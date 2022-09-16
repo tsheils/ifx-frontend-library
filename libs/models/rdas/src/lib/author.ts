@@ -5,7 +5,7 @@ export class Author {
   fullName!: string;
   lastName!: string;
 
-  constructor(obj: any) {
+  constructor(obj: { [key: string]: string }) {
     Object.assign(this, obj);
   }
 }

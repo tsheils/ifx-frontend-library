@@ -1,7 +1,11 @@
 <div class = "content-wrapper">
   <header>
-    <ncats-frontend-library-rdas-header [links]="links"></ncats-frontend-library-rdas-header>
-    <ncats-frontend-library-header-template
+    <ncats-frontend-library-header-template [links]="links">
+      <div class="left-options"><h2 class="app-title">Rare Disease Alert System</h2></div>
+      <div class="right-options"><h2>
+        <ncats-frontend-library-social-sign-on-button [user] = user></ncats-frontend-library-social-sign-on-button>
+      </h2></div>
+    </ncats-frontend-library-header-template>
   </header>
   <main role ="ncats-main">
     <div class="main-content">

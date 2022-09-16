@@ -3,6 +3,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { User } from "@ncats-frontend-library/models/utils";
 import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { UnsubscribeModalComponent } from "../unsubscribe-modal/unsubscribe-modal.component";
 
 @Component({
   selector: 'ncats-frontend-library-subscribe-button',
@@ -37,7 +38,7 @@ export class SubscribeButtonComponent implements OnInit {
   unSubscribe(){
     this.dialog.open(UnsubscribeModalComponent, {data:{entity: this.diseaseId}}).afterClosed()
       .subscribe(
-        (res:any) => {
+        (res: { [key: string]: string }) => {
           if(res) {
             console.log(res);
             this._snackBar.open('Subscription removed',undefined,{

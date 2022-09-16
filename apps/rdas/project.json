@@ -25,7 +25,9 @@
         "stylePreprocessorOptions": {
           "includePaths": ["libs/styles/src/styles/"]
         },
-        "styles": ["apps/rdas/src/styles.scss"],
+        "styles": [
+          "apps/rdas/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {

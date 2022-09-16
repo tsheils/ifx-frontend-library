@@ -1,5 +1,6 @@
 import {gql} from "apollo-angular";
-import {Article} from "./article";
+import { Article, ARTICLEFIELDS } from "./article";
+import { AUTHORFIELDS } from "./author";
 import {ClinicalTrial} from "./clinical-trial";
 import {Project} from "./project";
 
@@ -20,22 +21,22 @@ export class Disease {
   clinicalTrials?: ClinicalTrial[];
   clinicalTrialsCount = 0;
 
-  constructor(obj: { epiArticles?: unknown[]; nonEpiArticles?: unknown[]; epiCount?: { count: number; }; nonEpiCount?: { count: number; }; }) {
+  constructor(obj: Partial<Disease> = {}) {
     Object.assign(this, obj);
 
     if(obj.epiArticles) {
-      this.epiArticles = obj.epiArticles.map((article: unknown) => new Article(article));
+      this.epiArticles = obj.epiArticles.map((article: Partial<Article> = {}) => new Article(article));
     }
 
     if(obj.nonEpiArticles) {
-      this.nonEpiArticles = obj.nonEpiArticles.map((article: unknown) => new Article(article));
+      this.nonEpiArticles = obj.nonEpiArticles.map((article: Partial<Article> = {}) => new Article(article));
     }
 
     if(obj.epiCount) {
-      this.epiCount = obj.epiCount.count;
+      this.epiCount = obj.epiCount//.count;
     }
     if(obj.nonEpiCount) {
-      this.nonEpiCount = obj.nonEpiCount.count;
+      this.nonEpiCount = obj.nonEpiCount//.count;
     }
   }
 }

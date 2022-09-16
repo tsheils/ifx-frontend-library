@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 import { slideInOutAnimation } from "./header-animation";
 
@@ -13,7 +13,9 @@ export interface LinkTemplateProperty {
   selector: 'ncats-frontend-library-header-template',
   templateUrl: './header-template.component.html',
   styleUrls: ['./header-template.component.scss'],
-  animations: [slideInOutAnimation]
+  animations: [slideInOutAnimation],
+  encapsulation: ViewEncapsulation.None,
+
 })
 export class HeaderTemplateComponent {
   /**

@@ -7,41 +7,41 @@
       <mat-tab
         [label]= "'Epidemiology Articles ' + disease.epiCount"
         *ngIf="disease && disease.epiArticles">
-        <ncats-frontend-library-article-list-display
+        <ncats-frontend-library-article-list
           [articles] = disease.epiArticles
           [count] = disease.epiCount
           (pageChange)="pageList($event,'mentionedInEpiArticlesOptions', 'article')"
         >
-        </ncats-frontend-library-article-list-display>
+        </ncats-frontend-library-article-list>
       </mat-tab>
       <mat-tab
         [label] = "'Non-Epidemiology Articles ' + disease.nonEpiCount"
         *ngIf="disease && disease.nonEpiArticles">
-        <ncats-frontend-library-article-list-display
+        <ncats-frontend-library-article-list
           [articles]="disease.nonEpiArticles"
           [count] = disease.nonEpiCount
           (pageChange)="pageList($event,'mentionedInNonEpiArticlesOptions', 'article')"
         >
-        </ncats-frontend-library-article-list-display>
+        </ncats-frontend-library-article-list>
       </mat-tab>
     </mat-tab-group>
   </mat-tab>
   <mat-tab [label] = "'NIH-funded Grants ' + disease.projectCount">
     <div *ngIf="disease && disease.projects">
-      <ncats-frontend-library-project-list-display
+      <ncats-frontend-library-project-list
         [projects]="disease.projects"
         [count] = disease.projectCount
         (pageChange)="pageList($event,'project', 'project')"
-      ></ncats-frontend-library-project-list-display>
+      ></ncats-frontend-library-project-list>
     </div>
   </mat-tab>
   <mat-tab [label] = "'Clinical Trials ' + disease.clinicalTrialsCount">
     <div *ngIf="disease && disease.clinicalTrials">
-      <ncats-frontend-library-clinical-trials-list-display
+      <ncats-frontend-library-clinical-trials-list
         [trials]="disease.clinicalTrials"
         [count] = disease.clinicalTrialsCount
         (pageChange)="pageList($event,'ctoptions', 'trials')"
-      ></ncats-frontend-library-clinical-trials-list-display>
+      ></ncats-frontend-library-clinical-trials-list>
     </div>
   </mat-tab>
 </mat-tab-group>

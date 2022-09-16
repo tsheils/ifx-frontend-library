@@ -1,44 +1,59 @@
+import { gql } from "apollo-angular";
 import {Author} from "./author";
 import {Disease} from "./disease";
 
 export class Article {
   abstractText!: string;
   affiliation!: string;
-  appearsInJournalVolumes?: any[]; //[JournalVolume!]
+ // appearsInJournalVolumes?: []; //[JournalVolume!]
   authorsWrote?: Author[]; //[Author!]!
   citedByCount!: number;
   diseasesMentionedIn!: Disease[];
   doi!: string;
   firstPublicationDate!: string;
-  fullTextUrlsContentFor?: any[]; //[FullTextUrl!]!
-  hasOmimRefomimRefs?: any[]; //[OMIMRef!]!
+//  fullTextUrlsContentFor?: any[]; //[FullTextUrl!]!
+ // hasOmimRefomimRefs?: any[]; //[OMIMRef!]!
   hasPDF!: string;
   inEPMC!: string;
   inPMC!: string;
   isEpi?: string;
   isOpenAccess!: string;
-  keywordsKeywordFor?: any[]; //[Keyword!]!
-  meshTermsMeshTermFor?: any[]; //[MeshTerm!]!
+//  keywordsKeywordFor?: any[]; //[Keyword!]!
+ // meshTermsMeshTermFor?: any[]; //[MeshTerm!]!
   omim_evidence?: boolean;
   pubType?: string[];
   pubmed_evidence?: boolean;
   pubmed_id!: string;
-  pubtatorAnnotationsAnnotationFor?: any[]; // [PubtatorAnnotation!]
+ // pubtatorAnnotationsAnnotationFor?: any[]; // [PubtatorAnnotation!]
   refInOMIM?: boolean;
   source!: string;
-  substancesSubstanceAnnotatedByPubmed?: any[]; //[Substance!]!
+  substancesSubstanceAnnotatedByPubmed?: unknown[]; //[Substance!]!
   title!: string;
 
-  constructor(obj: any) {
+  constructor(obj: Partial<Article> = {}) {
     Object.assign(this, obj);
 
     if(obj.authorsWrote) {
-      this.authorsWrote = obj.authorsWrote.map((author: never) => new Author(author));
+      this.authorsWrote = obj.authorsWrote.map((author: Partial<Author> = {}) => new Author(author));
     }
   }
 }
 
-export const ARTICLEVARIABLES: any = {
+export const ARTICLEVARIABLES: {
+  diseasesWhere?: { gard_id?: null | string },
+  mentionedInEpiArticlesOptions?: {
+    limit?: number,
+    sort?: [{ firstPublicationDate?: string }]
+  },
+  mentionedInEpiArticlesWhere?: { isEpi?: string },
+  meshTermsMeshTermForEpiOptions?: {limit?: number},
+  mentionedInNonEpiArticlesOptions?: {
+    limit?: number,
+    sort?: [{ firstPublicationDate?: string }]
+  },
+  mentionedInNonEpiArticlesWhere?: { isEpi?: null | string },
+  meshTermsMeshTermForNonEpiOptions?: {limit: number}
+} = {
   diseasesWhere: {
     gard_id: null
   },
@@ -67,6 +82,8 @@ export const ARTICLEVARIABLES: any = {
   },
   meshTermsMeshTermForNonEpiOptions: {limit: 10}
 }
+
+
 export const ARTICLEFIELDS = gql`
   fragment articleFields on Article {
     abstractText

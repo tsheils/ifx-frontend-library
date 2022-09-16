@@ -6,8 +6,8 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
   templateUrl: './unsubscribe-modal.component.html',
   styleUrls: ['./unsubscribe-modal.component.scss']
 })
-export class UnsubscribeModalComponent implements OnInit {
+export class UnsubscribeModalComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: { entity: unknown }
   ) { }
 }

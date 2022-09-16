@@ -5,9 +5,11 @@ import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
-import { SharedRdasRdasHeaderModule } from "@ncats-frontend-library/shared/rdas/rdas-header";
+import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
 import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
-import { DiseaseService, StoresDiseaseStoreModule } from "@ncats-frontend-library/stores/disease-store";
+import { SharedSocialSignOnModule } from "@ncats-frontend-library/shared/utils/social-sign-on";
+import { DiseaseService, DiseasesFacade, StoresDiseaseStoreModule } from "@ncats-frontend-library/stores/disease-store";
+import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from "@ngrx/effects";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
 import { StoreModule } from "@ngrx/store";
@@ -54,10 +56,13 @@ export function init_connections(diseaseService: DiseaseService) {
     GraphQLModule,
     HttpClientModule,
     RouterModule,
-    SharedRdasRdasHeaderModule,
-    SharedUtilsLoadingSpinnerModule
+    SharedUtilsLoadingSpinnerModule,
+    SharedUtilsHeaderTemplateModule,
+    SharedSocialSignOnModule
   ],
   providers: [
+    UsersFacade,
+    DiseasesFacade,
     {provide: APP_INITIALIZER, useFactory: init_connections, deps: [DiseaseService], multi: true},
     { provide: PERSISTENCE, useValue: 'local' }
   ],

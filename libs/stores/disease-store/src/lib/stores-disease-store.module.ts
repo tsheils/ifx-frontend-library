@@ -11,7 +11,7 @@ import { DiseasesFacade } from './state/diseases.facade';
     CommonModule,
     StoreModule.forFeature(
       fromDiseases.DISEASES_FEATURE_KEY,
-      fromDiseases.diseasesReducer
+      fromDiseases.reducer
     ),
     EffectsModule.forFeature([DiseasesEffects]),
   ],

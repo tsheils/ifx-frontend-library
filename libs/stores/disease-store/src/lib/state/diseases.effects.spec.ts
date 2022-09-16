@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { NxModule } from '@nrwl/angular';
 import { hot } from 'jasmine-marbles';
-import { Observable } from 'rxjs';
+import { Observable, of } from "rxjs";
 
 import * as DiseasesActions from './diseases.actions';
 import { DiseasesEffects } from './diseases.effects';
@@ -28,13 +28,13 @@ describe('DiseasesEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: DiseasesActions.initDiseases() });
+      actions = hot('-a-|', { a: DiseasesActions.init() });
 
       const expected = hot('-a-|', {
         a: DiseasesActions.loadDiseasesSuccess({ diseases: [] }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(of(true)).toBeObservable(expected);
     });
   });
 });

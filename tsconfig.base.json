@@ -40,9 +40,6 @@
       "@ncats-frontend-library/shared/rdas/project-display": [
         "libs/shared/rdas/project-display/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/rdas/rdas-header": [
-        "libs/shared/rdas/rdas-header/src/index.ts"
-      ],
       "@ncats-frontend-library/shared/rdas/rdas-search": [
         "libs/shared/rdas/rdas-search/src/index.ts"
       ],
