@@ -4,6 +4,17 @@
 
 export const environment = {
   production: false,
+  neo4jUrl: "",
+  firebase: {
+    apiKey: "",
+    authDomain: "",
+    databaseURL: "",
+    projectId: "",
+    storageBucket: "",
+    messagingSenderId: "",
+    appId: ""
+
+  }
 };
 
 /*

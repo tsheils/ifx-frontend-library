@@ -1,0 +1,47 @@
+<ncats-frontend-library-disease-header [disease]="disease" [subscriptions]="[disease]"></ncats-frontend-library-disease-header>
+<ncats-frontend-library-identifiers-display [disease]="disease"></ncats-frontend-library-identifiers-display>
+
+<mat-tab-group>
+  <mat-tab [label] = "'Articles'">
+    <mat-tab-group>
+      <mat-tab
+        [label]= "'Epidemiology Articles ' + disease.epiCount"
+        *ngIf="disease && disease.epiArticles">
+        <ncats-frontend-library-article-list-display
+          [articles] = disease.epiArticles
+          [count] = disease.epiCount
+          (pageChange)="pageList($event,'mentionedInEpiArticlesOptions', 'article')"
+        >
+        </ncats-frontend-library-article-list-display>
+      </mat-tab>
+      <mat-tab
+        [label] = "'Non-Epidemiology Articles ' + disease.nonEpiCount"
+        *ngIf="disease && disease.nonEpiArticles">
+        <ncats-frontend-library-article-list-display
+          [articles]="disease.nonEpiArticles"
+          [count] = disease.nonEpiCount
+          (pageChange)="pageList($event,'mentionedInNonEpiArticlesOptions', 'article')"
+        >
+        </ncats-frontend-library-article-list-display>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-tab>
+  <mat-tab [label] = "'NIH-funded Grants ' + disease.projectCount">
+    <div *ngIf="disease && disease.projects">
+      <ncats-frontend-library-project-list-display
+        [projects]="disease.projects"
+        [count] = disease.projectCount
+        (pageChange)="pageList($event,'project', 'project')"
+      ></ncats-frontend-library-project-list-display>
+    </div>
+  </mat-tab>
+  <mat-tab [label] = "'Clinical Trials ' + disease.clinicalTrialsCount">
+    <div *ngIf="disease && disease.clinicalTrials">
+      <ncats-frontend-library-clinical-trials-list-display
+        [trials]="disease.clinicalTrials"
+        [count] = disease.clinicalTrialsCount
+        (pageChange)="pageList($event,'ctoptions', 'trials')"
+      ></ncats-frontend-library-clinical-trials-list-display>
+    </div>
+  </mat-tab>
+</mat-tab-group>

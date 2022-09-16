@@ -1,0 +1,9 @@
+<div fxLayout = "row" fxLayoutAlign="space-around start">
+  <div fxFlex = 75>
+    <ncats-frontend-library-disease-display
+      *ngIf="disease"
+      [disease] = disease
+      (optionsChange)="fetchDiseaseInfo($event)"
+    ></ncats-frontend-library-disease-display>
+  </div>
+</div>

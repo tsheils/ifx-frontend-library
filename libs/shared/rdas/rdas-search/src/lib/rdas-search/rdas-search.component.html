@@ -1,0 +1,20 @@
+<div fxLayout="row" fxLayoutAlign="space-around center">
+  <div fxFlex = 75>
+    <mat-form-field
+      class="full-width"
+      [appearance]="'outline'">
+      <input matInput
+             placeholder="Search for a rare disease"
+             [formControl]=searchFormCtl
+             [matAutocomplete]="auto">
+      <mat-autocomplete
+        [displayWith]="displayFn"
+        (optionSelected)="selectDisease($event)"
+        #auto="matAutocomplete">
+        <mat-option *ngFor="let option of options" [value]="option">
+          {{option.name}}
+        </mat-option>
+      </mat-autocomplete>
+    </mat-form-field>
+  </div>
+</div>
