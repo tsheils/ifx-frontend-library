@@ -1,0 +1,25 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/stores/user-store/src",
+  "prefix": "ncats-frontend-library",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/stores/user-store"],
+      "options": {
+        "jestConfig": "libs/stores/user-store/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/stores/user-store/**/*.ts",
+          "libs/stores/user-store/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

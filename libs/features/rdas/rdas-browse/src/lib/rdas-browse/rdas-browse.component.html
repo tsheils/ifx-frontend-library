@@ -1,0 +1,21 @@
+<div fxLayout = "row" fxLayoutAlign="space-around start">
+  <div fxFlex = 75>
+    <ncats-frontend-library-rdas-search></ncats-frontend-library-rdas-search>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="end start">
+  <div fxLayout="25">
+    <mat-paginator
+      [pageSize]="page?.pageSize"
+      [pageIndex]="page?.pageIndex"
+      [pageSizeOptions]="[10, 25, 50]"
+      (page)="paginationChanges($event)"
+      [length] = "page?.total"
+    ></mat-paginator>
+  </div>
+</div>
+<div fxLayout="row" fxLayoutAlign="space-around start">
+  <div fxFlex = 75>
+    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loading"></ncats-frontend-library-disease-list>
+  </div>
+</div>

@@ -1,0 +1,100 @@
+{
+  "projectType": "application",
+  "sourceRoot": "apps/rdas/src",
+  "prefix": "rdas",
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:browser",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/rdas",
+        "index": "apps/rdas/src/index.html",
+        "main": "apps/rdas/src/main.ts",
+        "polyfills": "apps/rdas/src/polyfills.ts",
+        "tsConfig": "apps/rdas/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/rdas/src/favicon.ico",
+          "apps/rdas/src/assets",
+          {
+            "input": "libs/shared/social-sign-on/src/assets",
+            "glob": "**/*",
+            "output": "assets/social-sign-on"
+          }
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src/styles/"]
+        },
+        "styles": [
+          "apps/rdas/src/styles.scss"
+        ],
+        "scripts": []
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas/src/environments/environment.ts",
+              "with": "apps/rdas/src/environments/environment.prod.ts"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "vendorChunk": true,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "browserTarget": "rdas:build:production"
+        },
+        "development": {
+          "browserTarget": "rdas:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "browserTarget": "rdas:build"
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/rdas/**/*.ts", "apps/rdas/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/apps/rdas"],
+      "options": {
+        "jestConfig": "apps/rdas/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

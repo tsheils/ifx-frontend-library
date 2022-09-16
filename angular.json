@@ -1,0 +1,26 @@
+{
+  "$schema": "./node_modules/nx/schemas/workspace-schema.json",
+  "version": 2,
+  "projects": {
+    "features-rdas-rdas-browse": "libs/features/rdas/rdas-browse",
+    "features-rdas-rdas-disease-page": "libs/features/rdas/rdas-disease-page",
+    "features-rdas-rdas-home": "libs/features/rdas/rdas-home",
+    "models-rdas": "libs/models/rdas",
+    "models-utils": "libs/models/utils",
+    "neo4j-introspection": "apps/neo4j-introspection",
+    "rdas": "apps/rdas",
+    "rdas-backend": "apps/rdas-backend",
+    "rdas-e2e": "apps/rdas-e2e",
+    "shared-rdas-article-display": "libs/shared/rdas/article-display",
+    "shared-rdas-clinical-trials-display": "libs/shared/rdas/clinical-trials-display",
+    "shared-rdas-disease-display": "libs/shared/rdas/disease-display",
+    "shared-rdas-project-display": "libs/shared/rdas/project-display",
+    "shared-rdas-rdas-search": "libs/shared/rdas/rdas-search",
+    "shared-rdas-subscribe-button": "libs/shared/rdas/subscribe-button",
+    "shared-utils-header-template": "libs/shared/utils/header-template",
+    "shared-utils-loading-spinner": "libs/shared/utils/loading-spinner",
+    "shared-utils-social-sign-on": "libs/shared/utils/social-sign-on",
+    "stores-disease-store": "libs/stores/disease-store",
+    "stores-user-store": "libs/stores/user-store"
+  }
+}
