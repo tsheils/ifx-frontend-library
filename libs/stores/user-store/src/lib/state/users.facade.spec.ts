@@ -10,15 +10,13 @@ import { UsersEffects } from './users.effects';
 import { UsersFacade } from './users.facade';
 import { UsersEntity } from './users.models';
 import {
-  USERS_FEATURE_KEY,
-  UsersState,
-  initialUsersState,
-  usersReducer,
-} from './users.reducer';
+  State,
+  USERS_FEATURE_KEY
+} from "./users.reducer";
 import * as UsersSelectors from './users.selectors';
 
 interface TestSchema {
-  users: UsersState;
+  users: State;
 }
 
 describe('UsersFacade', () => {

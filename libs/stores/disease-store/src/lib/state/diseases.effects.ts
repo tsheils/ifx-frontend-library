@@ -1,42 +1,20 @@
 import { Injectable } from '@angular/core';
 import {
-  ARTICLEVARIABLES,
-  FETCHDISEASEQUERY, FETCHDISEASESLISTQUERY,
+  ARTICLEVARIABLES, ClinicalTrial, Disease,
+  FETCHDISEASEQUERY, FETCHDISEASESLISTQUERY, FETCHPROJECTSQUERY,
   FETCHTRIALSQUERY,
   FETCHTRIALSVARIABLES,
-  GardClinicalTrial, GardDisease, LISTQUERYPARAMETERS
+  LISTQUERYPARAMETERS, Project, PROJECTVARIABLES
 } from "@ncats-frontend-library/models/rdas";
-import {
-  Disease,
-  Project,
-  AUTHORFIELDS
-} from "@ncats-frontend-library/models/ncats-models";
+import { DiseaseService } from "@ncats-frontend-library/stores/disease-store";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import {ROUTER_NAVIGATION, RouterNavigationAction} from "@ngrx/router-store";
 import { gql} from "apollo-angular";
 import {combineLatest, filter, forkJoin, map, mergeMap, switchMap, take, tap} from "rxjs";
-import {DiseaseService} from "../../disease.service";
-import {loadDiseasesSuccess} from "./diseases.actions";
-import * as DiseaseActions from "./diseases.actions";
-
 import * as DiseasesActions from './diseases.actions';
 import * as DiseasesFeature from './diseases.reducer';
 
-const fetchProjectsQuery = gql`
-  query Projects($projectsWhere: ProjectWhere, $projectsOptions: ProjectOptions) {
-    projects(where: $projectsWhere, options: $projectsOptions) {
-      project_title
-      funding_year
-      project_abstract
-      project_num
-      project_term
-      total_cost
-    }
-    projectsAggregate(where: $projectsWhere) {
-      count
-    }
-  }
-`
+
 
 
 /*const typeaheadQuery = gql`
@@ -61,22 +39,6 @@ const typeaheadQuery = gql`
   }
 `
 
-const projectVariables: any = {
-  projectsWhere: {
-    diseasesisInvestigatedBy_SOME: {
-      gard_id: null
-    }
-  },
-  $projectsOptions: {
-    sort: [
-      {
-        funding_year: "DESC"
-      }
-    ],
-    limit: 10
-  }
-}
-
 @Injectable()
 export class DiseasesEffects {
   searchDiseases = createEffect(() =>
@@ -91,8 +53,6 @@ export class DiseasesEffects {
             WITH arr[0..10] AS typeahead
             RETURN typeahead
         `;
-
-
         this.diseaseService.read(
           'epi',
           'search',
@@ -119,7 +79,7 @@ export class DiseasesEffects {
             map((res: any) => {
               if(res && res.data) {
                 console.log(res);
-                const diseaseArr = res.data.diseases.map((obj: any) => new GardDisease(obj))
+                const diseaseArr = res.data.diseases.map((obj: { [key: string]: string }) => new Disease(obj))
                 console.log(diseaseArr);
                 return DiseasesActions.loadDiseasesSuccess({diseases: diseaseArr})
               }
@@ -166,27 +126,30 @@ export class DiseasesEffects {
       mergeMap((action: any) => {
         switch(action.source) {
           case 'article': {
-            Object.keys(action.options).forEach(key => {
-              ARTICLEVARIABLES[key] = Object.assign(ARTICLEVARIABLES[key], action.options[key])
+            Object.keys(action.options).forEach((key: string) => {
+              ARTICLEVARIABLES[key as keyof typeof ARTICLEVARIABLES] =
+                Object.assign(ARTICLEVARIABLES[key as keyof typeof ARTICLEVARIABLES] as typeof ARTICLEVARIABLES, action.options[key])
             })
             break;
           }
           case 'project': {
-            Object.keys(action.options).forEach(key => {
-              projectVariables[key] = Object.assign(projectVariables[key], action.options[key])
+            Object.keys(action.options).forEach((key: string) => {
+              PROJECTVARIABLES[key as keyof typeof PROJECTVARIABLES] =
+                Object.assign(PROJECTVARIABLES[key as keyof typeof PROJECTVARIABLES] as typeof PROJECTVARIABLES, action.options[key])
             })
             break;
           }
           case 'trials': {
             Object.keys(action.options).forEach(key => {
-              FETCHTRIALSVARIABLES[key] = Object.assign(FETCHTRIALSVARIABLES[key], action.options[key])
+              FETCHTRIALSVARIABLES[key as keyof typeof FETCHTRIALSVARIABLES] =
+                Object.assign(FETCHTRIALSVARIABLES[key as keyof typeof FETCHTRIALSVARIABLES] as typeof FETCHTRIALSVARIABLES, action.options[key])
             })
             break;
           }
         }
         return combineLatest(
           this.diseaseService.fetchArticles(FETCHDISEASEQUERY, ARTICLEVARIABLES).pipe(take(1)),
-          this.diseaseService.fetchProjects(fetchProjectsQuery, projectVariables).pipe(take(1)),
+          this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
@@ -194,9 +157,10 @@ export class DiseasesEffects {
               console.log(trialsData);
               if(diseaseData && diseaseData.data) {
                 const diseaseObj: Disease = new Disease(diseaseData.data.diseases[0]);
-                diseaseObj.projects = projectsData.data.projects.map((proj: any) => new Project(proj))
+                diseaseObj.projects = projectsData.data.projects.map((proj: { [key: string]: unknown }) => new Project(proj))
                 diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
-                diseaseObj.clinicalTrials = trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial: any) => new GardClinicalTrial(trial))
+                diseaseObj.clinicalTrials =
+                  trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
                 diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
@@ -213,14 +177,14 @@ export class DiseasesEffects {
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/disease')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: any) => {
+      switchMap((params: {id?: string}) => {
         console.log(params);
-        ARTICLEVARIABLES.diseasesWhere.gard_id = params.id;
-        projectVariables.projectsWhere.diseasesisInvestigatedBy_SOME.gard_id = params.id;
-        FETCHTRIALSVARIABLES.ctwhere.GARDId = params.id;
+        ARTICLEVARIABLES.diseasesWhere = {gard_id: params.id};
+        PROJECTVARIABLES.projectsWhere = {diseasesisInvestigatedBy_SOME: {gard_id: params.id}};
+        FETCHTRIALSVARIABLES.ctwhere = {GARDId: params.id};
         return forkJoin(
           this.diseaseService.fetchArticles(FETCHDISEASEQUERY, ARTICLEVARIABLES).pipe(take(1)),
-          this.diseaseService.fetchProjects(fetchProjectsQuery, projectVariables).pipe(take(1)),
+          this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
@@ -232,7 +196,7 @@ export class DiseasesEffects {
                   diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 }
                 if(trialsData.data && trialsData.data.disease.length) {
-                  diseaseObj.clinicalTrials = trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial: any) => new GardClinicalTrial(trial))
+                  diseaseObj.clinicalTrials = trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
                   diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
                 }
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})

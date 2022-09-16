@@ -1,10 +1,10 @@
 export class User {
-  name!: string;
+  displayName!: string;
   id?: string;
-  imageUrl?: string;
+  photoURL?: string;
   interests?: string[];
 
-  constructor(obj: any) {
+  constructor(obj: Partial<User> = {}) {
     Object.assign(this, obj);
   }
 }

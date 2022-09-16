@@ -17,7 +17,7 @@ export interface UsersPartialState {
 
 export const usersAdapter: EntityAdapter<User> =
   createEntityAdapter<User>({
-    selectId: user => user.name
+    selectId: user => user.displayName
   });
 
 

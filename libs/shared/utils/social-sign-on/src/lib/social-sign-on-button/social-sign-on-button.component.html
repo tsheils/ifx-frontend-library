@@ -1,6 +1,6 @@
 <div *ngIf=user class="profile-section signin-button" [matMenuTriggerFor]="profileMenu" fxHide.lt-md>
-  <img [src]=user.imageUrl class="profile-pic" *ngIf="user?.imageUrl" alt="Profile picture of the signed in user">
-  <span class="user-name">{{user.name}}</span>
+  <img [src]=user.photoURL class="profile-pic" *ngIf="user?.photoURL" alt="Profile picture of the signed in user">
+  <span class="user-name">{{user.displayName}}</span>
 </div>
 <button mat-button class="menu-button signin-button" aria-label = "signin button" (click)="openSignInModal()" *ngIf="!user" fxHide.lt-md>
   Sign In

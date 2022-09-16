@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { NavigationExtras, Router } from "@angular/router";
+import { Disease } from "@ncats-frontend-library/models/rdas";
 
 
 /**
@@ -21,7 +22,7 @@ export class RdasHomeComponent {
     private router: Router
   ) { }
 
-  fetchDisease(disease: any) {
+  fetchDisease(disease: Disease) {
     navigationExtras.queryParams = {id: disease.gard_id}
     this.router.navigate(['disease'], navigationExtras);
     /* this.options.gard_id = disease.gard_id;

@@ -15,7 +15,6 @@
     "shared-rdas-clinical-trials-display": "libs/shared/rdas/clinical-trials-display",
     "shared-rdas-disease-display": "libs/shared/rdas/disease-display",
     "shared-rdas-project-display": "libs/shared/rdas/project-display",
-    "shared-rdas-rdas-header": "libs/shared/rdas/rdas-header",
     "shared-rdas-rdas-search": "libs/shared/rdas/rdas-search",
     "shared-rdas-subscribe-button": "libs/shared/rdas/subscribe-button",
     "shared-utils-header-template": "libs/shared/utils/header-template",

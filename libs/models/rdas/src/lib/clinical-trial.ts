@@ -33,7 +33,7 @@ export class ClinicalTrial {
   studyFirstPostDateType?: string;
   studyType?: string;
 
-  constructor(obj: any) {
+  constructor(obj: Partial<ClinicalTrial> = {}) {
     Object.assign(this, obj);
   }
 }
@@ -70,7 +70,16 @@ export const FETCHTRIALSQUERY = gql`
   }
 `
 
-export const FETCHTRIALSVARIABLES: any = {
+export const FETCHTRIALSVARIABLES: {
+  ctwhere?: {
+    GARDId?: null | string
+  },
+  ctoptions?: {
+    sort: [{StartDate?: string }],
+    limit?: number,
+    offset?: number
+  },
+} = {
   ctwhere: {
     GARDId: null
   },
