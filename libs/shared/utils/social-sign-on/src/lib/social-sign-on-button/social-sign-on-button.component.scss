@@ -1,0 +1,35 @@
+.profile-pic {
+  height: 45px;
+  margin: 15px 5px -15px 5px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.menu-button {
+  margin-right: 1vw;
+  margin-left: 1vw;
+  text-align: center;
+}
+
+.user-name {
+  font-size: 12px;
+  display: block;
+  cursor: pointer;
+}
+
+.profile-loading-spinner {
+  height: 50px;
+  margin-top: 7px;
+}
+
+button.nav-menu-button.mat-button {
+  width: 100%;
+}
+
+@media only screen and (max-width: 960px) {
+  .profile-pic {
+    margin-bottom: 5px;
+  }
+}
+
+
