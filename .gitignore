@@ -5,6 +5,10 @@
 /tmp
 /out-tsc
 
+#environments
+ apps/rdas/src/environments/
+environment.ts
+*.prod.ts
 # dependencies
 node_modules
 
