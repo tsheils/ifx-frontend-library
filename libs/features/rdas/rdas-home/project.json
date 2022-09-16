@@ -1,0 +1,25 @@
+{
+  "projectType": "library",
+  "sourceRoot": "libs/features/rdas/rdas-home/src",
+  "prefix": "ncats-frontend-library",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["coverage/libs/features/rdas/rdas-home"],
+      "options": {
+        "jestConfig": "libs/features/rdas/rdas-home/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/features/rdas/rdas-home/**/*.ts",
+          "libs/features/rdas/rdas-home/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

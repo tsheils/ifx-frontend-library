@@ -1,7 +1,7 @@
 {
   "projectType": "application",
   "sourceRoot": "apps/rdas/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "rdas",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -13,7 +13,18 @@
         "polyfills": "apps/rdas/src/polyfills.ts",
         "tsConfig": "apps/rdas/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
-        "assets": ["apps/rdas/src/favicon.ico", "apps/rdas/src/assets"],
+        "assets": [
+          "apps/rdas/src/favicon.ico",
+          "apps/rdas/src/assets",
+          {
+            "input": "libs/shared/social-sign-on/src/assets",
+            "glob": "**/*",
+            "output": "assets/social-sign-on"
+          }
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src/styles/"]
+        },
         "styles": ["apps/rdas/src/styles.scss"],
         "scripts": []
       },

@@ -1,0 +1,43 @@
+@use '@angular/material' as mat;
+@import 'rdas-theme';
+
+a {
+  color: mat.get-color-from-palette($app-primary);
+}
+
+.toolbar-template {
+  background-color: mat.get-color-from-palette($app-primary);
+  color: #ffffff;
+}
+
+.user-name, .app-title {
+  color: #ffffff;
+}
+
+.footer-template {
+  background-color: mat.get-color-from-palette($app-primary);
+  color: #ffffff;
+}
+
+.expand-link {
+  color: mat.get-color-from-palette($app-primary);
+}
+
+.toolbar-template button {
+  color: #ffffff;
+}
+
+.toolbar-template a {
+  color: #ffffff;
+}
+
+.main-content {
+  margin-top: 10vh;
+  padding-bottom: 5vh;
+}
+
+.content-wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}

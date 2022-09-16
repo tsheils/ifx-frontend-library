@@ -1,0 +1,11 @@
+<div fxLayout="row" fxLayoutAlign="space-between start">
+  <div fxFlex="80"><a
+    href = "https://rarediseases.info.nih.gov/diseases/{{trimmed_id}}/from_rdas"
+    target="_blank"
+    rel="noreferrer"
+    aria-label="Link to GARD website"
+  ><h1>{{disease.name}}: {{disease.gard_id}}</h1></a></div>
+  <div fxFlex="10">
+    <ncats-frontend-library-subscribe-button [diseaseId]="disease.name" ></ncats-frontend-library-subscribe-button>
+  </div>
+</div>

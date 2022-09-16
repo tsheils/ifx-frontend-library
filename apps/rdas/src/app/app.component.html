@@ -1,1 +1,15 @@
-<ncats-frontend-library-nx-welcome></ncats-frontend-library-nx-welcome>
+<div class = "content-wrapper">
+  <header>
+    <ncats-frontend-library-rdas-header [links]="links"></ncats-frontend-library-rdas-header>
+    <ncats-frontend-library-header-template
+  </header>
+  <main role ="ncats-main">
+    <div class="main-content">
+      <ncats-frontend-library-loading-spinner [isLoading]="loading"></ncats-frontend-library-loading-spinner>
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+  <footer>
+
+  </footer>
+</div>
