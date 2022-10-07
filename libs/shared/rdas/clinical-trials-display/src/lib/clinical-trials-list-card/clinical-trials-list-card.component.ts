@@ -23,7 +23,6 @@ export class ClinicalTrialsListCardComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    console.log(this.trial);
     this.fullSummary = true;
     this.truncatedSummary = '';
     if (this.trial.briefSummary && this.trial.briefSummary.length > 800) {

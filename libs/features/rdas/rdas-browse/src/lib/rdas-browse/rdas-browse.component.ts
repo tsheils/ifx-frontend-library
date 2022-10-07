@@ -19,7 +19,7 @@ const navigationExtras: NavigationExtras = {
 })
 export class RdasBrowseComponent implements OnInit {
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
-  page!: Page;
+  page?: Page;
   loading = true;
   diseases!: Disease[];
 
@@ -31,20 +31,17 @@ export class RdasBrowseComponent implements OnInit {
 
   ngOnInit(): void {
     this.diseaseFacade.allDiseases$.subscribe(res => {
-      console.log(res);
       this.diseases = res;
       this.changeRef.markForCheck()
     });
 
-    /*
         this.diseaseFacade.page$.subscribe(res => {
           if(res) {
             this.page = res;
           }
-        });*/
+        });
 
     this.diseaseFacade.loaded$.subscribe(res => {
-      console.log(res);
       this.loading = res;
     });
 

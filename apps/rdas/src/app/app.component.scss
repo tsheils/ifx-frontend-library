@@ -1,24 +1,10 @@
+
 @use '@angular/material' as mat;
-@import 'rdas-theme';
+@import 'libs/styles/src/styles/rdas-theme';
 
 
-
-.toolbar-template {
-  background-color: mat.get-color-from-palette($app-accent);
-  color: #ffffff;
-}
-
-.footer-template {
-  background-color: mat.get-color-from-palette($app-accent);
-  color: #ffffff;
-}
-
-.toolbar-template button {
-  color: #ffffff;
-}
-
-.toolbar-template a {
-  color: #ffffff;
+a {
+  color: mat.get-color-from-palette($app-primary);
 }
 
 .content-wrapper {
@@ -27,6 +13,22 @@
   grid-template-rows: auto 1fr auto;
 }
 
-.ramp-logo-footer {
-  max-width: 100%;
+.toolbar-template {
+  background-color: mat.get-color-from-palette($app-primary);
+  color: #ffffff !important;
+  //  z-index: 666;
+}
+
+.footer-template {
+  background-color: mat.get-color-from-palette($app-primary);
+  color: #ffffff;
+}
+.main-content {
+  margin-top: 15vh;
+}
+
+.header-search {
+  width: 30vw;
+  padding-right: 2vw;
+  color: white;
 }

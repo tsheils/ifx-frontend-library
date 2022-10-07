@@ -1,8 +1,9 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
+import { User } from "@ncats-frontend-library/models/utils";
 import firebase from 'firebase/compat/app';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
-import {from, Observable, of} from "rxjs";
+import {from, Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -23,28 +24,21 @@ export class UserService {
    * @param userCollection
    * @param afAuth
    */
-  constructor(private userCollection: AngularFirestore,
-              public afAuth: AngularFireAuth
+  constructor(
+    private userCollection: AngularFirestore,
+    public afAuth: AngularFireAuth
   ) {
   }
 
   /**
    * gets info from modal
    * fetch and login using the proper auth service
-   * clsoes modal
+   * closes modal
    * @param providerName
    */
-  doLogin(providerName: string): Observable<any> {
-    const provider: any = this.providers.get(providerName);
-    return from(this.afAuth.signInWithPopup(provider))
-    /*   .then(res => {
-         console.log(res);
-         this.fetchUserProfile(res.user);
-       //  dialogRef.close();
-       }, err => {
-         console.log(err);
-         this.handleError(err);
-       }));*/
+  doLogin(providerName: string): Observable<firebase.auth.UserCredential> {
+      const provider: unknown = this.providers.get(providerName);
+        return from(this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider))
   }
 
   /*  /!**
@@ -70,8 +64,8 @@ export class UserService {
    * logout user, remove profile via profile service
    */
   logout() {
-    this.afAuth.signOut().then(res => {
-      // this.pharosProfileService.setProfile(null);
+    this.afAuth.signOut().then(() => {
+      localStorage.removeItem('userEntity');
       return null;
     });
   }
@@ -80,8 +74,35 @@ export class UserService {
    * get profile of user
    * @param user
    */
-  fetchUserProfile(user: any) {
-    //  this.pharosProfileService.fetchUserProfile(user);
+  createUserProfile(user: User) {
+     this.userCollection.collection('users')
+      .doc(user.uid)
+      .set({...user})
+  }
+
+  updateUserProfile(user: User) {
+     this.userCollection.collection('users')
+      .doc(user.uid)
+       .update({...user})
+    return this.fetchUserProfile(user);
+  }
+
+  fetchUserProfile(user: User) {
+    return  this.userCollection.collection('users')
+      .doc(user.uid)
+      .get().subscribe((res:any) => {
+         if (!res.exists) {
+           this.createUserProfile(user);
+          this.fetchUserProfile(user);
+           return null;
+         } else {
+           localStorage.removeItem('userEntity');
+           localStorage.setItem('userEntity', JSON.stringify(res.data()));
+           return res.data();
+         }
+
+       }
+     )
   }
 
   /**
@@ -137,7 +158,7 @@ export class UserService {
           // @ts-ignore
           result.user.linkWithCredential(pendingCred).then(usercred => {
             // GitHub account successfully linked to the existing Firebase user.
-            this.fetchUserProfile(usercred.user);
+           // this.fetchUserProfile(usercred.user);
           });
         });
       });

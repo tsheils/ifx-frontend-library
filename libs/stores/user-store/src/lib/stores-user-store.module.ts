@@ -10,7 +10,7 @@ import { UsersFacade } from './state/users.facade';
   imports: [
     CommonModule,
     StoreModule.forFeature(fromUsers.USERS_FEATURE_KEY, fromUsers.reducer),
-    EffectsModule.forFeature([UsersEffects]),
+    EffectsModule.forFeature([UsersEffects])
   ],
   providers: [UsersFacade],
 })

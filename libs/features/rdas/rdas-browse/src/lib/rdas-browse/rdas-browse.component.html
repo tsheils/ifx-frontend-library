@@ -1,16 +1,17 @@
 <div fxLayout = "row" fxLayoutAlign="space-around start">
   <div fxFlex = 75>
-    <ncats-frontend-library-rdas-search></ncats-frontend-library-rdas-search>
+    <ncats-frontend-library-rdas-search ></ncats-frontend-library-rdas-search>
   </div>
 </div>
-<div fxLayout="row" fxLayoutAlign="end start">
+<div fxLayout="row" fxLayoutAlign="space-around start">
+  <div fxLayout="50"></div>
   <div fxLayout="25">
-    <mat-paginator
-      [pageSize]="page?.pageSize"
-      [pageIndex]="page?.pageIndex"
+    <mat-paginator *ngIf="page"
+      [pageSize]="page.pageSize"
+      [pageIndex]="page.pageIndex"
       [pageSizeOptions]="[10, 25, 50]"
       (page)="paginationChanges($event)"
-      [length] = "page?.total"
+      [length] = "page.total"
     ></mat-paginator>
   </div>
 </div>

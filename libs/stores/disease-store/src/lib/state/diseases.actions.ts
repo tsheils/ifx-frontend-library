@@ -1,18 +1,23 @@
 import { Disease } from "@ncats-frontend-library/models/rdas";
+import { Page } from "@ncats-frontend-library/models/utils";
 import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Diseases Page] Init');
 
 export const loadDiseases = createAction(
   '[Diseases/API] Load Diseases',
-  props<{ top: number
+  props<{
+    top: number
     skip: number
   }>()
 );
 
 export const loadDiseasesSuccess = createAction(
   '[Diseases/API] Load Diseases Success',
-  props<{ diseases: Disease[] }>()
+  props<{
+    diseases: Disease[],
+    page?: Page
+  }>()
 );
 
 export const loadDiseasesFailure = createAction(

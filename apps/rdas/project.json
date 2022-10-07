@@ -17,7 +17,7 @@
           "apps/rdas/src/favicon.ico",
           "apps/rdas/src/assets",
           {
-            "input": "libs/shared/social-sign-on/src/assets",
+            "input": "libs/shared/utils/social-sign-on/src/assets",
             "glob": "**/*",
             "output": "assets/social-sign-on"
           }
@@ -36,7 +36,7 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "5mb"
             },
             {
               "type": "anyComponentStyle",

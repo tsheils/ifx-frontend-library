@@ -1,5 +1,7 @@
-import { User } from "@ncats-frontend-library/models/utils";
+import { Subscription, User } from "@ncats-frontend-library/models/utils";
 import { createAction, props } from '@ngrx/store';
+
+export const init = createAction('[Users/API] Init');
 
 const openLogin = createAction(
   '[Users/API] Open Login',
@@ -28,7 +30,37 @@ export const loginUserSuccess = createAction(
 
 export const loginUserFailure = createAction(
   '[Users/API] Login User Failure',
-  props<{ error: never }>()
+  props<{ error: string }>()
+);
+
+export const fetchUserProfile = createAction(
+  '[Users/API] Fetch User Profile User',
+  props<{ user: User}>()
+);
+
+export const fetchUserProfileSuccess = createAction(
+  '[Users/API] Fetch User Profile Success',
+  props<{ user: User}>()
+);
+
+export const fetchUserProfileFailure = createAction(
+  '[Users/API] Fetch User Profile Failure',
+  props<{ error: string }>()
+);
+
+export const updateUserSubscriptions = createAction(
+  '[Users/API] Update User Subscriptions',
+  props<{ subscriptions: Subscription[]}>()
+);
+
+export const updateUserSubscriptionsSuccess = createAction(
+  '[Users/API] Update User Subscriptions Success',
+  props<{ user: User}>()
+);
+
+export const updateUserSubscriptionsFailure = createAction(
+  '[Users/API] Update User Subscriptions Failure',
+  props<{ error: string }>()
 );
 
 export const logoutUser = createAction(

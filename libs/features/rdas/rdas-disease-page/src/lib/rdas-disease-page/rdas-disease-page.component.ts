@@ -26,7 +26,6 @@ export class RdasDiseasePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.diseaseFacade.selectedDiseases$.subscribe(res => {
-        console.log(res);
         if (res) {
           this.disease = res;
           this.options.gard_id = this.disease.gard_id;

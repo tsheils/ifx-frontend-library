@@ -17,7 +17,7 @@ export interface UsersPartialState {
 
 export const usersAdapter: EntityAdapter<User> =
   createEntityAdapter<User>({
-    selectId: user => user.displayName
+    selectId: user => user.uid
   });
 
 
@@ -29,15 +29,14 @@ export const initialState: State = usersAdapter.getInitialState({
 
 const usersReducer = createReducer(
   initialState,
-  // on(UsersActions.init, (state) => ({ ...state, loaded: false, error: null })),
-  on(UsersActions.loginUserSuccess, (state, { user }) =>
-    usersAdapter.setAll([user], { ...state, loaded: true })
+  on(
+    UsersActions.loginUserSuccess,
+    UsersActions.fetchUserProfileSuccess,
+    UsersActions.updateUserSubscriptionsSuccess,
+    (state, { user }) => usersAdapter.setOne(user, { ...state, loaded: true, selectedId: user.uid })
   ),
-  on(UsersActions.logoutUser, (state) => {
-      console.log("logging out")
-      return  usersAdapter.removeAll(state)
-
-    }
+  on(
+    UsersActions.logoutUser, (state) => usersAdapter.removeAll(state)
   ),
   on(UsersActions.loginUserFailure, (state, { error }) => ({ ...state, error }))
 );

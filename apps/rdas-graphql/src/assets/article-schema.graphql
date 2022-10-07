@@ -116,13 +116,12 @@ type Substance {
 }
 
 type Query {
-  DiseaseTypeahead: String
-  @cypher(
-  statement: """
-    RETURN "Yo"
-  """
+  diseaseTypeahead(searchString: String): [Disease] @cypher(
+    statement: """
+      CALL db.index.fulltext.queryNodes(
+        'allNameIndex', $searchString+'~')
+      YIELD node RETURN node.name, node.gard_id
+    """
   )
 }
-
-
 

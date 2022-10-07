@@ -7,21 +7,23 @@ import {Project} from "./project";
 export class Disease {
   name!: string;
   gard_id!: string;
-  all_ids?: string[];
+  all_ids?:  string[];
   all_names?: string[];
   categories?: string[];
   is_rare?: boolean;
-  synonyms?: string[];
+  synonyms?:  string[];
   epiArticles?: Article[];
   nonEpiArticles?: Article[];
   epiCount = 0;
   nonEpiCount = 0;
+  _epiCount?: {count: number};
+  _nonEpiCount?: {count: number};
   projects?: Project[];
   projectCount = 0;
   clinicalTrials?: ClinicalTrial[];
   clinicalTrialsCount = 0;
 
-  constructor(obj: Partial<Disease> = {}) {
+  constructor(obj: Partial<Disease>) {
     Object.assign(this, obj);
 
     if(obj.epiArticles) {
@@ -32,11 +34,11 @@ export class Disease {
       this.nonEpiArticles = obj.nonEpiArticles.map((article: Partial<Article> = {}) => new Article(article));
     }
 
-    if(obj.epiCount) {
-      this.epiCount = obj.epiCount//.count;
+    if(obj._epiCount) {
+      this.epiCount = obj._epiCount.count;
     }
-    if(obj.nonEpiCount) {
-      this.nonEpiCount = obj.nonEpiCount//.count;
+    if(obj._nonEpiCount) {
+      this.nonEpiCount = obj._nonEpiCount.count;
     }
   }
 }
@@ -49,12 +51,12 @@ const DISEASEFIELDS = gql`
     name
     all_ids
     synonyms
-    epiCount: mentionedInArticlesAggregate(
+    _epiCount: mentionedInArticlesAggregate(
       where: {isEpi: "Y"}
     ) {
       count
     }
-    nonEpiCount: mentionedInArticlesAggregate(
+    _nonEpiCount: mentionedInArticlesAggregate(
       where: {isEpi: null}
     ) {
       count
@@ -72,6 +74,9 @@ export const FETCHDISEASESLISTQUERY = gql`
       mentionedInArticlesAggregate {
         count
       }
+    }
+    total: diseasesAggregate {
+      count
     }
   }
 `
@@ -127,7 +132,13 @@ export const FETCHDISEASEQUERY = gql`
   ${AUTHORFIELDS}
 `;
 
-export const LISTQUERYPARAMETERS =
+export const LISTQUERYPARAMETERS: {
+  options: {
+    limit?: number,
+    offset?: number,
+    sort?: [{ [key: string]: string }]
+  }
+  } =
   {
     options: {
       limit: 10,

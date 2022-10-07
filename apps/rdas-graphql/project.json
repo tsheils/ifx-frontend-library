@@ -1,16 +1,20 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/rdas-backend/src",
+  "sourceRoot": "apps/rdas-graphql/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/rdas-backend",
-        "main": "apps/rdas-backend/src/main.ts",
-        "tsConfig": "apps/rdas-backend/tsconfig.app.json",
-        "assets": ["apps/rdas-backend/src/assets"]
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/rdas-graphql",
+        "main": "apps/rdas-graphql/src/main.ts",
+        "tsConfig": "apps/rdas-graphql/tsconfig.app.json",
+        "assets": [
+          "apps/rdas-graphql/src/assets"
+        ]
       },
       "configurations": {
         "production": {
@@ -19,21 +23,21 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/rdas-backend/src/environments/environment.ts",
-              "with": "apps/rdas-backend/src/environments/environment.prod.ts"
+              "replace": "apps/rdas-graphql/src/environments/environment.ts",
+              "with": "apps/rdas-graphql/src/environments/environment.prod.ts"
             }
           ]
         }
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "rdas-backend:build"
+        "buildTarget": "rdas-graphql:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "rdas-backend:build:production"
+          "buildTarget": "rdas-graphql:build:production"
         }
       }
     },
@@ -41,14 +45,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/rdas-backend/**/*.ts"]
+        "lintFilePatterns": ["apps/rdas-graphql/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/rdas-backend"],
+      "outputs": ["coverage/apps/rdas-graphql"],
       "options": {
-        "jestConfig": "apps/rdas-backend/jest.config.ts",
+        "jestConfig": "apps/rdas-graphql/jest.config.ts",
         "passWithNoTests": true
       }
     }

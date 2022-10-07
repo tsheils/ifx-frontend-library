@@ -6,8 +6,12 @@
 /out-tsc
 
 #environments
- apps/rdas/src/environments/
-environment.ts
+apps/rdas/src/environments/environment.ts
+apps/rdas/src/environments/environment.prod.ts
+apps/rdas-graphql/src/environments/environment.ts
+apps/rdas-graphql/src/environments/environment.prod.ts
+apps/neo4j-introspection/src/environments/environment.ts
+apps/neo4j-introspection/src/environments/environment.prod.ts
 .dev.ts
 .prod.ts
 # dependencies

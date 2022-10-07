@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'rdas-backend',
+  displayName: 'rdas-graphql',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -12,5 +12,5 @@ export default {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/rdas-backend',
+  coverageDirectory: '../../coverage/apps/rdas-graphql',
 };

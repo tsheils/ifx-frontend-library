@@ -21,6 +21,7 @@ export class DiseaseService {
   ) { }
 
   fetchArticles(query: any, variables: object = {}) {
+    console.log("fetch articles");
     return this.apollo.use('articles').watchQuery({
         query,
         variables
@@ -30,6 +31,7 @@ export class DiseaseService {
 
 
   fetchTrials(query: any, variables: object = {}) {
+    console.log("fetch trials");
     return this.apollo.use('trials').watchQuery({
         query,
         variables
@@ -38,6 +40,7 @@ export class DiseaseService {
   }
 
   fetchProjects(query: any, variables: object = {}) {
+    console.log("fetch projects");
     return this.apollo.use('projects').watchQuery({
         query,
         variables
@@ -49,6 +52,7 @@ export class DiseaseService {
     this.socket = webSocket({url: url});
     this.socket.pipe(
       mergeMap(response => {
+        console.log("websocket driver?");
         switch (response.origin) {
           case "search": {
             this.diseaseFacade.dispatch(DiseaseActions.searchDiseasesSuccess({typeahead: response.data.typeahead}));
@@ -68,6 +72,7 @@ export class DiseaseService {
   }
 
   read(instance: string, origin: string, call: string, params?: any): void {
+    console.log("read websocket");
     this.socket.next({txcType: 'read', origin: origin, call: call, params: params ? params : null});
 
   }
