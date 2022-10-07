@@ -1,0 +1,68 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom", "esnext.asynciterable"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@ncats-frontend-library/features/rdas/rdas-browse": [
+        "libs/features/rdas/rdas-browse/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-disease-page": [
+        "libs/features/rdas/rdas-disease-page/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-home": [
+        "libs/features/rdas/rdas-home/src/index.ts"
+      ],
+      "@ncats-frontend-library/models/rdas": ["libs/models/rdas/src/index.ts"],
+      "@ncats-frontend-library/models/utils": [
+        "libs/models/utils/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/article-display": [
+        "libs/shared/rdas/article-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/clinical-trials-display": [
+        "libs/shared/rdas/clinical-trials-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/disease-display": [
+        "libs/shared/rdas/disease-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/project-display": [
+        "libs/shared/rdas/project-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/rdas-search": [
+        "libs/shared/rdas/rdas-search/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/subscribe-button": [
+        "libs/shared/rdas/subscribe-button/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/header-template": [
+        "libs/shared/utils/header-template/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/loading-spinner": [
+        "libs/shared/utils/loading-spinner/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/social-sign-on": [
+        "libs/shared/utils/social-sign-on/src/index.ts"
+      ],
+      "@ncats-frontend-library/stores/disease-store": [
+        "libs/stores/disease-store/src/index.ts"
+      ],
+      "@ncats-frontend-library/stores/user-store": [
+        "libs/stores/user-store/src/index.ts"
+      ]
+    },
+    "allowSyntheticDefaultImports": true
+  },
+  "exclude": ["node_modules", "tmp"]
+}

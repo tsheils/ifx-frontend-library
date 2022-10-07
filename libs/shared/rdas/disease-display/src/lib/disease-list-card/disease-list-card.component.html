@@ -1,0 +1,17 @@
+<mat-card>
+  <div fxLayout = "row" fxLayoutAlign="space-between start"  class = "link-row">
+    <div fxFlex="80" (click)="navigate(disease.gard_id)">
+      <h3 class ="disease-name" mat-card-title>{{disease.name}}: {{disease.gard_id}}</h3>
+    </div>
+    <div fxFlex="12">
+      <ncats-frontend-library-subscribe-button [diseaseId]="disease.gard_id" ></ncats-frontend-library-subscribe-button>
+    </div>
+  </div>
+  <div fxLayout = "row" fxLayoutAlign="space-between center">
+    <div fxFlex="75">
+      <div *ngIf=" disease && disease.synonyms">
+        Synonyms: {{disease.synonyms.join(', ')}}
+      </div>
+    </div>
+  </div>
+</mat-card>

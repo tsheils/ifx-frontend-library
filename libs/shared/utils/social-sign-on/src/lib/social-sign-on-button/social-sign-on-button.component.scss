@@ -1,0 +1,53 @@
+.profile-pic {
+  height: 30px;
+  margin: 7px 5px 0 5px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+
+.missing-url {
+  font-size: 32px;
+  height: 32px;
+  width: 32px;
+  cursor: pointer;
+}
+
+.menu-button {
+  margin-right: 1vw;
+  margin-left: 1vw;
+  text-align: center;
+}
+
+.user-name {
+  font-size: 11px;
+  display: block;
+  cursor: pointer;
+}
+
+.profile-loading-spinner {
+  height: 50px;
+  margin-top: 7px;
+}
+
+button.nav-menu-button.mat-button {
+  width: 100%;
+}
+
+.cbh-account-icon {
+  color: #ffffff;
+  width: 32px;
+  height: 32px;
+ // font-size: 22px;
+/*  padding-top: 2px;
+  margin-left: 5px;*/
+  border: 1px solid #ffffff;
+  border-radius: 30px;
+}
+
+@media only screen and (max-width: 960px) {
+  .profile-pic {
+    margin-bottom: 5px;
+  }
+}
+
+
