@@ -1,8 +1,9 @@
-<div *ngIf=user class="profile-section signin-button" [matMenuTriggerFor]="profileMenu" fxHide.lt-md>
-  <img [src]=user.photoURL class="profile-pic" *ngIf="user?.photoURL" alt="Profile picture of the signed in user">
+<div *ngIf=user class="profile-section signin-button" [matMenuTriggerFor]="profileMenu" fxLayout="column" fxLayoutAlign = "center center" fxHide.lt-md>
+  <img [src]=photoURL class="profile-pic" *ngIf="photoURL" alt="Profile picture of the signed in user" (error)="handleMissingImage()">
+  <mat-icon *ngIf="!photoURL" class="missing-url">account_circle</mat-icon>
   <span class="user-name">{{user.displayName}}</span>
 </div>
-<button mat-button class="menu-button signin-button" aria-label = "signin button" (click)="openSignInModal()" *ngIf="!user" fxHide.lt-md>
+<button mat-button class="menu-button signin-button" aria-label = "signin button" (click)="openSignInModal()" *ngIf="!user" fxHide.lt-md >
   Sign In
 </button>
 <mat-menu #profileMenu="matMenu">

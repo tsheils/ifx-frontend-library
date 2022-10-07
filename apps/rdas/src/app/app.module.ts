@@ -2,14 +2,16 @@ import { APP_INITIALIZER, NgModule } from "@angular/core";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule, PERSISTENCE } from "@angular/fire/compat/auth";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
+import { FlexModule } from "@angular/flex-layout";
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
+import { SharedRdasRdasSearchModule } from "@ncats-frontend-library/shared/rdas/rdas-search";
 import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
 import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { SharedSocialSignOnModule } from "@ncats-frontend-library/shared/utils/social-sign-on";
 import { DiseaseService, DiseasesFacade, StoresDiseaseStoreModule } from "@ncats-frontend-library/stores/disease-store";
-import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { StoresUserStoreModule, UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from "@ngrx/effects";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
 import { StoreModule } from "@ngrx/store";
@@ -23,7 +25,7 @@ import { HttpClientModule } from '@angular/common/http';
 
 export function init_connections(diseaseService: DiseaseService) {
   return () => {
-    diseaseService.createDriver(environment.neo4jUrl);
+   // diseaseService.createDriver(environment.neo4jUrl);
   }
 }
 
@@ -35,6 +37,7 @@ export function init_connections(diseaseService: DiseaseService) {
     BrowserAnimationsModule,
     AppRoutingModule,
     StoresDiseaseStoreModule,
+    StoresUserStoreModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
@@ -58,7 +61,9 @@ export function init_connections(diseaseService: DiseaseService) {
     RouterModule,
     SharedUtilsLoadingSpinnerModule,
     SharedUtilsHeaderTemplateModule,
-    SharedSocialSignOnModule
+    SharedSocialSignOnModule,
+    SharedRdasRdasSearchModule,
+    FlexModule
   ],
   providers: [
     UsersFacade,

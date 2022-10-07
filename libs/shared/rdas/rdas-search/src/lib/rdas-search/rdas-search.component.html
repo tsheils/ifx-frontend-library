@@ -1,20 +1,22 @@
-<div fxLayout="row" fxLayoutAlign="space-around center">
-  <div fxFlex = 75>
-    <mat-form-field
-      class="full-width"
-      [appearance]="'outline'">
+<div >
+<div class ="search-row">
+  <mat-form-field class = "typeahead-field search" [floatLabel] = "'never'">
       <input matInput
-             placeholder="Search for a rare disease"
+             (keydown.enter)="search()"
+             aria-label="Search for a rare disease"
+             [placeholder]="'Search for a rare disease'"
              [formControl]=searchFormCtl
              [matAutocomplete]="auto">
-      <mat-autocomplete
+    <mat-autocomplete
+      #auto="matAutocomplete"
         [displayWith]="displayFn"
         (optionSelected)="selectDisease($event)"
-        #auto="matAutocomplete">
-        <mat-option *ngFor="let option of options" [value]="option">
+        [autoActiveFirstOption]="true"
+        class="custom-autocomplete-panel" >
+        <mat-option *ngFor="let option of options" [value]="option" class="dynamic-height">
           {{option.name}}
         </mat-option>
       </mat-autocomplete>
-    </mat-form-field>
+    <button mat-button mat-icon-button matSuffix aria-label="search" (click)="search()"><mat-icon>search</mat-icon></button>
+  </mat-form-field>
   </div>
-</div>

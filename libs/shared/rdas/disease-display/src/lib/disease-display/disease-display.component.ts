@@ -3,9 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input, OnChanges,
-  OnInit,
-  Output
+  Input,
+  OnChanges,
+  Output,
+  ViewEncapsulation
 } from "@angular/core";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 

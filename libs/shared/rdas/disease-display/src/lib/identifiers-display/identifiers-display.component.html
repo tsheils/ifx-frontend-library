@@ -1,8 +1,9 @@
 <div *ngIf = "disease">
   <div fxLayout="row" fxLayoutAlign="space-before start">
-    <div fxFlex="50" *ngIf = "disease && disease.synonyms">
-      <h3>Synonyms</h3>
-      <p>{{disease.synonyms.join(", ")}}</p>
+    <div fxFlex="75" *ngIf = "disease && disease.synonyms">
+      <h3 >Synonyms</h3>
+      <span>{{disease.synonyms.join(", ")}}</span>
     </div>
   </div>
 </div>
+<br>

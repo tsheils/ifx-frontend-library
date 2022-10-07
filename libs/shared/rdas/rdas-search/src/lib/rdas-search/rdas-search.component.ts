@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+  ViewEncapsulation
+} from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { Disease } from "@ncats-frontend-library/models/rdas";
@@ -9,6 +17,7 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
   selector: 'ncats-frontend-library-rdas-search',
   templateUrl: './rdas-search.component.html',
   styleUrls: ['./rdas-search.component.scss']
+
 })
 export class RdasSearchComponent implements OnInit, OnDestroy {
   /**
@@ -55,6 +64,10 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
 
   displayFn(option: {name: string, id: string }): string {
     return option && option.name ? option.name : '';
+  }
+
+  search() {
+    console.log(this.searchFormCtl.value);
   }
 
   /**

@@ -14,7 +14,7 @@ export interface LinkTemplateProperty {
   templateUrl: './header-template.component.html',
   styleUrls: ['./header-template.component.scss'],
   animations: [slideInOutAnimation],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 
 })
 export class HeaderTemplateComponent {

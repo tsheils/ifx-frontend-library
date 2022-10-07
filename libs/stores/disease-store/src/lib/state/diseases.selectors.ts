@@ -12,7 +12,9 @@ const { selectAll, selectEntities } = diseasesAdapter.getSelectors();
 
 export const getDiseasesLoaded = createSelector(
   getDiseasesState,
-  (state: State) => state.loaded
+  (state: State) => {
+    return state.loaded
+  }
 );
 
 export const getDiseasesError = createSelector(
@@ -20,10 +22,8 @@ export const getDiseasesError = createSelector(
   (state: State) => state.error
 );
 
-export const getAllDiseases = createSelector(getDiseasesState, (state: State) => {
-    console.log(state);
-    return selectAll(state)
-  }
+export const getAllDiseases = createSelector(getDiseasesState, (state: State) =>
+     selectAll(state)
 );
 
 export const searchDiseasesEntities = createSelector(
@@ -40,6 +40,11 @@ export const getDiseasesEntities = createSelector(
 export const getSelectedId = createSelector(
   getDiseasesState,
   (state: State) => state.selectedId
+);
+
+export const getDiseasesPage = createSelector(
+  getDiseasesState,
+  (state: State) => state.page
 );
 
 export const getSelected = createSelector(

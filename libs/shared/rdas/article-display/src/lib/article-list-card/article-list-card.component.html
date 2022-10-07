@@ -3,6 +3,7 @@
   <div fxLayout="row" fxLayoutAlign="space-between start">
     <div fxFlex="100">
       <span class="mat-h2">{{article.title}}</span>
+      <br>
     </div>
   </div>
 
@@ -10,8 +11,8 @@
     <div fxFlex="70">
 <span *ngFor="let author of article.authorsWrote; let last = last">
       <i>{{author.fullName}}</i> <span *ngIf="!last">, </span>
-    </span><br>
-      <span *ngIf="article.affiliation">{{article.affiliation}}</span><br>
+    </span><br><br>
+      <span *ngIf="article.affiliation">{{article.affiliation}}</span><br><br>
       <div fxLayout="row" fxLayoutAlign="start start">
         <div fxFlex="20" class = "mat-h3" *ngIf = "article.pubmed_id">PMID:
           <a
@@ -20,7 +21,7 @@
             rel="noreferrer"
             aria-label="Link to publication in PubMed"
           >{{article.pubmed_id}}</a></div>
-        <div fxFlex="40" class = "mat-h3" *ngIf = "article.doi">DOI:
+        <div fxFlex="50" class = "mat-h3" *ngIf = "article.doi">DOI:
           <a
             href="https://doi.org/{{article.doi}}"
             target="_blank"
@@ -29,8 +30,7 @@
           >{{article.doi}}</a>
 
           <span *ngIf = "article.doi" [ngSwitch]="article.isOpenAccess">
-      <span *ngSwitchCase="'Y'">(open access)</span>
-      <span *ngSwitchDefault>(not open access)</span>
+            <span *ngSwitchDefault>&nbsp;<mat-icon [color]="'primary'">lock</mat-icon> &nbsp;<span class="small-text">(not open access)</span></span>
     </span>
         </div>
       </div>

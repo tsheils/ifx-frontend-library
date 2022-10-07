@@ -6,6 +6,7 @@ import {
   FETCHTRIALSVARIABLES,
   LISTQUERYPARAMETERS, Project, PROJECTVARIABLES
 } from "@ncats-frontend-library/models/rdas";
+import { Page } from "@ncats-frontend-library/models/utils";
 import { DiseaseService } from "@ncats-frontend-library/stores/disease-store";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import {ROUTER_NAVIGATION, RouterNavigationAction} from "@ngrx/router-store";
@@ -68,20 +69,18 @@ export class DiseasesEffects {
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: any) => {
-        console.log(params);
-        const pageSize = params.pageSize ? params.pageSize : 10;
-        const pageIndex = params.pageIndex ? params.pageIndex : 0;
-        LISTQUERYPARAMETERS.options.limit = pageSize;
-        LISTQUERYPARAMETERS.options.offset = (pageIndex + 1) * 10;
+      switchMap((params: { pageSize?: number, pageIndex?: number}) => {
+        let pageSize: number = params.pageSize ? params.pageSize as number: 10;
+        let pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
+        LISTQUERYPARAMETERS.options.limit =  +pageSize;
+        LISTQUERYPARAMETERS.options.offset = +pageSize * (+pageIndex +1);
         return this.diseaseService.fetchArticles(FETCHDISEASESLISTQUERY, LISTQUERYPARAMETERS)
           .pipe(
             map((res: any) => {
               if(res && res.data) {
-                console.log(res);
+                const page: Page = { pageSize: pageSize, pageIndex: pageIndex, total: res.data.total.count}
                 const diseaseArr = res.data.diseases.map((obj: { [key: string]: string }) => new Disease(obj))
-                console.log(diseaseArr);
-                return DiseasesActions.loadDiseasesSuccess({diseases: diseaseArr})
+                return DiseasesActions.loadDiseasesSuccess({diseases: diseaseArr, page: page})
               }
               else return DiseasesActions.loadDiseasesFailure({error: "No Disease found"})
             })
@@ -124,6 +123,7 @@ export class DiseasesEffects {
     this.actions$.pipe(
       ofType(DiseasesActions.fetchDisease),
       mergeMap((action: any) => {
+        console.log("fetch disease")
         switch(action.source) {
           case 'article': {
             Object.keys(action.options).forEach((key: string) => {
@@ -149,19 +149,19 @@ export class DiseasesEffects {
         }
         return combineLatest(
           this.diseaseService.fetchArticles(FETCHDISEASEQUERY, ARTICLEVARIABLES).pipe(take(1)),
-          this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
+       //   this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-            map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
-              console.log(trialsData);
+            map(([diseaseData, trialsData]: [any, any]) => {
+            //map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
               if(diseaseData && diseaseData.data) {
                 const diseaseObj: Disease = new Disease(diseaseData.data.diseases[0]);
-                diseaseObj.projects = projectsData.data.projects.map((proj: { [key: string]: unknown }) => new Project(proj))
-                diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
+             //   diseaseObj.projects = projectsData.data.projects.map((proj: { [key: string]: unknown }) => new Project(proj))
+             //   diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 diseaseObj.clinicalTrials =
                   trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
-                diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
+            //    diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
               }
@@ -175,26 +175,30 @@ export class DiseasesEffects {
   loadDisease$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/disease')),
+      filter((r: RouterNavigationAction) => {
+        console.log(r);
+        return r.payload.routerState.url != '/diseases' && r.payload.routerState.url.startsWith('/disease')
+      }),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       switchMap((params: {id?: string}) => {
-        console.log(params);
+        console.log("load disease")
         ARTICLEVARIABLES.diseasesWhere = {gard_id: params.id};
         PROJECTVARIABLES.projectsWhere = {diseasesisInvestigatedBy_SOME: {gard_id: params.id}};
         FETCHTRIALSVARIABLES.ctwhere = {GARDId: params.id};
         return forkJoin(
           this.diseaseService.fetchArticles(FETCHDISEASEQUERY, ARTICLEVARIABLES).pipe(take(1)),
-          this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
+        //  this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-            map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
+         //   map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
+            map(([diseaseData, trialsData]: [any, any]) => {
               if(diseaseData && diseaseData.data) {
                 const diseaseObj: Disease = new Disease(diseaseData.data.diseases[0]);
-                if(projectsData.data && projectsData.data.projects.length) {
+  /*              if(projectsData.data && projectsData.data.projects.length) {
                   diseaseObj.projects = projectsData.data.projects.map((proj: any) => new Project(proj))
                   diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
-                }
+                }*/
                 if(trialsData.data && trialsData.data.disease.length) {
                   diseaseObj.clinicalTrials = trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
                   diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;

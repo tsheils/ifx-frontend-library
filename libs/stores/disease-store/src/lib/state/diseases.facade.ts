@@ -3,6 +3,7 @@ import { select, Store, Action } from '@ngrx/store';
 
 import * as DiseasesActions from './diseases.actions';
 import * as DiseasesFeature from './diseases.reducer';
+import { getDiseasesPage } from "./diseases.selectors";
 import * as DiseasesSelectors from './diseases.selectors';
 
 @Injectable()
@@ -16,6 +17,7 @@ export class DiseasesFacade {
   allDiseases$ = this.store.pipe(select(DiseasesSelectors.getAllDiseases));
   selectedDiseases$ = this.store.pipe(select(DiseasesSelectors.getSelected));
   searchDiseases$ = this.store.pipe(select(DiseasesSelectors.searchDiseasesEntities));
+  page$ = this.store.pipe(select(DiseasesSelectors.getDiseasesPage));
 
 
   constructor(private store: Store<DiseasesFeature.DiseasesPartialState>) {

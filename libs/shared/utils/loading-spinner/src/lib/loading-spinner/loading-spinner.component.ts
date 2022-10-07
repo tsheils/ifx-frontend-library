@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 
 @Component({
   selector: 'ncats-frontend-library-loading-spinner',
@@ -6,7 +6,7 @@ import { Component, Input, OnInit } from "@angular/core";
   styleUrls: ['./loading-spinner.component.scss']
 })
 export class LoadingSpinnerComponent {
-  @Input() isLoading = true;
+  @Input() isLoaded = true;
   @Input() position: 'left' | 'right' | 'center' = 'center';
   @Input() size: 'small' | 'medium' | 'large' = 'large';
   sizes = {

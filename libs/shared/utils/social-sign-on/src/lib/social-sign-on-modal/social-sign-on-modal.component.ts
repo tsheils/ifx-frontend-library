@@ -14,9 +14,12 @@ export class SocialSignOnModalComponent  {
   constructor(
     public dialogRef: MatDialogRef<SocialSignOnModalComponent>,
     private userFacade: UsersFacade
-  ) { }
+  ) {
+    console.log("SDFSDFSDFSDFDSFS");
+  }
 
   login(provider: string): void {
+    console.log(provider)
     this.userFacade.dispatch(loginUser({provider: provider}))
   }
 

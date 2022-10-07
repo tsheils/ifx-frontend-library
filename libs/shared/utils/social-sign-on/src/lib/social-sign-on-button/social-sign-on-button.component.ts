@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { User } from "@ncats-frontend-library/models/utils";
 import { UsersFacade, logoutUser } from "@ncats-frontend-library/stores/user-store";
@@ -20,14 +20,23 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
   @Input()
   user?: User;
 
+  photoURL = '';
+
   constructor(
     public dialog: MatDialog,
+    public ref: ChangeDetectorRef,
     private userFacade: UsersFacade,
-  ) { }
+  ) {
+  }
 
   ngOnChanges(change: SimpleChanges) {
+    console.log(change);
     if(change['user'] && !change['user'].firstChange){
+      if(this.user?.photoURL) {
+        this.photoURL = this.user.photoURL;
+      }
       this.dialog.closeAll()
+      this.ref.detectChanges();
     }
 
   }
@@ -53,6 +62,10 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
 
   viewProfile() {
  //todo
+  }
+
+  handleMissingImage(){
+    this.photoURL = '';
   }
 
   ngOnDestroy() {

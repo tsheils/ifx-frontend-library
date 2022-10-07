@@ -1,4 +1,5 @@
 import { Disease } from "@ncats-frontend-library/models/rdas";
+import { Page } from "@ncats-frontend-library/models/utils";
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
@@ -12,6 +13,7 @@ export interface State extends EntityState<Disease> {
   error?: string | null; // last known error (if any)
   typeahead?: Disease[];
   disease?: Disease;
+  page?: Page;
 }
 
 export interface DiseasesPartialState {
@@ -36,20 +38,18 @@ const diseasesReducer = createReducer(
     error: null,
   })),
 
-  on(DiseasesActions.loadDiseasesSuccess, (state, { diseases }) => {
-      console.log(state);
-      console.log(diseases);
-      return diseasesAdapter.setAll(diseases, {...state, loaded: true})
-    }
+  on(DiseasesActions.loadDiseasesSuccess, (state, { diseases, page}) =>
+       diseasesAdapter.setAll(diseases, {...state, page: page, loaded: true})
+
   ),
 
-  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => {
-      return diseasesAdapter.setAll(typeahead, {...state, loaded: true})
-    }
+  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) =>
+       diseasesAdapter.setAll(typeahead, {...state, loaded: true})
+
   ),
-  on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) => {
-      return diseasesAdapter.setOne(disease, {...state, selectedId: disease.gard_id, loaded: true})
-    }
+  on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) =>
+       diseasesAdapter.setOne(disease, {...state, selectedId: disease.gard_id, loaded: true})
+
   ),
 
   on(

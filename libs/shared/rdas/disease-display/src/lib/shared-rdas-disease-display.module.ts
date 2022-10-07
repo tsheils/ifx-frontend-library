@@ -3,7 +3,10 @@ import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatTabsModule } from "@angular/material/tabs";
-import { SharedRdasArticleDisplayModule } from "@ncats-frontend-library/shared/rdas/article-display";
+import {
+  ArticleListCardComponent, ArticleListComponent
+
+} from "@ncats-frontend-library/shared/rdas/article-display";
 import { SharedRdasClinicalTrialsDisplayModule } from "@ncats-frontend-library/shared/rdas/clinical-trials-display";
 import { SharedRdasProjectDisplayModule } from "@ncats-frontend-library/shared/rdas/project-display";
 import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
@@ -21,8 +24,9 @@ import { IdentifiersDisplayComponent } from './identifiers-display/identifiers-d
     FlexLayoutModule,
     SharedRdasSubscribeButtonModule,
     SharedRdasProjectDisplayModule,
-    SharedRdasArticleDisplayModule,
-    SharedRdasClinicalTrialsDisplayModule
+    SharedRdasClinicalTrialsDisplayModule,
+    ArticleListCardComponent,
+    ArticleListComponent
   ],
   declarations: [
     DiseaseDisplayComponent,

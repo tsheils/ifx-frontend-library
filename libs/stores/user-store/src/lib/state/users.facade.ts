@@ -15,9 +15,15 @@ export class UsersFacade {
   user$ = this.store.pipe(select(UsersSelectors.getUser));
   selectedUsers$ = this.store.pipe(select(UsersSelectors.getSelected));
 
-  constructor(private readonly store: Store) {}
+  constructor(private readonly store: Store) {
+    this.store.dispatch(UsersActions.init());
+  }
 
   dispatch(action: Action) {
     this.store.dispatch(action);
+  }
+
+  init() {
+   // this.store.dispatch(UsersActions.init());
   }
 }

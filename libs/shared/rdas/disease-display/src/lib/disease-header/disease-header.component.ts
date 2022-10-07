@@ -1,10 +1,11 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 
 @Component({
   selector: 'ncats-frontend-library-disease-header',
   templateUrl: './disease-header.component.html',
-  styleUrls: ['./disease-header.component.scss']
+  styleUrls: ['./disease-header.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class DiseaseHeaderComponent implements OnInit {
   @Input()

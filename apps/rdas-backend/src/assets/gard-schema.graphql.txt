@@ -1,8 +1,0 @@
-
-type Disease {
-	dateCreated: BigInt!
-	gard_id: String!
-	name: String!
-	synonyms: [String]!
-	synonymsString: String!
-}
