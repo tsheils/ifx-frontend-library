@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'shared-social-sign-on',
-  preset: '../../../jest.preset.js',
+  preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {

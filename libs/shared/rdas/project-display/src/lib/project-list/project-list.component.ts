@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
 import { PageEvent } from "@angular/material/paginator";
 import { Project } from "@ncats-frontend-library/models/rdas";
 
@@ -10,17 +10,17 @@ import { Project } from "@ncats-frontend-library/models/rdas";
 export class ProjectListComponent implements OnChanges {
   @Input() projects!: Project[];
   @Input() count = 0;
-  @Output() pageChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() pageChange: EventEmitter<{offset:number}> = new EventEmitter<{offset:number}>();
   constructor(
     private changeRef: ChangeDetectorRef
   ) { }
 
-  ngOnChanges(change: any) {
+  ngOnChanges() {
     this.changeRef.markForCheck()
   }
 
   fetchProjects(event: PageEvent) {
-    const pageOptions = {
+    const pageOptions: {offset:number} = {
       offset: event.pageIndex * event.pageSize,
     }
     this.pageChange.emit(pageOptions);

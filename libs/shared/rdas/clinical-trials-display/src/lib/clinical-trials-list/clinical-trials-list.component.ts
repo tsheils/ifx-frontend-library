@@ -10,18 +10,18 @@ import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
 export class ClinicalTrialsListComponent implements OnChanges {
   @Input() trials!: ClinicalTrial[];
   @Input() count = 0;
-  @Output() pageChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() pageChange: EventEmitter< {offset:number}> = new EventEmitter<{offset:number}>();
   constructor(
     private changeRef: ChangeDetectorRef
   ) { }
 
 
-  ngOnChanges(change: any) {
+  ngOnChanges() {
     this.changeRef.markForCheck()
   }
 
   fetchTrials(event: PageEvent) {
-    const pageOptions = {
+    const pageOptions: {offset:number} = {
       offset: event.pageIndex * event.pageSize,
     }
     this.pageChange.emit(pageOptions);

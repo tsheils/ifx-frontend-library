@@ -1,4 +1,5 @@
 import { TestBed } from '@angular/core/testing';
+import { User } from "@ncats-frontend-library/models/utils";
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
@@ -28,13 +29,13 @@ describe('UsersEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: UsersActions.initUsers() });
+      actions = hot('-a-|', { a: UsersActions.init() });
 
       const expected = hot('-a-|', {
-        a: UsersActions.loadUsersSuccess({ users: [] }),
+        a: UsersActions.loginUserSuccess({ user: new User({})}),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(effects.init).toBeObservable(expected);
     });
   });
 });

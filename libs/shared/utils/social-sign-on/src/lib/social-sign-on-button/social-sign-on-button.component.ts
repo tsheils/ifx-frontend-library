@@ -30,7 +30,6 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(change: SimpleChanges) {
-    console.log(change);
     if(change['user'] && !change['user'].firstChange){
       if(this.user?.photoURL) {
         this.photoURL = this.user.photoURL;

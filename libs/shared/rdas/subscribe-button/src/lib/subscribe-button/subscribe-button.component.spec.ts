@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
 
 import { SubscribeButtonComponent } from './subscribe-button.component';
 
@@ -8,7 +10,14 @@ describe('SubscribeButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SubscribeButtonComponent ]
+      declarations: [ SubscribeButtonComponent ],
+      imports: [
+        MatDialogModule,
+        MatSnackBarModule
+      ],
+      providers: [
+        {provide: MatDialog, useValue: {}}
+      ]
     })
     .compileComponents();
 

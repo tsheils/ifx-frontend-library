@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatCardModule } from "@angular/material/card";
 
 import { ClinicalTrialsListComponent } from './clinical-trials-list.component';
 
@@ -8,7 +9,10 @@ describe('ClinicalTrialsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClinicalTrialsListComponent ]
+      declarations: [ ClinicalTrialsListComponent ],
+      imports: [
+        MatCardModule
+      ]
     })
     .compileComponents();
 

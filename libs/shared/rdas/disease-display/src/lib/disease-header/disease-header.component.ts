@@ -12,7 +12,6 @@ export class DiseaseHeaderComponent implements OnInit {
   disease!: Disease;
   @Input() subscriptions!: Disease[];
   trimmed_id!: number;
-  constructor() { }
 
   ngOnInit(): void {
     this.trimmed_id = +this.disease.gard_id.split('GARD:')[1]

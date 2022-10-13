@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from "@angular/material/dialog";
 
 import { SocialSignOnButtonComponent } from './social-sign-on-button.component';
 
@@ -8,7 +9,8 @@ describe('SocialSignOnButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SocialSignOnButtonComponent ]
+      declarations: [ SocialSignOnButtonComponent ],
+      imports:[MatDialogModule]
     })
     .compileComponents();
 
