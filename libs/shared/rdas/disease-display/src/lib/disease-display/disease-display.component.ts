@@ -5,8 +5,7 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  Output,
-  ViewEncapsulation
+  Output
 } from "@angular/core";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 
@@ -19,19 +18,20 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
 })
 export class DiseaseDisplayComponent implements OnChanges {
   @Input() disease!: Disease;
-  @Output() optionsChange: EventEmitter<any> = new EventEmitter<any>();
+  @Output() optionsChange: EventEmitter<{variables: { [key: string]: string }, origin: string}> =
+    new EventEmitter<{variables: { [key: string]: string }, origin: string}>();
 
   constructor(
     private changeRef: ChangeDetectorRef
   ) {
   }
 
-  ngOnChanges(change: any) {
+  ngOnChanges() {
     this.changeRef.markForCheck()
   }
 
   pageList(event: any, pageField: string, origin: string): void {
-    const variables: any = {};
+    const variables: { [key: string]: string } = {};
     variables[pageField] = event;
     this.optionsChange.emit({variables, origin});
   }

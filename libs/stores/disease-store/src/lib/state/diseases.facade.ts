@@ -3,7 +3,6 @@ import { select, Store, Action } from '@ngrx/store';
 
 import * as DiseasesActions from './diseases.actions';
 import * as DiseasesFeature from './diseases.reducer';
-import { getDiseasesPage } from "./diseases.selectors";
 import * as DiseasesSelectors from './diseases.selectors';
 
 @Injectable()

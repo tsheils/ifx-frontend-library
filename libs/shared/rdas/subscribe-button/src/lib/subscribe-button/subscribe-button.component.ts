@@ -1,4 +1,4 @@
-import { SelectionChange, SelectionModel } from "@angular/cdk/collections";
+import { SelectionModel } from "@angular/cdk/collections";
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -22,8 +22,8 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
 
   @Input() diseaseId!: string;
   @Input() subscribed = false;
-  private user!: User;
-  subscription!: Subscription;
+  private user: User | null = null;
+  subscription?: Subscription;
 
   all = ['articles', 'grants', 'trials'];
 
@@ -45,12 +45,17 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
       .subscribe(user => {
       if(user && user.length) {
         this.user = JSON.parse(JSON.stringify(user[0]));
-        this.subscription = this.user.subscriptions.filter(sub => sub.disease === this.diseaseId)[0];
+        this.subscription = this.user?.subscriptions.filter(sub => sub.disease === this.diseaseId)[0];
           this.subscribed = !!this.subscription;
           this.changeRef.markForCheck();
-        if (this.subscription?.alerts && this.subscription?.alerts.length > 0) {
+        if (this.subscription?.alerts) {
           this.subscriptionSelection.setSelection(...this.subscription.alerts);
         }
+      } else {
+        this.user = null;
+        this.subscription = undefined;
+        this.subscribed = false;
+        this.changeRef.markForCheck();
       }
     })
 
@@ -62,11 +67,13 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         const subscriptionClone: Subscription[] = [];
-        this.user.subscriptions.forEach(sub => subscriptionClone.push(sub))
-        subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.disease === this.diseaseId), 1);
-        this.subscription = {disease:this.diseaseId, alerts: this.subscriptionSelection.selected};
-        subscriptionClone.push(this.subscription);
-        this.userFacade.dispatch(updateUserSubscriptions({subscriptions: subscriptionClone}))
+        if (this.user && this.user.subscriptions) {
+          this.user?.subscriptions.forEach(sub => subscriptionClone.push(sub))
+          subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.disease === this.diseaseId), 1);
+          this.subscription = { disease: this.diseaseId, alerts: this.subscriptionSelection.selected };
+          subscriptionClone.push(this.subscription);
+          this.userFacade.dispatch(updateUserSubscriptions({ subscriptions: subscriptionClone }))
+        }
       });
   }
 
@@ -90,7 +97,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
         (res: { [key: string]: string }) => {
           if(res) {
             const subscriptionClone: Subscription[] = [];
-            this.user.subscriptions.forEach(sub => {
+            this.user?.subscriptions.forEach(sub => {
               if(sub.disease !== this.diseaseId) {
                 subscriptionClone.push(Object.assign({}, {...sub}))
               }

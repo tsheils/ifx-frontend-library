@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DiseaseHeaderComponent, DiseaseListCardComponent } from "@ncats-frontend-library/shared/rdas/disease-display";
+import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
 
 import { IdentifiersDisplayComponent } from './identifiers-display.component';
 
@@ -8,7 +10,11 @@ describe('IdentifiersDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ IdentifiersDisplayComponent ]
+      declarations: [ IdentifiersDisplayComponent, DiseaseHeaderComponent ],
+      imports: [
+        SharedRdasSubscribeButtonModule,
+        DiseaseListCardComponent
+      ]
     })
     .compileComponents();
 

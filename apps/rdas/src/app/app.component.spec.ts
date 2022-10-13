@@ -1,10 +1,27 @@
 import { TestBed } from '@angular/core/testing';
+import { ActivatedRoute, RouterModule } from "@angular/router";
+import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
+import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
+import { SharedSocialSignOnModule } from "@ncats-frontend-library/shared/utils/social-sign-on";
+import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
+import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
+      imports: [
+        SharedUtilsHeaderTemplateModule,
+        SharedSocialSignOnModule,
+        SharedUtilsLoadingSpinnerModule,
+        RouterModule
+      ],
+      providers: [
+        {provide: DiseasesFacade, useValue: {}},
+        {provide: UsersFacade, useValue: {}},
+        {provide: ActivatedRoute, useValue: {}}
+      ]
     }).compileComponents();
   });
 
@@ -20,10 +37,4 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('rdas');
   });
 
-  it('should render title', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Welcome rdas');
-  });
 });

@@ -1,6 +1,6 @@
-const { toGraphQLTypeDefs } = require("@neo4j/introspector")
-const neo4j = require("neo4j-driver");
-const fs = require('fs');
+import {toGraphQLTypeDefs} from "@neo4j/introspector";
+import neo4j = require("neo4j-driver");
+import fs = require('fs');
 
 const uri = '';
 const neo4jUser = '';

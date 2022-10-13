@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DiseaseService } from "@ncats-frontend-library/stores/disease-store";
+import { Apollo } from "apollo-angular";
 
 import { RdasSearchComponent } from './rdas-search.component';
 
@@ -8,7 +10,11 @@ describe('RdasSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RdasSearchComponent ]
+      declarations: [ RdasSearchComponent ],
+      providers: [
+        DiseaseService,
+        Apollo
+      ]
     })
     .compileComponents();
 

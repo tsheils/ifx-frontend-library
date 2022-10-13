@@ -1,4 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatTabsModule } from "@angular/material/tabs";
+import {
+  DiseaseHeaderComponent,
+  IdentifiersDisplayComponent
+} from "@ncats-frontend-library/shared/rdas/disease-display";
+import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
 
 import { DiseaseDisplayComponent } from './disease-display.component';
 
@@ -8,7 +14,14 @@ describe('DiseaseDisplayComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DiseaseDisplayComponent ]
+      declarations: [
+        DiseaseDisplayComponent,
+        DiseaseHeaderComponent,
+        IdentifiersDisplayComponent
+      ],
+      imports: [
+        MatTabsModule,
+      ]
     })
     .compileComponents();
 

@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
+import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 
 import { SocialSignOnModalComponent } from './social-sign-on-modal.component';
 
@@ -8,7 +10,15 @@ describe('SocialSignOnModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ SocialSignOnModalComponent ]
+      declarations: [ SocialSignOnModalComponent ],
+      imports: [
+        MatDialogModule
+      ],
+      providers: [
+        {provide: MatDialog, useValue: {}},
+        {provide: MatDialogRef, useValue: {}},
+        {provide: UsersFacade, useValue: {}}
+      ]
     })
     .compileComponents();
 

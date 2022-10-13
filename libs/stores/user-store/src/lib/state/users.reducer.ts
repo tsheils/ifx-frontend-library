@@ -36,7 +36,7 @@ const usersReducer = createReducer(
     (state, { user }) => usersAdapter.setOne(user, { ...state, loaded: true, selectedId: user.uid })
   ),
   on(
-    UsersActions.logoutUser, (state) => usersAdapter.removeAll(state)
+    UsersActions.logoutUserSuccess, (state) => usersAdapter.removeAll(state)
   ),
   on(UsersActions.loginUserFailure, (state, { error }) => ({ ...state, error }))
 );

@@ -3,6 +3,7 @@ import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Users/API] Init');
 
+/*
 const openLogin = createAction(
   '[Users/API] Open Login',
   props<{component:unknown, data:unknown}>()
@@ -17,6 +18,7 @@ const dialogClosed = createAction(
   '[Home Page] Dialog Closed',
   props<{data:unknown}>()
 )
+*/
 
 export const loginUser = createAction(
   '[Users/API] Login User',
