@@ -14,6 +14,7 @@ export interface State extends EntityState<Disease> {
   typeahead?: Disease[];
   disease?: Disease;
   page?: Page;
+  diseases?: Disease[];
 }
 
 export interface DiseasesPartialState {
@@ -28,9 +29,11 @@ export const diseasesAdapter: EntityAdapter<Disease> =
 export const initialState: State = diseasesAdapter.getInitialState({
   // set initial required properties
   loaded: false,
+  error: 'No Error Available',
+  typeahead: []
 });
 
-const diseasesReducer = createReducer(
+export const diseasesReducer = createReducer(
   initialState,
   on(DiseasesActions.init, (state) => ({
     ...state,

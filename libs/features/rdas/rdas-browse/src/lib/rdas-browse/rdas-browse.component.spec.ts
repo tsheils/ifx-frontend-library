@@ -1,7 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { SharedRdasDiseaseDisplayModule } from "@ncats-frontend-library/shared/rdas/disease-display";
+import { SharedRdasRdasSearchModule } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { DISEASES_FEATURE_KEY, DiseasesFacade, reducer } from "@ncats-frontend-library/stores/disease-store";
 import { EffectsModule } from "@ngrx/effects";
 import { Store, StoreModule } from "@ngrx/store";
+import { Apollo } from "apollo-angular";
 
 import { RdasBrowseComponent } from './rdas-browse.component';
 
@@ -13,19 +17,14 @@ describe('RdasBrowseComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ RdasBrowseComponent ],
       imports: [
-        StoreModule.forRoot(
-          {},
-          {
-            metaReducers: [],
-            runtimeChecks: {
-              strictActionImmutability: true,
-              strictStateImmutability: true,
-            },
-          }
-        ),
-        EffectsModule.forRoot([])
+        BrowserAnimationsModule,
+        SharedRdasRdasSearchModule,
+        SharedRdasDiseaseDisplayModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer)
       ],
       providers: [
+        Apollo,
         DiseasesFacade
       ]
     })

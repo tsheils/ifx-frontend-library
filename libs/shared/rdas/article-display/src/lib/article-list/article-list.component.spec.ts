@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ArticleListCardComponent } from "@ncats-frontend-library/shared/rdas/article-display";
+import { ArticleListCardComponent } from "../article-list-card/article-list-card.component";
 
 import { ArticleListComponent } from './article-list.component';
 
