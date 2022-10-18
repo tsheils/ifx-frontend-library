@@ -1,19 +1,23 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { AngularFireModule } from "@angular/fire/compat";
+import { AngularFirestore } from "@angular/fire/compat/firestore";
+import { User } from "@ncats-frontend-library/models/utils";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { NxModule } from '@nrwl/angular';
 import { readFirst } from '@nrwl/angular/testing';
+import { BehaviorSubject } from "rxjs";
+import { COMMON_CONFIG, FIRESTORESTUB } from "../user.service.spec";
 
 import * as UsersActions from './users.actions';
 import { UsersEffects } from './users.effects';
 import { UsersFacade } from './users.facade';
-import { UsersEntity } from './users.models';
 import {
+  reducer,
   State,
   USERS_FEATURE_KEY
 } from "./users.reducer";
-import * as UsersSelectors from './users.selectors';
 
 interface TestSchema {
   users: State;
@@ -22,19 +26,24 @@ interface TestSchema {
 describe('UsersFacade', () => {
   let facade: UsersFacade;
   let store: Store<TestSchema>;
-  const createUsersEntity = (id: string, name = ''): UsersEntity => ({
-    id,
-    name: name || `name-${id}`,
+  const createUsersEntity = (uid: string, displayName = ''): User => ({
+    uid,
+    displayName: displayName || `name-${uid}`,
+    subscriptions: []
   });
 
   describe('used in NgModule', () => {
     beforeEach(() => {
       @NgModule({
         imports: [
-          StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
+          StoreModule.forFeature(USERS_FEATURE_KEY, reducer),
           EffectsModule.forFeature([UsersEffects]),
+          AngularFireModule.initializeApp(COMMON_CONFIG)
         ],
-        providers: [UsersFacade],
+        providers: [
+          UsersFacade,
+        { provide: AngularFirestore, useValue: FIRESTORESTUB }
+        ],
       })
       class CustomFeatureModule {}
 
@@ -45,6 +54,9 @@ describe('UsersFacade', () => {
           EffectsModule.forRoot([]),
           CustomFeatureModule,
         ],
+        providers: [
+          { provide: AngularFirestore, useValue: FIRESTORESTUB }
+        ]
       })
       class RootModule {}
       TestBed.configureTestingModule({ imports: [RootModule] });
@@ -57,41 +69,54 @@ describe('UsersFacade', () => {
      * The initially generated facade::loadAll() returns empty array
      */
     it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allUsers$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      let list = await readFirst(facade.user$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       let isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
-      facade.init();
-
-      list = await readFirst(facade.allUsers$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      list = await readFirst(facade.user$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(isLoaded).toBe(false);
     });
 
     /**
      * Use `loadUsersSuccess` to manually update list
      */
     it('allUsers$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allUsers$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      let list = await readFirst(facade.user$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       let isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
       store.dispatch(
-        UsersActions.loadUsersSuccess({
-          users: [createUsersEntity('AAA'), createUsersEntity('BBB')],
+        UsersActions.loginUserSuccess({
+          user: createUsersEntity('AAA'),
         })
       );
-
-      list = await readFirst(facade.allUsers$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
+      list = await readFirst(facade.user$);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       isLoaded = await readFirst(facade.loaded$);
 
-      expect(list.length).toBe(2);
+      expect(list.length).toBe(1);
       expect(isLoaded).toBe(true);
     });
   });

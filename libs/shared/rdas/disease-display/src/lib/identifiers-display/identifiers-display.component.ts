@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 
 @Component({
@@ -7,11 +7,6 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
   styleUrls: ['./identifiers-display.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
-export class IdentifiersDisplayComponent implements OnInit {
+export class IdentifiersDisplayComponent {
   @Input() disease!: Disease;
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

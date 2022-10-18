@@ -1,17 +1,22 @@
+import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Action } from '@ngrx/store';
 
 import * as DiseasesActions from './diseases.actions';
 import { DiseasesEntity } from './diseases.models';
 import {
-  DiseasesState,
-  initialDiseasesState,
+  State,
+  initialState,
   diseasesReducer,
 } from './diseases.reducer';
 
 describe('Diseases Reducer', () => {
-  const createDiseasesEntity = (id: string, name = ''): DiseasesEntity => ({
-    id,
-    name: name || `name-${id}`,
+  const createDiseasesEntity = (gard_id: string, name = ''): Disease => ({
+    gard_id,
+    name: name || `name-${gard_id}`,
+    epiCount: 0,
+    nonEpiCount: 0,
+    projectCount: 0,
+    clinicalTrialsCount: 0
   });
 
   describe('valid Diseases actions', () => {
@@ -22,8 +27,8 @@ describe('Diseases Reducer', () => {
       ];
       const action = DiseasesActions.loadDiseasesSuccess({ diseases });
 
-      const result: DiseasesState = diseasesReducer(
-        initialDiseasesState,
+      const result: State = diseasesReducer(
+        initialState,
         action
       );
 
@@ -36,9 +41,9 @@ describe('Diseases Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = diseasesReducer(initialDiseasesState, action);
+      const result = diseasesReducer(initialState, action);
 
-      expect(result).toBe(initialDiseasesState);
+      expect(result).toBe(initialState);
     });
   });
 });

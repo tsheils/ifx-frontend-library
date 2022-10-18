@@ -1,27 +1,25 @@
+import { User } from "@ncats-frontend-library/models/utils";
+import { initialState, reducer, State } from './users.reducer';
 import { Action } from '@ngrx/store';
 
 import * as UsersActions from './users.actions';
-import { UsersEntity } from './users.models';
-import { UsersState, initialUsersState, usersReducer } from './users.reducer';
 
 describe('Users Reducer', () => {
-  const createUsersEntity = (id: string, name = ''): UsersEntity => ({
-    id,
-    name: name || `name-${id}`,
+  const createUsersEntity = (uid: string, displayName = ''): User => new User({
+    uid,
+    displayName: displayName || `name-${uid}`,
   });
 
   describe('valid Users actions', () => {
     it('loadUsersSuccess should return the list of known Users', () => {
-      const users = [
-        createUsersEntity('PRODUCT-AAA'),
-        createUsersEntity('PRODUCT-zzz'),
-      ];
-      const action = UsersActions.loadUsersSuccess({ users });
+      const users =
+        createUsersEntity('PRODUCT-zzz');
+      const action = UsersActions.loginUserSuccess({ user: users });
 
-      const result: UsersState = usersReducer(initialUsersState, action);
+      const result: State = reducer(initialState, action);
 
       expect(result.loaded).toBe(true);
-      expect(result.ids.length).toBe(2);
+      expect(result.ids.length).toBe(1);
     });
   });
 
@@ -29,9 +27,9 @@ describe('Users Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = usersReducer(initialUsersState, action);
+      const result = reducer(initialState, action);
 
-      expect(result).toBe(initialUsersState);
+      expect(result).toBe(initialState);
     });
   });
 });

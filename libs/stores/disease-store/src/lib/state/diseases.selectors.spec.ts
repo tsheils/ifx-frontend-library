@@ -1,39 +1,46 @@
-import { DiseasesEntity } from './diseases.models';
+import { Disease } from "@ncats-frontend-library/models/rdas";
 import {
   diseasesAdapter,
-  DiseasesPartialState,
-  initialDiseasesState,
+  State,
+  initialState,
 } from './diseases.reducer';
 import * as DiseasesSelectors from './diseases.selectors';
 
 describe('Diseases Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getDiseasesId = (it: DiseasesEntity) => it.id;
-  const createDiseasesEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as DiseasesEntity);
+  const getDiseasesId = (it: Disease) => it.gard_id;
+  const createDiseasesEntity = (gard_id: string, name = ''): Disease => ({
+    gard_id: gard_id,
+    name: name || `name-${gard_id}`,
+    epiCount: 0,
+    nonEpiCount: 0,
+    projectCount: 0,
+    clinicalTrialsCount: 0
+  });
 
-  let state: DiseasesPartialState;
+  let state: State;
+
+  const diseasesArr = [
+    createDiseasesEntity('PRODUCT-AAA'),
+    createDiseasesEntity('PRODUCT-BBB'),
+    createDiseasesEntity('PRODUCT-CCC'),]
 
   beforeEach(() => {
-    state = {
-      diseases: diseasesAdapter.setAll(
-        [
-          createDiseasesEntity('PRODUCT-AAA'),
-          createDiseasesEntity('PRODUCT-BBB'),
-          createDiseasesEntity('PRODUCT-CCC'),
-        ],
+      state = {
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+      diseases: diseasesAdapter.setAll(diseasesArr,
         {
-          ...initialDiseasesState,
+          ...initialState,
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
+          typeahead: undefined
         }
-      ),
-    };
-  });
+      )
+    }
+  }
+  );
 
   describe('Diseases Selectors', () => {
     it('getAllDiseases() should return the list of Diseases', () => {
@@ -45,7 +52,7 @@ describe('Diseases Selectors', () => {
     });
 
     it('getSelected() should return the selected Entity', () => {
-      const result = DiseasesSelectors.getSelected(state) as DiseasesEntity;
+      const result = DiseasesSelectors.getSelected(state) as Disease;
       const selId = getDiseasesId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

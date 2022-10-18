@@ -22,7 +22,7 @@ export const loadDiseasesSuccess = createAction(
 
 export const loadDiseasesFailure = createAction(
   '[Diseases/API] Load Diseases Failure',
-  props<{ error: any }>()
+  props<{ error: string }>()
 );
 
 export const searchDiseases = createAction(
@@ -37,7 +37,7 @@ export const searchDiseasesSuccess = createAction(
 
 export const searchDiseasesFailure = createAction(
   '[Diseases/API] Search Diseases Failure',
-  props<{ error: any }>()
+  props<{ error: string }>()
 );
 
 export const fetchDisease = createAction(
@@ -45,7 +45,7 @@ export const fetchDisease = createAction(
   props<{
     gard_id: string,
     source: string,
-    options?: any
+    options?: { [key: string]: string }
   }>()
 );
 
@@ -56,5 +56,5 @@ export const fetchDiseaseSuccess = createAction(
 
 export const fetchDiseaseFailure = createAction(
   '[Diseases/API] fetch Disease Failure',
-  props<{ error: any }>()
+  props<{ error: string }>()
 );

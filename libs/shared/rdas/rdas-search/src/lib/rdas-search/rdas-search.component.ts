@@ -4,8 +4,7 @@ import {
   EventEmitter,
   OnDestroy,
   OnInit,
-  Output,
-  ViewEncapsulation
+  Output
 } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
@@ -67,7 +66,7 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
   }
 
   search() {
-    console.log(this.searchFormCtl.value);
+   // console.log(this.searchFormCtl.value);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input } from "@angular/core";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 
 @Component({
@@ -6,13 +6,7 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
   templateUrl: './disease-list.component.html',
   styleUrls: ['./disease-list.component.scss']
 })
-export class DiseaseListComponent implements OnInit {
+export class DiseaseListComponent {
   @Input() diseases!: Disease[];
   @Input() loading = true;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
-
 }

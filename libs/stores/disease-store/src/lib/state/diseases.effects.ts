@@ -1,35 +1,20 @@
 import { Injectable } from '@angular/core';
 import {
   ARTICLEVARIABLES, ClinicalTrial, Disease,
-  FETCHDISEASEQUERY, FETCHDISEASESLISTQUERY, FETCHPROJECTSQUERY,
+  FETCHDISEASEQUERY, FETCHDISEASESLISTQUERY,
+  //FETCHPROJECTSQUERY,
   FETCHTRIALSQUERY,
   FETCHTRIALSVARIABLES,
-  LISTQUERYPARAMETERS, Project, PROJECTVARIABLES
+  LISTQUERYPARAMETERS, PROJECTVARIABLES
 } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
-import { DiseaseService } from "@ncats-frontend-library/stores/disease-store";
+import { DiseaseService } from "../disease.service";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import {ROUTER_NAVIGATION, RouterNavigationAction} from "@ngrx/router-store";
-import { gql} from "apollo-angular";
-import {combineLatest, filter, forkJoin, map, mergeMap, switchMap, take, tap} from "rxjs";
+import {combineLatest, filter, forkJoin, map, mergeMap, switchMap, take} from "rxjs";
 import * as DiseasesActions from './diseases.actions';
-import * as DiseasesFeature from './diseases.reducer';
-
-
-
 
 /*const typeaheadQuery = gql`
-query Diseases($name: String!, $options: QueryTypeOptions) {
-  queryTypes(options: $options) {
-    TypeaheadQuery(name: $name) {
-      gard_id
-      name
-    }
-  }
-}
-`*/
-
-const typeaheadQuery = gql`
   query Query($name: String!) {
     queryTypes {
       TypeaheadQuery(name: $name) {
@@ -38,14 +23,14 @@ const typeaheadQuery = gql`
       }
     }
   }
-`
+`*/
 
 @Injectable()
 export class DiseasesEffects {
   searchDiseases = createEffect(() =>
     this.actions$.pipe(
       ofType(DiseasesActions.searchDiseases),
-      tap((action) => {
+    /*  tap((action) => {
         const call = `
          Match (n:Disease)
             WHERE n.name =~ '(?i)' + $term + '.*'
@@ -60,7 +45,7 @@ export class DiseasesEffects {
           call,
           {term: action.term}
         )
-      })
+      })*/
     ),{ dispatch: false }
   );
 
@@ -70,8 +55,8 @@ export class DiseasesEffects {
       filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       switchMap((params: { pageSize?: number, pageIndex?: number}) => {
-        let pageSize: number = params.pageSize ? params.pageSize as number: 10;
-        let pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
+        const pageSize: number = params.pageSize ? params.pageSize as number: 10;
+        const pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
         LISTQUERYPARAMETERS.options.limit =  +pageSize;
         LISTQUERYPARAMETERS.options.offset = +pageSize * (+pageIndex +1);
         return this.diseaseService.fetchArticles(FETCHDISEASESLISTQUERY, LISTQUERYPARAMETERS)
@@ -123,7 +108,6 @@ export class DiseasesEffects {
     this.actions$.pipe(
       ofType(DiseasesActions.fetchDisease),
       mergeMap((action: any) => {
-        console.log("fetch disease")
         switch(action.source) {
           case 'article': {
             Object.keys(action.options).forEach((key: string) => {
@@ -175,13 +159,9 @@ export class DiseasesEffects {
   loadDisease$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter((r: RouterNavigationAction) => {
-        console.log(r);
-        return r.payload.routerState.url != '/diseases' && r.payload.routerState.url.startsWith('/disease')
-      }),
+      filter((r: RouterNavigationAction) => r.payload.routerState.url != '/diseases' && r.payload.routerState.url.startsWith('/disease')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       switchMap((params: {id?: string}) => {
-        console.log("load disease")
         ARTICLEVARIABLES.diseasesWhere = {gard_id: params.id};
         PROJECTVARIABLES.projectsWhere = {diseasesisInvestigatedBy_SOME: {gard_id: params.id}};
         FETCHTRIALSVARIABLES.ctwhere = {GARDId: params.id};

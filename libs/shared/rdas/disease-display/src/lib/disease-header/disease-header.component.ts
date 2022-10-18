@@ -10,12 +10,10 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
 export class DiseaseHeaderComponent implements OnInit {
   @Input()
   disease!: Disease;
-  @Input() subscriptions!: Disease[];
   trimmed_id!: number;
-  constructor() { }
 
   ngOnInit(): void {
-    this.trimmed_id = +this.disease.gard_id.split('GARD:')[1]
+    this.trimmed_id = +this.disease.gard_id.split('GARD:')[1];
   }
 
 }

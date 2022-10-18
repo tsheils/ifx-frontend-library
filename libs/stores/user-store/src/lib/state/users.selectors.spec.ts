@@ -1,19 +1,19 @@
-import { UsersEntity } from './users.models';
+import { User } from "@ncats-frontend-library/models/utils";
 import {
   usersAdapter,
   UsersPartialState,
-  initialUsersState,
+  initialState,
 } from './users.reducer';
 import * as UsersSelectors from './users.selectors';
 
 describe('Users Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getUsersId = (it: UsersEntity) => it.id;
-  const createUsersEntity = (id: string, name = '') =>
-    ({
-      id,
-      name: name || `name-${id}`,
-    } as UsersEntity);
+  const getUsersId = (it: User) => it.uid;
+  const createUsersEntity = (uid= 'sgsg', displayName = 'dsdsg') =>
+    (new User({
+      uid,
+      displayName,
+    }));
 
   let state: UsersPartialState;
 
@@ -26,7 +26,7 @@ describe('Users Selectors', () => {
           createUsersEntity('PRODUCT-CCC'),
         ],
         {
-          ...initialUsersState,
+          ...initialState,
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
@@ -45,7 +45,7 @@ describe('Users Selectors', () => {
     });
 
     it('getSelected() should return the selected Entity', () => {
-      const result = UsersSelectors.getSelected(state) as UsersEntity;
+      const result = UsersSelectors.getSelected(state) as User;
       const selId = getUsersId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

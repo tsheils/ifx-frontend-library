@@ -32,10 +32,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.userFacade.init();
-
     this.userFacade.user$.subscribe(res => {
-        console.log(res);
         if(res) {
           this.user = res[0];
         }

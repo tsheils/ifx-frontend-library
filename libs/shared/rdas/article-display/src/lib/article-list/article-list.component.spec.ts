@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ArticleListCardComponent } from "../article-list-card/article-list-card.component";
 
 import { ArticleListComponent } from './article-list.component';
 
@@ -8,7 +9,7 @@ describe('ArticleListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ArticleListComponent ]
+      imports: [ArticleListComponent, ArticleListCardComponent]
     })
     .compileComponents();
 

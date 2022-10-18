@@ -2,14 +2,11 @@ import { Injectable } from '@angular/core';
 import { User } from "@ncats-frontend-library/models/utils";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Store } from "@ngrx/store";
-import firebase from 'firebase/compat/app';
-import { map, mergeMap, of, tap, withLatestFrom } from "rxjs";
+import { map, mergeMap, tap, withLatestFrom } from "rxjs";
 import { UserService } from "../user.service";
-import { logoutUser } from "./users.actions";
 
 import * as UsersActions from './users.actions';
 import { UsersPartialState } from "./users.reducer";
-import * as UsersFeature from './users.reducer';
 
 @Injectable()
 export class UsersEffects {
@@ -20,7 +17,6 @@ export class UsersEffects {
         map(() => {
           const user = localStorage.getItem('userEntity');
           if(user) {
-        //    const user: User = JSON.parse(localStorage.getItem('userEntity') || 'null');
             return UsersActions.loginUserSuccess({ user: JSON.parse(user) })
           } else {
             return UsersActions.loginUserFailure({error: 'oops'})
@@ -39,7 +35,6 @@ export class UsersEffects {
           .pipe(
             map((res: any) =>
             {
-              console.log(res);
             return  res.user;
             }),
             map((res: Partial<User>) => {
@@ -61,8 +56,8 @@ export class UsersEffects {
         ofType(UsersActions.logoutUser),
         tap(() => {
             this.userService.logout();
-        //    localStorage.removeItem('userEntity');
-        //    return UsersActions.logoutUser();
+            localStorage.removeItem('userEntity');
+            return UsersActions.logoutUserSuccess();
           }
         )
       ),
@@ -72,14 +67,20 @@ export class UsersEffects {
   fetchUserProfile = createEffect( ()=>
   this.actions$.pipe(
     ofType(UsersActions.loginUserSuccess),
-    mergeMap((action: any) => {
-      console.log(action);
-      return of(this.userService.fetchUserProfile(action.user))
+    mergeMap((action: { user: User}) => {
+      return this.userService.fetchUserProfile(action.user)
         .pipe(
-          map((res: any) => {
-            console.log(res);
-            return UsersActions.fetchUserProfileSuccess({ user: action.user });
-          })
+          map((res) => {
+            let user: User = action.user;
+               if (res && !res.exists) {
+                    this.userService.createUserProfile(user);
+                  } else {
+                    user = res.data() as User;
+                    localStorage.removeItem('userEntity');
+                    localStorage.setItem('userEntity', JSON.stringify(user));
+                  }
+              return UsersActions.fetchUserProfileSuccess({ user: user });
+                })
         )
     })
   )
@@ -91,14 +92,13 @@ updateUserProfile = createEffect( ()=>
     withLatestFrom(this.store),
     mergeMap(([action, state]) => {
          const newUser: User = new User({...state.users.entities[state.users.selectedId || 'null' ], subscriptions: action.subscriptions})
-      return of(this.userService.updateUserProfile(newUser))
+      return this.userService.updateUserProfile(newUser)
         .pipe(
           map((res) => {
-            console.log(res);
-            console.log("update user profile in effects")
-            console.log(newUser);
-        //    localStorage.setItem('userEntity', JSON.stringify(newUser));
-            return UsersActions.updateUserSubscriptionsSuccess({user: newUser});
+            const user = res.data() as User;
+            localStorage.removeItem('userEntity');
+            localStorage.setItem('userEntity', JSON.stringify(res.data()));
+            return UsersActions.updateUserSubscriptionsSuccess({user: user});
           })
         )
     })
