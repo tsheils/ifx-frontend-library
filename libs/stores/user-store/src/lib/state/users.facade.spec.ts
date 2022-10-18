@@ -3,12 +3,12 @@ import { TestBed } from '@angular/core/testing';
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { User } from "@ncats-frontend-library/models/utils";
-import environment from "@neo4j/graphql/dist/environment";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { NxModule } from '@nrwl/angular';
 import { readFirst } from '@nrwl/angular/testing';
 import { BehaviorSubject } from "rxjs";
+import { COMMON_CONFIG, FIRESTORESTUB } from "../user.service.spec";
 
 import * as UsersActions from './users.actions';
 import { UsersEffects } from './users.effects';
@@ -22,28 +22,6 @@ import {
 interface TestSchema {
   users: State;
 }
-
-export const COMMON_CONFIG = {
-  projectId: 'pharos',
-  apiKey: 'AIzaSyBVSy3YpkVGiKXbbxeK0qBnu3-MNZ9UIjA',
-  authDomain: 'angularfire2-test.firebaseapp.com',
-  databaseURL: 'https://angularfire2-test.firebaseio.com',
-  storageBucket: 'angularfire2-test.appspot.com',
-};
-
-
-export const FIRESTORESTUB = {
-  collection: (name: string) => ({
-    doc: (_id: string) => ({
-      valueChanges: () => new BehaviorSubject({ foo: 'bar' }),
-      set: (_d: any) => new Promise((resolve, _reject) => resolve('Hi Keith')),
-    }),
-    valueChanges: () => new BehaviorSubject({ foo: 'bar' })
-  }),
-  valueChanges: () => new BehaviorSubject({ foo: 'bar' }),
-};
-
-
 
 describe('UsersFacade', () => {
   let facade: UsersFacade;
@@ -62,7 +40,10 @@ describe('UsersFacade', () => {
           EffectsModule.forFeature([UsersEffects]),
           AngularFireModule.initializeApp(COMMON_CONFIG)
         ],
-        providers: [UsersFacade],
+        providers: [
+          UsersFacade,
+        { provide: AngularFirestore, useValue: FIRESTORESTUB }
+        ],
       })
       class CustomFeatureModule {}
 
@@ -72,8 +53,10 @@ describe('UsersFacade', () => {
           StoreModule.forRoot({}),
           EffectsModule.forRoot([]),
           CustomFeatureModule,
-          { provide: AngularFirestore, useValue: FIRESTORESTUB }
         ],
+        providers: [
+          { provide: AngularFirestore, useValue: FIRESTORESTUB }
+        ]
       })
       class RootModule {}
       TestBed.configureTestingModule({ imports: [RootModule] });
@@ -104,7 +87,7 @@ describe('UsersFacade', () => {
       isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
-      expect(isLoaded).toBe(true);
+      expect(isLoaded).toBe(false);
     });
 
     /**

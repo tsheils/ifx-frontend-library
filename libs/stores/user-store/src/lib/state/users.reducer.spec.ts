@@ -1,5 +1,5 @@
 import { User } from "@ncats-frontend-library/models/utils";
-import { initialState, reducer, State } from "@ncats-frontend-library/stores/user-store";
+import { initialState, reducer, State } from './users.reducer';
 import { Action } from '@ngrx/store';
 
 import * as UsersActions from './users.actions';

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
+import { DISEASES_FEATURE_KEY, DiseasesFacade, reducer } from "@ncats-frontend-library/stores/disease-store";
 import { EffectsModule } from "@ngrx/effects";
 import { Store, StoreModule } from "@ngrx/store";
 
@@ -13,17 +13,8 @@ describe('RdasDiseasePageComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ RdasDiseasePageComponent ],
       imports: [
-        StoreModule.forRoot(
-          {},
-          {
-            metaReducers: [],
-            runtimeChecks: {
-              strictActionImmutability: true,
-              strictStateImmutability: true,
-            },
-          }
-        ),
-        EffectsModule.forRoot([])
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer)
       ],
       providers: [
         DiseasesFacade

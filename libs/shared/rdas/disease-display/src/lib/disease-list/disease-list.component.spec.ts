@@ -2,10 +2,12 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from "@angular/material/card";
 import { MatTabsModule } from "@angular/material/tabs";
 import { Disease } from "@ncats-frontend-library/models/rdas";
-import {
-  DiseaseHeaderComponent,
-  IdentifiersDisplayComponent
-} from "@ncats-frontend-library/shared/rdas/disease-display";
+import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { EffectsModule } from "@ngrx/effects";
+import { StoreModule } from "@ngrx/store";
+import { DiseaseListCardComponent } from "../disease-list-card/disease-list-card.component";
+import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
+import { IdentifiersDisplayComponent } from '../identifiers-display/identifiers-display.component';
 import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
 
 import { DiseaseListComponent } from './disease-list.component';
@@ -16,11 +18,24 @@ describe('DiseaseListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DiseaseListComponent, DiseaseHeaderComponent, IdentifiersDisplayComponent ],
+      declarations: [ DiseaseListComponent, DiseaseListCardComponent, DiseaseHeaderComponent, IdentifiersDisplayComponent ],
       imports: [
         MatCardModule,
         MatTabsModule,
-        SharedRdasSubscribeButtonModule
+        SharedRdasSubscribeButtonModule,StoreModule.forRoot(
+          {},
+          {
+            metaReducers: [],
+            runtimeChecks: {
+              strictActionImmutability: true,
+              strictStateImmutability: true,
+            },
+          }
+        ),
+        EffectsModule.forRoot([])
+      ],
+      providers: [
+        UsersFacade
       ]
     })
     .compileComponents();

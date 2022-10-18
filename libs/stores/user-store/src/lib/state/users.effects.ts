@@ -2,9 +2,8 @@ import { Injectable } from '@angular/core';
 import { User } from "@ncats-frontend-library/models/utils";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Store } from "@ngrx/store";
-import { map, mergeMap, of, tap, withLatestFrom } from "rxjs";
+import { map, mergeMap, tap, withLatestFrom } from "rxjs";
 import { UserService } from "../user.service";
-import { logoutUserSuccess } from "./users.actions";
 
 import * as UsersActions from './users.actions';
 import { UsersPartialState } from "./users.reducer";
