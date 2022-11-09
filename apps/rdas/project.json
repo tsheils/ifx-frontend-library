@@ -1,4 +1,5 @@
 {
+  "name": "rdas",
   "projectType": "application",
   "sourceRoot": "apps/rdas/src",
   "prefix": "rdas",
@@ -25,9 +26,7 @@
         "stylePreprocessorOptions": {
           "includePaths": ["libs/styles/src/styles/"]
         },
-        "styles": [
-          "apps/rdas/src/styles.scss"
-        ],
+        "styles": ["apps/rdas/src/styles.scss"],
         "scripts": []
       },
       "configurations": {
@@ -36,12 +35,12 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "5mb"
+              "maximumError": "500mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "400kb"
             }
           ],
           "fileReplacements": [
@@ -89,7 +88,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/rdas"],
+      "outputs": ["{workspaceRoot}/coverage/apps/rdas"],
       "options": {
         "jestConfig": "apps/rdas/jest.config.ts",
         "passWithNoTests": true

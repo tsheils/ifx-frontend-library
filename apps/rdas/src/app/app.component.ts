@@ -46,6 +46,10 @@ export class AppComponent implements OnInit {
         .subscribe((e:Event) => {
           if (e instanceof NavigationEnd) {
             this.hideSearch = e.url.split('/diseases').length > 1;
+            if(e.url === '/api') {
+              this.loaded = true;
+            }
+
           }
         });
 

@@ -1,11 +1,12 @@
 {
+  "name": "models-rdas",
   "projectType": "library",
   "sourceRoot": "libs/models/rdas/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/models/rdas"],
+      "outputs": ["{workspaceRoot}/coverage/libs/models/rdas"],
       "options": {
         "jestConfig": "libs/models/rdas/jest.config.ts",
         "passWithNoTests": true

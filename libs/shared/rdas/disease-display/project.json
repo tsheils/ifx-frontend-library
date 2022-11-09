@@ -1,11 +1,12 @@
 {
+  "name": "shared-rdas-disease-display",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/disease-display/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/disease-display"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/disease-display"],
       "options": {
         "jestConfig": "libs/shared/rdas/disease-display/jest.config.ts",
         "passWithNoTests": true

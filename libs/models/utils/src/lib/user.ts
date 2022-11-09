@@ -1,3 +1,5 @@
+import { Disease } from "@ncats-frontend-library/models/rdas";
+
 export class User {
   displayName!: string;
   uid!: string;
@@ -11,6 +13,8 @@ export class User {
 }
 
 export class Subscription {
-  disease!: string;
+  diseaseName!: string;
+  gardID!: string;
+  disease?: Disease;
   alerts?: string[];
 }

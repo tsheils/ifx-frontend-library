@@ -25,6 +25,7 @@ import { IdentifiersDisplayComponent } from './identifiers-display/identifiers-d
     SharedRdasSubscribeButtonModule,
     SharedRdasProjectDisplayModule,
     SharedRdasClinicalTrialsDisplayModule,
+    DiseaseListCardComponent,
     ArticleListCardComponent,
     ArticleListComponent
   ],
@@ -32,8 +33,7 @@ import { IdentifiersDisplayComponent } from './identifiers-display/identifiers-d
     DiseaseDisplayComponent,
     DiseaseHeaderComponent,
     IdentifiersDisplayComponent,
-    DiseaseListComponent,
-    DiseaseListCardComponent
+    DiseaseListComponent
   ],
   exports: [
     DiseaseListComponent,

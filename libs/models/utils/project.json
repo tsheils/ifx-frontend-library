@@ -1,11 +1,12 @@
 {
+  "name": "models-utils",
   "projectType": "library",
   "sourceRoot": "libs/models/utils/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/models/utils"],
+      "outputs": ["{workspaceRoot}/coverage/libs/models/utils"],
       "options": {
         "jestConfig": "libs/models/utils/jest.config.ts",
         "passWithNoTests": true

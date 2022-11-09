@@ -1,11 +1,14 @@
 {
+  "name": "shared-rdas-clinical-trials-display",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/clinical-trials-display/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/clinical-trials-display"],
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/shared/rdas/clinical-trials-display"
+      ],
       "options": {
         "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts",
         "passWithNoTests": true

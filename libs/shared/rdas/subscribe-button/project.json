@@ -1,11 +1,12 @@
 {
+  "name": "shared-rdas-subscribe-button",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/subscribe-button/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/subscribe-button"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/subscribe-button"],
       "options": {
         "jestConfig": "libs/shared/rdas/subscribe-button/jest.config.ts",
         "passWithNoTests": true

@@ -8,6 +8,6 @@ import { MAT_DIALOG_DATA } from "@angular/material/dialog";
 })
 export class UnsubscribeModalComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { entity: unknown }
+    @Inject(MAT_DIALOG_DATA) public data: { entity: unknown, label?: string }
   ) { }
 }

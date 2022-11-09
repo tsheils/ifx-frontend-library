@@ -1,11 +1,12 @@
 {
+  "name": "shared-rdas-rdas-search",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/rdas-search/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/rdas-search"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/rdas-search"],
       "options": {
         "jestConfig": "libs/shared/rdas/rdas-search/jest.config.ts",
         "passWithNoTests": true

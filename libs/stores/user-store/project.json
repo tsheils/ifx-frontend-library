@@ -1,11 +1,12 @@
 {
+  "name": "stores-user-store",
   "projectType": "library",
   "sourceRoot": "libs/stores/user-store/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/stores/user-store"],
+      "outputs": ["{workspaceRoot}/coverage/libs/stores/user-store"],
       "options": {
         "jestConfig": "libs/stores/user-store/jest.config.ts",
         "passWithNoTests": true

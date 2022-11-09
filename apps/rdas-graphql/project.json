@@ -1,4 +1,5 @@
 {
+  "name": "rdas-graphql",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/rdas-graphql/src",
   "projectType": "application",
@@ -7,14 +8,13 @@
       "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "generatePackageJson": true,
         "target": "node",
         "compiler": "tsc",
         "outputPath": "dist/apps/rdas-graphql",
         "main": "apps/rdas-graphql/src/main.ts",
         "tsConfig": "apps/rdas-graphql/tsconfig.app.json",
-        "assets": [
-          "apps/rdas-graphql/src/assets"
-        ]
+        "assets": ["apps/rdas-graphql/src/assets"]
       },
       "configurations": {
         "production": {
@@ -25,6 +25,17 @@
             {
               "replace": "apps/rdas-graphql/src/environments/environment.ts",
               "with": "apps/rdas-graphql/src/environments/environment.prod.ts"
+            }
+          ]
+        },
+        "development": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas-graphql/src/environments/environment.ts",
+              "with": "apps/rdas-graphql/src/environments/environment.ts"
             }
           ]
         }
@@ -38,6 +49,9 @@
       "configurations": {
         "production": {
           "buildTarget": "rdas-graphql:build:production"
+        },
+        "development": {
+          "buildTarget": "rdas-graphql:build:development"
         }
       }
     },
@@ -50,7 +64,7 @@
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/rdas-graphql"],
+      "outputs": ["{workspaceRoot}/coverage/apps/rdas-graphql"],
       "options": {
         "jestConfig": "apps/rdas-graphql/jest.config.ts",
         "passWithNoTests": true

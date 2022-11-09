@@ -2,9 +2,11 @@
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
   "projects": {
+    "features-rdas-graphql-sandbox": "libs/features/rdas/graphql-sandbox",
     "features-rdas-rdas-browse": "libs/features/rdas/rdas-browse",
     "features-rdas-rdas-disease-page": "libs/features/rdas/rdas-disease-page",
     "features-rdas-rdas-home": "libs/features/rdas/rdas-home",
+    "features-rdas-rdas-subscriptions": "libs/features/rdas/rdas-subscriptions",
     "models-rdas": "libs/models/rdas",
     "models-utils": "libs/models/utils",
     "neo4j-introspection": "apps/neo4j-introspection",

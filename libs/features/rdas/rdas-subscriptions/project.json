@@ -1,0 +1,29 @@
+{
+  "name": "features-rdas-rdas-subscriptions",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "libs/features/rdas/rdas-subscriptions/src",
+  "prefix": "ncats-frontend-library",
+  "targets": {
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/features/rdas/rdas-subscriptions"
+      ],
+      "options": {
+        "jestConfig": "libs/features/rdas/rdas-subscriptions/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": [
+          "libs/features/rdas/rdas-subscriptions/**/*.ts",
+          "libs/features/rdas/rdas-subscriptions/**/*.html"
+        ]
+      }
+    }
+  },
+  "tags": []
+}

@@ -1,4 +1,3 @@
-import { gql } from "apollo-angular";
 import {Author} from "./author";
 import {Disease} from "./disease";
 
@@ -84,7 +83,7 @@ export const ARTICLEVARIABLES: {
 }
 
 
-export const ARTICLEFIELDS = gql`
+export const ARTICLEFIELDS = `
   fragment articleFields on Article {
     abstractText
     firstPublicationDate

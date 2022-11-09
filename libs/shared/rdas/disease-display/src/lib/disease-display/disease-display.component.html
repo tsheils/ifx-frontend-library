@@ -2,7 +2,7 @@
 <ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
 <ncats-frontend-library-identifiers-display [disease]="disease"></ncats-frontend-library-identifiers-display>
 <mat-tab-group>
-  <mat-tab [label] = "'Articles'">
+  <mat-tab [label] = "'Articles ' + (disease.epiCount + disease.nonEpiCount )">
     <mat-tab-group>
       <mat-tab
         [label]= "'Epidemiology Articles ' + disease.epiCount"

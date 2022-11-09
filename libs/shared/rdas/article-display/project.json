@@ -1,11 +1,12 @@
 {
+  "name": "shared-rdas-article-display",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/article-display/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/article-display"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/article-display"],
       "options": {
         "jestConfig": "libs/shared/rdas/article-display/jest.config.ts",
         "passWithNoTests": true

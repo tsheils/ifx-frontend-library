@@ -1,11 +1,12 @@
 {
+  "name": "stores-disease-store",
   "projectType": "library",
   "sourceRoot": "libs/stores/disease-store/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/stores/disease-store"],
+      "outputs": ["{workspaceRoot}/coverage/libs/stores/disease-store"],
       "options": {
         "jestConfig": "libs/stores/disease-store/jest.config.ts",
         "passWithNoTests": true

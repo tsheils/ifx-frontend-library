@@ -1,11 +1,12 @@
 {
+  "name": "shared-utils-loading-spinner",
   "projectType": "library",
   "sourceRoot": "libs/shared/utils/loading-spinner/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/utils/loading-spinner"],
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/utils/loading-spinner"],
       "options": {
         "jestConfig": "libs/shared/utils/loading-spinner/jest.config.ts",
         "passWithNoTests": true
