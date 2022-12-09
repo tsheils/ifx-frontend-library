@@ -144,7 +144,7 @@ export class DiseasesEffects {
              //   diseaseObj.projects = projectsData.data.projects.map((proj: { [key: string]: unknown }) => new Project(proj))
              //   diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 diseaseObj.clinicalTrials =
-                  trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
+                  trialsData.data.disease[0].gardInClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
             //    diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
@@ -173,6 +173,8 @@ export class DiseasesEffects {
           .pipe(
          //   map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
             map(([diseaseData, trialsData]: [any, any]) => {
+              console.log(diseaseData)
+              console.log(trialsData)
               if(diseaseData && diseaseData.data) {
                 const diseaseObj: Disease = new Disease(diseaseData.data.diseases[0]);
   /*              if(projectsData.data && projectsData.data.projects.length) {
@@ -180,7 +182,7 @@ export class DiseasesEffects {
                   diseaseObj.projectCount = projectsData.data.projectsAggregate.count;
                 }*/
                 if(trialsData.data && trialsData.data.disease.length) {
-                  diseaseObj.clinicalTrials = trialsData.data.disease[0].clinicalTrialClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
+                  diseaseObj.clinicalTrials = trialsData.data.disease[0].gardInClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
                   diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
                 }
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})

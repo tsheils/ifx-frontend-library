@@ -1,0 +1,75 @@
+{
+  "name": "rdas-express",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/rdas-express/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "generatePackageJson": true,
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/rdas-express",
+        "main": "apps/rdas-express/src/main.ts",
+        "tsConfig": "apps/rdas-express/tsconfig.app.json",
+        "assets": ["apps/rdas-express/src/assets"]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas-express/src/environments/environment.ts",
+              "with": "apps/rdas-express/src/environments/environment.prod.ts"
+            }
+          ]
+        },
+        "local": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas-express/src/environments/environment.ts",
+              "with": "apps/rdas-express/src/environments/environment.local.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "rdas-express:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "rdas-express:build:production"
+        },
+        "local": {
+          "buildTarget": "rdas-express:build:local"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/rdas-express/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/rdas-express/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

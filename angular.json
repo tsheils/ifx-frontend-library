@@ -12,6 +12,7 @@
     "neo4j-introspection": "apps/neo4j-introspection",
     "rdas": "apps/rdas",
     "rdas-e2e": "apps/rdas-e2e",
+    "rdas-express": "apps/rdas-express",
     "rdas-graphql": "apps/rdas-graphql",
     "shared-rdas-article-display": "libs/shared/rdas/article-display",
     "shared-rdas-clinical-trials-display": "libs/shared/rdas/clinical-trials-display",

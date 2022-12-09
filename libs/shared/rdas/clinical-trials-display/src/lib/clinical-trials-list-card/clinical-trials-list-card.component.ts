@@ -40,5 +40,23 @@ export class ClinicalTrialsListCardComponent implements OnInit {
   getTrialSummary(): string {
     return (this.trial.briefSummary && this.fullSummary) ?  this.trial.briefSummary : this.truncatedSummary;
   }
+
+  getLabel(objType: string, plural: boolean = true): string {
+    let ret: string = objType;
+    const arr = this.trial[objType] as Array<unknown>
+    if (arr) {
+      if (arr && arr.length > 1) {
+        ret = ret + ' (' + arr.length+')';
+      }
+      else if (arr && arr.length == 1 && plural) {
+        ret = ret.slice(0, arr.length - 2);
+      }
+    }
+    ret = ret
+      .replace(/([A-Z])/g, (match) => ` ${match}`)
+      .replace(/^./, (match) => match.toUpperCase())
+      .trim()
+    return ret;
+  }
 }
 

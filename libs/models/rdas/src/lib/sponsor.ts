@@ -40,11 +40,11 @@ const SPONSORFIELDS = gql`
     centralContactRole:CentralContactRole
     leadSponsorClass: LeadSponsorClass
     leadSponsorName: LeadSponsorName
-    OrgClass
-    OrgFullName
-    OrgStudyId
-    OrgStudyIdLink
-    OrgStudyIdType
+    orgClass: OrgClass
+    orgFullName: OrgFullName
+    orgStudyId: OrgStudyId
+    orgStudyIdLink: OrgStudyIdLink
+    orgStudyId: OrgStudyIdType
     OverallOfficialAffiliation
     OverallOfficialName
     OverallOfficialRole
