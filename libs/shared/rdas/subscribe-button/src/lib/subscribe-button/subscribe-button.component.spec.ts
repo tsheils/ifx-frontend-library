@@ -7,10 +7,9 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSnackBarModule } from "@angular/material/snack-bar";
-import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade, UserService } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
-import { UserService } from "../../../../../../stores/user-store/src/lib/user.service";
 import { COMMON_CONFIG, FIRESTORESTUB } from "../../../../../../stores/user-store/src/lib/user.service.spec";
 
 import { SubscribeButtonComponent } from './subscribe-button.component';

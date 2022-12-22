@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { SharedRdasRdasSearchModule } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
 import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
 import { reducer, DISEASES_FEATURE_KEY } from "@ncats-frontend-library/stores/disease-store";
 import { StoreModule } from "@ngrx/store";
@@ -18,7 +18,7 @@ describe('RdasHomeComponent', () => {
       declarations: [ RdasHomeComponent ],
       imports: [
         BrowserAnimationsModule,
-        SharedRdasRdasSearchModule,
+        RdasSearchComponent,
         ApolloTestingModule,
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer)

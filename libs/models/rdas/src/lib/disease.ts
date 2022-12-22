@@ -2,7 +2,7 @@ import {gql} from "apollo-angular";
 import { Article, ARTICLEFIELDS } from "./article";
 import { AUTHORFIELDS } from "./author";
 import {ClinicalTrial} from "./clinical-trial";
-import {Project} from "./project";
+import { CoreProject } from "./project";
 
 export class Disease {
   name!: string;
@@ -18,7 +18,7 @@ export class Disease {
   nonEpiCount = 0;
   _epiCount?: {count: number};
   _nonEpiCount?: {count: number};
-  projects?: Project[];
+  projects?: CoreProject[];
   projectCount = 0;
   clinicalTrials?: ClinicalTrial[];
   clinicalTrialsCount = 0;

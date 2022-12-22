@@ -49,11 +49,20 @@
       "@ncats-frontend-library/shared/rdas/project-display": [
         "libs/shared/rdas/project-display/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/rdas-footer": [
+        "libs/shared/rdas/rdas-footer/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/rdas-search": [
         "libs/shared/rdas/rdas-search/src/index.ts"
       ],
       "@ncats-frontend-library/shared/rdas/subscribe-button": [
         "libs/shared/rdas/subscribe-button/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/external-link": [
+        "libs/shared/utils/external-link/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/footer-template": [
+        "libs/shared/utils/footer-template/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/header-template": [
         "libs/shared/utils/header-template/src/index.ts"

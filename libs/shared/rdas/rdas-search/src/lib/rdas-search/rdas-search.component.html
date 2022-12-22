@@ -1,6 +1,5 @@
-<div >
 <div class ="search-row">
-  <mat-form-field class = "typeahead-field search" [floatLabel] = "'never'">
+  <mat-form-field class = "typeahead-field search" appearance="outline" subscriptSizing="dynamic" [color]="'primary'">
       <input matInput
              (keydown.enter)="search()"
              aria-label="Search for a rare disease"
@@ -17,6 +16,6 @@
           {{option.name}}
         </mat-option>
       </mat-autocomplete>
-    <button mat-button mat-icon-button matSuffix aria-label="search" (click)="search()"><mat-icon>search</mat-icon></button>
+    <button mat-icon-button matSuffix aria-label="search" (click)="search()" [color]="'primary'"><mat-icon>search</mat-icon></button>
   </mat-form-field>
   </div>

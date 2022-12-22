@@ -1,3 +1,4 @@
+import { CommonModule } from "@angular/common";
 import {
   ChangeDetectorRef,
   Component,
@@ -6,8 +7,13 @@ import {
   OnInit,
   Output
 } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { FlexLayoutModule } from "@angular/flex-layout";
+import { FormControl, ReactiveFormsModule } from "@angular/forms";
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
+import { MatButtonModule } from "@angular/material/button";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { DiseaseService, DiseasesFacade, searchDiseases } from "@ncats-frontend-library/stores/disease-store";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
@@ -15,7 +21,10 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 @Component({
   selector: 'ncats-frontend-library-rdas-search',
   templateUrl: './rdas-search.component.html',
-  styleUrls: ['./rdas-search.component.scss']
+  imports: [CommonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatAutocompleteModule,
+    MatIconModule, MatButtonModule],
+  styleUrls: ['./rdas-search.component.scss'],
+  standalone: true
 
 })
 export class RdasSearchComponent implements OnInit, OnDestroy {

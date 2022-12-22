@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Project } from "@ncats-frontend-library/models/rdas";
+import { CoreProject } from "@ncats-frontend-library/models/rdas";
 
 import { ProjectListCardComponent } from './project-list-card.component';
 
@@ -15,7 +15,7 @@ describe('ProjectListCardComponent', () => {
 
     fixture = TestBed.createComponent(ProjectListCardComponent);
     component = fixture.componentInstance;
-    component.project = new Project({project_title: 'sdgsgsgs'})
+    component.project = new CoreProject({core_project_num: 'sdgsgsgs'})
     fixture.detectChanges();
   });
 

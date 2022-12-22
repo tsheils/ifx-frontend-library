@@ -1,10 +1,7 @@
-<mat-card *ngIf = "projects">
-  <div fxLayout="row" fxLayoutAlign="end center">
-    <div fxFlex="25">
-      <mat-paginator #paginator [length]="count" [pageIndex]="0" [pageSize]="10" (page)="fetchProjects($event)"></mat-paginator>
-    </div>
-  </div>
-  <div *ngFor="let project of projects">
-    <ncats-frontend-library-project-list-card [project]="project"></ncats-frontend-library-project-list-card>
-  </div>
-</mat-card>
+<div class="row right-justified-row" *ngIf = "projects">
+  <mat-paginator #paginator [length]="count" [pageIndex]="0" [pageSize]="10" (page)="fetchProjects($event)"></mat-paginator>
+</div>
+<div class="row centered-row" *ngFor="let project of projects">
+  <ncats-frontend-library-project-list-card [project]="project"></ncats-frontend-library-project-list-card>
+  <br>
+</div>

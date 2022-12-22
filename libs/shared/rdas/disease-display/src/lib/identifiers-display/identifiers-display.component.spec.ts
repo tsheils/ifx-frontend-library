@@ -6,7 +6,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 import { COMMON_CONFIG, FIRESTORESTUB } from "../../../../../../stores/user-store/src/lib/user.service.spec";
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
-import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card.component';
 import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
 
 import { IdentifiersDisplayComponent } from './identifiers-display.component';

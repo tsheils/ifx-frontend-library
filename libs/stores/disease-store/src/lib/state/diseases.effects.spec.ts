@@ -3,10 +3,9 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { NxModule } from '@nrwl/angular';
 import { Apollo } from "apollo-angular";
 import { hot } from 'jasmine-marbles';
-import { Observable, of } from "rxjs";
+import { Observable } from "rxjs";
 import { loadDiseases } from "./diseases.actions";
 
 import * as DiseasesActions from './diseases.actions';
@@ -34,7 +33,7 @@ describe('DiseasesEffects', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [NxModule.forRoot()],
+      imports: [],
       providers: [
         DiseasesEffects,
         provideMockActions(() => actions),

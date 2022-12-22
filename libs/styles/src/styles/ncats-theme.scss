@@ -1,3 +1,4 @@
+@use '@angular/material' as mat;
 @import '@angular/material/theming';
 
 $ncats-primary: (
@@ -66,11 +67,21 @@ $ncats-secondary: (
   ),
 );
 
-$app-primary: mat-palette($ncats-primary);
-$app-accent: mat-palette($ncats-secondary);
+$app-primary: mat.define-palette($ncats-primary);
+$app-accent: mat.define-palette($ncats-secondary);
 
-$app-warn: mat-palette($mat-red);
+// The "warn" palette is optional and defaults to red if not specified.
+$app-warn: mat.define-palette(mat.$red-palette);
 
-$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+$app-theme: mat.define-light-theme((
+  color: (
+    primary: $app-primary,
+    accent: $app-accent,
+    warn: $app-warn,
+  ),
+  typography: mat.define-typography-config(),
+  density: 0,
+));
 
 @include angular-material-theme($app-theme);
+

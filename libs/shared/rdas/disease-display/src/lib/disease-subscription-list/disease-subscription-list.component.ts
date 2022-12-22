@@ -5,20 +5,15 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Subscription } from "@ncats-frontend-library/models/utils";
-import {
-  DiseaseListCardComponent,
-  SharedRdasDiseaseDisplayModule
-} from "@ncats-frontend-library/shared/rdas/disease-display";
-import {
-  SharedRdasSubscribeButtonModule
-} from "@ncats-frontend-library/shared/rdas/subscribe-button";
+import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
+import { DiseaseListCardComponent } from "../disease-list-card/disease-list-card.component";
 
 @Component({
   selector: 'ncats-frontend-library-disease-subscription-list',
   standalone: true,
   imports: [CommonModule, FlexLayoutModule, MatCardModule, MatIconModule, DiseaseListCardComponent, SharedRdasSubscribeButtonModule],
   templateUrl: './disease-subscription-list.component.html',
-  styleUrls: ['./disease-subscription-list.component.css']
+  styleUrls: ['./disease-subscription-list.component.scss']
 })
 export class DiseaseSubscriptionListComponent implements OnInit {
 

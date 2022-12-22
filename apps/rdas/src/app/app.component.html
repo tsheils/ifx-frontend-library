@@ -2,7 +2,7 @@
   <header>
     <ncats-frontend-library-header-template [links]="links">
       <div class="left-options"><h2 class="app-title">Rare Disease Alert System</h2></div>
-      <div class="right-options" fxLayoutAlign="space-around center">
+      <div class="right-options">
         <ncats-frontend-library-rdas-search *ngIf="!hideSearch" class ="header-search"></ncats-frontend-library-rdas-search>
         <ncats-frontend-library-social-sign-on-button [user] = user></ncats-frontend-library-social-sign-on-button>
       </div>
@@ -15,6 +15,6 @@
     </div>
   </main>
   <footer>
-
+<ncats-frontend-library-footer-template></ncats-frontend-library-footer-template>
   </footer>
 </div>

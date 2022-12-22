@@ -1,11 +1,12 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { Component, Input, OnInit } from "@angular/core";
+import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-list-card',
   templateUrl: './clinical-trials-list-card.component.html',
-  styleUrls: ['./clinical-trials-list-card.component.scss']
+  styleUrls: ['./clinical-trials-list-card.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ClinicalTrialsListCardComponent implements OnInit {
   @Input() trial!: ClinicalTrial;

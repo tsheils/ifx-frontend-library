@@ -18,10 +18,10 @@ export class AppComponent implements OnInit {
   user?: User;
 
   links: LinkTemplateProperty[] = [
-    {
+    /*{
       link: 'about',
       label: 'About',
-    }
+    }*/
   ];
 
   constructor(

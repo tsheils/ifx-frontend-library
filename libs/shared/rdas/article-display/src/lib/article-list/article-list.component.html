@@ -1,11 +1,7 @@
-<mat-card *ngIf = "articles">
-  <div fxLayout="row" fxLayoutAlign="end center">
-    <div fxFlex="25">
+  <div class="row right-justified-row" *ngIf = "articles">
       <mat-paginator #paginator [length]="count" [pageIndex]="0" [pageSize]="10" (page)="fetchArticles($event)"></mat-paginator>
-    </div>
   </div>
-  <div *ngFor="let article of articles">
+  <div class="row centered-row" *ngFor="let article of articles">
     <ncats-frontend-library-article-list-card [article]="article"></ncats-frontend-library-article-list-card>
     <br>
   </div>
-</mat-card>

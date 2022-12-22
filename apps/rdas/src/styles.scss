@@ -1,16 +1,12 @@
-// Custom Theming for Angular Material
-// For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 @import 'libs/shared/utils/header-template/src/theming';
 @import 'libs/styles/src/styles/rdas-theme';
-@include mat.core();
-
-//@include header-theme($app-theme);
 
 html,
 body {
   height: 100%;
   margin: 0 !important;
+  font-family: Roboto,Helvetica Neue Light,Helvetica Neue,Helvetica,Arial,Lucida Grande,sans-serif;
 }
 
 .main {
@@ -42,4 +38,46 @@ body {
   color: #ffffff;
 }
 
+.centered {
+  display: flex;
+  align-items: center;
+  align-content: center;
+}
 
+.row {
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+}
+
+.centered-row {
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+}
+
+.right-justified-row {
+  align-content: center;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.space-around-row {
+  justify-content: space-around;
+  align-content: center;
+  align-items: center;
+}
+
+.space-between-row {
+  justify-content: space-between;
+  align-content: center;
+  align-items: center;
+}
+
+.width-75 {
+  flex-basis: 75%;
+}
+
+.width-25 {
+  flex-basis: 25%;
+}

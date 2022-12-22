@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { RouterModule, Routes } from "@angular/router";
 import { SharedRdasDiseaseDisplayModule } from "@ncats-frontend-library/shared/rdas/disease-display";
 import { RdasDiseasePageComponent } from './rdas-disease-page/rdas-disease-page.component';
@@ -17,8 +16,7 @@ const ROUTES: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(ROUTES),
-    SharedRdasDiseaseDisplayModule,
-    FlexLayoutModule
+    SharedRdasDiseaseDisplayModule
   ],
   declarations: [
     RdasDiseasePageComponent

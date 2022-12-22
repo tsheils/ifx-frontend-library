@@ -21,6 +21,11 @@
             "input": "libs/shared/utils/social-sign-on/src/assets",
             "glob": "**/*",
             "output": "assets/social-sign-on"
+          },
+          {
+            "input": "libs/shared/utils/external-link/src/assets",
+            "glob": "**/*",
+            "output": "assets/external-link"
           }
         ],
         "stylePreprocessorOptions": {

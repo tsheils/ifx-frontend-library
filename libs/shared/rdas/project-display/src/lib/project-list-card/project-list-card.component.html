@@ -1,1 +1,54 @@
-{{project.project_title}}
+
+<mat-card>
+  <mat-card-title>
+    <div class="row space-between-row">
+      <div class="width-75">
+      {{latestProject.title}}
+      </div>
+      <div class="mat-h3" *ngIf="project.core_project_num">
+        <a
+          href="https://reporter.nih.gov/project-details/{{project.core_project_num}}"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Link to project at NIH Reporter"
+        >{{project.core_project_num}}</a></div>
+    </div>
+  </mat-card-title>
+  <mat-card-content>
+    <div class="mat-h2" *ngIf="latestProject.abstract && latestProject.abstract.length">Abstract</div>
+    <div *ngIf="fullAbstract; else truncated">
+      <span class="mat-subtitle-2">{{latestProject.abstract}}</span>
+      <a (click) = "fullAbstract = false" *ngIf="fullAbstract && truncatedAbstract" class = "expand-link"> ...less</a>
+    </div>
+    <ng-template #truncated>
+      <span class="mat-subtitle-2">{{truncatedAbstract}}</span>
+      <a (click) = "fullAbstract = true" *ngIf="!fullAbstract" class = "expand-link"> ...more</a>
+    </ng-template>
+    <br>
+    <br>
+    <div class="row" *ngIf="funding">
+      Funded By: {{funding}} <div *ngIf="project.rd_total_cost">Total Cost: {{project.rd_total_cost | currency}}</div>
+    </div>
+    <div class="row">
+    Patents: {{project.patents ? project.patents.length : 0 }}
+
+      {{project.patents | json}}
+    </div>
+    <div class="row">
+    Clinical Studies {{project.clinicalStudies ? project.clinicalStudies.length : 0}}
+    </div>
+
+<mat-divider></mat-divider>
+    <div *ngFor="let project of project.projects">
+      <div class="row space-between-row">
+        <div class="width-75">
+      {{project.title}}
+        </div>
+        {{project.funding_year}}
+    </div>
+      <div class="row space-between-row">
+        {{project.annotations}}
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

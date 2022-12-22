@@ -5,9 +5,7 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { User } from "@ncats-frontend-library/models/utils";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
-import { NxModule } from '@nrwl/angular';
 import { readFirst } from '@nrwl/angular/testing';
-import { BehaviorSubject } from "rxjs";
 import { COMMON_CONFIG, FIRESTORESTUB } from "../user.service.spec";
 
 import * as UsersActions from './users.actions';

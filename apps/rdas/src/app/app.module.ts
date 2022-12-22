@@ -2,11 +2,11 @@ import { NgModule } from "@angular/core";
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFireAuthModule, PERSISTENCE } from "@angular/fire/compat/auth";
 import { AngularFirestoreModule } from "@angular/fire/compat/firestore";
-import { FlexModule } from "@angular/flex-layout";
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from "@angular/router";
-import { SharedRdasRdasSearchModule } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { FooterTemplateComponent } from "@ncats-frontend-library/shared/utils/footer-template";
 import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
 import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { SharedSocialSignOnModule } from "@ncats-frontend-library/shared/utils/social-sign-on";
@@ -55,8 +55,8 @@ import { HttpClientModule } from '@angular/common/http';
     SharedUtilsLoadingSpinnerModule,
     SharedUtilsHeaderTemplateModule,
     SharedSocialSignOnModule,
-    SharedRdasRdasSearchModule,
-    FlexModule
+    RdasSearchComponent,
+    FooterTemplateComponent
   ],
   providers: [
     UsersFacade,

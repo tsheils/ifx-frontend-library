@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
-import { NxModule } from '@nrwl/angular';
 import { readFirst } from '@nrwl/angular/testing';
 import { Apollo } from "apollo-angular";
 

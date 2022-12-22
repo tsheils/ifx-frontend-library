@@ -1,0 +1,18 @@
+ncats-frontend-library-project-list-card {
+  width: 98%;
+
+  mat-card {
+    padding: 1rem;
+    padding-bottom: 2vh;
+    margin-bottom: 2vh;
+  }
+
+  .expand-link {
+    font-style: italic;
+    cursor: pointer;
+  }
+
+  span.small-text {
+    font-size: 12px;
+  }
+}

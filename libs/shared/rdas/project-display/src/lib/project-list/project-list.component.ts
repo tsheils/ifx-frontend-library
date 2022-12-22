@@ -1,14 +1,18 @@
+import { CommonModule } from "@angular/common";
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
-import { PageEvent } from "@angular/material/paginator";
-import { Project } from "@ncats-frontend-library/models/rdas";
+import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { CoreProject } from "@ncats-frontend-library/models/rdas";
+import { ProjectListCardComponent } from "../project-list-card/project-list-card.component";
 
 @Component({
   selector: 'ncats-frontend-library-project-list',
   templateUrl: './project-list.component.html',
-  styleUrls: ['./project-list.component.scss']
+  styleUrls: ['./project-list.component.scss'],
+  standalone: true,
+  imports: [CommonModule, MatPaginatorModule, ProjectListCardComponent ],
 })
 export class ProjectListComponent implements OnChanges {
-  @Input() projects!: Project[];
+  @Input() projects!: CoreProject[];
   @Input() count = 0;
   @Output() pageChange: EventEmitter<{offset:number}> = new EventEmitter<{offset:number}>();
   constructor(
@@ -16,6 +20,7 @@ export class ProjectListComponent implements OnChanges {
   ) { }
 
   ngOnChanges() {
+    console.log(this);
     this.changeRef.markForCheck()
   }
 

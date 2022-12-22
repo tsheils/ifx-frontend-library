@@ -1,11 +1,11 @@
-<div fxLayout = "row" fxLayoutAlign="space-around start">
-  <div fxFlex = 75>
-    <ncats-frontend-library-rdas-search ></ncats-frontend-library-rdas-search>
-  </div>
+<div class="row centered-row ">
+  <div class="width-75">
+<div class="row centered-row ">
+  <div class="width-75">
+  <ncats-frontend-library-rdas-search ></ncats-frontend-library-rdas-search>
 </div>
-<div fxLayout="row" fxLayoutAlign="space-around start">
-  <div fxLayout="50"></div>
-  <div fxLayout="25">
+</div>
+<div class="row right-justified-row ">
     <mat-paginator *ngIf="page"
       [pageSize]="page.pageSize"
       [pageIndex]="page.pageIndex"
@@ -13,10 +13,9 @@
       (page)="paginationChanges($event)"
       [length] = "page.total"
     ></mat-paginator>
-  </div>
 </div>
-<div fxLayout="row" fxLayoutAlign="space-around start">
-  <div fxFlex = 75>
+<div class="row centered-row ">
     <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loading"></ncats-frontend-library-disease-list>
+</div>
   </div>
 </div>

@@ -1,12 +1,12 @@
-<div fxLayout="row" fxLayoutAlign="space-between center">
-  <div fxFlex="80"><a
+  <div class = "row space-between-row link-row">
+ <div>
+    <a
     class="mat-h1 disease-link"
     href = "https://rarediseases.info.nih.gov/diseases/{{trimmed_id}}/from_rdas"
     target="_blank"
     rel="noreferrer"
     aria-label="Link to GARD website"
-  ><h2>{{disease.name}}: {{disease.gard_id}}</h2></a></div>
-  <div fxFlex="12">
+  ><h2>{{disease.name}}: {{disease.gard_id}}</h2></a>
+ </div>
     <ncats-frontend-library-subscribe-button [disease]="disease" ></ncats-frontend-library-subscribe-button>
   </div>
-</div>

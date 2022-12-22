@@ -8,7 +8,6 @@ import {
   OnChanges,
   Output
 } from "@angular/core";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { Article } from "@ncats-frontend-library/models/rdas";
@@ -18,7 +17,7 @@ import { ArticleListCardComponent } from "../article-list-card/article-list-card
   standalone: true,
   selector: 'ncats-frontend-library-article-list',
   templateUrl: './article-list.component.html',
-  imports: [CommonModule, MatPaginatorModule, FlexLayoutModule, ArticleListCardComponent, MatCardModule],
+  imports: [CommonModule, MatPaginatorModule, ArticleListCardComponent, MatCardModule],
   styleUrls: ['./article-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
