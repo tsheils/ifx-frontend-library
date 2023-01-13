@@ -7,7 +7,6 @@ import {
   OnInit,
   Output
 } from "@angular/core";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
 import { MatButtonModule } from "@angular/material/button";

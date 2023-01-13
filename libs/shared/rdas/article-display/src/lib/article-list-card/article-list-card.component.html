@@ -1,4 +1,3 @@
-
 <mat-card>
   <mat-card-title>
     <ng-container *ngIf="article.doi; then link; else nolink">
@@ -44,7 +43,8 @@
     </div>
   </div>
 <br>
-  <div class="mat-h2" *ngIf="article.abstractText && article.abstractText.length">Abstract</div>
+    <div class="row space-between-row">
+    <div class="mat-h2" *ngIf="article.abstractText && article.abstractText.length">Abstract</div>
   <div *ngIf="fullAbstract; else truncated">
     <span class="mat-subtitle-2" [innerHTML]="getArticleAbstract()"></span>
     <a (click) = "fullAbstract = false" *ngIf="fullAbstract && truncatedAbstract" class = "expand-link"> ...less</a>
@@ -53,8 +53,7 @@
     <span class="mat-subtitle-2" [innerHTML]="getArticleAbstract()"></span>
     <a (click) = "fullAbstract = true" *ngIf="!fullAbstract" class = "expand-link"> ...more</a>
   </ng-template>
-
-  <div ></div>
+    </div>
   {{article.substancesSubstanceAnnotatedByPubmed | json}}
   </mat-card-content>
 </mat-card>

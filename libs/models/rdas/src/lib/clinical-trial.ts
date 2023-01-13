@@ -16,7 +16,7 @@ export class ClinicalTrial  {
   NCTIdAlias?: string[];
   officialTitle?: string;
   overallStatus?: string;
-  phase?: string;
+  phase?: string[];
   primaryCompletionDate?: string;
   primaryCompletionDateType?: string;
   resultsFirstPostDate?: string;
@@ -217,7 +217,7 @@ export const FETCHTRIALSQUERY = gql`
           leadSponsorName: LeadSponsorName
         }
         studyDiseases: gardSgardIn {
-          gard_id: GARDId
+          gardId: GARDId
           name: GARDName
         }
 

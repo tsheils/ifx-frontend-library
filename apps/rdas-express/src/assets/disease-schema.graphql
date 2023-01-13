@@ -1,0 +1,19 @@
+type GARD {
+	ClassificationLevel: String!
+	DisorderType: String!
+	GardId: String!
+	GardName: String!
+	Synonyms: [String]
+	gardSsubClassOf: [GARD!]! @relationship(type: "subClassOf", direction: IN)
+	subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
+}
+
+type Query {
+  diseaseSearch(searchString: String): [GARD] @cypher(
+    statement: """
+      CALL db.index.fulltext.queryNodes(
+        'allNameIndex', $searchString)
+      YIELD node RETURN node LIMIT 10
+    """
+  )
+}

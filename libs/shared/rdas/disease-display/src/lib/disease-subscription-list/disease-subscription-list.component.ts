@@ -24,7 +24,7 @@ export class DiseaseSubscriptionListComponent implements OnInit {
   set subscriptions(subscriptions: Subscription[] | undefined) {
     if(subscriptions) {
       this.subscriptions.forEach(sub => {
-        this.diseases.push(new Disease({ gard_id: sub.gardID, name: sub.diseaseName }))
+        this.diseases.push(new Disease({ gardId: sub.gardID, name: sub.diseaseName }))
       })
       this._subscriptions = subscriptions;
     }

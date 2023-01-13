@@ -13,7 +13,7 @@ export class RdasDiseasePageComponent implements OnInit {
   @ContentChildren(MatPaginator) paginators!: QueryList<MatPaginator>;
   @ViewChildren(MatPaginator) paginatorsVC!: QueryList<MatPaginator>;
   options = {
-    gard_id: '',
+    gardId: '',
     source: 'article',
     options: {}
   };
@@ -28,7 +28,7 @@ export class RdasDiseasePageComponent implements OnInit {
     this.diseaseFacade.selectedDiseases$.subscribe(res => {
         if (res) {
           this.disease = res;
-          this.options.gard_id = this.disease.gard_id;
+          this.options.gardId = this.disease.gardId;
           this.changeRef.markForCheck();
         }
       }
@@ -37,7 +37,7 @@ export class RdasDiseasePageComponent implements OnInit {
 
 
   fetchDisease(disease: Disease) {
-    this.options.gard_id = disease.gard_id;
+    this.options.gardId = disease.gardId;
     this.options.options = {
       mentionedInArticlesOptions: {
         limit: 10,

@@ -49,7 +49,7 @@ export class Investigator {
 }
 
 export class Annotation {
-  semantic_types_names?: string;
+  semantic_types_names?: string[];
   umls_concept?: string;
   constructor(obj: Partial<Annotation> = {}) {
     Object.assign(this, obj);
@@ -122,7 +122,7 @@ export const FETCHPROJECTSQUERY = gql`
         application_id
         application_type
         researchedDiseases: diseasesResearchedBy {
-          gard_id
+          gardId: gard_id
           name
         }
         phr
@@ -159,7 +159,8 @@ export const PROJECTVARIABLES: {
     }
   },
   coreProjectsOptions?: {
-    limit?: number
+    limit?: number,
+    offset?: number
   }
   projectsUnderCoreOptions?: {
     sort?: [

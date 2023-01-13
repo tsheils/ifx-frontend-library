@@ -18,8 +18,8 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
 })
 export class DiseaseDisplayComponent implements OnChanges {
   @Input() disease!: Disease;
-  @Output() optionsChange: EventEmitter<{variables: { [key: string]: string }, origin: string}> =
-    new EventEmitter<{variables: { [key: string]: string }, origin: string}>();
+  @Output() optionsChange: EventEmitter<{variables: { [key: string]: unknown }, origin: string}> =
+    new EventEmitter<{variables: { [key: string]: unknown }, origin: string}>();
 
   constructor(
     private changeRef: ChangeDetectorRef
@@ -32,8 +32,11 @@ export class DiseaseDisplayComponent implements OnChanges {
   }
 
   pageList(event: {offset:number}, pageField: string, origin: string): void {
-    const variables: { [key: string]: string } = {};
-    variables[pageField] = String(-+event);
+    console.log(event)
+    const variables: { [key: string]: unknown } = {};
+  //  variables[pageField] = String(-+event);
+    variables[pageField] = event;
+    console.log(variables);
     this.optionsChange.emit({variables, origin});
   }
 

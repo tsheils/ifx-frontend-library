@@ -28,6 +28,8 @@ export class ProjectListComponent implements OnChanges {
     const pageOptions: {offset:number} = {
       offset: event.pageIndex * event.pageSize,
     }
+    console.log(event)
+    console.log(pageOptions);
     this.pageChange.emit(pageOptions);
   }
 

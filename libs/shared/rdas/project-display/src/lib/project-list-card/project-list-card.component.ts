@@ -3,16 +3,17 @@ import { CommonModule } from "@angular/common";
 import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatDividerModule } from "@angular/material/divider";
-import { MatIconModule } from "@angular/material/icon";
-import { DomSanitizer } from "@angular/platform-browser";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatTabsModule } from "@angular/material/tabs";
 import { CoreProject, Project } from "@ncats-frontend-library/models/rdas";
+import { AnnotationsDisplayComponent } from "../annotations-display/annotations-display.component";
 
 @Component({
   selector: 'ncats-frontend-library-project-list-card',
   templateUrl: './project-list-card.component.html',
   styleUrls: ['./project-list-card.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatDividerModule],
+  imports: [CommonModule, MatCardModule, MatDividerModule, MatTabsModule, MatExpansionModule, AnnotationsDisplayComponent],
   encapsulation: ViewEncapsulation.None
 })
 export class ProjectListCardComponent implements OnInit {

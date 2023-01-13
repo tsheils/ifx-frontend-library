@@ -11,6 +11,14 @@ export class DiseaseService {
     private apollo: Apollo
   ) { }
 
+  fetchDiseases(query: DocumentNode, variables: object = {}) {
+    return this.apollo.use('diseases').watchQuery({
+        query,
+        variables
+      }
+    ).valueChanges.pipe()
+  }
+
   fetchArticles(query: DocumentNode, variables: object = {}) {
     return this.apollo.use('articles').watchQuery({
         query,
@@ -35,4 +43,12 @@ export class DiseaseService {
       }
     ).valueChanges.pipe()
   }
+
+  /*manualQuery(query: string, variables: object = {}, database: string) {
+    return this.apollo.use(database).watchQuery({
+        query,
+        variables
+      }
+    ).valueChanges.pipe()
+  }*/
 }

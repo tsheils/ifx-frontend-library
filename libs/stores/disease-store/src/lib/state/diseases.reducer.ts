@@ -23,7 +23,7 @@ export interface DiseasesPartialState {
 
 export const diseasesAdapter: EntityAdapter<Disease> =
   createEntityAdapter<Disease>({
-    selectId: disease => disease.gard_id
+    selectId: disease => disease.gardId
   });
 
 export const initialState: State = diseasesAdapter.getInitialState({
@@ -35,11 +35,14 @@ export const initialState: State = diseasesAdapter.getInitialState({
 
 export const diseasesReducer = createReducer(
   initialState,
-  on(DiseasesActions.init, (state) => ({
+  on(DiseasesActions.init,
+    DiseasesActions.loading,
+    (state) => ({
     ...state,
     loaded: false,
     error: null,
   })),
+
 
   on(DiseasesActions.loadDiseasesSuccess, (state, { diseases, page}) =>
        diseasesAdapter.setAll(diseases, {...state, page: page, loaded: true})
@@ -51,7 +54,7 @@ export const diseasesReducer = createReducer(
 
   ),
   on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) =>
-       diseasesAdapter.setOne(disease, {...state, selectedId: disease.gard_id, loaded: true})
+       diseasesAdapter.setOne(disease, {...state, selectedId: disease.gardId, loaded: true})
 
   ),
 

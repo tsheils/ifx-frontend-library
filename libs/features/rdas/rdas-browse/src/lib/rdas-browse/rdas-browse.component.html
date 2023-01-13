@@ -2,7 +2,7 @@
   <div class="width-75">
 <div class="row centered-row ">
   <div class="width-75">
-  <ncats-frontend-library-rdas-search ></ncats-frontend-library-rdas-search>
+  <ncats-frontend-library-rdas-search (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
 </div>
 </div>
 <div class="row right-justified-row ">
@@ -14,8 +14,8 @@
       [length] = "page.total"
     ></mat-paginator>
 </div>
-<div class="row centered-row ">
-    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loading"></ncats-frontend-library-disease-list>
+<div class="row centered-row width-75">
+    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loading" class="fill-container"></ncats-frontend-library-disease-list>
 </div>
   </div>
 </div>

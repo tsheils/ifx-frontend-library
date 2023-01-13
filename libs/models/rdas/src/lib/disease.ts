@@ -1,12 +1,13 @@
 import {gql} from "apollo-angular";
-import { Article, ARTICLEFIELDS } from "./article";
-import { AUTHORFIELDS } from "./author";
+import { Article } from "./article";
 import {ClinicalTrial} from "./clinical-trial";
 import { CoreProject } from "./project";
 
 export class Disease {
+  classificationLevel?: string;
+  disorderType?: string;
   name!: string;
-  gard_id!: string;
+  gardId!: string;
   all_ids?:  string[];
   all_names?: string[];
   categories?: string[];
@@ -42,112 +43,3 @@ export class Disease {
     }
   }
 }
-
-
-
-const DISEASEFIELDS = gql`
-  fragment diseaseFields on Disease {
-    gard_id
-    name
-    all_ids
-    synonyms
-    _epiCount: mentionedInArticlesAggregate(
-      where: {isEpi: "Y"}
-    ) {
-      count
-    }
-    _nonEpiCount: mentionedInArticlesAggregate(
-      where: {isEpi: null}
-    ) {
-      count
-    }
-  }
-`;
-
-export const FETCHDISEASESLISTQUERY = gql`
-  query Diseases($options: DiseaseOptions) {
-    diseases(options: $options) {
-      name
-      gard_id
-      is_rare
-      synonyms
-      mentionedInArticlesAggregate {
-        count
-      }
-    }
-    total: diseasesAggregate {
-      count
-    }
-  }
-`
-
-export const FETCHDISEASEQUERY = gql`
-  query Diseases(
-    $diseasesWhere: DiseaseWhere
-    $mentionedInEpiArticlesOptions: ArticleOptions
-    $mentionedInEpiArticlesWhere: ArticleWhere
-    $meshTermsMeshTermForEpiOptions: MeshTermOptions
-    $mentionedInNonEpiArticlesOptions: ArticleOptions
-    $mentionedInNonEpiArticlesWhere: ArticleWhere
-    $meshTermsMeshTermForNonEpiOptions: MeshTermOptions
-  ) {
-    diseases(where: $diseasesWhere) {
-      ...diseaseFields
-      epiArticles: mentionedInArticles(
-        options: $mentionedInEpiArticlesOptions
-        where: $mentionedInEpiArticlesWhere
-      ) {
-        ...articleFields
-        authorsWrote {
-          ...authorFields
-        }
-        meshTermsMeshTermForAggregate {
-          count
-        }
-        meshTermsMeshTermFor(options: $meshTermsMeshTermForEpiOptions) {
-          descriptorName
-          majorTopic_YN
-        }
-      }
-      nonEpiArticles: mentionedInArticles(
-        options: $mentionedInNonEpiArticlesOptions
-        where: $mentionedInNonEpiArticlesWhere
-      ) {
-        ...articleFields
-        authorsWrote {
-          ...authorFields
-        }
-        meshTermsMeshTermForAggregate {
-          count
-        }
-        meshTermsMeshTermFor(options: $meshTermsMeshTermForNonEpiOptions) {
-          descriptorName
-          majorTopic_YN
-        }
-      }
-    }
-  }
-  ${DISEASEFIELDS}
-  ${ARTICLEFIELDS}
-  ${AUTHORFIELDS}
-`;
-
-export const LISTQUERYPARAMETERS: {
-  options: {
-    limit?: number,
-    offset?: number,
-    sort?: [{ [key: string]: string }]
-  }
-  } =
-  {
-    options: {
-      limit: 10,
-      offset: 0,
-      sort: [
-        {
-          name: "ASC"
-        }
-      ]
-    }
-  }
-;

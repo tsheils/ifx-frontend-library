@@ -8,7 +8,7 @@
       <ncats-frontend-library-project-list
         [projects]="disease.projects"
         [count] = disease.projectCount
-        (pageChange)="pageList($event,'project', 'project')"
+        (pageChange)="pageList($event,'coreProjectsOptions', 'project')"
       ></ncats-frontend-library-project-list>
     </div>
   </mat-tab>
@@ -17,14 +17,14 @@
 
 
   <mat-tab [label] = "'Articles ' + (disease.epiCount + disease.nonEpiCount )">
-    <mat-tab-group>
+    <mat-tab-group [color]="'accent'">
       <mat-tab
         [label]= "'Epidemiology Articles ' + disease.epiCount"
         *ngIf="disease && disease.epiArticles">
         <ncats-frontend-library-article-list
           [articles] = disease.epiArticles
           [count] = disease.epiCount
-          (pageChange)="pageList($event,'mentionedInEpiArticlesOptions', 'article')"
+          (pageChange)="pageList($event,'epiOptions', 'article')"
         >
         </ncats-frontend-library-article-list>
       </mat-tab>
@@ -34,7 +34,7 @@
         <ncats-frontend-library-article-list
           [articles]="disease.nonEpiArticles"
           [count] = disease.nonEpiCount
-          (pageChange)="pageList($event,'mentionedInNonEpiArticlesOptions', 'article')"
+          (pageChange)="pageList($event,'nonEpiOptions', 'article')"
         >
         </ncats-frontend-library-article-list>
       </mat-tab>

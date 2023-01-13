@@ -13,9 +13,9 @@ import { DiseasesEffects } from './diseases.effects';
 
 describe('DiseasesEffects', () => {
 
-  const createDiseasesEntity = (gard_id: string, name = ''): Disease => ({
-    gard_id,
-    name: name || `name-${gard_id}`,
+  const createDiseasesEntity = (gardId: string, name = ''): Disease => ({
+    gardId,
+    name: name || `name-${gardId}`,
     epiCount: 0,
     nonEpiCount: 0,
     projectCount: 0,

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import {
-  ARTICLEVARIABLES, ClinicalTrial, CoreProject, Disease,
+  Article,
+  ARTICLEVARIABLES, ClinicalTrial, CoreProject, Disease, DISEASEQUERYPARAMETERS, DISEASETYPEAHEAD, FETCHARTICLESQUERY,
   FETCHDISEASEQUERY, FETCHDISEASESLISTQUERY, FETCHPROJECTSQUERY,
-  //FETCHPROJECTSQUERY,
   FETCHTRIALSQUERY,
   FETCHTRIALSVARIABLES,
   LISTQUERYPARAMETERS, Project, PROJECTVARIABLES
@@ -11,43 +11,30 @@ import { Page } from "@ncats-frontend-library/models/utils";
 import { DiseaseService } from "../disease.service";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import {ROUTER_NAVIGATION, RouterNavigationAction} from "@ngrx/router-store";
-import {combineLatest, filter, forkJoin, map, mergeMap, switchMap, take} from "rxjs";
+import { combineLatest, exhaustMap, filter, forkJoin, map, mergeMap, of, switchMap, take, tap } from "rxjs";
 import * as DiseasesActions from './diseases.actions';
-
-/*const typeaheadQuery = gql`
-  query Query($name: String!) {
-    queryTypes {
-      TypeaheadQuery(name: $name) {
-        name
-        gard_id
-      }
-    }
-  }
-`*/
 
 @Injectable()
 export class DiseasesEffects {
+
   searchDiseases = createEffect(() =>
     this.actions$.pipe(
       ofType(DiseasesActions.searchDiseases),
-    /*  tap((action) => {
-        const call = `
-         Match (n:Disease)
-            WHERE n.name =~ '(?i)' + $term + '.*'
-            WITH {name: n.name, gard_id: n.gard_id} as node
-            WITH COLLECT(node) AS arr
-            WITH arr[0..10] AS typeahead
-            RETURN typeahead
-        `;
-        this.diseaseService.read(
-          'epi',
-          'search',
-          call,
-          {term: action.term}
-        )
-      })*/
-    ),{ dispatch: false }
-  );
+      mergeMap((action) => {
+        return this.diseaseService.fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term + '~' })
+          .pipe(
+            map((res: any) => {
+              if (res && res.data) {
+                const diseaseArr = res.data.diseaseSearch.map((obj: { [key: string]: string }) => new Disease(obj))
+                const ids = diseaseArr.map((d: Disease) => d.gardId);
+                return DiseasesActions.searchDiseasesSuccess({ typeahead: diseaseArr })
+              } else return DiseasesActions.searchDiseasesFailure({ error: "No Diseases found" })
+            })
+          )
+      })
+    )
+  )
+
 
   loadDiseases$ = createEffect(() => {
     return this.actions$.pipe(
@@ -59,7 +46,7 @@ export class DiseasesEffects {
         const pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
         LISTQUERYPARAMETERS.options.limit =  +pageSize;
         LISTQUERYPARAMETERS.options.offset = +pageSize * (+pageIndex +1);
-        return this.diseaseService.fetchArticles(FETCHDISEASESLISTQUERY, LISTQUERYPARAMETERS)
+        return this.diseaseService.fetchDiseases(FETCHDISEASESLISTQUERY, LISTQUERYPARAMETERS)
           .pipe(
             map((res: any) => {
               if(res && res.data) {
@@ -74,43 +61,17 @@ export class DiseasesEffects {
     )}
   );
 
-  /*
-  diseaseTypeahead = createEffect(() =>
-      this.actions$.pipe(
-        ofType(DiseasesActions.searchDiseases),
-        exhaustMap((action: any) => {
-          const variables = {
-            "name": action.term.toLocaleLowerCase(),
-            "options": {
-              "limit": 10
-            }
-          };
-          console.log(variables);
-          return this.diseaseService.fetchApollo(typeaheadQuery, variables)
-            .pipe(
-              map((res: any) => {
-          if(res && res.data) {
-            console.log(res);
-            const disease: Disease = new Disease(res.data.diseases[0]);
-            return DiseaseActions.searchDiseasesSuccess({typeahead: res.data.typeahead})
-          }
-          else return DiseasesActions.searchDiseasesFailure({error: "No Diseases found"})
-        })
-              )
-        })
-      )
-    );
-  */
-
-
-
+  //paginate through disease sub-sections (projects, publications, clinical trials)
   fetchDisease = createEffect(() =>
     this.actions$.pipe(
       ofType(DiseasesActions.fetchDisease),
       mergeMap((action: any) => {
+        console.log(action)
         switch(action.source) {
           case 'article': {
             Object.keys(action.options).forEach((key: string) => {
+              console.log(key);
+              console.log(ARTICLEVARIABLES)
               ARTICLEVARIABLES[key as keyof typeof ARTICLEVARIABLES] =
                 Object.assign(ARTICLEVARIABLES[key as keyof typeof ARTICLEVARIABLES] as typeof ARTICLEVARIABLES, action.options[key])
             })
@@ -118,6 +79,8 @@ export class DiseasesEffects {
           }
           case 'project': {
             Object.keys(action.options).forEach((key: string) => {
+              console.log(action.options)
+              console.log(PROJECTVARIABLES)
               PROJECTVARIABLES[key as keyof typeof PROJECTVARIABLES] =
                 Object.assign(PROJECTVARIABLES[key as keyof typeof PROJECTVARIABLES] as typeof PROJECTVARIABLES, action.options[key])
             })
@@ -132,20 +95,16 @@ export class DiseasesEffects {
           }
         }
         return combineLatest(
-          this.diseaseService.fetchArticles(FETCHDISEASEQUERY, ARTICLEVARIABLES).pipe(take(1)),
+          this.diseaseService.fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS).pipe(take(1)),
+          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, ARTICLEVARIABLES).pipe(take(1)),
           this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
           //  map(([diseaseData, trialsData]: [any, any]) => {
-            map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
+            map(([diseaseData, articleData, projectsData, trialsData]: [any, any, any, any]) => {
               if(diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = new Disease(diseaseData.data.diseases[0]);
-                diseaseObj.projects = projectsData.data.coreProjects.map((proj: { [key: string]: unknown }) => new CoreProject(proj))
-                diseaseObj.projectCount = projectsData.data.count.count;
-                diseaseObj.clinicalTrials =
-                  trialsData.data.disease[0].gardInClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
-                diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
+                const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, projectsData, trialsData);
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
               }
               else return DiseasesActions.fetchDiseaseFailure({error: "No Disease found"})
@@ -161,30 +120,25 @@ export class DiseasesEffects {
       filter((r: RouterNavigationAction) => r.payload.routerState.url != '/diseases' && r.payload.routerState.url.startsWith('/disease')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       switchMap((params: {id?: string}) => {
-        ARTICLEVARIABLES.diseasesWhere = {gard_id: params.id};
+        DISEASEQUERYPARAMETERS.where = {GardId: params.id};
+        ARTICLEVARIABLES.gardWhere.gard_id =  params.id;
         PROJECTVARIABLES.coreProjectsWhere = {projectsUnderCoreConnection_ALL: {node: {diseasesResearchedBy_SINGLE: {gard_id: params.id}}}};
         FETCHTRIALSVARIABLES.ctwhere = {GARDId: params.id};
         return forkJoin(
-          this.diseaseService.fetchArticles(FETCHDISEASEQUERY, ARTICLEVARIABLES).pipe(take(1)),
+          this.diseaseService.fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS).pipe(take(1)),
+          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, ARTICLEVARIABLES).pipe(take(1)),
           this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-            map(([diseaseData, projectsData, trialsData]: [any, any, any]) => {
+            map(([diseaseData, articleData, projectsData, trialsData]: [any, any, any, any]) => {
       //      map(([diseaseData, trialsData]: [any, any]) => {
               console.log(diseaseData)
+              console.log(articleData)
               console.log(projectsData)
               console.log(trialsData)
               if(diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = new Disease(diseaseData.data.diseases[0]);
-                if(projectsData.data && projectsData.data.coreProjects.length) {
-                  diseaseObj.projects = projectsData.data.coreProjects.map((proj: { [key: string]: unknown  }) => new CoreProject(proj))
-                  diseaseObj.projectCount = projectsData.data.count.count;
-                }
-                if(trialsData.data && trialsData.data.disease.length) {
-                  diseaseObj.clinicalTrials = trialsData.data.disease[0].gardInClinicalTrials.map((trial:{ [key: string]: unknown  }) => new ClinicalTrial(trial))
-                  diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
-                }
+                const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, projectsData, trialsData); //new Disease(diseaseData.data.disease[0]);
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
               }
               else return DiseasesActions.fetchDiseaseFailure({error: "No Disease found"})
@@ -195,20 +149,41 @@ export class DiseasesEffects {
   );
 
 
-
-  /*  isLoading$ = createEffect(() => {
+    isLoading$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(DiseasesActions.fetchDisease),
-        filter((r: RouterNavigationAction) => {
-          return r.payload.routerState.url.startsWith('/disease')
-        }),
         mergeMap(() => {
-          return of(true)
-   //       return of(DiseasesActions.loadDiseases());
+          return of(DiseasesActions.loading());
         })
       )
-    }, {dispatch: false});*/
+    });
 
+
+  _makeDiseaseObj(diseaseData:{data:{disease:[Partial<Disease>]}}, articleData: any, projectsData :any, trialsData: any): Disease {
+    if (diseaseData && diseaseData.data) {
+      console.log(articleData);
+      const diseaseObj: Disease = new Disease(diseaseData.data.disease[0]);
+      if (articleData.data && articleData.data.articles.length) {
+        if (articleData.data.articles[0] && articleData.data.articles[0].epiArticles.length) {
+          diseaseObj.epiArticles = articleData.data.articles[0].epiArticles.map((art: { [key: string]: unknown }) => new Article(art))
+          diseaseObj.epiCount = articleData.data.articles[0]._epiCount.count;
+        }
+        if (articleData.data.articles[0] && articleData.data.articles[0].nonEpiArticles.length) {
+          diseaseObj.nonEpiArticles = articleData.data.articles[0].nonEpiArticles.map((art: { [key: string]: unknown }) => new Article(art))
+          diseaseObj.nonEpiCount = articleData.data.articles[0]._nonEpiCount.count;
+        }
+      }
+      if (projectsData.data && projectsData.data.coreProjects.length) {
+        diseaseObj.projects = projectsData.data.coreProjects.map((proj: { [key: string]: unknown }) => new CoreProject(proj))
+        diseaseObj.projectCount = projectsData.data.count.count;
+      }
+      if (trialsData.data && trialsData.data.disease.length) {
+        diseaseObj.clinicalTrials = trialsData.data.disease[0].gardInClinicalTrials.map((trial: { [key: string]: unknown }) => new ClinicalTrial(trial))
+        diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
+      }
+      return diseaseObj;
+    } else return new Disease({});
+  }
 
 
   constructor(

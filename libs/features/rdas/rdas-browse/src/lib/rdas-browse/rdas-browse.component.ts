@@ -60,6 +60,16 @@ export class RdasBrowseComponent implements OnInit {
     this._navigate(navigationExtras);
   }
 
+  selectDisease(event: Disease): void {
+    console.log(event);
+    const navigationExtras: NavigationExtras = {
+      queryParams:{
+        id: event.gardId
+      }
+    };
+    this.router.navigate(['/disease'], navigationExtras);
+  }
+
   /**
    * navigate on changes, mainly just changes url, shouldn't reload entire page, just data
    * @param {NavigationExtras} navExtras

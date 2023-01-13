@@ -1,6 +1,6 @@
 @use '@angular/material' as mat;
 @import 'libs/shared/utils/header-template/src/theming';
-@import 'libs/styles/src/styles/rdas-theme';
+@import 'libs/styles/src/styles/rdas-theme2';
 
 html,
 body {
@@ -27,7 +27,7 @@ body {
   padding-bottom: 5vh;
 }
 
-.toolbar-template {
+/*.toolbar-template {
   background-color: mat.get-color-from-palette($app-primary);
   color: #ffffff !important;
 //  z-index: 666;
@@ -36,6 +36,19 @@ body {
 .footer-template {
   background-color: mat.get-color-from-palette($app-primary);
   color: #ffffff;
+}*/
+
+.toolbar-template {
+  color: mat.get-color-from-palette($app-primary);
+  padding-bottom:10px;
+  border-bottom: 10px solid mat.get-color-from-palette($app-accent);
+  //color: #ffffff !important;
+//  z-index: 666;
+}
+
+.footer-template {
+  color: mat.get-color-from-palette($app-primary);
+ // color: #ffffff;
 }
 
 .centered {
@@ -80,4 +93,34 @@ body {
 
 .width-25 {
   flex-basis: 25%;
+}
+
+.width-30 {
+  flex-basis: 30%;
+}
+
+.fill-container {
+  width: 100%;
+}
+
+span.list-item-content {
+  padding-left: 1rem;
+  display: flex;
+  margin-top: -0.5rem;
+}
+
+.list-item-title {
+  font-weight: bold;
+  text-decoration: underline;
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.bottom-border-accent {
+ border-bottom: 5px solid mat.get-color-from-palette($app-accent);
+}
+
+.bottom-border-primary {
+ border-bottom: 5px solid mat.get-color-from-palette($app-primary);
 }

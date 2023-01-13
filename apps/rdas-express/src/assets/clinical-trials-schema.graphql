@@ -12,7 +12,7 @@ type ClinicalTrial {
 	NCTIdAlias: String
 	OfficialTitle: String
 	OverallStatus: String!
-	Phase: String
+	Phase: [String]
 	PrimaryCompletionDate: String
 	PrimaryCompletionDateType: String
 	ResultsFirstPostDate: String

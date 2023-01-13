@@ -46,7 +46,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
       .subscribe(user => {
       if(user && user.length) {
         this.user = JSON.parse(JSON.stringify(user[0]));
-        this.subscription = this.user?.subscriptions.filter(sub => sub.gardID === this.disease.gard_id)[0];
+        this.subscription = this.user?.subscriptions.filter(sub => sub.gardID === this.disease.gardId)[0];
           this.subscribed = !!this.subscription;
           this.changeRef.markForCheck();
         if (this.subscription?.alerts) {
@@ -70,8 +70,8 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
         const subscriptionClone: Subscription[] = [];
         if (this.user && this.user.subscriptions) {
           this.user?.subscriptions.forEach(sub => subscriptionClone.push(sub))
-          subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.gardID === this.disease.gard_id), 1);
-          this.subscription = { diseaseName: this.disease.name, gardID: this.disease.gard_id, alerts: this.subscriptionSelection.selected };
+          subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.gardID === this.disease.gardId), 1);
+          this.subscription = { diseaseName: this.disease.name, gardID: this.disease.gardId, alerts: this.subscriptionSelection.selected };
           subscriptionClone.push(this.subscription);
           this.userFacade.dispatch(updateUserSubscriptions({ subscriptions: subscriptionClone }))
         }
@@ -80,7 +80,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
 
   subscribe(){
     if(this.user) {
-      this.subscription = {diseaseName: this.disease.name, gardID: this.disease.gard_id, alerts: this.all};
+      this.subscription = {diseaseName: this.disease.name, gardID: this.disease.gardId, alerts: this.all};
       const subscriptionClone: Subscription[] = [this.subscription];
       this.user.subscriptions.forEach(sub => subscriptionClone.push(sub))
       this.userFacade.dispatch(updateUserSubscriptions({subscriptions: subscriptionClone}))
@@ -99,7 +99,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
           if(res) {
             const subscriptionClone: Subscription[] = [];
             this.user?.subscriptions.forEach(sub => {
-              if(sub.gardID !== this.disease.gard_id) {
+              if(sub.gardID !== this.disease.gardId) {
                 subscriptionClone.push(Object.assign({}, {...sub}))
               }
             })

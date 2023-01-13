@@ -10,13 +10,13 @@ import {HttpLink} from 'apollo-angular/http';
       provide: APOLLO_NAMED_OPTIONS, // <-- Different from standard initialization
       useFactory(httpLink: HttpLink): NamedOptions {
         return {
-          articles: /* <-- this settings will be saved as default client */ {
+          diseases: /* <-- this settings will be saved as default client */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
               uri: 'http://localhost:4000',
             }),
           },
-          trials: /* <-- these settings will be saved by name: newClientName */ {
+          articles: /* <-- this settings will be saved as default client */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
               uri: 'http://localhost:4001',
@@ -28,6 +28,12 @@ import {HttpLink} from 'apollo-angular/http';
               uri: 'http://localhost:4002',
             }),
           },
+          trials: /* <-- these settings will be saved by name: newClientName */ {
+            cache: new InMemoryCache(),
+            link: httpLink.create({
+              uri: 'http://localhost:4003',
+            }),
+          }
         };
       },
       deps: [HttpLink],

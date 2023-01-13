@@ -23,9 +23,9 @@ export class RdasHomeComponent {
   ) { }
 
   fetchDisease(disease: Disease) {
-    navigationExtras.queryParams = {id: disease.gard_id}
+    navigationExtras.queryParams = {id: disease.gardId}
     this.router.navigate(['disease'], navigationExtras);
-    /* this.options.gard_id = disease.gard_id;
+    /* this.options.gardId = disease.gardId;
      this.options.options = {
        mentionedInArticlesOptions: {
          limit: 10,

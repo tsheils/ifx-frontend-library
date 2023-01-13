@@ -14,16 +14,20 @@
     </div>
   </mat-card-title>
   <mat-card-content>
+    <div class="row space-between-row">
+      <div class="width-75">
      <b>Study Type: </b> {{trial.studyType}}<br>
         <b *ngIf="trial.overallStatus || trial.lastKnownStatus">Status: </b> {{trial.overallStatus || trial.lastKnownStatus}}
         <br>
-        <span *ngIf="trial.phase"><b>Phase: </b>{{trial.phase}}</span><br>
+        <span *ngIf="trial.phase"><b>Phase: </b>{{trial.phase.join(", ")}}</span><br>
     <b *ngIf="trial.studyFirstPostDate">First Posted: </b><span>{{trial.studyFirstPostDate}}</span><br>
         <b *ngIf="trial.lastUpdatePostDate">Last Update: </b><span>{{trial.lastUpdatePostDate}}</span>
     <br>
     <br>
+      </div>
+    </div>
     <div class="row space-between-row">
-    <div class="mat-h2" *ngIf="trial.briefSummary && trial.briefSummary.length">Summary</div>
+    <span class="list-item-title" *ngIf="trial.briefSummary && trial.briefSummary.length">Summary</span>
     <div *ngIf="fullSummary; else truncated">
       <span class="mat-subtitle-2">{{getTrialSummary()}}</span>
       <a (click)="fullSummary = false" *ngIf="fullSummary && truncatedSummary" class="expand-link"> ...less</a>
@@ -33,52 +37,64 @@
       <a (click)="fullSummary = true" *ngIf="!fullSummary" class="expand-link"> ...more</a>
     </ng-template>
     </div>
-    <div class="row">
+    <div class="row space-between-row">
+      <div class="width-75">
         <mat-tab-group [color]="'primary'">
         <mat-tab [label]="getLabel('studyDesigns')"
                  [disabled]="!trial.studyDesigns || trial.studyDesigns.length === 0">
           <div *ngFor="let studyDesign of trial.studyDesigns">
-            <mat-list>
-              <mat-list-item *ngIf="studyDesign.designPrimaryPurpose">
-                Primary Purpose: {{studyDesign.designPrimaryPurpose}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designInterventionModel">
-                Intervention Model: {{studyDesign.designInterventionModel}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designInterventionModelDescription">
-                Intervention Model Description: {{studyDesign.designInterventionModelDescription}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designMasking">
-                Design Masking: {{studyDesign.designMasking}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designMaskingDescription">
-                Design Masking Description: {{studyDesign.designMaskingDescription}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designAllocation">
-                Design Allocation: {{studyDesign.designAllocation}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designObservationalModel">
-                Design Observational Model: {{studyDesign.designObservationalModel}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.designTimePerspective">
-                Design Time Perspective: {{studyDesign.designTimePerspective}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.samplingMethod">
-                Sampling Method: {{studyDesign.samplingMethod}}
-              </mat-list-item>
-             <!-- <mat-list-item *ngIf="studyDesign.primaryOutcomeDescription">
-                Primary Outcome Description: {{studyDesign.primaryOutcomeDescription}}
-              </mat-list-item>-->
-              <mat-list-item  *ngIf="studyDesign.primaryOutcomeMeasure">
-                Primary Outcome Measure: {{studyDesign.primaryOutcomeMeasure}}
-              </mat-list-item>
-              <mat-list-item *ngIf="studyDesign.primaryOutcomeTimeFrame">
-                Primary Outcome Timeframe: {{studyDesign.primaryOutcomeTimeFrame}}
-              </mat-list-item>
-            </mat-list>
-            <p *ngIf="studyDesign.detailedDescription">
-              Detailed Description: {{studyDesign.detailedDescription}}
-            </p>
+              <div *ngIf="studyDesign.designPrimaryPurpose">
+                <span class="list-item-title">Primary Purpose</span>
+                <span class="list-item-content">{{studyDesign.designPrimaryPurpose}}</span>
+              </div>
+              <div *ngIf="studyDesign.designInterventionModel">
+                <span class="list-item-title">Intervention Model</span>
+                <span class="list-item-content">{{studyDesign.designInterventionModel}}</span>
+              </div>
+              <div *ngIf="studyDesign.designInterventionModelDescription">
+                <span class="list-item-title">Intervention Model Description</span>
+                <span class="list-item-content">{{studyDesign.designInterventionModelDescription}}</span>
+              </div>
+              <div *ngIf="studyDesign.designMasking">
+                <span class="list-item-title">Design Masking</span>
+                <span class="list-item-content">{{studyDesign.designMasking}}</span>
+              </div>
+              <div *ngIf="studyDesign.designMaskingDescription">
+                <span class="list-item-title">Design Masking Description</span>
+                <span class="list-item-content">{{studyDesign.designMaskingDescription}}</span>
+              </div>
+              <div *ngIf="studyDesign.designAllocation">
+                <span class="list-item-title">Design Allocation</span>
+                <span class="list-item-content">{{studyDesign.designAllocation}}</span>
+              </div>
+              <div *ngIf="studyDesign.designObservationalModel">
+                <span class="list-item-title">Design Observational Model</span>
+                <span class="list-item-content">{{studyDesign.designObservationalModel}}</span>
+              </div>
+              <div *ngIf="studyDesign.designTimePerspective">
+                <span class="list-item-title">Design Time Perspective</span>
+                <span class="list-item-content">{{studyDesign.designTimePerspective}}</span>
+              </div>
+              <div *ngIf="studyDesign.samplingMethod">
+                <span class="list-item-title">Sampling Method</span>
+                <span class="list-item-content">{{studyDesign.samplingMethod}}</span>
+              </div>
+              <div *ngIf="studyDesign.primaryOutcomeDescription">
+                <span class="list-item-title">Primary Outcome Description</span>
+                <span class="list-item-content">{{studyDesign.primaryOutcomeDescription}}</span>
+              </div>
+              <div *ngIf="studyDesign.primaryOutcomeMeasure">
+                <span class="list-item-title">Primary Outcome Measure</span>
+                <span class="list-item-content">{{studyDesign.primaryOutcomeMeasure}}</span>
+              </div>
+              <div *ngIf="studyDesign.primaryOutcomeTimeFrame">
+                <span class="list-item-title">Primary Outcome Timeframe</span>
+                <span class="list-item-content">{{studyDesign.primaryOutcomeTimeFrame}}</span>
+              </div>
+            <div *ngIf="studyDesign.detailedDescription">
+              <span class="list-item-title">Detailed Description</span>
+              <span class="list-item-content">{{studyDesign.detailedDescription}}</span>
+            </div>
           </div>
         </mat-tab>
         <mat-tab [label]="getLabel('participantInfo', false)"
@@ -94,10 +110,10 @@
                  [disabled]="!trial.studyDiseases || trial.studyDiseases.length <= 1">
           <mat-list>
             <mat-list-item *ngFor="let disease of trial.studyDiseases">
-              <ng-container *ngIf="disease.gard_id; then link; else nolink">
+              <ng-container *ngIf="disease.gardId; then link; else nolink">
               </ng-container>
               <ng-template #link>
-                <a href="/disease?id={{disease.gard_id}}"
+                <a href="/disease?id={{disease.gardId}}"
                    target="_blank"
                    rel="noreferrer"
                    aria-label="Link to disease details page">{{disease.name}}</a>
@@ -167,6 +183,7 @@
           </mat-list>
         </mat-tab>
       </mat-tab-group>
+      </div>
       </div>
   </mat-card-content>
 </mat-card>

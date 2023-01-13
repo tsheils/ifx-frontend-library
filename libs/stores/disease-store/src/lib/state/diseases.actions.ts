@@ -4,6 +4,8 @@ import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Diseases Page] Init');
 
+export const loading = createAction('[Loading] start');
+
 export const loadDiseases = createAction(
   '[Diseases/API] Load Diseases',
   props<{
@@ -43,7 +45,7 @@ export const searchDiseasesFailure = createAction(
 export const fetchDisease = createAction(
   '[Diseases/API] fetch Disease',
   props<{
-    gard_id: string,
+    gardId: string,
     source: string,
     options?: { [key: string]: string }
   }>()
@@ -58,3 +60,4 @@ export const fetchDiseaseFailure = createAction(
   '[Diseases/API] fetch Disease Failure',
   props<{ error: string }>()
 );
+

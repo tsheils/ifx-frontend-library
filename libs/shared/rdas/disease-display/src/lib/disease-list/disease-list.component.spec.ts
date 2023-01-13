@@ -42,7 +42,7 @@ describe('DiseaseListComponent', () => {
 
     fixture = TestBed.createComponent(DiseaseListComponent);
     component = fixture.componentInstance;
-    component.diseases=[new Disease({name: 'sdgsg', gard_id: 'bddfdf'})]
+    component.diseases=[new Disease({name: 'sdgsg', gardId: 'bddfdf'})]
     fixture.detectChanges();
   });
 

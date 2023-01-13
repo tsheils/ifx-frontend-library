@@ -13,7 +13,7 @@ export class DiseaseHeaderComponent implements OnInit {
   trimmed_id!: number;
 
   ngOnInit(): void {
-    this.trimmed_id = +this.disease.gard_id.split('GARD:')[1];
+    this.trimmed_id = +this.disease.gardId.split('GARD:')[1];
   }
 
 }

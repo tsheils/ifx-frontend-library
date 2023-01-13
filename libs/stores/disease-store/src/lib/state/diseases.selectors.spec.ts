@@ -8,10 +8,10 @@ import * as DiseasesSelectors from './diseases.selectors';
 
 describe('Diseases Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getDiseasesId = (it: Disease) => it.gard_id;
-  const createDiseasesEntity = (gard_id: string, name = ''): Disease => ({
-    gard_id: gard_id,
-    name: name || `name-${gard_id}`,
+  const getDiseasesId = (it: Disease) => it.gardId;
+  const createDiseasesEntity = (gardId: string, name = ''): Disease => ({
+    gardId: gardId,
+    name: name || `name-${gardId}`,
     epiCount: 0,
     nonEpiCount: 0,
     projectCount: 0,
