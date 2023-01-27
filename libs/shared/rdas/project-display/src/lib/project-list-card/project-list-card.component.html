@@ -41,13 +41,20 @@
         <div class="project-sub-header bottom-border-accent">
           Patents: {{project.patents ? project.patents.length : 0 }}</div>
         <div *ngIf="project.patents && project.patents.length">
-          {{project.patents | json}}
+          <div *ngFor="let patent of project.patents">
+            <div class="list-item-title">{{patent.title}}</div>
+            <div class="list-item-content">{{patent.org_name}}</div>
+          </div>
         </div>
       </mat-card>
       <mat-card [appearance]="'outlined'">
         <div class="project-sub-header bottom-border-accent">Clinical
           Studies: {{project.clinicalStudies ? project.clinicalStudies.length : 0 }}</div>
         <div *ngIf="project.clinicalStudies && project.clinicalStudies.length">
+          <div *ngFor="let study of project.clinicalStudies">
+            <div class="list-item-title">{{study.title}}</div>
+            <div class="list-item-content">{{study.status}}</div>
+          </div>
           {{project.clinicalStudies | json}}
         </div>
       </mat-card>
@@ -68,10 +75,10 @@
                 </div>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <div *ngIf="project.researchedDiseases && project.researchedDiseases.length" class="primary-chip">Diseases
-              Studied
-            </div>
-            <br>
+            <div class="project-content-wrapper">
+              <mat-card [appearance]="'outlined'">
+                <div class="project-sub-header bottom-border-primary">
+                  Diseases Studied: {{project.researchedDiseases ? project.researchedDiseases.length : 0 }}</div>
             <div *ngFor="let disease of project.researchedDiseases">
               <ng-container *ngIf="disease.gardId; then link; else nolink">
               </ng-container>
@@ -85,18 +92,23 @@
                 {{disease.name}}
               </ng-template>
             </div>
-            <br>
-            <div *ngIf="project.terms && project.terms.length" class="primary-chip">Key Terms</div>
+              </mat-card>
+                <mat-card [appearance]="'outlined'">
+                  <div class="project-sub-header bottom-border-primary">
+                    Key Terms: {{project.terms ? project.terms.length : 0 }}</div>
             <br>
             <div *ngFor="let term of project.terms">
               {{term}}
             </div>
-            <br>
+                </mat-card>
+                <mat-card [appearance]="'outlined'">
+                  <div class="project-sub-header bottom-border-primary">
+                    Annotations: {{project.annotations ? project.annotations.length : 0 }}</div>
             <div *ngIf="project.annotations && project.annotations.length">
-              <div *ngIf="latestProject.abstract && latestProject.abstract.length" class="primary-chip">Annotations
-              </div>
               <ncats-frontend-library-annotations-display
                 [annotations]="project.annotations"></ncats-frontend-library-annotations-display>
+            </div>
+                </mat-card>
             </div>
           </mat-expansion-panel>
         </mat-accordion>

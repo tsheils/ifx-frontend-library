@@ -1,7 +1,7 @@
-  <div class="annotations-grid-container" *ngIf=annotations.length>
+  <div  *ngIf=annotations.length>
       <div  *ngFor="let annotation of annotationsMap | keyvalue">
-        <div class="bottom-border-accent">{{annotation.key}}</div>
-        <div *ngFor="let term of annotation.value" class="primary-chip disabled-chip">{{term}}</div>
+        <div class="primary-chip">{{annotation.key}}</div>
+        <div *ngFor="let term of annotation.value" class="">{{term}}</div>
       </div>
         <br>
       </div>

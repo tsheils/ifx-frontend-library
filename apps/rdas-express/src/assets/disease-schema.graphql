@@ -8,6 +8,25 @@ type GARD {
 	subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
 }
 
+type GARDRelationship {
+  id: ID!
+  type: String!
+  start: GARD
+  end: GARD
+}
+type GARDPathSegment {
+  start:GARD
+  end: GARD
+  relationship: GARDRelationship
+}
+type GARDPath {
+  start: GARD
+  end: GARD
+  length: Int
+  segments: [GARDPathSegment]
+
+}
+
 type Query {
   diseaseSearch(searchString: String): [GARD] @cypher(
     statement: """
@@ -15,5 +34,24 @@ type Query {
         'allNameIndex', $searchString)
       YIELD node RETURN node LIMIT 10
     """
+  )
+}
+
+type Query {
+  treeParent: [GARD] @cypher(
+    statement: """
+      match (g:GARD) WHERE NOT (:GARD)-[]->(g) AND NOT g.DisorderType = 'Disease' return DISTINCT(g)
+    """
+  )
+}
+
+type Query {
+  treeBranch(searchString: String):[GARDPath] @cypher(
+    statement: """
+match path=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
+with [n IN nodes(path) | n {GardId:n.GardId, labels:labels(n), properties: [k in keys(n) | {key:k, value:n[k]}]}] as nodes,
+     [r IN relationships(path)  | r {id:id(n), type:type(r),     properties: [k in keys(r) | {key:k, value:r[k]}]}] as rels
+return { start:nodes[0], end:nodes[-1], length: size(nodes), segments: [idx in range(0,size(nodes)-2) | {start:nodes[idx],end:nodes[idx+1],relationship:rels[idx]} ]}
+ """
   )
 }

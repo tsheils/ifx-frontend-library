@@ -20,6 +20,7 @@
     "shared-rdas-project-display": "libs/shared/rdas/project-display",
     "shared-rdas-rdas-footer": "libs/shared/rdas/rdas-footer",
     "shared-rdas-rdas-search": "libs/shared/rdas/rdas-search",
+    "shared-rdas-rdas-tree": "libs/shared/rdas/rdas-tree",
     "shared-rdas-subscribe-button": "libs/shared/rdas/subscribe-button",
     "shared-utils-external-link": "libs/shared/utils/external-link",
     "shared-utils-footer-template": "libs/shared/utils/footer-template",

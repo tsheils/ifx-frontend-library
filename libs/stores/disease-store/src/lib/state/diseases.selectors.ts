@@ -47,6 +47,11 @@ export const getDiseasesPage = createSelector(
   (state: State) => state.page
 );
 
+export const getDiseaseTree = createSelector(
+  getDiseasesState,
+  (state: State) => state.tree
+);
+
 export const getSelected = createSelector(
   getDiseasesEntities,
   getSelectedId,

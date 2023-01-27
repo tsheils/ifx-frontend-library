@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator } from "@angular/material/paginator";
 import { NavigationExtras, Router } from "@angular/router";
-import { Disease } from "@ncats-frontend-library/models/rdas";
+import { Disease, DiseaseNode } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
 import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
 
@@ -22,6 +22,7 @@ export class RdasBrowseComponent implements OnInit {
   page?: Page;
   loading = true;
   diseases!: Disease[];
+  diseaseTree!: DiseaseNode[];
 
   constructor(
     private router: Router,
@@ -31,8 +32,17 @@ export class RdasBrowseComponent implements OnInit {
 
   ngOnInit(): void {
     this.diseaseFacade.allDiseases$.subscribe(res => {
+     // console.log(res);
       this.diseases = res;
       this.changeRef.markForCheck()
+    });
+
+    this.diseaseFacade.diseaseTree$.subscribe(res => {
+     // console.log(res);
+      if(res) {
+        this.diseaseTree = res;
+        this.changeRef.markForCheck()
+      }
     });
 
         this.diseaseFacade.page$.subscribe(res => {
@@ -61,13 +71,22 @@ export class RdasBrowseComponent implements OnInit {
   }
 
   selectDisease(event: Disease): void {
-    console.log(event);
     const navigationExtras: NavigationExtras = {
       queryParams:{
         id: event.gardId
       }
     };
     this.router.navigate(['/disease'], navigationExtras);
+  }
+
+  treeExpand(event: DiseaseNode): void {
+    console.log(event);
+    const navigationExtras: NavigationExtras = {
+      queryParams:{
+        parentId: event.gardId
+      }
+    };
+    this.router.navigate(['/diseases'], navigationExtras);
   }
 
   /**

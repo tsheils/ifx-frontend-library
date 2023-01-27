@@ -16,18 +16,25 @@
   <mat-card-content>
     <div class="row space-between-row">
       <div class="width-75">
-     <b>Study Type: </b> {{trial.studyType}}<br>
-        <b *ngIf="trial.overallStatus || trial.lastKnownStatus">Status: </b> {{trial.overallStatus || trial.lastKnownStatus}}
-        <br>
-        <span *ngIf="trial.phase"><b>Phase: </b>{{trial.phase.join(", ")}}</span><br>
-    <b *ngIf="trial.studyFirstPostDate">First Posted: </b><span>{{trial.studyFirstPostDate}}</span><br>
-        <b *ngIf="trial.lastUpdatePostDate">Last Update: </b><span>{{trial.lastUpdatePostDate}}</span>
-    <br>
-    <br>
+        <div class="primary-chip">Study Type</div>
+        <div class="list-item-content">{{trial.studyType ? trial.studyType : 'None Listed'}}</div>
+        <div class="primary-chip">Status</div>
+        <div class="list-item-content">{{trial.overallStatus || trial.lastKnownStatus}}</div>
+        <div class="primary-chip">Phase</div>
+        <div class="list-item-content">{{trial.phase && trial.phase.length ? trial.phase.join(", ") : 'None Listed'}}</div>
       </div>
+
+        <div>
+        <div class="primary-chip">First Posted</div>
+        <div class="list-item-content">{{trial.studyFirstPostDate ? trial.studyFirstPostDate : 'Unknown'}}</div>
+        <div class="primary-chip">Last Update</div>
+        <div class="list-item-content">{{trial.lastUpdatePostDate}}</div>
+        </div>
     </div>
-    <div class="row space-between-row">
-    <span class="list-item-title" *ngIf="trial.briefSummary && trial.briefSummary.length">Summary</span>
+
+
+    <div *ngIf="trial.briefSummary && trial.briefSummary.length" class="primary-chip">Summary</div>
+    <br>
     <div *ngIf="fullSummary; else truncated">
       <span class="mat-subtitle-2">{{getTrialSummary()}}</span>
       <a (click)="fullSummary = false" *ngIf="fullSummary && truncatedSummary" class="expand-link"> ...less</a>
@@ -36,64 +43,66 @@
       <span class="mat-subtitle-2">{{getTrialSummary()}}</span>
       <a (click)="fullSummary = true" *ngIf="!fullSummary" class="expand-link"> ...more</a>
     </ng-template>
-    </div>
-    <div class="row space-between-row">
-      <div class="width-75">
-        <mat-tab-group [color]="'primary'">
+    <br>
+    <br>
+
+        <mat-tab-group [backgroundColor]="'accent'" [dynamicHeight]=true mat-align-tabs="start" mat-stretch-tabs="true">
         <mat-tab [label]="getLabel('studyDesigns')"
                  [disabled]="!trial.studyDesigns || trial.studyDesigns.length === 0">
+          <br>
+          <br>
           <div *ngFor="let studyDesign of trial.studyDesigns">
               <div *ngIf="studyDesign.designPrimaryPurpose">
-                <span class="list-item-title">Primary Purpose</span>
-                <span class="list-item-content">{{studyDesign.designPrimaryPurpose}}</span>
+                <div class="accent-chip">Primary Purpose</div>
+                <div class="list-item-content">{{studyDesign.designPrimaryPurpose}}</div>
               </div>
               <div *ngIf="studyDesign.designInterventionModel">
-                <span class="list-item-title">Intervention Model</span>
-                <span class="list-item-content">{{studyDesign.designInterventionModel}}</span>
+                <div class="accent-chip">Intervention Model</div>
+                <div class="list-item-content">{{studyDesign.designInterventionModel}}</div>
               </div>
               <div *ngIf="studyDesign.designInterventionModelDescription">
-                <span class="list-item-title">Intervention Model Description</span>
-                <span class="list-item-content">{{studyDesign.designInterventionModelDescription}}</span>
+                <div class="accent-chip">Intervention Model Description</div>
+                <div class="list-item-content">{{studyDesign.designInterventionModelDescription}}</div>
               </div>
               <div *ngIf="studyDesign.designMasking">
-                <span class="list-item-title">Design Masking</span>
-                <span class="list-item-content">{{studyDesign.designMasking}}</span>
+                <div class="accent-chip">Design Masking</div>
+                <div class="list-item-content">{{studyDesign.designMasking}}</div>
               </div>
               <div *ngIf="studyDesign.designMaskingDescription">
-                <span class="list-item-title">Design Masking Description</span>
-                <span class="list-item-content">{{studyDesign.designMaskingDescription}}</span>
+                <div class="accent-chip">Design Masking Description</div>
+                <div class="list-item-content">{{studyDesign.designMaskingDescription}}</div>
               </div>
               <div *ngIf="studyDesign.designAllocation">
-                <span class="list-item-title">Design Allocation</span>
-                <span class="list-item-content">{{studyDesign.designAllocation}}</span>
+                <div class="accent-chip">Design Allocation</div>
+                <div class="list-item-content">{{studyDesign.designAllocation}}</div>
               </div>
               <div *ngIf="studyDesign.designObservationalModel">
-                <span class="list-item-title">Design Observational Model</span>
-                <span class="list-item-content">{{studyDesign.designObservationalModel}}</span>
+                <div class="accent-chip">Design Observational Model</div>
+                <div class="list-item-content">{{studyDesign.designObservationalModel}}</div>
               </div>
               <div *ngIf="studyDesign.designTimePerspective">
-                <span class="list-item-title">Design Time Perspective</span>
-                <span class="list-item-content">{{studyDesign.designTimePerspective}}</span>
+                <div class="accent-chip">Design Time Perspective</div>
+                <div class="list-item-content">{{studyDesign.designTimePerspective}}</div>
               </div>
               <div *ngIf="studyDesign.samplingMethod">
-                <span class="list-item-title">Sampling Method</span>
-                <span class="list-item-content">{{studyDesign.samplingMethod}}</span>
+                <div class="accent-chip">Sampling Method</div>
+                <div class="list-item-content">{{studyDesign.samplingMethod}}</div>
               </div>
               <div *ngIf="studyDesign.primaryOutcomeDescription">
-                <span class="list-item-title">Primary Outcome Description</span>
-                <span class="list-item-content">{{studyDesign.primaryOutcomeDescription}}</span>
+                <div class="accent-chip">Primary Outcome Description</div>
+                <div class="list-item-content">{{studyDesign.primaryOutcomeDescription}}</div>
               </div>
               <div *ngIf="studyDesign.primaryOutcomeMeasure">
-                <span class="list-item-title">Primary Outcome Measure</span>
-                <span class="list-item-content">{{studyDesign.primaryOutcomeMeasure}}</span>
+                <div class="accent-chip">Primary Outcome Measure</div>
+                <div class="list-item-content">{{studyDesign.primaryOutcomeMeasure}}</div>
               </div>
               <div *ngIf="studyDesign.primaryOutcomeTimeFrame">
-                <span class="list-item-title">Primary Outcome Timeframe</span>
-                <span class="list-item-content">{{studyDesign.primaryOutcomeTimeFrame}}</span>
+                <div class="accent-chip">Primary Outcome Timeframe</div>
+                <div class="list-item-content">{{studyDesign.primaryOutcomeTimeFrame}}</div>
               </div>
             <div *ngIf="studyDesign.detailedDescription">
-              <span class="list-item-title">Detailed Description</span>
-              <span class="list-item-content">{{studyDesign.detailedDescription}}</span>
+              <div class="accent-chip">Detailed Description</div>
+              <div class="list-item-content">{{studyDesign.detailedDescription}}</div>
             </div>
           </div>
         </mat-tab>
@@ -149,21 +158,18 @@
           </mat-list>
         </mat-tab>
         <mat-tab [label]="getLabel('sponsors')" [disabled]="!trial.sponsors || trial.sponsors.length === 0">
-          <mat-list>
-            <mat-list-item *ngFor="let sponsor of trial.sponsors">
-              <span *ngIf="sponsor.leadSponsorName">{{sponsor.leadSponsorName}}</span> <span
-              *ngIf="sponsor.leadSponsorClass">: &nbsp;{{sponsor.leadSponsorClass}}</span>
-            </mat-list-item>
-          </mat-list>
+
+            <div *ngFor="let sponsor of trial.sponsors">
+              <div class="accent-chip" *ngIf="sponsor.leadSponsorClass">{{sponsor.leadSponsorClass}}</div>
+              <div class="list-item-content" *ngIf="sponsor.leadSponsorName">{{sponsor.leadSponsorName}}</div>
+            </div>
         </mat-tab>
         <mat-tab [label]="getLabel('interventions')"
                  [disabled]="!trial.interventions || trial.interventions.length === 0">
-          <mat-list>
-            <mat-list-item *ngFor="let intervention of trial.interventions">
-              <span *ngIf="intervention.interventionType"> {{intervention.interventionType}}: &nbsp;</span>
-              <span *ngIf="intervention.interventionName"> {{intervention.interventionName}}</span>
-            </mat-list-item>
-          </mat-list>
+            <div *ngFor="let intervention of trial.interventions">
+              <div class="accent-chip"  *ngIf="intervention.interventionType">{{intervention.interventionType}} </div>
+              <div class="list-item-content" *ngIf="intervention.interventionName">{{intervention.interventionName}}</div>
+            </div>
         </mat-tab>
         <mat-tab [label]="getLabel('references')" [disabled]="!trial.references || trial.references.length === 0">
           <mat-list>
@@ -183,7 +189,5 @@
           </mat-list>
         </mat-tab>
       </mat-tab-group>
-      </div>
-      </div>
   </mat-card-content>
 </mat-card>

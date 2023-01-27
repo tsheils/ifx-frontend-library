@@ -1,5 +1,7 @@
 <mat-card>
   <mat-card-title>
+    <div class="row space-between-row">
+      <div class="width-75">
     <ng-container *ngIf="article.doi; then link; else nolink">
     </ng-container>
     <ng-template #link>
@@ -7,15 +9,18 @@
       <a href="https://doi.org/{{article.doi}}"
          target="_blank"
          rel="noreferrer"
-         aria-label="Link to publication via DOI">{{article.title}}</a>
+         aria-label="Link to publication via DOI" class="mat-card-title">{{article.title}}</a>
       <span class="centered" *ngIf = "article.isOpenAccess=== 'N'">
         &nbsp;<mat-icon [color]="'primary'">lock</mat-icon> &nbsp;<span class="small-text">(not open access)</span>
         </span>
       </div>
     </ng-template>
     <ng-template #nolink>
-      {{article.title}}
+      <span class="mat-card-title">{{article.title}}</span>
     </ng-template>
+
+      </div>
+    </div>
   </mat-card-title>
   <mat-card-content>
   <div class="row space-between-row">

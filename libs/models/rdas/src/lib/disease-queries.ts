@@ -1,5 +1,54 @@
 import { gql } from "apollo-angular";
 
+
+export const TREEROOTPARAMETERS = {
+  where: {
+    subClassOfGardsAggregate: {
+      count: 0
+    },
+    AND: [
+      {
+        DisorderType_NOT: "Disease"
+      }
+    ]
+  }
+};
+
+export const CATEGORYTREEBRANCH = gql`
+  query Tree($where: GARDWhere) {
+    diseases:gards(where: $where) {
+        gardId:GardId
+        name:GardName
+        children:gardSsubClassOf {
+            name: GardName,
+            gardId: GardId
+            ClassificationLevel
+            DisorderType
+          _childrenCount: gardSsubClassOfAggregate {
+                count
+            }
+        }
+    }
+  }
+`
+
+export const CATEGORYTREE = gql`
+  query Tree($where: GARDWhere) {
+    diseases:gards(where: $where) {
+        gardId:GardId
+        name:GardName
+      ClassificationLevel
+      DisorderType
+          _childrenCount: gardSsubClassOfAggregate {
+                count
+            }
+        }
+    }
+`
+
+
+
+
 export const DISEASETYPEAHEAD = gql`
   query Gards($searchString: String) {
     diseaseSearch(searchString: $searchString) {
@@ -37,8 +86,9 @@ export const FETCHDISEASEQUERY = gql`
       count
     }
   }
-
 `
+
+
 
 
 export const DISEASEQUERYPARAMETERS: {

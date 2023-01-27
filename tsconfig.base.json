@@ -55,6 +55,9 @@
       "@ncats-frontend-library/shared/rdas/rdas-search": [
         "libs/shared/rdas/rdas-search/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/rdas-tree": [
+        "libs/shared/rdas/rdas-tree/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/subscribe-button": [
         "libs/shared/rdas/subscribe-button/src/index.ts"
       ],

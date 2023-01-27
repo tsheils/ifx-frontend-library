@@ -1,21 +1,6 @@
 <ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
 <ncats-frontend-library-identifiers-display [disease]="disease"></ncats-frontend-library-identifiers-display>
-<div class="row centered-row">
-<mat-tab-group [backgroundColor]="'primary'">
-
-  <mat-tab [label] = "'NIH-funded Grants ' + disease.projectCount">
-    <div *ngIf="disease && disease.projects">
-      <ncats-frontend-library-project-list
-        [projects]="disease.projects"
-        [count] = disease.projectCount
-        (pageChange)="pageList($event,'coreProjectsOptions', 'project')"
-      ></ncats-frontend-library-project-list>
-    </div>
-  </mat-tab>
-
-
-
-
+<mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true">
   <mat-tab [label] = "'Articles ' + (disease.epiCount + disease.nonEpiCount )">
     <mat-tab-group [color]="'accent'">
       <mat-tab
@@ -40,6 +25,15 @@
       </mat-tab>
     </mat-tab-group>
   </mat-tab>
+  <mat-tab [label] = "'NIH-funded Grants ' + disease.projectCount">
+    <div *ngIf="disease && disease.projects">
+      <ncats-frontend-library-project-list
+        [projects]="disease.projects"
+        [count] = disease.projectCount
+        (pageChange)="pageList($event,'coreProjectsOptions', 'project')"
+      ></ncats-frontend-library-project-list>
+    </div>
+  </mat-tab>
   <mat-tab [label] = "'Clinical Trials ' + disease.clinicalTrialsCount">
     <div *ngIf="disease && disease.clinicalTrials">
       <ncats-frontend-library-clinical-trials-list
@@ -50,4 +44,3 @@
     </div>
   </mat-tab>
 </mat-tab-group>
-</div>

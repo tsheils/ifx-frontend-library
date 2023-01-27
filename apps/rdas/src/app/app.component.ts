@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { Event, NavigationEnd, Router } from "@angular/router";
+import { Event, NavigationEnd, NavigationExtras, Router } from "@angular/router";
+import { Disease } from "@ncats-frontend-library/models/rdas";
 import { User } from "@ncats-frontend-library/models/utils";
 import { LinkTemplateProperty } from "@ncats-frontend-library/shared/utils/header-template";
 import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
@@ -52,6 +53,16 @@ export class AppComponent implements OnInit {
 
           }
         });
-
   }
+
+  selectDisease(event: Disease): void {
+    console.log(event);
+    const navigationExtras: NavigationExtras = {
+      queryParams:{
+        id: event.gardId
+      }
+    };
+    this.router.navigate(['/disease'], navigationExtras);
+  }
+
 }

@@ -24,7 +24,7 @@ if(this.isBrowser) {
   const sandbox = new ApolloSandbox({
     target: this.embeddedsandbox.nativeElement,
     initialEndpoint: 'http://localhost:4000',
-    includeCookies: false
+    includeCookies: false,
   })
 }
   }

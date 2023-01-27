@@ -1,4 +1,4 @@
-import { Disease } from "@ncats-frontend-library/models/rdas";
+import { Disease, DiseaseNode } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
 import { createAction, props } from '@ngrx/store';
 
@@ -24,6 +24,18 @@ export const loadDiseasesSuccess = createAction(
 
 export const loadDiseasesFailure = createAction(
   '[Diseases/API] Load Diseases Failure',
+  props<{ error: string }>()
+);
+
+export const loadDiseaseTreeSuccess = createAction(
+  '[Diseases/API] Load Disease Tree Success',
+  props<{
+    diseases: DiseaseNode[]
+  }>()
+);
+
+export const loadDiseaseTreeFailure = createAction(
+  '[Diseases/API] Load Disease Tree Failure',
   props<{ error: string }>()
 );
 

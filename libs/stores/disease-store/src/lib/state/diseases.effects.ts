@@ -1,18 +1,46 @@
 import { Injectable } from '@angular/core';
 import {
   Article,
-  ARTICLEVARIABLES, ClinicalTrial, CoreProject, Disease, DISEASEQUERYPARAMETERS, DISEASETYPEAHEAD, FETCHARTICLESQUERY,
-  FETCHDISEASEQUERY, FETCHDISEASESLISTQUERY, FETCHPROJECTSQUERY,
+  ARTICLEVARIABLES, CATEGORYTREE,
+  CATEGORYTREEBRANCH,
+  ClinicalTrial,
+  CoreProject,
+  Disease, DiseaseNode,
+  DISEASEQUERYPARAMETERS,
+  DISEASETYPEAHEAD,
+  FETCHARTICLESQUERY,
+  FETCHDISEASEQUERY,
+  FETCHDISEASESLISTQUERY,
+  FETCHPROJECTSQUERY,
   FETCHTRIALSQUERY,
   FETCHTRIALSVARIABLES,
-  LISTQUERYPARAMETERS, Project, PROJECTVARIABLES
+  LISTQUERYPARAMETERS,
+  Project,
+  PROJECTVARIABLES, TREEROOTPARAMETERS
 } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
+import { Store } from "@ngrx/store";
 import { DiseaseService } from "../disease.service";
-import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
 import {ROUTER_NAVIGATION, RouterNavigationAction} from "@ngrx/router-store";
-import { combineLatest, exhaustMap, filter, forkJoin, map, mergeMap, of, switchMap, take, tap } from "rxjs";
+import {
+  combineLatest,
+  exhaustMap,
+  filter,
+  forkJoin,
+  map,
+  mergeMap,
+  of,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom
+} from "rxjs";
 import * as DiseasesActions from './diseases.actions';
+import * as fromDiseases from './diseases.reducer';
+import * as fromDiseasesSelectors from './diseases.selectors';
+import * as diseaseFacade from './diseases.facade';
+
 
 @Injectable()
 export class DiseasesEffects {
@@ -39,9 +67,10 @@ export class DiseasesEffects {
   loadDiseases$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases')),
+      filter((r: RouterNavigationAction) =>  r.payload.routerState.url.startsWith('/diseases')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       switchMap((params: { pageSize?: number, pageIndex?: number}) => {
+        console.log("paging")
         const pageSize: number = params.pageSize ? params.pageSize as number: 10;
         const pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
         LISTQUERYPARAMETERS.options.limit =  +pageSize;
@@ -149,7 +178,69 @@ export class DiseasesEffects {
   );
 
 
-    isLoading$ = createEffect(() => {
+
+  loadTree$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(ROUTER_NAVIGATION),
+     filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases') && !r.payload.routerState.root.queryParams['parentId']),
+      switchMap(() => {
+        return this.diseaseService.fetchDiseases(CATEGORYTREE, TREEROOTPARAMETERS)
+          .pipe(
+            map((res: any) => {
+              if(res && res.data) {
+                const diseaseArr = res.data.diseases
+                  .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
+                  .sort((a: DiseaseNode, b: DiseaseNode) => b.childrenCount - a.childrenCount)
+                return DiseasesActions.loadDiseaseTreeSuccess({diseases: diseaseArr})
+              }
+              else return DiseasesActions.loadDiseaseTreeFailure({error: "No Disease found"})
+            })
+          )
+      })
+    )}
+  );
+
+  fetchTreeBranch$ = createEffect(() => {
+    return this.actions$.pipe(
+    ofType(ROUTER_NAVIGATION),
+     filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases') && r.payload.routerState.root.queryParams['parentId']),
+      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
+      concatLatestFrom(() => this.store.select(fromDiseasesSelectors.getDiseaseTree)),
+      switchMap(([params, tree]) => {
+        let query = CATEGORYTREEBRANCH;
+        let qParams;
+        if(!tree) {
+          console.log("no tree")
+          query = CATEGORYTREE;
+          qParams = TREEROOTPARAMETERS;
+        } else {
+          console.log("tree")
+          DISEASEQUERYPARAMETERS.where = {GardId: params["parentId"]};
+          qParams = DISEASEQUERYPARAMETERS;
+        }
+        return this.diseaseService.fetchDiseases(query, qParams )
+          .pipe(
+            map((res: any) => {
+              if(res && res.data) {
+                let diseaseArr;
+                if(tree) {
+                   diseaseArr = this._addToTree(res.data.diseases[0], tree);
+                } else {
+                  diseaseArr = res.data.diseases
+                    .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
+                    .sort((a: DiseaseNode, b: DiseaseNode) => b.childrenCount - a.childrenCount)
+                }
+                return DiseasesActions.loadDiseaseTreeSuccess({diseases: diseaseArr})
+              }
+              else return DiseasesActions.loadDiseaseTreeFailure({error: "No Disease found"})
+            })
+          )
+      })
+    )}
+  );
+
+
+  isLoading$ = createEffect(() => {
       return this.actions$.pipe(
         ofType(DiseasesActions.fetchDisease),
         mergeMap(() => {
@@ -159,9 +250,9 @@ export class DiseasesEffects {
     });
 
 
-  _makeDiseaseObj(diseaseData:{data:{disease:[Partial<Disease>]}}, articleData: any, projectsData :any, trialsData: any): Disease {
+  _makeDiseaseObj(diseaseData:{data:{disease:[Partial<DiseaseNode>]}}, articleData?: any, projectsData? :any, trialsData?: any): Disease {
     if (diseaseData && diseaseData.data) {
-      console.log(articleData);
+      console.log(diseaseData);
       const diseaseObj: Disease = new Disease(diseaseData.data.disease[0]);
       if (articleData.data && articleData.data.articles.length) {
         if (articleData.data.articles[0] && articleData.data.articles[0].epiArticles.length) {
@@ -185,9 +276,43 @@ export class DiseasesEffects {
     } else return new Disease({});
   }
 
+  _addToTree(data: DiseaseNode, parent?: DiseaseNode[]|undefined) {
+    let ret = [data];
+    const dNode = new DiseaseNode(data);
+    if (!parent) {
+      console.log("Ading to parent?");
+      ret = [data];
+    //  return data.map((obj: Partial<Disease>) => new Disease(obj));
+    } else {
+      const diseaseMap = new Map<string, DiseaseNode>();
+      let found = false;
+      parent.map(disease => {
+        if(disease.gardId === dNode.gardId) {
+          found = true;
+          diseaseMap.set(dNode.gardId, dNode)
+      } else {
+          diseaseMap.set(disease.gardId, disease)
+        }
+      })
+      if(found) {
+        ret = [...diseaseMap.values()].sort((a,b) => b.childrenCount - a.childrenCount);
+      } else {
+        parent.some(disease => {
+           const lll =  this._addToTree(dNode, disease.children)
+            const d2: DiseaseNode = new DiseaseNode({...disease, children: lll})
+            diseaseMap.set(d2.gardId, d2)
+            ret = [...diseaseMap.values()].sort((a,b) => b.childrenCount - a.childrenCount);
+          })
+        }
+      }
+      return ret;
+    }
 
-  constructor(
+
+
+constructor(
     private readonly actions$: Actions,
-    private diseaseService: DiseaseService
+    private diseaseService: DiseaseService,
+    private store: Store
   ) {}
 }

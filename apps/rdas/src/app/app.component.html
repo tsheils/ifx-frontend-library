@@ -5,10 +5,10 @@
 <!--
         <h2 class="app-title">Rare Disease Alert System</h2>
 -->
-      <img src="/assets/final_rdas_color.png" alt="rdas logo" class="rdas-logo">
+      <img src="/assets/rdas_final_gradient.svg" alt="rdas logo" class="rdas-logo">
       </div>
       <div class="right-options">
-        <ncats-frontend-library-rdas-search *ngIf="!hideSearch" class ="header-search"></ncats-frontend-library-rdas-search>
+        <ncats-frontend-library-rdas-search *ngIf="!hideSearch" class ="header-search" (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
         <ncats-frontend-library-social-sign-on-button [user] = user></ncats-frontend-library-social-sign-on-button>
       </div>
     </ncats-frontend-library-header-template>
