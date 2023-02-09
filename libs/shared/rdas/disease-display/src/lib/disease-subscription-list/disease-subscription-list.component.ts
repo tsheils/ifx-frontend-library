@@ -6,6 +6,7 @@ import { MatIconModule } from "@angular/material/icon";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Subscription } from "@ncats-frontend-library/models/utils";
 import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
+import { Subject } from "rxjs";
 import { DiseaseListCardComponent } from "../disease-list-card/disease-list-card.component";
 
 @Component({
@@ -15,7 +16,12 @@ import { DiseaseListCardComponent } from "../disease-list-card/disease-list-card
   templateUrl: './disease-subscription-list.component.html',
   styleUrls: ['./disease-subscription-list.component.scss']
 })
-export class DiseaseSubscriptionListComponent implements OnInit {
+export class DiseaseSubscriptionListComponent {
+  /**
+   * Behaviour subject to allow extending class to unsubscribe on destroy
+   * @type {Subject<any>}
+   */
+  protected ngUnsubscribe: Subject<boolean> = new Subject();
 
   private _subscriptions: Subscription[] = [];
   diseases: Disease[] = [];
@@ -23,7 +29,8 @@ export class DiseaseSubscriptionListComponent implements OnInit {
   @Input()
   set subscriptions(subscriptions: Subscription[] | undefined) {
     if(subscriptions) {
-      this.subscriptions.forEach(sub => {
+      this.diseases = []
+      subscriptions.forEach(sub => {
         this.diseases.push(new Disease({ gardId: sub.gardID, name: sub.diseaseName }))
       })
       this._subscriptions = subscriptions;
@@ -33,13 +40,4 @@ export class DiseaseSubscriptionListComponent implements OnInit {
   get subscriptions(): Subscription[] {
     return this._subscriptions;
   }
-
-constructor() {
-    console.log("tyryryrt");
-}
-
-  ngOnInit(): void {
-    console.log(this);
-  }
-
 }

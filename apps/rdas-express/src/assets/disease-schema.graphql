@@ -8,24 +8,13 @@ type GARD {
 	subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
 }
 
-type GARDRelationship {
-  id: ID!
-  type: String!
-  start: GARD
-  end: GARD
-}
-type GARDPathSegment {
-  start:GARD
-  end: GARD
-  relationship: GARDRelationship
-}
-type GARDPath {
-  start: GARD
-  end: GARD
-  length: Int
-  segments: [GARDPathSegment]
+scalar JSON
 
+type GARDList {
+  diseases: [GARD]!
+  count: Int!
 }
+
 
 type Query {
   diseaseSearch(searchString: String): [GARD] @cypher(
@@ -38,20 +27,44 @@ type Query {
 }
 
 type Query {
-  treeParent: [GARD] @cypher(
+  treeParent: [JSON] @cypher(
     statement: """
-      match (g:GARD) WHERE NOT (:GARD)-[]->(g) AND NOT g.DisorderType = 'Disease' return DISTINCT(g)
+    match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
+    WITH {gardId: l.GardId, name: l.GardName, _childrenCount: COUNT(s)} as parents
+    return collect(DISTINCT(parents))
     """
   )
 }
 
 type Query {
-  treeBranch(searchString: String):[GARDPath] @cypher(
+  treeBranch(searchString: String):[JSON] @cypher(
     statement: """
-match path=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
-with [n IN nodes(path) | n {GardId:n.GardId, labels:labels(n), properties: [k in keys(n) | {key:k, value:n[k]}]}] as nodes,
-     [r IN relationships(path)  | r {id:id(n), type:type(r),     properties: [k in keys(r) | {key:k, value:r[k]}]}] as rels
-return { start:nodes[0], end:nodes[-1], length: size(nodes), segments: [idx in range(0,size(nodes)-2) | {start:nodes[idx],end:nodes[idx+1],relationship:rels[idx]} ]}
+ match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD) WITH
+  {gardId: l.GardId, name: l.GardName, _childrenCount: COUNT(s)} as parents
+   match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
+    return {paths: collect(distinct(p)), nodes: collect(distinct(parents))}
+ """
+  )
+}
+
+type Query {
+  hierarchyDiseases(searchString: String, limit: Int, skip: Int): [GARD] @cypher(
+    statement: """
+ match (d)-[*0..]->(e) WHERE e.GardId = $searchString
+ with distinct(d) as ds
+ SKIP $skip
+ LIMIT $limit
+ return ds
+ """
+  )
+}
+
+type Query {
+  hierarchyDiseasesCount(searchString: String, limit: Int, skip: Int): Int @cypher(
+  statement: """
+ match (d)-[*0..]->(e) WHERE e.GardId = $searchString
+ with count(distinct d) as count
+ return count
  """
   )
 }

@@ -38,7 +38,6 @@ export class ProjectListCardComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.project);
     if(this.project.fundedByAgents) {
       this.funding = this.project.fundedByAgents.map(obj => obj.name).join(', ');
     }

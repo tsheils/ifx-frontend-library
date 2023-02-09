@@ -39,6 +39,10 @@ export const loadDiseaseTreeFailure = createAction(
   props<{ error: string }>()
 );
 
+export const clearTypeahead = createAction(
+  '[Diseases/API] Clear Typeahead',
+);
+
 export const searchDiseases = createAction(
   '[Diseases/API] Search Diseases',
   props<{ term: string }>()

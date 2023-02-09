@@ -33,7 +33,6 @@ export class AnnotationsDisplayComponent implements OnInit {
          }
         })
     })
-      console.log(this.annotationsMap);
   }
 
 }

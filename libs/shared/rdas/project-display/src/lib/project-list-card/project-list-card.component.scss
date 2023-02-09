@@ -23,6 +23,11 @@ ncats-frontend-library-project-list-card {
     grid-auto-rows: minmax(100px, auto);
   }
 
+  .project-content-wrapper > mat-card {
+    max-height: 50vh;
+    overflow: scroll;
+  }
+
   .project-sub-header {
     font-size: 20px;
     text-align: center;

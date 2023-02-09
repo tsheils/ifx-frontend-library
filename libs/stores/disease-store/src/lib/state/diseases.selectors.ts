@@ -26,10 +26,16 @@ export const getAllDiseases = createSelector(getDiseasesState, (state: State) =>
      selectAll(state)
 );
 
+/*
 export const searchDiseasesEntities = createSelector(
   getDiseasesState,
   (state: State) =>  selectAll(state)
+);
+*/
 
+export const searchDiseasesEntities = createSelector(
+  getDiseasesState,
+  (state: State) =>  state.typeahead
 );
 
 export const getDiseasesEntities = createSelector(

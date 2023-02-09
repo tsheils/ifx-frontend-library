@@ -14,7 +14,12 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { Disease } from "@ncats-frontend-library/models/rdas";
-import { DiseaseService, DiseasesFacade, searchDiseases } from "@ncats-frontend-library/stores/disease-store";
+import {
+  clearTypeahead,
+  DiseaseService,
+  DiseasesFacade,
+  searchDiseases
+} from "@ncats-frontend-library/stores/disease-store";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 
 @Component({
@@ -74,13 +79,13 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
   }
 
   search() {
-   // console.log(this.searchFormCtl.value);
   }
 
   /**
    * clean up on leaving component
    */
   ngOnDestroy() {
+    this.diseaseFacade.dispatch(clearTypeahead())
     this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
   }

@@ -52,8 +52,16 @@ export const diseasesReducer = createReducer(
        diseasesAdapter.setAll(diseases, {...state, page: page, loaded: true})
   ),
 
-  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) =>
+/*  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) =>
        diseasesAdapter.setAll(typeahead, {...state, loaded: true})
+  ),*/
+
+  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) =>
+       ({...state, typeahead: typeahead, loaded: true})
+  ),
+
+  on(DiseasesActions.clearTypeahead, (state) =>
+       ({...state, typeahead: [], loaded: true})
   ),
 
   on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) =>

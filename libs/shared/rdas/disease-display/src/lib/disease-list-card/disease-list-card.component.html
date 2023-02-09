@@ -1,14 +1,18 @@
 <mat-card>
   <mat-card-content class="row centered-row">
   <div class = "row space-between-row link-row">
-    <div (click)="navigate(disease.gardId)">
+    <div (click)="navigate(disease.gardId)" class="clickable-area">
       <h3 class ="disease-name" mat-card-title>{{disease.name}}: {{disease.gardId}}</h3>
     </div>
     <div>
       <ncats-frontend-library-subscribe-button [disease]="disease" ></ncats-frontend-library-subscribe-button>
     </div>
   </div>
-      <div class="width-75" *ngIf=" disease && disease.synonyms">
+      <div class="width-75">
+        <div class ="primary-chip" *ngIf="disease.classificationLevel">{{disease.classificationLevel}}</div>&nbsp;&nbsp;&nbsp;
+        <div class ="accent-chip" *ngIf="disease.disorderType">{{disease.disorderType}}</div>
+      </div>
+    <div class="width-75" *ngIf="disease.synonyms && disease.synonyms.length">
         Synonyms: {{disease.synonyms.join(', ')}}
       </div>
   </mat-card-content>

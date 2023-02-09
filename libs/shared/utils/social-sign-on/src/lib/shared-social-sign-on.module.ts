@@ -4,6 +4,7 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
+import { RouterModule } from "@angular/router";
 import { SocialSignOnModalComponent } from './social-sign-on-modal/social-sign-on-modal.component';
 import { SocialSignOnButtonComponent } from './social-sign-on-button/social-sign-on-button.component';
 
@@ -13,7 +14,8 @@ import { SocialSignOnButtonComponent } from './social-sign-on-button/social-sign
     MatButtonModule,
     MatMenuModule,
     MatDialogModule,
-    MatIconModule
+    MatIconModule,
+    RouterModule
   ],
   declarations: [
     SocialSignOnModalComponent,

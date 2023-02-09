@@ -5,6 +5,7 @@ import { RouterModule, Routes } from "@angular/router";
 import { SharedRdasDiseaseDisplayModule } from "@ncats-frontend-library/shared/rdas/disease-display";
 import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
 import { RdasTreeComponent } from "@ncats-frontend-library/shared/rdas/rdas-tree";
+import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { RdasBrowseComponent } from './rdas-browse/rdas-browse.component';
 
 const ROUTES: Routes = [
@@ -21,7 +22,8 @@ const ROUTES: Routes = [
     RdasSearchComponent,
     SharedRdasDiseaseDisplayModule,
     MatPaginatorModule,
-    RdasTreeComponent
+    RdasTreeComponent,
+    SharedUtilsLoadingSpinnerModule
   ],
   declarations: [
     RdasBrowseComponent

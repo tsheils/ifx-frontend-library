@@ -174,7 +174,7 @@ export const PROJECTVARIABLES: {
     projectsUnderCoreConnection_ALL: {
       node: {
         diseasesResearchedBy_SINGLE: {
-          gard_id: "GARD:0007446"
+          gard_id: null
         }
       }
     }

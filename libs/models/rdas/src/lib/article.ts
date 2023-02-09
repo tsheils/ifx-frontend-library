@@ -4,30 +4,38 @@ import {Disease} from "./disease";
 export class Article {
   abstractText!: string;
   affiliation!: string;
- // appearsInJournalVolumes?: []; //[JournalVolume!]
-  authorsWrote?: Author[]; //[Author!]!
   citedByCount!: number;
-  diseasesMentionedIn!: Disease[];
   doi!: string;
   firstPublicationDate!: string;
+  isEpi?: string;
+  pubType?: string[];
+  pubmed_id!: string;
+  title!: string;
+  authorsWrote?: Author[];
+  diseases!: Disease[];
+  journals!: JournalVolume[];
+  keywords?: {keyword: string}[];
+  meshTerms?: MeshTerm[];
+  annotations?: PubtatorAnnotation[];
+  sources!: Source[];
+  substances?: {name: string}[];
+
+
+//  inPMC!: string;
 //  fullTextUrlsContentFor?: any[]; //[FullTextUrl!]!
  // hasOmimRefomimRefs?: any[]; //[OMIMRef!]!
-  hasPDF!: string;
+ /* hasPDF!: string;
   inEPMC!: string;
-  inPMC!: string;
-  isEpi?: string;
-  isOpenAccess!: string;
-//  keywordsKeywordFor?: any[]; //[Keyword!]!
- // meshTermsMeshTermFor?: any[]; //[MeshTerm!]!
-  omim_evidence?: boolean;
-  pubType?: string[];
-  pubmed_evidence?: boolean;
-  pubmed_id!: string;
+
+
+  isOpenAccess!: string;*/
+ //
+ // omim_evidence?: boolean;
+ // pubmed_evidence?: boolean;
  // pubtatorAnnotationsAnnotationFor?: any[]; // [PubtatorAnnotation!]
-  refInOMIM?: boolean;
-  source!: string;
-  substancesSubstanceAnnotatedByPubmed?: unknown[]; //[Substance!]!
-  title!: string;
+//  refInOMIM?: boolean;
+//  source!: string;
+//  substancesSubstanceAnnotatedByPubmed?: unknown[]; //[Substance!]!
 
   constructor(obj: Partial<Article> = {}) {
     Object.assign(this, obj);
@@ -35,9 +43,103 @@ export class Article {
     if(obj.authorsWrote) {
       this.authorsWrote = obj.authorsWrote.map((author: Partial<Author> = {}) => new Author(author));
     }
+
+    if(obj.journals) {
+      this.journals = obj.journals.map((journal: Partial<JournalVolume> = {}) => new JournalVolume(journal));
+    }
+
+    if(obj.meshTerms) {
+      this.meshTerms = obj.meshTerms.map((mesh: Partial<MeshTerm> = {}) => new MeshTerm(mesh));
+    }
+
+    if(obj.annotations) {
+      this.annotations = obj.annotations
+        .map((annotation: Partial<PubtatorAnnotation> = {}) => new PubtatorAnnotation(annotation))
+        .filter((a: PubtatorAnnotation) =>  !(a.infons_type ==='Species' || a.infons_type ==='Genus'));
+    }
+
+    if(obj.diseases) {
+      this.diseases = obj.diseases.map((disease: Partial<Disease> = {}) => new Disease(disease));
+    }
+
+    if(obj.sources) {
+      this.sources = obj.sources.map((source: Partial<Source> = {}) => new Source(source));
+    }
   }
 }
 
 
+export class JournalVolume {
+  dateOfPublication!: string;
+  printPublicationDate!: string;
+  volume!: string;
+  _title!: {title:string};
+  title!: string;
 
+constructor(obj: Partial<JournalVolume>) {
+  Object.assign(this, obj);
+
+  if (obj._title) {
+    this.title = obj._title.title;
+  }
+}
+}
+
+export class MeshTerm {
+  descriptorName!: string;
+  isMajorTopic?: boolean;
+  abbreviation?: string;
+  qualifierName?: string;
+
+  _qualifier!: {
+    abbreviation?: string;
+    qualifierName?: string;
+  }
+
+constructor(obj: Partial<MeshTerm>) {
+  Object.assign(this, obj);
+  if(obj._qualifier && obj._qualifier.abbreviation) {
+    this.abbreviation = obj._qualifier.abbreviation;
+  }
+
+  if(obj._qualifier && obj._qualifier.qualifierName) {
+    this.qualifierName = obj._qualifier.qualifierName;
+  }
+    }
+}
+
+
+
+
+
+export class PubtatorAnnotation {
+  infons_identifier!: string;
+  infons_type!: string;
+  type!: string;
+  text!: string[];
+
+constructor(obj: Partial<PubtatorAnnotation>) {
+  Object.assign(this, obj);
+  if (obj.text) {
+    this.text = [];
+     obj.text.forEach((textVal: string) => {
+       const textArr =  textVal.split(",");
+       this.text.push(...textArr);
+    })
+  }
+}
+}
+
+export class Source {
+  availability!: string;
+  availabilityCode!: string;
+  documentStyle!: string;
+  site!: string;
+  url!: string;
+
+
+constructor(obj: Partial<Source>) {
+  Object.assign(this, obj);
+}
+}
 

@@ -10,15 +10,22 @@
          target="_blank"
          rel="noreferrer"
          aria-label="Link to publication via DOI" class="mat-card-title">{{article.title}}</a>
-      <span class="centered" *ngIf = "article.isOpenAccess=== 'N'">
+      <!--<span class="centered" *ngIf = "article.isOpenAccess=== 'N'">
         &nbsp;<mat-icon [color]="'primary'">lock</mat-icon> &nbsp;<span class="small-text">(not open access)</span>
-        </span>
+        </span>-->
       </div>
     </ng-template>
     <ng-template #nolink>
       <span class="mat-card-title">{{article.title}}</span>
     </ng-template>
-
+      </div>
+      <div class = "mat-h3" *ngIf = "article.pubmed_id">PMID:
+        <a
+          href="https://pubmed.ncbi.nlm.nih.gov/{{article.pubmed_id}}"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Link to publication in PubMed"
+        >{{article.pubmed_id}}</a>
       </div>
     </div>
   </mat-card-title>
@@ -29,14 +36,6 @@
       <i>{{author.fullName}}</i> <span *ngIf="!last">, </span>
     </span><br><br>
       <span *ngIf="article.affiliation">{{article.affiliation}}</span><br><br>
-        <div class = "mat-h3" *ngIf = "article.pubmed_id">PMID:
-          <a
-            href="https://pubmed.ncbi.nlm.nih.gov/{{article.pubmed_id}}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to publication in PubMed"
-          >{{article.pubmed_id}}</a>
-        </div>
     </div>
     <div>
       <span class = "mat-h3">First Published: </span> {{article.firstPublicationDate | date}}<br>
@@ -47,18 +46,67 @@
     </span><br>
     </div>
   </div>
-<br>
     <div class="row space-between-row">
-    <div class="mat-h2" *ngIf="article.abstractText && article.abstractText.length">Abstract</div>
-  <div *ngIf="fullAbstract; else truncated">
-    <span class="mat-subtitle-2" [innerHTML]="getArticleAbstract()"></span>
-    <a (click) = "fullAbstract = false" *ngIf="fullAbstract && truncatedAbstract" class = "expand-link"> ...less</a>
-  </div>
-  <ng-template #truncated>
-    <span class="mat-subtitle-2" [innerHTML]="getArticleAbstract()"></span>
-    <a (click) = "fullAbstract = true" *ngIf="!fullAbstract" class = "expand-link"> ...more</a>
-  </ng-template>
+      <button mat-flat-button [color]="'accent'" *ngIf="article.abstractText && article.abstractText.length"
+              (click)="showAbstract = !showAbstract" >{{showAbstract ? 'Hide ' : 'Show '}}Abstract</button>
+      <div *ngIf="showAbstract">
+      <span class="mat-subtitle-2" [innerHTML]="getArticleAbstract()"></span>
+      </div>
     </div>
-  {{article.substancesSubstanceAnnotatedByPubmed | json}}
+    <div class="project-content-wrapper">
+      <mat-card [appearance]="'outlined'">
+        <div class="project-sub-header bottom-border-accent">Other Diseases Mentioned: {{article.diseases ? article.diseases.length : 0 }}</div>
+        <br>
+        <div *ngFor="let disease of article.diseases">
+          <ng-container *ngIf="disease.gardId; then link; else nolink">
+          </ng-container>
+          <ng-template #link>
+            <a href="/disease?id={{disease.gardId}}"
+               target="_blank"
+               rel="noreferrer"
+               aria-label="Link to disease details page">{{disease.name}}</a>
+          </ng-template>
+          <ng-template #nolink>
+            {{disease.name}}
+          </ng-template>
+          <br>
+          <br>
+        </div>
+      </mat-card>
+      <mat-card [appearance]="'outlined'">
+        <div class="project-sub-header bottom-border-accent">
+        Annotations: {{article.annotations ? article.annotations.length : 0 }}</div>
+        <div *ngIf="article.annotations && article.annotations.length">
+          <div *ngFor="let annotation of article.annotations">
+            <div class="list-item-title">{{annotation.infons_type}}</div>
+            <div class="list-item-content">{{annotation.text.join(", ")}}</div>
+            <div class="list-item-content">Found In: {{annotation.type}}</div>
+          </div>
+        </div>
+      </mat-card>
+      <mat-card [appearance]="'outlined'">
+        <div class="project-sub-header bottom-border-accent">Mesh
+          Terms: {{article.meshTerms ? article.meshTerms.length : 0 }}</div>
+        <div *ngIf="article.meshTerms && article.meshTerms.length">
+          <div *ngFor="let term of article.meshTerms">
+            <div class="list-item-content">{{term.qualifierName}}</div>
+            <div class="list-item-content">{{term.abbreviation}}</div>
+            <div class="list-item-content">{{term.descriptorName}}</div>
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div *ngIf="article.substances && article.substances.length">
+     <div class="primary-chip">Substances </div> <br>
+      <span *ngFor="let substance of article.substances">
+        {{substance.name}}
+      </span>
+    </div>
+    <div *ngIf="article.keywords && article.keywords.length">
+     <div class="primary-chip">Keywords </div><br>
+      <span *ngFor="let keyword of article.keywords; let last = last">
+        {{keyword.keyword}}<span *ngIf="!last">,&nbsp;</span>
+      </span>
+    </div>
   </mat-card-content>
 </mat-card>

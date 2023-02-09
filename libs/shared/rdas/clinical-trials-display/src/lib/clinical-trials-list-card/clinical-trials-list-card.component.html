@@ -113,7 +113,6 @@
               {{participant.eligibilityCriteria}}
             </mat-list-item>
           </mat-list>
-          {{trial.participantInfo | json}}
         </mat-tab>
         <mat-tab [label]="getLabel('studyDiseases')"
                  [disabled]="!trial.studyDiseases || trial.studyDiseases.length <= 1">

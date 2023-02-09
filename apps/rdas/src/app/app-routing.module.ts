@@ -35,12 +35,11 @@ const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadChildren: () =>
-      // eslint-disable-next-line @nrwl/nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/rdas-subscriptions').then(
         (m) => m.FeaturesRdasRdasSubscriptionsModule
       ),
   },
-  {
+ /* {
     path: 'api',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
@@ -49,7 +48,7 @@ const routes: Routes = [
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
         (m) => m.FeaturesRdasGraphqlSandboxModule
       ),
-  }
+  }*/
 ];
 
 @NgModule({

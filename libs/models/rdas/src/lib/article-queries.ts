@@ -4,22 +4,17 @@ import { gql } from "apollo-angular";
 export const ARTICLEFIELDS = `
   fragment articleFields on Article {
     abstractText
+    affiliation
+    citedByCount
+    doi
     firstPublicationDate
-    hasPDF
-    inEPMC
-    inPMC
     isEpi
-    isOpenAccess
-    omim_evidence
     pubType
-    pubmed_evidence
     pubmed_id
-    refInOMIM
     source
     title
-    doi
-    citedByCount
-    affiliation
+    pubType
+    pubmed_id
   }
 `;
 
@@ -94,9 +89,44 @@ query Articles(
                 lastName
                 fullName
             }
-            meshTermsMeshTermForAggregate {
-                count
+          journals: appearsInJournalVolumes {
+            dateOfPublication
+            printPublicationDate
+            volume
+            _title: contentOfJournals {
+              title
             }
+          }
+          diseases: diseasesMentionedIn {
+            gardId: gard_id
+            name
+          }
+          sources: fullTextUrlsContentFor {
+            availability
+            documentStyle
+            site
+            url
+          }
+          keywords: keywordsKeywordFor {
+            keyword
+          }
+          meshTerms: meshTermsMeshTermFor {
+            descriptorName
+            isMajorTopic
+            _qualifier: meshQualifiersMeshQualifierFor {
+              abbreviation
+              qualifierName
+            }
+          }
+          annotations: pubtatorAnnotationsAnnotationFor {
+            infons_identifier
+            infons_type
+            type
+            text
+          }
+          substances: substancesSubstanceAnnotatedByPubmed {
+            name
+          }
         }
         nonEpiArticles: mentionedInArticles(
             options: $nonEpiOptions
@@ -108,9 +138,44 @@ query Articles(
                 lastName
                 fullName
             }
-            meshTermsMeshTermForAggregate {
-                count
+          journals: appearsInJournalVolumes {
+            dateOfPublication
+            printPublicationDate
+            volume
+            contentOfJournals {
+              title
             }
+          }
+          diseases: diseasesMentionedIn {
+            gardId: gard_id
+            name
+          }
+          sources: fullTextUrlsContentFor {
+            availability
+            documentStyle
+            site
+            url
+          }
+          keywords: keywordsKeywordFor {
+            keyword
+          }
+          meshTerms: meshTermsMeshTermFor {
+            descriptorName
+            isMajorTopic
+            _qualifier: meshQualifiersMeshQualifierFor {
+              abbreviation
+              qualifierName
+            }
+          }
+          annotations: pubtatorAnnotationsAnnotationFor {
+            infons_identifier
+            infons_type
+            type
+            text
+          }
+          substances: substancesSubstanceAnnotatedByPubmed {
+            name
+          }
         }
     }
 }
@@ -166,3 +231,13 @@ export const ARTICLEVARIABLES: {
   meshTermsMeshTermForNonEpiOptions: {limit: 10}
 }
 
+export const FETCHARTICLECOUNTS = gql`
+query ArticleCount($diseasesWhere: DiseaseWhere) {
+  diseases(where: $diseasesWhere) {
+    gard_id
+    mentionedInArticlesAggregate {
+      count
+    }
+  }
+}
+`

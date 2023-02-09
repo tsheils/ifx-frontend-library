@@ -1,5 +1,5 @@
 <ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
-<ncats-frontend-library-identifiers-display [disease]="disease"></ncats-frontend-library-identifiers-display>
+<ncats-frontend-library-identifiers-display [disease]="disease" *ngIf="disease.synonyms && disease.synonyms.length"></ncats-frontend-library-identifiers-display>
 <mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true">
   <mat-tab [label] = "'Articles ' + (disease.epiCount + disease.nonEpiCount )">
     <mat-tab-group [color]="'accent'">

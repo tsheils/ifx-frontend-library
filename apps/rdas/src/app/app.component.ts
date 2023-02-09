@@ -19,9 +19,13 @@ export class AppComponent implements OnInit {
   user?: User;
 
   links: LinkTemplateProperty[] = [
-    /*{
-      link: 'about',
-      label: 'About',
+    {
+      link: 'diseases',
+      label: 'DISEASES',
+    },
+/*    {
+      link: 'api',
+      label: 'API',
     }*/
   ];
 
@@ -56,7 +60,6 @@ export class AppComponent implements OnInit {
   }
 
   selectDisease(event: Disease): void {
-    console.log(event);
     const navigationExtras: NavigationExtras = {
       queryParams:{
         id: event.gardId

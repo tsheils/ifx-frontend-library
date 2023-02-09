@@ -14,6 +14,12 @@ export const TREEROOTPARAMETERS = {
   }
 };
 
+export const DISEASEBRANCHPARAMETERS = {
+  searchString: '',
+  skip: 0,
+  limit: 10
+};
+
 export const CATEGORYTREEBRANCH = gql`
   query Tree($where: GARDWhere) {
     diseases:gards(where: $where) {
@@ -46,6 +52,30 @@ export const CATEGORYTREE = gql`
     }
 `
 
+export const FETCHPATH = gql`
+  query Query($searchString: String) {
+    treeBranch(searchString: $searchString)
+  }
+`
+export const FETCHROOT = gql`
+  query Query {
+   diseases:treeParent
+  }
+`
+
+export const FETCHPATHDISEASES = gql`
+  query Query($searchString: String, $skip: Int, $limit: Int) {
+    diseases:hierarchyDiseases (searchString: $searchString, limit: $limit, skip: $skip) {
+      name:GardName
+      gardId: GardId
+      classificationLevel: ClassificationLevel
+      disorderType: DisorderType
+      synonyms: Synonyms
+    }
+    total:hierarchyDiseasesCount(searchString: $searchString, limit: $limit, skip: $skip)
+  }
+`
+
 
 
 
@@ -65,7 +95,7 @@ export const FETCHDISEASESLISTQUERY = gql`
       gardId: GardId
       classificationLevel: ClassificationLevel
       disorderType: DisorderType
-      # Synonyms
+      synonyms: Synonyms
     }
     total: gardsAggregate(where: $where) {
       count
@@ -80,7 +110,7 @@ export const FETCHDISEASEQUERY = gql`
       gardId: GardId
       classificationLevel: ClassificationLevel
       disorderType: DisorderType
-      # Synonyms
+      synonyms: Synonyms
     }
     total: gardsAggregate(where: $where) {
       count

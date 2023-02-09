@@ -27,16 +27,12 @@ export class DiseaseDisplayComponent implements OnChanges {
   }
 
   ngOnChanges() {
-    console.log(this.disease);
     this.changeRef.markForCheck()
   }
 
   pageList(event: {offset:number}, pageField: string, origin: string): void {
-    console.log(event)
     const variables: { [key: string]: unknown } = {};
-  //  variables[pageField] = String(-+event);
     variables[pageField] = event;
-    console.log(variables);
     this.optionsChange.emit({variables, origin});
   }
 

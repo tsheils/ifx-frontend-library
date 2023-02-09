@@ -2,10 +2,9 @@
   <header>
     <ncats-frontend-library-header-template [links]="links">
       <div class="left-options">
-<!--
-        <h2 class="app-title">Rare Disease Alert System</h2>
--->
+        <a routerLink="/diseases">
       <img src="/assets/rdas_final_gradient.svg" alt="rdas logo" class="rdas-logo">
+        </a>
       </div>
       <div class="right-options">
         <ncats-frontend-library-rdas-search *ngIf="!hideSearch" class ="header-search" (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
@@ -15,11 +14,17 @@
   </header>
   <main role ="ncats-main">
     <div class="main-content">
+<!--
       <ncats-frontend-library-loading-spinner [isLoaded]="!loaded"></ncats-frontend-library-loading-spinner>
+-->
       <router-outlet></router-outlet>
     </div>
   </main>
   <footer>
-<ncats-frontend-library-footer-template></ncats-frontend-library-footer-template>
+<ncats-frontend-library-footer-template>
+  <div class="app-description">
+    <img src="/assets/final_rdas_mono_2.svg" alt="rdas all-white logo" class="rdas-footer-logo">
+  </div>
+</ncats-frontend-library-footer-template>
   </footer>
 </div>

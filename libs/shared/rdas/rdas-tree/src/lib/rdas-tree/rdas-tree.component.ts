@@ -13,6 +13,7 @@ import {
 } from "@angular/material/tree";
 import { NavigationExtras, Router } from "@angular/router";
 import { Disease, DiseaseNode } from "@ncats-frontend-library/models/rdas";
+import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { BehaviorSubject } from "rxjs";
 
 /** Flat tree item node with expandable and level information */
@@ -24,7 +25,7 @@ export class FlatDiseaseNode extends DiseaseNode {
 @Component({
   selector: 'ncats-frontend-library-rdas-tree',
   standalone: true,
-  imports: [CommonModule, MatTreeModule, MatProgressBarModule, MatIconModule, MatButtonModule, MatCardModule],
+  imports: [CommonModule, MatTreeModule, MatIconModule, MatButtonModule, MatCardModule, SharedUtilsLoadingSpinnerModule],
   templateUrl: './rdas-tree.component.html',
   styleUrls: ['./rdas-tree.component.scss'],
 })
@@ -60,6 +61,8 @@ export class RdasTreeComponent {
   treeFlattener;
   dataSource;
 
+  loading = true;
+
   private _transformer = (node: DiseaseNode, level: number) => {
     const flatNode = new FlatDiseaseNode(node);
     flatNode.expandable = ((node.children && node.children.length > 0)) ||  (!!(node.childrenCount && node.childrenCount > 0));
@@ -92,20 +95,11 @@ export class RdasTreeComponent {
               this.changeRef.markForCheck();
             }
           });
+          this.loading = false;
       this.changeRef.markForCheck();
       }
     });
-    console.log(this);
   }
-
-  ngOnChanges(change: any) {
-  /*  console.log(change);
-    this.dataSource.data = [...this.data];
-    this.treeControl.dataNodes = [...this.data];
-    this.treeControl.expandAll()
-    this.changeRef.detectChanges()
-    console.log(this);*/
-   }
 
   selectDisease(event: FlatDiseaseNode): void {
     if(event.children && event.children.length) {
@@ -117,6 +111,7 @@ export class RdasTreeComponent {
       }
       this.changeRef.detectChanges()
     } else {
+      this.loading= true;
       this.leafExpand.emit(event);
       this.treeControl.expand(event);
     }
