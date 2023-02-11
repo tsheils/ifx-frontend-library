@@ -44,6 +44,10 @@ export class Disease {
       this.nonEpiCount = obj._nonEpiCount.count;
     }
 
+    if(obj.synonyms) {
+      this.synonyms = [...new Set(obj.synonyms)];
+    }
+
   }
 }
 

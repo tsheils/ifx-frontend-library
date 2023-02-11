@@ -26,6 +26,7 @@
     "shared-utils-footer-template": "libs/shared/utils/footer-template",
     "shared-utils-header-template": "libs/shared/utils/header-template",
     "shared-utils-loading-spinner": "libs/shared/utils/loading-spinner",
+    "shared-utils-scroll-to-top": "libs/shared/utils/scroll-to-top",
     "shared-utils-social-sign-on": "libs/shared/utils/social-sign-on",
     "stores-disease-store": "libs/stores/disease-store",
     "stores-user-store": "libs/stores/user-store"

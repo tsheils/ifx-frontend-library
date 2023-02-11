@@ -1,11 +1,20 @@
-<button mat-flat-button  *ngIf= !subscribed (click)="subscribe()" [color]="'primary'">SUBSCRIBE</button>
-<div *ngIf= subscribed class="row centered-row">
-<button mat-button [color]="'primary'" (click)="unSubscribe()">SUBSCRIBED</button>
-<button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Alert options menu">
-  <mat-icon [color]="'primary'" *ngIf="subscriptionSelection.selected.length === 3">notifications_active</mat-icon>
-  <mat-icon [color]="'primary'" *ngIf="subscriptionSelection.selected.length === 1 || subscriptionSelection.selected.length === 2" class="material-symbols-outlined">notifications</mat-icon>
-  <mat-icon [color]="'primary'" *ngIf="subscriptionSelection.selected.length === 0">notifications_off</mat-icon>
-</button>
+<div class="centered">
+<button mat-flat-button  *ngIf= !subscribed (click)="subscribe()" [color]="'primary'" [disabled]="!userExists">SUBSCRIBE</button>
+<a mat-stroked-button [color]="'primary'" *ngIf= subscribed [matMenuTriggerFor]="menu">
+  <div class="grid-button">
+  <div>
+  <mat-icon *ngIf="subscriptionSelection.selected.length === 3">notifications_active</mat-icon>
+  <mat-icon *ngIf="subscriptionSelection.selected.length === 1 || subscriptionSelection.selected.length === 2" class="material-symbols-outlined">notifications</mat-icon>
+  <mat-icon *ngIf="subscriptionSelection.selected.length === 0">notifications_off</mat-icon>
+  </div>
+  <div>
+    SUBSCRIBED
+    </div>
+  <div>
+<mat-icon aria-label="Alert options menu">expand_more</mat-icon>
+    </div>
+  </div>
+</a>
 <mat-menu #menu="matMenu">
   <div mat-menu-item>
     <mat-checkbox
@@ -56,5 +65,11 @@
       </button>
     </li>
   </ul>
+  <button mat-menu-item (click)="unSubscribe()">
+    <mat-icon [color]="'primary'">unsubscribe</mat-icon>
+    <span>Unsubscribe</span>
+  </button>
 </mat-menu>
+
+<button mat-mini-fab class="about-subscribe-button" (click)="aboutSubscribe()"> <mat-icon>question_mark</mat-icon></button>
 </div>

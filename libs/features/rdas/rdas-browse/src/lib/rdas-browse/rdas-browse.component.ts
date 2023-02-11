@@ -60,6 +60,7 @@ export class RdasBrowseComponent implements OnInit {
           .subscribe(res => {
           if(res) {
             this.page = res;
+            this.changeRef.markForCheck()
           }
         });
 

@@ -1,6 +1,6 @@
 <mat-card>
   <mat-card-title>
-    <div class="row space-between-row">
+    <div class="row space-between-row top-align">
       <div class="width-75">
     <ng-container *ngIf="article.doi; then link; else nolink">
     </ng-container>
@@ -18,6 +18,12 @@
     <ng-template #nolink>
       <span class="mat-card-title">{{article.title}}</span>
     </ng-template>
+        <div *ngFor="let journal of article.journals">
+          <i>{{journal.title}}</i> <span *ngIf="journal.volume">&nbsp;Volume:{{journal.volume}}</span>
+        </div>
+
+
+
       </div>
       <div class = "mat-h3" *ngIf = "article.pubmed_id">PMID:
         <a
@@ -30,14 +36,15 @@
     </div>
   </mat-card-title>
   <mat-card-content>
-  <div class="row space-between-row">
-    <div class="width-75">
+  <div class="row space-between-row top-align">
+    <div class="width-70">
     <span *ngFor="let author of article.authorsWrote; let last = last">
       <i>{{author.fullName}}</i> <span *ngIf="!last">, </span>
-    </span><br><br>
+    </span>
+      <br>
       <span *ngIf="article.affiliation">{{article.affiliation}}</span><br><br>
     </div>
-    <div>
+    <div class="width-25">
       <span class = "mat-h3">First Published: </span> {{article.firstPublicationDate | date}}<br>
       <span class = "mat-h3" *ngIf = "article.citedByCount">Cited By: </span> {{article.citedByCount}}<br>
       <span class = "mat-h3" *ngIf="article.pubType">Publication Type: </span>
@@ -77,11 +84,14 @@
         <div class="project-sub-header bottom-border-accent">
         Annotations: {{article.annotations ? article.annotations.length : 0 }}</div>
         <div *ngIf="article.annotations && article.annotations.length">
-          <div *ngFor="let annotation of article.annotations">
-            <div class="list-item-title">{{annotation.infons_type}}</div>
-            <div class="list-item-content">{{annotation.text.join(", ")}}</div>
+            <div  *ngFor="let annotation of annotationsMap | keyvalue">
+              <div class="primary-chip">{{annotation.key}}</div>
+              <div *ngFor="let term of annotation.value" class="annotation-term">{{term}}</div>
+            </div>
+            <br>
+<!--
             <div class="list-item-content">Found In: {{annotation.type}}</div>
-          </div>
+-->
         </div>
       </mat-card>
       <mat-card [appearance]="'outlined'">

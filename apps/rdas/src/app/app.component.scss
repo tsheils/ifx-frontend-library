@@ -7,6 +7,10 @@ a {
   color: mat.get-color-from-palette($app-primary);
 }
 
+a:visited {
+  color: mat.get-color-from-palette($app-primary, 900);
+}
+
 .content-wrapper {
   min-height: 100%;
   display: grid;
@@ -17,8 +21,6 @@ a {
   background-color: #ffffff;
   color: mat.get-color-from-palette($app-primary) !important;
   height: 75px;
-  //color: #ffffff !important;
-  //  z-index: 666;
 }
 .footer-template {
   background-color: mat.get-color-from-palette($app-primary);

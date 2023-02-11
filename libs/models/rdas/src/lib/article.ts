@@ -49,17 +49,22 @@ export class Article {
     }
 
     if(obj.meshTerms) {
-      this.meshTerms = obj.meshTerms.map((mesh: Partial<MeshTerm> = {}) => new MeshTerm(mesh));
+      this.meshTerms = obj
+        .meshTerms.map((mesh: Partial<MeshTerm> = {}) => new MeshTerm(mesh))
+        .sort((a: MeshTerm, b:MeshTerm) =>  a.descriptorName.localeCompare(b.descriptorName));
+      ;
     }
 
     if(obj.annotations) {
       this.annotations = obj.annotations
-        .map((annotation: Partial<PubtatorAnnotation> = {}) => new PubtatorAnnotation(annotation))
-        .filter((a: PubtatorAnnotation) =>  !(a.infons_type ==='Species' || a.infons_type ==='Genus'));
+        .filter((a: Partial<PubtatorAnnotation>) =>  !(a.infons_type ==='Species' || a.infons_type ==='Genus'))
+    .map((annotation: Partial<PubtatorAnnotation> = {}) => new PubtatorAnnotation(annotation))
     }
 
     if(obj.diseases) {
-      this.diseases = obj.diseases.map((disease: Partial<Disease> = {}) => new Disease(disease));
+      this.diseases = obj.diseases
+        .map((disease: Partial<Disease> = {}) => new Disease(disease))
+        .sort((a: Disease, b:Disease) =>  a.name.localeCompare(b.name));
     }
 
     if(obj.sources) {
@@ -73,14 +78,14 @@ export class JournalVolume {
   dateOfPublication!: string;
   printPublicationDate!: string;
   volume!: string;
-  _title!: {title:string};
+  _title!: {title:string}[];
   title!: string;
 
 constructor(obj: Partial<JournalVolume>) {
   Object.assign(this, obj);
 
   if (obj._title) {
-    this.title = obj._title.title;
+    this.title = obj._title[0].title;
   }
 }
 }
@@ -121,11 +126,15 @@ export class PubtatorAnnotation {
 constructor(obj: Partial<PubtatorAnnotation>) {
   Object.assign(this, obj);
   if (obj.text) {
-    this.text = [];
-     obj.text.forEach((textVal: string) => {
-       const textArr =  textVal.split(",");
-       this.text.push(...textArr);
-    })
+    if (!Array.isArray(obj.text)) {
+      this.text = [obj.text]
+    } else {
+      this.text = [];
+      obj.text.forEach((textVal: string) => {
+        const textArr = textVal.split(",");
+        this.text.push(...textArr);
+      })
+    }
   }
 }
 }

@@ -73,6 +73,9 @@
       "@ncats-frontend-library/shared/utils/loading-spinner": [
         "libs/shared/utils/loading-spinner/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/utils/scroll-to-top": [
+        "libs/shared/utils/scroll-to-top/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/utils/social-sign-on": [
         "libs/shared/utils/social-sign-on/src/index.ts"
       ],

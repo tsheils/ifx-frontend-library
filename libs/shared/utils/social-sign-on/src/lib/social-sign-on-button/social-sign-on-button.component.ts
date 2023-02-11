@@ -45,8 +45,8 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
    */
   openSignInModal() {
     this.dialog.open(SocialSignOnModalComponent, {
-        height: '75vh',
-        width: '66vw',
+        height: '35vh',
+        width: '35vw',
       }
     );
   }

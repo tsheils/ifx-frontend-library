@@ -1,6 +1,12 @@
 <div class="row right-justified-row" *ngIf = "projects">
-  <mat-paginator #paginator [length]="count" [pageIndex]="0" [pageSize]="10" (page)="fetchProjects($event)"></mat-paginator>
+  <mat-paginator #paginator
+                 [length]="count"
+                 [pageIndex]="0"
+                 [pageSizeOptions]="[10, 25, 50]"
+                 [pageSize]="10"
+                 (page)="fetchProjects($event)"></mat-paginator>
 </div>
 <div class="row centered-row" *ngFor="let project of projects">
   <ncats-frontend-library-project-list-card [project]="project"></ncats-frontend-library-project-list-card>
 </div>
+

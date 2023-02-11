@@ -1,5 +1,10 @@
   <div class="row right-justified-row" *ngIf = "articles">
-      <mat-paginator #paginator [length]="count" [pageIndex]="0" [pageSize]="10" (page)="fetchArticles($event)"></mat-paginator>
+      <mat-paginator #paginator
+                     [length]="count"
+                     [pageIndex]="0"
+                     [hidePageSize] = true
+                     [pageSize]="10"
+                     (page)="fetchArticles($event)"></mat-paginator>
   </div>
   <div class="row centered-row" *ngFor="let article of articles">
     <ncats-frontend-library-article-list-card [article]="article"></ncats-frontend-library-article-list-card>

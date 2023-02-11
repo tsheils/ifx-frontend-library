@@ -6,6 +6,7 @@ import { SharedRdasDiseaseDisplayModule } from "@ncats-frontend-library/shared/r
 import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
 import { RdasTreeComponent } from "@ncats-frontend-library/shared/rdas/rdas-tree";
 import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
+import { ScrollToTopComponent } from "@ncats-frontend-library/shared/utils/scroll-to-top";
 import { RdasBrowseComponent } from './rdas-browse/rdas-browse.component';
 
 const ROUTES: Routes = [
@@ -23,7 +24,8 @@ const ROUTES: Routes = [
     SharedRdasDiseaseDisplayModule,
     MatPaginatorModule,
     RdasTreeComponent,
-    SharedUtilsLoadingSpinnerModule
+    SharedUtilsLoadingSpinnerModule,
+    ScrollToTopComponent
   ],
   declarations: [
     RdasBrowseComponent

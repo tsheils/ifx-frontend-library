@@ -1,6 +1,16 @@
-  .subscribe-menu {
-    list-style-type: none;
+ .subscribe-menu {
     padding-left: 24px;
     margin-top: 0;
+    list-style: none !important;
   }
 
+.grid-button {
+  min-height: 100%;
+  display: grid !important;
+  grid-template-columns: 23% 65% 10%;
+  align-items: center;
+}
+
+.about-subscribe-button {
+  margin-left: 1vw;
+}

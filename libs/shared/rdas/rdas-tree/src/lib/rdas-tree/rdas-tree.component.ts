@@ -105,7 +105,12 @@ export class RdasTreeComponent {
     if(event.children && event.children.length) {
       this.treeControl.toggle(event);
       if(this.treeControl.isExpanded(event)) {
-       this.treeControl.collapse(event)
+        let r = this.treeControl.expansionModel.selected;
+        if(r.length){
+          r = r.filter(node => !(node.gardId === event.gardId));
+          this.treeControl.expansionModel.clear();
+          this.treeControl.expansionModel.select(...r);
+        }
       } else {
         this.treeControl.expand(event);
       }
