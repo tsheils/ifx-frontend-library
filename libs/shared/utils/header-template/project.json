@@ -1,5 +1,6 @@
 {
   "name": "shared-utils-header-template",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/utils/header-template/src",
   "prefix": "ncats-frontend-library",

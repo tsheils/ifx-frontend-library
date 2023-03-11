@@ -1,5 +1,6 @@
 {
   "name": "stores-user-store",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/stores/user-store/src",
   "prefix": "ncats-frontend-library",

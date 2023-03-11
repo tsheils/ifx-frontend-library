@@ -1,5 +1,6 @@
 {
   "name": "features-rdas-rdas-disease-page",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/features/rdas/rdas-disease-page/src",
   "prefix": "ncats-frontend-library",

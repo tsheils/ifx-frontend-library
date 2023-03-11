@@ -9,6 +9,7 @@ import {
   Output
 } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
+import { MatDividerModule } from "@angular/material/divider";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { Article } from "@ncats-frontend-library/models/rdas";
 import { ArticleListCardComponent } from "../article-list-card/article-list-card.component";

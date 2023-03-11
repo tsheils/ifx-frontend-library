@@ -19,7 +19,7 @@ export class UsersEffects {
           if(user) {
             return UsersActions.loginUserSuccess({ user: JSON.parse(user) })
           } else {
-            return UsersActions.loginUserFailure({error: 'oops'})
+            return UsersActions.loginUserFailure({error: ''})
           }
           }
         )
@@ -47,6 +47,103 @@ export class UsersEffects {
             })
         // return DiseasesActions.fetchDiseaseFailure({error: "No Disease found"})
           )
+      })
+    )
+  );
+
+
+  loginEmailUser = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.loginEmailUser),
+      mergeMap((action: {email: string, pw: string}) => {
+        return this.userService.doEmailLogin(action.email, action.pw)
+          .pipe(
+            map((res: { code?: string, message?: string, user?: Partial<User> }) => {
+              console.log(res);
+              if (res.code) {
+               const errMessage: string = this._getErrorMesssage(res.code);
+                console.log(res.code)
+                return UsersActions.loginEmailUserFailure({ error: errMessage })
+              } else {
+                if (res.user) {
+                  const u: User = new User({
+                    displayName: res.user.displayName,
+                    photoURL: res.user.photoURL,
+                    uid: res.user.uid
+                  })
+                if (u) {
+                  return UsersActions.loginUserSuccess({ user: u });
+                } else {
+                  return UsersActions.loginEmailUserFailure({ error: "Login Failed" })
+                }
+              } else {
+                  return UsersActions.loginEmailUserFailure({ error: "Login Failed" })
+                }
+              }
+            }))
+      }))
+  );
+
+registerEmailUser = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.registerEmailUser),
+      mergeMap((action: {email: string, pw: string}) => {
+        return this.userService.doRegister(action.email, action.pw)
+          .pipe(
+            map((res: any) =>
+            {
+              return  res.user;
+            }),
+            map((res: Partial<User>) => {
+              const u: User = new User({
+                displayName: res.displayName,
+                photoURL: res.photoURL,
+                uid: res.uid
+              })
+              if(u) {
+                return UsersActions.loginUserSuccess({ user: u });
+              } else {
+                return UsersActions.registerEmailUserFailure({error: "Registration Failed"})
+              }
+            }))
+            }))
+  );
+
+
+loginLinkUser = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.loginLinkUser),
+      mergeMap((action: {email: string}) => {
+        return this.userService.doEmailLinkLogin(action.email)
+          .pipe(
+            map((res: any) => {
+              if(res) {
+                return UsersActions.loginLinkUserSuccess({ email: action.email });
+              } else {
+                return UsersActions.loginLinkUserFailure({error: "Login Link Failed"})
+              }
+            }))
+      })
+    )
+  );
+
+resetEmailPassword = createEffect(() =>
+    this.actions$.pipe(
+      ofType(UsersActions.resetPasswordEmail),
+      mergeMap((action: {email: string}) => {
+        return this.userService.doResetEmail(action.email)
+          .pipe(
+            map((res: any) => {
+              console.log(res);
+              if (res && res.code) {
+                const errMessage: string = this._getErrorMesssage(res.code);
+                console.log(res.code)
+                return UsersActions.loginEmailUserFailure({ error: errMessage })
+              } else  {
+                console.log("success");
+                return UsersActions.resetPasswordEmailSuccess();
+              }
+            }))
       })
     )
   );
@@ -104,6 +201,23 @@ updateUserProfile = createEffect( ()=>
     })
   )
   )
+
+  _getErrorMesssage(code: string): string {
+    switch (code){
+      case 'auth/user-not-found': {
+        return 'User not found. Please double check your email address';
+      }
+      case 'auth/wrong-password': {
+        return 'Invalid password';
+      }
+      case 'auth/invalid-email': {
+          return 'Invalid email';
+      }
+      default: {
+        return 'Unable to login with these credentials';
+      }
+    }
+  }
 
   constructor(
     private readonly actions$: Actions,

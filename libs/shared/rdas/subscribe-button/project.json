@@ -1,5 +1,6 @@
 {
   "name": "shared-rdas-subscribe-button",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/subscribe-button/src",
   "prefix": "ncats-frontend-library",

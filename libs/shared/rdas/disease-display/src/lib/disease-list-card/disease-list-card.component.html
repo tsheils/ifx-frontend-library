@@ -9,8 +9,8 @@
     </div>
   </div>
       <div class="width-75">
-        <div class ="primary-chip" *ngIf="disease.classificationLevel">{{disease.classificationLevel}}</div>&nbsp;&nbsp;&nbsp;
-        <div class ="accent-chip" *ngIf="disease.disorderType">{{disease.disorderType}}</div>
+        <div class ="primary-chip-outlined" *ngIf="disease.classificationLevel">{{disease.classificationLevel}}</div>&nbsp;&nbsp;&nbsp;
+        <div class ="accent-chip-outlined" *ngIf="disease.disorderType">{{disease.disorderType}}</div>
       </div>
     <div class="width-75" *ngIf="disease.synonyms && disease.synonyms.length">
         Synonyms: {{disease.synonyms.join(', ')}}

@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 import { RouterModule, Routes } from "@angular/router";
-import { SharedRdasRdasSearchModule } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
 import { RdasHomeComponent } from './rdas-home/rdas-home.component';
 
 const ROUTES: Routes = [
@@ -15,7 +17,9 @@ const ROUTES: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(ROUTES),
-    SharedRdasRdasSearchModule
+    RdasSearchComponent,
+    MatCardModule,
+    MatIconModule
   ],
   declarations: [
     RdasHomeComponent

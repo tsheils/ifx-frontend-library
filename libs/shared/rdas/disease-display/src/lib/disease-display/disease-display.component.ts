@@ -5,7 +5,8 @@ import {
   EventEmitter,
   Input,
   OnChanges,
-  Output
+  Output,
+  ViewEncapsulation
 } from "@angular/core";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 
@@ -13,7 +14,8 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
   selector: 'ncats-frontend-library-disease-display',
   templateUrl: './disease-display.component.html',
   styleUrls: ['./disease-display.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
 
 })
 export class DiseaseDisplayComponent implements OnChanges {

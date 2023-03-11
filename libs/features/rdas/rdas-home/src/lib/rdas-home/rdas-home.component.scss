@@ -1,3 +1,43 @@
 .home-component {
-  padding-top: 5vh;
+  margin-top: -10vh;
+  padding-top: 15vh;
+  padding-left:5vw;
+  z-index: 666;
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 3%;
+  grid-auto-rows: minmax(100px, auto);
+}
+
+img.datasource-logo {
+  width: 200px;
+}
+
+.rdas-headline {
+  font-size: 4.5rem;
+  font-weight: bold;
+  padding-bottom: 2rem;
+}
+
+
+.rdas-subheadline {
+  font-size: 2rem;
+}
+
+
+.graph {
+  min-width: 100vw;
+  width: 100vw;
+  height: 85vh;
+  position:absolute;
+  top:0;
+  right:-30%;
+  overflow: hidden;
+ }
+
+.graph-holder {
+  height: 70vh;
 }

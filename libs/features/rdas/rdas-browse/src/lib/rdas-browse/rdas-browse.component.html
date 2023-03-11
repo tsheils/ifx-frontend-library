@@ -1,5 +1,6 @@
 <div class="row space-around-row top-align">
   <div class="width-25">
+    <h2>Filter Diseases by Hierarchy</h2>
     <ncats-frontend-library-rdas-tree *ngIf="diseaseTree" (leafExpand)="treeExpand($event)" [data]="diseaseTree"></ncats-frontend-library-rdas-tree>
   </div>
   <div class="width-70">
@@ -16,6 +17,7 @@
       [pageSizeOptions]="[10, 25, 50]"
       (page)="paginationChanges($event)"
       [length] = "page.total"
+                   class="browse-paginator"
     ></mat-paginator>
 </div>
     <div class="row spinner-holder width-70">
@@ -29,6 +31,7 @@
                      [hidePageSize]=" true"
                      (page)="paginationChanges($event)"
                      [length] = "page.total"
+                     class="browse-paginator"
       ></mat-paginator>
       <ncats-frontend-library-scroll-to-top [color]="'accent'"></ncats-frontend-library-scroll-to-top>
     </div>

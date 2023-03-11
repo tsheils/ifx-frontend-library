@@ -1,5 +1,6 @@
 {
   "name": "shared-rdas-article-display",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/article-display/src",
   "prefix": "ncats-frontend-library",

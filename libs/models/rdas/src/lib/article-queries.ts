@@ -1,5 +1,6 @@
 import { gql } from "apollo-angular";
 
+//pubType
 
 export const ARTICLEFIELDS = `
   fragment articleFields on Article {
@@ -9,12 +10,9 @@ export const ARTICLEFIELDS = `
     doi
     firstPublicationDate
     isEpi
-    pubType
     pubmed_id
     source
     title
-    pubType
-    pubmed_id
   }
 `;
 
@@ -89,6 +87,13 @@ query Articles(
                 lastName
                 fullName
             }
+          #epidemiologies: epidemiologyAnnotationsEpidemiologyAnnotationFor {
+          #  epidemiology_rate
+          #  epidemiology_type
+          #  ethnicity
+          #  location
+          #  sex
+          #}
           journals: appearsInJournalVolumes {
             dateOfPublication
             printPublicationDate
@@ -112,7 +117,7 @@ query Articles(
           }
           meshTerms: meshTermsMeshTermFor {
             descriptorName
-            isMajorTopic
+          #  majorTopic_YN
             _qualifier: meshQualifiersMeshQualifierFor {
               abbreviation
               qualifierName
@@ -161,7 +166,7 @@ query Articles(
           }
           meshTerms: meshTermsMeshTermFor {
             descriptorName
-            isMajorTopic
+          #  isMajorTopic
             _qualifier: meshQualifiersMeshQualifierFor {
               abbreviation
               qualifierName
@@ -187,7 +192,7 @@ ${ARTICLEFIELDS}
 export const ARTICLEVARIABLES: {
   gardWhere: {gard_id?: null | string }
   epiWhere: {
-        isEpi?: null | string
+        isEpi?: null | string | boolean
   },
   epiOptions?: {
     limit?: number,
@@ -206,7 +211,7 @@ export const ARTICLEVARIABLES: {
 } = {
   gardWhere: {gard_id: null},
   epiWhere: {
-        isEpi: "Y"
+        isEpi:  'Y'
   },
   epiOptions: {
     limit: 10,

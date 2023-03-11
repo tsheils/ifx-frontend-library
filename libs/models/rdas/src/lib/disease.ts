@@ -37,6 +37,7 @@ export class Disease {
       this.nonEpiArticles = obj.nonEpiArticles.map((article: Partial<Article> = {}) => new Article(article));
     }
 
+
     if(obj._epiCount) {
       this.epiCount = obj._epiCount.count;
     }
@@ -78,3 +79,4 @@ export class DiseaseNode {
     }
   }
 }
+

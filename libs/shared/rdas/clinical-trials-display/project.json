@@ -1,5 +1,6 @@
 {
   "name": "shared-rdas-clinical-trials-display",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/clinical-trials-display/src",
   "prefix": "ncats-frontend-library",

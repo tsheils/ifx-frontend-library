@@ -1,6 +1,5 @@
 import { CommonModule } from "@angular/common";
 import { Component, Input } from "@angular/core";
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { NavigationExtras, Router } from "@angular/router";
@@ -12,7 +11,7 @@ import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/
   templateUrl: './disease-list-card.component.html',
   styleUrls: ['./disease-list-card.component.scss'],
   standalone: true,
-  imports: [CommonModule, FlexLayoutModule, MatCardModule, MatIconModule, SharedRdasSubscribeButtonModule]
+  imports: [CommonModule, MatCardModule, MatIconModule, SharedRdasSubscribeButtonModule]
 })
 export class DiseaseListCardComponent {
   @Input() disease!:Disease;

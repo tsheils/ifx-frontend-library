@@ -1,5 +1,6 @@
 {
   "name": "shared-utils-social-sign-on",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/utils/social-sign-on/src",
   "prefix": "ncats-frontend-library",

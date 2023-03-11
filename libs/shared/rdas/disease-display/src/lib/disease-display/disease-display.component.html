@@ -1,3 +1,4 @@
+<mat-card [appearance]="'outlined'" class="main-disease-display">
 <ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
 <ncats-frontend-library-identifiers-display [disease]="disease" *ngIf="disease.synonyms && disease.synonyms.length"></ncats-frontend-library-identifiers-display>
 <mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true">
@@ -44,3 +45,4 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+</mat-card>

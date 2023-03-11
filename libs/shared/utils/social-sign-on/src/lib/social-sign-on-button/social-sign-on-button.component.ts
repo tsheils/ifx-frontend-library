@@ -45,7 +45,7 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
    */
   openSignInModal() {
     this.dialog.open(SocialSignOnModalComponent, {
-        height: '35vh',
+        height: '45vh',
         width: '35vw',
       }
     );
@@ -56,7 +56,6 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
    */
   signOut(): void {
     this.userFacade.dispatch(logoutUser())
-    //  this.profileService.logout();
   }
 
   viewProfile() {

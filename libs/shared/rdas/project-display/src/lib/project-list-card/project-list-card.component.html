@@ -14,7 +14,7 @@
     </div>
   </mat-card-title>
   <mat-card-content>
-    <div *ngIf="latestProject.abstract && latestProject.abstract.length" class="primary-chip">Abstract</div>
+    <div *ngIf="latestProject.abstract && latestProject.abstract.length" class="primary-chip-outlined">Abstract</div>
     <br>
     <div *ngIf="fullAbstract; else truncated">
       <span class="mat-subtitle-2">{{latestProject.abstract}}</span>
@@ -30,10 +30,10 @@
     <div class="project-content-wrapper">
       <mat-card [appearance]="'outlined'">
         <div class="project-sub-header bottom-border-accent">Funding</div>
-        <div class="primary-chip">Funding Agency</div>
+        <div class="primary-chip-outlined">Funding Agency</div>
         <div class="list-item-content">{{funding ? funding : 'None Listed'}}</div>
         <div *ngIf="project.rd_total_cost">
-          <div class="primary-chip">Total Cost</div>
+          <div class="primary-chip-outlined">Total Cost</div>
           <div class="list-item-content">{{project.rd_total_cost | currency}}</div>
         </div>
       </mat-card>
@@ -94,20 +94,20 @@
               </mat-card>
                 <mat-card [appearance]="'outlined'">
                   <div class="project-sub-header bottom-border-primary">
-                    Key Terms: {{project.terms ? project.terms.length : 0 }}</div>
-            <br>
-            <div *ngFor="let term of project.terms">
-              {{term}}
-            </div>
-                </mat-card>
-                <mat-card [appearance]="'outlined'">
-                  <div class="project-sub-header bottom-border-primary">
                     Annotations: {{project.annotations ? project.annotations.length : 0 }}</div>
             <div *ngIf="project.annotations && project.annotations.length">
               <ncats-frontend-library-annotations-display
                 [annotations]="project.annotations"></ncats-frontend-library-annotations-display>
             </div>
                 </mat-card>
+              <mat-card [appearance]="'outlined'">
+                <div class="project-sub-header bottom-border-primary">
+                  Key Terms: {{project.terms ? project.terms.length : 0 }}</div>
+                <br>
+                <div *ngFor="let term of project.terms">
+                  {{term}}
+                </div>
+              </mat-card>
             </div>
           </mat-expansion-panel>
         </mat-accordion>

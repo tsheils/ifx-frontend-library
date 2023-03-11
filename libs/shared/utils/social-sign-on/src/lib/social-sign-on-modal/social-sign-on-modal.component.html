@@ -1,3 +1,8 @@
+<div class="row right-justified-row no-padding">
+  <button mat-icon-button (click) = "closeModal()">
+  <mat-icon>close</mat-icon>
+  </button>
+</div>
 <div class="row centered-row">
     <mat-list class ="buttons-list">
       <mat-list-item >
@@ -16,14 +21,40 @@
         Sign In with Facebook
       </div>
       </mat-list-item >
-      <mat-list-item >
+<!--      <mat-list-item >
         <div (click)="login('twitter')" class="login-button twitter">
         <img src="/assets/social-sign-on/ttr.png" class="login-icon">
           &nbsp;
           &nbsp;
         Sign In with Twitter
       </div>
+      </mat-list-item >-->
+<!--      <mat-list-item >
+        <div (click)="openEmailLinkModal()" class="login-button primary-background">
+          <mat-icon class="login-icon">mail</mat-icon>
+          &nbsp;
+          &nbsp;
+          Send Me a Link
+        </div>
+      </mat-list-item>-->
+<!--      <mat-list-item>
+        <div (click)="login('email')" class="login-button primary-background">
+          <mat-icon class="login-icon">lock</mat-icon>
+          &nbsp;
+          &nbsp;
+        Use an Email and Password
+        </div>
+      </mat-list-item >-->
+      <mat-list-item>
+        <div (click)="loginEmail()" class="login-button primary-background">
+          <mat-icon class="login-icon">lock</mat-icon>
+          &nbsp;
+          &nbsp;
+        Use an Email and Password
+        </div>
       </mat-list-item >
+
+
     </mat-list>
   </div>
 <div class="row centered-row">

@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FlexLayoutModule } from "@angular/flex-layout";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
@@ -10,7 +9,7 @@ import { RouterModule } from "@angular/router";
 import { HeaderTemplateComponent } from './header-template/header-template.component';
 
 @NgModule({
-  imports: [CommonModule, MatSidenavModule, MatToolbarModule, MatMenuModule, RouterModule, MatButtonModule, MatIconModule, FlexLayoutModule],
+  imports: [CommonModule, MatSidenavModule, MatToolbarModule, MatMenuModule, RouterModule, MatButtonModule, MatIconModule],
   declarations: [
     HeaderTemplateComponent
   ],

@@ -60,7 +60,7 @@ export class ScrollToTopComponent {
         window.scrollTo(0, currentScroll - (currentScroll / 5));
       }
     })();
-    this.router.navigate([]);
+     this.router.navigate([],  { queryParamsHandling: 'merge' });
   }
 
 }

@@ -1,5 +1,6 @@
 {
   "name": "models-rdas",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/models/rdas/src",
   "prefix": "ncats-frontend-library",

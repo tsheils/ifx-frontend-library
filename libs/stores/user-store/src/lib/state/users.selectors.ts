@@ -15,6 +15,14 @@ export const getUsersError = createSelector(
   (state: State) => state.error
 );
 
+export const getEmail = createSelector(
+  getUsersState,
+  (state: State) => {
+    console.log(state);
+    return state.email
+  }
+);
+
 export const getAllUsers = createSelector(getUsersState, (state: State) =>
   selectAll(state)
 );

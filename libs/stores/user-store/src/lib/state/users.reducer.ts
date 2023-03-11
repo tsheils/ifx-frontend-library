@@ -9,6 +9,7 @@ export interface State extends EntityState<User> {
   selectedId?: string | number; // which Users record has been selected
   loaded: boolean; // has the Users list been loaded
   error?: string | null; // last known error (if any)
+  email?: string | null;
 }
 
 export interface UsersPartialState {
@@ -36,9 +37,23 @@ const usersReducer = createReducer(
     (state, { user }) => usersAdapter.setOne(user, { ...state, loaded: true, selectedId: user.uid })
   ),
   on(
+    UsersActions.resetPasswordEmailSuccess, (state) =>{
+        console.log("you");
+      return { ...state, email: 'reset' }
+    }
+    ),
+  on(
+    UsersActions.loginLinkUserSuccess, (state, {email}) =>({
+    ...state, email: email
+  })),
+  on(
     UsersActions.logoutUserSuccess, (state) => usersAdapter.removeAll(state)
   ),
-  on(UsersActions.loginUserFailure, (state, { error }) => ({ ...state, error }))
+  on(
+    UsersActions.loginUserFailure,
+    UsersActions.loginEmailUserFailure,
+    UsersActions.loginLinkUserFailure,
+    (state, { error }) => ({ ...state, error }))
 );
 
 export function reducer(state: State | undefined, action: Action) {

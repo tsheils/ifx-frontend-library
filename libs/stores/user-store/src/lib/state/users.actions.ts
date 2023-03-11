@@ -3,26 +3,92 @@ import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Users/API] Init');
 
-/*
-const openLogin = createAction(
-  '[Users/API] Open Login',
-  props<{component:unknown, data:unknown}>()
-)
 
-const dialogSaved = createAction(
-  '[Home Page] Dialog Saved',
-  props<{data:unknown}>()
-)
+export const resetPasswordEmail = createAction(
+  '[Users/API] Reset Password Email',
+  props<{
+    email: string
+  }>()
+);
 
-const dialogClosed = createAction(
-  '[Home Page] Dialog Closed',
-  props<{data:unknown}>()
-)
-*/
+export const resetPasswordEmailSuccess = createAction(
+  '[Users/API] Reset Password Email Success'
+);
+
+export const resetPasswordEmailFailure = createAction(
+  '[Users/API] Reset Password Email Failure',
+  props<{ error: string }>()
+);
+
+export const loginLinkUser = createAction(
+  '[Users/API] Login Link User',
+  props<{
+    email: string
+  }>()
+);
+
+export const loginLinkUserSuccess = createAction(
+  '[Users/API] Login Link User Success',
+  props<{
+    email: string
+  }>()
+);
+
+export const loginLinkUserFailure = createAction(
+  '[Users/API] Login Link User Failure',
+  props<{ error: string }>()
+);
+
+
+
+
+
+export const loginEmailUser = createAction(
+  '[Users/API] Login Email User',
+  props<{
+    email: string
+    pw: string
+  }>()
+);
+
+export const loginEmailUserSuccess = createAction(
+  '[Users/API] Login Email User Success',
+  props<{ user: User}>()
+);
+
+export const loginEmailUserFailure = createAction(
+  '[Users/API] Login Email User Failure',
+  props<{ error: string }>()
+);
+
+
+export const registerEmailUser = createAction(
+  '[Users/API] Register Email User',
+  props<{
+    email: string
+    pw: string
+    pwVerify: string
+  }>()
+);
+
+export const registerEmailUserSuccess = createAction(
+  '[Users/API] Register Email User Success',
+  props<{ user: User}>()
+);
+
+export const registerEmailUserFailure = createAction(
+  '[Users/API] Register Email User Failure',
+  props<{ error: string }>()
+);
+
+
+
 
 export const loginUser = createAction(
   '[Users/API] Login User',
-  props<{ provider: string}>()
+  props<{
+    provider: string
+  }>()
 );
 
 export const loginUserSuccess = createAction(

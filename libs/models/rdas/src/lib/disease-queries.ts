@@ -144,9 +144,6 @@ export const LISTQUERYPARAMETERS: {
             GardName: "ASC"
           }
         ]
-      },
-      where: {
-        ClassificationLevel: "Disorder",
       }
     }
 ;

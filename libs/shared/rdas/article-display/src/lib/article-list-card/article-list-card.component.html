@@ -1,4 +1,4 @@
-<mat-card>
+<div class="article-card-display">
   <mat-card-title>
     <div class="row space-between-row top-align">
       <div class="width-75">
@@ -53,12 +53,43 @@
     </span><br>
     </div>
   </div>
+
+
+    <mat-card [appearance]="'outlined'" *ngIf="article.epidemiologies && article.epidemiologies.length">
+      <div class="project-sub-header bottom-border-accent">Epidemiologies: {{article.epidemiologies.length}}</div>
+      <div class="project-content-wrapper">
+      <mat-card [appearance]="'outlined'" *ngFor="let epidemiology of article.epidemiologies">
+        <div *ngIf="epidemiology.epidemiology_type && epidemiology.epidemiology_type.length">Epidemiology Type: {{epidemiology.epidemiology_type.join(", ")}}</div>
+        <div *ngIf="epidemiology.epidemiology_rate && epidemiology.epidemiology_rate.length">
+          Epidemiology Rate:<br> <span *ngFor = "let rate of epidemiology.epidemiology_rate">{{rate}}<br></span></div>
+        <div *ngIf="epidemiology.location && epidemiology.location.length">Location: {{epidemiology.location.join(", ")}}</div>
+        <div *ngIf="epidemiology.sex && epidemiology.sex.length">Sex Affected: {{epidemiology.sex.join(", ")}}</div>
+      </mat-card>
+      </div>
+    </mat-card>
+
     <div class="row space-between-row">
       <button mat-flat-button [color]="'accent'" *ngIf="article.abstractText && article.abstractText.length"
               (click)="showAbstract = !showAbstract" >{{showAbstract ? 'Hide ' : 'Show '}}Abstract</button>
       <div *ngIf="showAbstract">
       <span class="mat-subtitle-2" [innerHTML]="getArticleAbstract()"></span>
       </div>
+    </div>
+    <div *ngIf="article.substances && article.substances.length">
+      <div class="primary-chip-outlined">Substances </div> <br>
+      <span *ngFor="let substance of article.substances">
+        {{substance.name}}
+      </span>
+      <br>
+      <br>
+    </div>
+    <div *ngIf="article.keywords && article.keywords.length">
+      <div class="primary-chip-outlined">Keywords </div><br>
+      <span *ngFor="let keyword of article.keywords; let last = last">
+        {{keyword.keyword}}<span *ngIf="!last">,&nbsp;</span>
+      </span>
+      <br>
+      <br>
     </div>
     <div class="project-content-wrapper">
       <mat-card [appearance]="'outlined'">
@@ -85,7 +116,7 @@
         Annotations: {{article.annotations ? article.annotations.length : 0 }}</div>
         <div *ngIf="article.annotations && article.annotations.length">
             <div  *ngFor="let annotation of annotationsMap | keyvalue">
-              <div class="primary-chip">{{annotation.key}}</div>
+              <div class="primary-chip-outlined">{{annotation.key}}</div>
               <div *ngFor="let term of annotation.value" class="annotation-term">{{term}}</div>
             </div>
             <br>
@@ -106,17 +137,5 @@
         </div>
       </mat-card>
     </div>
-    <div *ngIf="article.substances && article.substances.length">
-     <div class="primary-chip">Substances </div> <br>
-      <span *ngFor="let substance of article.substances">
-        {{substance.name}}
-      </span>
-    </div>
-    <div *ngIf="article.keywords && article.keywords.length">
-     <div class="primary-chip">Keywords </div><br>
-      <span *ngFor="let keyword of article.keywords; let last = last">
-        {{keyword.keyword}}<span *ngIf="!last">,&nbsp;</span>
-      </span>
-    </div>
   </mat-card-content>
-</mat-card>
+</div>

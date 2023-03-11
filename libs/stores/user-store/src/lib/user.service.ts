@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
+import { MatDialogRef } from "@angular/material/dialog";
 import { User } from "@ncats-frontend-library/models/utils";
 import firebase from 'firebase/compat/app';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
-import {from, Observable } from "rxjs";
+import { from, Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,17 @@ export class UserService {
     ['google', new firebase.auth.GoogleAuthProvider()],
     ['twitter', new firebase.auth.TwitterAuthProvider()],
     ['github', new firebase.auth.GithubAuthProvider()],
+    ['email', new firebase.auth.EmailAuthProvider()],
   ]);
+
+   actionCodeSettings = {
+    // The URL to redirect to for sign-in completion. This is also the deep
+    // link for mobile redirects. The domain (www.example.com) for this URL
+    // must be whitelisted in the Firebase Console.
+    url: 'http://localhost:4200',
+    // This must be true.
+    handleCodeInApp: true
+  }
 
   /**
    * get user info from firebase
@@ -37,28 +48,32 @@ export class UserService {
    * @param providerName
    */
   doLogin(providerName: string): Observable<firebase.auth.UserCredential> {
-    const provider: unknown = this.providers.get(providerName);
-    return from(this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider))
+      const provider: unknown = this.providers.get(providerName);
+      return from(this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider))
   }
 
-  /*  /!**
+  doEmailLogin(email: string, pw:string): Observable<any> {
+    return from(this.afAuth.signInWithEmailAndPassword(email, pw).catch((error)=>  error))
+  }
+
+  doEmailLinkLogin(email: string): Observable<void> {
+
+    return from(this.afAuth.sendSignInLinkToEmail(email, this.actionCodeSettings))
+  }
+
+    /**
      * registers no user
      * todo: this ins't set up in the UI
-     * @param value
-     * @param dialogRef
-     *!/
-    doRegister(value, dialogRef: MatDialogRef<any>) {
-      return new Promise<any>((resolve, reject) => {
-        this.afAuth.createUserWithEmailAndPassword(value.email, value.password)
-          .then(res => {
-            this.fetchUserProfile(res.user);
-            dialogRef.close();
-          }, err => {
-            console.log(err);
-            reject(err);
-          });
-      });
-    }*/
+     * @param email
+     * @param pw
+     */
+    doRegister(email: string, pw: string) {
+      return from(this.afAuth.createUserWithEmailAndPassword(email, pw))
+    }
+
+  doResetEmail(email: string) {
+      return from(this.afAuth.sendPasswordResetEmail(email, this.actionCodeSettings).catch((error)=>  error))
+  }
 
   /**
    * logout user, remove profile via profile service

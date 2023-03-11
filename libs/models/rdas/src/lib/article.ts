@@ -17,6 +17,7 @@ export class Article {
   keywords?: {keyword: string}[];
   meshTerms?: MeshTerm[];
   annotations?: PubtatorAnnotation[];
+  epidemiologies?: Epidemiology[];
   sources!: Source[];
   substances?: {name: string}[];
 
@@ -70,6 +71,10 @@ export class Article {
     if(obj.sources) {
       this.sources = obj.sources.map((source: Partial<Source> = {}) => new Source(source));
     }
+
+    if(obj.epidemiologies) {
+      this.epidemiologies = obj.epidemiologies.map((epi: Partial<Epidemiology> = {}) => new Epidemiology(epi));
+    }
   }
 }
 
@@ -92,7 +97,7 @@ constructor(obj: Partial<JournalVolume>) {
 
 export class MeshTerm {
   descriptorName!: string;
-  isMajorTopic?: boolean;
+  majorTopic_YN?: string;
   abbreviation?: string;
   qualifierName?: string;
 
@@ -148,6 +153,19 @@ export class Source {
 
 
 constructor(obj: Partial<Source>) {
+  Object.assign(this, obj);
+}
+}
+
+export class Epidemiology {
+  epidemiology_rate?: string[];
+  epidemiology_type?: string[];
+  ethnicity?: string[];
+  location?: string[];
+  sex?: string[];
+
+
+constructor(obj: Partial<Epidemiology>) {
   Object.assign(this, obj);
 }
 }
