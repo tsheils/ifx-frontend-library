@@ -3,11 +3,9 @@ import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { MatButtonModule } from "@angular/material/button";
 import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
-import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade, UserService } from "@ncats-frontend-library/stores/user-store";
+import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade, UserService, COMMON_CONFIG, FIRESTORESTUB } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
-import { COMMON_CONFIG, FIRESTORESTUB } from "../../../../../../stores/user-store/src/lib/user.service.spec";
-
 import { UnsubscribeModalComponent } from './unsubscribe-modal.component';
 
 describe('UnsubscribeModalComponent', () => {

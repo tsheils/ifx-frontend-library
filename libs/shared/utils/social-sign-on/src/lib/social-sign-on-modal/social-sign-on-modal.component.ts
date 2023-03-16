@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { loginUser } from "@ncats-frontend-library/stores/user-store";
-import { EmailLinkModalComponent } from "../email-link-modal/email-link-modal.component";
 import { EmailSignOnModalComponent } from "../email-sign-on-modal/email-sign-on-modal.component";
 
 
@@ -21,14 +20,6 @@ export class SocialSignOnModalComponent  {
 
   login(provider: string): void {
     this.userFacade.dispatch(loginUser({provider: provider}))
-  }
-
-  openEmailLinkModal() {
-    this.dialog.open(EmailLinkModalComponent, {
-        height: '45vh',
-        width: '35vw',
-      }
-    );
   }
   /**
    * use firebase's email login methods

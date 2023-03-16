@@ -11,7 +11,6 @@ import {
   DiseasesFacade,
   reducer
 } from "@ncats-frontend-library/stores/disease-store";
-import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 import { Apollo } from "apollo-angular";
 
@@ -23,8 +22,9 @@ describe('RdasSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RdasSearchComponent ],
+      declarations: [  ],
       imports: [
+        RdasSearchComponent,
         BrowserAnimationsModule,
         MatFormFieldModule,
         ReactiveFormsModule,

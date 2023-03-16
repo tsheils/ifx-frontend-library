@@ -6,7 +6,7 @@ import { User } from "@ncats-frontend-library/models/utils";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { readFirst } from '@nrwl/angular/testing';
-import { COMMON_CONFIG, FIRESTORESTUB } from "../user.service.spec";
+import { COMMON_CONFIG, FIRESTORESTUB } from "../firebase-stubs";
 
 import * as UsersActions from './users.actions';
 import { UsersEffects } from './users.effects';
@@ -47,7 +47,6 @@ describe('UsersFacade', () => {
 
       @NgModule({
         imports: [
-          NxModule.forRoot(),
           StoreModule.forRoot({}),
           EffectsModule.forRoot([]),
           CustomFeatureModule,

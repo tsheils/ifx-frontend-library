@@ -13,6 +13,7 @@ describe('GraphqlSandboxComponent', () => {
 
     fixture = TestBed.createComponent(GraphqlSandboxComponent);
     component = fixture.componentInstance;
+    component.isBrowser = false
     fixture.detectChanges();
   });
 

@@ -1,6 +1,5 @@
 import {Injectable} from '@angular/core';
 import {AngularFireAuth} from '@angular/fire/compat/auth';
-import { MatDialogRef } from "@angular/material/dialog";
 import { User } from "@ncats-frontend-library/models/utils";
 import firebase from 'firebase/compat/app';
 import {AngularFirestore} from '@angular/fire/compat/firestore';

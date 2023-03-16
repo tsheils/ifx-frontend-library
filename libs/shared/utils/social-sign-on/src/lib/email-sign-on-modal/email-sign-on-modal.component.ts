@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { loginEmailUser, UsersFacade } from "@ncats-frontend-library/stores/user-store";
-import { map } from "rxjs";
 import { ForgotPasswordModalComponent } from "../forgot-password-modal/forgot-password-modal.component";
 import { RegisterModalComponent } from "../register-modal/register-modal.component";
 

@@ -3,55 +3,86 @@
 
 <div class="row graph-holder">
   <div id="3d-graph" class="graph"></div>
-  <div class="width-50 home-component">
-  <div class="rdas-headline">Meeting the Needs of Rare Disease Patients, Clinicians, and Scientists</div>
+  <div class="home-component">
+  <div class="width-50 rdas-headline">Meeting the Needs of Rare Disease Patients, Clinicians, and Scientists</div>
 
-  <div class="rdas-subheadline">
+  <div class="width-50 rdas-subheadline">
     Integrating the latest biomedical data in a structured, standardized, and semantic way
-    to empower the research community in their rare disease research efforts an provide an educational resource to all.
+    to empower the rare disease research community in their efforts, and provide an educational resource to all.
   </div>
 </div>
 </div>
-
-<div class="row centered-row white-background">
-  Learn More <mat-icon>down</mat-icon>
+<a (click)="goToDetails()">
+<div class="primary-background learn-more">
+<div class="row centered-row no-padding learn-more-text">
+  <p>Learn More</p>
 </div>
-
-
-
-  Main Features
-  Integrated information from publications, clinical trials, and grants
-  Diseases standardized with well-known rare disease based controlled vocabularies, GARD, Orphanet, etc.
-  Timely alerts regarding updates generated for subscribers
-  Ease of access via a user-friendly web interface and API
-
-  <div class="row">
-      <mat-card class="full-width">
-        <div class="bottom-border-primary">Comprehensive</div>
-        <div class = "width-50">
-          <h3>Integrated information from publications, clinical trials, and grants</h3>
-        </div>
-        <div class="width-30">
-<img src="/assets/rdas-home/ct.gov-nlm-nih-logo.png" alt="clinicaltrials.gov logo" class="datasource-logo"><br>
-<img src="/assets/rdas-home/grants-logo.png" alt="NIH grants website" class="datasource-logo"><br>
-<img src="/assets/rdas-home/pubmed-logo-blue.svg" alt="pubmed logo" class="datasource-logo">
-        </div>
-      </mat-card>
+<div class="row centered-row top-align no-padding more-arrow">
+  <mat-icon>expand_more</mat-icon>
   </div>
-  <div class="row right-justified-row">
-  <mat-card class="">
-        <div class="mat-card-title bottom-border-primary">Up to Date</div>
-        <div class="mat-card-content">
-         Subscribe to and receive weekly alerts for updates to disease information
-        </div>
-      </mat-card>
+</div>
+</a>
+<div #details class="primary-background">
+  <div class="grid-wrapper">
+    <mat-card class="white-background rdas-card centered">
+      <div class="bottom-border-primary heading-text">Browse comprehensive disease data</div>
+      <div class = "">
+        <h3>Integrated information from publications, clinical trials, and grants</h3>
+      </div>
+      <div class="">
+
+        <img src="/assets/rdas-home/sources/sources.png" alt="sources used" class="datasource-logo"><br>
+
+      </div>
+    </mat-card>
+    <mat-card class="white-background rdas-card centered">
+      <div class="bottom-border-primary heading-text">Subscribe for disease knowledge updates</div>
+      <h3 class="">
+        Subscribe to and receive weekly alerts for updates to disease information
+      </h3>
+    </mat-card>
+    <mat-card class="white-background rdas-card centered">
+      <div class="bottom-border-primary heading-text">Access and analyze the underlying data</div>
+      <h3>
+        Web user interface and GraphQL API for programmatic access
+      </h3>
+      <div class="">
+        <img src="/assets/rdas-home/tools/tools.png" alt="tools used" class="tools-logo"><br>
+      </div>
+    </mat-card>
   </div>
-  <div class="row">
-  <mat-card class="full-width">
-        <div class="bottom-border-primary">Accessible</div>
-        <div>
-          Web user interface and GraphQL API for programatic access
-        </div>
-      </mat-card>
+</div>
+<div class="grid-wrapper annotation-standardization-grid">
+<mat-card class="width-30">
+  <div class="heading-text">Annotated</div>
+  <h3>RDAS data is annotated using a variety of automated learning methods to link disparate data sets</h3>
+  <div class="annotations-column">
+    <img src="/assets/rdas-home/annotations/pubtator.png" alt="Pubtator logo" class="annotations-logo"><br>
+    <img src="/assets/rdas-home/annotations/scispacy-logo-square.png" alt="SciSpacy logo" class="scispacy-logo"><br>
+    <div class="big-logo accent-color-font">BioBERT</div><br>
+  </div>
+<p>Read more about our annotation process here:<br>
+  <a href = "https://rdcu.be/c7G35"
+     target="_blank"
+     rel="noreferrer"
+     aria-label="Link to publication describing annotation process"
+  >Zhu, Q., Nguyễn, ÐT., Sheils, T. et al. Scientific evidence based rare disease research discovery with research funding data in knowledge graph.
+    Orphanet J Rare Dis 16, 483 (2021). https://doi.org/10.1186/s13023-021-02120-9</a>
+</p>
+</mat-card>
+
+  <mat-card class="width-30">
+  <div class="heading-text">Standardized</div>
+  <h3>RDAS data is standardized using the best industry standards</h3>
+    <div class="row centered-row">
+    <div class="">
+      <img src="/assets/rdas-home/standardization/GARD_Logo.svg" alt="tools used" class="standards-logo"><br>
+      <img src="/assets/rdas-home/standardization/hpo.png" alt="tools used" class="standards-logo"><br>
+      <img src="/assets/rdas-home/standardization/omim.jpeg" alt="tools used" class="standards-logo"><br>
+      <img src="/assets/rdas-home/standardization/orphanet.png" alt="tools used" class="standards-logo"><br>
     </div>
+    </div>
+</mat-card>
+
+</div>
 

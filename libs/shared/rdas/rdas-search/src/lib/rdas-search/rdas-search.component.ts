@@ -78,9 +78,6 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
     return option && option.name ? option.name : '';
   }
 
-  search() {
-  }
-
   /**
    * clean up on leaving component
    */

@@ -4,10 +4,9 @@ import { AngularFirestore } from "@angular/fire/compat/firestore";
 import { MatCardModule } from "@angular/material/card";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
-import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade, COMMON_CONFIG, FIRESTORESTUB } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
-import { COMMON_CONFIG, FIRESTORESTUB } from "../../../../../../stores/user-store/src/lib/user.service.spec";
 
 import { DiseaseListCardComponent } from './disease-list-card.component';
 
@@ -17,7 +16,7 @@ describe('DiseaseListCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DiseaseListCardComponent ],
+      declarations: [  ],
       imports: [
         MatCardModule,
         SharedRdasSubscribeButtonModule,
@@ -25,7 +24,8 @@ describe('DiseaseListCardComponent', () => {
         EffectsModule.forRoot([]),
         StoreModule.forFeature(USERS_FEATURE_KEY, reducer),
         EffectsModule.forFeature([UsersEffects]),
-        AngularFireModule.initializeApp(COMMON_CONFIG)
+        AngularFireModule.initializeApp(COMMON_CONFIG),
+        DiseaseListCardComponent
       ],
       providers: [
         UsersFacade,

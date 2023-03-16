@@ -1,13 +1,12 @@
 <div class ="search-row">
   <mat-form-field class = "typeahead-field search" appearance="outline" subscriptSizing="dynamic" [color]="'primary'">
       <input matInput
-             (keydown.enter)="search()"
              aria-label="Search for a rare disease"
              [placeholder]="'Search for a rare disease'"
              [formControl]=searchFormCtl
-             [matAutocomplete]="auto">
+             [matAutocomplete]="autoOpts">
     <mat-autocomplete
-      #auto="matAutocomplete"
+      #autoOpts="matAutocomplete"
         [displayWith]="displayFn"
         (optionSelected)="selectDisease($event)"
         [autoActiveFirstOption]="true"
@@ -16,6 +15,6 @@
           {{option.name}}
         </mat-option>
       </mat-autocomplete>
-    <button mat-icon-button matSuffix aria-label="search" (click)="search()" [color]="'primary'"><mat-icon>search</mat-icon></button>
+      <mat-icon>search</mat-icon>
   </mat-form-field>
   </div>

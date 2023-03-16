@@ -1,10 +1,15 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { AngularFireModule } from "@angular/fire/compat";
 import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { reducer, USERS_FEATURE_KEY, UsersEffects } from "@ncats-frontend-library/stores/user-store";
+import {
+  COMMON_CONFIG,
+  FIRESTORESTUB,
+  reducer,
+  USERS_FEATURE_KEY,
+  UsersEffects
+} from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
-import { COMMON_CONFIG, FIRESTORESTUB } from "../../../../../../stores/user-store/src/lib/user.service.spec";
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
 import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
 
@@ -18,15 +23,9 @@ describe('IdentifiersDisplayComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [ IdentifiersDisplayComponent, DiseaseHeaderComponent ],
       imports: [
-        SharedRdasSubscribeButtonModule,
-        StoreModule.forRoot({},),
-        EffectsModule.forRoot([]),
-        StoreModule.forFeature(USERS_FEATURE_KEY, reducer),
-        EffectsModule.forFeature([UsersEffects]),
-        AngularFireModule.initializeApp(COMMON_CONFIG)
-      ],
+        SharedRdasSubscribeButtonModule
+        ],
       providers: [
-        { provide: AngularFirestore, useValue: FIRESTORESTUB }
       ]
     })
     .compileComponents();

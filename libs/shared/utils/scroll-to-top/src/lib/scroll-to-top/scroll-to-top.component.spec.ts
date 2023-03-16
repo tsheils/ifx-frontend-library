@@ -1,7 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 
 import { ScrollToTopComponent } from './scroll-to-top.component';
-import {MaterialModule} from '../../../assets/material/material.module';
 import {RouterTestingModule} from '@angular/router/testing';
 
 describe('ScrollToTopComponent', () => {
@@ -12,8 +13,11 @@ describe('ScrollToTopComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         RouterTestingModule,
-        MaterialModule],
-      declarations: [ ScrollToTopComponent ]
+        MatButtonModule,
+        MatIconModule,
+        ScrollToTopComponent
+      ],
+      declarations: [  ]
     })
     .compileComponents();
   }));
