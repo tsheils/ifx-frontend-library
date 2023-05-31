@@ -1,14 +1,21 @@
 import { ChangeDetectorRef, Component, Input, OnChanges, OnDestroy, SimpleChanges } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { User } from "@ncats-frontend-library/models/utils";
 import { UsersFacade, logoutUser } from "@ncats-frontend-library/stores/user-store";
 import { Subject } from "rxjs";
 import { SocialSignOnModalComponent } from "../social-sign-on-modal/social-sign-on-modal.component";
+import { RouterLink } from "@angular/router";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: 'ncats-frontend-library-social-sign-on-button',
-  templateUrl: './social-sign-on-button.component.html',
-  styleUrls: ['./social-sign-on-button.component.scss']
+    selector: 'ncats-frontend-library-social-sign-on-button',
+    templateUrl: './social-sign-on-button.component.html',
+    styleUrls: ['./social-sign-on-button.component.scss'],
+    standalone: true,
+    imports: [NgIf, MatMenuModule, MatIconModule, MatButtonModule, RouterLink, MatDialogModule]
 })
 export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
 

@@ -132,7 +132,6 @@ export class DiseasesEffects {
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-          //  map(([diseaseData, trialsData]: [any, any]) => {
             map(([diseaseData, articleData, projectsData, trialsData]: [any, any, any, any]) => {
               if(diseaseData && diseaseData.data) {
                 const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, projectsData, trialsData);
@@ -236,27 +235,27 @@ export class DiseasesEffects {
         let qParams;
         if(!tree) {
           if(params["parentId"]) {
-           // console.log("no tree, maybe page, parent id")
+            console.log("no tree, maybe page, parent id")
             query = FETCHPATH;
             qParams = { searchString: params["parentId"] };
           } else {
-          //  console.log("no tree, maybe page, no parent id")
+            console.log("no tree, maybe page, no parent id")
             query = FETCHROOT;
             qParams = undefined;
           }
         } else {
           if(params["pageIndex"]) {
-           // console.log("tree, page, no parent id")
+            console.log("tree, page, no parent id")
             query = FETCHROOT;
             qParams = undefined;
           } else {
             if(params["parentId"]) {
-            //  console.log("tree, no page, parent id")
+              console.log("tree, no page, parent id")
               DISEASEQUERYPARAMETERS.where = { GardId: params["parentId"] };
               query = CATEGORYTREEBRANCH;
               qParams = DISEASEQUERYPARAMETERS;
             } else {
-             // console.log("tree, no page, no parent id")
+              console.log("tree, no page, no parent id")
               query = FETCHROOT;
               qParams = undefined;
             }
@@ -266,7 +265,7 @@ export class DiseasesEffects {
           .pipe(
             map((res: any) => {
               if(res && res.data) {
-//                console.log(res);
+                console.log(res);
                 let diseaseArr;
                 if(res.data.treeBranch) {
                    diseaseArr = res.data.treeBranch[0].nodes

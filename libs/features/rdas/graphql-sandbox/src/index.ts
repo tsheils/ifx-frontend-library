@@ -1,1 +1,1 @@
-export * from './lib/features-rdas-graphql-sandbox.module';
+export * from './lib/graphql-sandbox/graphql-sandbox.component';

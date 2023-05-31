@@ -1,8 +1,8 @@
-<div class = "content-wrapper">
+<div class = "content-wrapper"  #contentWrapper cdkScrollable>
   <header>
     <ncats-frontend-library-header-template [links]="links">
       <div class="left-options">
-        <a routerLink="/diseases">
+        <a routerLink="/">
       <img src="/assets/rdas_final_gradient.svg" alt="rdas logo" class="rdas-logo">
         </a>
       </div>
@@ -12,12 +12,10 @@
       </div>
     </ncats-frontend-library-header-template>
   </header>
-  <main role ="ncats-main">
-    <div class="main-content">
-<!--
+  <main role ="ncats-main"  >
+    <div class="main-content" >
       <ncats-frontend-library-loading-spinner [isLoaded]="!loaded"></ncats-frontend-library-loading-spinner>
--->
-      <router-outlet></router-outlet>
+      <router-outlet ></router-outlet>
     </div>
   </main>
   <footer>

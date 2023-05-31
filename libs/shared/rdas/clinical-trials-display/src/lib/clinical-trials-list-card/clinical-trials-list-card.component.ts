@@ -1,12 +1,18 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
 import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import { MatListModule } from "@angular/material/list";
+import { MatTabsModule } from "@angular/material/tabs";
+import { NgIf, NgFor } from "@angular/common";
+import { MatCardModule } from "@angular/material/card";
 
 @Component({
-  selector: 'ncats-frontend-library-clinical-trials-list-card',
-  templateUrl: './clinical-trials-list-card.component.html',
-  styleUrls: ['./clinical-trials-list-card.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'ncats-frontend-library-clinical-trials-list-card',
+    templateUrl: './clinical-trials-list-card.component.html',
+    styleUrls: ['./clinical-trials-list-card.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
+    imports: [MatCardModule, NgIf, MatTabsModule, NgFor, MatListModule]
 })
 export class ClinicalTrialsListCardComponent implements OnInit {
   @Input() trial!: ClinicalTrial;

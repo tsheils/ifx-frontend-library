@@ -28,7 +28,7 @@ export const initialState: State = usersAdapter.getInitialState({
   loaded: false,
 });
 
-const usersReducer = createReducer(
+export const usersReducer = createReducer(
   initialState,
   on(
     UsersActions.loginUserSuccess,

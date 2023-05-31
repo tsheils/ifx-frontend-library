@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, RouterModule } from "@angular/router";
+import { RouterModule } from "@angular/router";
 import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
 import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { SharedSocialSignOnModule } from "@ncats-frontend-library/shared/utils/social-sign-on";
@@ -20,7 +20,6 @@ describe('AppComponent', () => {
       providers: [
         {provide: DiseasesFacade, useValue: {}},
         {provide: UsersFacade, useValue: {}},
-        {provide: ActivatedRoute, useValue: {}}
       ]
     }).compileComponents();
   });

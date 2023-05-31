@@ -7,20 +7,35 @@ import {
   OnDestroy,
   OnInit
 } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
-import { MatSnackBar } from "@angular/material/snack-bar";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Subscription, User } from "@ncats-frontend-library/models/utils";
 import { updateUserSubscriptions, UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 import { AboutSubscribeModalComponent } from "../about-subscribe-modal/about-subscribe-modal.component";
 import { UnsubscribeModalComponent } from "../unsubscribe-modal/unsubscribe-modal.component";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { MatButtonModule } from "@angular/material/button";
+import { NgIf } from "@angular/common";
 
 @Component({
-  selector: "ncats-frontend-library-subscribe-button",
-  templateUrl: "./subscribe-button.component.html",
-  styleUrls: ["./subscribe-button.component.scss"],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "ncats-frontend-library-subscribe-button",
+    templateUrl: "./subscribe-button.component.html",
+    styleUrls: ["./subscribe-button.component.scss"],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgIf,
+        MatButtonModule,
+        MatMenuModule,
+        MatIconModule,
+        MatCheckboxModule,
+      MatDialogModule,
+      MatSnackBarModule
+    ],
 })
 export class SubscribeButtonComponent implements OnInit, OnDestroy {
   /**

@@ -1,1 +1,2 @@
-export * from './lib/features-rdas-rdas-subscriptions.module';
+export * from './lib/rdas-subscriptions/rdas-subscriptions.component';
+

@@ -2,11 +2,14 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription, User } from "@ncats-frontend-library/models/utils";
 import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { Subject, takeUntil } from "rxjs";
+import { DiseaseSubscriptionListComponent } from "../../../../../../shared/rdas/disease-display/src/lib/disease-subscription-list/disease-subscription-list.component";
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-subscriptions',
-  templateUrl: './rdas-subscriptions.component.html',
-  styleUrls: ['./rdas-subscriptions.component.scss'],
+    selector: 'ncats-frontend-library-rdas-subscriptions',
+    templateUrl: './rdas-subscriptions.component.html',
+    styleUrls: ['./rdas-subscriptions.component.scss'],
+    standalone: true,
+    imports: [DiseaseSubscriptionListComponent],
 })
 export class RdasSubscriptionsComponent implements OnInit, OnDestroy {
   /**

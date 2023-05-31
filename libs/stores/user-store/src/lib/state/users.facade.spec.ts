@@ -1,21 +1,17 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { User } from "@ncats-frontend-library/models/utils";
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { User } from '@ncats-frontend-library/models/utils';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
-import { readFirst } from '@nrwl/angular/testing';
-import { COMMON_CONFIG, FIRESTORESTUB } from "../firebase-stubs";
+import { readFirst } from '@nx/angular/testing';
+import { COMMON_CONFIG, FIRESTORESTUB } from '../firebase-stubs';
 
 import * as UsersActions from './users.actions';
 import { UsersEffects } from './users.effects';
 import { UsersFacade } from './users.facade';
-import {
-  reducer,
-  State,
-  USERS_FEATURE_KEY
-} from "./users.reducer";
+import { reducer, State, USERS_FEATURE_KEY } from './users.reducer';
 
 interface TestSchema {
   users: State;
@@ -27,7 +23,7 @@ describe('UsersFacade', () => {
   const createUsersEntity = (uid: string, displayName = ''): User => ({
     uid,
     displayName: displayName || `name-${uid}`,
-    subscriptions: []
+    subscriptions: [],
   });
 
   describe('used in NgModule', () => {
@@ -36,11 +32,11 @@ describe('UsersFacade', () => {
         imports: [
           StoreModule.forFeature(USERS_FEATURE_KEY, reducer),
           EffectsModule.forFeature([UsersEffects]),
-          AngularFireModule.initializeApp(COMMON_CONFIG)
+          AngularFireModule.initializeApp(COMMON_CONFIG),
         ],
         providers: [
           UsersFacade,
-        { provide: AngularFirestore, useValue: FIRESTORESTUB }
+          { provide: AngularFirestore, useValue: FIRESTORESTUB },
         ],
       })
       class CustomFeatureModule {}
@@ -51,9 +47,7 @@ describe('UsersFacade', () => {
           EffectsModule.forRoot([]),
           CustomFeatureModule,
         ],
-        providers: [
-          { provide: AngularFirestore, useValue: FIRESTORESTUB }
-        ]
+        providers: [{ provide: AngularFirestore, useValue: FIRESTORESTUB }],
       })
       class RootModule {}
       TestBed.configureTestingModule({ imports: [RootModule] });

@@ -9,9 +9,6 @@ import { MatIconModule } from "@angular/material/icon";
   template: `
     <a href="https://www.hhs.gov/web/policies-and-standards/hhs-web-policies/disclaimer/index.html" title="Exit Disclaimer" class="exit-disclaimer">
      <mat-icon class="exit-disclaimer">open_in_new</mat-icon>
-<!--
-      <img src="./assets/external-link/exit_disclaimer.png" alt="exit disclaimer icon" class="icon-image">
--->
     </a>
   `,
   styles: [`

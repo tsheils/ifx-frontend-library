@@ -1,8 +1,13 @@
 import { Component, ViewEncapsulation } from "@angular/core";
-import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators } from "@angular/forms";
+import { AbstractControl, FormControl, FormGroup, ValidatorFn, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { registerEmailUser, UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { map } from "rxjs";
+import { NgIf } from "@angular/common";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 /**
  * Set the regular expression for a secure password
@@ -26,10 +31,12 @@ import { map } from "rxjs";
 }
 
 @Component({
-  selector: 'ncats-frontend-library-register-modal',
-  templateUrl: './register-modal.component.html',
-  styleUrls: ['./register-modal.component.scss'],
-  encapsulation: ViewEncapsulation.None
+    selector: 'ncats-frontend-library-register-modal',
+    templateUrl: './register-modal.component.html',
+    styleUrls: ['./register-modal.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    standalone: true,
+    imports: [MatButtonModule, MatIconModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, NgIf]
 })
 export class RegisterModalComponent {
 

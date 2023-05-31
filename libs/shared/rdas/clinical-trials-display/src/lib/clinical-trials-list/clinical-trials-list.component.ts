@@ -1,11 +1,15 @@
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
-import { PageEvent } from "@angular/material/paginator";
+import { PageEvent, MatPaginatorModule } from "@angular/material/paginator";
 import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import { ClinicalTrialsListCardComponent } from "../clinical-trials-list-card/clinical-trials-list-card.component";
+import { NgIf, NgFor } from "@angular/common";
 
 @Component({
-  selector: 'ncats-frontend-library-clinical-trials-list',
-  templateUrl: './clinical-trials-list.component.html',
-  styleUrls: ['./clinical-trials-list.component.scss']
+    selector: 'ncats-frontend-library-clinical-trials-list',
+    templateUrl: './clinical-trials-list.component.html',
+    styleUrls: ['./clinical-trials-list.component.scss'],
+    standalone: true,
+    imports: [NgIf, MatPaginatorModule, NgFor, ClinicalTrialsListCardComponent]
 })
 export class ClinicalTrialsListComponent implements OnChanges {
   @Input() trials!: ClinicalTrial[];

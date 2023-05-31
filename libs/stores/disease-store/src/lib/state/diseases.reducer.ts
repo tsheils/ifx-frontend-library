@@ -37,12 +37,18 @@ export const initialState: State = diseasesAdapter.getInitialState({
 export const diseasesReducer = createReducer(
   initialState,
   on(DiseasesActions.init,
+    DiseasesActions.loadDiseases,
+    DiseasesActions.fetchDisease,
     DiseasesActions.loading,
-    (state) => ({
-    ...state,
-    loaded: false,
-    error: null,
-  })),
+    (state) => {
+    console.log("gdfgdfdgfdg")
+
+    return {
+        ...state,
+        loaded: false,
+        error: null,
+      }
+    }),
 
   on(DiseasesActions.loadDiseaseTreeSuccess, (state, {diseases}) =>({
     ...state, tree: diseases

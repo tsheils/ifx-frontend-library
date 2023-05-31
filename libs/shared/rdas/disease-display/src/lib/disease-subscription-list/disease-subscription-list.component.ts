@@ -4,14 +4,14 @@ import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Subscription } from "@ncats-frontend-library/models/utils";
-import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
+
 import { Subject } from "rxjs";
 import { DiseaseListCardComponent } from "../disease-list-card/disease-list-card.component";
 
 @Component({
   selector: 'ncats-frontend-library-disease-subscription-list',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, DiseaseListCardComponent, SharedRdasSubscribeButtonModule],
+  imports: [CommonModule, MatCardModule, MatIconModule, DiseaseListCardComponent],
   templateUrl: './disease-subscription-list.component.html',
   styleUrls: ['./disease-subscription-list.component.scss']
 })

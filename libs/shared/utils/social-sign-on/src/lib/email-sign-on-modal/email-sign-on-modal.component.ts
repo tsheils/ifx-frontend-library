@@ -1,14 +1,28 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { loginEmailUser, UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { ForgotPasswordModalComponent } from "../forgot-password-modal/forgot-password-modal.component";
 import { RegisterModalComponent } from "../register-modal/register-modal.component";
+import { NgIf } from '@angular/common';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-email-sign-on-modal',
-  templateUrl: './email-sign-on-modal.component.html',
-  styleUrls: ['./email-sign-on-modal.component.scss'],
+    selector: 'ncats-frontend-library-email-sign-on-modal',
+    templateUrl: './email-sign-on-modal.component.html',
+    styleUrls: ['./email-sign-on-modal.component.scss'],
+    standalone: true,
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgIf,
+    ],
 })
 export class EmailSignOnModalComponent {
   loginError = '';

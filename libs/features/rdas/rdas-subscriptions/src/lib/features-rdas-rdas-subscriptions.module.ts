@@ -13,11 +13,11 @@ const ROUTES: Routes = [
 
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule.forChild(ROUTES),
-    DiseaseSubscriptionListComponent
-  ],
-  declarations: [RdasSubscriptionsComponent]
+    imports: [
+        CommonModule,
+        RouterModule.forChild(ROUTES),
+        DiseaseSubscriptionListComponent,
+        RdasSubscriptionsComponent
+    ]
 })
 export class FeaturesRdasRdasSubscriptionsModule {}

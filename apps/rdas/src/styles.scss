@@ -38,6 +38,14 @@ body {
   color: #ffffff;
 }*/
 
+.primary-color-font {
+  color: mat.get-color-from-palette($app-primary);
+}
+
+.accent-color-font {
+  color: mat.get-color-from-palette($app-accent);
+}
+
 .toolbar-template {
   color: mat.get-color-from-palette($app-primary);
   padding-bottom:10px;
@@ -61,7 +69,7 @@ body {
   display: flex;
   flex-flow: row wrap;
   box-sizing: border-box;
-  padding-bottom: 2vh;
+  padding-top: 2vh;
 }
 
 .centered-row {
@@ -90,6 +98,11 @@ body {
 
 .top-align {
   align-items: start;
+  align-content: start;
+}
+
+.no-padding {
+  padding: 0
 }
 
 .width-75 {
@@ -106,6 +119,11 @@ body {
   flex-basis: 25%;
 }
 
+.width-60 {
+  width:60%;
+  flex-basis: 60%;
+}
+
 .width-50 {
   width:50%;
   flex-basis: 50%;
@@ -113,6 +131,11 @@ body {
 
 .width-30 {
   flex-basis: 30%;
+}
+
+.width-5 {
+  width:5%;
+  flex-basis: 5%;
 }
 
 .fill-container {
@@ -143,4 +166,13 @@ span.list-item-content {
 
 .clickable-area {
   cursor: pointer;
+}
+
+.heading-text {
+  font-size: 1.5rem;
+  text-align: center;
+}
+
+.rdas-card {
+  padding: 2vh 2vw;
 }

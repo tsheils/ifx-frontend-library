@@ -1,4 +1,4 @@
-<div class="scroll-to-top" [ngClass]="{'show-scroll': navIsFixed}">
+<div class="scroll-to-top" [ngClass]="{'show-scroll': navIsFixed}" cdkScrollable>
   <button  mat-fab [color]= color (click)="scrollToTop()" aria-label="Return to top">
     <mat-icon> arrow_upward </mat-icon>
   </button>

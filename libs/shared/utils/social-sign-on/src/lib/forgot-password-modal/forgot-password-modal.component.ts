@@ -1,12 +1,20 @@
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { FormControl, FormGroup, Validators } from "@angular/forms";
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from "@angular/forms";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { resetPasswordEmail, UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { MatCardModule } from "@angular/material/card";
+import { NgIf } from "@angular/common";
+import { MatInputModule } from "@angular/material/input";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from "@angular/material/button";
 
 @Component({
-  selector: 'ncats-frontend-library-forgot-password-modal',
-  templateUrl: './forgot-password-modal.component.html',
-  styleUrls: ['./forgot-password-modal.component.scss']
+    selector: 'ncats-frontend-library-forgot-password-modal',
+    templateUrl: './forgot-password-modal.component.html',
+    styleUrls: ['./forgot-password-modal.component.scss'],
+    standalone: true,
+    imports: [MatButtonModule, MatIconModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, NgIf, MatCardModule]
 })
 export class ForgotPasswordModalComponent implements OnInit, OnDestroy{
   loginError = '';
@@ -32,7 +40,6 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy{
     })
 
     this.userFacade.email$.subscribe((res) => {
-        console.log(res);
         if(res === 'reset') {
           this.emailSent = true;
           this.signOnForm.reset();

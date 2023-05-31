@@ -3,7 +3,6 @@ import { MatIconModule } from "@angular/material/icon";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ActivatedRoute } from "@angular/router";
 
 import { HeaderTemplateComponent } from './header-template.component';
 
@@ -20,7 +19,6 @@ describe('HeaderTemplateComponent', () => {
         MatToolbarModule,
         MatIconModule
       ],
-      providers: [{ provide: ActivatedRoute, useValue: {}}]
     })
     .compileComponents();
 

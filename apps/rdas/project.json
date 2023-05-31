@@ -1,14 +1,17 @@
 {
   "name": "rdas",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
   "sourceRoot": "apps/rdas/src",
   "prefix": "rdas",
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
-        "outputPath": "dist/apps/rdas",
+        "outputPath": "dist/rdas/browser",
         "index": "apps/rdas/src/index.html",
         "main": "apps/rdas/src/main.ts",
         "polyfills": "apps/rdas/src/polyfills.ts",
@@ -26,12 +29,21 @@
             "input": "libs/shared/utils/external-link/src/assets",
             "glob": "**/*",
             "output": "assets/external-link"
+          },
+          {
+            "input": "libs/features/rdas/rdas-home/src/assets",
+            "glob": "**/*",
+            "output": "assets/rdas-home"
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": ["libs/styles/src/styles/"]
+          "includePaths": [
+            "libs/styles/src/styles/"
+          ]
         },
-        "styles": ["apps/rdas/src/styles.scss"],
+        "styles": [
+          "apps/rdas/src/styles.scss"
+        ],
         "scripts": []
       },
       "configurations": {
@@ -86,18 +98,88 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": ["apps/rdas/**/*.ts", "apps/rdas/**/*.html"]
+        "lintFilePatterns": [
+          "apps/rdas/**/*.ts",
+          "apps/rdas/**/*.html"
+        ]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/rdas"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/apps/rdas"
+      ],
       "options": {
         "jestConfig": "apps/rdas/jest.config.ts",
         "passWithNoTests": true
       }
+    },
+    "server": {
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/rdas/server",
+        "main": "apps/rdas/server.ts",
+        "tsConfig": "apps/rdas/tsconfig.server.json",
+        "stylePreprocessorOptions": {
+          "includePaths": [
+            "libs/styles/src/styles/"
+          ]
+        },
+        "inlineStyleLanguage": "scss"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media",
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas/src/environments/environment.ts",
+              "with": "apps/rdas/src/environments/environment.prod.ts"
+            }
+          ]
+        },
+        "development": {
+          "buildOptimizer": false,
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false,
+          "vendorChunk": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve-ssr": {
+      "executor": "@nguniversal/builders:ssr-dev-server",
+      "configurations": {
+        "development": {
+          "browserTarget": "rdas:build:development",
+          "serverTarget": "rdas:server:development"
+        },
+        "production": {
+          "browserTarget": "rdas:build:production",
+          "serverTarget": "rdas:server:production"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "prerender": {
+      "executor": "@nguniversal/builders:prerender",
+      "options": {
+        "guessRoutes": false,
+        "routesFile": "./apps/rdas/routes.txt"
+      },
+      "configurations": {
+        "production": {
+          "browserTarget": "rdas:build:production",
+          "serverTarget": "rdas:server:production"
+        },
+        "development": {
+          "browserTarget": "rdas:build:development",
+          "serverTarget": "rdas:server:development"
+        }
+      },
+      "defaultConfiguration": "production"
     }
   },
   "tags": []

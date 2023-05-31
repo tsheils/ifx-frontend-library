@@ -18,7 +18,6 @@ export const getUsersError = createSelector(
 export const getEmail = createSelector(
   getUsersState,
   (state: State) => {
-    console.log(state);
     return state.email
   }
 );

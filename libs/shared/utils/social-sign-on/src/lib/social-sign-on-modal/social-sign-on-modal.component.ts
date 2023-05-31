@@ -3,12 +3,17 @@ import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { loginUser } from "@ncats-frontend-library/stores/user-store";
 import { EmailSignOnModalComponent } from "../email-sign-on-modal/email-sign-on-modal.component";
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 
 @Component({
-  selector: 'ncats-frontend-library-social-sign-on-modal',
-  templateUrl: './social-sign-on-modal.component.html',
-  styleUrls: ['./social-sign-on-modal.component.scss']
+    selector: 'ncats-frontend-library-social-sign-on-modal',
+    templateUrl: './social-sign-on-modal.component.html',
+    styleUrls: ['./social-sign-on-modal.component.scss'],
+    standalone: true,
+    imports: [MatButtonModule, MatIconModule, MatListModule]
 })
 export class SocialSignOnModalComponent  {
   constructor(

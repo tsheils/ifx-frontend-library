@@ -1,10 +1,10 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Disease } from "@ncats-frontend-library/models/rdas";
+import { Disease } from '@ncats-frontend-library/models/rdas';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
-import { readFirst } from '@nrwl/angular/testing';
-import { Apollo } from "apollo-angular";
+import { readFirst } from '@nx/angular/testing';
+import { Apollo } from 'apollo-angular';
 
 import * as DiseasesActions from './diseases.actions';
 import { DiseasesEffects } from './diseases.effects';
@@ -31,7 +31,7 @@ describe('DiseasesFacade', () => {
     epiCount: 0,
     nonEpiCount: 0,
     projectCount: 0,
-    clinicalTrialsCount: 0
+    clinicalTrialsCount: 0,
   });
 
   describe('used in NgModule', () => {
@@ -51,9 +51,7 @@ describe('DiseasesFacade', () => {
           EffectsModule.forRoot([]),
           CustomFeatureModule,
         ],
-        providers: [
-          Apollo
-        ]
+        providers: [Apollo],
       })
       class RootModule {}
       TestBed.configureTestingModule({ imports: [RootModule] });

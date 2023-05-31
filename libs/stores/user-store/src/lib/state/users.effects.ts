@@ -62,7 +62,6 @@ export class UsersEffects {
               console.log(res);
               if (res.code) {
                const errMessage: string = this._getErrorMesssage(res.code);
-                console.log(res.code)
                 return UsersActions.loginEmailUserFailure({ error: errMessage })
               } else {
                 if (res.user) {
@@ -137,7 +136,6 @@ resetEmailPassword = createEffect(() =>
               console.log(res);
               if (res && res.code) {
                 const errMessage: string = this._getErrorMesssage(res.code);
-                console.log(res.code)
                 return UsersActions.loginEmailUserFailure({ error: errMessage })
               } else  {
                 console.log("success");

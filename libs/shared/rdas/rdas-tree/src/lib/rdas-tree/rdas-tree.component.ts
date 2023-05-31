@@ -11,7 +11,8 @@ import {
 } from "@angular/material/tree";
 import { NavigationExtras, Router } from "@angular/router";
 import { DiseaseNode } from "@ncats-frontend-library/models/rdas";
-import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
+import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
+
 import { BehaviorSubject } from "rxjs";
 
 /** Flat tree item node with expandable and level information */
@@ -23,7 +24,7 @@ export class FlatDiseaseNode extends DiseaseNode {
 @Component({
   selector: 'ncats-frontend-library-rdas-tree',
   standalone: true,
-  imports: [CommonModule, MatTreeModule, MatIconModule, MatButtonModule, MatCardModule, SharedUtilsLoadingSpinnerModule],
+  imports: [CommonModule, MatTreeModule, MatIconModule, MatButtonModule, MatCardModule, LoadingSpinnerComponent],
   templateUrl: './rdas-tree.component.html',
   styleUrls: ['./rdas-tree.component.scss'],
 })
@@ -113,6 +114,7 @@ export class RdasTreeComponent {
     } else {
       this.treeControl.expand(event);
     }
+    this.loading = false;
     this.changeRef.detectChanges()
 
     /*    if(event.children && event.children.length) {

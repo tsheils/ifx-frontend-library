@@ -1,10 +1,16 @@
 import { ChangeDetectorRef, Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator } from "@angular/material/paginator";
+import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { NavigationExtras, Router } from "@angular/router";
 import { Disease, DiseaseNode } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
-import { clearTypeahead, DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
+import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
 import { Subject, takeUntil } from "rxjs";
+import { ScrollToTopComponent } from "@ncats-frontend-library/shared/utils/scroll-to-top";
+import { DiseaseListComponent } from "@ncats-frontend-library/shared/rdas/disease-display";
+import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
+import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { RdasTreeComponent } from "@ncats-frontend-library/shared/rdas/rdas-tree";
+import { NgIf } from "@angular/common";
 
 /**
  * navigation options to merge query parameters that are added on in navigation/query/facets/pagination
@@ -13,10 +19,14 @@ const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge'
 };
 
+
+
 @Component({
-  selector: 'ncats-frontend-library-rdas-browse',
-  templateUrl: './rdas-browse.component.html',
-  styleUrls: ['./rdas-browse.component.scss']
+    selector: 'ncats-frontend-library-rdas-browse',
+    templateUrl: './rdas-browse.component.html',
+    styleUrls: ['./rdas-browse.component.scss'],
+    standalone: true,
+    imports: [NgIf, RdasTreeComponent, RdasSearchComponent, MatPaginatorModule, LoadingSpinnerComponent, DiseaseListComponent, ScrollToTopComponent]
 })
 export class RdasBrowseComponent implements OnInit {
 
@@ -64,7 +74,7 @@ export class RdasBrowseComponent implements OnInit {
           }
         });
 
-    this.diseaseFacade.loaded$.subscribe(res => {
+    this.diseaseFacade.loaded$.pipe().subscribe(res => {
       this.loading = res;
     });
 
