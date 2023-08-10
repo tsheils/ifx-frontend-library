@@ -15,62 +15,15 @@ export const ARTICLEFIELDS = `
     title
   }
 `;
-
-/*
 export const FETCHARTICLESQUERY = gql`
 query Articles(
+  $gardWhere: GARDWhere,
   $epiWhere: ArticleWhere,
   $nonEpiWhere: ArticleWhere,
   $epiOptions: ArticleOptions,
   $nonEpiOptions: ArticleOptions
 ) {
-  _epiCount: articlesAggregate(where: $epiWhere) {
-    count
-  }
-  _nonEpiCount: articlesAggregate(where: $nonEpiWhere) {
-    count
-  }
-  epiArticles: articles(
-    options: $epiOptions
-  where: $epiWhere
-) {
-    ...articleFields
-    authorsWrote {
-      firstName
-      lastName
-      fullName
-    }
-    meshTermsMeshTermForAggregate {
-      count
-    }
-  }
-  nonEpiArticles: articles(
-    options: $nonEpiOptions
-  where: $nonEpiWhere
-) {
-    ...articleFields
-    authorsWrote {
-      firstName
-      lastName
-      fullName
-    }
-    meshTermsMeshTermForAggregate {
-      count
-    }
-  }
-}
-${ARTICLEFIELDS}
-`;
-*/
-export const FETCHARTICLESQUERY = gql`
-query Articles(
-  $gardWhere: DiseaseWhere,
-  $epiWhere: ArticleWhere,
-  $nonEpiWhere: ArticleWhere,
-  $epiOptions: ArticleOptions,
-  $nonEpiOptions: ArticleOptions
-) {
-    articles:diseases(where: $gardWhere) {
+    articles:gards(where: $gardWhere) {
         _epiCount: mentionedInArticlesAggregate(where: $epiWhere) {
             count
         }
@@ -87,13 +40,13 @@ query Articles(
                 lastName
                 fullName
             }
-          #epidemiologies: epidemiologyAnnotationsEpidemiologyAnnotationFor {
-          #  epidemiology_rate
-          #  epidemiology_type
-          #  ethnicity
-          #  location
-          #  sex
-          #}
+          epidemiologies: epidemiologyAnnotationsEpidemiologyAnnotationFor {
+            epidemiology_rate
+           epidemiology_type
+            ethnicity
+           location
+           sex
+          }
           journals: appearsInJournalVolumes {
             dateOfPublication
             printPublicationDate
@@ -102,8 +55,8 @@ query Articles(
               title
             }
           }
-          diseases: diseasesMentionedIn {
-            gardId: gard_id
+          diseases: gardsmentionedIn {
+            gardId: GardId
             name
           }
           sources: fullTextUrlsContentFor {
@@ -131,6 +84,7 @@ query Articles(
           }
           substances: substancesSubstanceAnnotatedByPubmed {
             name
+            registryNumber
           }
         }
         nonEpiArticles: mentionedInArticles(
@@ -151,8 +105,8 @@ query Articles(
               title
             }
           }
-          diseases: diseasesMentionedIn {
-            gardId: gard_id
+          diseases: gardsmentionedIn {
+            gardId: GardId
             name
           }
           sources: fullTextUrlsContentFor {
@@ -176,7 +130,7 @@ query Articles(
             infons_identifier
             infons_type
             type
-            text
+           # text
           }
           substances: substancesSubstanceAnnotatedByPubmed {
             name
@@ -190,7 +144,7 @@ ${ARTICLEFIELDS}
 
 
 export const ARTICLEVARIABLES: {
-  gardWhere: {gard_id?: null | string }
+  gardWhere: {GardId?: null | string }
   epiWhere: {
         isEpi?: null | string | boolean
   },
@@ -200,7 +154,7 @@ export const ARTICLEVARIABLES: {
   },
   meshTermsMeshTermForEpiOptions?: {limit?: number},
   nonEpiWhere: {
-    isEpi?: null | string
+    isEpi?: null | boolean
   },
   nonEpiOptions?: {
     limit?: number,
@@ -209,9 +163,9 @@ export const ARTICLEVARIABLES: {
 
   meshTermsMeshTermForNonEpiOptions?: {limit: number}
 } = {
-  gardWhere: {gard_id: null},
+  gardWhere: {GardId: null},
   epiWhere: {
-        isEpi:  'Y'
+        isEpi:  true
   },
   epiOptions: {
     limit: 10,
@@ -222,7 +176,7 @@ export const ARTICLEVARIABLES: {
     ]
   },
   nonEpiWhere: {
-        isEpi: null
+        isEpi: false
   },
   meshTermsMeshTermForEpiOptions: {limit: 10},
   nonEpiOptions: {
@@ -237,9 +191,9 @@ export const ARTICLEVARIABLES: {
 }
 
 export const FETCHARTICLECOUNTS = gql`
-query ArticleCount($diseasesWhere: DiseaseWhere) {
+query ArticleCount($diseasesWhere: GARDWhere) {
   diseases(where: $diseasesWhere) {
-    gard_id
+    GardId
     mentionedInArticlesAggregate {
       count
     }

@@ -1,4 +1,4 @@
-<div class="article-card-display">
+  <mat-card>
   <mat-card-title>
     <div class="row space-between-row top-align">
       <div class="width-75">
@@ -59,11 +59,11 @@
       <div class="project-sub-header bottom-border-accent">Epidemiologies: {{article.epidemiologies.length}}</div>
       <div class="project-content-wrapper">
       <mat-card [appearance]="'outlined'" *ngFor="let epidemiology of article.epidemiologies">
-        <div *ngIf="epidemiology.epidemiology_type && epidemiology.epidemiology_type.length">Epidemiology Type: {{epidemiology.epidemiology_type.join(", ")}}</div>
+        <div *ngIf="epidemiology.epidemiology_type && epidemiology.epidemiology_type.length"><b>Epidemiology Type:</b><br> {{epidemiology.epidemiology_type.join(", ")}}</div>
         <div *ngIf="epidemiology.epidemiology_rate && epidemiology.epidemiology_rate.length">
-          Epidemiology Rate:<br> <span *ngFor = "let rate of epidemiology.epidemiology_rate">{{rate}}<br></span></div>
-        <div *ngIf="epidemiology.location && epidemiology.location.length">Location: {{epidemiology.location.join(", ")}}</div>
-        <div *ngIf="epidemiology.sex && epidemiology.sex.length">Sex Affected: {{epidemiology.sex.join(", ")}}</div>
+         <b>Epidemiology Rate:</b><br> <span *ngFor = "let rate of epidemiology.epidemiology_rate">{{rate}}<br></span></div>
+        <div *ngIf="epidemiology.location && epidemiology.location.length"><b>Location: </b><br>{{epidemiology.location.join(", ")}}</div>
+        <div *ngIf="epidemiology.sex && epidemiology.sex.length"><b>Sex Affected: </b><br>{{epidemiology.sex.join(", ")}}</div>
       </mat-card>
       </div>
     </mat-card>
@@ -138,4 +138,4 @@
       </mat-card>
     </div>
   </mat-card-content>
-</div>
+  </mat-card>

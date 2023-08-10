@@ -121,9 +121,9 @@ export const FETCHPROJECTSQUERY = gql`
         abstract
         application_id
         application_type
-        researchedDiseases: diseasesResearchedBy {
-          gardId: gard_id
-          name
+        researchedDiseases: gardsresearchedBy {
+          gardId: GardId
+          gardName: GardName
         }
         phr
         funding_year
@@ -152,8 +152,8 @@ export const PROJECTVARIABLES: {
   coreProjectsWhere: {
     projectsUnderCoreConnection_ALL: {
       node: {
-        diseasesResearchedBy_SINGLE: {
-          gard_id?: string | null
+        gardsresearchedBy_SINGLE: {
+          GardId?: string | null
         }
       }
     }
@@ -173,8 +173,8 @@ export const PROJECTVARIABLES: {
   coreProjectsWhere: {
     projectsUnderCoreConnection_ALL: {
       node: {
-        diseasesResearchedBy_SINGLE: {
-          gard_id: null
+        gardsresearchedBy_SINGLE: {
+          GardId: null
         }
       }
     }

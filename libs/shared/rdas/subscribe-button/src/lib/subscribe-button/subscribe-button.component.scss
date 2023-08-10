@@ -11,6 +11,10 @@
   align-items: center;
 }
 
-.about-subscribe-button {
+ .grid-button > div {
+ display: grid;
+ }
+
+ .about-subscribe-button {
   margin-left: 1vw;
 }

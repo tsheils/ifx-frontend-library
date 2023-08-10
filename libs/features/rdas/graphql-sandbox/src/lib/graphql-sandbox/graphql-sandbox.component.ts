@@ -4,6 +4,8 @@ import { ApolloSandbox } from "@apollo/sandbox";
 
 @Component({
   selector: 'ncats-frontend-library-graphql-sandbox',
+  standalone: true,
+  imports: [],
   template: `
     <div id="embedded-sandbox" #embeddedsandbox></div>
   `,

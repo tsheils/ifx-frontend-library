@@ -2,12 +2,13 @@ import {Author} from "./author";
 import {Disease} from "./disease";
 
 export class Article {
+  DateCreatedRDAS!: string;
   abstractText!: string;
   affiliation!: string;
   citedByCount!: number;
   doi!: string;
   firstPublicationDate!: string;
-  isEpi?: string;
+  isEpi?: boolean;
   pubType?: string[];
   pubmed_id!: string;
   title!: string;

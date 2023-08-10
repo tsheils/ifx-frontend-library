@@ -1,11 +1,7 @@
 
-<div class="row centered-row">
-  <div class="width-75">
     <ncats-frontend-library-disease-display
       *ngIf="disease"
       [disease] = disease
       (optionsChange)="fetchDiseaseInfo($event)"
     ></ncats-frontend-library-disease-display>
     <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
-  </div>
-</div>

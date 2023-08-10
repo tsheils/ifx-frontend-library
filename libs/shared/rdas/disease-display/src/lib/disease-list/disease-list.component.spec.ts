@@ -16,8 +16,6 @@ import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 import { DiseaseListCardComponent } from "../disease-list-card/disease-list-card.component";
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
-import { IdentifiersDisplayComponent } from '../identifiers-display/identifiers-display.component';
-import { SharedRdasSubscribeButtonModule } from "@ncats-frontend-library/shared/rdas/subscribe-button";
 
 import { DiseaseListComponent } from './disease-list.component';
 
@@ -27,12 +25,11 @@ describe('DiseaseListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DiseaseListComponent, DiseaseHeaderComponent, IdentifiersDisplayComponent ],
+      declarations: [ DiseaseListComponent, DiseaseHeaderComponent ],
       imports: [
         DiseaseListCardComponent,
         MatCardModule,
         MatTabsModule,
-        SharedRdasSubscribeButtonModule,
         StoreModule.forRoot({},),
         EffectsModule.forRoot([]),
         StoreModule.forFeature(USERS_FEATURE_KEY, reducer),

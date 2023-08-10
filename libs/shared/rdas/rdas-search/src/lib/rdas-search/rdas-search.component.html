@@ -2,6 +2,7 @@
   <mat-form-field class = "typeahead-field search" appearance="outline" subscriptSizing="dynamic" [color]="'primary'">
       <input matInput
              aria-label="Search for a rare disease"
+             id="search-input"
              [placeholder]="'Search for a rare disease'"
              [formControl]=searchFormCtl
              [matAutocomplete]="autoOpts">
@@ -16,7 +17,7 @@
         </mat-option>
       </mat-autocomplete>
     <button matSuffix mat-icon-button aria-label="search">
-      <mat-icon>search</mat-icon>
+      <mat-icon [color]="'primary'">search</mat-icon>
     </button>
   </mat-form-field>
   </div>

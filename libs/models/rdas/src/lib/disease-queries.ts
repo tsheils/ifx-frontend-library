@@ -111,6 +111,66 @@ export const FETCHDISEASEQUERY = gql`
       classificationLevel: ClassificationLevel
       disorderType: DisorderType
       synonyms: Synonyms
+      dataSource: DataSource
+      dataSourceId: DataSourceId
+      diseaseOntology: DiseaseOntology
+      geneticAlliance: GeneticAlliance
+      geneticsHomeReference: GeneticsHomeReference
+      icd10: ICD10
+      icd10cm: ICD10CM
+      icd11: ICD11
+      mesh: MeSH
+      medra: MedDRA
+      omim: OMIM
+      orphanet: Orphanet
+      snomed: SNOMEDCT
+      umls: UMLS
+      associatedWithGeneGenesAggregate {
+        count
+
+      }
+      _geneAssociations: associatedWithGeneGenesConnection {
+        edges {
+          associationStatus: AssociationStatus
+          associationType: AssociationType
+          _reference: Reference
+          gene: node {
+            ensembl: Ensembl
+            geneIdentifier: GeneIdentifier
+            geneSymbol: GeneSymbol
+            iuphar: IUPHAR
+            locus: Locus
+            geneTitle: GeneTitle
+            geneSynonyms: GeneSynonyms
+            omim: OMIM
+            reactome: Reactome
+            swissprot: Swissprot
+          }
+        }
+      }
+      _genesCount:  associatedWithGeneGenesAggregate {
+        count
+      }
+      _phenotypesCount: hasPhenotypePhenotypesAggregate {
+        count
+      }
+
+      _phenotypeAssociations: hasPhenotypePhenotypesConnection {
+        edges {
+          hpoFrequency: HPOFrequency
+          status: ValidationStatus
+          _evidence: Evidence
+          _reference: Reference
+          phenotype: node {
+            hpoId: HPOId
+            hpoTerm: HPOTerm
+            modifier: Modifier
+            online: Online
+            onset: Onset
+            sex: Sex
+          }
+        }
+      }
     }
     total: gardsAggregate(where: $where) {
       count

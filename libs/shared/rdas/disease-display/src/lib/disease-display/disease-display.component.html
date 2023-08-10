@@ -1,7 +1,27 @@
-<mat-card [appearance]="'outlined'" class="main-disease-display">
+<div class="disease-header-section">
 <ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
-<ncats-frontend-library-identifiers-display [disease]="disease" *ngIf="disease.synonyms && disease.synonyms.length"></ncats-frontend-library-identifiers-display>
-<mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true">
+  <div class="row space-around-row top-align">
+<div class ="width-45">
+<ncats-frontend-library-gene-list *ngIf="disease && disease.geneAssociations"
+                                  [genes] = disease.geneAssociations
+>
+</ncats-frontend-library-gene-list>
+</div>
+
+  <div class ="width-45">
+  <ncats-frontend-library-phenotype-list *ngIf="disease && disease.phenotypeAssociations"
+                                       [phenotypes] = disease.phenotypeAssociations
+>
+</ncats-frontend-library-phenotype-list>
+  </div>
+  </div>
+<br>
+</div>
+
+<mat-card [appearance]="'outlined'" class="main-disease-display">
+  <div class="row centered-row">
+    <div class="width-75">
+  <mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true">
   <mat-tab [label] = "'Articles ' + (disease.epiCount + disease.nonEpiCount )">
     <mat-tab-group [color]="'accent'">
       <mat-tab
@@ -45,4 +65,6 @@
     </div>
   </mat-tab>
 </mat-tab-group>
+</div>
+</div>
 </mat-card>

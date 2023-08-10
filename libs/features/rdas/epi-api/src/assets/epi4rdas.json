@@ -1,0 +1,745 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "EpiPipeline4RD API",
+    "description": "\n<p align=\"center\">\n    <img src=\"https://github.com/ncats/epi4GARD/raw/master/ncats.png\" alt=\"National Center for Advancing Translational Sciences Logo\" width=600>\n    <br>\n    <br>\n    <img src=\"https://github.com/ncats/epi4GARD/raw/master/Logo_GARD_fullres.png\" alt=\"NIH Genetic and Rare Diseases Information Center Logo\" width=500>\n</p>\n\nThis API was developed by the **[National Center for Advancing Translational Sciences (NCATS)](https://ncats.nih.gov/)** for the National Institutes of Health (NIH) **[Genetic and Rare Diseases Information Center (GARD)](https://rarediseases.info.nih.gov/)**.\n\nIt allows one to _gather_ abstracts for a rare disease (query any rare disease name, synonym, or GARD ID) from two APIs, [_classify_ those abstracts as epidemiologic](https://pubmed.ncbi.nlm.nih.gov/34457147/), and _extract_ epidemiology information from them.\n\nA **full list of rare diseases** tracked by the NIH Genetic and Rare Diseases Information Center can be found [here](https://rarediseases.info.nih.gov/diseases/browse-by-first-letter).\n\n\n### [Interactive User Interface](https://huggingface.co/spaces/ncats/EpiPipeline4RD) &nbsp; &nbsp; &nbsp; &nbsp; [Example POST calls](https://colab.research.google.com/drive/1QODYn9g8jbqDZTs3eR60mMkMA9PBv59t?usp=sharing) &nbsp; &nbsp; &nbsp; &nbsp; [GitHub Repository](https://github.com/ncats/epi4GARD)\n\n",
+    "license": {
+      "name": "National Center for Advancing Translational Sciences License",
+      "url": "https://github.com/ncats/epi4GARD/blob/master/LICENSE"
+    },
+    "version": "1.1"
+  },
+  "servers": [
+    {
+      "url": "/api"
+    }
+  ],
+  "paths": {
+    "/": {
+      "get": {
+        "tags": [
+          "root"
+        ],
+        "summary": "Root",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getAbsRD/term={search_term}": {
+      "get": {
+        "tags": [
+          "get_rare_disease_abstracts"
+        ],
+        "summary": "Get Rare Disease Abstracts",
+        "operationId": "get_rare_disease_abstracts_getAbsRD_term__search_term__get",
+        "parameters": [
+          {
+            "description": "The name of the rare disease or the GARD ID you want epidemiology data for.",
+            "required": true,
+            "schema": {
+              "title": "Search Term",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "description": "The name of the rare disease or the GARD ID you want epidemiology data for."
+            },
+            "name": "search_term",
+            "in": "path"
+          },
+          {
+            "description": "Maximum Number of Abstracts Returned.",
+            "required": false,
+            "schema": {
+              "title": "Max Results",
+              "exclusiveMaximum": 1000.0,
+              "exclusiveMinimum": 0.0,
+              "type": "integer",
+              "description": "Maximum Number of Abstracts Returned.",
+              "default": 50
+            },
+            "name": "max_results",
+            "in": "query"
+          },
+          {
+            "description": "Type of Abstract Filtering to reduce false positives.",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/FilteringType"
+                }
+              ],
+              "description": "Type of Abstract Filtering to reduce false positives.",
+              "default": "strict"
+            },
+            "name": "filtering",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getEpiAbsPMID/term={PubMed_ID}": {
+      "get": {
+        "tags": [
+          "get_rare_disease_epidemiology_abstracts_from_PubMed_ID"
+        ],
+        "summary": "Get Rare Disease Epidemiology Abstracts",
+        "operationId": "get_rare_disease_epidemiology_abstracts_getEpiAbsPMID_term__PubMed_ID__get",
+        "parameters": [
+          {
+            "required": true,
+            "schema": {
+              "title": "Pubmed Id"
+            },
+            "name": "PubMed_ID",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getEpiAbsRD/term={search_term}": {
+      "get": {
+        "tags": [
+          "get_rare_disease_epidemiology_abstracts"
+        ],
+        "summary": "Get Rare Disease Epidemiology Abstracts",
+        "operationId": "get_rare_disease_epidemiology_abstracts_getEpiAbsRD_term__search_term__get",
+        "parameters": [
+          {
+            "description": "The name of the rare disease or the GARD ID you want epidemiology data for.",
+            "required": true,
+            "schema": {
+              "title": "Search Term",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "description": "The name of the rare disease or the GARD ID you want epidemiology data for."
+            },
+            "name": "search_term",
+            "in": "path"
+          },
+          {
+            "description": "Maximum Number of Abstracts Returned.",
+            "required": false,
+            "schema": {
+              "title": "Max Results",
+              "exclusiveMaximum": 1000.0,
+              "exclusiveMinimum": 0.0,
+              "type": "integer",
+              "description": "Maximum Number of Abstracts Returned.",
+              "default": 50
+            },
+            "name": "max_results",
+            "in": "query"
+          },
+          {
+            "description": "Type of Abstract Filtering to reduce false positives.",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/FilteringType"
+                }
+              ],
+              "description": "Type of Abstract Filtering to reduce false positives.",
+              "default": "strict"
+            },
+            "name": "filtering",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/getEpiAbsExtractRD/term={search_term}": {
+      "get": {
+        "tags": [
+          "get_rare_disease_epidemiology_extraction"
+        ],
+        "summary": "Get Rare Disease Epidemiology Extraction",
+        "operationId": "get_rare_disease_epidemiology_extraction_getEpiAbsExtractRD_term__search_term__get",
+        "parameters": [
+          {
+            "description": "The name of the rare disease or the GARD ID you want epidemiology data for.",
+            "required": true,
+            "schema": {
+              "title": "Search Term",
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ],
+              "description": "The name of the rare disease or the GARD ID you want epidemiology data for."
+            },
+            "name": "search_term",
+            "in": "path"
+          },
+          {
+            "description": "Maximum Number of Abstracts Returned.",
+            "required": false,
+            "schema": {
+              "title": "Max Results",
+              "exclusiveMaximum": 1000.0,
+              "exclusiveMinimum": 0.0,
+              "type": "integer",
+              "description": "Maximum Number of Abstracts Returned.",
+              "default": 50
+            },
+            "name": "max_results",
+            "in": "query"
+          },
+          {
+            "description": "Type of Abstract Filtering to reduce false positives.",
+            "required": false,
+            "schema": {
+              "allOf": [
+                {
+                  "$ref": "#/components/schemas/FilteringType"
+                }
+              ],
+              "description": "Type of Abstract Filtering to reduce false positives.",
+              "default": "strict"
+            },
+            "name": "filtering",
+            "in": "query"
+          },
+          {
+            "description": "Extract Rare Diseases from Text Using GARD Dictionary.",
+            "required": false,
+            "schema": {
+              "title": "Extract Diseases",
+              "type": "boolean",
+              "description": "Extract Rare Diseases from Text Using GARD Dictionary.",
+              "default": false
+            },
+            "name": "extract_diseases",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postEpiClassifyText/": {
+      "post": {
+        "tags": [
+          "classify_text_as_epidemiological"
+        ],
+        "summary": "Classify Text As Epidemiological",
+        "operationId": "classify_text_as_epidemiological_postEpiClassifyText__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Text"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postEpiExtractText/": {
+      "post": {
+        "tags": [
+          "extract_epidemiology_from_text"
+        ],
+        "summary": "Extract Epidemiology From Text",
+        "operationId": "extract_epidemiology_from_text_postEpiExtractText__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Text"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postEpiClassifyExtractText/": {
+      "post": {
+        "tags": [
+          "classify_and_extract_epidemiology_from_text"
+        ],
+        "summary": "Classify And Extract Epidemiology From Text",
+        "operationId": "classify_and_extract_epidemiology_from_text_postEpiClassifyExtractText__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Text"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postAbsBatch/": {
+      "post": {
+        "tags": [
+          "get_batch_rare_disease_abstracts"
+        ],
+        "summary": "Get Batch Rare Disease Abstracts",
+        "operationId": "get_batch_rare_disease_abstracts_postAbsBatch__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Batch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postEpiAbsBatch/": {
+      "post": {
+        "tags": [
+          "get_batch_rare_disease_epidemiology_abstracts"
+        ],
+        "summary": "Get Batch Rare Disease Epidemiology Abstracts",
+        "operationId": "get_batch_rare_disease_epidemiology_abstracts_postEpiAbsBatch__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Batch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/postEpiExtractBatch/": {
+      "post": {
+        "tags": [
+          "get_batch_rare_disease_epidemiology_extraction"
+        ],
+        "summary": "Get Batch Rare Disease Epidemiology Extraction",
+        "operationId": "get_batch_rare_disease_epidemiology_extraction_postEpiExtractBatch__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Batch"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Batch": {
+        "title": "Batch",
+        "required": [
+          "rd_list"
+        ],
+        "type": "object",
+        "properties": {
+          "rd_list": {
+            "title": "Rd List",
+            "type": "array",
+            "items": {},
+            "description": "The names of the rare disease or the GARD ID you want abstracts for, separated by semicolons."
+          },
+          "max_results": {
+            "title": "Max Results",
+            "exclusiveMaximum": 1000.0,
+            "exclusiveMinimum": 0.0,
+            "type": "integer",
+            "description": "Maximum Number of Abstracts Returned.",
+            "default": 50
+          },
+          "filtering": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/FilteringType"
+              }
+            ],
+            "description": "Type of Abstract Filtering to reduce false positives.",
+            "default": "strict"
+          },
+          "extract_diseases": {
+            "title": "Extract Diseases",
+            "type": "boolean",
+            "description": "Extract Rare Diseases from Text Using GARD Dictionary.",
+            "default": false
+          }
+        }
+      },
+      "FilteringType": {
+        "title": "FilteringType",
+        "enum": [
+          "none",
+          "lenient",
+          "strict"
+        ],
+        "type": "string",
+        "description": "An enumeration."
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            }
+          }
+        }
+      },
+      "Text": {
+        "title": "Text",
+        "required": [
+          "text"
+        ],
+        "type": "object",
+        "properties": {
+          "text": {
+            "title": "Text",
+            "type": "string",
+            "description": "The text you want to extract or classify"
+          },
+          "extract_diseases": {
+            "title": "Extract Diseases",
+            "type": "boolean",
+            "description": "Extract Rare Diseases from Text Using GARD Dictionary.",
+            "default": false
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            }
+          },
+          "msg": {
+            "title": "Message",
+            "type": "string"
+          },
+          "type": {
+            "title": "Error Type",
+            "type": "string"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "root",
+      "description": "Execute this to test the server."
+    },
+    {
+      "name": "get_rare_disease_abstracts",
+      "description": "Query any rare disease name, synonym, or GARD ID. \n        <br>\n        <br>\n        Uses the NCATS GARD Knowledge Graph to gather PubMed abstracts from the NCBI and EBI APIs. It contains three filtering options to reduce the number of false positive abstracts returned from the APIs. \n        <br>\n        <br>\n        Returns JSON of form `{'PubMed ID':'Abstract'}`"
+    },
+    {
+      "name": "get_rare_disease_epidemiology_abstracts",
+      "description": "Query any rare disease name, synonym, or GARD ID. \n        <br>\n        <br>\n        Gets abstracts from `Get Rare Disease Abstracts` then classifies them as epidemiological or not. \n        <br>\n        <br>\n        Returns JSON of form `{'entries':[{'PMID':pmid, \n                                           'ABSTRACT':abstract, \n                                           'EPI_PROB':epi_prob, \n                                           'IsEpi':isEpi}, \n                                               ...]}`\n        ",
+      "externalDocs": {
+        "description": "Publication:",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34457147/"
+      }
+    },
+    {
+      "name": "get_rare_disease_epidemiology_abstracts_from_PubMed_ID",
+      "description": "Query any PubMed ID \n        <br>\n        <br>\n        Gets abstracts from PubMed then classifies them as epidemiological or not. \n        <br>\n        <br>\n        Returns JSON of form ```{'PMID':pmid, \n                               'ABSTRACT':abstract, \n                               'EPI_PROB':epi_prob, \n                               'IsEpi':isEpi}```\n        ",
+      "externalDocs": {
+        "description": "Publication:",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34457147/"
+      }
+    },
+    {
+      "name": "get_rare_disease_epidemiology_extraction",
+      "description": "Query any rare disease name, synonym, or GARD ID. \n        <br>\n        <br>\n        Examples of rare diseases include [**Fellman syndrome**](https://rarediseases.info.nih.gov/diseases/1/gracile-syndrome), [**Classic Homocystinuria**](https://rarediseases.info.nih.gov/diseases/6667/classic-homocystinuria), [**7383**](https://rarediseases.info.nih.gov/diseases/7383/phenylketonuria), and [**GARD:0009941**](https://rarediseases.info.nih.gov/diseases/9941/fshmd1a).\n        <br>\n        <br>\n        Execute one of the examples to see the format of the output.\n        ",
+      "externalDocs": {
+        "description": "Also see User Interface:",
+        "url": "https://huggingface.co/spaces/ncats/EpiPipeline4RD"
+      }
+    },
+    {
+      "name": "classify_text_as_epidemiological",
+      "description": "Submit a POST request to classify a rare disease abstract as epidemiology or not",
+      "externalDocs": {
+        "description": "Publication:",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34457147/"
+      }
+    },
+    {
+      "name": "extract_epidemiology_from_text",
+      "description": "Submit a POST request with text for epidemiology information extraction",
+      "externalDocs": {
+        "description": "Example POST Request:",
+        "url": "https://colab.research.google.com/drive/1QODYn9g8jbqDZTs3eR60mMkMA9PBv59t?usp=sharing"
+      }
+    },
+    {
+      "name": "classify_and_extract_epidemiology_from_text",
+      "description": "Combines above two"
+    },
+    {
+      "name": "get_batch_rare_disease_abstracts",
+      "description": "Batch version of `Get Rare Disease Abstracts`"
+    },
+    {
+      "name": "get_batch_rare_disease_epidemiology_abstracts",
+      "description": "Batch version of `Get Rare Disease Epidemiology Abstracts`.",
+      "externalDocs": {
+        "description": "Publication:",
+        "url": "https://pubmed.ncbi.nlm.nih.gov/34457147/"
+      }
+    },
+    {
+      "name": "get_batch_rare_disease_epidemiology_extraction",
+      "description": "Batch version of `Get Rare Disease Epidemiology Extraction`."
+    }
+  ]
+}

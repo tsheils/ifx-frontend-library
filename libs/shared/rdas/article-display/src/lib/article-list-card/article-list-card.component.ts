@@ -31,17 +31,18 @@ export class ArticleListCardComponent implements OnInit{
   ngOnInit() {
     if (this.article.annotations) {
       this.article.annotations.forEach((annotation: PubtatorAnnotation) => {
-        if (this.annotationsMap.has(annotation.infons_type)) {
-          let types = this.annotationsMap.get(annotation.infons_type);
-          if (types) {
-            types.push(...annotation.text)
+        if(annotation.text) {
+          if (this.annotationsMap.has(annotation.infons_type)) {
+            let types = this.annotationsMap.get(annotation.infons_type);
+            if (types) {
+              types = [...types, ...annotation.text]
+            } else {
+              types = annotation.text
+            }
+            this.annotationsMap.set(annotation.infons_type, [...new Set(types)]);
           } else {
-            types = [...annotation.text]
+            this.annotationsMap.set(annotation.infons_type, annotation.text);
           }
-          this.annotationsMap.set(annotation.infons_type, types);
-        } else {
-          this.annotationsMap.set(annotation.infons_type, [...annotation.text]);
-
         }
       });
     }

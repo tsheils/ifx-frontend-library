@@ -40,15 +40,7 @@ export const diseasesReducer = createReducer(
     DiseasesActions.loadDiseases,
     DiseasesActions.fetchDisease,
     DiseasesActions.loading,
-    (state) => {
-    console.log("gdfgdfdgfdg")
-
-    return {
-        ...state,
-        loaded: false,
-        error: null,
-      }
-    }),
+    (state) => ({...state, loaded: false, error: null})),
 
   on(DiseasesActions.loadDiseaseTreeSuccess, (state, {diseases}) =>({
     ...state, tree: diseases
@@ -58,9 +50,9 @@ export const diseasesReducer = createReducer(
        diseasesAdapter.setAll(diseases, {...state, page: page, loaded: true})
   ),
 
-/*  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) =>
-       diseasesAdapter.setAll(typeahead, {...state, loaded: true})
-  ),*/
+  on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) =>
+    diseasesAdapter.setOne(disease, {...state, selectedId: disease.gardId, loaded: true})
+  ),
 
   on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) =>
        ({...state, typeahead: typeahead, loaded: true})
@@ -68,10 +60,6 @@ export const diseasesReducer = createReducer(
 
   on(DiseasesActions.clearTypeahead, (state) =>
        ({...state, typeahead: [], loaded: true})
-  ),
-
-  on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) =>
-       diseasesAdapter.setOne(disease, {...state, selectedId: disease.gardId, loaded: true})
   ),
 
   on(

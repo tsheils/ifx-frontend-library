@@ -14,10 +14,8 @@ import {
   FETCHDISEASEQUERY,
   FETCHDISEASESLISTQUERY, FETCHPATH, FETCHPATHDISEASES,
   FETCHPROJECTSQUERY,
-  FETCHTRIALSQUERY,
-  FETCHTRIALSVARIABLES,
   LISTQUERYPARAMETERS,
-  PROJECTVARIABLES, TREEROOTPARAMETERS, FETCHROOT, FETCHARTICLECOUNTS
+  PROJECTVARIABLES, TREEROOTPARAMETERS, FETCHROOT, FETCHARTICLECOUNTS, FETCHTRIALSVARIABLES, FETCHTRIALSQUERY
 } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
 import { Store } from "@ngrx/store";
@@ -151,9 +149,9 @@ export class DiseasesEffects {
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       switchMap((params: {id?: string}) => {
         DISEASEQUERYPARAMETERS.where = {GardId: params.id};
-        ARTICLEVARIABLES.gardWhere.gard_id =  params.id;
-        PROJECTVARIABLES.coreProjectsWhere = {projectsUnderCoreConnection_ALL: {node: {diseasesResearchedBy_SINGLE: {gard_id: params.id}}}};
-        FETCHTRIALSVARIABLES.ctwhere = {GARDId: params.id};
+        ARTICLEVARIABLES.gardWhere.GardId =  params.id;
+        PROJECTVARIABLES.coreProjectsWhere = {projectsUnderCoreConnection_ALL: {node: {gardsresearchedBy_SINGLE: {GardId: params.id}}}};
+        FETCHTRIALSVARIABLES.ctwhere = {investigatesConditionConditions_SINGLE: { mappedToGardGards_SINGLE: {GardId: params.id}}};
         return forkJoin(
           this.diseaseService.fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS).pipe(take(1)),
           this.diseaseService.fetchArticles(FETCHARTICLESQUERY, ARTICLEVARIABLES).pipe(take(1)),
@@ -235,27 +233,27 @@ export class DiseasesEffects {
         let qParams;
         if(!tree) {
           if(params["parentId"]) {
-            console.log("no tree, maybe page, parent id")
+         //   console.log("no tree, maybe page, parent id")
             query = FETCHPATH;
             qParams = { searchString: params["parentId"] };
           } else {
-            console.log("no tree, maybe page, no parent id")
+         //   console.log("no tree, maybe page, no parent id")
             query = FETCHROOT;
             qParams = undefined;
           }
         } else {
           if(params["pageIndex"]) {
-            console.log("tree, page, no parent id")
+          //  console.log("tree, page, no parent id")
             query = FETCHROOT;
             qParams = undefined;
           } else {
             if(params["parentId"]) {
-              console.log("tree, no page, parent id")
+           //   console.log("tree, no page, parent id")
               DISEASEQUERYPARAMETERS.where = { GardId: params["parentId"] };
               query = CATEGORYTREEBRANCH;
               qParams = DISEASEQUERYPARAMETERS;
             } else {
-              console.log("tree, no page, no parent id")
+           //   console.log("tree, no page, no parent id")
               query = FETCHROOT;
               qParams = undefined;
             }
@@ -265,7 +263,6 @@ export class DiseasesEffects {
           .pipe(
             map((res: any) => {
               if(res && res.data) {
-                console.log(res);
                 let diseaseArr;
                 if(res.data.treeBranch) {
                    diseaseArr = res.data.treeBranch[0].nodes
@@ -307,6 +304,8 @@ export class DiseasesEffects {
     });
 
   _makeDiseaseObj(diseaseData:{data:{disease:[Partial<DiseaseNode>]}}, articleData?: any, projectsData? :any, trialsData?: any): Disease {
+    console.log(articleData)
+    console.log(trialsData)
     if (diseaseData && diseaseData.data) {
       const diseaseObj: Disease = new Disease(diseaseData.data.disease[0]);
       if (articleData.data && articleData.data.articles.length) {
@@ -323,9 +322,9 @@ export class DiseasesEffects {
         diseaseObj.projects = projectsData.data.coreProjects.map((proj: { [key: string]: unknown }) => new CoreProject(proj))
         diseaseObj.projectCount = projectsData.data.count.count;
       }
-      if (trialsData.data && trialsData.data.disease.length) {
-        diseaseObj.clinicalTrials = trialsData.data.disease[0].gardInClinicalTrials.map((trial: { [key: string]: unknown }) => new ClinicalTrial(trial))
-        diseaseObj.clinicalTrialsCount = trialsData.data.disease[0].ctcount.count;
+      if (trialsData.data && trialsData.data.clinicalTrials.length) {
+        diseaseObj.clinicalTrials = trialsData.data.clinicalTrials.map((trial: { [key: string]: unknown }) => new ClinicalTrial(trial))
+        diseaseObj.clinicalTrialsCount = trialsData.data.clinicalTrialsAggregate.count;
       }
       return diseaseObj;
     } else return new Disease({});

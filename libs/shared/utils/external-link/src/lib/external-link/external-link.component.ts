@@ -7,17 +7,17 @@ import { MatIconModule } from "@angular/material/icon";
   standalone: true,
   imports: [CommonModule, MatIconModule],
   template: `
-    <a href="https://www.hhs.gov/web/policies-and-standards/hhs-web-policies/disclaimer/index.html" title="Exit Disclaimer" class="exit-disclaimer">
+    <a href="https://www.hhs.gov/web/policies-and-standards/hhs-web-policies/disclaimer/index.html"
+       target="_blank"
+       rel="noreferrer"
+       title="Exit Disclaimer" class="exit-disclaimer">
      <mat-icon class="exit-disclaimer">open_in_new</mat-icon>
     </a>
   `,
   styles: [`
-    img.icon-image {
-      height: 1em;
-    }
-
     .exit-disclaimer {
-      color: #ffffff;
+      padding: 0;
+      font-size: 1rem;
     }
   `]
 })

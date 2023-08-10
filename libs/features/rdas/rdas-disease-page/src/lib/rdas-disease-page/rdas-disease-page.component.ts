@@ -30,7 +30,6 @@ export class RdasDiseasePageComponent implements OnInit {
     private diseaseFacade: DiseasesFacade,
     private changeRef: ChangeDetectorRef
   ) {
-    console.log("new page");
   }
 
   ngOnInit(): void {
@@ -52,6 +51,7 @@ export class RdasDiseasePageComponent implements OnInit {
 
     this.diseaseFacade.selectedDiseases$.subscribe(res => {
         if (res) {
+          console.log(res)
           this.disease = res;
           this.options.gardId = this.disease.gardId;
           this.changeRef.markForCheck();

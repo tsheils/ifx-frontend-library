@@ -28,6 +28,7 @@ export class SocialSignOnButtonComponent implements OnChanges, OnDestroy {
   user?: User;
 
   photoURL = '';
+  @Input() theme = 'primary';
 
   constructor(
     public dialog: MatDialog,

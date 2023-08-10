@@ -38,7 +38,6 @@ export const usersReducer = createReducer(
   ),
   on(
     UsersActions.resetPasswordEmailSuccess, (state) =>{
-        console.log("you");
       return { ...state, email: 'reset' }
     }
     ),

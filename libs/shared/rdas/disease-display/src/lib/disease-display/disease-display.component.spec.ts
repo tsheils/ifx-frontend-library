@@ -21,7 +21,6 @@ import {
 import { EffectsModule } from "@ngrx/effects";
 import { StoreModule } from "@ngrx/store";
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
-import { IdentifiersDisplayComponent } from '../identifiers-display/identifiers-display.component';
 
 import { DiseaseDisplayComponent } from './disease-display.component';
 

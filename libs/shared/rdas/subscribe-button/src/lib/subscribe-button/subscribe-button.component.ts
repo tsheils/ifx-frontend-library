@@ -11,6 +11,7 @@ import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Subscription, User } from "@ncats-frontend-library/models/utils";
+import { SocialSignOnButtonComponent } from "@ncats-frontend-library/shared/utils/social-sign-on";
 import { updateUserSubscriptions, UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 import { AboutSubscribeModalComponent } from "../about-subscribe-modal/about-subscribe-modal.component";
@@ -34,7 +35,8 @@ import { NgIf } from "@angular/common";
         MatIconModule,
         MatCheckboxModule,
       MatDialogModule,
-      MatSnackBarModule
+      MatSnackBarModule,
+      SocialSignOnButtonComponent
     ],
 })
 export class SubscribeButtonComponent implements OnInit, OnDestroy {
@@ -46,6 +48,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
 
   @Input() disease!: Disease;
   @Input() subscribed = false;
+  @Input() theme = 'primary';
   private user: User | null = null;
   subscription?: Subscription;
   userExists = false;

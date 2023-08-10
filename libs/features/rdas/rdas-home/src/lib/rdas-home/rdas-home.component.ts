@@ -1,7 +1,8 @@
 import { CdkScrollable } from "@angular/cdk/overlay";
 import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
+import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, ViewChild } from "@angular/core";
+import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
 import { Router } from "@angular/router";
 import ForceGraph3D from '3d-force-graph';
 import { MatCardModule } from "@angular/material/card";
@@ -27,7 +28,7 @@ export class RdasHomeComponent {
   constructor(
     private router: Router,
     private http: HttpClient,
-) { }
+  ) { }
 
 
   ngOnInit() {
@@ -61,19 +62,11 @@ export class RdasHomeComponent {
     }
   }
 
-  ngAfterViewInit() {
-    console.log(this);
-    this.scrollable.elementScrolled().pipe(map(res => console.log(res)))
-    this.scrollable.elementScrolled().subscribe(res => console.log(res) )
-
-  }
-
   /**
    * scroll to details section of the home page
    */
   goToDetails(): void {
     this.elemRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start', inline: 'nearest' });
   }
-
 }
 

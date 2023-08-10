@@ -59,7 +59,6 @@ export class UsersEffects {
         return this.userService.doEmailLogin(action.email, action.pw)
           .pipe(
             map((res: { code?: string, message?: string, user?: Partial<User> }) => {
-              console.log(res);
               if (res.code) {
                const errMessage: string = this._getErrorMesssage(res.code);
                 return UsersActions.loginEmailUserFailure({ error: errMessage })
@@ -133,12 +132,10 @@ resetEmailPassword = createEffect(() =>
         return this.userService.doResetEmail(action.email)
           .pipe(
             map((res: any) => {
-              console.log(res);
               if (res && res.code) {
                 const errMessage: string = this._getErrorMesssage(res.code);
                 return UsersActions.loginEmailUserFailure({ error: errMessage })
               } else  {
-                console.log("success");
                 return UsersActions.resetPasswordEmailSuccess();
               }
             }))

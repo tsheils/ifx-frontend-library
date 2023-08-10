@@ -1,7 +1,26 @@
+
+
 ncats-frontend-library-disease-display {
   margin-top: 5vh;
 
   .main-disease-display {
     padding: 2vh;
   }
+
+  .disease-header-section {
+    padding: 5vh 2vw 0 2vw;
+    background-image: url("/assets/disease-display/graph-background.png");
+    background-position: top;
+    height: 80vh;
+    margin-top: -10vh;
+  }
+
+ .disease-header-section .disease-link {
+    color: #ffffff;
+  }
+
+  .mdc-button--outlined .mdc-button__ripple {
+    border-color: #ffffff;
+  }
+
 }

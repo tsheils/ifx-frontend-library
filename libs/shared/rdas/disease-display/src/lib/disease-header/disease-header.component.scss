@@ -1,5 +1,29 @@
+@use '@angular/material' as mat;
+@import 'libs/styles/src/styles/rdas-theme2';
 
 ncats-frontend-library-disease-header{
+  color: #ffffff;
+
+  .disease-title {
+    font-size:3em;
+  }
+
+   .disease-header {
+     color: #ffffff;
+     height:20vh;
+     padding: 2vw;
+     margin: -2vw;
+     background: linear-gradient(
+         to bottom,
+         mat.get-color-from-palette($app-primary, .1) 0%,
+         mat.get-color-from-palette($app-primary, .3) 20%,
+         mat.get-color-from-palette($app-primary, .7) 40%,
+       mat.get-color-from-palette($app-primary, .6) 60%,
+         mat.get-color-from-palette($app-primary, .3) 80%,
+         mat.get-color-from-palette($app-primary, .1) 100%
+     );
+
+   }
 
   .disease-link {
     text-decoration: none;

@@ -19,8 +19,6 @@ const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge'
 };
 
-
-
 @Component({
     selector: 'ncats-frontend-library-rdas-browse',
     templateUrl: './rdas-browse.component.html',
@@ -38,7 +36,7 @@ export class RdasBrowseComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: true}) paginator!: MatPaginator;
   page?: Page;
-  loading = true;
+  loaded = false;
   diseases!: Disease[];
   diseaseTree!: DiseaseNode[] | undefined;
 
@@ -75,7 +73,7 @@ export class RdasBrowseComponent implements OnInit {
         });
 
     this.diseaseFacade.loaded$.pipe().subscribe(res => {
-      this.loading = res;
+      this.loaded = res;
     });
 
   }

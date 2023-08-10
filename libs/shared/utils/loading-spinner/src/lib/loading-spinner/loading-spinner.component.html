@@ -1,7 +1,7 @@
 <div
   class="progress-bar-container"
   [ngClass]="positions[position]"
-  *ngIf="isLoaded"
+  *ngIf="!isLoaded"
 >
   <mat-spinner
     color="primary"

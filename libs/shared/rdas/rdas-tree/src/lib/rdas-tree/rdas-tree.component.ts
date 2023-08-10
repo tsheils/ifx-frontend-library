@@ -1,5 +1,5 @@
 import { FlatTreeControl } from "@angular/cdk/tree";
-import { ChangeDetectorRef, Component, EventEmitter, Input, Output } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
@@ -28,7 +28,7 @@ export class FlatDiseaseNode extends DiseaseNode {
   templateUrl: './rdas-tree.component.html',
   styleUrls: ['./rdas-tree.component.scss'],
 })
-export class RdasTreeComponent {
+export class RdasTreeComponent implements OnInit {
   /**
    * initialize a private variable _data, it's a BehaviorSubject
    * @type {BehaviorSubject<any>}
@@ -60,7 +60,7 @@ export class RdasTreeComponent {
   treeFlattener;
   dataSource;
 
-  loading = true;
+  loaded = false;
 
   private _transformer = (node: DiseaseNode, level: number) => {
     const flatNode = new FlatDiseaseNode(node);
@@ -94,27 +94,36 @@ export class RdasTreeComponent {
               this.changeRef.markForCheck();
             }
           });
-          this.loading = false;
+          this.loaded = true;
       this.changeRef.markForCheck();
       }
     });
   }
 
   selectDisease(event: FlatDiseaseNode): void {
-    this.loading= true;
+
+  //  console.log(this.treeControl);
+    this.loaded= false;
     this.leafExpand.emit(event);
-    this.treeControl.toggle(event);
+   this.treeControl.toggle(event);
     if(this.treeControl.isExpanded(event)) {
+   //   console.log("close?")
+   //   console.log(event)
       let r = this.treeControl.expansionModel.selected;
+   //   console.log(r);
       if(r.length){
         r = r.filter(node => !(node.gardId === event.gardId));
+    //    console.log(r);
         this.treeControl.expansionModel.clear();
+   //     console.log(this.treeControl.expansionModel.selected);
         this.treeControl.expansionModel.select(...r);
+    //    console.log(this.treeControl.expansionModel.selected);
+    //    console.log(this.treeControl);
       }
     } else {
       this.treeControl.expand(event);
     }
-    this.loading = false;
+    this.loaded = true;
     this.changeRef.detectChanges()
 
     /*    if(event.children && event.children.length) {

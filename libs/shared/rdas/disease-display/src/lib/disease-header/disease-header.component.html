@@ -1,3 +1,4 @@
+  <div class = "disease-header">
   <div class = "row space-between-row link-row">
  <div class="width-75">
     <a
@@ -6,7 +7,14 @@
     target="_blank"
     rel="noreferrer"
     aria-label="Link to GARD website"
-  ><h2>{{disease.name}}: {{disease.gardId}}<mat-icon class="exit-disclaimer">open_in_new</mat-icon></h2></a>
+  ><div class="disease-title">{{disease.name}}: {{disease.gardId}}<mat-icon class="exit-disclaimer">open_in_new</mat-icon></div></a>
  </div>
-    <ncats-frontend-library-subscribe-button [disease]="disease" ></ncats-frontend-library-subscribe-button>
+    <ncats-frontend-library-subscribe-button [disease]="disease" [theme]="'warn'" ></ncats-frontend-library-subscribe-button>
+  </div>
+    <div *ngIf = "disease" class="row space-between-row">
+      <div class="width-75" *ngIf = "disease.synonyms && disease.synonyms.length">
+        <span>{{disease.synonyms.join(", ")}}</span>
+      </div>
+    </div>
+    <br>
   </div>

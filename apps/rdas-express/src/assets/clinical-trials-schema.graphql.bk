@@ -1,17 +1,19 @@
 type ClinicalTrial {
 	Acronym: String
 	BriefSummary: String
-	BriefTitle: String
+	BriefTitle: String!
 	CompletionDate: String
 	CompletionDateType: String
+	DateCreatedRDAS: String!
 	LastKnownStatus: String
-	LastUpdatePostDate: String
-	LastUpdatePostDateType: String
-	LastUpdateSubmitDate: String
-	NCTId: String
+	LastUpdatePostDate: String!
+	LastUpdatePostDateType: String!
+	LastUpdateSubmitDate: String!
+  LastUpdatedRDAS: String!
+	NCTId: String!
 	NCTIdAlias: [String]
 	OfficialTitle: String
-	OverallStatus: String
+	OverallStatus: String!
 	Phase: [String]
 	PrimaryCompletionDate: String
 	PrimaryCompletionDateType: String
@@ -19,50 +21,34 @@ type ClinicalTrial {
 	ResultsFirstPostDateType: String
 	ResultsFirstPostedQCCommentsDate: String
 	ResultsFirstPostedQCCommentsDateType: String
-	SecondaryId: [String]
-	SecondaryIdDomain: [String]
-	SecondaryIdLink: [String]
-	SecondaryIdType: [String]
-	SeeAlsoLinkLabel: [String]
-	SeeAlsoLinkURL: [String]
 	StartDate: String
 	StartDateType: String
-	StudyFirstPostDate: String
-	StudyFirstPostDateType: String
-	StudyType: String
+	StudyFirstPostDate: String!
+	StudyFirstPostDateType: String!
+	StudyType: String!
 	collaboratedWithCollaborators: [Collaborator!]! @relationship(type: "collaborated_with", direction: OUT)
 	expandedAccessInfoExpandedAccesses: [ExpandedAccess!]! @relationship(type: "expanded_access_info", direction: OUT)
-	gardSclinicalTrial: [GARD!]! @relationship(type: "clinical_trial", direction: IN)
 	hasIndividualPatientDataIndividualPatientData: [IndividualPatientData!]! @relationship(type: "has_individual_patient_data", direction: OUT)
+	hasInterventionInterventions: [Intervention!]! @relationship(type: "has_intervention", direction: OUT)
 	hasParticipantInfoParticipants: [Participant!]! @relationship(type: "has_participant_info", direction: OUT)
-	hasReferencesReferences: [Reference!]! @relationship(type: "has_references", direction: OUT)
 	hasStudyDesignStudyDesigns: [StudyDesign!]! @relationship(type: "has_study_design", direction: OUT)
 	inLocationsLocations: [Location!]! @relationship(type: "in_locations", direction: OUT)
-	includesConditionsConditions: [Condition!]! @relationship(type: "includes_conditions", direction: OUT)
+	investigatesConditionConditions: [Condition!]! @relationship(type: "investigates_condition", direction: OUT)
 	patientRegistryInfoPatientRegistries: [PatientRegistry!]! @relationship(type: "patient_registry_info", direction: OUT)
+	referencesisAbout: [Reference!]! @relationship(type: "is_about", direction: IN)
 	sponsoredBySponsors: [Sponsor!]! @relationship(type: "sponsored_by", direction: OUT)
-	usesInterventionsInterventions: [Intervention!]! @relationship(type: "uses_interventions", direction: OUT)
 }
 
 type Collaborator {
-	CollaboratorClass: [String]!
-	CollaboratorName: [String]!
+	CollaboratorClass: String!
+	CollaboratorName: String!
 	clinicalTrialscollaboratedWith: [ClinicalTrial!]! @relationship(type: "collaborated_with", direction: IN)
 }
 
 type Condition {
-	Condition: [String]
-	ConditionAncestorId: [String]
-	ConditionAncestorTerm: [String]
-	ConditionBrowseBranchAbbrev: [String]
-	ConditionBrowseBranchName: [String]
-	ConditionBrowseLeafAsFound: [String]
-	ConditionBrowseLeafId: [String]
-	ConditionBrowseLeafName: [String]
-	ConditionBrowseLeafRelevance: [String]
-	ConditionMeshId: [String]
-	ConditionMeshTerm: [String]
-	clinicalTrialsincludesConditions: [ClinicalTrial!]! @relationship(type: "includes_conditions", direction: IN)
+	Condition: String!
+	clinicalTrialsinvestigatesCondition: [ClinicalTrial!]! @relationship(type: "investigates_condition", direction: IN)
+	mappedToGardGards: [GARD!]! @relationship(type: "mapped_to_gard", direction: OUT)
 }
 
 type ExpandedAccess {
@@ -76,67 +62,43 @@ type ExpandedAccess {
 }
 
 type GARD {
-	GARDId: String!
+	GardId: String!
 	GardName: String!
-	clinicalTrialClinicalTrials: [ClinicalTrial!]! @relationship(type: "clinical_trial", direction: OUT)
+	gardInClinicalTrials: [ClinicalTrial!]! @relationship(type: "gard_in", direction: OUT)
 }
 
 type IndividualPatientData {
-	AvailIPDComment: [String]
-	AvailIPDId: [String]
-	AvailIPDType: [String]
-	AvailIPDURL: [String]
+	AvailIPDComment: String
+	AvailIPDId: String
+	AvailIPDType: String
+	AvailIPDURL: String
 	IPDSharing: String
 	IPDSharingAccessCriteria: String
 	IPDSharingDescription: String
-	IPDSharingInfoType: [String]
+	IPDSharingInfoType: String
 	IPDSharingTimeFrame: String
 	IPDSharingURL: String
 	clinicalTrialshasIndividualPatientData: [ClinicalTrial!]! @relationship(type: "has_individual_patient_data", direction: IN)
 }
 
 type Intervention {
-	InterventionBrowseLeafId: [String]
-	InterventionBrowseLeafName: [String]
-	InterventionBrowseLeafRelevance: [String]
-	InterventionDescription: [String]
-	InterventionMeshId: [String]
-	InterventionMeshTerm: [String]
-	InterventionName: [String]
-	InterventionOtherName: [String]
-	InterventionType: [String]
-	IsFDARegulatedDevice: String
-	IsFDARegulatedDrug: String
-	clinicalTrialsusesInterventions: [ClinicalTrial!]! @relationship(type: "uses_interventions", direction: IN)
+	InterventionName: String
+	InterventionType: String!
+	clinicalTrialshasIntervention: [ClinicalTrial!]! @relationship(type: "has_intervention", direction: IN)
 }
 
 type Location {
-	LocationCity: [String]!
-	LocationContactEMail: [String]
-	LocationContactName: [String]
-	LocationContactPhone: [String]
-	LocationContactPhoneExt: [String]
-	LocationContactRole: [String]
-	LocationCountry: [String]!
-	LocationFacility: [String]
-	LocationState: [String]
-	LocationStatus: [String]
-	LocationZip: [String]
+	LocationCity: String
+	LocationCountry: String
+	LocationFacility: String
+	LocationState: String
+	LocationStatus: String
+	LocationZip: String
 	clinicalTrialsinLocations: [ClinicalTrial!]! @relationship(type: "in_locations", direction: IN)
 }
 
 type Participant {
-	EligibilityCriteria: String
-	EnrollmentCount: String
-	EnrollmentType: String
-	Gender: String
-	GenderBased: String
-	GenderDescription: String
-	HealthyVolunteers: String
-	MaximumAge: String
-	MinimumAge: String
-	StdAge: [String]!
-	StudyPopulation: String
+	EligibilityCriteria: String!
 	clinicalTrialshasParticipantInfo: [ClinicalTrial!]! @relationship(type: "has_participant_info", direction: IN)
 }
 
@@ -146,41 +108,15 @@ type PatientRegistry {
 }
 
 type Reference {
-	ReferenceCitation: [String]!
-	ReferencePMID: [String]
-	ReferenceType: [String]!
-	RetractionPMID: [String]
-	RetractionSource: [String]
-	clinicalTrialshasReferences: [ClinicalTrial!]! @relationship(type: "has_references", direction: IN)
+	ReferenceCitation: String!
+	ReferencePMID: String
+	ReferenceType: String!
+	isAboutClinicalTrials: [ClinicalTrial!]! @relationship(type: "is_about", direction: OUT)
 }
 
 type Sponsor {
-	CentralContactEMail: [String]
-	CentralContactName: [String]
-	CentralContactPhone: [String]
-	CentralContactPhoneExt: [String]
-	CentralContactRole: [String]
 	LeadSponsorClass: String
 	LeadSponsorName: String!
-	OrgClass: String
-	OrgFullName: String!
-	OrgStudyId: String
-	OrgStudyIdLink: String
-	OrgStudyIdType: String
-	OverallOfficialAffiliation: [String]
-	OverallOfficialName: [String]
-	OverallOfficialRole: [String]
-	PointOfContactEMail: String
-	PointOfContactOrganization: String
-	PointOfContactPhone: String
-	PointOfContactPhoneExt: String
-	PointOfContactTitle: String
-	ResponsiblePartyInvestigatorAffiliation: String
-	ResponsiblePartyInvestigatorFullName: String
-	ResponsiblePartyInvestigatorTitle: String
-	ResponsiblePartyOldNameTitle: String
-	ResponsiblePartyOldOrganization: String
-	ResponsiblePartyType: String
 	clinicalTrialssponsoredBy: [ClinicalTrial!]! @relationship(type: "sponsored_by", direction: IN)
 }
 
@@ -194,9 +130,9 @@ type StudyDesign {
 	DesignPrimaryPurpose: String
 	DesignTimePerspective: String
 	DetailedDescription: String
-	PrimaryOutcomeDescription: [String]
-	PrimaryOutcomeMeasure: [String]
-	PrimaryOutcomeTimeFrame: [String]
+	PrimaryOutcomeDescription: String
+	PrimaryOutcomeMeasure: String
+	PrimaryOutcomeTimeFrame: String
 	SamplingMethod: String
 	clinicalTrialshasStudyDesign: [ClinicalTrial!]! @relationship(type: "has_study_design", direction: IN)
 }

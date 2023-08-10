@@ -21,9 +21,9 @@
     ></mat-paginator>
 </div>
     <div class="row spinner-holder width-70">
-    <ncats-frontend-library-loading-spinner [isLoaded]="!loading"></ncats-frontend-library-loading-spinner>
+    <ncats-frontend-library-loading-spinner [isLoaded]="loaded"></ncats-frontend-library-loading-spinner>
     </div>
-    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loading" class="fill-container"></ncats-frontend-library-disease-list>
+    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loaded" class="fill-container"></ncats-frontend-library-disease-list>
     <div class="row right-justified-row ">
       <mat-paginator *ngIf="page"
                      [pageSize]="page.pageSize"

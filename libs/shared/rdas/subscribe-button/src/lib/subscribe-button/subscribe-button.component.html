@@ -1,6 +1,10 @@
 <div class="centered">
-<button mat-flat-button  *ngIf= !subscribed (click)="subscribe()" [color]="'primary'" [disabled]="!userExists">SUBSCRIBE</button>
-<a mat-stroked-button [color]="'primary'" *ngIf= subscribed [matMenuTriggerFor]="menu">
+<button mat-stroked-button  *ngIf= "!subscribed && userExists" (click)="subscribe()" [color]=theme [disabled]="!userExists">SUBSCRIBE</button>
+<ncats-frontend-library-social-sign-on-button *ngIf= "!userExists" [theme]= theme></ncats-frontend-library-social-sign-on-button>
+<!--
+  <button mat-stroked-button   (click)="subscribe()" [color]="'warn'">SIGN IN TO SUBSCRIBE</button>
+-->
+<button mat-stroked-button [color]=theme *ngIf= subscribed [matMenuTriggerFor]="menu">
   <div class="grid-button">
   <div>
   <mat-icon *ngIf="subscriptionSelection.selected.length === 3">notifications_active</mat-icon>
@@ -14,7 +18,7 @@
 <mat-icon aria-label="Alert options menu">expand_more</mat-icon>
     </div>
   </div>
-</a>
+</button>
 <mat-menu #menu="matMenu">
   <div mat-menu-item>
     <mat-checkbox

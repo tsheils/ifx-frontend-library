@@ -3,7 +3,7 @@
   <mat-icon *ngIf="!photoURL" class="missing-url">account_circle</mat-icon>
   <span class="user-name">{{user.displayName}}</span>
 </div>
-<button mat-button class="signin-button" aria-label = "signin button" (click)="openSignInModal()" *ngIf="!user">
+<button mat-button class="signin-button" [color] = theme aria-label = "signin button" (click)="openSignInModal()" *ngIf="!user">
   Sign In
 </button>
 <mat-menu #profileMenu="matMenu">
