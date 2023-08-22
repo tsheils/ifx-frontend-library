@@ -1,17 +1,17 @@
+@use '@angular/material' as mat;
+@import 'libs/styles/src/styles/rdas-theme2';
+
 ncats-frontend-library-article-list-card {
   width: 98%;
   -ms-overflow-style: none; //windows
   scrollbar-width: none; //firefox
-padding-bottom: 2vh;
+  padding: 1rem;
+  padding-bottom: 2vh;
+  margin-bottom: 2vh;
+  border-bottom: 2px solid mat.get-color-from-palette($app-accent);
   //chrome
   ::-webkit-scrollbar{
     display: none;
-  }
-
-  mat-card {
-    padding: 1rem;
-    padding-bottom: 2vh;
-    margin-bottom: 2vh;
   }
 
   .expand-link {

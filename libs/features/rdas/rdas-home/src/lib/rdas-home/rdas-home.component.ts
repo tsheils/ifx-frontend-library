@@ -1,20 +1,19 @@
+import ForceGraph3D from "3d-force-graph";
 import { CdkScrollable } from "@angular/cdk/overlay";
 import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
-import { DOCUMENT } from "@angular/common";
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, Inject, ViewChild } from "@angular/core";
-import { Router } from "@angular/router";
-import ForceGraph3D from '3d-force-graph';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
-import { map } from "rxjs";
+import { Router } from "@angular/router";
 
 @Component({
     selector: 'ncats-frontend-library-rdas-home',
     templateUrl: './rdas-home.component.html',
     styleUrls: ['./rdas-home.component.scss'],
     standalone: true,
-    imports: [MatIconModule, MatCardModule, ScrollingModule, CdkScrollableModule]
+    imports: [MatIconModule, MatCardModule, ScrollingModule, CdkScrollableModule],
+  encapsulation: ViewEncapsulation.None
 })
 export class RdasHomeComponent {
   @ViewChild(CdkScrollable, {static: false}) scrollable!: CdkScrollable;

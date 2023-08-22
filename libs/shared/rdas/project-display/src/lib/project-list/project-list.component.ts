@@ -1,6 +1,7 @@
 import { CommonModule } from "@angular/common";
 import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { NavigationExtras, Router } from "@angular/router";
 import { CoreProject } from "@ncats-frontend-library/models/rdas";
 import { ProjectListCardComponent } from "../project-list-card/project-list-card.component";
 
@@ -16,7 +17,8 @@ export class ProjectListComponent implements OnChanges {
   @Input() count = 0;
   @Output() pageChange: EventEmitter<{offset:number}> = new EventEmitter<{offset:number}>();
   constructor(
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnChanges() {
@@ -28,6 +30,15 @@ export class ProjectListComponent implements OnChanges {
       offset: event.pageIndex * event.pageSize,
     }
     this.pageChange.emit(pageOptions);
+  }
+
+  navigate(id: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams:{
+        projectid: id
+      }
+    };
+    this.router.navigate(['/grant'], navigationExtras);
   }
 
 }

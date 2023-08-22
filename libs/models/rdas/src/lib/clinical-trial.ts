@@ -12,7 +12,7 @@ export class ClinicalTrial  {
   lastUpdatePostDate?: string;
   lastUpdatePostDateType?: string;
   lastUpdateSubmitDate?: string;
-  NCTId?: string;
+  NCTId!: string;
   NCTIdAlias?: string[];
   officialTitle?: string;
   overallStatus?: string;

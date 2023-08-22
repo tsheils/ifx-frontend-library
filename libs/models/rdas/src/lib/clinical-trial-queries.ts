@@ -1,8 +1,7 @@
 import { gql } from "apollo-angular";
 
-export const FETCHTRIALSQUERY = gql`
-  query ClinicalTrials($ctwhere: ClinicalTrialWhere, $ctoptions: ClinicalTrialOptions) {
-    clinicalTrials(where: $ctwhere, options: $ctoptions) {
+export const TRIALFIELDS = `
+fragment trialFields on ClinicalTrial {
       briefTitle: BriefTitle
       officialTitle: OfficialTitle
       briefSummary: BriefSummary
@@ -57,18 +56,52 @@ export const FETCHTRIALSQUERY = gql`
         leadSponsorClass: LeadSponsorClass
         leadSponsorName: LeadSponsorName
       }
+}
+`
+
+
+
+export const FETCHTRIALDETAILS = gql`
+  query ClinicalTrials($ctwhere: ClinicalTrialWhere) {
+    clinicalTrials(where: $ctwhere) {
+     ...trialFields
+    }
+  }
+  ${TRIALFIELDS}
+`
+
+export const FETCHTRIALSQUERY = gql`
+  query ClinicalTrials($ctwhere: ClinicalTrialWhere, $ctoptions: ClinicalTrialOptions) {
+    clinicalTrials(where: $ctwhere, options: $ctoptions) {
+     ...trialFields
     }
     clinicalTrialsAggregate(where: $ctwhere) {
       count
     }
   }
+  ${TRIALFIELDS}
 `
+
+export const TRIALDETAILSVARIABLES: {
+  ctwhere: {
+    NCTId: null | undefined | string;
+
+  }
+} = {
+  ctwhere: {
+    NCTId: ""
+  }
+}
 
 export const FETCHTRIALSVARIABLES: {
   ctwhere?: {
     investigatesConditionConditions_SINGLE?: {
-      mappedToGardGards_SINGLE?: {
-        GardId?: null | string
+      mappedToUmlsMetaMapAnnotationsConnection_SINGLE?: {
+        node?: {
+          mappedToGardGards_SINGLE?: {
+            GardId?: null | string
+          }
+        }
       }
     }
   },
@@ -80,10 +113,14 @@ export const FETCHTRIALSVARIABLES: {
 } = {
   ctwhere: {
     investigatesConditionConditions_SINGLE: {
-      mappedToGardGards_SINGLE: {
-        GardId: null
+      mappedToUmlsMetaMapAnnotationsConnection_SINGLE: {
+        node: {
+          mappedToGardGards_SINGLE: {
+            GardId: null
+          }
+        }
       }
-    }
+      }
     },
   ctoptions: {
     sort: [

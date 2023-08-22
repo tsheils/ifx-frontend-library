@@ -5,7 +5,6 @@ import { DiseaseDisplayComponent } from "@ncats-frontend-library/shared/rdas/dis
 import { ScrollToTopComponent } from "@ncats-frontend-library/shared/utils/scroll-to-top";
 import { DiseasesFacade, fetchDisease } from "@ncats-frontend-library/stores/disease-store";
 import { NgIf } from "@angular/common";
-import { combineLatest } from "rxjs";
 
 @Component({
     selector: 'ncats-frontend-library-rdas-disease-page',
@@ -33,25 +32,8 @@ export class RdasDiseasePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-/*    combineLatest([this.diseaseFacade.selectedDiseases$, this.diseaseFacade.loaded$])
-      .subscribe(res => {
-          this.disease = res[0] as Disease;
-          if(this.disease) {
-            this.options.gardId = this.disease.gardId;
-          }
-         //   this.loaded = res[1];
-          this.changeRef.markForCheck();
-      })
-    this.diseaseFacade.loaded$.subscribe(res => {
-      console.log("loading: " + res);
-      if(this.disease) {
-        this.loaded = res
-      }
-    });*/
-
     this.diseaseFacade.selectedDiseases$.subscribe(res => {
         if (res) {
-          console.log(res)
           this.disease = res;
           this.options.gardId = this.disease.gardId;
           this.changeRef.markForCheck();
@@ -59,7 +41,6 @@ export class RdasDiseasePageComponent implements OnInit {
       }
     )
   }
-
 
   fetchDisease(disease: Disease) {
     this.options.gardId = disease.gardId;
@@ -78,6 +59,7 @@ export class RdasDiseasePageComponent implements OnInit {
   }
 
   fetchDiseaseInfo(options: any) {
+    console.log(options)
     this.options.options = options.variables;
     this.options.source = options.origin;
     this.diseaseFacade.dispatch(fetchDisease(this.options));

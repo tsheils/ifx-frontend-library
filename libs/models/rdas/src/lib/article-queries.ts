@@ -200,3 +200,74 @@ query ArticleCount($diseasesWhere: GARDWhere) {
   }
 }
 `
+
+export const FETCHARTICLEDETAILS = gql`
+  query ArticleDetails($articleWhere: ArticleWhere) {
+    articles(where: $articleWhere) {
+      ...articleFields
+      authorsWrote {
+        firstName
+        lastName
+        fullName
+      }
+      epidemiologies: epidemiologyAnnotationsEpidemiologyAnnotationFor {
+        epidemiology_rate
+        epidemiology_type
+        ethnicity
+        location
+        sex
+      }
+      journals: appearsInJournalVolumes {
+        dateOfPublication
+        printPublicationDate
+        volume
+        _title: contentOfJournals {
+          title
+        }
+      }
+      diseases: gardsmentionedIn {
+        gardId: GardId
+        name
+      }
+      sources: fullTextUrlsContentFor {
+        availability
+        documentStyle
+        site
+        url
+      }
+      keywords: keywordsKeywordFor {
+        keyword
+      }
+      meshTerms: meshTermsMeshTermFor {
+        descriptorName
+        #  majorTopic_YN
+        _qualifier: meshQualifiersMeshQualifierFor {
+          abbreviation
+          qualifierName
+        }
+      }
+      annotations: pubtatorAnnotationsAnnotationFor {
+        infons_identifier
+        infons_type
+        type
+        text
+      }
+      substances: substancesSubstanceAnnotatedByPubmed {
+        name
+        registryNumber
+      }
+    }
+  }
+  ${ARTICLEFIELDS}
+`
+
+export const ARTICLEDETAILSVARIABLES: {
+  articleWhere: {
+    pubmed_id: null | undefined | string;
+  }
+} = {
+  articleWhere:
+    {
+      pubmed_id: ''
+    }
+}

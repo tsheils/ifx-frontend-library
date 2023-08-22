@@ -10,8 +10,8 @@
       ></mat-paginator>
     </div>
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)">
-      <ng-container matColumnDef="Gene Symbol">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gene symbol"> Gene Symbol
+      <ng-container matColumnDef="Gene">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by gene symbol"> Gene
         </th>
         <td mat-cell *matCellDef="let geneAssociation">
           <a
@@ -52,12 +52,15 @@
       <ng-container matColumnDef="Reference">
         <th mat-header-cell *matHeaderCellDef>Reference</th>
         <td mat-cell *matCellDef="let geneAssociation">
-          <a *ngFor="let ref of geneAssociation.reference"
+         <span *ngFor="let ref of geneAssociation.reference">
+          <a
              href="{{ref.url}}"
              target="_blank"
              rel="noreferrer"
              aria-label="Link to reference"
           >{{ref.code}}</a><ncats-frontend-library-external-link></ncats-frontend-library-external-link>
+          </span>
+           <br>
         </td>
       </ng-container>
 

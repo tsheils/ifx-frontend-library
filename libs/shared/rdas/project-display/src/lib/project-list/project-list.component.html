@@ -6,7 +6,7 @@
                  [pageSize]="10"
                  (page)="fetchProjects($event)"></mat-paginator>
 </div>
-<div class="row centered-row" *ngFor="let project of projects">
-  <ncats-frontend-library-project-list-card [project]="project"></ncats-frontend-library-project-list-card>
+<div class="row centered-row" *ngFor="let grant of projects">
+  <ncats-frontend-library-project-list-card [grant]="grant" (click)="navigate(grant.core_project_num)" class="clickable-area"></ncats-frontend-library-project-list-card>
 </div>
 

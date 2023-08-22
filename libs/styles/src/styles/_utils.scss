@@ -4,3 +4,21 @@
     flex-basis: $width*1%;
   }
 }
+
+@mixin horizontalpadding($padding) {
+  .horizontal-padding-#{$padding} {
+    padding: 0 $padding;
+  }
+}
+
+@mixin verticalpadding($padding) {
+  .vertical-padding-#{$padding} {
+    padding: $padding 0;
+  }
+}
+
+@mixin padding($padding) {
+  .padding-#{$padding} {
+    padding: $padding;
+  }
+}

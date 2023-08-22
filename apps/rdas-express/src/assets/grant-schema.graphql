@@ -1,0 +1,95 @@
+type Agent {
+	coreProjectsFundedBy: [CoreProject!]! @relationship(type: "FUNDED_BY", direction: IN)
+	name: String!
+}
+
+interface AnnotatedProperties @relationshipProperties {
+	source: String!
+}
+
+type Annotation {
+	projectsAnnotated: [Project!]! @relationship(type: "ANNOTATED", direction: IN, properties: "AnnotatedProperties")
+	semantic_types: [String]!
+	semantic_types_names: [String]!
+	umls_concept: String!
+	umls_cui: String!
+}
+
+type ClinicalStudies {
+	coreProjectsStudied: [CoreProject!]! @relationship(type: "STUDIED", direction: IN)
+	gov_id: String!
+	status: String!
+	title: String!
+}
+
+type CoreProject {
+	core_project_num: String!
+	fundedByAgents: [Agent!]! @relationship(type: "FUNDED_BY", direction: OUT)
+	patentedPatents: [Patent!]! @relationship(type: "PATENTED", direction: OUT)
+	projectsUnderCore: [Project!]! @relationship(type: "UNDER_CORE", direction: IN)
+	publishedPublications: [Publication!]! @relationship(type: "PUBLISHED", direction: OUT)
+	rd_total_cost: BigInt
+	studiedClinicalStudies: [ClinicalStudies!]! @relationship(type: "STUDIED", direction: OUT)
+}
+
+type GARD {
+	GardId: String!
+	GardName: String!
+	Synonyms: [String]!
+	researchedByProjects: [Project!]! @relationship(type: "RESEARCHED_BY", direction: OUT)
+}
+
+type Journal {
+	publicationsPublishedIn: [Publication!]! @relationship(type: "PUBLISHED_IN", direction: IN, properties: "PublishedInProperties")
+	title: String!
+}
+
+type Patent {
+	coreProjectsPatented: [CoreProject!]! @relationship(type: "PATENTED", direction: IN)
+	id: String!
+	org_name: String!
+	title: String!
+}
+
+type PrincipalInvestigator {
+	investigatedProjects: [Project!]! @relationship(type: "INVESTIGATED", direction: OUT)
+	org_name: String!
+	org_state: String!
+	pi_id: String!
+	pi_name: String!
+}
+
+type Project {
+	DateCreatedRDAS: String!
+	abstract: String!
+	annotatedAnnotations: [Annotation!]! @relationship(type: "ANNOTATED", direction: OUT, properties: "AnnotatedProperties")
+	application_id: BigInt!
+	application_type: BigInt
+	funding_year: BigInt!
+	gardsresearchedBy: [GARD!]! @relationship(type: "RESEARCHED_BY", direction: IN)
+	phr: String
+	principalInvestigatorsInvestigated: [PrincipalInvestigator!]! @relationship(type: "INVESTIGATED", direction: IN)
+	subproject_id: BigInt
+	terms: [String]
+	title: String!
+	total_cost: BigInt
+	underCoreCoreProjects: [CoreProject!]! @relationship(type: "UNDER_CORE", direction: OUT)
+}
+
+type Publication {
+	affiliation: String
+	authors: [String]
+	coreProjectsPublished: [CoreProject!]! @relationship(type: "PUBLISHED", direction: IN)
+	date: String!
+	language: String!
+	pmc_id: BigInt
+	pmid: BigInt!
+	publishedInJournals: [Journal!]! @relationship(type: "PUBLISHED_IN", direction: OUT, properties: "PublishedInProperties")
+	title: String
+}
+
+interface PublishedInProperties @relationshipProperties {
+	issue: String
+	page: String
+	volume: String
+}

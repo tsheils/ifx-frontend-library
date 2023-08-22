@@ -1,0 +1,62 @@
+interface AssociatedWithGeneProperties @relationshipProperties {
+	AssociationSource: [String]
+	AssociationStatus: String!
+	AssociationType: String!
+}
+
+type GARD {
+	ClassificationLevel: String!
+	DataSource: String!
+	DataSourceId: String!
+	DiseaseOntology: [String]
+	DisorderType: [String]!
+	GardId: String!
+	GardName: String!
+	GeneticAlliance: [String]
+	GeneticsHomeReference: [String]
+	ICD10: [String]
+	ICD10CM: [String]
+	ICD11: [String]
+	MeSH: [String]
+	MedDRA: [String]
+	OMIM: [String]
+	Orphanet: [String]
+	SNOMEDCT: [String]
+	Synonyms: [String]!
+	UMLS: [String]
+	associatedWithGeneGenes: [Gene!]! @relationship(type: "associated_with_gene", direction: OUT, properties: "AssociatedWithGeneProperties")
+	gardSsubClassOf: [GARD!]! @relationship(type: "subClassOf", direction: IN)
+	hasPhenotypePhenotypes: [Phenotype!]! @relationship(type: "has_phenotype", direction: OUT, properties: "HasPhenotypeProperties")
+	subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
+}
+
+type Gene {
+	Ensembl: String
+	GeneIdentifier: String!
+	GeneSymbol: String!
+	GeneSynonyms: [String]
+	GeneTitle: String!
+	IUPHAR: String
+	Locus: String!
+	OMIM: String
+	Reactome: String
+	Swissprot: String
+	gardSassociatedWithGene: [GARD!]! @relationship(type: "associated_with_gene", direction: IN, properties: "AssociatedWithGeneProperties")
+}
+
+interface HasPhenotypeProperties @relationshipProperties {
+	Evidence: String!
+	HPOFrequency: String
+	Reference: [String]!
+	ValidationStatus: Boolean!
+}
+
+type Phenotype {
+	HPOId: String!
+	HPOTerm: String!
+	Modifier: [String]
+	Online: Boolean!
+	Onset: String
+	Sex: String
+	gardShasPhenotype: [GARD!]! @relationship(type: "has_phenotype", direction: IN, properties: "HasPhenotypeProperties")
+}

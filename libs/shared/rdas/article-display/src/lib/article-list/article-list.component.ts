@@ -8,9 +8,8 @@ import {
   OnChanges,
   Output
 } from "@angular/core";
-import { MatCardModule } from "@angular/material/card";
-import { MatDividerModule } from "@angular/material/divider";
 import { MatPaginatorModule, PageEvent } from "@angular/material/paginator";
+import { NavigationExtras, Router } from "@angular/router";
 import { Article } from "@ncats-frontend-library/models/rdas";
 import { ArticleListCardComponent } from "../article-list-card/article-list-card.component";
 
@@ -18,7 +17,7 @@ import { ArticleListCardComponent } from "../article-list-card/article-list-card
   standalone: true,
   selector: 'ncats-frontend-library-article-list',
   templateUrl: './article-list.component.html',
-  imports: [CommonModule, MatPaginatorModule, ArticleListCardComponent, MatCardModule],
+  imports: [CommonModule, MatPaginatorModule, ArticleListCardComponent],
   styleUrls: ['./article-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -27,7 +26,8 @@ export class ArticleListComponent implements OnChanges {
   @Input() count = 0;
   @Output() pageChange: EventEmitter<{ offset: number }> = new EventEmitter<{ offset: number }>();
   constructor(
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
+    private router: Router
   ) { }
 
   ngOnChanges() {
@@ -39,6 +39,15 @@ export class ArticleListComponent implements OnChanges {
       offset: event.pageIndex * event.pageSize,
     }
     this.pageChange.emit(pageOptions);
+  }
+
+  navigate(id: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams:{
+        pmid: id
+      }
+    };
+    this.router.navigate(['/article'], navigationExtras);
   }
 
 }

@@ -151,7 +151,8 @@ export class DiseasesEffects {
         DISEASEQUERYPARAMETERS.where = {GardId: params.id};
         ARTICLEVARIABLES.gardWhere.GardId =  params.id;
         PROJECTVARIABLES.coreProjectsWhere = {projectsUnderCoreConnection_ALL: {node: {gardsresearchedBy_SINGLE: {GardId: params.id}}}};
-        FETCHTRIALSVARIABLES.ctwhere = {investigatesConditionConditions_SINGLE: { mappedToGardGards_SINGLE: {GardId: params.id}}};
+        FETCHTRIALSVARIABLES.ctwhere = {investigatesConditionConditions_SINGLE:{ mappedToUmlsMetaMapAnnotationsConnection_SINGLE: {
+          node: { mappedToGardGards_SINGLE: {GardId: params.id}}}}};
         return forkJoin(
           this.diseaseService.fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS).pipe(take(1)),
           this.diseaseService.fetchArticles(FETCHARTICLESQUERY, ARTICLEVARIABLES).pipe(take(1)),

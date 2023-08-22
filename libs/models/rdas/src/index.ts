@@ -8,4 +8,5 @@ export * from './lib/disease-queries';
 export * from './lib/gene';
 export * from './lib/phenotype';
 export * from './lib/project';
+export * from './lib/project-queries';
 

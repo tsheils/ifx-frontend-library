@@ -1,13 +1,19 @@
-import { ChangeDetectorRef, Component, Input, ViewChild } from "@angular/core";
-import { CommonModule } from '@angular/common';
+import { CommonModule } from "@angular/common";
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  Input, OnChanges,
+  SimpleChanges,
+  ViewChild, ViewEncapsulation
+} from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatSort, MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-import { Phenotype, PhenotypeAssociation } from "@ncats-frontend-library/models/rdas";
+import { PhenotypeAssociation } from "@ncats-frontend-library/models/rdas";
 import { ExternalLinkComponent } from "@ncats-frontend-library/shared/utils/external-link";
-import { map } from "rxjs";
 import { PhenotypeListCardComponent } from "../phenotype-list-card/phenotype-list-card.component";
 
 @Component({
@@ -16,15 +22,17 @@ import { PhenotypeListCardComponent } from "../phenotype-list-card/phenotype-lis
   imports: [CommonModule, PhenotypeListCardComponent, MatPaginatorModule, MatIconModule, MatSortModule, MatCardModule, MatTableModule, ExternalLinkComponent],
   templateUrl: './phenotype-list.component.html',
   styleUrls: ['./phenotype-list.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None
+
 })
-export class PhenotypeListComponent {
+export class PhenotypeListComponent implements AfterViewInit, OnChanges {
   @Input() phenotypes!: PhenotypeAssociation[];
   count = 0;
   dataSource: MatTableDataSource<PhenotypeAssociation> = new MatTableDataSource<PhenotypeAssociation>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   displayColumns = ["Phenotype", "Frequency", "Evidence", "Reference"]
-
 
   ngAfterViewInit() {
     this.count = this.phenotypes.length;
@@ -56,6 +64,14 @@ export class PhenotypeListComponent {
           return 0;
       }
     });
+  }
+
+  ngOnChanges(change: SimpleChanges) {
+    if(change['phenotypes']) {
+      this.count = this.phenotypes.length;
+      this.dataSource.data = this.phenotypes;
+      this.sortData({active: 'Frequency', direction: 'desc'})
+    }
   }
 }
 
