@@ -2,7 +2,6 @@ import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Action } from '@ngrx/store';
 
 import * as DiseasesActions from './diseases.actions';
-import { DiseasesEntity } from './diseases.models';
 import {
   State,
   initialState,
@@ -10,14 +9,14 @@ import {
 } from './diseases.reducer';
 
 describe('Diseases Reducer', () => {
-  const createDiseasesEntity = (gardId: string, name = ''): Disease => ({
+  const createDiseasesEntity = (gardId: string, name = ''): Disease => (new Disease ({
     gardId,
     name: name || `name-${gardId}`,
     epiCount: 0,
     nonEpiCount: 0,
     projectCount: 0,
     clinicalTrialsCount: 0
-  });
+  }));
 
   describe('valid Diseases actions', () => {
     it('loadDiseasesSuccess should return the list of known Diseases', () => {

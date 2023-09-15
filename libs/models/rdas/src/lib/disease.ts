@@ -1,11 +1,11 @@
-import {gql} from "apollo-angular";
 import { Article } from "./article";
 import {ClinicalTrial} from "./clinical-trial";
-import { Gene, GeneAssociation } from "./gene";
-import { Phenotype, PhenotypeAssociation } from "./phenotype";
+import { GeneAssociation } from "./gene";
+import { PhenotypeAssociation } from "./phenotype";
 import { CoreProject } from "./project";
 
 export class Disease {
+  articleCount = 0;
   classificationLevel?: string;
   dataSource!: string;
   dataSourceId!: string;
@@ -37,13 +37,13 @@ export class Disease {
   projects?: CoreProject[];
   projectCount = 0;
   clinicalTrials?: ClinicalTrial[];
-  clinicalTrialsCount = 0;
+  clinicalTrialCount = 0;
   geneAssociations?: GeneAssociation[];
   _geneAssociations?: {edges?: Partial<GeneAssociation>[]};
   phenotypeAssociations?: PhenotypeAssociation[];
   _phenotypeAssociations?: {edges?: Partial<PhenotypeAssociation>[]};
   geneCount: number | undefined = 0;
-  phenotypesCount = 0;
+  phenotypeCount = 0;
   parentId?: string;
   _genesCount?: {count?: number, low: 0};
   _phenotypesCount?: {count: number, low: 0};
@@ -83,7 +83,7 @@ export class Disease {
     }
 
     if(obj._phenotypesCount &&  obj._phenotypesCount.count) {
-      this.phenotypesCount = obj._phenotypesCount.count;
+      this.phenotypeCount = obj._phenotypesCount.count;
       delete this._phenotypesCount;
     }
 

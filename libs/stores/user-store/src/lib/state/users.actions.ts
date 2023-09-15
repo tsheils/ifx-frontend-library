@@ -17,7 +17,7 @@ export const resetPasswordEmailSuccess = createAction(
 
 export const resetPasswordEmailFailure = createAction(
   '[Users/API] Reset Password Email Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const loginLinkUser = createAction(
@@ -36,7 +36,7 @@ export const loginLinkUserSuccess = createAction(
 
 export const loginLinkUserFailure = createAction(
   '[Users/API] Login Link User Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 
@@ -58,7 +58,7 @@ export const loginEmailUserSuccess = createAction(
 
 export const loginEmailUserFailure = createAction(
   '[Users/API] Login Email User Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 
@@ -78,7 +78,7 @@ export const registerEmailUserSuccess = createAction(
 
 export const registerEmailUserFailure = createAction(
   '[Users/API] Register Email User Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 
@@ -98,7 +98,7 @@ export const loginUserSuccess = createAction(
 
 export const loginUserFailure = createAction(
   '[Users/API] Login User Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const fetchUserProfile = createAction(
@@ -113,7 +113,7 @@ export const fetchUserProfileSuccess = createAction(
 
 export const fetchUserProfileFailure = createAction(
   '[Users/API] Fetch User Profile Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const updateUserSubscriptions = createAction(
@@ -128,7 +128,7 @@ export const updateUserSubscriptionsSuccess = createAction(
 
 export const updateUserSubscriptionsFailure = createAction(
   '[Users/API] Update User Subscriptions Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const logoutUser = createAction(
@@ -141,7 +141,7 @@ export const logoutUserSuccess = createAction(
 
 export const logoutUserFailure = createAction(
   '[Users/API] Logout User Failure',
-  props<{ error: never }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const fetchUser = createAction(
@@ -155,5 +155,5 @@ export const fetchUserSuccess = createAction(
 
 export const fetchUserFailure = createAction(
   '[Users/API] Fetch User Failure',
-  props<{ error: never }>()
+  props<{ error: string | null | undefined }>()
 );

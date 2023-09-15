@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, Signal, signal } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
@@ -23,17 +23,19 @@ export class DiseaseSubscriptionListComponent {
   protected ngUnsubscribe: Subject<boolean> = new Subject();
 
   private _subscriptions: Subscription[] = [];
-  diseases: Disease[] = [];
+  diseases!: Signal<Disease[] | undefined>;
 
   @Input()
   set subscriptions(subscriptions: Subscription[] | undefined) {
     if(subscriptions) {
-      this.diseases = []
+     const diseaseArr: Disease[] = []
       subscriptions.forEach(sub => {
-        this.diseases.push(new Disease({ gardId: sub.gardID, name: sub.diseaseName }))
+        diseaseArr.push(new Disease({ gardId: sub.gardID, name: sub.diseaseName }));
+        this.diseases =(signal<Disease[]>(diseaseArr))
       })
       this._subscriptions = subscriptions;
     }
+    console.log(this.diseases);
   }
 
   get subscriptions(): Subscription[] {

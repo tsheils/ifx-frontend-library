@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { User } from "@ncats-frontend-library/models/utils";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Store } from "@ngrx/store";
+import firebase from "firebase/compat";
 import { map, mergeMap, tap, withLatestFrom } from "rxjs";
 import { UserService } from "../user.service";
 
@@ -10,6 +11,11 @@ import { UsersPartialState } from "./users.reducer";
 
 @Injectable()
 export class UsersEffects {
+  constructor(
+    private readonly actions$: Actions,
+    private userService: UserService,
+    private store: Store<UsersPartialState>
+  ) {}
 
   init = createEffect(() =>
       this.actions$.pipe(
@@ -33,32 +39,32 @@ export class UsersEffects {
       mergeMap((action: {provider: string}) => {
         return this.userService.doLogin(action.provider)
           .pipe(
-            map((res: any) =>
-            {
-            return  res.user;
-            }),
-            map((res: Partial<User>) => {
+            map((res: any) => {
+              if(res && res.user){
               const u: User = new User({
-                displayName: res.displayName,
-                photoURL: res.photoURL,
-                uid: res.uid
-              })
-              return UsersActions.loginUserSuccess({ user: u });
+                displayName: res.user.displayName,
+                photoURL: res.user.photoURL,
+                uid: res.user.uid
+              } as Partial<User>)
+
+                return UsersActions.loginUserSuccess({ user: u });
+              } else {
+                return UsersActions.loginUserFailure({ error: "Login Failed" });
+              }
             })
-        // return DiseasesActions.fetchDiseaseFailure({error: "No Disease found"})
           )
       })
     )
   );
 
 
-  loginEmailUser = createEffect(() =>
+  loginEmailUser = createEffect(()  =>
     this.actions$.pipe(
       ofType(UsersActions.loginEmailUser),
       mergeMap((action: {email: string, pw: string}) => {
         return this.userService.doEmailLogin(action.email, action.pw)
           .pipe(
-            map((res: { code?: string, message?: string, user?: Partial<User> }) => {
+            map((res: any) => {
               if (res.code) {
                const errMessage: string = this._getErrorMesssage(res.code);
                 return UsersActions.loginEmailUserFailure({ error: errMessage })
@@ -88,18 +94,14 @@ registerEmailUser = createEffect(() =>
       mergeMap((action: {email: string, pw: string}) => {
         return this.userService.doRegister(action.email, action.pw)
           .pipe(
-            map((res: any) =>
-            {
-              return  res.user;
-            }),
-            map((res: Partial<User>) => {
-              const u: User = new User({
-                displayName: res.displayName,
-                photoURL: res.photoURL,
-                uid: res.uid
-              })
-              if(u) {
-                return UsersActions.loginUserSuccess({ user: u });
+            map((res: firebase.auth.UserCredential | null) => {
+              if(res && res.user) {
+                const u: User = new User({
+                  displayName: res.user.displayName,
+                  photoURL: res.user.photoURL,
+                  uid: res.user.uid
+                } as Partial<User>)
+                  return UsersActions.loginUserSuccess({ user: u });
               } else {
                 return UsersActions.registerEmailUserFailure({error: "Registration Failed"})
               }
@@ -114,7 +116,7 @@ loginLinkUser = createEffect(() =>
       mergeMap((action: {email: string}) => {
         return this.userService.doEmailLinkLogin(action.email)
           .pipe(
-            map((res: any) => {
+            map((res: unknown) => {
               if(res) {
                 return UsersActions.loginLinkUserSuccess({ email: action.email });
               } else {
@@ -131,7 +133,7 @@ resetEmailPassword = createEffect(() =>
       mergeMap((action: {email: string}) => {
         return this.userService.doResetEmail(action.email)
           .pipe(
-            map((res: any) => {
+            map((res: {code: string }) => {
               if (res && res.code) {
                 const errMessage: string = this._getErrorMesssage(res.code);
                 return UsersActions.loginEmailUserFailure({ error: errMessage })
@@ -176,7 +178,7 @@ resetEmailPassword = createEffect(() =>
         )
     })
   )
-  )
+  );
 
 updateUserProfile = createEffect( ()=>
   this.actions$.pipe(
@@ -195,7 +197,7 @@ updateUserProfile = createEffect( ()=>
         )
     })
   )
-  )
+  );
 
   _getErrorMesssage(code: string): string {
     switch (code){
@@ -213,10 +215,4 @@ updateUserProfile = createEffect( ()=>
       }
     }
   }
-
-  constructor(
-    private readonly actions$: Actions,
-    private userService: UserService,
-    private store: Store<UsersPartialState>
-  ) {}
 }

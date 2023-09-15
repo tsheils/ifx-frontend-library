@@ -14,6 +14,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from "@angular/material/input";
 import { Disease } from "@ncats-frontend-library/models/rdas";
+import { HighlightPipe } from "@ncats-frontend-library/shared/utils/highlight-pipe";
 import {
   clearTypeahead,
   DiseaseService,
@@ -26,7 +27,7 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
   selector: 'ncats-frontend-library-rdas-search',
   templateUrl: './rdas-search.component.html',
   imports: [CommonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatAutocompleteModule,
-    MatIconModule, MatButtonModule],
+    MatIconModule, MatButtonModule, HighlightPipe],
   styleUrls: ['./rdas-search.component.scss'],
   standalone: true
 

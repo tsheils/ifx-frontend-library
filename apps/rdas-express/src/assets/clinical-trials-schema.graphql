@@ -1,3 +1,12 @@
+type Annotation {
+	CandidatePreferred: String!
+	MATCH_TYPE: String!
+	SEMANTIC_TYPE: [String]
+	UMLS: String
+	conditionshasAnnotation: [Condition!]! @relationship(type: "has_annotation", direction: IN, properties: "HasAnnotationProperties")
+	mappedToGardGards: [GARD!]! @relationship(type: "mapped_to_gard", direction: OUT)
+}
+
 type ClinicalTrial {
 	Acronym: String
 	BriefSummary: String!
@@ -48,7 +57,7 @@ type Collaborator {
 type Condition {
 	Condition: String!
 	clinicalTrialsinvestigatesCondition: [ClinicalTrial!]! @relationship(type: "investigates_condition", direction: IN)
-	mappedToUmlsMetaMapAnnotations: [MetaMapAnnotation!]! @relationship(type: "mapped_to_umls", direction: OUT, properties: "MappedToUmlsProperties")
+	hasAnnotationAnnotations: [Annotation!]! @relationship(type: "has_annotation", direction: OUT, properties: "HasAnnotationProperties")
 }
 
 type Drug {
@@ -91,7 +100,7 @@ type Drug {
 	USP: [String]
 	VET_DRUG: [String]
 	VUID: [String]
-	interventionshasParticipant: [Intervention!]! @relationship(type: "has_participant", direction: IN)
+	interventionsmappedToRxnorm: [Intervention!]! @relationship(type: "mapped_to_rxnorm", direction: IN, properties: "MappedToRxnormProperties")
 }
 
 type ExpandedAccess {
@@ -110,7 +119,12 @@ type GARD {
 	Synonyms: [String]!
 	UMLS: [String]
 	UMLS_Source: String!
-	metaMapAnnotationsmappedToGard: [MetaMapAnnotation!]! @relationship(type: "mapped_to_gard", direction: IN)
+	annotationsmappedToGard: [Annotation!]! @relationship(type: "mapped_to_gard", direction: IN)
+}
+
+interface HasAnnotationProperties @relationshipProperties {
+	FUZZY_SCORE: BigInt
+	METAMAP_SCORE: BigInt
 }
 
 type IndividualPatientData {
@@ -128,7 +142,7 @@ type Intervention {
 	InterventionName: String
 	InterventionType: String!
 	clinicalTrialshasIntervention: [ClinicalTrial!]! @relationship(type: "has_intervention", direction: IN)
-	hasParticipantDrugs: [Drug!]! @relationship(type: "has_participant", direction: OUT)
+	mappedToRxnormDrugs: [Drug!]! @relationship(type: "mapped_to_rxnorm", direction: OUT, properties: "MappedToRxnormProperties")
 }
 
 type Location {
@@ -141,16 +155,8 @@ type Location {
 	clinicalTrialsinLocations: [ClinicalTrial!]! @relationship(type: "in_locations", direction: IN)
 }
 
-interface MappedToUmlsProperties @relationshipProperties {
-	FUZZY_SCORE: BigInt!
-	METAMAP_SCORE: BigInt!
-}
-
-type MetaMapAnnotation {
-	CandidatePreferred: String!
-	UMLS: String!
-	conditionsmappedToUmls: [Condition!]! @relationship(type: "mapped_to_umls", direction: IN, properties: "MappedToUmlsProperties")
-	mappedToGardGards: [GARD!]! @relationship(type: "mapped_to_gard", direction: OUT)
+interface MappedToRxnormProperties @relationshipProperties {
+	WITH_SPACY: Boolean!
 }
 
 type Participant {
@@ -189,3 +195,27 @@ type StudyDesign {
 	SamplingMethod: String
 	clinicalTrialshasStudyDesign: [ClinicalTrial!]! @relationship(type: "has_study_design", direction: IN)
 }
+
+type Query {
+  clinicalTrialsByGardList(gardId: String, offset: Int, limit: Int): [ClinicalTrial] @cypher(
+  statement: """
+   MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+    WHERE n.GardId= $gardId
+    return distinct(cl)
+   ORDER BY cl.StartDate DESC
+   SKIP $offset
+   LIMIT $limit
+ """
+  )
+}
+
+type Query {
+  clinicalTrialsByGardCount(gardId: String): BigInt @cypher(
+  statement: """
+  MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+    WHERE n.GardId= $gardId
+  RETURN count(distinct(cl))
+ """
+  )
+}
+

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { Article } from "@ncats-frontend-library/models/rdas";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { readFirst } from '@nx/angular/testing';
@@ -7,17 +8,13 @@ import { readFirst } from '@nx/angular/testing';
 import * as ArticleStoreActions from './articles.actions';
 import { ArticlesEffects } from './articles.effects';
 import { ArticlesFacade } from './articles.facade';
-import { ArticleStoreEntity } from './article-store.models';
 import {
   ARTICLE_STORE_FEATURE_KEY,
-  ArticleStoreState,
-  initialArticleStoreState,
-  articlesReducer,
-} from './articles.reducer';
-import * as ArticleStoreSelectors from './articles.selectors';
+  articlesReducer, ArticleStorePartialState
+} from "./articles.reducer";
 
 interface TestSchema {
-  articleStore: ArticleStoreState;
+  articleStore: ArticleStorePartialState;
 }
 
 describe('ArticleStoreFacade', () => {
@@ -26,10 +23,10 @@ describe('ArticleStoreFacade', () => {
   const createArticleStoreEntity = (
     id: string,
     name = ''
-  ): ArticleStoreEntity => ({
-    id,
-    name: name || `name-${id}`,
-  });
+  ): Article => ( new Article({
+    pmid: id,
+    title: name || `name-${id}`,
+  }));
 
   describe('used in NgModule', () => {
     beforeEach(() => {
@@ -63,7 +60,7 @@ describe('ArticleStoreFacade', () => {
      * The initially generated facade::loadAll() returns empty array
      */
     it('loadAll() should return empty list with loaded == true', async () => {
-      let list = await readFirst(facade.allArticleStore$);
+      let list = await readFirst(facade.allArticles$);
       let isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
@@ -71,7 +68,7 @@ describe('ArticleStoreFacade', () => {
 
       facade.init();
 
-      list = await readFirst(facade.allArticleStore$);
+      list = await readFirst(facade.allArticles$);
       isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
@@ -82,22 +79,22 @@ describe('ArticleStoreFacade', () => {
      * Use `loadArticleStoreSuccess` to manually update list
      */
     it('allArticleStore$ should return the loaded list; and loaded flag == true', async () => {
-      let list = await readFirst(facade.allArticleStore$);
+      let list = await readFirst(facade.allArticles$);
       let isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(0);
       expect(isLoaded).toBe(false);
 
       store.dispatch(
-        ArticleStoreActions.loadArticleStoreSuccess({
-          articleStore: [
+        ArticleStoreActions.loadArticlesSuccess({
+          articles: [
             createArticleStoreEntity('AAA'),
             createArticleStoreEntity('BBB'),
           ],
         })
       );
 
-      list = await readFirst(facade.allArticleStore$);
+      list = await readFirst(facade.allArticles$);
       isLoaded = await readFirst(facade.loaded$);
 
       expect(list.length).toBe(2);

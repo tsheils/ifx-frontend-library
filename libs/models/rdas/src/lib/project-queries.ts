@@ -26,7 +26,7 @@ export const FETCHGRANTDETAILS = gql`
               application_type
               researchedDiseases: gardsresearchedBy {
                   gardId: GardId
-                  gardName: GardName
+                  name: GardName
               }
               phr
               funding_year
@@ -118,7 +118,7 @@ export const PROJECTVARIABLES: {
       }
     }
   },
-  coreProjectsOptions?: {
+  coreProjectsOptions: {
     limit?: number,
     offset?: number
   }

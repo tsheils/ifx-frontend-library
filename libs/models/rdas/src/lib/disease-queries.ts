@@ -1,5 +1,19 @@
 import { gql } from "apollo-angular";
 
+export const DISEASELISTFIELDS = `
+        fragment diseaseListFields on GARD {
+      name:GardName
+      gardId: GardId
+      classificationLevel: ClassificationLevel
+      disorderType: DisorderType
+      synonyms: Synonyms
+      articleCount: COUNT_ARTICLES
+      geneCount: COUNT_GENES
+      phenotypeCount: COUNT_PHENOTYPES
+      projectCount: COUNT_PROJECTS
+      clinicalTrialCount: COUNT_TRIALS
+      }
+`
 
 export const TREEROOTPARAMETERS = {
   where: {
@@ -14,7 +28,17 @@ export const TREEROOTPARAMETERS = {
   }
 };
 
-export const DISEASEBRANCHPARAMETERS = {
+export const DISEASEBRANCHPARAMETERS: {
+  searchString?: string,
+  skip?: number,
+  limit?: number,
+  where?: {
+    hasPhenotypePhenotypes_SOME?: {
+      HPOTerm_IN?: string[]
+    };
+  }
+} =
+  {
   searchString: '',
   skip: 0,
   limit: 10
@@ -23,33 +47,28 @@ export const DISEASEBRANCHPARAMETERS = {
 export const CATEGORYTREEBRANCH = gql`
   query Tree($where: GARDWhere) {
     diseases:gards(where: $where) {
-        gardId:GardId
-        name:GardName
-        children:gardSsubClassOf {
-            name: GardName,
-            gardId: GardId
-            ClassificationLevel
-            DisorderType
-          _childrenCount: gardSsubClassOfAggregate {
+      ...diseaseListFields
+      children:gardSsubClassOf {
+        ...diseaseListFields
+        _childrenCount: gardSsubClassOfAggregate {
                 count
             }
         }
     }
   }
+  ${DISEASELISTFIELDS}
 `
 
 export const CATEGORYTREE = gql`
   query Tree($where: GARDWhere) {
     diseases:gards(where: $where) {
-        gardId:GardId
-        name:GardName
-      ClassificationLevel
-      DisorderType
-          _childrenCount: gardSsubClassOfAggregate {
+      ...diseaseListFields
+      _childrenCount: gardSsubClassOfAggregate {
                 count
             }
         }
     }
+  ${DISEASELISTFIELDS}
 `
 
 export const FETCHPATH = gql`
@@ -57,6 +76,7 @@ export const FETCHPATH = gql`
     treeBranch(searchString: $searchString)
   }
 `
+
 export const FETCHROOT = gql`
   query Query {
    diseases:treeParent
@@ -66,18 +86,12 @@ export const FETCHROOT = gql`
 export const FETCHPATHDISEASES = gql`
   query Query($searchString: String, $skip: Int, $limit: Int) {
     diseases:hierarchyDiseases (searchString: $searchString, limit: $limit, skip: $skip) {
-      name:GardName
-      gardId: GardId
-      classificationLevel: ClassificationLevel
-      disorderType: DisorderType
-      synonyms: Synonyms
+      ...diseaseListFields
     }
     total:hierarchyDiseasesCount(searchString: $searchString, limit: $limit, skip: $skip)
   }
+  ${DISEASELISTFIELDS}
 `
-
-
-
 
 export const DISEASETYPEAHEAD = gql`
   query Gards($searchString: String) {
@@ -91,16 +105,13 @@ export const DISEASETYPEAHEAD = gql`
 export const FETCHDISEASESLISTQUERY = gql`
   query Gards($options: GARDOptions, $where: GARDWhere) {
     diseases: gards(options: $options, where: $where) {
-      name:GardName
-      gardId: GardId
-      classificationLevel: ClassificationLevel
-      disorderType: DisorderType
-      synonyms: Synonyms
+      ...diseaseListFields
     }
     total: gardsAggregate(where: $where) {
       count
     }
   }
+  ${DISEASELISTFIELDS}
 `
 
 export const FETCHDISEASEQUERY = gql`
@@ -178,11 +189,11 @@ export const FETCHDISEASEQUERY = gql`
   }
 `
 
-
-
-
 export const DISEASEQUERYPARAMETERS: {
-  where?: { GardId?: null | string }
+  where?: {
+    GardId?: null | string ,
+    hasPhenotypePhenotypes_SOME?: {HPOTerm_IN: string[]}
+  }
 } = {
   where: { GardId: null }
 }
@@ -193,7 +204,11 @@ export const LISTQUERYPARAMETERS: {
       offset?: number,
       sort?: [{ [key: string]: string }],
     },
-    where?: { [key: string]: string }
+    where?: {
+      hasPhenotypePhenotypes_SOME?: {
+        HPOTerm_IN?: string[]
+      };
+    }
   } =
     {
       options: {
@@ -201,7 +216,7 @@ export const LISTQUERYPARAMETERS: {
         offset: 0,
         sort: [
           {
-            GardName: "ASC"
+            COUNT_ARTICLES: "DESC"
           }
         ]
       }

@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot } from "@angular/router";
+import { ApolloQueryResult } from "@apollo/client";
 import {
   Article,
-  ARTICLEVARIABLES, CATEGORYTREE,
   CATEGORYTREEBRANCH,
   ClinicalTrial,
   CoreProject,
@@ -12,10 +13,19 @@ import {
   DISEASETYPEAHEAD,
   FETCHARTICLESQUERY,
   FETCHDISEASEQUERY,
-  FETCHDISEASESLISTQUERY, FETCHPATH, FETCHPATHDISEASES,
+  FETCHDISEASESLISTQUERY,
+  FETCHPATH,
+  FETCHPATHDISEASES,
   FETCHPROJECTSQUERY,
   LISTQUERYPARAMETERS,
-  PROJECTVARIABLES, TREEROOTPARAMETERS, FETCHROOT, FETCHARTICLECOUNTS, FETCHTRIALSVARIABLES, FETCHTRIALSQUERY
+  PROJECTVARIABLES,
+  FETCHROOT,
+  FETCHTRIALSVARIABLES,
+  FETCHTRIALSQUERY,
+  EPIARTICLES,
+  NONEPIARTICLES,
+  PHENOTYPEPARAMETERS,
+  FETCHPHENOTYPES, SEARCHPHENOTYPES
 } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
 import { Store } from "@ngrx/store";
@@ -33,22 +43,22 @@ import {
   take
 } from "rxjs";
 import * as DiseasesActions from './diseases.actions';
-import * as fromDiseases from './diseases.reducer';
 import * as fromDiseasesSelectors from './diseases.selectors';
-import * as diseaseFacade from './diseases.facade';
 
 
 @Injectable()
 export class DiseasesEffects {
 
-  searchDiseases = createEffect(() =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  searchDiseases = createEffect((): any =>
     this.actions$.pipe(
       ofType(DiseasesActions.searchDiseases),
-      mergeMap((action) => {
+      mergeMap((action: {term: string}) => {
         return this.diseaseService.fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term + '~' })
           .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map((res: any) => {
-              if (res && res.data) {
+              if (res.data && res.data.diseaseSearch) {
                 const diseaseArr = res.data.diseaseSearch.map((obj: Partial<Disease>) => new Disease(obj))
                 return DiseasesActions.searchDiseasesSuccess({ typeahead: diseaseArr })
               } else return DiseasesActions.searchDiseasesFailure({ error: "No Diseases found" })
@@ -58,18 +68,20 @@ export class DiseasesEffects {
     )
   )
 
-  loadDiseases$ = createEffect(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadDiseases$ = createEffect((): any => {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>  r.payload.routerState.url.startsWith('/diseases')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: { pageSize?: number, pageIndex?: number, parentId?: string}) => {
+      switchMap((params: { pageSize?: number, pageIndex?: number, parentId?: string, sort?: string, direction?: string, phenotypes?: string}) => {
         let query;
         let queryParams;
         const pageSize: number = params.pageSize ? params.pageSize as number: 10;
         const pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
+
         if(params.parentId) {
-          DISEASEBRANCHPARAMETERS.searchString = params["parentId"];
+          DISEASEBRANCHPARAMETERS.searchString = params.parentId;
             DISEASEBRANCHPARAMETERS.limit = +pageSize;
             DISEASEBRANCHPARAMETERS.skip = +pageSize * (+pageIndex);
           query = FETCHPATHDISEASES
@@ -77,11 +89,20 @@ export class DiseasesEffects {
         } else {
           LISTQUERYPARAMETERS.options.limit =  +pageSize;
           LISTQUERYPARAMETERS.options.offset = +pageSize * (+pageIndex +1);
+          if(params.sort) {
+            LISTQUERYPARAMETERS.options.sort = [{
+              [params.sort]: params.direction ? params.direction : "DESC"
+            }]
+          }
           queryParams = LISTQUERYPARAMETERS
           query = FETCHDISEASESLISTQUERY
         }
+        if(params.phenotypes) {
+          queryParams.where = {hasPhenotypePhenotypes_SOME: {HPOTerm_IN: params.phenotypes.split("&")}}
+        }
         return this.diseaseService.fetchDiseases(query, queryParams)
           .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map((res: any) => {
               if(res && res.data) {
                 const page: Page = { pageSize: pageSize, pageIndex: pageIndex, total: res.data.total.count ? res.data.total.count : res.data.total}
@@ -96,43 +117,26 @@ export class DiseasesEffects {
   );
 
   //paginate through disease sub-sections (projects, publications, clinical trials)
-  fetchDisease = createEffect(() =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fetchDisease = createEffect((): any =>
     this.actions$.pipe(
       ofType(DiseasesActions.fetchDisease),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mergeMap((action: any) => {
-        switch(action.source) {
-          case 'article': {
-            Object.keys(action.options).forEach((key: string) => {
-              ARTICLEVARIABLES[key as keyof typeof ARTICLEVARIABLES] =
-                Object.assign(ARTICLEVARIABLES[key as keyof typeof ARTICLEVARIABLES] as typeof ARTICLEVARIABLES, action.options[key])
-            })
-            break;
-          }
-          case 'project': {
-            Object.keys(action.options).forEach((key: string) => {
-              PROJECTVARIABLES[key as keyof typeof PROJECTVARIABLES] =
-                Object.assign(PROJECTVARIABLES[key as keyof typeof PROJECTVARIABLES] as typeof PROJECTVARIABLES, action.options[key])
-            })
-            break;
-          }
-          case 'trials': {
-            Object.keys(action.options).forEach(key => {
-              FETCHTRIALSVARIABLES[key as keyof typeof FETCHTRIALSVARIABLES] =
-                Object.assign(FETCHTRIALSVARIABLES[key as keyof typeof FETCHTRIALSVARIABLES] as typeof FETCHTRIALSVARIABLES, action.options[key])
-            })
-            break;
-          }
+        if(action.fragment) {
+          this._setFragment(action.origin, action.variables)
         }
         return combineLatest(
           this.diseaseService.fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS).pipe(take(1)),
-          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, ARTICLEVARIABLES).pipe(take(1)),
+          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES).pipe(take(1)),
+          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, EPIARTICLES).pipe(take(1)),
           this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-            map(([diseaseData, articleData, projectsData, trialsData]: [any, any, any, any]) => {
+            map(([diseaseData, articleData, epiArticleData, projectsData, trialsData]: [ApolloQueryResult<unknown>, ApolloQueryResult<unknown>, ApolloQueryResult<unknown>, ApolloQueryResult<unknown>, ApolloQueryResult<unknown>]) => {
               if(diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, projectsData, trialsData);
+                const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, epiArticleData, projectsData, trialsData);
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
               }
               else return DiseasesActions.fetchDiseaseFailure({error: "No Disease found"})
@@ -142,126 +146,93 @@ export class DiseasesEffects {
     )
   );
 
-  loadDisease$ = createEffect(() => {
-    return this.actions$.pipe(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadDisease$ = createEffect((): any =>
+     this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => !r.payload.routerState.url.includes('/diseases') && r.payload.routerState.url.startsWith('/disease')),
-      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: {id?: string}) => {
-        DISEASEQUERYPARAMETERS.where = {GardId: params.id};
-        ARTICLEVARIABLES.gardWhere.GardId =  params.id;
-        PROJECTVARIABLES.coreProjectsWhere = {projectsUnderCoreConnection_ALL: {node: {gardsresearchedBy_SINGLE: {GardId: params.id}}}};
-        FETCHTRIALSVARIABLES.ctwhere = {investigatesConditionConditions_SINGLE:{ mappedToUmlsMetaMapAnnotationsConnection_SINGLE: {
-          node: { mappedToGardGards_SINGLE: {GardId: params.id}}}}};
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      switchMap((root: ActivatedRouteSnapshot) => {
+        const params = root.queryParams;
+        const gardid = params['id']
+        DISEASEQUERYPARAMETERS.where = {GardId: gardid};
+        EPIARTICLES.gardWhere.GardId =  gardid;
+        NONEPIARTICLES.gardWhere.GardId =  gardid;
+        PROJECTVARIABLES.coreProjectsWhere = {projectsUnderCoreConnection_ALL: {node: {gardsresearchedBy_SINGLE: {GardId: gardid}}}};
+         FETCHTRIALSVARIABLES.gardId = gardid;
+        if(root.fragment){
+          this._setFragment(root.fragment, {limit: params['limit'], offset: params['offset']})
+        }
         return forkJoin(
           this.diseaseService.fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS).pipe(take(1)),
-          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, ARTICLEVARIABLES).pipe(take(1)),
+          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES).pipe(take(1)),
+          this.diseaseService.fetchArticles(FETCHARTICLESQUERY, EPIARTICLES).pipe(take(1)),
           this.diseaseService.fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES).pipe(take(1)),
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-            map(([diseaseData, articleData, projectsData, trialsData]: [any, any, any, any]) => {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            map(([diseaseData, articleData, epiArticleData, projectsData, trialsData]: [ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>, ApolloQueryResult<unknown>,ApolloQueryResult<unknown>, ApolloQueryResult<unknown>]) => {
               if(diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, projectsData, trialsData); //new Disease(diseaseData.data.disease[0]);
+                const diseaseObj: Disease = this._makeDiseaseObj(diseaseData, articleData, epiArticleData, projectsData, trialsData);
                 return DiseasesActions.fetchDiseaseSuccess({disease: diseaseObj})
               }
               else return DiseasesActions.fetchDiseaseFailure({error: "No Disease found"})
             })
           )
       })
-    )}
+    )
   );
 
-/*
-  loadTree$ = createEffect(() => {
-    return this.actions$.pipe(
-    ofType(ROUTER_NAVIGATION),
-     filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases') && !r.payload.routerState.root.queryParams['parentId']),
-      switchMap(() => {
-        return this.diseaseService.fetchDiseases(CATEGORYTREE, TREEROOTPARAMETERS)
-          .pipe(
-            map((res: any) => {
-              if(res && res.data) {
-                console.log(res);
-                const diseaseArr = res.data.diseases
-                  .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
-                  .sort((a: DiseaseNode, b: DiseaseNode) => b.childrenCount - a.childrenCount)
-                return DiseasesActions.loadDiseaseTreeSuccess({diseases: diseaseArr})
-              }
-              else return DiseasesActions.loadDiseaseTreeFailure({error: "No Disease found"})
-            })
-          )
-      })
-    )}
-  );
-*/
-
-/*
-  fetchPath$ = createEffect(() => {
-    return this.actions$.pipe(
-    ofType(ROUTER_NAVIGATION),
-     filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases') && r.payload.routerState.root.queryParams['parentId']),
-      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params) => {
-        return this.diseaseService.fetchDiseases(FETCHPATH, { searchString: params["parentId"]})
-          .pipe(
-            map((res: any) => {
-              console.log(res);
-              if(res && res.data) {
-                const diseaseArr = res.data.treeBranch[0].nodes
-                  .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
-                  .sort((a: DiseaseNode, b: DiseaseNode) => b.childrenCount - a.childrenCount)
-                console.log(diseaseArr);
-                return DiseasesActions.loadDiseaseTreeSuccess({diseases: diseaseArr})
-              }
-              else return DiseasesActions.loadDiseaseTreeFailure({error: "No Disease found"})
-            })
-          )
-      })
-    )}
-  );
-*/
-
-
-  fetchTreeBranch$ = createEffect(() => {
-    return this.actions$.pipe(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  fetchTreeBranch$ = createEffect((): any =>
+     this.actions$.pipe(
     ofType(ROUTER_NAVIGATION),
      filter((r: RouterNavigationAction) => r.payload.routerState.url.startsWith('/diseases')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
       concatLatestFrom(() => this.store.select(fromDiseasesSelectors.getDiseaseTree)),
       switchMap(([params, tree]) => {
         let query;
-        let qParams;
+        let qParams: any;
         if(!tree) {
           if(params["parentId"]) {
          //   console.log("no tree, maybe page, parent id")
             query = FETCHPATH;
             qParams = { searchString: params["parentId"] };
+            if(params['phenotypes']) {
+              qParams.where = { hasPhenotypePhenotypes_SOME: { HPOTerm_IN: params['phenotypes'].split("&") } }
+            }
           } else {
          //   console.log("no tree, maybe page, no parent id")
             query = FETCHROOT;
-            qParams = undefined;
+            qParams = params['phenotypes'] ? {where: { hasPhenotypePhenotypes_SOME: { HPOTerm_IN: params['phenotypes'].split("&") }}} : undefined;
           }
         } else {
           if(params["pageIndex"]) {
           //  console.log("tree, page, no parent id")
             query = FETCHROOT;
-            qParams = undefined;
+            qParams = params['phenotypes'] ? {where: { hasPhenotypePhenotypes_SOME: { HPOTerm_IN: params['phenotypes'].split("&") }}} : undefined;
           } else {
             if(params["parentId"]) {
            //   console.log("tree, no page, parent id")
               DISEASEQUERYPARAMETERS.where = { GardId: params["parentId"] };
+              if(params['phenotypes']){
+                DISEASEQUERYPARAMETERS.where.hasPhenotypePhenotypes_SOME =  {HPOTerm_IN: params['phenotypes'].split("&")};
+              }
               query = CATEGORYTREEBRANCH;
               qParams = DISEASEQUERYPARAMETERS;
             } else {
            //   console.log("tree, no page, no parent id")
               query = FETCHROOT;
-              qParams = undefined;
+              qParams = params['phenotypes'] ? {where: { hasPhenotypePhenotypes_SOME: { HPOTerm_IN: params['phenotypes'].split("&") }}} : undefined;
             }
           }
         }
+
         return this.diseaseService.fetchDiseases(query, qParams )
           .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map((res: any) => {
               if(res && res.data) {
                 let diseaseArr;
@@ -282,50 +253,84 @@ export class DiseasesEffects {
             })
           )
       })
+    )
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadPhenotypes$ = createEffect((): any => {
+    return this.actions$.pipe(
+      ofType(DiseasesActions.fetchPhenotypes),
+      switchMap((action: any) => {
+        let query = FETCHPHENOTYPES;
+        if(action.skip) {
+          PHENOTYPEPARAMETERS.skip = action.skip;
+        }
+        if(action.limit) {
+          PHENOTYPEPARAMETERS.limit = action.limit;
+        }
+        if(action.term) {
+          query = SEARCHPHENOTYPES
+          PHENOTYPEPARAMETERS.term = action.term + '*';
+        }
+        return this.diseaseService.fetchDiseases(query, PHENOTYPEPARAMETERS)
+          .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            map((res: any) => {
+              if(res && res.data) {
+                const phenotypeArr = res.data.phenotypeCounts //..map((obj: Partial<Disease>) => new Disease(obj))
+                return DiseasesActions.fetchPhenotypesSuccess({phenotypes: phenotypeArr})
+              }
+              else return DiseasesActions.fetchPhenotypesFailure({error: "No Disease found"})
+            })
+          )
+      })
     )}
   );
 
 
-  isLoadingDisease$ = createEffect(() => {
-      return this.actions$.pipe(
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  isLoadingDisease$ = createEffect((): any =>
+       this.actions$.pipe(
         ofType(DiseasesActions.fetchDisease),
         mergeMap(() => {
           return of(DiseasesActions.loading());
         })
       )
-    });
+    );
 
-  isLoadingDiseaseList$ = createEffect(() => {
-      return this.actions$.pipe(
+  isLoadingDiseaseList$ = createEffect((): any =>
+       this.actions$.pipe(
         ofType(ROUTER_NAVIGATION),
         mergeMap(() => {
           return of(DiseasesActions.loading());
         })
       )
-    });
+    );
 
-  _makeDiseaseObj(diseaseData:{data:{disease:[Partial<DiseaseNode>]}}, articleData?: any, projectsData? :any, trialsData?: any): Disease {
-    console.log(articleData)
-    console.log(trialsData)
-    if (diseaseData && diseaseData.data) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _makeDiseaseObj(diseaseData: any, articleData?: any, epiArticleData?: any, projectsData?: any, trialsData?: any): Disease {
+    if (diseaseData ) {
       const diseaseObj: Disease = new Disease(diseaseData.data.disease[0]);
-      if (articleData.data && articleData.data.articles.length) {
-        if (articleData.data.articles[0] && articleData.data.articles[0].epiArticles.length) {
-          diseaseObj.epiArticles = articleData.data.articles[0].epiArticles.map((art: { [key: string]: unknown }) => new Article(art))
-          diseaseObj.epiCount = articleData.data.articles[0]._epiCount.count;
+      if (articleData && articleData.data && articleData.data.articles.length) {
+        if (articleData.data.articles[0] && articleData.data.articles[0].articles.length) {
+          diseaseObj.nonEpiArticles = articleData.data.articles[0].articles.map((art: Partial<Article>) => new Article(art))
+          diseaseObj.nonEpiCount = articleData.data.articles[0]._count.count;
         }
-        if (articleData.data.articles[0] && articleData.data.articles[0].nonEpiArticles.length) {
-          diseaseObj.nonEpiArticles = articleData.data.articles[0].nonEpiArticles.map((art: { [key: string]: unknown }) => new Article(art))
-          diseaseObj.nonEpiCount = articleData.data.articles[0]._nonEpiCount.count;
+      }
+      if (epiArticleData && epiArticleData.data && epiArticleData.data.articles.length) {
+        if (epiArticleData.data.articles[0] && epiArticleData.data.articles[0].articles.length) {
+          diseaseObj.epiArticles = epiArticleData.data.articles[0].articles.map((art: Partial<Article>) => new Article(art))
+          diseaseObj.epiCount = epiArticleData.data.articles[0]._count.count;
         }
       }
       if (projectsData.data && projectsData.data.coreProjects.length) {
-        diseaseObj.projects = projectsData.data.coreProjects.map((proj: { [key: string]: unknown }) => new CoreProject(proj))
+        diseaseObj.projects = projectsData.data.coreProjects.map((proj: Partial<CoreProject>) => new CoreProject(proj))
         diseaseObj.projectCount = projectsData.data.count.count;
       }
       if (trialsData.data && trialsData.data.clinicalTrials.length) {
-        diseaseObj.clinicalTrials = trialsData.data.clinicalTrials.map((trial: { [key: string]: unknown }) => new ClinicalTrial(trial))
-        diseaseObj.clinicalTrialsCount = trialsData.data.clinicalTrialsAggregate.count;
+        diseaseObj.clinicalTrials = trialsData.data.clinicalTrials.map((trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial))
+        diseaseObj.clinicalTrialCount = trialsData.data.count;
       }
       return diseaseObj;
     } else return new Disease({});
@@ -364,7 +369,38 @@ export class DiseasesEffects {
     }
     }
 
-
+_setFragment(origin: string | null, options: {limit?: number, offset?: number}){
+  switch(origin) {
+    case 'epi-articles': {
+      EPIARTICLES.articleOptions.limit = options.limit ? options.limit : 10
+      if(options.offset) {
+        EPIARTICLES.articleOptions.offset = Number(options.offset);
+      }
+      break;
+    }
+    case 'nonepi-articles': {
+      NONEPIARTICLES.articleOptions.limit = options.limit ? options.limit : 10;
+      if(options.offset) {
+        NONEPIARTICLES.articleOptions.offset = Number(options.offset);
+      }
+      break;
+    }
+    case 'project': {
+      PROJECTVARIABLES.coreProjectsOptions.limit = options.limit ? options.limit : 10;
+      if(options.offset) {
+        PROJECTVARIABLES.coreProjectsOptions.offset = Number(options.offset);
+      }
+      break;
+    }
+    case 'trials': {
+      FETCHTRIALSVARIABLES.limit = options.limit ? options.limit : 10;
+      if(options.offset) {
+        FETCHTRIALSVARIABLES.offset = Number(options.offset);
+      }
+      break;
+    }
+  }
+}
 
 constructor(
     private readonly actions$: Actions,

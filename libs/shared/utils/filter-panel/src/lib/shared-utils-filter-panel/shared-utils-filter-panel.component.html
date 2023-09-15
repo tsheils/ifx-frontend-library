@@ -1,0 +1,34 @@
+<mat-card class="filter-card">
+  <mat-card-title>{{label}}</mat-card-title>
+<mat-form-field class="table-search">
+  <input matInput placeholder="Search {{label}}" [formControl]="searchCtl">
+  <button matSuffix mat-icon-button aria-label="close" (click)="clearSearch()" *ngIf="searchCtl.value">
+    <mat-icon [color]="'primary'" >backspace</mat-icon>
+  </button>
+</mat-form-field>
+<div>
+  <ncats-frontend-library-loading-spinner [isLoaded] = !loading></ncats-frontend-library-loading-spinner>
+  <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="filter-viewport" (scrolledIndexChange)="scrollDetected($event)">
+
+    <div *cdkVirtualFor="let field of dataSource" class="filter-grid">
+
+    <div class="filter-cell checkbox">
+      <mat-checkbox (click)="$event.stopPropagation()" aria-label="Select filter option"
+                    (change)="$event ? filterSelection.toggle(field['term']) : null"
+                    [checked]="filterSelection.isSelected(field['term'])"
+      ><label class="hidden">Select filter option</label>
+      </mat-checkbox>
+    </div>
+      <div class="filter-cell name"><span class="field-text">
+        <span [innerHTML]="field['term'] | highlight : searchCtl.value"></span>
+      </span>
+      </div>
+      <div class="filter-cell count">
+        <span class="field-text">
+          {{field['count']}}
+        </span>
+    </div>
+    </div>
+  </cdk-virtual-scroll-viewport>
+</div>
+</mat-card>

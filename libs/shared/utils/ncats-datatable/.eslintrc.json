@@ -9,7 +9,7 @@
           "error",
           {
             "type": "attribute",
-            "prefix": "ncatsFrontendLibrary",
+            "prefix": "ncats",
             "style": "camelCase"
           }
         ],
@@ -17,7 +17,7 @@
           "error",
           {
             "type": "element",
-            "prefix": "ncats-frontend-library",
+            "prefix": "ncats",
             "style": "kebab-case"
           }
         ]

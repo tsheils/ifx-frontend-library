@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
+import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, Output } from "@angular/core";
 import { PageEvent, MatPaginatorModule } from "@angular/material/paginator";
 import { NavigationExtras, Router } from "@angular/router";
 import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
@@ -13,8 +13,8 @@ import { NgIf, NgFor } from "@angular/common";
     imports: [NgIf, MatPaginatorModule, NgFor, ClinicalTrialsListCardComponent]
 })
 export class ClinicalTrialsListComponent implements OnChanges {
-  @Input() trials!: ClinicalTrial[];
-  @Input() count = 0;
+  @Input() trials!: ClinicalTrial[] | undefined;
+  @Input() count: number | undefined = 0;
   @Output() pageChange: EventEmitter< {offset:number}> = new EventEmitter<{offset:number}>();
   constructor(
     private changeRef: ChangeDetectorRef,

@@ -1,70 +1,90 @@
+<div *ngIf="disease()">
 <div class="disease-header-section">
-<ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
+  <ncats-frontend-library-disease-header [disease]="disease"></ncats-frontend-library-disease-header>
   <div class="grid-list">
-<div>
-<ncats-frontend-library-gene-list *ngIf="disease && disease.geneAssociations"
-                                  [genes] = disease.geneAssociations
->
-</ncats-frontend-library-gene-list>
-</div>
+    <div>
+      <ncats-frontend-library-gene-list *ngIf="disease() && disease()?.geneAssociations"
+                                        [genes]=disease()?.geneAssociations>
+      </ncats-frontend-library-gene-list>
+    </div>
 
-  <div>
-  <ncats-frontend-library-phenotype-list *ngIf="disease && disease.phenotypeAssociations"
-                                       [phenotypes] = disease.phenotypeAssociations
->
-</ncats-frontend-library-phenotype-list>
+    <div>
+      <ncats-frontend-library-phenotype-list *ngIf="disease() && disease()?.phenotypeAssociations"
+                                             [phenotypes]=disease()?.phenotypeAssociations>
+      </ncats-frontend-library-phenotype-list>
+    </div>
   </div>
-  </div>
-<br>
+  <br>
 </div>
 
 <mat-card [appearance]="'outlined'" class="main-disease-display">
   <div class="row centered-row">
     <div class="width-75">
-  <mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true" (selectedTabChange)="setTabUrl($event)" [selectedIndex]="selectedIndex">
-  <mat-tab [label] = "'Articles ' + (disease.epiCount + disease.nonEpiCount )" >
-    <mat-tab-group [color]="'accent'">
-      <mat-tab
-        [label]= "'Epidemiology Articles ' + disease.epiCount"
-        *ngIf="disease && disease.epiArticles">
-        <ncats-frontend-library-article-list
-          [articles] = disease.epiArticles
-          [count] = disease.epiCount
-          (pageChange)="pageList($event,'epiOptions', 'article')"
-        >
-        </ncats-frontend-library-article-list>
-      </mat-tab>
-      <mat-tab
-        [label] = "'Non-Epidemiology Articles ' + disease.nonEpiCount"
-        *ngIf="disease && disease.nonEpiArticles">
-        <ncats-frontend-library-article-list
-          [articles]="disease.nonEpiArticles"
-          [count] = disease.nonEpiCount
-          (pageChange)="pageList($event,'nonEpiOptions', 'article')"
-        >
-        </ncats-frontend-library-article-list>
-      </mat-tab>
-    </mat-tab-group>
-  </mat-tab>
-  <mat-tab [label] = "'NIH-funded Grants ' + disease.projectCount">
-    <div *ngIf="disease && disease.projects">
-      <ncats-frontend-library-project-list
-        [projects]="disease.projects"
-        [count] = disease.projectCount
-        (pageChange)="pageList($event,'coreProjectsOptions', 'project')"
-      ></ncats-frontend-library-project-list>
+      <mat-tab-group [color]="'primary'" mat-align-tabs="start" mat-stretch-tabs="true"
+                     (selectedTabChange)="setTabUrl($event)" [selectedIndex]="selectedIndex">
+        <mat-tab
+          [label]="'Epidemiology Articles ' + disease()?.epiCount">
+          <div *ngIf="disease() && disease()?.epiArticles; else notFoundEpi">
+            <ncats-frontend-library-article-list
+              [articles]=disease()?.epiArticles
+              [count]=disease()?.epiCount
+              (pageChange)="pageList($event,'articleOptions', 'epi-articles')"
+            >
+            </ncats-frontend-library-article-list>
+          </div>
+          <ng-template #notFoundEpi>
+            <ncats-frontend-library-shared-utils-data-not-found
+              [message]="'No Epidemiological Articles Found'"></ncats-frontend-library-shared-utils-data-not-found>
+          </ng-template>
+        </mat-tab>
+        <mat-tab
+          [label]="'Non-Epidemiology Articles ' + disease()?.nonEpiCount">
+          <div *ngIf="disease() && disease()?.nonEpiArticles; else notFoundArticles">
+            <ncats-frontend-library-article-list
+              [articles]="disease()?.nonEpiArticles"
+              [count]=disease()?.nonEpiCount
+              (pageChange)="pageList($event,'articleOptions', 'nonepi-articles')"
+            >
+            </ncats-frontend-library-article-list>
+          </div>
+          <ng-template #notFoundArticles>
+            <ncats-frontend-library-shared-utils-data-not-found
+              [message]="'No Articles Found'"></ncats-frontend-library-shared-utils-data-not-found>
+          </ng-template>
+        </mat-tab>
+        <!--<mat-tab [label]="'Articles ' + (disease.epiCount + disease.nonEpiCount )">
+          <mat-tab-group [color]="'accent'">
+
+          </mat-tab-group>
+        </mat-tab>-->
+        <mat-tab [label]="'NIH-funded Projects ' + disease()?.projectCount">
+          <div *ngIf="(disease() && disease()?.projects); else notFoundProjects">
+            <ncats-frontend-library-project-list
+              [projects]="disease()?.projects"
+              [count]=disease()?.projectCount
+              (pageChange)="pageList($event,'coreProjectsOptions', 'project')"
+            ></ncats-frontend-library-project-list>
+          </div>
+          <ng-template #notFoundProjects>
+            <ncats-frontend-library-shared-utils-data-not-found
+              [message]="'No NIH Funded Projects Available'"></ncats-frontend-library-shared-utils-data-not-found>
+          </ng-template>
+        </mat-tab>
+        <mat-tab [label]="'Clinical Trials ' + disease()?.clinicalTrialCount">
+          <div *ngIf="disease() && disease()?.clinicalTrials; else notFoundTrials">
+            <ncats-frontend-library-clinical-trials-list
+              [trials]="disease()?.clinicalTrials"
+              [count]=disease()?.clinicalTrialCount
+              (pageChange)="pageList($event,'ctoptions', 'trials')"
+            ></ncats-frontend-library-clinical-trials-list>
+          </div>
+          <ng-template #notFoundTrials>
+            <ncats-frontend-library-shared-utils-data-not-found
+              [message]="'No Clinical Trial Data Available'"></ncats-frontend-library-shared-utils-data-not-found>
+          </ng-template>
+        </mat-tab>
+      </mat-tab-group>
     </div>
-  </mat-tab>
-  <mat-tab [label] = "'Clinical Trials ' + disease.clinicalTrialsCount">
-    <div *ngIf="disease && disease.clinicalTrials">
-      <ncats-frontend-library-clinical-trials-list
-        [trials]="disease.clinicalTrials"
-        [count] = disease.clinicalTrialsCount
-        (pageChange)="pageList($event,'ctoptions', 'trials')"
-      ></ncats-frontend-library-clinical-trials-list>
-    </div>
-  </mat-tab>
-</mat-tab-group>
-</div>
-</div>
+  </div>
 </mat-card>
+</div>

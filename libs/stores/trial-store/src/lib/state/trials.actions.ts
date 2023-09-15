@@ -18,7 +18,7 @@ export const fetchTrialSuccess = createAction(
 
 export const fetchTrialFailure = createAction(
   '[Trials/API] Fetch Trial Failure',
-  props<{ error: any }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const loadTrials = createAction(
@@ -36,5 +36,5 @@ export const loadTrialsSuccess = createAction(
 
 export const loadTrialsFailure = createAction(
   '[Trials/API] Load Trials Failure',
-  props<{ error: any }>()
+  props<{ error: string | null | undefined }>()
 );

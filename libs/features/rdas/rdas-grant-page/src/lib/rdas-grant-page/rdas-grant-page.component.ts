@@ -5,7 +5,7 @@ import { ProjectDetailsComponent } from "@ncats-frontend-library/shared/rdas/pro
 import { GrantsFacade } from "@ncats-frontend-library/stores/grant-store";
 
 @Component({
-  selector: 'rdas-rdas-grant-page',
+  selector: 'ncats-frontend-library-grant-page',
   standalone: true,
   imports: [CommonModule, ProjectDetailsComponent],
   templateUrl: './rdas-grant-page.component.html',
@@ -22,7 +22,6 @@ export class RdasGrantPageComponent implements OnInit {
 
   ngOnInit() {
     this.grantFacade.selectedGrants$.subscribe(res => {
-      console.log(res);
       if(res) {
         this.grant = res;
         this.changeRef.markForCheck();

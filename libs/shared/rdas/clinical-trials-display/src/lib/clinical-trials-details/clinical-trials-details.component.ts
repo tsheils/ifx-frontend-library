@@ -1,5 +1,5 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnInit } from "@angular/core";
 import { CommonModule} from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
@@ -14,7 +14,7 @@ import { ClinicalTrialsListCardComponent } from "../clinical-trials-list-card/cl
   templateUrl: './clinical-trials-details.component.html',
   styleUrls: ['./clinical-trials-details.component.scss']
 })
-export class ClinicalTrialsDetailsComponent {
+export class ClinicalTrialsDetailsComponent implements OnInit {
   @Input() trial!: ClinicalTrial;
   /**
    * truncated summary text

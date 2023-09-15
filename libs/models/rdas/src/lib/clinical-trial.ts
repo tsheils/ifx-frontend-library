@@ -1,4 +1,3 @@
-import {gql} from "apollo-angular";
 import { Disease } from "./disease";
 
 export class ClinicalTrial  {

@@ -18,7 +18,7 @@ export const loadGrantsSuccess = createAction(
 
 export const loadGrantsFailure = createAction(
   '[Grants/API] Load Grants Failure',
-  props<{ error: any }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const fetchGrant = createAction(
@@ -37,5 +37,5 @@ export const fetchGrantSuccess = createAction(
 
 export const fetchGrantFailure = createAction(
   '[Grants/API] Fetch Grant Failure',
-  props<{ error: any }>()
+  props<{ error: string | null | undefined }>()
 );

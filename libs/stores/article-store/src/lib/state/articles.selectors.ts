@@ -29,7 +29,6 @@ export const selectAllArticleStore = createSelector(
 export const selectArticleStoreEntities = createSelector(
   selectArticleStoreState,
   (state: ArticleState) => {
-    console.log(state)
     return selectEntities(state)
   }
 );

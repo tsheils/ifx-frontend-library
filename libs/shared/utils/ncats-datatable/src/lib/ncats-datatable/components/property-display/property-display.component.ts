@@ -47,7 +47,7 @@ export class PropertyDisplayComponent {
     return ret;
   }
 
-  isArray(data: any) {
+  isArray(data: unknown) {
     return Array.isArray(data);
   }
 }

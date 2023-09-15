@@ -9,7 +9,7 @@ import {
   MatTreeFlattener,
   MatTreeModule
 } from "@angular/material/tree";
-import { NavigationExtras, Router } from "@angular/router";
+import { Router } from "@angular/router";
 import { DiseaseNode } from "@ncats-frontend-library/models/rdas";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 

@@ -5,8 +5,8 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  Inject,
-  Input,
+  Inject, InjectionToken,
+  Input, OnDestroy,
   PLATFORM_ID,
   ViewChild,
   ViewEncapsulation
@@ -30,7 +30,7 @@ import { Subject, takeUntil } from "rxjs";
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
-export class ScrollToTopComponent implements AfterViewInit {
+export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
   @ViewChild(CdkScrollable, {static: false}) scrollable!: CdkScrollable;
   /**
    * fires to set the nav to be fixed
@@ -54,7 +54,7 @@ export class ScrollToTopComponent implements AfterViewInit {
    * @param {Router} router
    */
   constructor(@Inject(DOCUMENT) private document: Document,
-              @Inject(PLATFORM_ID) private platformId: any,
+              @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
               private scrollDispatcher: ScrollDispatcher,
               private changeRef: ChangeDetectorRef,
               private router: Router) {
@@ -67,7 +67,7 @@ export class ScrollToTopComponent implements AfterViewInit {
   ngAfterViewInit() {
     this.scrollDispatcher.scrolled()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => {
+      .subscribe(() => {
         if(isPlatformBrowser(this.platformId)) {
           if (window.pageYOffset > 100 || this.document.documentElement.scrollTop > 100 || this.document.body.scrollTop > 100) {
             this.navIsFixed = true;

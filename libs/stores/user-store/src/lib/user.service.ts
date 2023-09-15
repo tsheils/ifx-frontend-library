@@ -3,7 +3,7 @@ import {AngularFireAuth} from '@angular/fire/compat/auth';
 import { User } from "@ncats-frontend-library/models/utils";
 import firebase from 'firebase/compat/app';
 import {AngularFirestore} from '@angular/fire/compat/firestore';
-import { from, Observable } from "rxjs";
+import { from, Observable, ObservedValueOf } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -46,12 +46,12 @@ export class UserService {
    * closes modal
    * @param providerName
    */
-  doLogin(providerName: string): Observable<firebase.auth.UserCredential> {
+  doLogin(providerName: string): Observable<firebase.auth.UserCredential | User> {
       const provider: unknown = this.providers.get(providerName);
       return from(this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider))
   }
 
-  doEmailLogin(email: string, pw:string): Observable<any> {
+  doEmailLogin(email: string, pw:string): Observable<ObservedValueOf<Promise<firebase.auth.UserCredential>>> {
     return from(this.afAuth.signInWithEmailAndPassword(email, pw).catch((error)=>  error))
   }
 
@@ -79,7 +79,7 @@ export class UserService {
    */
   logout() {
     this.afAuth.signOut().then(() => {
-      return null;
+      return;
     });
   }
 

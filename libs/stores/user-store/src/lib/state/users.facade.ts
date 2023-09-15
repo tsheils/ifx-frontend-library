@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { select, Store, Action } from '@ngrx/store';
 
 import * as UsersActions from './users.actions';
-import { getUsersError } from "./users.selectors";
 import * as UsersSelectors from './users.selectors';
 
 @Injectable()

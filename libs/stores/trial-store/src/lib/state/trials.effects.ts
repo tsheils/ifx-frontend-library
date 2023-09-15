@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ApolloQueryResult } from "@apollo/client";
 import {
   ClinicalTrial,
   FETCHTRIALDETAILS,
@@ -6,18 +7,15 @@ import {
 } from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from "@ngrx/router-store";
-import { Store } from "@ngrx/store";
 import { switchMap, catchError, of, filter, map } from "rxjs";
 import { TrialService } from "../trial.service";
 import * as TrialsActions from './trials.actions';
-import * as TrialsFeature from './trials.reducer';
 
 @Injectable()
 export class TrialsEffects {
   constructor(
     private actions$: Actions,
-    private trialService: TrialService,
-    private store: Store
+    private trialService: TrialService
   ) {}
 
   init$ = createEffect(() =>
@@ -40,8 +38,7 @@ export class TrialsEffects {
         TRIALDETAILSVARIABLES.ctwhere.NCTId =  params.nctid;
         return this.trialService.fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
           .pipe(
-            map((trialData: any) => {
-              console.log(trialData);
+            map((trialData:ApolloQueryResult<any>) => {
               if (trialData.data) {
                 const trial: ClinicalTrial = new ClinicalTrial(trialData.data.clinicalTrials[0]);
                 return TrialsActions.fetchTrialSuccess({ trial: trial });

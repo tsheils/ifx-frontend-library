@@ -22,8 +22,9 @@ import { ArticleListCardComponent } from "../article-list-card/article-list-card
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ArticleListComponent implements OnChanges {
-  @Input() articles!: Article[];
-  @Input() count = 0;
+  @Input() articles!: Article[] | undefined;
+  @Input() count: number | undefined = 0;
+  @Input() offset = 0;
   @Output() pageChange: EventEmitter<{ offset: number }> = new EventEmitter<{ offset: number }>();
   constructor(
     private changeRef: ChangeDetectorRef,

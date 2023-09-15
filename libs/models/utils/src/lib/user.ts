@@ -1,4 +1,5 @@
 import { Disease } from "@ncats-frontend-library/models/rdas";
+import firebase from "firebase/compat";
 
 export class User {
   displayName!: string;
@@ -9,12 +10,19 @@ export class User {
 
   constructor(obj: Partial<User>) {
     Object.assign(this, obj);
+    if(obj.subscriptions) {
+      this.subscriptions = obj.subscriptions.map(sub => new Subscription(sub))
+    }
   }
 }
 
 export class Subscription {
-  diseaseName!: string;
-  gardID!: string;
+  diseaseName?: string;
+  gardID?: string;
   disease?: Disease;
   alerts?: string[];
+
+  constructor(obj: Partial<Subscription>) {
+    Object.assign(this, obj);
+  }
 }

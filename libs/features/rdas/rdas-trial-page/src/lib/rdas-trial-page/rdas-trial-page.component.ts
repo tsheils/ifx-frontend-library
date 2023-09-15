@@ -5,7 +5,7 @@ import { ClinicalTrialsDetailsComponent } from "@ncats-frontend-library/shared/r
 import { TrialsFacade } from "@ncats-frontend-library/stores/trial-store";
 
 @Component({
-  selector: 'rdas-rdas-trial-page',
+  selector: 'ncats-frontend-library-trial-page',
   standalone: true,
   imports: [CommonModule, ClinicalTrialsDetailsComponent],
   templateUrl: './rdas-trial-page.component.html',
@@ -22,7 +22,6 @@ export class RdasTrialPageComponent implements OnInit {
 
   ngOnInit() {
     this.trialsFacade.selectedTrials$.subscribe(res => {
-      console.log(res);
       if(res) {
         this.trial = res;
         this.changeRef.markForCheck();

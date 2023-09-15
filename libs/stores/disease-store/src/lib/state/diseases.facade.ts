@@ -13,10 +13,11 @@ export class DiseasesFacade {
    * and expose them as observables through the facade.
    */
   loaded$ = this.store.pipe(select(DiseasesSelectors.getDiseasesLoaded));
-  allDiseases$ = this.store.pipe(select(DiseasesSelectors.getAllDiseases));
+  allDiseases$ = this.store.selectSignal(DiseasesSelectors.getAllDiseases);
   diseaseTree$ = this.store.pipe(select(DiseasesSelectors.getDiseaseTree));
-  selectedDiseases$ = this.store.pipe(select(DiseasesSelectors.getSelected));
+  selectedDiseases$ = this.store.selectSignal(DiseasesSelectors.getSelected);
   searchDiseases$ = this.store.pipe(select(DiseasesSelectors.searchDiseasesEntities));
+  fetchPhenotypes$ = this.store.pipe(select(DiseasesSelectors.getPhenotypes));
   page$ = this.store.pipe(select(DiseasesSelectors.getDiseasesPage));
 
 

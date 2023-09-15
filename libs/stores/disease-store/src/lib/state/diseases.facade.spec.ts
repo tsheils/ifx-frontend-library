@@ -9,14 +9,11 @@ import { Apollo } from 'apollo-angular';
 import * as DiseasesActions from './diseases.actions';
 import { DiseasesEffects } from './diseases.effects';
 import { DiseasesFacade } from './diseases.facade';
-import { DiseasesEntity } from './diseases.models';
 import {
   DISEASES_FEATURE_KEY,
   State,
-  initialState,
   diseasesReducer,
 } from './diseases.reducer';
-import * as DiseasesSelectors from './diseases.selectors';
 
 interface TestSchema {
   diseases: State;
@@ -25,14 +22,14 @@ interface TestSchema {
 describe('DiseasesFacade', () => {
   let facade: DiseasesFacade;
   let store: Store<TestSchema>;
-  const createDiseasesEntity = (gardId: string, name = ''): Disease => ({
+  const createDiseasesEntity = (gardId: string, name = ''): Disease => (new Disease({
     gardId,
     name: name || `name-${gardId}`,
     epiCount: 0,
     nonEpiCount: 0,
     projectCount: 0,
     clinicalTrialsCount: 0,
-  });
+  }));
 
   describe('used in NgModule', () => {
     beforeEach(() => {

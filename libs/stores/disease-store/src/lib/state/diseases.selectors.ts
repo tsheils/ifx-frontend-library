@@ -38,6 +38,11 @@ export const searchDiseasesEntities = createSelector(
   (state: State) =>  state.typeahead
 );
 
+export const getPhenotypes = createSelector(
+  getDiseasesState,
+  (state: State) =>  state.phenotypes
+);
+
 export const getDiseasesEntities = createSelector(
   getDiseasesState,
   (state: State) => selectEntities(state)

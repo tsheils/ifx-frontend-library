@@ -22,3 +22,10 @@
     padding: $padding;
   }
 }
+
+@mixin text-align($direction) {
+  .text-align-#{$direction} {
+    text-align: $direction;
+  }
+}
+

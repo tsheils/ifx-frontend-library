@@ -1,5 +1,4 @@
 import { BehaviorSubject } from "rxjs";
-import { getAuth,signInWithPopup } from 'firebase/auth';
 
 export const COMMON_CONFIG = {
   apiKey: "AIzaSyAeMmLhQqFbvzlP9kQfpCAteynu8Boo4qs",
@@ -12,11 +11,11 @@ export const COMMON_CONFIG = {
 };
 
 export const FIRESTORESTUB = {
-  collection: (name: string) => ({
-    doc: (_id: string) => ({
+  collection: () => ({
+    doc: () => ({
       valueChanges: () => new BehaviorSubject({ foo: 'bar' }),
-      set: (_d: any) => new Promise((resolve, _reject) => resolve('Hi Keith')),
-      get: (_d: any) => new Promise((resolve, _reject) => resolve('Hi Keith')),
+      set: () => new Promise((resolve) => resolve('Hi Keith')),
+      get: () => new Promise((resolve) => resolve('Hi Keith')),
     }),
     valueChanges: () => new BehaviorSubject({ foo: 'bar' })
   }),

@@ -13,8 +13,8 @@ import { ProjectListCardComponent } from "../project-list-card/project-list-card
   imports: [CommonModule, MatPaginatorModule, ProjectListCardComponent ],
 })
 export class ProjectListComponent implements OnChanges {
-  @Input() projects!: CoreProject[];
-  @Input() count = 0;
+  @Input() projects!: CoreProject[] | undefined;
+  @Input() count: number | undefined = 0;
   @Output() pageChange: EventEmitter<{offset:number}> = new EventEmitter<{offset:number}>();
   constructor(
     private changeRef: ChangeDetectorRef,

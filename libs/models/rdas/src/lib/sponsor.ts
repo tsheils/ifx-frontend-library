@@ -33,7 +33,7 @@ export class Sponsor {
 
 
 
-const SPONSORFIELDS = gql`
+export const SPONSORFIELDS = gql`
   fragment sponsorFields on Sponsor {
     centralContactEMail: CentralContactEMail
     centralContactName:CentralContactName

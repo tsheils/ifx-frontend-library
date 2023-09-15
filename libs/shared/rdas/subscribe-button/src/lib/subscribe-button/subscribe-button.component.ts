@@ -2,16 +2,17 @@ import { SelectionModel } from "@angular/cdk/collections";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, EventEmitter,
   Input,
   OnDestroy,
-  OnInit
+  OnInit, Output, Signal
 } from "@angular/core";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";
 import { MatSnackBar, MatSnackBarModule } from "@angular/material/snack-bar";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { Subscription, User } from "@ncats-frontend-library/models/utils";
 import { SocialSignOnButtonComponent } from "@ncats-frontend-library/shared/utils/social-sign-on";
+import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
 import { updateUserSubscriptions, UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
 import { AboutSubscribeModalComponent } from "../about-subscribe-modal/about-subscribe-modal.component";
@@ -46,9 +47,12 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
    */
   protected ngUnsubscribe: Subject<boolean> = new Subject();
 
-  @Input() disease!: Disease;
+  @Input() disease!: Signal<Disease | undefined>;
   @Input() subscribed = false;
   @Input() theme = 'primary';
+  @Output() userChange: EventEmitter<User | null> = new EventEmitter<User | null>();
+  @Output() isSubscribed: EventEmitter<boolean> = new EventEmitter<boolean>();
+
   private user: User | null = null;
   subscription?: Subscription;
   userExists = false;
@@ -62,11 +66,22 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     private _snackBar: MatSnackBar,
     private userFacade: UsersFacade,
+    private diseaseFacade: DiseasesFacade,
     private changeRef: ChangeDetectorRef
   ) {
   }
 
   ngOnInit(): void {
+    this.disease = this.diseaseFacade.selectedDiseases$
+     /* .pipe(
+        takeUntil(this.ngUnsubscribe)
+      )
+      .subscribe(disease => {
+        if(disease) {
+           = disease;
+        }
+      })
+*/
     this.userFacade.user$
       .pipe(
         takeUntil(this.ngUnsubscribe)
@@ -75,19 +90,23 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
         if (user && user.length) {
           this.user = JSON.parse(JSON.stringify(user[0]));
           this.userExists = true;
-          this.subscription = this.user?.subscriptions.filter(sub => sub.gardID === this.disease.gardId)[0];
-          this.subscribed = !!this.subscription;
-          this.changeRef.markForCheck();
-          if (this.subscription?.alerts) {
-            this.subscriptionSelection.setSelection(...this.subscription.alerts);
+          if(this.disease) {
+            const id = this.disease()?.gardId
+            this.subscription = this.user?.subscriptions.filter((sub: Subscription) => sub.gardID == id)[0];
+            this.subscribed = !!this.subscription;
+            if (this.subscription?.alerts) {
+              this.subscriptionSelection.setSelection(...this.subscription.alerts);
+            }
           }
         } else {
           this.user = null;
           this.userExists = false;
           this.subscription = undefined;
           this.subscribed = false;
-          this.changeRef.markForCheck();
         }
+        this.changeRef.markForCheck();
+        this.userChange.emit(this.user);
+        this.isSubscribed.emit(this.subscribed);
       });
 
     this.subscriptionSelection.changed
@@ -100,12 +119,12 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
         const subscriptionClone: Subscription[] = [];
         if (this.user && this.user.subscriptions) {
           this.user?.subscriptions.forEach(sub => subscriptionClone.push(sub));
-          subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.gardID === this.disease.gardId), 1);
-          this.subscription = {
+          subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.gardID === this.disease()?.gardId), 1);
+          this.subscription = new Subscription({
             diseaseName: this.disease.name,
-            gardID: this.disease.gardId,
+            gardID: this.disease()?.gardId,
             alerts: this.subscriptionSelection.selected
-          };
+          });
           subscriptionClone.push(this.subscription);
           this.userFacade.dispatch(updateUserSubscriptions({ subscriptions: subscriptionClone }));
         }
@@ -113,8 +132,8 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
   }
 
   subscribe() {
-    if (this.user) {
-      this.subscription = { diseaseName: this.disease.name, gardID: this.disease.gardId, alerts: this.all };
+    if (this.user && this.disease()) {
+      this.subscription = new Subscription({ diseaseName: this.disease()?.name, gardID: this.disease()?.gardId, alerts: this.all });
       const subscriptionClone: Subscription[] = [this.subscription];
       this.user.subscriptions.forEach(sub => subscriptionClone.push(sub));
       this.userFacade.dispatch(updateUserSubscriptions({ subscriptions: subscriptionClone }));
@@ -129,8 +148,8 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
   unSubscribe() {
     this.dialog.open(UnsubscribeModalComponent, {
       data: {
-        entity: this.disease,
-        label: this.disease.name
+        entity: this.disease(),
+        label: this.disease()?.name
       }
     }).afterClosed()
       .subscribe(
@@ -138,7 +157,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
           if (res) {
             const subscriptionClone: Subscription[] = [];
             this.user?.subscriptions.forEach(sub => {
-              if (sub.gardID !== this.disease.gardId) {
+              if (sub.gardID !== this.disease()?.gardId) {
                 subscriptionClone.push(Object.assign({}, { ...sub }));
               }
             });

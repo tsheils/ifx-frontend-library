@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { Subscription, User } from "@ncats-frontend-library/models/utils";
 import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
 import { Subject, takeUntil } from "rxjs";
-import { DiseaseSubscriptionListComponent } from "../../../../../../shared/rdas/disease-display/src/lib/disease-subscription-list/disease-subscription-list.component";
+import { DiseaseSubscriptionListComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
 
 @Component({
     selector: 'ncats-frontend-library-rdas-subscriptions',

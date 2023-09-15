@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { DocumentNode } from "@apollo/client";
+import { ApolloQueryResult, DocumentNode } from "@apollo/client";
+import { Disease } from "@ncats-frontend-library/models/rdas";
 import {Apollo} from "apollo-angular";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,7 @@ export class DiseaseService {
     private apollo: Apollo
   ) { }
 
-  fetchDiseases(query: DocumentNode, variables: object = {}) {
+  fetchDiseases(query: DocumentNode, variables: object = {}): Observable<ApolloQueryResult<unknown >> {
     return this.apollo.use('diseases').watchQuery({
         query,
         variables

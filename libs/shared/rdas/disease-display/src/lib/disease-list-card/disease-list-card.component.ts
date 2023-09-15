@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import { Component, Input } from "@angular/core";
+import { Component, Input, Signal } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { NavigationExtras, Router } from "@angular/router";
@@ -15,19 +15,21 @@ import { SubscribeButtonComponent } from "@ncats-frontend-library/shared/rdas/su
   imports: [CommonModule, MatCardModule, MatIconModule, SubscribeButtonComponent]
 })
 export class DiseaseListCardComponent {
-  @Input() disease!:Disease;
+  @Input() disease!: any | Disease;
 
   constructor(
     private router: Router
   ) {}
 
-  navigate(id: string): void {
-    const navigationExtras: NavigationExtras = {
-      queryParams:{
-        id: id
-      }
-    };
-    this.router.navigate(['/disease'], navigationExtras);
+  navigate(id: string | undefined): void {
+    if(id) {
+      const navigationExtras: NavigationExtras = {
+        queryParams: {
+          id: id
+        }
+      };
+      this.router.navigate(['/disease'], navigationExtras);
+    }
   }
 }
 

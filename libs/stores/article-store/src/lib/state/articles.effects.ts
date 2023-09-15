@@ -1,25 +1,15 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
+import { ApolloQueryResult } from "@apollo/client";
 import {
   Article,
   ARTICLEDETAILSVARIABLES,
-  ARTICLEVARIABLES,
-  Disease,
-  DISEASEQUERYPARAMETERS,
   FETCHARTICLEDETAILS,
-  FETCHARTICLESQUERY,
-  FETCHDISEASEQUERY,
-  FETCHPROJECTSQUERY,
-  FETCHTRIALSQUERY,
-  FETCHTRIALSVARIABLES,
-  PROJECTVARIABLES
 } from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from "@ngrx/router-store";
-import { Store } from "@ngrx/store";
-import { switchMap, catchError, of, filter, map, forkJoin, take } from "rxjs";
+import { switchMap, catchError, of, filter, map } from "rxjs";
 import { ArticleService } from "../article.service";
 import * as ArticleActions from './articles.actions';
-import * as ArticleFeature from './articles.reducer';
 
 @Injectable()
 export class ArticlesEffects {
@@ -27,11 +17,11 @@ export class ArticlesEffects {
   constructor(
     private actions$: Actions,
     private articleService: ArticleService,
-    private store: Store
   ) {}
 
 
-  init$ = createEffect(() =>
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  init$ = createEffect((): any =>
     this.actions$.pipe(
       ofType(ArticleActions.initArticleStore),
       switchMap(() =>
@@ -44,8 +34,9 @@ export class ArticlesEffects {
     )
   );
 
-  loadArticle$ = createEffect(() => {
-    return this.actions$.pipe(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadArticle$ = createEffect((): any =>
+     this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => !r.payload.routerState.url.includes('/articles') && r.payload.routerState.url.startsWith('/article')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
@@ -53,8 +44,8 @@ export class ArticlesEffects {
         ARTICLEDETAILSVARIABLES.articleWhere.pubmed_id =  params.pmid;
         return this.articleService.fetchArticles(FETCHARTICLEDETAILS, ARTICLEDETAILSVARIABLES)
           .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map((articleData: any) => {
-              console.log(articleData);
               if(articleData.data) {
                 const article: Article = new Article(articleData.data.articles[0]);
                 return ArticleActions.fetchArticleSuccess({article: article})
@@ -63,7 +54,6 @@ export class ArticlesEffects {
             })
           )
       })
-    )}
+    )
   );
-
 }

@@ -2,7 +2,7 @@ import { Route } from '@angular/router';
 import { DiseasesEffects, DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
 import { RdasBrowseComponent } from './rdas-browse/rdas-browse.component';
 import { UsersEffects, UsersFacade } from "@ncats-frontend-library/stores/user-store";
-import { provideStore, provideState } from '@ngrx/store';
+import { provideState } from '@ngrx/store';
 import * as fromUsers from '@ncats-frontend-library/stores/user-store';
 import * as fromDiseases from '@ncats-frontend-library/stores/disease-store';
 

@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { select, Store, Action } from '@ngrx/store';
 import * as GrantsActions from './grants.actions';
 import * as GrantsFeature from './grants.reducer';

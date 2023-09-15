@@ -13,7 +13,7 @@
         [autoActiveFirstOption]="true"
         class="custom-autocomplete-panel" >
         <mat-option *ngFor="let option of options" [value]="option" class="dynamic-height">
-          {{option.name}}
+          <span [innerHTML]="option.name | highlight : searchFormCtl.value"></span>
         </mat-option>
       </mat-autocomplete>
     <button matSuffix mat-icon-button aria-label="search">

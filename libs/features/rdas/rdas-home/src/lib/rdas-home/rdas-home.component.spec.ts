@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+/*import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
 import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
 import { reducer, DISEASES_FEATURE_KEY } from "@ncats-frontend-library/stores/disease-store";
 import { StoreModule } from "@ngrx/store";
 import { Apollo } from "apollo-angular";
-import { ApolloTestingModule } from "apollo-angular/testing";
+import { ApolloTestingModule } from "apollo-angular/testing";*/
 
 
-import { RdasHomeComponent } from './rdas-home.component';
+//import { RdasHomeComponent } from './rdas-home.component';
 
 
 /*jest.mock('ForceGraph3D', () => ({

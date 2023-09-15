@@ -2,7 +2,7 @@
   "name": "shared-utils-ncats-datatable",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/utils/ncats-datatable/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ncats",
   "tags": [],
   "projectType": "library",
   "targets": {

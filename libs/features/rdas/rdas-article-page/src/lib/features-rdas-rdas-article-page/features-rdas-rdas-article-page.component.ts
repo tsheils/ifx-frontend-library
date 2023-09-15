@@ -23,7 +23,6 @@ constructor(
 
   ngOnInit() {
     this.articleFacade.selectedArticle$.subscribe(res => {
-      console.log(res);
       if(res) {
         this.article = res;
         this.changeRef.markForCheck();

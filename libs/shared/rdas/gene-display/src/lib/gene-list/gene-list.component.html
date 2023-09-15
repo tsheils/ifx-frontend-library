@@ -1,7 +1,11 @@
-<div class="rounded-tab primary-color-font"><span class="bottom-border-primary">Associated Genes ({{genes.length}}
+<div class="rounded-tab primary-color-font"><span class="bottom-border-primary">Associated Genes ({{genes?.length}}
   )</span></div>
 <mat-card class="rounded-card">
   <mat-card-content>
+    <div *ngIf="!genes?.length">
+      <ncats-frontend-library-shared-utils-data-not-found [message]="'No Gene Data Available'"></ncats-frontend-library-shared-utils-data-not-found>
+    </div>
+    <div  *ngIf="genes?.length">
     <div class="row right-justified-row">
       <mat-paginator #paginator [length]="count"
                      [pageIndex]="0"
@@ -67,5 +71,6 @@
       <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
       <tr mat-row *matRowDef="let geneAssociation; columns: displayColumns;"></tr>
     </table>
+    </div>
   </mat-card-content>
 </mat-card>

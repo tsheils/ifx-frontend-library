@@ -1,5 +1,6 @@
 import { isPlatformBrowser } from "@angular/common";
 import { AfterViewInit, Component, ElementRef, Inject, PLATFORM_ID, ViewChild, ViewEncapsulation } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 import { ApolloSandbox } from "@apollo/sandbox";
 
 @Component({
@@ -15,19 +16,27 @@ import { ApolloSandbox } from "@apollo/sandbox";
 export class GraphqlSandboxComponent implements AfterViewInit {
   @ViewChild('embeddedsandbox', {static: true}) embeddedsandbox!: ElementRef;
   isBrowser: boolean;
+  url = 'http://localhost:4000';
 
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  constructor( @Inject(PLATFORM_ID) platformId: Object) {
+  constructor(
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    @Inject(PLATFORM_ID) platformId: Object,
+  private router: Router,
+  private route: ActivatedRoute
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
 
   ngAfterViewInit(): void {
 if(this.isBrowser) {
-  const sandbox = new ApolloSandbox({
+  this.route.data.subscribe(data => {
+    this.url = data['instance'];
+   new ApolloSandbox({
     target: this.embeddedsandbox.nativeElement,
-    initialEndpoint: 'http://localhost:4000',
+    initialEndpoint: this.url,
     includeCookies: false,
-  })
+  });
+})
 }
   }
 }

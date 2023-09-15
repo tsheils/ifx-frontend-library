@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SocialSignOnButtonComponent } from '../../../../../utils/social-sign-on/src/lib/social-sign-on-button/social-sign-on-button.component';
+import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCheckboxModule } from '@angular/material/checkbox';

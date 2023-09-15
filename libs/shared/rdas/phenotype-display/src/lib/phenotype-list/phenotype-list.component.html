@@ -1,6 +1,10 @@
 <div class="rounded-tab accent-color-font"> <span class="bottom-border-accent">Phenotypes ({{count}})</span></div>
 <mat-card class = "rounded-card">
   <mat-card-content>
+    <div *ngIf="!phenotypes?.length">
+      <ncats-frontend-library-shared-utils-data-not-found [message]="'No Phenotype Data Available'"></ncats-frontend-library-shared-utils-data-not-found>
+    </div>
+    <div *ngIf="phenotypes?.length">
     <div class="row right-justified-row">
       <mat-paginator #paginator [length]="count"
                      [pageIndex]="0"
@@ -64,6 +68,6 @@
       <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
       <tr mat-row *matRowDef="let phenotypeAssociation; columns: displayColumns;"></tr>
     </table>
-
+    </div>
   </mat-card-content>
 </mat-card>

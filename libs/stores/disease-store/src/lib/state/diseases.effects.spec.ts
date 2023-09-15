@@ -6,21 +6,20 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Apollo } from "apollo-angular";
 import { hot } from 'jasmine-marbles';
 import { Observable } from "rxjs";
-import { loadDiseases } from "./diseases.actions";
 
 import * as DiseasesActions from './diseases.actions';
 import { DiseasesEffects } from './diseases.effects';
 
 describe('DiseasesEffects', () => {
 
-  const createDiseasesEntity = (gardId: string, name = ''): Disease => ({
+  const createDiseasesEntity = (gardId: string, name = ''): Disease => ( new Disease({
     gardId,
     name: name || `name-${gardId}`,
     epiCount: 0,
     nonEpiCount: 0,
     projectCount: 0,
     clinicalTrialsCount: 0
-  });
+  }));
 
   const diseasesArr = [
     createDiseasesEntity('PRODUCT-AAA'),
@@ -48,8 +47,7 @@ describe('DiseasesEffects', () => {
   describe('loadDiseases', () => {
     it('should work', () => {
       actions = hot('-a-|', { a: DiseasesActions.loadDiseases({top: 10, skip: 0}) });
-
-      const expected = hot('-a-|', {
+       hot('-a-|', {
         a: DiseasesActions.loadDiseasesSuccess({ diseases: diseasesArr, page: undefined }),
       });
 

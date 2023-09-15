@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { select, Store, Action } from '@ngrx/store';
 
 import * as TrialsActions from './trials.actions';
-import * as TrialsFeature from './trials.reducer';
 import * as TrialsSelectors from './trials.selectors';
 
 @Injectable()

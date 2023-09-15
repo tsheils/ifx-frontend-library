@@ -1,6 +1,6 @@
 
     <ncats-frontend-library-disease-display
-      *ngIf="disease"
+      *ngIf="disease() && loaded()"
       [disease] = disease
       (optionsChange)="fetchDiseaseInfo($event)"
     ></ncats-frontend-library-disease-display>

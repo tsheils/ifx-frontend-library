@@ -6,14 +6,10 @@ import {
   EventEmitter,
   Injector,
   Input,
-  IterableDiffer,
-  IterableDiffers,
-  OnChanges,
   OnDestroy,
   OnInit,
   Output,
   QueryList,
-  SimpleChanges,
   Type,
   ViewChild,
   ViewChildren,
@@ -86,32 +82,32 @@ export class NcatsDatatableComponent
   /**
    * Table object
    */
-  @ViewChild(MatTable) dataTable!: MatTable<any>;
+  @ViewChild(MatTable) dataTable!: MatTable<unknown>;
 
   /**
    * Behaviour subject to allow extending class to unsubscribe on destroy
    * @type {Subject<any>}
    */
-  protected ngUnsubscribe: Subject<any> = new Subject();
+  protected ngUnsubscribe: Subject<boolean> = new Subject();
 
   /**
    * initialize a private variable _data, it's a BehaviorSubject
    *
    */
-  protected _data = new BehaviorSubject<any>(null);
+  protected _data = new BehaviorSubject<unknown>(null);
 
   /**
    * pushes changed data to {BehaviorSubject}
    */
   @Input()
-  set data(value: any) {
+  set data(value: unknown) {
     this._data.next(value);
   }
 
   /**
    * returns value of {BehaviorSubject}
    */
-  get data(): any {
+  get data(): unknown {
     return this._data.getValue();
   }
 
@@ -216,7 +212,7 @@ export class NcatsDatatableComponent
    * This compares each row of the table to the "expanded element - if they are equal, the row is expanded
    *  todo: this only allows one open at a time, this might need to be a map to allow multiple expanded rows
    */
-  expandedElement: any | null;
+  expandedElement: unknown | null;
 
   /**
    * event that emits when the sort value or direction is changed. The parent component will be responsible for
@@ -242,7 +238,7 @@ export class NcatsDatatableComponent
    * main table datasource
    * @type {MatTableDataSource<any>}
    */
-  dataSource: MatTableDataSource<any> = new MatTableDataSource<any>();
+  dataSource: MatTableDataSource<unknown> = new MatTableDataSource<unknown>();
 
   /**
    * whether to toggle the condensed class to make a more compact table
@@ -254,10 +250,10 @@ export class NcatsDatatableComponent
 
   @Input() internalSort = false;
 
-  @Output() rowSelectionChange: EventEmitter<SelectionModel<any>> =
-    new EventEmitter<SelectionModel<any>>();
+  @Output() rowSelectionChange: EventEmitter<SelectionModel<unknown>> =
+    new EventEmitter<SelectionModel<unknown>>();
 
-  selection = new SelectionModel<any>(true, []);
+  selection = new SelectionModel<unknown>(true, []);
 
   /**
    * Paginator object from Angular Material
@@ -285,11 +281,11 @@ export class NcatsDatatableComponent
       // listen to data as long as term is undefined or null
       // Unsubscribe once term has value
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((res) => {
+      .subscribe((res: Partial<DataProperty>[]) => {
         if (res) {
           if (this.useInternalPaginator) {
             this.dataSource = new MatTableDataSource<DataProperty>(
-              res.map((val: any) => new DataProperty(val))
+              res.map((val: Partial<DataProperty>) => new DataProperty(val))
             );
             this.pageData = new PageData({ total: res.length });
           } else {
@@ -299,7 +295,7 @@ export class NcatsDatatableComponent
           if (this.internalSort) {
             this.dataSource.sortingDataAccessor = _sortingDataAccessor;
             this.dataSource.sort = this._sort;
-            this._sort.sortChange.subscribe((res) => {
+            this._sort.sortChange.subscribe(() => {
               if (this.dataSource.paginator) {
                 this.dataSource.paginator.firstPage();
               }
@@ -311,16 +307,13 @@ export class NcatsDatatableComponent
 
     this._fieldsConfig
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((res) => this.fetchTableFields());
+      .subscribe(() => this.fetchTableFields());
     this.selection.changed
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((change) => {
+      .subscribe(() => {
         this.ref.detectChanges();
         this.rowSelectionChange.emit(this.selection);
       });
-  }
-
-  ngAfterViewInit() {
   }
 
   /**
@@ -329,7 +322,7 @@ export class NcatsDatatableComponent
    * @param item
    * @return {any}
    */
-  trackByFn(index: number, item: any) {
+  trackByFn(index: number, item: unknown) {
     return item.name && item.name.term ? item.name.term : item;
   }
 
@@ -394,7 +387,7 @@ export class NcatsDatatableComponent
     return ret;
   }
 
-  isArray(data: any) {
+  isArray(data: unknown) {
     return Array.isArray(data);
   }
 
@@ -451,16 +444,12 @@ export class NcatsDatatableComponent
    * todo: the comtainer and object should be optional fields
    * todo: table injected components need to implement an interface to get the substance or container
    * @param field
-   * @param row
-   * @param index
    */
   getCustomComponent(
     field: DataProperty,
-    row: MatRow,
-    index: number
-  ): ComponentPortal<any> | null {
+  ): ComponentPortal<unknown> | null {
     if (this.rowOutlet && field.customComponent) {
-      const comp = this._injector.get<Type<any>>(field.customComponent);
+      const comp = this._injector.get<Type<unknown>>(field.customComponent);
       return new ComponentPortal(comp);
     } else {
       return null;
@@ -475,7 +464,7 @@ export class NcatsDatatableComponent
    * @param index
    * @param field
    */
-  componentAttached(component: any, index: number, field: DataProperty) {
+  componentAttached(component: unknown, index: number, field: DataProperty) {
     if (component.instance.data === null && this.data[index][field.field]) {
       component.instance.data = this.data[index][field.field];
     }
@@ -490,7 +479,7 @@ export class NcatsDatatableComponent
       component.instance.parent = this.data[index];
     }
     if (component.instance.clickEvent) {
-      component.instance.clickEvent.subscribe((res: any) => {
+      component.instance.clickEvent.subscribe((res: unknown) => {
         this.cellClicked(res);
       });
     }
@@ -536,7 +525,7 @@ export class NcatsDatatableComponent
    * clean up on leaving component
    */
   ngOnDestroy() {
-    this.ngUnsubscribe.next(null);
+    this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
   }
 }

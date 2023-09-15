@@ -7,6 +7,7 @@ export * from './lib/disease';
 export * from './lib/disease-queries';
 export * from './lib/gene';
 export * from './lib/phenotype';
+export * from './lib/phenotype-queries';
 export * from './lib/project';
 export * from './lib/project-queries';
 

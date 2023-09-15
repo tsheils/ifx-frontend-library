@@ -1,8 +1,8 @@
-import ForceGraph3D from "3d-force-graph";
+import ForceGraph3D, { ForceGraph3DInstance } from "3d-force-graph";
 import { CdkScrollable } from "@angular/cdk/overlay";
 import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
 import { HttpClient } from "@angular/common/http";
-import { Component, ElementRef, ViewChild, ViewEncapsulation } from "@angular/core";
+import { Component, ElementRef, OnInit, ViewChild, ViewEncapsulation } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatIconModule } from "@angular/material/icon";
 import { Router } from "@angular/router";
@@ -15,10 +15,9 @@ import { Router } from "@angular/router";
     imports: [MatIconModule, MatCardModule, ScrollingModule, CdkScrollableModule],
   encapsulation: ViewEncapsulation.None
 })
-export class RdasHomeComponent {
+export class RdasHomeComponent implements OnInit {
   @ViewChild(CdkScrollable, {static: false}) scrollable!: CdkScrollable;
 
-  data!: any;
   /**
    * element of the page to scroll to
    */
@@ -33,10 +32,10 @@ export class RdasHomeComponent {
   ngOnInit() {
     const elem: HTMLElement | null = document.getElementById('3d-graph');
     if (elem) {
-        this.http.get('/assets/rdas-home/graph.json').subscribe((data: any) => {
+        this.http.get('/assets/rdas-home/graph.json').subscribe((data: unknown) => {
           const distance = 1400;
-          const scene: any = ForceGraph3D()(elem)
-            .graphData(<{nodes: any, links: any}>data)
+          const scene: ForceGraph3DInstance = ForceGraph3D()(elem)
+            .graphData(<never>data)
             .backgroundColor('rgba(255,255,255,.01)')
             .nodeAutoColorBy('label')
             .nodeVal('size')
@@ -46,7 +45,9 @@ export class RdasHomeComponent {
             .linkWidth('weight')
             .showNavInfo(false)
 
-          scene.controls().maxDistance = 750
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const ctls: any = scene.controls();
+          ctls.maxDistance = 750
 
           let angle = 0;
           setInterval(() => {

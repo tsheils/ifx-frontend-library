@@ -1,16 +1,39 @@
 <div class="row space-around-row top-align">
   <div class="width-25">
-    <h2>Filter Diseases by Hierarchy</h2>
+    <ncats-frontend-library-shared-utils-filter-panel
+      [label]="'Phenotypes'"
+      [values]="phenotypeFilters"
+      [selectedValues]="selectedValues()"
+      (filterChange)="filterPhenotypes($event)"
+      (searchFilterChange)="searchPhenotypes($event)"
+      (pageFilterChange)="fetchPhenotypesPage($event)"
+    ></ncats-frontend-library-shared-utils-filter-panel>
+      <h2>Filter Diseases by Hierarchy</h2>
     <ncats-frontend-library-rdas-tree *ngIf="diseaseTree" (leafExpand)="treeExpand($event)" [data]="diseaseTree"></ncats-frontend-library-rdas-tree>
-  </div>
-  <div class="width-70">
-    <div class="row centered-row">
-      <div class="width-75">
-      <ncats-frontend-library-rdas-search (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
-      </div>
+   </div>
+   <div class="width-70">
+     <div class="row centered-row">
+       <div class="width-75">
+       <ncats-frontend-library-rdas-search (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
+       </div>
     </div>
+       <ncats-frontend-library-shared-utils-selected-filter-list [filters]="selectedValues" (filterChange)="updateFilters($event)" ></ncats-frontend-library-shared-utils-selected-filter-list>
 
-<div class="row right-justified-row ">
+     <div class="row space-between-row">
+  <mat-form-field appearance="outline" subscriptSizing="dynamic" [color]="'primary'">
+  <mat-label>Sort</mat-label>
+  <mat-select (selectionChange)="changeSort($event)" [value]=this.sort>
+    <mat-option [value] ="'COUNT_ARTICLES'">Articles</mat-option>
+    <mat-option [value] ="'COUNT_PROJECTS'">Projects</mat-option>
+    <mat-option [value] ="'COUNT_TRIALS'">Clinical Trials</mat-option>
+    <mat-option [value] ="'COUNT_GENES'">Genes</mat-option>
+    <mat-option [value] ="'COUNT_PHENOTYPES'">Phenotypes</mat-option>
+    <mat-option [value] ="'GardName'">Name (A-Z)</mat-option>
+  </mat-select>
+  </mat-form-field>
+
+
+
     <mat-paginator *ngIf="page"
       [pageSize]="page.pageSize"
       [pageIndex]="page.pageIndex"
