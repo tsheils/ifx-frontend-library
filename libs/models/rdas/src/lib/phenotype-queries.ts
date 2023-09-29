@@ -1,31 +1,31 @@
 import { gql } from "apollo-angular";
 
-export const PHENOTYPEPARAMETERS: {
+export const PHENOTYPEFILTERPARAMETERS: {
   skip?: number,
   limit?: number,
-  term?: string
+  term?: string,
+  terms?: string[]
 } = {
   skip: 0,
-  limit: 100
+  limit: 200,
+  term: '""',
+  terms: [],
 }
 
-export const FETCHPHENOTYPES = gql`
-  query PhenotypeCounts($skip: Int, $limit: Int, $term: String) {
-    phenotypeCounts(skip: $skip, limit: $limit, term: $term) {
-      term
-      count
-    }
+export const PHENOTYPEFILTERS = gql`
+query PhenotypeFilters($skip: Int, $limit: Int, $term: String, $terms: [String]) {
+  searchFilters:phenotypeSearch(skip: $skip, limit: $limit, term: $term) {
+    term
+    count
   }
-`
-
-export const SEARCHPHENOTYPES = gql`
-  query PhenotypeSearchCounts($skip: Int, $limit: Int, $term: String) {
-    phenotypeCounts: phenotypeSearch(skip: $skip, limit: $limit, term: $term) {
-      term
-      count
-    }
+  selectedFilters:phenotypeFilteredCounts(terms: $terms) {
+    term
+    count
   }
+  allFilters:phenotypeCounts(skip: $skip, limit: $limit ,terms: $terms) {
+    term
+    count
+  }
+}
 `
-
-
 

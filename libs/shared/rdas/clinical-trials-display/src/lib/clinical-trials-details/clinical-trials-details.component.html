@@ -124,11 +124,12 @@
       </mat-tab>
       <mat-tab [label]="getLabel('participantInfo', false)"
                [disabled]="!trial.participantInfo || trial.participantInfo.length === 0">
-        <mat-list>
-          <mat-list-item *ngFor="let participant of trial.participantInfo">
-            {{participant.eligibilityCriteria}}
-          </mat-list-item>
-        </mat-list>
+<br>
+          <div *ngFor="let participant of trial.participantInfo">
+            <div *ngFor="let criteria of participant.eligibilityCriteriaList" class="eligibility-text" [ngClass]="{'isHeader': isHeader(criteria)}">
+              {{criteria}}
+            </div>
+          </div>
       </mat-tab>
       <mat-tab [label]="getLabel('studyDiseases')"
                [disabled]="!trial.studyDiseases || trial.studyDiseases.length <= 1">

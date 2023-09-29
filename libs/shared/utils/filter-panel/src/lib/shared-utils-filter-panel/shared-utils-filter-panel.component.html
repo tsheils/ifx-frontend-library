@@ -1,17 +1,15 @@
 <mat-card class="filter-card">
-  <mat-card-title>{{label}}</mat-card-title>
+  <mat-card-title>{{filter.label | titlecase}}</mat-card-title>
 <mat-form-field class="table-search">
-  <input matInput placeholder="Search {{label}}" [formControl]="searchCtl">
+  <input matInput #searchInput placeholder="Search {{filter.label}}" [formControl]="searchCtl"  [value]="filter.query">
   <button matSuffix mat-icon-button aria-label="close" (click)="clearSearch()" *ngIf="searchCtl.value">
     <mat-icon [color]="'primary'" >backspace</mat-icon>
   </button>
 </mat-form-field>
 <div>
   <ncats-frontend-library-loading-spinner [isLoaded] = !loading></ncats-frontend-library-loading-spinner>
-  <cdk-virtual-scroll-viewport appendOnly itemSize="50" class="filter-viewport" (scrolledIndexChange)="scrollDetected($event)">
-
-    <div *cdkVirtualFor="let field of dataSource" class="filter-grid">
-
+  <cdk-virtual-scroll-viewport appendOnly itemSize="55" class="filter-viewport" (scrolledIndexChange)="scrollDetected()">
+    <div *cdkVirtualFor="let field of filter.values; let last = last;" class="filter-grid">
     <div class="filter-cell checkbox">
       <mat-checkbox (click)="$event.stopPropagation()" aria-label="Select filter option"
                     (change)="$event ? filterSelection.toggle(field['term']) : null"
@@ -20,7 +18,7 @@
       </mat-checkbox>
     </div>
       <div class="filter-cell name"><span class="field-text">
-        <span [innerHTML]="field['term'] | highlight : searchCtl.value"></span>
+        <span [innerHTML]="field['term'] | highlight : filter.query ? filter.query : ''"></span>
       </span>
       </div>
       <div class="filter-cell count">
@@ -28,6 +26,8 @@
           {{field['count']}}
         </span>
     </div>
+        <br *ngIf="last">
+        <button *ngIf="last && filter.values.length >= 200" matButton mat-stroked-button (click)="loadMore()" [color]="'primary'" class="full-width">see more</button>
     </div>
   </cdk-virtual-scroll-viewport>
 </div>

@@ -1,9 +1,10 @@
 import { BreakpointObserver } from "@angular/cdk/layout";
-import { Component, Input, OnInit } from "@angular/core";
-import { CommonModule} from "@angular/common";
+import { CommonModule } from "@angular/common";
+import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatCardModule } from "@angular/material/card";
 import { MatListModule } from "@angular/material/list";
 import { MatTabsModule } from "@angular/material/tabs";
+import { DomSanitizer } from "@angular/platform-browser";
 import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
 import { ClinicalTrialsListCardComponent } from "../clinical-trials-list-card/clinical-trials-list-card.component";
 
@@ -12,7 +13,8 @@ import { ClinicalTrialsListCardComponent } from "../clinical-trials-list-card/cl
   standalone: true,
   imports: [CommonModule, ClinicalTrialsListCardComponent, MatCardModule, MatTabsModule, MatListModule],
   templateUrl: './clinical-trials-details.component.html',
-  styleUrls: ['./clinical-trials-details.component.scss']
+  styleUrls: ['./clinical-trials-details.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class ClinicalTrialsDetailsComponent implements OnInit {
   @Input() trial!: ClinicalTrial;
@@ -26,7 +28,8 @@ export class ClinicalTrialsDetailsComponent implements OnInit {
    */
   fullSummary = true;
   constructor(
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
+    private sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit(): void {
@@ -65,4 +68,8 @@ export class ClinicalTrialsDetailsComponent implements OnInit {
       .trim()
     return ret;
   }
+
+ isHeader(criteria: string){
+   return (criteria === 'Inclusion Criteria:' || criteria === 'Exclusion Criteria:')
+ }
 }

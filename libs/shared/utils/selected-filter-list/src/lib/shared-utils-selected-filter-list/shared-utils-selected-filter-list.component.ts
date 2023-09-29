@@ -25,7 +25,7 @@ export class SharedUtilsSelectedFilterListComponent {
   /**
    * list of selected facets
    */
-  @Input() filters!: WritableSignal<Map<string, string[]>>;
+  @Input() filters!: Map<string, string[]>;
   @Output() filterChange: EventEmitter<Map<string, string[]>> = new EventEmitter<Map<string, string[]>>()
 
 
@@ -38,27 +38,18 @@ export class SharedUtilsSelectedFilterListComponent {
               ) {
   }
 
-  /**
-   * set up subscriptions for fetching facets and watching route changes
-   */
+
   ngOnInit() {
     this.changeRef.markForCheck();
   }
 
-  ngOnChanges(change: SimpleChange){
-    console.log(change);
-    console.log(this.filters())
-  }
   /**
    * remove a specific facet and all selected fields
    * @param family
    */
   removeFilterFamily(family:string): void {
-  //  this.filters = this.filters.filter(field => field.label !== family)
-    this.filters().delete(family);
-console.log(this.filters);
-    this.filterChange.next(this.filters());
-    //this.selectedFacetService.removefacetFamily(facet);
+    this.filters.delete(family);
+    this.filterChange.next(this.filters);
   }
 
   /**
@@ -67,24 +58,13 @@ console.log(this.filters);
    * @param value
    */
   removeField(label: string, value: string): void {
-   const vals =  this.filters().get(label);
-   if(vals) {
-     this.filters().set(label, vals.filter(val=> val !== value) )
-     console.log(this.filters)
+   const vals = this.filters.get(label)?.filter(val=> val !== value) ;
+   if(vals && vals.length) {
+     this.filters.set(label, vals)
+   } else {
+     this.removeFilterFamily(label);
    }
-
-   /* this.filters.forEach(ffilter => {
-      if(ffilter.label == filter) {
-        if (ffilter && ffilter.values) {
-          ffilter.values = ffilter.values.filter(fvalue => fvalue !== value);
-          if(ffilter.values.length === 0) {
-            this.filters = this.filters.filter(field => field.label !== ffilter.label)
-          }
-        }
-      }
-     })
-    console.log(this.filters);*/
-    this.filterChange.next(this.filters());
+    this.filterChange.next(this.filters);
 
   }
 
@@ -92,14 +72,7 @@ console.log(this.filters);
    * clear all queries/facets
    */
   removeAll(): void {
-    this.filters().clear();
-    console.log(this.filters());
-    this.filterChange.next(this.filters());
+    this.filters.clear();
+    this.filterChange.next(this.filters);
   }
-
-
-  ngOnDestroy(): void {
-    this.filters().clear();
-  }
-
 }

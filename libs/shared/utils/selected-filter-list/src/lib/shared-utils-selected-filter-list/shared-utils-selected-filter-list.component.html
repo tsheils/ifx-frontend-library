@@ -1,4 +1,4 @@
- <div class="row space-between-row" *ngIf="filters()">
+ <div class="row space-between-row" *ngIf="filters && filters.size">
       <div class="width-70">
         <span class=" filter-row-title">Selected Filters:</span>
       </div>
@@ -11,7 +11,7 @@
     </div>
 
     <div class = "row space-between-row">
-      <div class="width-15" *ngFor="let  filter of filters().entries()">
+      <div class="width-15" *ngFor="let  filter of filters.entries()">
         <div class = "row space-between-row">
           <div class="facetHeader">
             <span class="mat-subheader">{{filter[0]}}</span>

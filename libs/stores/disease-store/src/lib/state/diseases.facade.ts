@@ -17,7 +17,6 @@ export class DiseasesFacade {
   diseaseTree$ = this.store.pipe(select(DiseasesSelectors.getDiseaseTree));
   selectedDiseases$ = this.store.selectSignal(DiseasesSelectors.getSelected);
   searchDiseases$ = this.store.pipe(select(DiseasesSelectors.searchDiseasesEntities));
-  fetchPhenotypes$ = this.store.pipe(select(DiseasesSelectors.getPhenotypes));
   page$ = this.store.pipe(select(DiseasesSelectors.getDiseasesPage));
 
 

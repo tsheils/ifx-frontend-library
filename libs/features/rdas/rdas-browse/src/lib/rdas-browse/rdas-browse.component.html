@@ -1,12 +1,10 @@
 <div class="row space-around-row top-align">
   <div class="width-25">
     <ncats-frontend-library-shared-utils-filter-panel
-      [label]="'Phenotypes'"
-      [values]="phenotypeFilters"
-      [selectedValues]="selectedValues()"
-      (filterChange)="filterPhenotypes($event)"
-      (searchFilterChange)="searchPhenotypes($event)"
-      (pageFilterChange)="fetchPhenotypesPage($event)"
+      *ngFor = "let filter of filters"
+      [filter]="filter"
+      (filterSelectionChange)="filterPhenotypes($event)"
+      (filterChange)="filterChange($event)"
     ></ncats-frontend-library-shared-utils-filter-panel>
       <h2>Filter Diseases by Hierarchy</h2>
     <ncats-frontend-library-rdas-tree *ngIf="diseaseTree" (leafExpand)="treeExpand($event)" [data]="diseaseTree"></ncats-frontend-library-rdas-tree>

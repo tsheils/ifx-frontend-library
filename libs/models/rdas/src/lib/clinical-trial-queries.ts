@@ -18,7 +18,7 @@ fragment trialFields on ClinicalTrial {
         interventionName: InterventionName
         interventionType: InterventionType
       }
-      paticipants: hasParticipantInfoParticipants {
+      participantInfo: hasParticipantInfoParticipants {
         eligibilityCriteria: EligibilityCriteria
       }
       studyDesigns: hasStudyDesignStudyDesigns {

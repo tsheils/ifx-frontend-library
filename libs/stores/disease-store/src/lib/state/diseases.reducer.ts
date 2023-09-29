@@ -1,4 +1,4 @@
-import { Disease, DiseaseNode, Phenotype } from "@ncats-frontend-library/models/rdas";
+import { Disease, DiseaseNode } from "@ncats-frontend-library/models/rdas";
 import { Page } from "@ncats-frontend-library/models/utils";
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
@@ -16,7 +16,6 @@ export interface State extends EntityState<Disease> {
   page?: Page;
   diseases?: Disease[];
   tree?: DiseaseNode[];
-  phenotypes?: {term: string, count: number}[]
 }
 
 export interface DiseasesPartialState {
@@ -32,8 +31,7 @@ export const initialState: State = diseasesAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   error: 'No Error Available',
-  typeahead: [],
-  phenotypes: []
+  typeahead: []
 });
 
 export const diseasesReducer = createReducer(
@@ -60,10 +58,6 @@ export const diseasesReducer = createReducer(
        ({...state, typeahead: typeahead, loaded: true})
   ),
 
-  on(DiseasesActions.fetchPhenotypesSuccess, (state, { phenotypes }) =>
-       ({...state, phenotypes: phenotypes, loaded: true})
-  ),
-
   on(DiseasesActions.clearTypeahead, (state) =>
        ({...state, typeahead: [], loaded: true})
   ),
@@ -72,7 +66,6 @@ export const diseasesReducer = createReducer(
     DiseasesActions.loadDiseasesFailure,
     DiseasesActions.searchDiseasesFailure,
     DiseasesActions.fetchDiseaseFailure,
-    DiseasesActions.fetchPhenotypesFailure,
     DiseasesActions.loadDiseaseTreeFailure,
     (state, { error }) => ({
       ...state,

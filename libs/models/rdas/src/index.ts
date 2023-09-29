@@ -6,6 +6,7 @@ export * from './lib/clinical-trial-queries';
 export * from './lib/disease';
 export * from './lib/disease-queries';
 export * from './lib/gene';
+export * from './lib/gene-queries';
 export * from './lib/phenotype';
 export * from './lib/phenotype-queries';
 export * from './lib/project';

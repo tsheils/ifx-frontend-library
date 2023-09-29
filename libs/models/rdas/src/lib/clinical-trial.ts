@@ -91,8 +91,13 @@ export class Intervention {
 
 export class ParticipantInfo {
   eligibilityCriteria?: string;
+  eligibilityCriteriaList?: string[];
   constructor(obj: Partial<ParticipantInfo> = {}) {
+    console.log(obj)
     Object.assign(this, obj);
+    if(obj.eligibilityCriteria) {
+      this.eligibilityCriteriaList = obj.eligibilityCriteria.split(('\n'))
+    }
   }
 }
 

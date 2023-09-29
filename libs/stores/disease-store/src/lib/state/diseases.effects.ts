@@ -25,9 +25,9 @@ import {
   EPIARTICLES,
   NONEPIARTICLES,
   PHENOTYPEPARAMETERS,
-  FETCHPHENOTYPES, SEARCHPHENOTYPES
+  FETCHPHENOTYPES, SEARCHPHENOTYPES, FETCHFILTEREDPHENOTYPES
 } from "@ncats-frontend-library/models/rdas";
-import { Page } from "@ncats-frontend-library/models/utils";
+import { Filter, FilterCategory, Page } from "@ncats-frontend-library/models/utils";
 import { Store } from "@ngrx/store";
 import { DiseaseService } from "../disease.service";
 import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
@@ -171,7 +171,6 @@ export class DiseasesEffects {
           this.diseaseService.fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES).pipe(take(1))
         )
           .pipe(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map(([diseaseData, articleData, epiArticleData, projectsData, trialsData]: [ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>, ApolloQueryResult<unknown>,ApolloQueryResult<unknown>, ApolloQueryResult<unknown>]) => {
               if(diseaseData && diseaseData.data) {
@@ -255,38 +254,6 @@ export class DiseasesEffects {
       })
     )
   );
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  loadPhenotypes$ = createEffect((): any => {
-    return this.actions$.pipe(
-      ofType(DiseasesActions.fetchPhenotypes),
-      switchMap((action: any) => {
-        let query = FETCHPHENOTYPES;
-        if(action.skip) {
-          PHENOTYPEPARAMETERS.skip = action.skip;
-        }
-        if(action.limit) {
-          PHENOTYPEPARAMETERS.limit = action.limit;
-        }
-        if(action.term) {
-          query = SEARCHPHENOTYPES
-          PHENOTYPEPARAMETERS.term = action.term + '*';
-        }
-        return this.diseaseService.fetchDiseases(query, PHENOTYPEPARAMETERS)
-          .pipe(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            map((res: any) => {
-              if(res && res.data) {
-                const phenotypeArr = res.data.phenotypeCounts //..map((obj: Partial<Disease>) => new Disease(obj))
-                return DiseasesActions.fetchPhenotypesSuccess({phenotypes: phenotypeArr})
-              }
-              else return DiseasesActions.fetchPhenotypesFailure({error: "No Disease found"})
-            })
-          )
-      })
-    )}
-  );
-
 
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
