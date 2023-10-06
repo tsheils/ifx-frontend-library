@@ -185,7 +185,9 @@ updateUserProfile = createEffect( ()=>
     ofType(UsersActions.updateUserSubscriptions),
     withLatestFrom(this.store),
     mergeMap(([action, state]) => {
+      console.log(action)
          const newUser: User = new User({...state.users.entities[state.users.selectedId || 'null' ], subscriptions: action.subscriptions})
+      console.log(newUser)
       return this.userService.updateUserProfile(newUser)
         .pipe(
           map((res) => {

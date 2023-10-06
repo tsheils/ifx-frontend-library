@@ -1,3 +1,9 @@
+  .selected-filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 15%);
+    gap: 2%;
+}
+
 
 .removeIcon {
   vertical-align: middle;

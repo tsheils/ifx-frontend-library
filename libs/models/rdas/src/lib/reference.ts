@@ -10,7 +10,11 @@ export class Reference {
       this.url = REFERENCELOOKUP.filter(ref => ref.origin == split[0])[0].url.concat(split[1])
     }
   }
+
+  _toString() {
+    return this.code + ' | ' + this.url;
   }
+}
 
 
 

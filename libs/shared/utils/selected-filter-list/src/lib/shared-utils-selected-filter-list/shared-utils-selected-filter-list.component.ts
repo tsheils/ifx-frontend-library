@@ -26,7 +26,7 @@ export class SharedUtilsSelectedFilterListComponent {
    * list of selected facets
    */
   @Input() filters!: Map<string, string[]>;
-  @Output() filterChange: EventEmitter<Map<string, string[]>> = new EventEmitter<Map<string, string[]>>()
+  @Output() filterChange: EventEmitter<{label: string, values: string[]}[]> = new EventEmitter<{label: string, values: string[]}[]>()
 
 
   /**
@@ -48,8 +48,8 @@ export class SharedUtilsSelectedFilterListComponent {
    * @param family
    */
   removeFilterFamily(family:string): void {
-    this.filters.delete(family);
-    this.filterChange.next(this.filters);
+    this.filters.set(family, []);
+    this.filterChange.next(this._flattenMap());
   }
 
   /**
@@ -64,7 +64,7 @@ export class SharedUtilsSelectedFilterListComponent {
    } else {
      this.removeFilterFamily(label);
    }
-    this.filterChange.next(this.filters);
+    this.filterChange.next(this._flattenMap());
 
   }
 
@@ -73,6 +73,18 @@ export class SharedUtilsSelectedFilterListComponent {
    */
   removeAll(): void {
     this.filters.clear();
-    this.filterChange.next(this.filters);
+    this.filterChange.next(this._flattenMap());
+  }
+
+  _flattenMap(): {label: string, values: string[]}[] {
+    const ret:{label: string, values: string[]}[] = [];
+    [...this.filters.keys()].forEach(key=> {
+      let valuesArr = this.filters.get(key);
+      if(!valuesArr) {
+        valuesArr = []
+      }
+      ret.push({label: key, values: valuesArr})
+    })
+    return ret;
   }
 }

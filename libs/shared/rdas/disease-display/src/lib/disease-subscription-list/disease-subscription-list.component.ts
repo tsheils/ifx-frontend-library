@@ -35,7 +35,6 @@ export class DiseaseSubscriptionListComponent {
       })
       this._subscriptions = subscriptions;
     }
-    console.log(this.diseases);
   }
 
   get subscriptions(): Subscription[] {

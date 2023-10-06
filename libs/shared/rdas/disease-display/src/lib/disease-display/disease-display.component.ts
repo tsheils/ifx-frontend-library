@@ -26,7 +26,6 @@ import { MatCardModule } from "@angular/material/card";
     selector: 'ncats-frontend-library-disease-display',
     templateUrl: './disease-display.component.html',
     styleUrls: ['./disease-display.component.scss'],
-  //  changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None,
     standalone: true,
   imports: [MatCardModule, DiseaseHeaderComponent, NgIf, MatTabsModule,
@@ -35,28 +34,6 @@ import { MatCardModule } from "@angular/material/card";
 })
 export class DiseaseDisplayComponent implements OnChanges {
   @Input() disease!: Signal<Disease | undefined>;
-
-
-  /*  /!**
-     * initialize a private variable _data, it's a BehaviorSubject
-     *
-     *!/
-    protected _disease = new BehaviorSubject<Disease | null>(null);
-
-    /!**
-     * pushes changed data to {BehaviorSubject}
-     *!/
-    @Input()
-    set disease(value: Disease | null) {
-      this._disease.next(value);
-    }
-
-    /!**
-     * returns value of {BehaviorSubject}
-     *!/
-    get disease(): Disease | null {
-      return this._disease.getValue();
-    }*/
 
   @Output() optionsChange: EventEmitter<{ variables: { [key: string]: string | number | undefined }, origin: string }> =
     new EventEmitter<{ variables: { [key: string]: string | number | undefined }, origin: string }>();
@@ -74,12 +51,6 @@ export class DiseaseDisplayComponent implements OnChanges {
   ngOnInit() {
     if (this.route.snapshot.fragment) {
       this.selectedIndex = this.tabs.indexOf(this.route.snapshot.fragment);
-      /*if (this.route.snapshot.queryParamMap.has('offset')) {
-        const offset = +-this.route.snapshot.queryParamMap.has('offset');
-        if (offset) {
-          this.optionsChange.emit({variables: { offset: offset }, origin: this.route.snapshot.fragment})
-        }
-      }*/
     }
   }
 

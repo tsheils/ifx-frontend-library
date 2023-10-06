@@ -14,25 +14,25 @@ import { environment } from "../environments/environment";
           diseases: /* <-- this settings will be saved as default client */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}:4000`,
+              uri: `${environment.baseUrl}/api/diseases`,
             }),
           },
           articles: /* <-- this settings will be saved as default client */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}:4001`,
+              uri: `${environment.baseUrl}/api/articles`,
             }),
           },
           projects: {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}:4002`,
+              uri: `${environment.baseUrl}/api/grants`,
             }),
           },
           trials: /* <-- these settings will be saved by name: newClientName */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}:4003`,
+              uri: `${environment.baseUrl}/api/trials`,
             }),
           }
         };

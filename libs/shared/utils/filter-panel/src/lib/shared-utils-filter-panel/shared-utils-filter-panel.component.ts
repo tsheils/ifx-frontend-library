@@ -50,8 +50,8 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
    */
   @Input() filter!: FilterCategory;
 
-  @Output() filterSelectionChange: EventEmitter<{label: string, values: string[]}> =
-    new EventEmitter<{label: string, values: string[]}>();
+  @Output() filterSelectionChange: EventEmitter<{label: string, values: string[]}[]> =
+    new EventEmitter<{label: string, values: string[]}[]>();
 
   @Output() filterChange: EventEmitter<{label: string, term?: string, page?: number}> =
     new EventEmitter<{label: string, term?: string, page?: number}>();
@@ -88,7 +88,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
    */
   ngOnInit() {
     this.filterSelection.changed.subscribe(() => {
-      this.filterSelectionChange.next({label: this.filter.label, values: this.filterSelection.selected})
+      this.filterSelectionChange.next([{label: this.filter.label, values: this.filterSelection.selected}])
     })
 
     this.searchCtl.valueChanges

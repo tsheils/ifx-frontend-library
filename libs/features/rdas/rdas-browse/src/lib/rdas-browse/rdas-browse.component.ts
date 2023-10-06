@@ -1,8 +1,8 @@
-import { CommonModule, NgIf } from "@angular/common";
+import { CommonModule, DOCUMENT, NgIf } from "@angular/common";
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
+  Component, Inject,
   OnDestroy,
   OnInit,
   signal,
@@ -11,11 +11,12 @@ import {
   WritableSignal
 } from "@angular/core";
 import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
 import { MatSelectChange, MatSelectModule } from "@angular/material/select";
-import { Event, NavigationEnd, NavigationExtras, Router } from "@angular/router";
-import { Disease, DiseaseNode } from "@ncats-frontend-library/models/rdas";
+import { Event, NavigationEnd, NavigationExtras, NavigationStart, Router } from "@angular/router";
+import { Disease, DiseaseNode, GeneAssociation } from "@ncats-frontend-library/models/rdas";
 import { Filter, FilterCategory, Page } from "@ncats-frontend-library/models/utils";
 import { DiseaseListComponent } from "@ncats-frontend-library/shared/rdas/disease-display";
 import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
@@ -41,7 +42,7 @@ const navigationExtras: NavigationExtras = {
   styleUrls: ["./rdas-browse.component.scss"],
   standalone: true,
   imports: [CommonModule, RdasTreeComponent, RdasSearchComponent, MatPaginatorModule,
-    LoadingSpinnerComponent, DiseaseListComponent, ScrollToTopComponent, MatMenuModule,
+    LoadingSpinnerComponent, DiseaseListComponent, ScrollToTopComponent, MatMenuModule, MatIconModule,
     MatButtonModule, MatSelectModule, SharedUtilsFilterPanelComponent, SharedUtilsSelectedFilterListComponent],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -61,13 +62,15 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   filters: FilterCategory[] = [];
   sort = "COUNT_ARTICLES";
   selectedValues: Map<string, string[]> = new Map<string, string[]>();
+  showDownload = false;
 
   constructor(
     private router: Router,
     private changeRef: ChangeDetectorRef,
     private diseaseFacade: DiseasesFacade,
-    private filterFacade: FiltersFacade
-  ) {
+    private filterFacade: FiltersFacade,
+  @Inject(DOCUMENT) protected dom?: Document
+) {
   }
 
   ngOnInit(): void {
@@ -79,6 +82,9 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((e: Event) => {
+        if (e instanceof NavigationStart) {
+          this.loaded = false;
+        }
         if (e instanceof NavigationEnd) {
           this.selectedValues.clear();
           this.fetchParameters();
@@ -99,6 +105,11 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       .subscribe(res => {
         if (res) {
           this.page = res;
+          if (this.page.total <= 1000) {
+        //    this.showDownload = true
+            this.changeRef.markForCheck();
+
+          }
           this.changeRef.markForCheck();
         }
       });
@@ -133,7 +144,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
    */
   paginationChanges(event: PageEvent): void {
     navigationExtras.queryParams = {
-      pageIndex: event.pageIndex,
+      pageIndex: event.pageIndex + 1,
       pageSize: event.pageSize,
       sort: this.sort
     };
@@ -168,27 +179,25 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-  filterPhenotypes(filter: { label: string; values: string[] } | null): void {
-    let navigationExtras: NavigationExtras = {};
-    if (filter && filter.values.length) {
-      const newObj: { [key: string]: string } = {};
-      Object.keys(filter).forEach((key, value) => {
-        newObj[filter.label] = filter.values.join("&");
-      });
+  filterSelectionChange(filters: { label: string; values: string[] }[]): void {
+    let navigationExtras: NavigationExtras = {queryParamsHandling: 'merge' };
+    const newObj: { [key: string]: string | null } = {};
+    if (this.router.routerState.snapshot.root.queryParamMap.has("sort")) {
       navigationExtras = {
-        queryParams: { ...newObj },
-        queryParamsHandling: "merge"
+        queryParams: {
+          sort: this.router.routerState.snapshot.root.queryParamMap.get("sort"),
+          direction: this.sort === "GardName" ? "ASC" : "DESC"
+        }
       };
-    } else {
-      if (this.router.routerState.snapshot.root.queryParamMap.has("sort")) {
-        navigationExtras = {
-          queryParams: {
-            sort: this.router.routerState.snapshot.root.queryParamMap.get("sort"),
-            direction: this.sort === "GardName" ? "ASC" : "DESC"
-          }
-        };
-      }
     }
+    filters.forEach(filter => {
+           if(filter.values.length) {
+          newObj[filter.label] = filter.values.join("&");
+           }else {
+             newObj[filter.label] = null;
+          }
+    });
+      navigationExtras.queryParams = { ...newObj }
     this.router.navigate(["/diseases"], navigationExtras);
   }
 
@@ -216,16 +225,51 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateFilters(filters: Map<string, string[]>): void {
-    if (filters.has("phenotypes")) {
-      const values = filters.get("phenotypes");
-      if (values) {
-        this.filterPhenotypes({ label: "phenotypes", values: values });
+  downloadData() {
+   // if(this.diseases) {
+    //  console.log(this.diseases());
+   //   console.log(this.page);
+     // this.diseasesFacade.dispatch()
+      //this._downloadFile(this._toTSV(this.genes), 'rdas-genes-download.tsv')
+   // }
+  }
+
+  _toTSV(data: GeneAssociation[]): string {
+// grab the column headings (separated by tabs)
+    const headings: string = ["geneSymbol","associationStatus",	"associationType","references"].join("\t");
+
+// iterate over the data
+    const rows: string = data.reduce((acc, c) => {
+
+      // for each row object get its values and add tabs between them
+      // then add them as a new array to the outgoing array
+
+      return acc.concat([c._toString()]);
+
+// finally joining each row with a line break
+    }, [headings]).join('\n');
+    return rows;
+  }
+
+
+  _downloadFile(data: any, name: string, type = 'text/tsv') {
+    if(this.dom) {
+      const file = new Blob([data], { type: type });
+      const link = this.dom.createElement('a');
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        const url = URL.createObjectURL(file);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${name}`);
+        link.style.visibility = 'hidden';
+        this.dom.body.appendChild(link);
+        link.click();
+        this.dom.body.removeChild(link);
       }
-    } else {
-      this.filterPhenotypes({ label: "phenotypes", values: [] });
     }
   }
+
 
   /**
    * navigate on changes, mainly just changes url, shouldn't reload entire page, just data

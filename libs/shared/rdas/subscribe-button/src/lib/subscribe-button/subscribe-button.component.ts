@@ -73,15 +73,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.disease = this.diseaseFacade.selectedDiseases$
-     /* .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(disease => {
-        if(disease) {
-           = disease;
-        }
-      })
-*/
+
     this.userFacade.user$
       .pipe(
         takeUntil(this.ngUnsubscribe)
@@ -121,7 +113,7 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
           this.user?.subscriptions.forEach(sub => subscriptionClone.push(sub));
           subscriptionClone.splice(this.user.subscriptions.findIndex(obj => obj.gardID === this.disease()?.gardId), 1);
           this.subscription = new Subscription({
-            diseaseName: this.disease.name,
+            diseaseName: this.disease()?.name,
             gardID: this.disease()?.gardId,
             alerts: this.subscriptionSelection.selected
           });
@@ -132,10 +124,14 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
   }
 
   subscribe() {
+    console.log(this.user)
+    console.log(this.disease())
     if (this.user && this.disease()) {
       this.subscription = new Subscription({ diseaseName: this.disease()?.name, gardID: this.disease()?.gardId, alerts: this.all });
-      const subscriptionClone: Subscription[] = [this.subscription];
+      console.log(this.subscription)
+      const subscriptionClone: Subscription[] = [{...this.subscription}];
       this.user.subscriptions.forEach(sub => subscriptionClone.push(sub));
+      console.log(subscriptionClone);
       this.userFacade.dispatch(updateUserSubscriptions({ subscriptions: subscriptionClone }));
       this._snackBar.open("Subscription updated", undefined, {
         duration: 3000

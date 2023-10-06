@@ -10,8 +10,8 @@
       </div>
     </div>
 
-    <div class = "row space-between-row">
-      <div class="width-15" *ngFor="let  filter of filters.entries()">
+    <div class = "selected-filter-grid">
+      <div *ngFor="let filter of filters.entries()">
         <div class = "row space-between-row">
           <div class="facetHeader">
             <span class="mat-subheader">{{filter[0]}}</span>

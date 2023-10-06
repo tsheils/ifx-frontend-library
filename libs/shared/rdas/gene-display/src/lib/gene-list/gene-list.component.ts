@@ -1,11 +1,13 @@
 import {
   AfterViewInit,
-  Component,
+  Component, Inject,
   Input, OnChanges, SimpleChanges,
   ViewChild, ViewEncapsulation
 } from "@angular/core";
-import { NgFor, NgIf } from "@angular/common";
+import { DOCUMENT, NgFor, NgIf } from "@angular/common";
+import { MatButtonModule } from "@angular/material/button";
 import { MatCardModule } from "@angular/material/card";
+import { MatIconModule } from "@angular/material/icon";
 import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
 import { MatSort, MatSortModule, Sort } from "@angular/material/sort";
 import { MatTableDataSource, MatTableModule } from "@angular/material/table";
@@ -18,7 +20,7 @@ import { GeneListCardComponent } from "../gene-list-card/gene-list-card.componen
 @Component({
   selector: 'ncats-frontend-library-gene-list',
   standalone: true,
-  imports: [NgIf, MatPaginatorModule, NgFor, GeneListCardComponent, MatCardModule,
+  imports: [NgIf, MatPaginatorModule, NgFor, GeneListCardComponent, MatCardModule, MatButtonModule, MatIconModule,
     MatTabsModule, MatTableModule, MatSortModule, ExternalLinkComponent, SharedUtilsDataNotFoundComponent],
   templateUrl: './gene-list.component.html',
   styleUrls: ['./gene-list.component.scss'],
@@ -32,6 +34,9 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
   @ViewChild(MatSort) sort!: MatSort;
   displayColumns = ["Gene", "Gene Name", "Association Type", "Reference"]
 
+  constructor(
+    @Inject(DOCUMENT) protected dom?: Document
+  ){}
 
   ngAfterViewInit() {
     if (this.genes) {
@@ -78,6 +83,50 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
 
     }
   }
+
+  downloadData() {
+    if(this.genes) {
+      console.log(this.genes);
+      this._downloadFile(this._toTSV(this.genes), 'rdas-genes-download.tsv')
+    }
+  }
+
+  _toTSV(data: GeneAssociation[]): string {
+// grab the column headings (separated by tabs)
+      const headings: string = ["geneSymbol","associationStatus",	"associationType","references"].join("\t");
+
+// iterate over the data
+      const rows: string = data.reduce((acc, c) => {
+
+        // for each row object get its values and add tabs between them
+        // then add them as a new array to the outgoing array
+
+        return acc.concat([c._toString()]);
+
+// finally joining each row with a line break
+      }, [headings]).join('\n');
+      return rows;
+  }
+
+
+  _downloadFile(data: any, name: string, type = 'text/tsv') {
+    if(this.dom) {
+      const file = new Blob([data], { type: type });
+      const link = this.dom.createElement('a');
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        const url = URL.createObjectURL(file);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${name}`);
+        link.style.visibility = 'hidden';
+        this.dom.body.appendChild(link);
+        link.click();
+        this.dom.body.removeChild(link);
+      }
+    }
+  }
+
 }
 
 

@@ -3,7 +3,7 @@
     <ncats-frontend-library-shared-utils-filter-panel
       *ngFor = "let filter of filters"
       [filter]="filter"
-      (filterSelectionChange)="filterPhenotypes($event)"
+      (filterSelectionChange)="filterSelectionChange($event)"
       (filterChange)="filterChange($event)"
     ></ncats-frontend-library-shared-utils-filter-panel>
       <h2>Filter Diseases by Hierarchy</h2>
@@ -15,9 +15,10 @@
        <ncats-frontend-library-rdas-search (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
        </div>
     </div>
-       <ncats-frontend-library-shared-utils-selected-filter-list [filters]="selectedValues" (filterChange)="updateFilters($event)" ></ncats-frontend-library-shared-utils-selected-filter-list>
+       <ncats-frontend-library-shared-utils-selected-filter-list [filters]="selectedValues" (filterChange)="filterSelectionChange($event)" ></ncats-frontend-library-shared-utils-selected-filter-list>
 
      <div class="row space-between-row">
+       <div>
   <mat-form-field appearance="outline" subscriptSizing="dynamic" [color]="'primary'">
   <mat-label>Sort</mat-label>
   <mat-select (selectionChange)="changeSort($event)" [value]=this.sort>
@@ -29,9 +30,18 @@
     <mat-option [value] ="'GardName'">Name (A-Z)</mat-option>
   </mat-select>
   </mat-form-field>
-
-
-
+       </div>
+       <div class="row centered">
+       <button
+         mat-stroked-button
+         class="tool-button list-download"
+         (click)="downloadData()"
+         matTooltip="Download Data"
+         color="accent"
+         *ngIf="showDownload"
+       >
+         <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+       </button>
     <mat-paginator *ngIf="page"
       [pageSize]="page.pageSize"
       [pageIndex]="page.pageIndex"
@@ -40,6 +50,7 @@
       [length] = "page.total"
                    class="browse-paginator"
     ></mat-paginator>
+       </div>
 </div>
     <div class="row spinner-holder width-70">
     <ncats-frontend-library-loading-spinner [isLoaded]="loaded"></ncats-frontend-library-loading-spinner>

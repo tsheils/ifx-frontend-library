@@ -41,36 +41,9 @@ export class RdasDiseasePageComponent implements OnInit {
     private route: ActivatedRoute
   ) {
   }
-  @HostListener('unloaded')
-  ngOnDestroy() {
-    console.log('Items destroyed');
-    console.log(this.disease());
-     // this.loaded = false;
-  }
 
   ngOnInit(): void {
    this.disease = this.diseaseFacade.selectedDiseases$
-
-    console.log(this.disease);
-   console.log(this.disease());
-   console.log(this);
-
-    /* .subscribe(res => {
-        if (res) {
-          this.disease = res;
-          this.options.gardId = this.disease.gardId;
-          this.changeRef.detectChanges();
-        }
-      }
-    )*/
-    /*if (this.route.snapshot.fragment) {
-      if (this.route.snapshot.queryParamMap.has('offset')) {
-        const offset = +-this.route.snapshot.queryParamMap.has('offset');
-        if (offset) {
-          this.fetchDiseaseInfo({variables: { offset: offset }, origin: this.route.snapshot.fragment})
-        }
-      }
-    }*/
   }
 
   fetchDisease(disease: Disease) {

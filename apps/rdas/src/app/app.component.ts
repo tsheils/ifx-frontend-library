@@ -5,12 +5,20 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Inject,
+  Inject, InjectionToken, OnDestroy,
   OnInit,
   PLATFORM_ID, ViewChild,
   ViewEncapsulation
 } from "@angular/core";
-import { Event, NavigationEnd, NavigationExtras, Router, RouterLink, RouterOutlet } from "@angular/router";
+import {
+  Event,
+  NavigationEnd,
+  NavigationExtras,
+  NavigationStart,
+  Router,
+  RouterLink,
+  RouterOutlet
+} from "@angular/router";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { User } from "@ncats-frontend-library/models/utils";
 import { HeaderTemplateComponent, LinkTemplateProperty } from "@ncats-frontend-library/shared/utils/header-template";
@@ -32,7 +40,7 @@ import { Subject, takeUntil } from "rxjs";
   imports: [RouterLink, NgIf, RdasSearchComponent, RouterOutlet, FooterTemplateComponent, HeaderTemplateComponent,
     SocialSignOnButtonComponent, CdkScrollableModule, ScrollingModule, LoadingSpinnerComponent]
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   @ViewChild(CdkScrollable, {static: false}) scrollable!: CdkScrollable;
   title = 'rdas';
   loaded = false;
@@ -44,10 +52,32 @@ export class AppComponent implements OnInit {
       link: 'diseases',
       label: 'DISEASES',
     },
-/*    {
-      link: 'api',
-      label: 'API',
-    }*/
+    {
+      link: 'apis',
+      label: 'APIs',
+      children: [
+        {
+          link: 'apis/epi',
+          label: 'EPIDEMIOLOGY',
+        },
+        {
+          link: 'apis/diseases',
+          label: 'DISEASES',
+        },
+        {
+          link: 'apis/publications',
+          label: 'PUBLICATIONS',
+        },
+        {
+          link: 'apis/projects',
+          label: 'PROJECTS',
+        },
+        {
+          link: 'apis/trials',
+          label: 'TRIALS',
+        },
+      ]
+    }
   ];
 
   /**
@@ -58,7 +88,7 @@ export class AppComponent implements OnInit {
 
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
     @Inject(DOCUMENT) private document: Document,
     private scrollDispatcher: ScrollDispatcher,
     private router: Router,
@@ -77,33 +107,22 @@ export class AppComponent implements OnInit {
         }
     });
 
+    /**
+     * This shows loading spinner for page navigation - usually navigation is finished before the page is finished loading
+     */
      this.router.events
        .pipe(takeUntil(this.ngUnsubscribe))
        .subscribe((e:Event) => {
-       //  this.loaded = false;
          if (e instanceof NavigationEnd) {
-           console.log("navigation ending")
             this.hideSearch = e.url.split('/diseases').length > 1;
-            if(e.url === '/api') {
-              this.loaded = true;
-            }
-
            this.loaded = true;
          }
         });
 
-    this.diseaseFacade.loaded$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe(res => {
-        console.log("loading in app " + res)
-      this.loaded = res;
-        this.changeRef.detectChanges()
-      });
-
     this.scrollDispatcher.scrolled()
       .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => {
-        if(isPlatformBrowser(this.platformId)) {
+      .subscribe(() => {
+        if(isPlatformBrowser(this.platformId) && this.document) {
           if (this.router.url.includes('diseases')) {
             if (this.scrollable.getElementRef().nativeElement.offsetTop > 100 || this.document.documentElement.scrollTop > 100 || this.document.body.scrollTop > 100) {
               this.hideSearch = false;

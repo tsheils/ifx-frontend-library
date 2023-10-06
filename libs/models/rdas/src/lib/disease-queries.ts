@@ -36,6 +36,9 @@ export const DISEASEBRANCHPARAMETERS: {
     hasPhenotypePhenotypes_SOME?: {
       HPOTerm_IN?: string[]
     };
+    associatedWithGeneGenes_SOME?: {
+      GeneSymbol_IN?: string[]
+    };
   }
 } =
   {
@@ -66,6 +69,15 @@ export const CATEGORYTREE = gql`
       _childrenCount: gardSsubClassOfAggregate {
                 count
             }
+        }
+    }
+  ${DISEASELISTFIELDS}
+`
+
+export const DISEASELIST = gql`
+  query Tree($where: GARDWhere) {
+    diseases:gards(where: $where) {
+      ...diseaseListFields
         }
     }
   ${DISEASELISTFIELDS}
@@ -193,6 +205,19 @@ export const DISEASEQUERYPARAMETERS: {
   where?: {
     GardId?: null | string ,
     hasPhenotypePhenotypes_SOME?: {HPOTerm_IN: string[]}
+    associatedWithGeneGenes_SOME?: {GeneSymbol_IN: string[]}
+    AND?: [
+      {
+        hasPhenotypePhenotypes_SOME?: {
+          HPOTerm_IN?: string[]
+        }
+      },
+      {
+        associatedWithGeneGenes_SOME?: {
+          GeneSymbol_IN?: string[]
+        }
+      }
+    ]
   }
 } = {
   where: { GardId: null }
@@ -207,7 +232,11 @@ export const LISTQUERYPARAMETERS: {
     where?: {
       hasPhenotypePhenotypes_SOME?: {
         HPOTerm_IN?: string[]
-      };
+      },
+      associatedWithGeneGenes_SOME?: {
+        GeneSymbol_IN?: string[]
+      },
+      AND?: any[]
     }
   } =
     {

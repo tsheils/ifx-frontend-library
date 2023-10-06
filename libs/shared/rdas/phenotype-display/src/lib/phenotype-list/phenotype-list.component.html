@@ -2,15 +2,28 @@
 <mat-card class = "rounded-card">
   <mat-card-content>
     <div *ngIf="!phenotypes?.length">
-      <ncats-frontend-library-shared-utils-data-not-found [message]="'No Phenotype Data Available'"></ncats-frontend-library-shared-utils-data-not-found>
+      <ncats-frontend-library-shared-utils-data-not-found [message]="'No Phenotype Data Available'" ></ncats-frontend-library-shared-utils-data-not-found>
     </div>
     <div *ngIf="phenotypes?.length">
-    <div class="row right-justified-row">
-      <mat-paginator #paginator [length]="count"
+      <div class="row space-between-row">
+        <div>
+          <button
+            mat-stroked-button
+            class="tool-button list-download"
+            (click)="downloadData()"
+            matTooltip="Download Data"
+            color="accent"
+          >
+            <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+          </button>
+        </div>
+        <div>
+          <mat-paginator #paginator [length]="count"
                      [pageIndex]="0"
                      [pageSize]="5"
                      [hidePageSize] = true
       ></mat-paginator>
+        </div>
     </div>
 
     <table mat-table [dataSource]="dataSource" matSort (matSortChange)="sortData($event)" matSortActive="Frequency">

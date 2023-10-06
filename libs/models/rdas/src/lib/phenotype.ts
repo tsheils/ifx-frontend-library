@@ -46,6 +46,10 @@ export class PhenotypeAssociation {
       delete this._evidence;
     }
   }
+
+  _toString(){
+    return `${this.phenotype.hpoTerm}\t ${this.hpoFrequency}\t${this.validationStatus ? this.validationStatus : ''}\t${[Object.values(this.evidence)].join(":")}\t${this.reference?.map(ref => ref._toString()).join('|')}`
+  }
 }
 
 const FREQUENCYRANK = [

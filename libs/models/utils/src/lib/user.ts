@@ -17,8 +17,8 @@ export class User {
 }
 
 export class Subscription {
-  diseaseName?: string;
-  gardID?: string;
+  diseaseName!: string;
+  gardID = '';
   disease?: Disease;
   alerts?: string[];
 

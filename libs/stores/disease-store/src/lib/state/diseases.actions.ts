@@ -76,3 +76,20 @@ export const fetchDiseaseFailure = createAction(
   '[Diseases/API] fetch Disease Failure',
   props<{ error: string | null | undefined }>()
 );
+
+export const fetchDiseaseList = createAction(
+  '[Diseases/API] fetch Disease List',
+  props<{
+    gardIds: string[]
+  }>()
+);
+
+export const fetchDiseaseListSuccess = createAction(
+  '[Diseases/API] fetch Disease List Success',
+  props<{ diseases: Disease[] }>()
+);
+
+export const fetchDiseaseListFailure = createAction(
+  '[Diseases/API] fetch Disease List Failure',
+  props<{ error: string | null | undefined }>()
+);

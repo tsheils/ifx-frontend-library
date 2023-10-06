@@ -16,6 +16,7 @@ export interface State extends EntityState<Disease> {
   page?: Page;
   diseases?: Disease[];
   tree?: DiseaseNode[];
+  subscriptions?: Disease[];
 }
 
 export interface DiseasesPartialState {
@@ -58,6 +59,10 @@ export const diseasesReducer = createReducer(
        ({...state, typeahead: typeahead, loaded: true})
   ),
 
+  on(DiseasesActions.fetchDiseaseListSuccess, (state, { diseases }) =>
+       ({...state, subscriptions: diseases, loaded: true})
+  ),
+
   on(DiseasesActions.clearTypeahead, (state) =>
        ({...state, typeahead: [], loaded: true})
   ),
@@ -66,6 +71,7 @@ export const diseasesReducer = createReducer(
     DiseasesActions.loadDiseasesFailure,
     DiseasesActions.searchDiseasesFailure,
     DiseasesActions.fetchDiseaseFailure,
+    DiseasesActions.fetchDiseaseListFailure,
     DiseasesActions.loadDiseaseTreeFailure,
     (state, { error }) => ({
       ...state,

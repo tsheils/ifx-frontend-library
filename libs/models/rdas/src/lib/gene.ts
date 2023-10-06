@@ -36,4 +36,8 @@ export class GeneAssociation {
     }
 
   }
+
+  _toString(){
+    return `${this.gene.geneSymbol}\t ${this.associationStatus}\t${this.associationType}\t${this.reference?.map(ref => ref._toString()).join('|')}`
+  }
 }

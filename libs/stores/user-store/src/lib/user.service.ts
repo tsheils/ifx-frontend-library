@@ -97,7 +97,7 @@ export class UserService {
   updateUserProfile(user: User) {
     this.userCollection.collection('users')
       .doc(user.uid)
-      .update({ ...user })
+      .update(JSON.parse(JSON.stringify(user)))
     return this.fetchUserProfile(user);
   }
 

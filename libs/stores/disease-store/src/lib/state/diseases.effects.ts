@@ -23,9 +23,7 @@ import {
   FETCHTRIALSVARIABLES,
   FETCHTRIALSQUERY,
   EPIARTICLES,
-  NONEPIARTICLES,
-  PHENOTYPEPARAMETERS,
-  FETCHPHENOTYPES, SEARCHPHENOTYPES, FETCHFILTEREDPHENOTYPES
+  NONEPIARTICLES, DISEASELIST
 } from "@ncats-frontend-library/models/rdas";
 import { Filter, FilterCategory, Page } from "@ncats-frontend-library/models/utils";
 import { Store } from "@ngrx/store";
@@ -74,12 +72,13 @@ export class DiseasesEffects {
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>  r.payload.routerState.url.startsWith('/diseases')),
       map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: { pageSize?: number, pageIndex?: number, parentId?: string, sort?: string, direction?: string, phenotypes?: string}) => {
+      switchMap((params: { pageSize?: number, pageIndex?: number, parentId?: string, sort?: string, direction?: string, phenotypes?: string, genes?:string}) => {
+       console.log(params);
         let query;
         let queryParams;
         const pageSize: number = params.pageSize ? params.pageSize as number: 10;
-        const pageIndex: number = params.pageIndex ? params.pageIndex as number : 0;
-
+        const pageIndex: number = params.pageIndex ? params.pageIndex -1 : 0;
+console.log(pageIndex)
         if(params.parentId) {
           DISEASEBRANCHPARAMETERS.searchString = params.parentId;
             DISEASEBRANCHPARAMETERS.limit = +pageSize;
@@ -88,22 +87,42 @@ export class DiseasesEffects {
           queryParams = DISEASEBRANCHPARAMETERS
         } else {
           LISTQUERYPARAMETERS.options.limit =  +pageSize;
-          LISTQUERYPARAMETERS.options.offset = +pageSize * (+pageIndex +1);
+          LISTQUERYPARAMETERS.options.offset = +pageSize * (+pageIndex);
           if(params.sort) {
             LISTQUERYPARAMETERS.options.sort = [{
               [params.sort]: params.direction ? params.direction : "DESC"
             }]
           }
+          console.log("yo")
           queryParams = LISTQUERYPARAMETERS
           query = FETCHDISEASESLISTQUERY
         }
-        if(params.phenotypes) {
-          queryParams.where = {hasPhenotypePhenotypes_SOME: {HPOTerm_IN: params.phenotypes.split("&")}}
+        if(params.phenotypes && params.genes) {
+          queryParams.where = {
+            hasPhenotypePhenotypes_SOME: { HPOTerm_IN: params.phenotypes.split("&") },
+            AND: [
+              {
+                associatedWithGeneGenes_SOME: {
+                  GeneSymbol_IN: params.genes.split("&")
+                }
+              }
+            ]
+          }
+        } else {
+          if (params.phenotypes) {
+            queryParams.where = { hasPhenotypePhenotypes_SOME: { HPOTerm_IN: params.phenotypes.split("&") } }
+          }
+          if (params.genes) {
+            queryParams.where = { associatedWithGeneGenes_SOME: { GeneSymbol_IN: params.genes.split("&") } }
+          }
         }
+        console.log(query)
+        console.log(queryParams)
         return this.diseaseService.fetchDiseases(query, queryParams)
           .pipe(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map((res: any) => {
+              console.log(res);
               if(res && res.data) {
                 const page: Page = { pageSize: pageSize, pageIndex: pageIndex, total: res.data.total.count ? res.data.total.count : res.data.total}
                 const diseaseArr: Disease[] = res.data.diseases.map((obj: Partial<Disease>) => new Disease(obj))
@@ -255,6 +274,33 @@ export class DiseasesEffects {
     )
   );
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadDiseaseList$ = createEffect((): any => {
+    return this.actions$.pipe(
+      ofType(DiseasesActions.fetchDiseaseList),
+      mergeMap((action: {gardIds: string[]}) => {
+        console.log(action);
+        return this.diseaseService.fetchDiseases(DISEASELIST, {where: {GardId_IN: action.gardIds }})
+          .pipe(
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            map((res: any) => {
+              console.log(res);
+              if(res && res.data) {
+                const diseaseArr: Disease[] = res.data.diseases.map((obj: Partial<Disease>) => new Disease(obj))
+                return DiseasesActions.fetchDiseaseListSuccess({diseases: diseaseArr})
+              }
+              else return DiseasesActions.fetchDiseaseListFailure({error: "No Disease found"})
+            })
+          )
+      })
+    )}
+  );
+
+
+
+  "where": {
+    "GardId_IN": null
+  }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isLoadingDisease$ = createEffect((): any =>

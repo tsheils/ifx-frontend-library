@@ -7,9 +7,7 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/rdas/browser",
         "index": "apps/rdas/src/index.html",
@@ -34,17 +32,27 @@
             "input": "libs/features/rdas/rdas-home/src/assets",
             "glob": "**/*",
             "output": "assets/rdas-home"
+          },
+          {
+            "input": "libs/features/rdas/epi-api/src/assets",
+            "glob": "**/*",
+            "output": "assets/epi-api"
+          },
+          {
+            "input": "libs/shared/rdas/disease-display/src/assets",
+            "glob": "**/*",
+            "output": "assets/disease-display"
           }
         ],
         "stylePreprocessorOptions": {
-          "includePaths": [
-            "libs/styles/src/styles/"
-          ]
+          "includePaths": ["libs/styles/src/styles"]
         },
         "styles": [
-          "apps/rdas/src/styles.scss"
+          "apps/rdas/src/styles.scss",
+          "node_modules/swagger-ui/dist/swagger-ui.css"
         ],
-        "scripts": []
+        "scripts": [],
+        "webWorkerTsConfig": "apps/rdas/tsconfig.worker.json"
       },
       "configurations": {
         "production": {
@@ -66,7 +74,15 @@
               "with": "apps/rdas/src/environments/environment.prod.ts"
             }
           ],
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "optimization": {
+            "scripts": true,
+            "styles": {
+              "minify": true,
+              "inlineCritical": true
+            },
+            "fonts": false
+          }
         },
         "development": {
           "buildOptimizer": false,
@@ -100,20 +116,16 @@
     "lint": {
       "executor": "@nx/linter:eslint",
       "options": {
-        "lintFilePatterns": [
-          "apps/rdas/**/*.ts",
-          "apps/rdas/**/*.html"
-        ]
+        "lintFilePatterns": ["apps/rdas/**/*.ts", "apps/rdas/**/*.html"]
       }
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/apps/rdas"
-      ],
+      "outputs": ["{workspaceRoot}/coverage/apps/rdas"],
       "options": {
         "jestConfig": "apps/rdas/jest.config.ts",
-        "passWithNoTests": true
+        "passWithNoTests": true,
+        "webWorkerTsConfig": "apps/rdas/tsconfig.worker.json"
       }
     },
     "server": {
@@ -123,9 +135,7 @@
         "main": "apps/rdas/server.ts",
         "tsConfig": "apps/rdas/tsconfig.server.json",
         "stylePreprocessorOptions": {
-          "includePaths": [
-            "libs/styles/src/styles/"
-          ]
+          "includePaths": ["libs/styles/src/styles/"]
         },
         "inlineStyleLanguage": "scss"
       },
