@@ -15,11 +15,17 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ncats-frontend-library/feature/rdas/rdas-about": [
+        "libs/feature/rdas/rdas-about/src/index.ts"
+      ],
       "@ncats-frontend-library/features/rdas/epi-api": [
         "libs/features/rdas/epi-api/src/index.ts"
       ],
       "@ncats-frontend-library/features/rdas/graphql-sandbox": [
         "libs/features/rdas/graphql-sandbox/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-about": [
+        "libs/features/rdas/rdas-about/src/index.ts"
       ],
       "@ncats-frontend-library/features/rdas/rdas-article-page": [
         "libs/features/rdas/rdas-article-page/src/index.ts"
@@ -99,6 +105,9 @@
       ],
       "@ncats-frontend-library/shared/utils/loading-spinner": [
         "libs/shared/utils/loading-spinner/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/mobile-header-template": [
+        "libs/shared/utils/mobile-header-template/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/ncats-datatable": [
         "libs/shared/utils/ncats-datatable/src/index.ts"

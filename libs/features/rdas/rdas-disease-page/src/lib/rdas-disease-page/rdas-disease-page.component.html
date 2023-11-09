@@ -1,7 +1,11 @@
+<div *ngIf="!disease.name">
 
-    <ncats-frontend-library-disease-display
-      *ngIf="disease() && loaded()"
-      [disease] = disease
-      (optionsChange)="fetchDiseaseInfo($event)"
-    ></ncats-frontend-library-disease-display>
-    <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+  <h1>No disease info found</h1>
+</div>
+<ncats-frontend-library-disease-display
+  *ngIf="disease() && loaded()"
+  [disease]="disease"
+  (optionsChange)="fetchDiseaseInfo($event)"
+></ncats-frontend-library-disease-display>
+
+<ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>

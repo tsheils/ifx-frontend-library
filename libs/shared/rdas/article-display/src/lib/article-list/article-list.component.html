@@ -1,13 +1,19 @@
-<div *ngIf = "articles">
-<div class="row right-justified-row">
-      <mat-paginator #paginator
-                     [length]="count"
-                     [pageIndex]="0"
-                     [hidePageSize] = true
-                     [pageSize]="10"
-                     (page)="fetchArticles($event)"></mat-paginator>
+<div *ngIf="articles">
+  <div class="row right-justified-row">
+    <mat-paginator
+      #paginator
+      [length]="count"
+      [pageIndex]="0"
+      [hidePageSize]="true"
+      [pageSize]="10"
+      (page)="fetchArticles($event)"
+    ></mat-paginator>
   </div>
   <div class="row centered-row" *ngFor="let article of articles">
-    <ncats-frontend-library-article-list-card [article]="article" (click)="navigate(article.pubmed_id)" class="clickable-area"></ncats-frontend-library-article-list-card>
+    <ncats-frontend-library-article-list-card
+      [article]="article"
+      (click)="navigate(article.pubmed_id)"
+      class="clickable-area"
+    ></ncats-frontend-library-article-list-card>
   </div>
 </div>

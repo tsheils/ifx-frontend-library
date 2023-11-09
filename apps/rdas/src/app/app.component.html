@@ -1,28 +1,107 @@
-<div class = "content-wrapper"  #contentWrapper cdkScrollable>
-  <header>
-    <ncats-frontend-library-header-template [links]="links">
-      <div class="left-options">
-        <a routerLink="/">
-      <img src="/assets/rdas_final_gradient.svg" alt="rdas logo" class="rdas-logo">
-        </a>
-      </div>
-      <div class="right-options">
-        <ncats-frontend-library-rdas-search *ngIf="!hideSearch" class ="header-search" (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
-        <ncats-frontend-library-social-sign-on-button [user] = user></ncats-frontend-library-social-sign-on-button>
-      </div>
-    </ncats-frontend-library-header-template>
-  </header>
-  <main role = "main">
-    <div class="main-content" >
+<div class="content-wrapper" #contentWrapper cdkScrollable>
+  <mat-sidenav-container class="mobile-menu-container">
+    <header>
+      <ng-container *ngIf="mobile; else fullScreen">
+        <ncats-frontend-library-mobile-header-template
+          [links]="links"
+          #appHeader
+        >
+          <div left-options>
+            <a routerLink="/">
+              <img
+                src="/assets/rdas_final_gradient.svg"
+                alt="rdas logo"
+                class="rdas-logo"
+              />
+            </a>
+          </div>
+          <div icon>
+            <a routerLink="/">
+              <img
+                src="/assets/rdas_final_gradient.svg"
+                alt="rdas logo"
+                class="rdas-logo"
+              />
+            </a>
+          </div>
+          <div class="right-options">
+            <ncats-frontend-library-rdas-search
+              class="header-search"
+              (diseaseSelect)="selectDisease($event)"
+            ></ncats-frontend-library-rdas-search>
+            <ncats-frontend-library-social-sign-on-button
+              [user]="user"
+            ></ncats-frontend-library-social-sign-on-button>
+          </div>
+        </ncats-frontend-library-mobile-header-template>
+      </ng-container>
+
+      <!-- Custom content -->
+      <ng-template #fullScreen>
+        <ncats-frontend-library-header-template [links]="links">
+          <div class="left-options">
+            <a routerLink="/">
+              <picture>
+                <source
+                  srcset="/assets/rdas_final_gradient.webp"
+                  type="image/webp"
+                />
+                <source
+                  srcset="/assets/rdas_final_gradient.svg"
+                  type="image/svg"
+                />
+                <img
+                  src="/assets/rdas_final_gradient.png"
+                  alt="rdas logo"
+                  class="rdas-logo"
+                />
+              </picture>
+            </a>
+          </div>
+          <div class="right-options">
+            <ncats-frontend-library-rdas-search
+              *ngIf="!hideSearch"
+              class="header-search"
+              (diseaseSelect)="selectDisease($event)"
+            ></ncats-frontend-library-rdas-search>
+            <ncats-frontend-library-social-sign-on-button
+              [user]="user"
+            ></ncats-frontend-library-social-sign-on-button>
+          </div>
+        </ncats-frontend-library-header-template>
+      </ng-template>
+
+      <!--
+-->
+    </header>
+    <main role="main">
+      <div class="main-content" (click)="closeSidenav()">
+        <!--
       <ncats-frontend-library-loading-spinner [isLoaded]="loaded"></ncats-frontend-library-loading-spinner>
-      <router-outlet ></router-outlet>
-    </div>
-  </main>
-  <footer>
-<ncats-frontend-library-footer-template>
-  <div class="app-description">
-    <img src="/assets/final_rdas_mono_2.svg" alt="rdas all-white logo" class="rdas-footer-logo">
-  </div>
-</ncats-frontend-library-footer-template>
-  </footer>
+-->
+        <router-outlet></router-outlet>
+      </div>
+    </main>
+    <footer>
+      <ncats-frontend-library-footer-template>
+        <div class="app-description">
+          <picture>
+            <source
+              srcset="/assets/final_rdas_mono.webp"
+              type="image/webp"
+            />
+            <source
+              srcset="/assets/final_rdas_mono.svg"
+              type="image/svg"
+            />
+            <img
+              src="/assets/final_rdas_mono.png"
+              alt="rdas all-white logo"
+              class="rdas-footer-logo"
+            />
+          </picture>
+        </div>
+      </ncats-frontend-library-footer-template>
+    </footer>
+  </mat-sidenav-container>
 </div>

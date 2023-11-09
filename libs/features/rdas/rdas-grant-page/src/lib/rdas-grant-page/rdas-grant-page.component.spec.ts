@@ -8,7 +8,7 @@ describe('RdasGrantPageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RdasGrantPageComponent]
+      imports: [RdasGrantPageComponent],
     });
     fixture = TestBed.createComponent(RdasGrantPageComponent);
     component = fixture.componentInstance;

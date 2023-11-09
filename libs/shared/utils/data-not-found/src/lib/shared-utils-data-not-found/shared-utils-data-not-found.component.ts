@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { SubscribeButtonComponent } from "@ncats-frontend-library/shared/rdas/subscribe-button";
+import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-data-not-found',
@@ -11,7 +11,7 @@ import { SubscribeButtonComponent } from "@ncats-frontend-library/shared/rdas/su
 })
 export class SharedUtilsDataNotFoundComponent {
   @Input() message?: string;
-  subscribed = false
+  subscribed = false;
 
   setSub(sub: boolean) {
     this.subscribed = sub;

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from "@angular/material/card";
-import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import { MatCardModule } from '@angular/material/card';
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 
 import { ClinicalTrialsListCardComponent } from './clinical-trials-list-card.component';
 
@@ -10,16 +10,16 @@ describe('ClinicalTrialsListCardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ClinicalTrialsListCardComponent ],
+      declarations: [],
       imports: [
-        MatCardModule
-      ]
-    })
-    .compileComponents();
+        MatCardModule,
+        ClinicalTrialsListCardComponent
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ClinicalTrialsListCardComponent);
     component = fixture.componentInstance;
-    component.trial = new ClinicalTrial({})
+    component.trial = new ClinicalTrial({});
     fixture.detectChanges();
   });
 

@@ -1,4 +1,3 @@
-
 export class Author {
   firstName!: string;
   fullName!: string;
@@ -8,7 +7,6 @@ export class Author {
     Object.assign(this, obj);
   }
 }
-
 
 export const AUTHORFIELDS = `
   fragment authorFields on Author {

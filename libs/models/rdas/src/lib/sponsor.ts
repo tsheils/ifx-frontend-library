@@ -1,4 +1,4 @@
-import { gql } from "apollo-angular";
+import { gql } from 'apollo-angular';
 
 export class Sponsor {
   centralContactEMail?: string[]; //~50k
@@ -11,7 +11,7 @@ export class Sponsor {
   orgClass?: string;
   orgFullName?: string;
   orgStudyId?: string;
-  orgStudyIdLink?: string;   //~1200
+  orgStudyIdLink?: string; //~1200
   orgStudyIdType?: string; //~1200
   OverallOfficialAffiliation?: string[]; //~140k
   OverallOfficialName?: string[]; //~140k
@@ -29,15 +29,11 @@ export class Sponsor {
   ResponsiblePartyType?: string;
 }
 
-
-
-
-
 export const SPONSORFIELDS = gql`
   fragment sponsorFields on Sponsor {
     centralContactEMail: CentralContactEMail
-    centralContactName:CentralContactName
-    centralContactRole:CentralContactRole
+    centralContactName: CentralContactName
+    centralContactRole: CentralContactRole
     leadSponsorClass: LeadSponsorClass
     leadSponsorName: LeadSponsorName
     orgClass: OrgClass

@@ -8,7 +8,7 @@ describe('EpiApiComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [EpiApiComponent]
+      imports: [EpiApiComponent],
     });
     fixture = TestBed.createComponent(EpiApiComponent);
     component = fixture.componentInstance;

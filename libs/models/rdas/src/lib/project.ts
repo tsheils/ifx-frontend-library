@@ -1,8 +1,8 @@
-import { Disease } from "./disease";
+import { Disease } from './disease';
 
 export class CoreProject {
   core_project_num!: string;
-  rd_total_cost?: number
+  rd_total_cost?: number;
   fundedByAgents?: { name: string }[];
   clinicalStudies?: ClinicalStudy[];
   patents?: Patent[];
@@ -12,18 +12,19 @@ export class CoreProject {
   constructor(obj: Partial<CoreProject> = {}) {
     Object.assign(this, obj);
 
-    if(obj.clinicalStudies) {
-      this.clinicalStudies = obj.clinicalStudies.map(data => new ClinicalStudy((data)));
+    if (obj.clinicalStudies) {
+      this.clinicalStudies = obj.clinicalStudies.map(
+        (data) => new ClinicalStudy(data)
+      );
     }
 
-    if(obj.patents) {
-      this.patents = obj.patents.map(data => new Patent((data)));
+    if (obj.patents) {
+      this.patents = obj.patents.map((data) => new Patent(data));
     }
 
-    if(obj.projects) {
-      this.projects = obj.projects.map(data => new Project((data)));
+    if (obj.projects) {
+      this.projects = obj.projects.map((data) => new Project(data));
     }
-
   }
 }
 
@@ -40,7 +41,7 @@ export class Patent {
 export class Investigator {
   org_name?: string;
   org_state?: string;
-  pi_name?:string;
+  pi_name?: string;
 
   constructor(obj: Partial<Investigator> = {}) {
     Object.assign(this, obj);
@@ -79,20 +80,23 @@ export class Project {
   principalInvestigators?: Investigator[];
   researchedDiseases?: Disease[];
 
-
   constructor(obj: Partial<Project> = {}) {
-     Object.assign(this, obj);
+    Object.assign(this, obj);
 
-    if(obj.annotations) {
-      this.annotations = obj.annotations.map(data => new Annotation((data)));
+    if (obj.annotations) {
+      this.annotations = obj.annotations.map((data) => new Annotation(data));
     }
 
-    if(obj.principalInvestigators) {
-      this.principalInvestigators = obj.principalInvestigators.map(data => new Investigator((data)));
+    if (obj.principalInvestigators) {
+      this.principalInvestigators = obj.principalInvestigators.map(
+        (data) => new Investigator(data)
+      );
     }
 
-    if(obj.researchedDiseases) {
-      this.researchedDiseases = obj.researchedDiseases.map(data => new Disease((data)));
+    if (obj.researchedDiseases) {
+      this.researchedDiseases = obj.researchedDiseases.map(
+        (data) => new Disease(data)
+      );
     }
-     }
+  }
 }

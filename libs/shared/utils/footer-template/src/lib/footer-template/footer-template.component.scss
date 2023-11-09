@@ -4,7 +4,7 @@ ncats-frontend-library-footer-template {
     margin: 0 auto;
   }
 
-  .links-header{
+  .links-header {
     display: block;
     text-align: center;
     font-size: 1.2em;
@@ -22,9 +22,8 @@ ncats-frontend-library-footer-template {
   .link-list-item > a {
     color: white;
     font-size: 1em;
-    padding: 1.5vh 0 .2vh 0
+    padding: 1.5vh 0 0.2vh 0;
   }
-
 
   .centered {
     display: flex;
@@ -51,9 +50,8 @@ ncats-frontend-library-footer-template {
   }
 
   .exit-disclaimer {
-    color:#ffffff;
+    color: #ffffff;
   }
-
 
   .space-around-row {
     justify-content: space-around;
@@ -67,17 +65,8 @@ ncats-frontend-library-footer-template {
     align-items: center;
   }
 
-  .width-75 {
-    flex-basis: 75%;
-  }
-
-  .width-25 {
-    flex-basis: 25%;
-  }
-
   @media only screen and (max-width: 960px) {
-
-    .links-header{
+    .links-header {
       font-size: 1em;
       padding: 2vw;
       text-align: start;
@@ -85,18 +74,26 @@ ncats-frontend-library-footer-template {
 
     .link-list {
       display: flex;
-      margin-top:1vh;
-      margin-bottom:1vh;
+      margin-top: 1vh;
+      margin-bottom: 1vh;
     }
+
     .link-list > a {
-      font-size: .8em;
+      font-size: 0.8em;
       padding: 3vw;
     }
   }
 
   @media only screen and (max-width: 768px) {
     .lt-sm-100 {
-      flex-basis: 100%;
+      width: 90vw;
+      flex-basis: 90vw;
+    }
+
+    .link-list {
+      display: block;
+      margin-top: 1vh;
+      margin-bottom: 1vh;
     }
   }
 }

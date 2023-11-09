@@ -1,27 +1,23 @@
 <div class="row right-justified-row no-padding">
-  <button mat-icon-button (click) = "closeModal()">
-  <mat-icon>close</mat-icon>
+  <button mat-icon-button (click)="closeModal()">
+    <mat-icon>close</mat-icon>
   </button>
 </div>
 <div class="row centered-row">
-    <mat-list class ="buttons-list">
-      <mat-list-item >
-        <div (click)="login('google')" class="login-button google">
-        <img src="./assets/social-sign-on/ggl.png" class="login-icon">
-          &nbsp;
-          &nbsp;
-        Sign In with Google
+  <mat-list class="buttons-list">
+    <mat-list-item>
+      <div (click)="login('google')" class="login-button google">
+        <img src="./assets/social-sign-on/ggl.png" class="login-icon" />
+        &nbsp; &nbsp; Sign In with Google
       </div>
-      </mat-list-item >
-      <mat-list-item >
-        <div (click)="login('facebook')" class="login-button facebook">
-        <img src="./assets/social-sign-on/fbk.png" class="login-icon">
-          &nbsp;
-          &nbsp;
-        Sign In with Facebook
+    </mat-list-item>
+    <mat-list-item>
+      <div (click)="login('facebook')" class="login-button facebook">
+        <img src="./assets/social-sign-on/fbk.png" class="login-icon" />
+        &nbsp; &nbsp; Sign In with Facebook
       </div>
-      </mat-list-item >
-<!--      <mat-list-item >
+    </mat-list-item>
+    <!--      <mat-list-item >
         <div (click)="login('twitter')" class="login-button twitter">
         <img src="/assets/social-sign-on/ttr.png" class="login-icon">
           &nbsp;
@@ -29,7 +25,7 @@
         Sign In with Twitter
       </div>
       </mat-list-item >-->
-<!--      <mat-list-item >
+    <!--      <mat-list-item >
         <div (click)="openEmailLinkModal()" class="login-button primary-background">
           <mat-icon class="login-icon">mail</mat-icon>
           &nbsp;
@@ -37,7 +33,7 @@
           Send Me a Link
         </div>
       </mat-list-item>-->
-<!--      <mat-list-item>
+    <!--      <mat-list-item>
         <div (click)="login('email')" class="login-button primary-background">
           <mat-icon class="login-icon">lock</mat-icon>
           &nbsp;
@@ -45,22 +41,24 @@
         Use an Email and Password
         </div>
       </mat-list-item >-->
-      <mat-list-item>
-        <div (click)="loginEmail()" class="login-button primary-background">
-          <mat-icon class="login-icon">lock</mat-icon>
-          &nbsp;
-          &nbsp;
-        Use an Email and Password
-        </div>
-      </mat-list-item >
-
-
-    </mat-list>
-  </div>
+    <mat-list-item>
+      <div (click)="loginEmail()" class="login-button primary-background">
+        <mat-icon class="login-icon">lock</mat-icon>
+        &nbsp; &nbsp; Use an Email and Password
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
 <div class="row centered-row">
   <p class="disclaimer">
-    By continuing, you are indicating that you accept our <a href ="https://ncats.nih.gov/disclaimer" target="_blank" rel="noreferrer">Terms of Service</a>
-    and <a href="https://ncats.nih.gov/privacy" target="_blank" rel="noreferrer">Privacy Policy</a>.
+    By continuing, you are indicating that you accept our
+    <a href="https://ncats.nih.gov/disclaimer" target="_blank" rel="noreferrer"
+      >Terms of Service</a
+    >
+    and
+    <a href="https://ncats.nih.gov/privacy" target="_blank" rel="noreferrer"
+      >Privacy Policy</a
+    >.
   </p>
-  <br>
+  <br />
 </div>

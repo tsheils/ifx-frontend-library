@@ -7,17 +7,17 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatDialogModule } from '@angular/material/dialog';
 
 @Component({
-    selector: 'ncats-frontend-library-about-subscribe-modal',
-    templateUrl: './about-subscribe-modal.component.html',
-    styleUrls: ['./about-subscribe-modal.component.scss'],
-    standalone: true,
-    imports: [
-        MatDialogModule,
-        MatMenuModule,
-        MatCheckboxModule,
-        MatIconModule,
-        MatButtonModule,
-        SocialSignOnButtonComponent,
-    ],
+  selector: 'ncats-frontend-library-about-subscribe-modal',
+  templateUrl: './about-subscribe-modal.component.html',
+  styleUrls: ['./about-subscribe-modal.component.scss'],
+  standalone: true,
+  imports: [
+    MatDialogModule,
+    MatMenuModule,
+    MatCheckboxModule,
+    MatIconModule,
+    MatButtonModule,
+    SocialSignOnButtonComponent,
+  ],
 })
 export class AboutSubscribeModalComponent {}

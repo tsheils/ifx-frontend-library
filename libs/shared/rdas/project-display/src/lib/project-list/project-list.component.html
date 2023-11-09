@@ -1,12 +1,17 @@
-<div class="row right-justified-row" *ngIf = "projects">
-  <mat-paginator #paginator
-                 [length]="count"
-                 [pageIndex]="0"
-                 [pageSizeOptions]="[10, 25, 50]"
-                 [pageSize]="10"
-                 (page)="fetchProjects($event)"></mat-paginator>
+<div class="row right-justified-row" *ngIf="projects">
+  <mat-paginator
+    #paginator
+    [length]="count"
+    [pageIndex]="0"
+    [pageSizeOptions]="[10, 25, 50]"
+    [pageSize]="10"
+    (page)="fetchProjects($event)"
+  ></mat-paginator>
 </div>
 <div class="row centered-row" *ngFor="let grant of projects">
-  <ncats-frontend-library-project-list-card [grant]="grant" (click)="navigate(grant.core_project_num)" class="clickable-area"></ncats-frontend-library-project-list-card>
+  <ncats-frontend-library-project-list-card
+    [grant]="grant"
+    (click)="navigate(grant.core_project_num)"
+    class="clickable-area"
+  ></ncats-frontend-library-project-list-card>
 </div>
-

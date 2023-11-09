@@ -1,4 +1,4 @@
-import { CoreProject } from "@ncats-frontend-library/models/rdas";
+import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { createAction, props } from '@ngrx/store';
 
 export const initGrants = createAction('[Grants Page] Init');
@@ -6,8 +6,8 @@ export const initGrants = createAction('[Grants Page] Init');
 export const loadGrants = createAction(
   '[Grants/API] Load Grants',
   props<{
-    top: number
-    skip: number
+    top: number;
+    skip: number;
   }>()
 );
 
@@ -24,15 +24,14 @@ export const loadGrantsFailure = createAction(
 export const fetchGrant = createAction(
   '[Grants/API] fetch Grant',
   props<{
-    core_project_num: string,
-    options?: { [key: string]: string }
+    core_project_num: string;
+    options?: { [key: string]: string };
   }>()
 );
 
-
 export const fetchGrantSuccess = createAction(
   '[Grants/API] Fetch Grant Success',
-  props<{ grant: CoreProject}>()
+  props<{ grant: CoreProject }>()
 );
 
 export const fetchGrantFailure = createAction(

@@ -1,10 +1,10 @@
-
-    <div class="row space-between-row">
-      <div class="width-75">
-<span class="mat-card-title">
-        {{trial.briefTitle ? trial.briefTitle : trial.officialTitle}}
-</span>
-      </div>
-      <div class="mat-h3" *ngIf="trial.NCTId">
-        {{trial.NCTId}}</div>
-    </div>
+<div class="row space-between-row">
+  <div class="width-75">
+    <span class="mat-card-title">
+      {{ trial.briefTitle ? trial.briefTitle : trial.officialTitle }}
+    </span>
+  </div>
+  <div class="mat-h3" *ngIf="trial.NCTId">
+    {{ trial.NCTId }}
+  </div>
+</div>

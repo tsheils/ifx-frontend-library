@@ -1,23 +1,20 @@
 import { Injectable } from '@angular/core';
-import { DocumentNode } from "@apollo/client";
-import { Apollo } from "apollo-angular";
+import { DocumentNode } from '@apollo/client';
+import { Apollo } from 'apollo-angular';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class GrantService {
-
-  constructor(
-    private apollo: Apollo
-  ) { }
+  constructor(private apollo: Apollo) {}
 
   fetchGrants(query: DocumentNode, variables: object = {}) {
-    return this.apollo.use('projects').watchQuery({
+    return this.apollo
+      .use('projects')
+      .watchQuery({
         query,
-        variables
-      }
-    ).valueChanges.pipe()
+        variables,
+      })
+      .valueChanges.pipe();
   }
-
-
 }

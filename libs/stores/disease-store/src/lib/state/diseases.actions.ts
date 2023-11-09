@@ -1,5 +1,14 @@
-import { Disease, DiseaseNode, Gene, Phenotype } from "@ncats-frontend-library/models/rdas";
-import { Filter, FilterCategory, Page } from "@ncats-frontend-library/models/utils";
+import {
+  Disease,
+  DiseaseNode,
+  Gene,
+  Phenotype,
+} from '@ncats-frontend-library/models/rdas';
+import {
+  Filter,
+  FilterCategory,
+  Page,
+} from '@ncats-frontend-library/models/utils';
 import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Diseases Page] Init');
@@ -9,16 +18,16 @@ export const loading = createAction('[Loading] start');
 export const loadDiseases = createAction(
   '[Diseases/API] Load Diseases',
   props<{
-    top: number
-    skip: number
+    top: number;
+    skip: number;
   }>()
 );
 
 export const loadDiseasesSuccess = createAction(
   '[Diseases/API] Load Diseases Success',
   props<{
-    diseases: Disease[],
-    page?: Page
+    diseases: Disease[];
+    page?: Page;
   }>()
 );
 
@@ -30,7 +39,7 @@ export const loadDiseasesFailure = createAction(
 export const loadDiseaseTreeSuccess = createAction(
   '[Diseases/API] Load Disease Tree Success',
   props<{
-    diseases: DiseaseNode[]
+    diseases: DiseaseNode[];
   }>()
 );
 
@@ -39,9 +48,7 @@ export const loadDiseaseTreeFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
-export const clearTypeahead = createAction(
-  '[Diseases/API] Clear Typeahead',
-);
+export const clearTypeahead = createAction('[Diseases/API] Clear Typeahead');
 
 export const searchDiseases = createAction(
   '[Diseases/API] Search Diseases',
@@ -61,9 +68,9 @@ export const searchDiseasesFailure = createAction(
 export const fetchDisease = createAction(
   '[Diseases/API] fetch Disease',
   props<{
-    gardId: string,
-    source: string,
-    options?: { [key: string]: string }
+    gardId: string;
+    source: string;
+    options?: { [key: string]: string };
   }>()
 );
 
@@ -80,7 +87,7 @@ export const fetchDiseaseFailure = createAction(
 export const fetchDiseaseList = createAction(
   '[Diseases/API] fetch Disease List',
   props<{
-    gardIds: string[]
+    gardIds: string[];
   }>()
 );
 

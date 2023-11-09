@@ -1,8 +1,7 @@
-  <div  *ngIf=annotations.length>
-      <div  *ngFor="let annotation of annotationsMap | keyvalue">
-        <div class="primary-chip-outlined">{{annotation.key}}</div>
-        <div *ngFor="let term of annotation.value" class="">{{term}}</div>
-      </div>
-        <br>
-      </div>
-
+<div *ngIf="annotations.length">
+  <div *ngFor="let annotation of annotationsMap | keyvalue">
+    <div class="primary-chip-outlined">{{ annotation.key }}</div>
+    <div *ngFor="let term of annotation.value" class="">{{ term }}</div>
+  </div>
+  <br />
+</div>

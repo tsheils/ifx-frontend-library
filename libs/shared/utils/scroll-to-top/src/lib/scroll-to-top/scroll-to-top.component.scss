@@ -1,4 +1,4 @@
-.return{
+.return {
   position: fixed; /* Sit on top of the page content */
   top: 1vh;
   left: 1vh;
@@ -9,11 +9,11 @@
   bottom: 15px;
   right: 15px;
   opacity: 0;
-  z-index: 665;
-  transition: all .2s ease-in-out;
+  //  z-index: 665;
+  transition: all 0.2s ease-in-out;
 }
 
 .show-scroll {
   opacity: 1;
-  transition: all .2s ease-in-out;
+  transition: all 0.2s ease-in-out;
 }

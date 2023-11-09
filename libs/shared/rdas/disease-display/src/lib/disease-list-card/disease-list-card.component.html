@@ -1,49 +1,71 @@
 <mat-card>
   <mat-card-content class="row centered-row">
-  <div class = "row space-between-row link-row">
-    <div (click)="navigate(disease.gardId)" class="width-75 clickable-area">
-      <h3 class ="disease-name" mat-card-title>{{disease.name}}: {{disease.gardId}}</h3>
-    </div>
-    <div>
-      <ncats-frontend-library-subscribe-button [disease]="disease" ></ncats-frontend-library-subscribe-button>
-    </div>
-  </div>
-      <div class="width-75">
-        <div class ="primary-chip-outlined" *ngIf="disease.classificationLevel">{{disease.classificationLevel}}</div>&nbsp;&nbsp;&nbsp;
-        <div class ="accent-chip-outlined" *ngIf="disease.disorderType && disease.disorderType?.length">{{disease.disorderType?.join(", ")}}</div>
+    <div class="row space-between-row link-row">
+      <div (click)="navigate(disease.gardId)" class="width-75 clickable-area">
+        <h3 class="disease-name" mat-card-title>
+          {{ disease.name }}: {{ disease.gardId }}
+        </h3>
       </div>
+      <div>
+        <ncats-frontend-library-subscribe-button
+          [disease]="disease"
+        ></ncats-frontend-library-subscribe-button>
+      </div>
+    </div>
+    <div class="width-75">
+      <div class="primary-chip-outlined" *ngIf="disease.classificationLevel">
+        {{ disease.classificationLevel }}
+      </div>
+      &nbsp;&nbsp;&nbsp;
+      <div
+        class="accent-chip-outlined"
+        *ngIf="disease.disorderType && disease.disorderType?.length"
+      >
+        {{ disease.disorderType?.join(', ') }}
+      </div>
+    </div>
     <div class="width-75" *ngIf="disease.synonyms && disease.synonyms?.length">
-        Synonyms: {{disease.synonyms?.join(', ')}}
-      </div>
-    <div class = "count-grid">
+      Synonyms: {{ disease.synonyms?.join(', ') }}
+    </div>
+    <div class="count-grid">
       <mat-card [appearance]="'outlined'" class="count-card">
-        <mat-card-title class="bottom-border-primary count-title">Published Articles</mat-card-title>
+        <mat-card-title class="bottom-border-primary count-title"
+          >Published Articles</mat-card-title
+        >
         <span class="card-count">
-        {{disease.articleCount}}
+          {{ disease.articleCount }}
         </span>
       </mat-card>
       <mat-card [appearance]="'outlined'" class="count-card">
-        <mat-card-title class="bottom-border-primary">Funded Projects</mat-card-title>
+        <mat-card-title class="bottom-border-primary"
+          >Funded Projects</mat-card-title
+        >
         <span class="card-count">
-        {{disease.projectCount}}
+          {{ disease.projectCount }}
         </span>
       </mat-card>
       <mat-card [appearance]="'outlined'" class="count-card">
-        <mat-card-title class="bottom-border-primary">Clinical Trials</mat-card-title>
+        <mat-card-title class="bottom-border-primary"
+          >Clinical Trials</mat-card-title
+        >
         <span class="card-count">
-        {{disease.clinicalTrialCount}}
+          {{ disease.clinicalTrialCount }}
         </span>
       </mat-card>
       <mat-card [appearance]="'outlined'" class="count-card">
-        <mat-card-title class="bottom-border-primary">Associated Genes</mat-card-title>
+        <mat-card-title class="bottom-border-primary"
+          >Associated Genes</mat-card-title
+        >
         <span class="card-count">
-        {{disease.geneCount}}
+          {{ disease.geneCount }}
         </span>
       </mat-card>
       <mat-card [appearance]="'outlined'" class="count-card">
-        <mat-card-title class="bottom-border-primary">Phenotypes</mat-card-title>
+        <mat-card-title class="bottom-border-primary"
+          >Phenotypes</mat-card-title
+        >
         <span class="card-count">
-        {{disease.phenotypeCount}}
+          {{ disease.phenotypeCount }}
         </span>
       </mat-card>
     </div>

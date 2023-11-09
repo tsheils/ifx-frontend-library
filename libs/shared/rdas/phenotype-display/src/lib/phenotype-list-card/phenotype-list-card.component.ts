@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Phenotype } from "@ncats-frontend-library/models/rdas";
+import { Phenotype } from '@ncats-frontend-library/models/rdas';
 
 @Component({
   selector: 'ncats-frontend-library-phenotype-list-card',
@@ -10,5 +10,5 @@ import { Phenotype } from "@ncats-frontend-library/models/rdas";
   styleUrls: ['./phenotype-list-card.component.scss'],
 })
 export class PhenotypeListCardComponent {
-  @Input() phenotype?: Phenotype
+  @Input() phenotype?: Phenotype;
 }

@@ -1,0 +1,22 @@
+ncats-frontend-library-mobile-header-template {
+  .mobile-menu-panel {
+    width: 75vw;
+    align-content: end;
+    justify-content: end;
+    padding-right: 2vw;
+    padding-left: 2vw;
+    padding-top: 60px;
+  }
+
+  .active {
+    text-decoration: underline;
+  }
+
+  .toolbar-template {
+    justify-content: space-between;
+  }
+
+  .header-search {
+    width: 90%;
+  }
+}

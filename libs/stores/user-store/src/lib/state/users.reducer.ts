@@ -1,4 +1,4 @@
-import { User } from "@ncats-frontend-library/models/utils";
+import { User } from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import * as UsersActions from './users.actions';
@@ -16,12 +16,9 @@ export interface UsersPartialState {
   readonly [USERS_FEATURE_KEY]: State;
 }
 
-export const usersAdapter: EntityAdapter<User> =
-  createEntityAdapter<User>({
-    selectId: user => user.uid
-  });
-
-
+export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>({
+  selectId: (user) => user.uid,
+});
 
 export const initialState: State = usersAdapter.getInitialState({
   // set initial required properties
@@ -34,25 +31,27 @@ export const usersReducer = createReducer(
     UsersActions.loginUserSuccess,
     UsersActions.fetchUserProfileSuccess,
     UsersActions.updateUserSubscriptionsSuccess,
-    (state, { user }) => usersAdapter.setOne(user, { ...state, loaded: true, selectedId: user.uid })
+    (state, { user }) =>
+      usersAdapter.setOne(user, {
+        ...state,
+        loaded: true,
+        selectedId: user.uid,
+      })
   ),
-  on(
-    UsersActions.resetPasswordEmailSuccess, (state) =>{
-      return { ...state, email: 'reset' }
-    }
-    ),
-  on(
-    UsersActions.loginLinkUserSuccess, (state, {email}) =>({
-    ...state, email: email
+  on(UsersActions.resetPasswordEmailSuccess, (state) => {
+    return { ...state, email: 'reset' };
+  }),
+  on(UsersActions.loginLinkUserSuccess, (state, { email }) => ({
+    ...state,
+    email: email,
   })),
-  on(
-    UsersActions.logoutUserSuccess, (state) => usersAdapter.removeAll(state)
-  ),
+  on(UsersActions.logoutUserSuccess, (state) => usersAdapter.removeAll(state)),
   on(
     UsersActions.loginUserFailure,
     UsersActions.loginEmailUserFailure,
     UsersActions.loginLinkUserFailure,
-    (state, { error }) => ({ ...state, error }))
+    (state, { error }) => ({ ...state, error })
+  )
 );
 
 export function reducer(state: State | undefined, action: Action) {

@@ -1,6 +1,6 @@
-import { Disease } from "./disease";
+import { Disease } from './disease';
 
-export class ClinicalTrial  {
+export class ClinicalTrial {
   [key: string]: unknown;
   acronym?: string;
   briefSummary?: string;
@@ -42,43 +42,45 @@ export class ClinicalTrial  {
   studyDesigns?: StudyDesign[];
   studyDiseases?: Disease[];
 
-
   constructor(obj: Partial<ClinicalTrial> = {}) {
     Object.assign(this, obj);
-    if(obj.conditions) {
-      this.conditions = obj.conditions.map(data => new Condition(data));
+    if (obj.conditions) {
+      this.conditions = obj.conditions.map((data) => new Condition(data));
     }
 
-    if(obj.interventions) {
-      this.interventions = obj.interventions.map(data => new Intervention(data));
+    if (obj.interventions) {
+      this.interventions = obj.interventions.map(
+        (data) => new Intervention(data)
+      );
     }
 
-    if(obj.locations) {
-      this.locations = obj.locations.map(data => new Location(data));
+    if (obj.locations) {
+      this.locations = obj.locations.map((data) => new Location(data));
     }
 
-    if(obj.participantInfo) {
-      this.participantInfo = obj.participantInfo.map(data => new ParticipantInfo(data));
+    if (obj.participantInfo) {
+      this.participantInfo = obj.participantInfo.map(
+        (data) => new ParticipantInfo(data)
+      );
     }
 
-    if(obj.references) {
-      this.references = obj.references.map(data => new Reference(data));
+    if (obj.references) {
+      this.references = obj.references.map((data) => new Reference(data));
     }
 
-    if(obj.sponsors) {
-      this.sponsors = obj.sponsors.map(data => new Sponsor(data));
+    if (obj.sponsors) {
+      this.sponsors = obj.sponsors.map((data) => new Sponsor(data));
     }
 
-    if(obj.studyDesigns) {
-      this.studyDesigns = obj.studyDesigns.map(data => new StudyDesign(data));
+    if (obj.studyDesigns) {
+      this.studyDesigns = obj.studyDesigns.map((data) => new StudyDesign(data));
     }
 
-    if(obj.studyDiseases) {
-      this.studyDiseases = obj.studyDiseases.map(data => new Disease(data));
+    if (obj.studyDiseases) {
+      this.studyDiseases = obj.studyDiseases.map((data) => new Disease(data));
     }
   }
 }
-
 
 export class Intervention {
   interventionName?: string;
@@ -94,8 +96,8 @@ export class ParticipantInfo {
   eligibilityCriteriaList?: string[];
   constructor(obj: Partial<ParticipantInfo> = {}) {
     Object.assign(this, obj);
-    if(obj.eligibilityCriteria) {
-      this.eligibilityCriteriaList = obj.eligibilityCriteria.split(('\n'))
+    if (obj.eligibilityCriteria) {
+      this.eligibilityCriteriaList = obj.eligibilityCriteria.split('\n');
     }
   }
 }
@@ -156,4 +158,3 @@ export class StudyDesign {
     Object.assign(this, obj);
   }
 }
-

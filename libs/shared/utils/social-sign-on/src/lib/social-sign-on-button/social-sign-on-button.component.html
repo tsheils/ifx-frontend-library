@@ -1,16 +1,29 @@
-<div *ngIf=user class="profile-section signin-button" [matMenuTriggerFor]="profileMenu">
-  <img [src]=photoURL class="profile-pic" *ngIf="photoURL" alt="Profile picture of the signed in user" (error)="handleMissingImage()">
+<div
+  *ngIf="user"
+  class="profile-section signin-button"
+  [matMenuTriggerFor]="profileMenu"
+>
+  <img
+    [src]="photoURL"
+    class="profile-pic"
+    *ngIf="photoURL"
+    alt="Profile picture of the signed in user"
+    (error)="handleMissingImage()"
+  />
   <mat-icon *ngIf="!photoURL" class="missing-url">account_circle</mat-icon>
-  <span class="user-name">{{user.displayName}}</span>
+  <span class="user-name">{{ user.displayName }}</span>
 </div>
-<button mat-button class="signin-button" [color] = theme aria-label = "signin button" (click)="openSignInModal()" *ngIf="!user">
+<button
+  mat-button
+  class="signin-button"
+  [color]="theme"
+  aria-label="signin button"
+  (click)="openSignInModal()"
+  *ngIf="!user"
+>
   Sign In
 </button>
 <mat-menu #profileMenu="matMenu">
-  <button mat-menu-item routerLink="/subscriptions" >
-    My Subscriptions
-  </button>
-  <button mat-menu-item (click)="signOut()">
-    Sign Out
-  </button>
+  <button mat-menu-item routerLink="/subscriptions">My Subscriptions</button>
+  <button mat-menu-item (click)="signOut()">Sign Out</button>
 </mat-menu>

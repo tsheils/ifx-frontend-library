@@ -1,8 +1,13 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input } from "@angular/core";
-import { Article } from "@ncats-frontend-library/models/rdas";
-import { ArticleDetailsDisplayComponent } from "@ncats-frontend-library/shared/rdas/article-display";
-import { ArticlesFacade } from "@ncats-frontend-library/stores/article-store";
+import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+} from '@angular/core';
+import { Article } from '@ncats-frontend-library/models/rdas';
+import { ArticleDetailsDisplayComponent } from '@ncats-frontend-library/shared/rdas/article-display';
+import { ArticlesFacade } from '@ncats-frontend-library/stores/article-store';
 
 @Component({
   selector: 'ncats-frontend-library-features-rdas-rdas-article-page',
@@ -10,23 +15,22 @@ import { ArticlesFacade } from "@ncats-frontend-library/stores/article-store";
   imports: [CommonModule, ArticleDetailsDisplayComponent],
   templateUrl: './features-rdas-rdas-article-page.component.html',
   styleUrls: ['./features-rdas-rdas-article-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturesRdasRdasArticlePageComponent {
-@Input() article!: Article;
+  @Input() article!: Article;
 
-constructor(
+  constructor(
     private articleFacade: ArticlesFacade,
     private changeRef: ChangeDetectorRef
-  ) {
-  }
+  ) {}
 
   ngOnInit() {
-    this.articleFacade.selectedArticle$.subscribe(res => {
-      if(res) {
+    this.articleFacade.selectedArticle$.subscribe((res) => {
+      if (res) {
         this.article = res;
         this.changeRef.markForCheck();
       }
-    })
+    });
   }
 }

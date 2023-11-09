@@ -1,42 +1,58 @@
 import {
   AfterViewInit,
-  Component, Inject,
-  Input, OnChanges, SimpleChanges,
-  ViewChild, ViewEncapsulation
-} from "@angular/core";
-import { DOCUMENT, NgFor, NgIf } from "@angular/common";
-import { MatButtonModule } from "@angular/material/button";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { MatPaginator, MatPaginatorModule } from "@angular/material/paginator";
-import { MatSort, MatSortModule, Sort } from "@angular/material/sort";
-import { MatTableDataSource, MatTableModule } from "@angular/material/table";
-import { MatTabsModule } from "@angular/material/tabs";
-import { GeneAssociation } from "@ncats-frontend-library/models/rdas";
-import { SharedUtilsDataNotFoundComponent } from "@ncats-frontend-library/shared/utils/data-not-found";
-import { ExternalLinkComponent } from "@ncats-frontend-library/shared/utils/external-link";
-import { GeneListCardComponent } from "../gene-list-card/gene-list-card.component";
+  Component,
+  Inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { DOCUMENT, NgFor, NgIf } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { GeneAssociation } from '@ncats-frontend-library/models/rdas';
+import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
+import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
+import { GeneListCardComponent } from '../gene-list-card/gene-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-gene-list',
   standalone: true,
-  imports: [NgIf, MatPaginatorModule, NgFor, GeneListCardComponent, MatCardModule, MatButtonModule, MatIconModule,
-    MatTabsModule, MatTableModule, MatSortModule, ExternalLinkComponent, SharedUtilsDataNotFoundComponent],
+  imports: [
+    NgIf,
+    MatPaginatorModule,
+    NgFor,
+    GeneListCardComponent,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTabsModule,
+    MatTableModule,
+    MatSortModule,
+    ExternalLinkComponent,
+    SharedUtilsDataNotFoundComponent,
+  ],
   templateUrl: './gene-list.component.html',
   styleUrls: ['./gene-list.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class GeneListComponent implements AfterViewInit, OnChanges {
   @Input() genes: GeneAssociation[] | undefined = [];
-   count = 0;
-  dataSource: MatTableDataSource<GeneAssociation> = new MatTableDataSource<GeneAssociation>([]);
+  count = 0;
+  dataSource: MatTableDataSource<GeneAssociation> =
+    new MatTableDataSource<GeneAssociation>([]);
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  displayColumns = ["Gene", "Gene Name", "Association Type", "Reference"]
+  @Input() showTab = true;
+  displayColumns = ['Gene', 'Gene Name', 'Association Type', 'Reference'];
 
-  constructor(
-    @Inject(DOCUMENT) protected dom?: Document
-  ){}
+  constructor(@Inject(DOCUMENT) protected dom?: Document) {}
 
   ngAfterViewInit() {
     if (this.genes) {
@@ -44,7 +60,7 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
       this.dataSource.data = this.genes;
       this.dataSource.paginator = this.paginator;
       this.dataSource.sort = this.sort;
-      this.sortData({ active: 'Association Type', direction: 'asc' })
+      this.sortData({ active: 'Association Type', direction: 'asc' });
     }
   }
 
@@ -76,41 +92,47 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
   }
 
   ngOnChanges(change: SimpleChanges) {
-    if(change['genes'] && this.genes) {
+    if (change['genes'] && this.genes) {
       this.count = this.genes.length;
       this.dataSource.data = this.genes;
-      this.sortData({active: 'Association Type', direction: 'asc'})
-
+      this.sortData({ active: 'Association Type', direction: 'asc' });
     }
   }
 
   downloadData() {
-    if(this.genes) {
-      console.log(this.genes);
-      this._downloadFile(this._toTSV(this.genes), 'rdas-genes-download.tsv')
+    if (this.genes) {
+      this._downloadFile(this._toTSV(this.genes), 'rdas-genes-download.tsv');
     }
   }
 
   _toTSV(data: GeneAssociation[]): string {
-// grab the column headings (separated by tabs)
-      const headings: string = ["geneSymbol","associationStatus",	"associationType","references"].join("\t");
+    // grab the column headings (separated by tabs)
+    const headings: string = [
+      'geneSymbol',
+      'associationStatus',
+      'associationType',
+      'references',
+    ].join('\t');
 
-// iterate over the data
-      const rows: string = data.reduce((acc, c) => {
+    // iterate over the data
+    const rows: string = data
+      .reduce(
+        (acc, c) => {
+          // for each row object get its values and add tabs between them
+          // then add them as a new array to the outgoing array
 
-        // for each row object get its values and add tabs between them
-        // then add them as a new array to the outgoing array
+          return acc.concat([c._toString()]);
 
-        return acc.concat([c._toString()]);
-
-// finally joining each row with a line break
-      }, [headings]).join('\n');
-      return rows;
+          // finally joining each row with a line break
+        },
+        [headings]
+      )
+      .join('\n');
+    return rows;
   }
 
-
   _downloadFile(data: any, name: string, type = 'text/tsv') {
-    if(this.dom) {
+    if (this.dom) {
       const file = new Blob([data], { type: type });
       const link = this.dom.createElement('a');
       if (link.download !== undefined) {
@@ -126,11 +148,8 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
       }
     }
   }
-
 }
-
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
   return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }
-

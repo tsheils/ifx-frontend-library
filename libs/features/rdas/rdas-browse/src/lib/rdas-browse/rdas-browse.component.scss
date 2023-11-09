@@ -1,12 +1,35 @@
-.spinner-holder {
-  height: 100%;
-  position: absolute;
-}
+ncats-frontend-library-rdas-browse {
+  .browse-page {
+  //  margin-top: 60px;
+    padding: 1vw;
+  }
 
-.mobile-menu-container {
-  z-index: 0;
-}
+  .drawer-container-content {
+    padding-left: 1vw;
+  }
 
-.browse-paginator {
+  .spinner-holder {
+    // height: 100%;
+    // position: absolute;
+  }
+
+  .browse-paginator {
     background-color: transparent;
+  }
+
+  .filters-menu-panel {
+    width: 25%;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .filters-menu-panel {
+      width: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .filters-menu-panel {
+      width: 100%;
+    }
+  }
 }

@@ -1,22 +1,19 @@
 import { Injectable } from '@angular/core';
-import { ApolloQueryResult } from "@apollo/client";
+import { ApolloQueryResult } from '@apollo/client';
 import {
   ClinicalTrial,
   FETCHTRIALDETAILS,
-  TRIALDETAILSVARIABLES
-} from "@ncats-frontend-library/models/rdas";
+  TRIALDETAILSVARIABLES,
+} from '@ncats-frontend-library/models/rdas';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { ROUTER_NAVIGATION, RouterNavigationAction } from "@ngrx/router-store";
-import { switchMap, catchError, of, filter, map } from "rxjs";
-import { TrialService } from "../trial.service";
+import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
+import { switchMap, catchError, of, filter, map } from 'rxjs';
+import { TrialService } from '../trial.service';
 import * as TrialsActions from './trials.actions';
 
 @Injectable()
 export class TrialsEffects {
-  constructor(
-    private actions$: Actions,
-    private trialService: TrialService
-  ) {}
+  constructor(private actions$: Actions, private trialService: TrialService) {}
 
   init$ = createEffect(() =>
     this.actions$.pipe(
@@ -32,20 +29,32 @@ export class TrialsEffects {
   loadTrial$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter((r: RouterNavigationAction) => !r.payload.routerState.url.includes('/trials') && r.payload.routerState.url.startsWith('/trial')),
-      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: {nctid?: string}) => {
-        TRIALDETAILSVARIABLES.ctwhere.NCTId =  params.nctid;
-        return this.trialService.fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/trials') &&
+          r.payload.routerState.url.startsWith('/trial')
+      ),
+      map(
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
+      ),
+      switchMap((params: { nctid?: string }) => {
+        TRIALDETAILSVARIABLES.ctwhere.NCTId = params.nctid;
+        return this.trialService
+          .fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
           .pipe(
-            map((trialData:ApolloQueryResult<any>) => {
+            map((trialData: ApolloQueryResult<any>) => {
               if (trialData.data) {
-                const trial: ClinicalTrial = new ClinicalTrial(trialData.data.clinicalTrials[0]);
+                const trial: ClinicalTrial = new ClinicalTrial(
+                  trialData.data.clinicalTrials[0]
+                );
                 return TrialsActions.fetchTrialSuccess({ trial: trial });
-              } else return TrialsActions.fetchTrialFailure({ error: "No Disease found" });
+              } else
+                return TrialsActions.fetchTrialFailure({
+                  error: 'No Disease found',
+                });
             })
           );
       })
-    )}
-  );
+    );
+  });
 }

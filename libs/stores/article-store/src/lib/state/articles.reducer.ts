@@ -1,4 +1,4 @@
-import { Article } from "@ncats-frontend-library/models/rdas";
+import { Article } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
@@ -18,10 +18,9 @@ export interface ArticleStorePartialState {
   readonly [ARTICLE_STORE_FEATURE_KEY]: ArticleState;
 }
 
-
 export const articlesAdapter: EntityAdapter<Article> =
   createEntityAdapter<Article>({
-    selectId: article => article.pubmed_id
+    selectId: (article) => article.pubmed_id,
   });
 
 export const initialState: ArticleState = articlesAdapter.getInitialState({
@@ -29,7 +28,6 @@ export const initialState: ArticleState = articlesAdapter.getInitialState({
   loaded: false,
   error: 'No Error Available',
 });
-
 
 const reducer = createReducer(
   initialState,
@@ -39,7 +37,11 @@ const reducer = createReducer(
     error: null,
   })),
   on(ArticleActions.fetchArticleSuccess, (state, { article }) =>
-    articlesAdapter.setOne(article, { ...state, selectedId: article.pubmed_id, loaded: true })
+    articlesAdapter.setOne(article, {
+      ...state,
+      selectedId: article.pubmed_id,
+      loaded: true,
+    })
   ),
   on(ArticleActions.fetchArticleFailure, (state, { error }) => ({
     ...state,

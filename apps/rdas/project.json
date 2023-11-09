@@ -34,6 +34,11 @@
             "output": "assets/rdas-home"
           },
           {
+            "input": "libs/features/rdas/rdas-about/src/assets",
+            "glob": "**/*",
+            "output": "assets/rdas-about"
+          },
+          {
             "input": "libs/features/rdas/epi-api/src/assets",
             "glob": "**/*",
             "output": "assets/epi-api"

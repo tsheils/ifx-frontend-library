@@ -6,11 +6,4 @@
   // Extract the palettes you need from the theme definition.
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
-
-  // Define any styles affected by the theme.
-  .header {
-    .toolbar-template {
-    //  background-color: mat.get-color-from-palette($primary);
-    }
-  }
 }

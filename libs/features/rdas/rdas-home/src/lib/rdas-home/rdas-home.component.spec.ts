@@ -7,9 +7,7 @@ import { StoreModule } from "@ngrx/store";
 import { Apollo } from "apollo-angular";
 import { ApolloTestingModule } from "apollo-angular/testing";*/
 
-
 //import { RdasHomeComponent } from './rdas-home.component';
-
 
 /*jest.mock('ForceGraph3D', () => ({
   app: {
@@ -22,11 +20,11 @@ import { ApolloTestingModule } from "apollo-angular/testing";*/
 }));*/
 
 describe.skip('RdasHomeComponent', () => {
- // let component: RdasHomeComponent;
- // let fixture: ComponentFixture<RdasHomeComponent>;
+  // let component: RdasHomeComponent;
+  // let fixture: ComponentFixture<RdasHomeComponent>;
 
   beforeEach(async () => {
-   /* await TestBed.configureTestingModule({
+    /* await TestBed.configureTestingModule({
       declarations: [ RdasHomeComponent ],
       imports: [
         BrowserAnimationsModule,
@@ -48,6 +46,6 @@ describe.skip('RdasHomeComponent', () => {
   });
 
   it('should create', () => {
-  //  expect(component).toBeTruthy();
+    //  expect(component).toBeTruthy();
   });
 });

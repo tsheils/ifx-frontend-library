@@ -1,23 +1,22 @@
-import { Article } from "@ncats-frontend-library/models/rdas";
-import { Page } from "@ncats-frontend-library/models/utils";
+import { Article } from '@ncats-frontend-library/models/rdas';
+import { Page } from '@ncats-frontend-library/models/utils';
 import { createAction, props } from '@ngrx/store';
 
 export const initArticleStore = createAction('[Articles Page] Init');
 
-
 export const loadArticles = createAction(
   '[Articles/API] Load Articles',
   props<{
-    top: number
-    skip: number
+    top: number;
+    skip: number;
   }>()
 );
 
 export const loadArticlesSuccess = createAction(
   '[Articles/API] Load Articles Success',
   props<{
-    articles: Article[],
-    page?: Page
+    articles: Article[];
+    page?: Page;
   }>()
 );
 
@@ -29,8 +28,8 @@ export const loadArticlesFailure = createAction(
 export const fetchArticle = createAction(
   '[Articles/API] fetch Article',
   props<{
-    pmid: string,
-    options?: { [key: string]: string }
+    pmid: string;
+    options?: { [key: string]: string };
   }>()
 );
 
@@ -43,4 +42,3 @@ export const fetchArticleFailure = createAction(
   '[Articles/API] fetch Article Failure',
   props<{ error: string }>()
 );
-

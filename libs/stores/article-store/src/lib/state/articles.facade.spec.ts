@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Article } from "@ncats-frontend-library/models/rdas";
+import { Article } from '@ncats-frontend-library/models/rdas';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { readFirst } from '@nx/angular/testing';
@@ -10,8 +10,9 @@ import { ArticlesEffects } from './articles.effects';
 import { ArticlesFacade } from './articles.facade';
 import {
   ARTICLE_STORE_FEATURE_KEY,
-  articlesReducer, ArticleStorePartialState
-} from "./articles.reducer";
+  articlesReducer,
+  ArticleStorePartialState,
+} from './articles.reducer';
 
 interface TestSchema {
   articleStore: ArticleStorePartialState;
@@ -20,22 +21,17 @@ interface TestSchema {
 describe('ArticleStoreFacade', () => {
   let facade: ArticlesFacade;
   let store: Store<TestSchema>;
-  const createArticleStoreEntity = (
-    id: string,
-    name = ''
-  ): Article => ( new Article({
-    pmid: id,
-    title: name || `name-${id}`,
-  }));
+  const createArticleStoreEntity = (id: string, name = ''): Article =>
+    new Article({
+      pmid: id,
+      title: name || `name-${id}`,
+    });
 
   describe('used in NgModule', () => {
     beforeEach(() => {
       @NgModule({
         imports: [
-          StoreModule.forFeature(
-            ARTICLE_STORE_FEATURE_KEY,
-            articlesReducer
-          ),
+          StoreModule.forFeature(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
           EffectsModule.forFeature([ArticlesEffects]),
         ],
         providers: [ArticlesFacade],

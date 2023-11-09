@@ -1,6 +1,6 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { GeneAssociation } from "@ncats-frontend-library/models/rdas";
+import { GeneAssociation } from '@ncats-frontend-library/models/rdas';
 
 @Component({
   selector: 'ncats-frontend-library-gene-list-card',

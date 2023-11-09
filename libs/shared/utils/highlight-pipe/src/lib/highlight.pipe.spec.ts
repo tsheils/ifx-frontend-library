@@ -1,5 +1,5 @@
 import { DomSanitizer } from '@angular/platform-browser';
-import {TestBed, inject, async} from '@angular/core/testing';
+import { TestBed, inject, async } from '@angular/core/testing';
 
 import { HighlightPipe } from './highlight.pipe';
 
@@ -8,18 +8,19 @@ describe('AutoComplete Component - Highlight pipe', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [ {
-        provide: DomSanitizer,
-        useValue: {
-          bypassSecurityTrustHtml: v => v
-        }
-      }, HighlightPipe
-      ]
+      providers: [
+        {
+          provide: DomSanitizer,
+          useValue: {
+            bypassSecurityTrustHtml: (v) => v,
+          },
+        },
+        HighlightPipe,
+      ],
     });
-  })
-);
+  }));
 
-  beforeEach(inject([HighlightPipe], p => {
+  beforeEach(inject([HighlightPipe], (p) => {
     pipe = p;
   }));
 

@@ -1,7 +1,6 @@
-import { FilterCategory } from "@ncats-frontend-library/models/utils";
+import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { fetchFiltersSuccess } from "./filters.actions";
 
 import * as FiltersActions from './filters.actions';
 
@@ -20,7 +19,7 @@ export interface FiltersPartialState {
 
 export const filtersAdapter: EntityAdapter<FilterCategory> =
   createEntityAdapter<FilterCategory>({
-    selectId: filterCategory => filterCategory.label
+    selectId: (filterCategory) => filterCategory.label,
   });
 
 export const initialFiltersState: FiltersState = filtersAdapter.getInitialState(

@@ -22,14 +22,15 @@ interface TestSchema {
 describe('DiseasesFacade', () => {
   let facade: DiseasesFacade;
   let store: Store<TestSchema>;
-  const createDiseasesEntity = (gardId: string, name = ''): Disease => (new Disease({
-    gardId,
-    name: name || `name-${gardId}`,
-    epiCount: 0,
-    nonEpiCount: 0,
-    projectCount: 0,
-    clinicalTrialsCount: 0,
-  }));
+  const createDiseasesEntity = (gardId: string, name = ''): Disease =>
+    new Disease({
+      gardId,
+      name: name || `name-${gardId}`,
+      epiCount: 0,
+      nonEpiCount: 0,
+      projectCount: 0,
+      clinicalTrialsCount: 0,
+    });
 
   describe('used in NgModule', () => {
     beforeEach(() => {

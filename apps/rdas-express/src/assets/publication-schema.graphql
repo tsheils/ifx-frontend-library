@@ -1,123 +1,144 @@
-type Article {
-	DateCreatedRDAS: String!
-	abstractText: String!
-	affiliation: String!
-	appearsInJournalVolumes: [JournalVolume!]! @relationship(type: "APPEARS_IN", direction: OUT)
-	authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
-	citedByCount: BigInt!
-	doi: String!
-	epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]! @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: IN)
-	firstPublicationDate: String!
-	fullTextUrlsContentFor: [FullTextUrl!]! @relationship(type: "CONTENT_FOR", direction: IN)
-	gardsmentionedIn: [GARD!]! @relationship(type: "MENTIONED_IN", direction: IN)
-	hasOmimRefomimRefs: [OMIMRef!]! @relationship(type: "HAS_OMIM_REF", direction: OUT)
-	isEpi: Boolean
-	keywordsKeywordFor: [Keyword!]! @relationship(type: "KEYWORD_FOR", direction: IN)
-	meshTermsMeshTermFor: [MeshTerm!]! @relationship(type: "MESH_TERM_FOR", direction: IN)
-	omim_evidence: Boolean
-	pubType: [String]
-	pubmed_evidence: Boolean
-	pubmed_id: String!
-	pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]! @relationship(type: "ANNOTATION_FOR", direction: IN)
-	refInOMIM: Boolean
-	source: String!
-	substancesSubstanceAnnotatedByPubmed: [Substance!]! @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
-	title: String!
+type Article @exclude(operations: [CREATE, DELETE, UPDATE]){
+  DateCreatedRDAS: String!
+  abstractText: String!
+  affiliation: String!
+  appearsInJournalVolumes: [JournalVolume!]!
+    @relationship(type: "APPEARS_IN", direction: OUT)
+  authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
+  citedByCount: BigInt!
+  doi: String!
+  epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]!
+    @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: IN)
+  firstPublicationDate: String!
+  fullTextUrlsContentFor: [FullTextUrl!]!
+    @relationship(type: "CONTENT_FOR", direction: IN)
+  gardsmentionedIn: [GARD!]! @relationship(type: "MENTIONED_IN", direction: IN)
+  hasOmimRefomimRefs: [OMIMRef!]!
+    @relationship(type: "HAS_OMIM_REF", direction: OUT)
+  isEpi: Boolean
+  keywordsKeywordFor: [Keyword!]!
+    @relationship(type: "KEYWORD_FOR", direction: IN)
+  meshTermsMeshTermFor: [MeshTerm!]!
+    @relationship(type: "MESH_TERM_FOR", direction: IN)
+  omim_evidence: Boolean
+  pubType: [String]
+  pubmed_evidence: Boolean
+  pubmed_id: String!
+  pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]!
+    @relationship(type: "ANNOTATION_FOR", direction: IN)
+  refInOMIM: Boolean
+  source: String!
+  substancesSubstanceAnnotatedByPubmed: [Substance!]!
+    @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
+  title: String!
 }
 
-type Author {
-	firstName: String!
-	fullName: String!
-	lastName: String!
-	wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
+type Author @exclude(operations: [CREATE, DELETE, UPDATE]){
+  firstName: String!
+  fullName: String!
+  lastName: String!
+  wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
 }
 
-type EpidemiologyAnnotation {
-	date: [String]!
-	epidemiologyAnnotationForArticles: [Article!]! @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: OUT)
-	epidemiology_rate: [String]!
-	epidemiology_type: [String]!
-	ethnicity: [String]!
-	isEpi: Boolean!
-	location: [String]!
-	sex: [String]!
+type EpidemiologyAnnotation @exclude(operations: [CREATE, DELETE, UPDATE]){
+  date: [String]!
+  epidemiologyAnnotationForArticles: [Article!]!
+    @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: OUT)
+  epidemiology_rate: [String]!
+  epidemiology_type: [String]!
+  ethnicity: [String]!
+  isEpi: Boolean!
+  location: [String]!
+  sex: [String]!
 }
 
-type FullTextUrl {
-	availability: String!
-	availabilityCode: String!
-	contentForArticles: [Article!]! @relationship(type: "CONTENT_FOR", direction: OUT)
-	documentStyle: String!
-	site: String!
-	url: String!
+type FullTextUrl @exclude(operations: [CREATE, DELETE, UPDATE]){
+  availability: String!
+  availabilityCode: String!
+  contentForArticles: [Article!]!
+    @relationship(type: "CONTENT_FOR", direction: OUT)
+  documentStyle: String!
+  site: String!
+  url: String!
 }
 
-type GARD {
-	GardId: String!
-	is_rare: Boolean!
-	mentionedInArticles: [Article!]! @relationship(type: "MENTIONED_IN", direction: OUT)
-	name: String!
+type GARD @exclude(operations: [CREATE, DELETE, UPDATE]){
+  GardId: String!
+  is_rare: Boolean!
+  mentionedInArticles: [Article!]!
+    @relationship(type: "MENTIONED_IN", direction: OUT)
+  GardName: String!
 }
 
-type Journal {
-	essn: String!
-	issn: String!
-	journalVolumesContentOf: [JournalVolume!]! @relationship(type: "CONTENT_OF", direction: IN)
-	medlineAbbreviation: String!
-	nlmid: String!
-	title: String!
+type Journal @exclude(operations: [CREATE, DELETE, UPDATE]){
+  essn: String!
+  issn: String!
+  journalVolumesContentOf: [JournalVolume!]!
+    @relationship(type: "CONTENT_OF", direction: IN)
+  medlineAbbreviation: String!
+  nlmid: String!
+  title: String!
 }
 
-type JournalVolume {
-	articlesAppearsIn: [Article!]! @relationship(type: "APPEARS_IN", direction: IN)
-	contentOfJournals: [Journal!]! @relationship(type: "CONTENT_OF", direction: OUT)
-	dateOfPublication: String!
-	issue: String!
-	journalIssueId: BigInt!
-	monthOfPublication: BigInt!
-	printPublicationDate: String!
-	volume: String!
-	yearOfPublication: BigInt!
+type JournalVolume @exclude(operations: [CREATE, DELETE, UPDATE]){
+  articlesAppearsIn: [Article!]!
+    @relationship(type: "APPEARS_IN", direction: IN)
+  contentOfJournals: [Journal!]!
+    @relationship(type: "CONTENT_OF", direction: OUT)
+  dateOfPublication: String!
+  issue: String!
+  journalIssueId: BigInt!
+  monthOfPublication: BigInt!
+  printPublicationDate: String!
+  volume: String!
+  yearOfPublication: BigInt!
 }
 
-type Keyword {
-	keyword: String!
-	keywordForArticles: [Article!]! @relationship(type: "KEYWORD_FOR", direction: OUT)
+type Keyword @exclude(operations: [CREATE, DELETE, UPDATE]){
+  keyword: String!
+  keywordForArticles: [Article!]!
+    @relationship(type: "KEYWORD_FOR", direction: OUT)
 }
 
-type MeshQualifier {
-	abbreviation: String!
-	isMajorTopic: Boolean
-	majorTopic_YN: String
-	meshQualifierForMeshTerms: [MeshTerm!]! @relationship(type: "MESH_QUALIFIER_FOR", direction: OUT)
-	qualifierName: String!
+type MeshQualifier @exclude(operations: [CREATE, DELETE, UPDATE]){
+  abbreviation: String!
+  isMajorTopic: Boolean
+  majorTopic_YN: String
+  meshQualifierForMeshTerms: [MeshTerm!]!
+    @relationship(type: "MESH_QUALIFIER_FOR", direction: OUT)
+  qualifierName: String!
 }
 
-type MeshTerm {
-	descriptorName: String!
-	isMajorTopic: Boolean
-	majorTopic_YN: String
-	meshQualifiersMeshQualifierFor: [MeshQualifier!]! @relationship(type: "MESH_QUALIFIER_FOR", direction: IN)
-	meshTermForArticles: [Article!]! @relationship(type: "MESH_TERM_FOR", direction: OUT)
+type MeshTerm @exclude(operations: [CREATE, DELETE, UPDATE]){
+  descriptorName: String!
+  isMajorTopic: Boolean
+  majorTopic_YN: String
+  meshQualifiersMeshQualifierFor: [MeshQualifier!]!
+    @relationship(type: "MESH_QUALIFIER_FOR", direction: IN)
+  meshTermForArticles: [Article!]!
+    @relationship(type: "MESH_TERM_FOR", direction: OUT)
 }
 
-type OMIMRef {
-	articlesHasOmimRef: [Article!]! @relationship(type: "HAS_OMIM_REF", direction: IN)
-	omimId: String!
-	omimName: String!
-	omimSections: [String]!
+type OMIMRef @exclude(operations: [CREATE, DELETE, UPDATE]){
+  articlesHasOmimRef: [Article!]!
+    @relationship(type: "HAS_OMIM_REF", direction: IN)
+  omimId: String!
+  omimName: String!
+  omimSections: [String]!
 }
 
-type PubtatorAnnotation {
-	annotationForArticles: [Article!]! @relationship(type: "ANNOTATION_FOR", direction: OUT)
-	infons_identifier: String!
-	infons_type: String!
-	type: String!
-	text: [String]
+type PubtatorAnnotation @exclude(operations: [CREATE, DELETE, UPDATE]){
+  annotationForArticles: [Article!]!
+    @relationship(type: "ANNOTATION_FOR", direction: OUT)
+  infons_identifier: String!
+  infons_type: String!
+  type: String!
+  text: [String]
 }
 
-type Substance {
-	name: String!
-	registryNumber: String!
-	substanceAnnotatedByPubmedArticles: [Article!]! @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: OUT)
+type Substance @exclude(operations: [CREATE, DELETE, UPDATE]){
+  name: String!
+  registryNumber: String!
+  substanceAnnotatedByPubmedArticles: [Article!]!
+    @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: OUT)
 }

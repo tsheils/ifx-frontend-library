@@ -1,35 +1,36 @@
-import { CommonModule } from "@angular/common";
-import { Component, Input, Signal } from "@angular/core";
-import { MatCardModule } from "@angular/material/card";
-import { MatIconModule } from "@angular/material/icon";
-import { NavigationExtras, Router } from "@angular/router";
-import { Disease } from "@ncats-frontend-library/models/rdas";
-import { SubscribeButtonComponent } from "@ncats-frontend-library/shared/rdas/subscribe-button";
-
+import { CommonModule } from '@angular/common';
+import { Component, Input, Signal } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { NavigationExtras, Router } from '@angular/router';
+import { Disease } from '@ncats-frontend-library/models/rdas';
+import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
 
 @Component({
   selector: 'ncats-frontend-library-disease-list-card',
   templateUrl: './disease-list-card.component.html',
   styleUrls: ['./disease-list-card.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatIconModule, SubscribeButtonComponent]
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    SubscribeButtonComponent,
+  ],
 })
 export class DiseaseListCardComponent {
   @Input() disease!: any | Disease;
 
-  constructor(
-    private router: Router
-  ) {}
+  constructor(private router: Router) {}
 
   navigate(id: string | undefined): void {
-    if(id) {
+    if (id) {
       const navigationExtras: NavigationExtras = {
         queryParams: {
-          id: id
-        }
+          id: id,
+        },
       };
       this.router.navigate(['/disease'], navigationExtras);
     }
   }
 }
-

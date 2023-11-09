@@ -16,13 +16,15 @@ export class DiseasesFacade {
   allDiseases$ = this.store.selectSignal(DiseasesSelectors.getAllDiseases);
   diseaseTree$ = this.store.pipe(select(DiseasesSelectors.getDiseaseTree));
   selectedDiseases$ = this.store.selectSignal(DiseasesSelectors.getSelected);
-  subscribedDiseases$ = this.store.selectSignal(DiseasesSelectors.getDiseasesSubscriptions);
-  searchDiseases$ = this.store.pipe(select(DiseasesSelectors.searchDiseasesEntities));
+  subscribedDiseases$ = this.store.selectSignal(
+    DiseasesSelectors.getDiseasesSubscriptions
+  );
+  searchDiseases$ = this.store.pipe(
+    select(DiseasesSelectors.searchDiseasesEntities)
+  );
   page$ = this.store.pipe(select(DiseasesSelectors.getDiseasesPage));
 
-
-  constructor(private store: Store<DiseasesFeature.DiseasesPartialState>) {
-  }
+  constructor(private store: Store<DiseasesFeature.DiseasesPartialState>) {}
   dispatch(action: Action) {
     this.store.dispatch(action);
   }

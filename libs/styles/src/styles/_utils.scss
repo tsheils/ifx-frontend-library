@@ -1,7 +1,7 @@
 @mixin width($width) {
   .width-#{$width} {
-    width: $width*1%;
-    flex-basis: $width*1%;
+    width: $width * 1%;
+    flex-basis: $width * 1%;
   }
 }
 
@@ -28,4 +28,3 @@
     text-align: $direction;
   }
 }
-

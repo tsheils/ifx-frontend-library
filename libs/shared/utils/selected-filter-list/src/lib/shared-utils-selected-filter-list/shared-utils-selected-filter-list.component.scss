@@ -1,9 +1,8 @@
-  .selected-filter-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, 15%);
-    gap: 2%;
+.selected-filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, 15%);
+  gap: 2%;
 }
-
 
 .removeIcon {
   vertical-align: middle;
@@ -12,4 +11,10 @@
 .filter-row-title {
   font-size: 1.3rem;
   font-weight: 500;
+}
+
+@media only screen and (max-width: 768px) {
+  .selected-filter-grid {
+    grid-template-columns: repeat(auto-fit, 40%);
+  }
 }

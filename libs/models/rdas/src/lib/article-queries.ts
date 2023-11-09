@@ -1,4 +1,4 @@
-import { gql } from "apollo-angular";
+import { gql } from 'apollo-angular';
 
 //pubType
 
@@ -35,7 +35,7 @@ export const ARTICLEFIELDS = `
           }
           diseases: gardsmentionedIn {
             gardId: GardId
-            name
+            name: GardName
           }
           sources: fullTextUrlsContentFor {
             availability
@@ -142,81 +142,78 @@ ${ARTICLEFIELDS}
 `;*/
 
 export const FETCHARTICLESQUERY = gql`
-query Articles(
-  $gardWhere: GARDWhere,
-  $articleWhere: ArticleWhere,
-  $articleOptions: ArticleOptions
-) {
-    articles:gards(where: $gardWhere) {
-        _count: mentionedInArticlesAggregate(where: $articleWhere) {
-            count
-        }
-        articles: mentionedInArticles(
-            options: $articleOptions
-            where: $articleWhere
-        ) {
-            ...articleFields
-        }
+  query Articles(
+    $gardWhere: GARDWhere
+    $articleWhere: ArticleWhere
+    $articleOptions: ArticleOptions
+  ) {
+    articles: gards(where: $gardWhere) {
+      _count: mentionedInArticlesAggregate(where: $articleWhere) {
+        count
+      }
+      articles: mentionedInArticles(
+        options: $articleOptions
+        where: $articleWhere
+      ) {
+        ...articleFields
+      }
     }
-}
-${ARTICLEFIELDS}
+  }
+  ${ARTICLEFIELDS}
 `;
 
-
-
 class ARTICLEVARIABLES {
-  gardWhere!: {GardId: undefined | string }
+  gardWhere!: { GardId: undefined | string };
   articleWhere?: {
-        isEpi?: null | string | boolean
-  }
+    isEpi?: null | string | boolean;
+  };
   articleOptions!: {
-    limit: number,
-    offset?: number,
-    sort: [{ firstPublicationDate?: string }]
-  }
-  meshTermsMeshTermForArticleOptions?: {limit?: number}
+    limit: number;
+    offset?: number;
+    sort: [{ firstPublicationDate?: string }];
+  };
+  meshTermsMeshTermForArticleOptions?: { limit?: number };
 }
-
 
 export const EPIARTICLES: ARTICLEVARIABLES = {
-  gardWhere: {GardId: undefined},
+  gardWhere: { GardId: undefined },
   articleWhere: {
-        isEpi:  true
+    isEpi: true,
   },
   articleOptions: {
     limit: 10,
     sort: [
       {
-        firstPublicationDate: "DESC"
-      }
-    ]
-  }
-}
+        firstPublicationDate: 'DESC',
+      },
+    ],
+  },
+};
 export const NONEPIARTICLES: ARTICLEVARIABLES = {
-  gardWhere: {GardId: undefined},
+  gardWhere: { GardId: undefined },
   articleWhere: {
-        isEpi:  false
+    isEpi: false,
   },
   articleOptions: {
     limit: 10,
     sort: [
       {
-        firstPublicationDate: "DESC"
-      }
-    ]
-  }
-}
+        firstPublicationDate: 'DESC',
+      },
+    ],
+  },
+};
 
 export const FETCHARTICLECOUNTS = gql`
-query ArticleCount($diseasesWhere: GARDWhere) {
-  diseases(where: $diseasesWhere) {
-    GardId
-    mentionedInArticlesAggregate {
-      count
+  query ArticleCount($diseasesWhere: GARDWhere) {
+    diseases(where: $diseasesWhere) {
+      GardId
+      mentionedInArticlesAggregate {
+        count
+      }
     }
   }
-}
-`
+`;
 
 export const FETCHARTICLEDETAILS = gql`
   query ArticleDetails($articleWhere: ArticleWhere) {
@@ -276,15 +273,14 @@ export const FETCHARTICLEDETAILS = gql`
     }
   }
   ${ARTICLEFIELDS}
-`
+`;
 
 export const ARTICLEDETAILSVARIABLES: {
   articleWhere: {
     pubmed_id: null | undefined | string;
-  }
+  };
 } = {
-  articleWhere:
-    {
-      pubmed_id: ''
-    }
-}
+  articleWhere: {
+    pubmed_id: '',
+  },
+};

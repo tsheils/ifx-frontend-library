@@ -7,8 +7,7 @@ import * as ArticleStoreSelectors from './articles.selectors';
 
 @Injectable()
 export class ArticlesFacade {
-  constructor(private store: Store<ArticleFeature.ArticleStorePartialState>) {
-  }
+  constructor(private store: Store<ArticleFeature.ArticleStorePartialState>) {}
   /**
    * Combine pieces of state using createSelector,
    * and expose them as observables through the facade.

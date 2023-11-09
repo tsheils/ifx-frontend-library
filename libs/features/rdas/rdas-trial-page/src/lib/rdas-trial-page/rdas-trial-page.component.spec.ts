@@ -8,7 +8,7 @@ describe('RdasTrialPageComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RdasTrialPageComponent]
+      imports: [RdasTrialPageComponent],
     });
     fixture = TestBed.createComponent(RdasTrialPageComponent);
     component = fixture.componentInstance;

@@ -8,7 +8,7 @@ describe('ClinicalTrialsDetailsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [ClinicalTrialsDetailsComponent]
+      imports: [ClinicalTrialsDetailsComponent],
     });
     fixture = TestBed.createComponent(ClinicalTrialsDetailsComponent);
     component = fixture.componentInstance;

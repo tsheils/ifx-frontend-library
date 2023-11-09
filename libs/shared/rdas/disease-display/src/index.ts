@@ -3,4 +3,3 @@ export * from './lib/disease-header/disease-header.component';
 export * from './lib/disease-display/disease-display.component';
 export * from './lib/disease-list/disease-list.component';
 export * from './lib/disease-subscription-list/disease-subscription-list.component';
-

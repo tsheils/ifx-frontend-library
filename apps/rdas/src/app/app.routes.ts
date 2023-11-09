@@ -1,26 +1,33 @@
-import { importProvidersFrom } from "@angular/core";
+import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
-import { ArticlesEffects, articlesReducer } from "@ncats-frontend-library/stores/article-store";
-import { GrantsEffects, grantsReducer } from "@ncats-frontend-library/stores/grant-store";
-import { TrialsEffects, trialsReducer } from "@ncats-frontend-library/stores/trial-store";
-import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
-import { EffectsModule } from "@ngrx/effects";
-import { StoreModule } from "@ngrx/store";
-import { environment } from "../environments/environment";
-
+import {
+  ArticlesEffects,
+  articlesReducer,
+} from '@ncats-frontend-library/stores/article-store';
+import {
+  GrantsEffects,
+  grantsReducer,
+} from '@ncats-frontend-library/stores/grant-store';
+import {
+  TrialsEffects,
+  trialsReducer,
+} from '@ncats-frontend-library/stores/trial-store';
+import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { environment } from '../environments/environment';
 
 export const routes: Routes = [
   {
     path: '',
     //  redirectTo: 'diseases',
     // pathMatch: 'full',
-    providers: [
-      UsersFacade
-    ],
+    providers: [UsersFacade],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadChildren: () =>
       import('@ncats-frontend-library/features/rdas/rdas-home').then(
-        (m) => m.rdasHomeRoutes),
+        (m) => m.rdasHomeRoutes
+      ),
   },
   {
     path: 'diseases',
@@ -39,6 +46,14 @@ export const routes: Routes = [
       import('@ncats-frontend-library/features/rdas/rdas-disease-page').then(
         (m) => m.RdasDiseasePageComponent
       ),
+  },{
+    path: 'about',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('@ncats-frontend-library/features/rdas/rdas-about').then(
+        (m) => m.FeaturesRdasRdasAboutComponent
+      ),
   },
   {
     path: 'article',
@@ -49,7 +64,8 @@ export const routes: Routes = [
         StoreModule.forFeature('articleStore', articlesReducer),
         // run feature effects
         EffectsModule.forFeature([ArticlesEffects])
-      )    ],
+      ),
+    ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-article-page').then(
@@ -65,7 +81,8 @@ export const routes: Routes = [
         StoreModule.forFeature('grants', grantsReducer),
         // run feature effects
         EffectsModule.forFeature([GrantsEffects])
-      )    ],
+      ),
+    ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-grant-page').then(
@@ -81,7 +98,8 @@ export const routes: Routes = [
         StoreModule.forFeature('trials', trialsReducer),
         // run feature effects
         EffectsModule.forFeature([TrialsEffects])
-      )    ],
+      ),
+    ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-trial-page').then(
@@ -97,13 +115,13 @@ export const routes: Routes = [
         (m) => m.RdasSubscriptionsComponent
       ),
   },
-   {
+  {
     path: 'apis/diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-     data: {
-       instance: `${environment.baseUrl}api/diseases`
-     },
+    data: {
+      instance: `${environment.baseUrl}${environment.production ? '/' : ':4000/'}api/diseases`,
+    },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
@@ -114,9 +132,9 @@ export const routes: Routes = [
     path: 'apis/publications',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-     data: {
-       instance: `${environment.baseUrl}api/publications`
-     },
+    data: {
+      instance: `${environment.baseUrl}${environment.production ? '/' : ':4001/'}api/articles`,
+    },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
@@ -128,26 +146,28 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
-      instance: `${environment.baseUrl}api/projects`
+      instance: `${environment.baseUrl}${environment.production ? '/' : ':4002/'}api/grants`,
     },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
         (m) => m.GraphqlSandboxComponent
       ),
-  },{
+  },
+  {
     path: 'apis/trials',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
-      instance: `${environment.baseUrl}api/trials`
+      instance: `${environment.baseUrl}${environment.production ? '/' : ':4003/'}api/trials`,
     },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
         (m) => m.GraphqlSandboxComponent
       ),
-  },{
+  },
+  {
     path: 'apis/epi',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
@@ -159,8 +179,6 @@ export const routes: Routes = [
   },
   { path: '**', redirectTo: '' },
 ];
-
-
 
 /* RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking',

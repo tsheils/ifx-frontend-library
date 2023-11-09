@@ -1,4 +1,4 @@
-import { Reference } from "./reference";
+import { Reference } from './reference';
 
 export class Gene {
   ensembl?: string;
@@ -26,18 +26,21 @@ export class GeneAssociation {
   constructor(obj: Partial<GeneAssociation> = {}) {
     Object.assign(this, obj);
 
-    if(obj.gene) {
+    if (obj.gene) {
       this.gene = new Gene(obj.gene);
     }
 
-    if(obj._reference){
-      this.reference = obj._reference.map(ref => new Reference({code: ref}));
+    if (obj._reference) {
+      this.reference = obj._reference.map(
+        (ref) => new Reference({ code: ref })
+      );
       delete this._reference;
     }
-
   }
 
-  _toString(){
-    return `${this.gene.geneSymbol}\t ${this.associationStatus}\t${this.associationType}\t${this.reference?.map(ref => ref._toString()).join('|')}`
+  _toString() {
+    return `${this.gene.geneSymbol}\t ${this.associationStatus}\t${
+      this.associationType
+    }\t${this.reference?.map((ref) => ref._toString()).join('|')}`;
   }
 }

@@ -1,8 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   ARTICLE_STORE_FEATURE_KEY,
-  articlesAdapter, ArticleState
-} from "./articles.reducer";
+  articlesAdapter,
+  ArticleState,
+} from './articles.reducer';
 
 // Lookup the 'ArticleStore' feature state managed by NgRx
 export const selectArticleStoreState = createFeatureSelector<ArticleState>(
@@ -29,7 +30,7 @@ export const selectAllArticleStore = createSelector(
 export const selectArticleStoreEntities = createSelector(
   selectArticleStoreState,
   (state: ArticleState) => {
-    return selectEntities(state)
+    return selectEntities(state);
   }
 );
 

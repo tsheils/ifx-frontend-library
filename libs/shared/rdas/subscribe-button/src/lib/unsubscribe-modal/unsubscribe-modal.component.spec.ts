@@ -1,11 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { AngularFireModule } from "@angular/fire/compat";
-import { AngularFirestore } from "@angular/fire/compat/firestore";
-import { MatButtonModule } from "@angular/material/button";
-import { MAT_DIALOG_DATA, MatDialogModule } from "@angular/material/dialog";
-import { reducer, USERS_FEATURE_KEY, UsersEffects, UsersFacade, UserService, COMMON_CONFIG, FIRESTORESTUB } from "@ncats-frontend-library/stores/user-store";
-import { EffectsModule } from "@ngrx/effects";
-import { StoreModule } from "@ngrx/store";
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFirestore } from '@angular/fire/compat/firestore';
+import { MatButtonModule } from '@angular/material/button';
+import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
+import {
+  reducer,
+  USERS_FEATURE_KEY,
+  UsersEffects,
+  UsersFacade,
+  UserService,
+  COMMON_CONFIG,
+  FIRESTORESTUB,
+} from '@ncats-frontend-library/stores/user-store';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 import { UnsubscribeModalComponent } from './unsubscribe-modal.component';
 
 describe('UnsubscribeModalComponent', () => {
@@ -14,24 +22,24 @@ describe('UnsubscribeModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UnsubscribeModalComponent ],
+      declarations: [],
       imports: [
         MatDialogModule,
         MatButtonModule,
+        UnsubscribeModalComponent,
         StoreModule.forRoot({}),
         EffectsModule.forRoot([]),
         StoreModule.forFeature(USERS_FEATURE_KEY, reducer),
         EffectsModule.forFeature([UsersEffects]),
-        AngularFireModule.initializeApp(COMMON_CONFIG)
+        AngularFireModule.initializeApp(COMMON_CONFIG),
       ],
       providers: [
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: AngularFirestore, useValue: FIRESTORESTUB },
         UsersFacade,
-        UserService
-      ]
-    })
-    .compileComponents();
+        UserService,
+      ],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(UnsubscribeModalComponent);
     component = fixture.componentInstance;

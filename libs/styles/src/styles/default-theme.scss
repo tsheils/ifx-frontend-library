@@ -9,21 +9,20 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-
 $app-primary: mat.define-palette(mat.$indigo-palette);
 $app-accent: mat.define-palette(mat.$pink-palette);
 
 // The "warn" palette is optional and defaults to red if not specified.
 $app-warn: mat.define-palette(mat.$red-palette);
 
-$app-theme: mat.define-light-theme((
-  color: (
-    primary: $app-primary,
-    accent: $app-accent,
-    warn: $app-warn,
-  ),
-  typography: mat.define-typography-config(),
-  density: 0,
-));
-
-
+$app-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $app-primary,
+      accent: $app-accent,
+      warn: $app-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);

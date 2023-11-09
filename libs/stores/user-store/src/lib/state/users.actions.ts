@@ -1,13 +1,12 @@
-import { Subscription, User } from "@ncats-frontend-library/models/utils";
+import { Subscription, User } from '@ncats-frontend-library/models/utils';
 import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Users/API] Init');
 
-
 export const resetPasswordEmail = createAction(
   '[Users/API] Reset Password Email',
   props<{
-    email: string
+    email: string;
   }>()
 );
 
@@ -23,14 +22,14 @@ export const resetPasswordEmailFailure = createAction(
 export const loginLinkUser = createAction(
   '[Users/API] Login Link User',
   props<{
-    email: string
+    email: string;
   }>()
 );
 
 export const loginLinkUserSuccess = createAction(
   '[Users/API] Login Link User Success',
   props<{
-    email: string
+    email: string;
   }>()
 );
 
@@ -39,21 +38,17 @@ export const loginLinkUserFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
-
-
-
-
 export const loginEmailUser = createAction(
   '[Users/API] Login Email User',
   props<{
-    email: string
-    pw: string
+    email: string;
+    pw: string;
   }>()
 );
 
 export const loginEmailUserSuccess = createAction(
   '[Users/API] Login Email User Success',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const loginEmailUserFailure = createAction(
@@ -61,19 +56,18 @@ export const loginEmailUserFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
-
 export const registerEmailUser = createAction(
   '[Users/API] Register Email User',
   props<{
-    email: string
-    pw: string
-    pwVerify: string
+    email: string;
+    pw: string;
+    pwVerify: string;
   }>()
 );
 
 export const registerEmailUserSuccess = createAction(
   '[Users/API] Register Email User Success',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const registerEmailUserFailure = createAction(
@@ -81,19 +75,16 @@ export const registerEmailUserFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
-
-
-
 export const loginUser = createAction(
   '[Users/API] Login User',
   props<{
-    provider: string
+    provider: string;
   }>()
 );
 
 export const loginUserSuccess = createAction(
   '[Users/API] Login User Success',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const loginUserFailure = createAction(
@@ -103,12 +94,12 @@ export const loginUserFailure = createAction(
 
 export const fetchUserProfile = createAction(
   '[Users/API] Fetch User Profile User',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const fetchUserProfileSuccess = createAction(
   '[Users/API] Fetch User Profile Success',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const fetchUserProfileFailure = createAction(
@@ -118,12 +109,12 @@ export const fetchUserProfileFailure = createAction(
 
 export const updateUserSubscriptions = createAction(
   '[Users/API] Update User Subscriptions',
-  props<{ subscriptions: Subscription[]}>()
+  props<{ subscriptions: Subscription[] }>()
 );
 
 export const updateUserSubscriptionsSuccess = createAction(
   '[Users/API] Update User Subscriptions Success',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const updateUserSubscriptionsFailure = createAction(
@@ -131,9 +122,7 @@ export const updateUserSubscriptionsFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
-export const logoutUser = createAction(
-  '[Users/API] Logout User Success'
-);
+export const logoutUser = createAction('[Users/API] Logout User Success');
 
 export const logoutUserSuccess = createAction(
   '[Users/API] Logout User Success'
@@ -144,13 +133,11 @@ export const logoutUserFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
-export const fetchUser = createAction(
-  '[Users/API] Fetch User Success'
-);
+export const fetchUser = createAction('[Users/API] Fetch User Success');
 
 export const fetchUserSuccess = createAction(
   '[Users/API] Fetch User Success',
-  props<{ user: User}>()
+  props<{ user: User }>()
 );
 
 export const fetchUserFailure = createAction(

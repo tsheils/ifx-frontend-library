@@ -8,7 +8,8 @@ describe('AboutSubscribeModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AboutSubscribeModalComponent],
+      declarations: [],
+      imports: [AboutSubscribeModalComponent]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AboutSubscribeModalComponent);

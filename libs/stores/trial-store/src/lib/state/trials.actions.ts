@@ -1,4 +1,4 @@
-import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 import { createAction, props } from '@ngrx/store';
 
 export const initTrials = createAction('[Trials Page] Init');
@@ -6,8 +6,8 @@ export const initTrials = createAction('[Trials Page] Init');
 export const fetchTrial = createAction(
   '[Trials/API] fetch Trial',
   props<{
-    NCTId?: string,
-    options?: { [key: string]: string }
+    NCTId?: string;
+    options?: { [key: string]: string };
   }>()
 );
 
@@ -24,8 +24,8 @@ export const fetchTrialFailure = createAction(
 export const loadTrials = createAction(
   '[Trials/API] Load Trials',
   props<{
-    top: number
-    skip: number
+    top: number;
+    skip: number;
   }>()
 );
 

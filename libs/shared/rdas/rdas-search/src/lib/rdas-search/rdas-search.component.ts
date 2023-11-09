@@ -1,36 +1,46 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
   OnDestroy,
   OnInit,
-  Output
-} from "@angular/core";
-import { FormControl, ReactiveFormsModule } from "@angular/forms";
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { MatButtonModule } from "@angular/material/button";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { Disease } from "@ncats-frontend-library/models/rdas";
-import { HighlightPipe } from "@ncats-frontend-library/shared/utils/highlight-pipe";
+  Output,
+} from '@angular/core';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { Disease } from '@ncats-frontend-library/models/rdas';
+import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
 import {
   clearTypeahead,
   DiseaseService,
   DiseasesFacade,
-  searchDiseases
-} from "@ncats-frontend-library/stores/disease-store";
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
+  searchDiseases,
+} from '@ncats-frontend-library/stores/disease-store';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-rdas-search',
   templateUrl: './rdas-search.component.html',
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, ReactiveFormsModule, MatAutocompleteModule,
-    MatIconModule, MatButtonModule, HighlightPipe],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatButtonModule,
+    HighlightPipe,
+  ],
   styleUrls: ['./rdas-search.component.scss'],
-  standalone: true
-
+  standalone: true,
 })
 export class RdasSearchComponent implements OnInit, OnDestroy {
   /**
@@ -48,34 +58,36 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
     private changeRef: ChangeDetectorRef,
     private diseaseService: DiseaseService,
     private diseaseFacade: DiseasesFacade
-  ) { }
+  ) {}
 
   ngOnInit(): void {
-    this.diseaseFacade.searchDiseases$.pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(res => {
-      if(res && res.length) {
-        this.options = res.map(disease => new Disease(disease));
-        this.changeRef.markForCheck();
-      }
-    })
-
-    this.searchFormCtl.valueChanges.pipe(
-      takeUntil(this.ngUnsubscribe),
-      debounceTime(200),
-      distinctUntilChanged())
-      .subscribe((term) => {
-        if(term && term.length) {
-          this.diseaseFacade.dispatch(searchDiseases({term: term}))
+    this.diseaseFacade.searchDiseases$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((res) => {
+        if (res && res.length) {
+          this.options = res.map((disease) => new Disease(disease));
+          this.changeRef.markForCheck();
         }
-      })
+      });
+
+    this.searchFormCtl.valueChanges
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        debounceTime(200),
+        distinctUntilChanged()
+      )
+      .subscribe((term) => {
+        if (term && term.length) {
+          this.diseaseFacade.dispatch(searchDiseases({ term: term }));
+        }
+      });
   }
 
   selectDisease(event: MatAutocompleteSelectedEvent) {
     this.diseaseSelect.next(event.option.value as Disease);
   }
 
-  displayFn(option: {name: string, id: string }): string {
+  displayFn(option: { name: string; id: string }): string {
     return option && option.name ? option.name : '';
   }
 
@@ -83,9 +95,8 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
    * clean up on leaving component
    */
   ngOnDestroy() {
-    this.diseaseFacade.dispatch(clearTypeahead())
+    this.diseaseFacade.dispatch(clearTypeahead());
     this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
   }
-
 }

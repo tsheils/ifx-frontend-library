@@ -1,20 +1,26 @@
-import { BreakpointObserver } from "@angular/cdk/layout";
-import { CommonModule } from "@angular/common";
-import { Component, Input, OnInit, ViewEncapsulation } from "@angular/core";
-import { MatCardModule } from "@angular/material/card";
-import { MatListModule } from "@angular/material/list";
-import { MatTabsModule } from "@angular/material/tabs";
-import { DomSanitizer } from "@angular/platform-browser";
-import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
-import { ClinicalTrialsListCardComponent } from "../clinical-trials-list-card/clinical-trials-list-card.component";
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { CommonModule } from '@angular/common';
+import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { DomSanitizer } from '@angular/platform-browser';
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/clinical-trials-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-details',
   standalone: true,
-  imports: [CommonModule, ClinicalTrialsListCardComponent, MatCardModule, MatTabsModule, MatListModule],
+  imports: [
+    CommonModule,
+    ClinicalTrialsListCardComponent,
+    MatCardModule,
+    MatTabsModule,
+    MatListModule,
+  ],
   templateUrl: './clinical-trials-details.component.html',
   styleUrls: ['./clinical-trials-details.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class ClinicalTrialsDetailsComponent implements OnInit {
   @Input() trial!: ClinicalTrial;
@@ -29,8 +35,8 @@ export class ClinicalTrialsDetailsComponent implements OnInit {
   fullSummary = true;
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer,
-  ) { }
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     this.fullSummary = true;
@@ -48,28 +54,31 @@ export class ClinicalTrialsDetailsComponent implements OnInit {
   }
 
   getTrialSummary(): string {
-    return (this.trial.briefSummary && this.fullSummary) ?  this.trial.briefSummary : this.truncatedSummary;
+    return this.trial.briefSummary && this.fullSummary
+      ? this.trial.briefSummary
+      : this.truncatedSummary;
   }
 
-  getLabel(objType: string, plural: boolean = true): string {
+  getLabel(objType: string, plural = true): string {
     let ret: string = objType;
-    const arr = this.trial[objType] as Array<unknown>
+    const arr = this.trial[objType] as Array<unknown>;
     if (arr) {
       if (arr && arr.length > 1) {
-        ret = ret + ' (' + arr.length+')';
-      }
-      else if (arr && arr.length == 1 && plural) {
+        ret = ret + ' (' + arr.length + ')';
+      } else if (arr && arr.length == 1 && plural) {
         ret = ret.slice(0, arr.length - 2);
       }
     }
     ret = ret
       .replace(/([A-Z])/g, (match) => ` ${match}`)
       .replace(/^./, (match) => match.toUpperCase())
-      .trim()
+      .trim();
     return ret;
   }
 
- isHeader(criteria: string){
-   return (criteria === 'Inclusion Criteria:' || criteria === 'Exclusion Criteria:')
- }
+  isHeader(criteria: string) {
+    return (
+      criteria === 'Inclusion Criteria:' || criteria === 'Exclusion Criteria:'
+    );
+  }
 }

@@ -2,8 +2,8 @@
   padding: 2vh 1vw;
 }
 
-.table-search{
-  width:100%;
+.table-search {
+  width: 100%;
 }
 
 .filter-viewport {
@@ -26,7 +26,7 @@
   border-bottom: 1px #f0f0f0 solid;
   min-height: 50px;
   padding: 5px 0 0 0;
-  width: 100%
+  width: 100%;
 }
 
 .filter-grid:hover {
@@ -49,9 +49,7 @@
 }
 */
 
-
-
-.container{
+.container {
   position: relative;
 }
 
@@ -62,7 +60,7 @@
 }
 
 .disabled {
-  opacity: .5;
+  opacity: 0.5;
   cursor: unset;
 }
 
@@ -71,7 +69,7 @@
 }
 
 .field-text {
-  font: 400 15px/24px Roboto,"Helvetica Neue",sans-serif;
+  font: 400 15px/24px Roboto, 'Helvetica Neue', sans-serif;
 }
 
 .mat-column-select {
@@ -80,28 +78,27 @@
 
 .mat-row {
   //min-height: 32px;
- // border: none;
+  // border: none;
 }
 
-.mat-column-label{
+.mat-column-label {
   min-width: 60%;
   text-align: start;
   padding-right: 1vw;
 }
 
-
 .filter-cell.name {
   grid-area: 1 / 2 / 2 / 5;
- // padding-right: 0;
-//  max-width: 10vw;
+  // padding-right: 0;
+  //  max-width: 10vw;
   justify-content: flex-end;
 }
 
 .filter-cell.checkbox {
   grid-area: 1 / 1 / 2 / 2;
- // padding-left: 0;
-//  max-width: 1vw;
-//  min-width: 20px;
+  // padding-left: 0;
+  //  max-width: 1vw;
+  //  min-width: 20px;
 }
 
 .filter-cell.count {
@@ -111,7 +108,7 @@
   justify-content: flex-end;
 }
 
-.facetSpinner{
+.facetSpinner {
   display: none;
 }
 
@@ -122,10 +119,10 @@
 }
 
 .hidden {
-  display:none;
+  display: none;
 }
 
-mat-card{
+mat-card {
   padding: 2vh 2vw;
 }
 

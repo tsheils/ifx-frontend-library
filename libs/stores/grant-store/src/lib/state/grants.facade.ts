@@ -6,8 +6,7 @@ import * as GrantsSelectors from './grants.selectors';
 
 @Injectable()
 export class GrantsFacade {
-  constructor(private store: Store<GrantsFeature.GrantsPartialState>) {
-  }
+  constructor(private store: Store<GrantsFeature.GrantsPartialState>) {}
   /**
    * Combine pieces of state using createSelector,
    * and expose them as observables through the facade.

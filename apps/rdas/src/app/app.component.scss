@@ -1,7 +1,5 @@
-
 @use '@angular/material' as mat;
 @import 'libs/styles/src/styles/rdas-theme2';
-
 
 a {
   color: mat.get-color-from-palette($app-primary);
@@ -44,7 +42,7 @@ a:visited {
 
 .white-background {
   background-color: #ffffff;
-  color: #000000
+  color: #000000;
 }
 
 .primary-chip {
@@ -103,8 +101,9 @@ a:visited {
 }
 
 .main-content {
-  padding-top: 15vh;
   background-color: #fafafa;
+  padding-top: 60px;
+  min-height: 60vh;
 }
 
 .search-row {
@@ -131,6 +130,10 @@ img.rdas-logo {
   height: 3rem;
   display: flex;
   padding-right: 2vw;
+}
+
+img.rdas-footer-logo {
+  height: 8rem;
 }
 
 .rdas-tab-label {

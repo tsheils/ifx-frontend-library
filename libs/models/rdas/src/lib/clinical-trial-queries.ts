@@ -1,4 +1,4 @@
-import { gql } from "apollo-angular";
+import { gql } from 'apollo-angular';
 
 export const TRIALFIELDS = `
 fragment trialFields on ClinicalTrial {
@@ -57,95 +57,99 @@ fragment trialFields on ClinicalTrial {
         leadSponsorName: LeadSponsorName
       }
 }
-`
-
-
+`;
 
 export const FETCHTRIALDETAILS = gql`
   query ClinicalTrials($ctwhere: ClinicalTrialWhere) {
     clinicalTrials(where: $ctwhere) {
-     ...trialFields
+      ...trialFields
     }
   }
   ${TRIALFIELDS}
-`
+`;
 export const FETCHTRIALSQUERY = gql`
-query ClinicalTrialsList($gardId: String, $offset: Int, $limit: Int) {
-  clinicalTrials: clinicalTrialsByGardList(gardId: $gardId, offset: $offset, limit: $limit) {
-    ...trialFields
+  query ClinicalTrialsList($gardId: String, $offset: Int, $limit: Int) {
+    clinicalTrials: clinicalTrialsByGardList(
+      gardId: $gardId
+      offset: $offset
+      limit: $limit
+    ) {
+      ...trialFields
+    }
+    count: clinicalTrialsByGardCount(gardId: $gardId)
   }
-  count: clinicalTrialsByGardCount(gardId: $gardId)
-}
-${TRIALFIELDS}
-`
+  ${TRIALFIELDS}
+`;
 
 export const FETCHTRIALSQUERYOLD = gql`
-  query ClinicalTrials($ctwhere: ClinicalTrialWhere, $ctoptions: ClinicalTrialOptions) {
+  query ClinicalTrials(
+    $ctwhere: ClinicalTrialWhere
+    $ctoptions: ClinicalTrialOptions
+  ) {
     clinicalTrials(where: $ctwhere, options: $ctoptions) {
-     ...trialFields
+      ...trialFields
     }
     clinicalTrialsAggregate(where: $ctwhere) {
       count
     }
   }
   ${TRIALFIELDS}
-`
+`;
 
 export const TRIALDETAILSVARIABLES: {
   ctwhere: {
     NCTId: null | undefined | string;
-
-  }
+  };
 } = {
   ctwhere: {
-    NCTId: ""
-  }
-}
+    NCTId: '',
+  },
+};
 
 export const FETCHTRIALSVARIABLES: {
-  gardId?: string,
-  limit?: number,
-  offset?: number
+  gardId?: string;
+  limit?: number;
+  offset?: number;
 } = {
   limit: 10,
-  offset: 0
-}
+  offset: 0,
+};
 export const FETCHTRIALSVARIABLESOLD: {
   ctwhere?: {
     investigatesConditionConditions_SINGLE?: {
       hasAnnotationAnnotationsConnection_SINGLE?: {
         node?: {
           mappedToGardGards_SINGLE?: {
-            GardId?: null | string
-          }
-        }
-      }
-    }
-  },
+            GardId?: null | string;
+          };
+        };
+      };
+    };
+  };
   ctoptions: {
-    sort: [{StartDate?: string }],
-    limit?: number,
-    offset?: number
-  },
+    sort: [{ StartDate?: string }];
+    limit?: number;
+    offset?: number;
+  };
 } = {
   ctwhere: {
     investigatesConditionConditions_SINGLE: {
       hasAnnotationAnnotationsConnection_SINGLE: {
         node: {
           mappedToGardGards_SINGLE: {
-            GardId: null
-          }
-        }
-      }
-      }
+            GardId: null,
+          },
+        },
+      },
     },
+  },
   ctoptions: {
     sort: [
       {
-        StartDate: "DESC"
-      }
+        StartDate: 'DESC',
+      },
     ],
     limit: 10,
-    offset: 0
+    offset: 0,
   },
-}
+};

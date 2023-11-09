@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { readFirst } from '@nx/angular/testing';
@@ -7,14 +8,11 @@ import { readFirst } from '@nx/angular/testing';
 import * as FiltersActions from './filters.actions';
 import { FiltersEffects } from './filters.effects';
 import { FiltersFacade } from './filters.facade';
-import { FiltersEntity } from './filters.models';
 import {
   FILTERS_FEATURE_KEY,
   FiltersState,
-  initialFiltersState,
   filtersReducer,
 } from './filters.reducer';
-import * as FiltersSelectors from './filters.selectors';
 
 interface TestSchema {
   filters: FiltersState;
@@ -23,10 +21,11 @@ interface TestSchema {
 describe('FiltersFacade', () => {
   let facade: FiltersFacade;
   let store: Store<TestSchema>;
-  const createFiltersEntity = (id: string, name = ''): FiltersEntity => ({
-    id,
-    name: name || `name-${id}`,
-  });
+  const createFiltersEntity = (label: string, values = []): FilterCategory =>
+    <FilterCategory>{
+      label,
+      values,
+    };
 
   describe('used in NgModule', () => {
     beforeEach(() => {

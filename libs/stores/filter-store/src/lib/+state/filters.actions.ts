@@ -1,13 +1,12 @@
-import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { createAction, props } from '@ngrx/store';
-
 
 export const searchFilters = createAction(
   '[Filters/API] Search Filters',
   props<{
-    term: string
-    skip?: number
-    limit?: number
+    term: string;
+    skip?: number;
+    limit?: number;
   }>()
 );
 
@@ -34,7 +33,7 @@ export const fetchFilters = createAction(
 
 export const fetchFiltersSuccess = createAction(
   '[Filters/API] fetch Filters Success',
-  props<{ filters: FilterCategory[]}>()
+  props<{ filters: FilterCategory[] }>()
 );
 
 export const fetchFiltersFailure = createAction(

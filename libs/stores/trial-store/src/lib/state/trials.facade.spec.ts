@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { readFirst } from '@nx/angular/testing';
@@ -21,10 +21,11 @@ interface TestSchema {
 describe('TrialsFacade', () => {
   let facade: TrialsFacade;
   let store: Store<TestSchema>;
-  const createTrialsEntity = (id: string, name = ''): ClinicalTrial => (new ClinicalTrial({
-    NCTId :id,
-    name: name || `name-${id}`,
-  }));
+  const createTrialsEntity = (id: string, name = ''): ClinicalTrial =>
+    new ClinicalTrial({
+      NCTId: id,
+      name: name || `name-${id}`,
+    });
 
   describe('used in NgModule', () => {
     beforeEach(() => {

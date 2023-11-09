@@ -3,110 +3,161 @@
     <mat-card>
       <div class="row space-between-row">
         <div class="width-75">
-          <span class="mat-card-title"> {{latestGrant.title}}</span>
+          <span class="mat-card-title"> {{ latestGrant.title }}</span>
         </div>
         <div *ngIf="grant.core_project_num" class="mat-h3">
           <a
             aria-label="Link to project at NIH Reporter"
-            href="https://reporter.nih.gov/project-details/{{grant.core_project_num}}"
+            href="https://reporter.nih.gov/project-details/{{
+              grant.core_project_num
+            }}"
             rel="noreferrer"
             target="_blank"
-          >{{grant.core_project_num}}</a>
+            >{{ grant.core_project_num }}</a
+          >
         </div>
       </div>
       <mat-card-content>
-        <div *ngIf="latestGrant.abstract && latestGrant.abstract.length" class="primary-chip-outlined">Abstract</div>
-        <br>
+        <div
+          *ngIf="latestGrant.abstract && latestGrant.abstract.length"
+          class="primary-chip-outlined"
+        >
+          Abstract
+        </div>
+        <br />
         <div *ngIf="fullAbstract; else truncated">
-          <span class="mat-subtitle-2">{{latestGrant.abstract}}</span>
-          <a (click)="fullAbstract = false" *ngIf="fullAbstract && truncatedAbstract" class="expand-link"> ...less</a>
+          <span class="mat-subtitle-2">{{ latestGrant.abstract }}</span>
+          <a
+            (click)="fullAbstract = false"
+            *ngIf="fullAbstract && truncatedAbstract"
+            class="expand-link"
+          >
+            ...less</a
+          >
         </div>
         <ng-template #truncated>
-          <span class="mat-subtitle-2">{{truncatedAbstract}}</span>
-          <a (click)="fullAbstract = true" *ngIf="!fullAbstract" class="expand-link"> ...more</a>
+          <span class="mat-subtitle-2">{{ truncatedAbstract }}</span>
+          <a
+            (click)="fullAbstract = true"
+            *ngIf="!fullAbstract"
+            class="expand-link"
+          >
+            ...more</a
+          >
         </ng-template>
-        <br>
-        <br>
+        <br />
+        <br />
 
         <div class="grant-content-wrapper">
           <mat-card [appearance]="'outlined'">
             <div class="grant-sub-header bottom-border-accent">Funding</div>
             <div class="primary-chip-outlined">Funding Agency</div>
-            <div class="list-item-content">{{funding ? funding : 'None Listed'}}</div>
+            <div class="list-item-content">
+              {{ funding ? funding : 'None Listed' }}
+            </div>
             <div *ngIf="grant.rd_total_cost">
               <div class="primary-chip-outlined">Total Cost</div>
-              <div class="list-item-content">{{grant.rd_total_cost | currency}}</div>
+              <div class="list-item-content">
+                {{ grant.rd_total_cost | currency }}
+              </div>
             </div>
           </mat-card>
           <mat-card [appearance]="'outlined'">
             <div class="grant-sub-header bottom-border-accent">
-              Patents: {{grant.patents ? grant.patents.length : 0 }}</div>
+              Patents: {{ grant.patents ? grant.patents.length : 0 }}
+            </div>
             <div *ngIf="grant.patents && grant.patents.length">
               <div *ngFor="let patent of grant.patents">
-                <div class="list-item-title">{{patent.title}}</div>
-                <div class="list-item-content">{{patent.org_name}}</div>
+                <div class="list-item-title">{{ patent.title }}</div>
+                <div class="list-item-content">{{ patent.org_name }}</div>
               </div>
             </div>
           </mat-card>
           <mat-card [appearance]="'outlined'">
-            <div class="grant-sub-header bottom-border-accent">Clinical
-              Studies: {{grant.clinicalStudies ? grant.clinicalStudies.length : 0 }}</div>
+            <div class="grant-sub-header bottom-border-accent">
+              Clinical Studies:
+              {{ grant.clinicalStudies ? grant.clinicalStudies.length : 0 }}
+            </div>
             <div *ngIf="grant.clinicalStudies && grant.clinicalStudies.length">
               <div *ngFor="let study of grant.clinicalStudies">
-                <div class="list-item-title">{{study.title}}</div>
-                <div class="list-item-content">{{study.status}}</div>
+                <div class="list-item-title">{{ study.title }}</div>
+                <div class="list-item-content">{{ study.status }}</div>
               </div>
             </div>
           </mat-card>
         </div>
-        <mat-tab-group [backgroundColor]="'accent'" mat-align-tabs="start" mat-stretch-tabs="false">
+        <mat-tab-group
+          [backgroundColor]="'accent'"
+          mat-align-tabs="start"
+          mat-stretch-tabs="false"
+        >
           <mat-tab>
             <ng-template mat-tab-label>
-              <div class="rdas-tab-label">Sub Projects: {{grant.projects?.length}}</div>
+              <div class="rdas-tab-label">
+                Sub Projects: {{ grant.projects?.length }}
+              </div>
             </ng-template>
             <mat-accordion [displayMode]="'flat'" multi>
-              <mat-expansion-panel *ngFor="let grant of grant.projects; let i = index" [expanded]="i === 0">
+              <mat-expansion-panel
+                *ngFor="let grant of grant.projects; let i = index"
+                [expanded]="i === 0"
+              >
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     <div class="mat-mdc-card-title">
-                      {{grant.funding_year}} &nbsp;&nbsp;&nbsp;
-                      {{grant.title}}&nbsp;&nbsp;&nbsp;
-                      {{grant.total_cost | currency}}
+                      {{ grant.funding_year }} &nbsp;&nbsp;&nbsp;
+                      {{ grant.title }}&nbsp;&nbsp;&nbsp;
+                      {{ grant.total_cost | currency }}
                     </div>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="grant-content-wrapper">
                   <mat-card [appearance]="'outlined'">
                     <div class="grant-sub-header bottom-border-primary">
-                      Diseases Studied: {{grant.researchedDiseases ? grant.researchedDiseases.length : 0 }}</div>
+                      Diseases Studied:
+                      {{
+                        grant.researchedDiseases
+                          ? grant.researchedDiseases.length
+                          : 0
+                      }}
+                    </div>
                     <div *ngFor="let disease of grant.researchedDiseases">
-                      <ng-container *ngIf="disease.gardId; then link; else nolink">
+                      <ng-container
+                        *ngIf="disease.gardId; then link; else nolink"
+                      >
                       </ng-container>
                       <ng-template #link>
-                        <a aria-label="Link to disease details page"
-                           href="/disease?id={{disease.gardId}}"
-                           rel="noreferrer"
-                           target="_blank">{{disease.name}}</a>
+                        <a
+                          aria-label="Link to disease details page"
+                          href="/disease?id={{ disease.gardId }}"
+                          rel="noreferrer"
+                          target="_blank"
+                          >{{ disease.name }}</a
+                        >
                       </ng-template>
                       <ng-template #nolink>
-                        {{disease.name}}
+                        {{ disease.name }}
                       </ng-template>
                     </div>
                   </mat-card>
                   <mat-card [appearance]="'outlined'">
                     <div class="grant-sub-header bottom-border-primary">
-                      Annotations: {{grant.annotations ? grant.annotations.length : 0 }}</div>
+                      Annotations:
+                      {{ grant.annotations ? grant.annotations.length : 0 }}
+                    </div>
                     <div *ngIf="grant.annotations && grant.annotations.length">
                       <ncats-frontend-library-annotations-display
-                        [annotations]="grant.annotations"></ncats-frontend-library-annotations-display>
+                        [annotations]="grant.annotations"
+                      ></ncats-frontend-library-annotations-display>
                     </div>
                   </mat-card>
                   <mat-card [appearance]="'outlined'">
                     <div class="grant-sub-header bottom-border-primary">
-                      Key Terms: {{grant.terms ? grant.terms.length : 0 }}</div>
-                    <br>
+                      Key Terms: {{ grant.terms ? grant.terms.length : 0 }}
+                    </div>
+                    <br />
                     <div *ngFor="let term of grant.terms">
-                      {{term}}
+                      {{ term }}
                     </div>
                   </mat-card>
                 </div>
@@ -115,8 +166,6 @@
           </mat-tab>
         </mat-tab-group>
       </mat-card-content>
-
-
     </mat-card>
   </div>
 </div>

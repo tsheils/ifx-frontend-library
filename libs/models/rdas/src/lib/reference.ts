@@ -5,9 +5,11 @@ export class Reference {
   constructor(obj: Partial<Reference> = {}) {
     Object.assign(this, obj);
 
-    if(obj.code) {
+    if (obj.code) {
       const split = obj.code.split(':');
-      this.url = REFERENCELOOKUP.filter(ref => ref.origin == split[0])[0].url.concat(split[1])
+      this.url = REFERENCELOOKUP.filter(
+        (ref) => ref.origin == split[0]
+      )[0].url.concat(split[1]);
     }
   }
 
@@ -16,12 +18,12 @@ export class Reference {
   }
 }
 
-
-
- const REFERENCELOOKUP = [
-   {origin: 'HPO', url: "https://hpo.jax.org/app/browse/term/"},
-   {origin: 'OMIM', url: "https://www.omim.org/entry/"},
-   {origin: 'ORPHA', url: "https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Expert="},
-   {origin: 'PMID', url: "https://pubmed.ncbi.nlm.nih.gov/"}
-
- ]
+const REFERENCELOOKUP = [
+  { origin: 'HPO', url: 'https://hpo.jax.org/app/browse/term/' },
+  { origin: 'OMIM', url: 'https://www.omim.org/entry/' },
+  {
+    origin: 'ORPHA',
+    url: 'https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Expert=',
+  },
+  { origin: 'PMID', url: 'https://pubmed.ncbi.nlm.nih.gov/' },
+];

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { CoreProject } from "@ncats-frontend-library/models/rdas";
+import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
 import { readFirst } from '@nx/angular/testing';
@@ -21,11 +21,11 @@ interface TestSchema {
 describe('GrantsFacade', () => {
   let facade: GrantsFacade;
   let store: Store<TestSchema>;
-  const createGrantsEntity = (id: string, name = ''): CoreProject => ( new CoreProject({
-    core_project_num: id,
-    name: name || `name-${id}`,
-  })
-  );
+  const createGrantsEntity = (id: string, name = ''): CoreProject =>
+    new CoreProject({
+      core_project_num: id,
+      name: name || `name-${id}`,
+    });
 
   describe('used in NgModule', () => {
     beforeEach(() => {

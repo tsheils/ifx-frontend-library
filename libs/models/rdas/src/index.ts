@@ -11,4 +11,3 @@ export * from './lib/phenotype';
 export * from './lib/phenotype-queries';
 export * from './lib/project';
 export * from './lib/project-queries';
-

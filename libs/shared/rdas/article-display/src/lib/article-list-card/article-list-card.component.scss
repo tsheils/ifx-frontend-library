@@ -10,7 +10,7 @@ ncats-frontend-library-article-list-card {
   margin-bottom: 2vh;
   border-bottom: 2px solid mat.get-color-from-palette($app-accent);
   //chrome
-  ::-webkit-scrollbar{
+  ::-webkit-scrollbar {
     display: none;
   }
 
@@ -38,5 +38,4 @@ ncats-frontend-library-article-list-card {
   .annotation-term {
     padding-left: 1vw;
   }
-
 }

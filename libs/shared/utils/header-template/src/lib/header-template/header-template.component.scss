@@ -1,7 +1,7 @@
 ncats-frontend-library-header-template {
   .toolbar-template {
     position: fixed;
-    z-index: 667;
+    // z-index: 667;
   }
 
   img.toolbar-template-logo {
@@ -17,16 +17,16 @@ ncats-frontend-library-header-template {
     text-decoration: underline;
   }
 
-  .mobile-menu-container {
-    z-index: 2;
-  }
-
-  .menu-button {
-    display: none;
-  }
-
   @media only screen and (max-width: 768px) {
     .menu-button {
       display: block;
     }
-  }}
+    .toolbar-template {
+      justify-content: end;
+    }
+
+    .menu-content {
+      display: none;
+    }
+  }
+}

@@ -1,71 +1,130 @@
-<div class="row space-around-row top-align">
-  <div class="width-25">
-    <ncats-frontend-library-shared-utils-filter-panel
-      *ngFor = "let filter of filters"
-      [filter]="filter"
-      (filterSelectionChange)="filterSelectionChange($event)"
-      (filterChange)="filterChange($event)"
-    ></ncats-frontend-library-shared-utils-filter-panel>
-      <h2>Filter Diseases by Hierarchy</h2>
-    <ncats-frontend-library-rdas-tree *ngIf="diseaseTree" (leafExpand)="treeExpand($event)" [data]="diseaseTree"></ncats-frontend-library-rdas-tree>
-   </div>
-   <div class="width-70">
-     <div class="row centered-row">
-       <div class="width-75">
-       <ncats-frontend-library-rdas-search (diseaseSelect)="selectDisease($event)"></ncats-frontend-library-rdas-search>
-       </div>
+<mat-drawer-container class="browse-page">
+  <mat-drawer
+    #filtersidenav
+    class="filters-menu-panel"
+    [position]="'start'"
+    [opened]="!mobile"
+    [mode]="'side'"
+  >
+    <div class="row right-justified-row">
+      <button
+        [color]="'primary'"
+        mat-icon-button
+        class="close-button"
+        aria-label="close filters"
+        (click)="filtersidenav.toggle()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
     </div>
-       <ncats-frontend-library-shared-utils-selected-filter-list [filters]="selectedValues" (filterChange)="filterSelectionChange($event)" ></ncats-frontend-library-shared-utils-selected-filter-list>
+    <mat-tab-group>
+      <mat-tab label="Filters">
+        <ncats-frontend-library-shared-utils-filter-panel
+          *ngFor="let filter of filters"
+          [filter]="filter"
+          (filterSelectionChange)="filterSelectionChange($event)"
+          (filterChange)="filterChange($event)"
+        ></ncats-frontend-library-shared-utils-filter-panel>
+      </mat-tab>
+      <mat-tab label="Hierarchy">
+        <ncats-frontend-library-rdas-tree
+          *ngIf="diseaseTree"
+          (leafExpand)="treeExpand($event)"
+          [data]="diseaseTree"
+        ></ncats-frontend-library-rdas-tree>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-drawer>
+  <mat-drawer-content class="drawer-container-content">
+    <div class="row" *ngIf="!filtersidenav.opened">
+      <button
+        [color]="'primary'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="filtersidenav.toggle()"
+      >
+        Filters <mat-icon>filter_list</mat-icon>
+      </button>
+    </div>
+    <div class="row centered-row">
+      <div class="width-75">
+        <ncats-frontend-library-rdas-search
+          (diseaseSelect)="selectDisease($event)"
+        ></ncats-frontend-library-rdas-search>
+      </div>
+    </div>
+    <ncats-frontend-library-shared-utils-selected-filter-list
+      [filters]="selectedValues"
+      (filterChange)="filterSelectionChange($event)"
+    ></ncats-frontend-library-shared-utils-selected-filter-list>
 
-     <div class="row space-between-row">
-       <div>
-  <mat-form-field appearance="outline" subscriptSizing="dynamic" [color]="'primary'">
-  <mat-label>Sort</mat-label>
-  <mat-select (selectionChange)="changeSort($event)" [value]=this.sort>
-    <mat-option [value] ="'COUNT_ARTICLES'">Articles</mat-option>
-    <mat-option [value] ="'COUNT_PROJECTS'">Projects</mat-option>
-    <mat-option [value] ="'COUNT_TRIALS'">Clinical Trials</mat-option>
-    <mat-option [value] ="'COUNT_GENES'">Genes</mat-option>
-    <mat-option [value] ="'COUNT_PHENOTYPES'">Phenotypes</mat-option>
-    <mat-option [value] ="'GardName'">Name (A-Z)</mat-option>
-  </mat-select>
-  </mat-form-field>
-       </div>
-       <div class="row centered">
-       <button
-         mat-stroked-button
-         class="tool-button list-download"
-         (click)="downloadData()"
-         matTooltip="Download Data"
-         color="accent"
-         *ngIf="showDownload"
-       >
-         <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
-       </button>
-    <mat-paginator *ngIf="page"
-      [pageSize]="page.pageSize"
-      [pageIndex]="page.pageIndex"
-      [pageSizeOptions]="[10, 25, 50]"
-      (page)="paginationChanges($event)"
-      [length] = "page.total"
-                   class="browse-paginator"
-    ></mat-paginator>
-       </div>
-</div>
+    <div class="row space-between-row">
+      <div>
+        <mat-form-field
+          appearance="outline"
+          subscriptSizing="dynamic"
+          [color]="'primary'"
+        >
+          <mat-label>Sort</mat-label>
+          <mat-select
+            (selectionChange)="changeSort($event)"
+            [value]="this.sort"
+          >
+            <mat-option [value]="'COUNT_ARTICLES'">Articles</mat-option>
+            <mat-option [value]="'COUNT_PROJECTS'">Projects</mat-option>
+            <mat-option [value]="'COUNT_TRIALS'">Clinical Trials</mat-option>
+            <mat-option [value]="'COUNT_GENES'">Genes</mat-option>
+            <mat-option [value]="'COUNT_PHENOTYPES'">Phenotypes</mat-option>
+            <mat-option [value]="'GardName'">Name (A-Z)</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row centered">
+        <button
+          mat-stroked-button
+          class="tool-button list-download"
+          (click)="downloadData()"
+          matTooltip="Download Data"
+          color="accent"
+          *ngIf="showDownload"
+        >
+          <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+        </button>
+        <mat-paginator
+          *ngIf="page"
+          [pageSize]="page.pageSize"
+          [pageIndex]="page.pageIndex"
+          [pageSizeOptions]="[10, 25, 50]"
+          (page)="paginationChanges($event)"
+          [length]="page.total"
+          class="browse-paginator"
+        ></mat-paginator>
+      </div>
+    </div>
     <div class="row spinner-holder width-70">
-    <ncats-frontend-library-loading-spinner [isLoaded]="loaded"></ncats-frontend-library-loading-spinner>
+      <ncats-frontend-library-loading-spinner
+        [isLoaded]="loaded"
+      ></ncats-frontend-library-loading-spinner>
     </div>
-    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loaded" class="fill-container"></ncats-frontend-library-disease-list>
-    <div class="row right-justified-row ">
-      <mat-paginator *ngIf="page"
-                     [pageSize]="page.pageSize"
-                     [pageIndex]="page.pageIndex"
-                     [hidePageSize]=" true"
-                     (page)="paginationChanges($event)"
-                     [length] = "page.total"
-                     class="browse-paginator"
+    <ncats-frontend-library-disease-list
+      [diseases]="diseases"
+      [loading]="loaded"
+      class="fill-container"
+    ></ncats-frontend-library-disease-list>
+    <div class="row right-justified-row">
+      <mat-paginator
+        *ngIf="page"
+        [pageSize]="page.pageSize"
+        [pageIndex]="page.pageIndex"
+        [hidePageSize]="true"
+        (page)="paginationChanges($event)"
+        [length]="page.total"
+        class="browse-paginator"
       ></mat-paginator>
-      <ncats-frontend-library-scroll-to-top [color]="'accent'"></ncats-frontend-library-scroll-to-top>
+      <ncats-frontend-library-scroll-to-top
+        [color]="'accent'"
+      ></ncats-frontend-library-scroll-to-top>
     </div>
-  </div>
-</div>
+  </mat-drawer-content>
+</mat-drawer-container>

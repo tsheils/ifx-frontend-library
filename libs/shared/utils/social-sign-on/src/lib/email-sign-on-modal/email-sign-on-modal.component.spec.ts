@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from "@angular/forms";
-import { MatButtonModule } from "@angular/material/button";
-import { MatDialog, MatDialogRef } from "@angular/material/dialog";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatIconModule } from "@angular/material/icon";
-import { MatInputModule } from "@angular/material/input";
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
-import { of } from "rxjs";
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
+import { of } from 'rxjs';
 
 import { EmailSignOnModalComponent } from './email-sign-on-modal.component';
 
@@ -24,14 +24,13 @@ describe('EmailSignOnModalComponent', () => {
         MatInputModule,
         MatIconModule,
         MatButtonModule,
-        BrowserAnimationsModule
+        BrowserAnimationsModule,
       ],
       providers: [
-        {provide: MatDialog, useValue: {}},
-        {provide: MatDialogRef, useValue: {}},
-        {provide: UsersFacade, useValue: {error$: of()}},
-
-      ]
+        { provide: MatDialog, useValue: {} },
+        { provide: MatDialogRef, useValue: {} },
+        { provide: UsersFacade, useValue: { error$: of() } },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EmailSignOnModalComponent);

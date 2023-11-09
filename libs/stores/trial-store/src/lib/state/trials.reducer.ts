@@ -1,4 +1,4 @@
-import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
@@ -20,7 +20,7 @@ export interface TrialsPartialState {
 
 export const trialsAdapter: EntityAdapter<ClinicalTrial> =
   createEntityAdapter<ClinicalTrial>({
-    selectId: trial => trial.NCTId
+    selectId: (trial) => trial.NCTId,
   });
 
 export const initialTrialsState: TrialsState = trialsAdapter.getInitialState({
@@ -40,16 +40,21 @@ const reducer = createReducer(
   ),
 
   on(TrialsActions.fetchTrialSuccess, (state, { trial }) =>
-    trialsAdapter.setOne(trial, { ...state, selectedId: trial.NCTId, loaded: true })
+    trialsAdapter.setOne(trial, {
+      ...state,
+      selectedId: trial.NCTId,
+      loaded: true,
+    })
   ),
 
   on(
     TrialsActions.loadTrialsFailure,
     TrialsActions.fetchTrialFailure,
     (state, { error }) => ({
-    ...state,
-    error,
-  }))
+      ...state,
+      error,
+    })
+  )
 );
 
 export function trialsReducer(state: TrialsState | undefined, action: Action) {

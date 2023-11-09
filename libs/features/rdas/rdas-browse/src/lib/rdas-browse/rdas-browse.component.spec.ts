@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { SharedRdasDiseaseDisplayModule } from "@ncats-frontend-library/shared/rdas/disease-display";
-import { DISEASES_FEATURE_KEY, DiseasesFacade, reducer } from "@ncats-frontend-library/stores/disease-store";
-import { StoreModule } from "@ngrx/store";
-import { Apollo } from "apollo-angular";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {
+  DISEASES_FEATURE_KEY,
+  DiseasesFacade,
+  reducer,
+} from '@ncats-frontend-library/stores/disease-store';
+import { StoreModule } from '@ngrx/store';
+import { Apollo } from 'apollo-angular';
 
 import { RdasBrowseComponent } from './rdas-browse.component';
 
@@ -13,19 +16,15 @@ describe('RdasBrowseComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RdasBrowseComponent ],
+      declarations: [],
       imports: [
+        RdasBrowseComponent,
         BrowserAnimationsModule,
-        SharedRdasDiseaseDisplayModule,
         StoreModule.forRoot({}),
-        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer)
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer),
       ],
-      providers: [
-        Apollo,
-        DiseasesFacade
-      ]
-    })
-    .compileComponents();
+      providers: [Apollo, DiseasesFacade],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RdasBrowseComponent);
     component = fixture.componentInstance;
