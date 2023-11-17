@@ -241,7 +241,7 @@ export const FETCHARTICLEDETAILS = gql`
       }
       diseases: gardsmentionedIn {
         gardId: GardId
-        name
+        name: GardName
       }
       sources: fullTextUrlsContentFor {
         availability
