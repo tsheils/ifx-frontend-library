@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ScrollDispatcher } from "@angular/cdk/overlay";
+import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -185,6 +185,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           >();
           res.forEach((filter) => tempMap.set(filter.label, filter));
           this.filters = [...tempMap.values()];
+          this.changeRef.markForCheck()
         }
       });
   }
@@ -219,6 +220,15 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       },
     };
     this.router.navigate(['/disease'], navigationExtras);
+  }
+
+  searchDiseaseString(event: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        q: event,
+      },
+    };
+    this.router.navigate(['/diseases'], navigationExtras);
   }
 
   filterChange(event: { label: string; term?: string; page?: number }): void {

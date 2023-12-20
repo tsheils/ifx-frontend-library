@@ -1,5 +1,5 @@
 import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
-import { Page } from '@ncats-frontend-library/models/utils';
+import { FilterCategory, Page } from "@ncats-frontend-library/models/utils";
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 
@@ -17,6 +17,7 @@ export interface State extends EntityState<Disease> {
   diseases?: Disease[];
   tree?: DiseaseNode[];
   subscriptions?: Disease[];
+  diseaseFilters?: FilterCategory[];
 }
 
 export interface DiseasesPartialState {
@@ -71,6 +72,12 @@ export const diseasesReducer = createReducer(
   on(DiseasesActions.fetchDiseaseListSuccess, (state, { diseases }) => ({
     ...state,
     subscriptions: diseases,
+    loaded: true,
+  })),
+
+  on(DiseasesActions.fetchDiseaseFiltersSuccess, (state, { filters }) => ({
+    ...state,
+    diseaseFilters: filters,
     loaded: true,
   })),
 

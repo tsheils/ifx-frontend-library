@@ -4,6 +4,7 @@ import {
   ArticlesEffects,
   articlesReducer,
 } from '@ncats-frontend-library/stores/article-store';
+import { DiseasesEffects, diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
 import {
   GrantsEffects,
   grantsReducer,
@@ -12,17 +13,14 @@ import {
   TrialsEffects,
   trialsReducer,
 } from '@ncats-frontend-library/stores/trial-store';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
+import { USERS_FEATURE_KEY, UsersFacade, usersReducer } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
+import { provideState, StoreModule } from "@ngrx/store";
 import { environment } from '../environments/environment';
 
 export const routes: Routes = [
   {
     path: '',
-    //  redirectTo: 'diseases',
-    // pathMatch: 'full',
-    providers: [UsersFacade],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadChildren: () =>
       import('@ncats-frontend-library/features/rdas/rdas-home').then(
@@ -41,12 +39,21 @@ export const routes: Routes = [
   {
     path: 'disease',
     pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    runGuardsAndResolvers: 'pathParamsChange',
+    providers: [
+      importProvidersFrom(
+        // register feature reducer
+        StoreModule.forFeature('diseaseStore', diseasesReducer),
+        // run feature effects
+        EffectsModule.forFeature([DiseasesEffects])
+      ),
+    ],
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-disease-page').then(
         (m) => m.RdasDiseasePageComponent
       ),
-  },{
+  },
+  {
     path: 'about',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
@@ -120,7 +127,9 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
-      instance: `${environment.baseUrl}${environment.production ? '/' : ':4000/'}api/diseases`,
+      instance: `${environment.baseUrl}${
+        environment.production ? '/' : ':4000/'
+      }api/diseases`,
     },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -133,7 +142,9 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
-      instance: `${environment.baseUrl}${environment.production ? '/' : ':4001/'}api/articles`,
+      instance: `${environment.baseUrl}${
+        environment.production ? '/' : ':4001/'
+      }api/articles`,
     },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -146,7 +157,9 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
-      instance: `${environment.baseUrl}${environment.production ? '/' : ':4002/'}api/grants`,
+      instance: `${environment.baseUrl}${
+        environment.production ? '/' : ':4002/'
+      }api/grants`,
     },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
@@ -159,7 +172,9 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
-      instance: `${environment.baseUrl}${environment.production ? '/' : ':4003/'}api/trials`,
+      instance: `${environment.baseUrl}${
+        environment.production ? '/' : ':4003/'
+      }api/trials`,
     },
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries

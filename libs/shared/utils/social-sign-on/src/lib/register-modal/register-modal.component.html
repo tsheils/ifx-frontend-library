@@ -13,9 +13,9 @@
         [placeholder]="'Email Sign in'"
         [formControlName]="'email'"
       />
-      <mat-error *ngIf="registerForm.controls['email'].invalid">{{
-        getEmailErrorMessage()
-      }}</mat-error>
+      @if (registerForm.controls['email'].invalid) {
+      <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
   </div>
   <div class="row centered-row">
@@ -26,9 +26,9 @@
         [placeholder]="'Password'"
         [formControlName]="'pw'"
       />
-      <mat-error *ngIf="registerForm.controls['pw'].invalid">{{
-        getPasswordErrorMessage()
-      }}</mat-error>
+      @if (registerForm.controls['pw'].invalid) {
+      <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
   </div>
   <div class="row centered-row">
@@ -39,9 +39,9 @@
         [placeholder]="'Verify Password'"
         [formControlName]="'pwVerify'"
       />
-      <mat-error *ngIf="registerForm.controls['pwVerify'].invalid">{{
-        getPasswordVerifyErrorMessage()
-      }}</mat-error>
+      @if (registerForm.controls['pwVerify'].invalid) {
+      <mat-error>{{ getPasswordVerifyErrorMessage() }}</mat-error>
+      }
     </mat-form-field>
   </div>
 </form>

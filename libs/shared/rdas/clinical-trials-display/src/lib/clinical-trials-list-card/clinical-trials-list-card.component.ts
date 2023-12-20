@@ -1,7 +1,6 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-list-card',
@@ -9,7 +8,7 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./clinical-trials-list-card.component.scss'],
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [NgIf, MatCardModule],
+  imports: [MatCardModule],
 })
 export class ClinicalTrialsListCardComponent {
   @Input() trial!: ClinicalTrial;

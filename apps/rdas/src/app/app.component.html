@@ -1,75 +1,78 @@
 <div class="content-wrapper" #contentWrapper cdkScrollable>
   <mat-sidenav-container class="mobile-menu-container">
     <header>
-      <ng-container *ngIf="mobile; else fullScreen">
-        <ncats-frontend-library-mobile-header-template
-          [links]="links"
-          #appHeader
-        >
-          <div left-options>
-            <a routerLink="/">
+      @if (mobile) {
+
+      <ncats-frontend-library-mobile-header-template [links]="links" #appHeader>
+        <div left-options>
+          <a routerLink="/">
+            <img
+              src="/assets/rdas_final_gradient_no_logo_small.svg"
+              alt="Rare Disease Alert System"
+              class="rdas-logo"
+            />
+          </a>
+        </div>
+        <div icon>
+          <a routerLink="/">
+            <img
+              src="/assets/rdas_final_gradient_no_logo_small.svg"
+              alt="Rare Disease Alert System"
+              class="rdas-logo"
+            />
+          </a>
+        </div>
+        <div class="right-options">
+          <ncats-frontend-library-rdas-search
+            class="header-search"
+            (diseaseSelect)="selectDisease($event)"
+            (diseaseSearch)="searchDiseaseString($event)"
+          ></ncats-frontend-library-rdas-search>
+          <ncats-frontend-library-social-sign-on-button
+            [user]="user"
+          ></ncats-frontend-library-social-sign-on-button>
+        </div>
+      </ncats-frontend-library-mobile-header-template>
+
+      } @else {
+
+      <ncats-frontend-library-header-template [links]="links">
+        <div class="left-options">
+          <a routerLink="/">
+            <picture>
+              <source
+                srcset="/assets/rdas_final_gradient_no_logo_small.webp"
+                type="image/webp"
+              />
+              <source
+                srcset="/assets/rdas_final_gradient_no_logo_small.svg"
+                type="image/svg"
+              />
               <img
-                src="/assets/rdas_final_gradient.svg"
-                alt="rdas logo"
+                src="/assets/rdas_final_gradient_no_logo_small.png"
+              alt="Rare Disease Alert System"
                 class="rdas-logo"
               />
-            </a>
-          </div>
-          <div icon>
-            <a routerLink="/">
-              <img
-                src="/assets/rdas_final_gradient.svg"
-                alt="rdas logo"
-                class="rdas-logo"
-              />
-            </a>
-          </div>
-          <div class="right-options">
-            <ncats-frontend-library-rdas-search
-              class="header-search"
-              (diseaseSelect)="selectDisease($event)"
-            ></ncats-frontend-library-rdas-search>
-            <ncats-frontend-library-social-sign-on-button
-              [user]="user"
-            ></ncats-frontend-library-social-sign-on-button>
-          </div>
-        </ncats-frontend-library-mobile-header-template>
-      </ng-container>
+            </picture>
+          </a>
+        </div>
+        <div class="right-options">
+          @if (!hideSearch) {
+          <ncats-frontend-library-rdas-search
+            class="header-search"
+            (diseaseSelect)="selectDisease($event)"
+            (diseaseSearch)="searchDiseaseString($event)"
+          ></ncats-frontend-library-rdas-search>
+          }
+          <ncats-frontend-library-social-sign-on-button
+            [user]="user"
+          ></ncats-frontend-library-social-sign-on-button>
+        </div>
+      </ncats-frontend-library-header-template>
+
+      }
 
       <!-- Custom content -->
-      <ng-template #fullScreen>
-        <ncats-frontend-library-header-template [links]="links">
-          <div class="left-options">
-            <a routerLink="/">
-              <picture>
-                <source
-                  srcset="/assets/rdas_final_gradient.webp"
-                  type="image/webp"
-                />
-                <source
-                  srcset="/assets/rdas_final_gradient.svg"
-                  type="image/svg"
-                />
-                <img
-                  src="/assets/rdas_final_gradient.png"
-                  alt="rdas logo"
-                  class="rdas-logo"
-                />
-              </picture>
-            </a>
-          </div>
-          <div class="right-options">
-            <ncats-frontend-library-rdas-search
-              *ngIf="!hideSearch"
-              class="header-search"
-              (diseaseSelect)="selectDisease($event)"
-            ></ncats-frontend-library-rdas-search>
-            <ncats-frontend-library-social-sign-on-button
-              [user]="user"
-            ></ncats-frontend-library-social-sign-on-button>
-          </div>
-        </ncats-frontend-library-header-template>
-      </ng-template>
 
       <!--
 -->
@@ -86,17 +89,11 @@
       <ncats-frontend-library-footer-template>
         <div class="app-description">
           <picture>
-            <source
-              srcset="/assets/final_rdas_mono.webp"
-              type="image/webp"
-            />
-            <source
-              srcset="/assets/final_rdas_mono.svg"
-              type="image/svg"
-            />
+            <source srcset="/assets/rdas_final_gradient_no_logo_small_white.webp" type="image/webp" />
+            <source srcset="/assets/rdas_final_gradient_no_logo_small_white.svg" type="image/svg" />
             <img
-              src="/assets/final_rdas_mono.png"
-              alt="rdas all-white logo"
+              src="/assets/rdas_final_gradient_no_logo_small_white.png"
+              alt="Rare Disease Alert System"
               class="rdas-footer-logo"
             />
           </picture>

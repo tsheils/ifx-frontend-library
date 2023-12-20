@@ -14,7 +14,7 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { NgFor, NgIf, NgClass } from '@angular/common';
+import { NgClass } from '@angular/common';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
 @Component({
@@ -26,8 +26,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   standalone: true,
   imports: [
     MatToolbarModule,
-    NgFor,
-    NgIf,
     MatButtonModule,
     MatMenuModule,
     RouterLink,

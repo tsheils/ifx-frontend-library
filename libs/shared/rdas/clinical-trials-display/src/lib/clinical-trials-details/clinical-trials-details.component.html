@@ -7,7 +7,8 @@
             {{ trial.briefTitle ? trial.briefTitle : trial.officialTitle }}
           </span>
         </div>
-        <div class="mat-h3" *ngIf="trial.NCTId">
+        @if (trial.NCTId) {
+        <div class="mat-h3">
           <a
             href="https://clinicaltrials.gov/ct2/show/{{ trial.NCTId }}"
             target="_blank"
@@ -16,6 +17,7 @@
             >{{ trial.NCTId }}</a
           >
         </div>
+        }
       </div>
       <mat-card-content>
         <div class="row space-between-row">
@@ -49,34 +51,27 @@
             <div class="list-item-content">{{ trial.lastUpdatePostDate }}</div>
           </div>
         </div>
-
-        <div
-          *ngIf="trial.briefSummary && trial.briefSummary.length"
-          class="primary-chip-outlined"
-        >
-          Summary
+        <div>
+          @if (trial.briefSummary && trial.briefSummary.length) {
+          <div class="primary-chip-outlined">Summary</div>
+          }
+          <br />
+          @if (fullSummary) {
+          <div>
+            <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
+            @if (fullSummary && truncatedSummary) {
+            <a (click)="fullSummary = false" class="expand-link">...less</a>
+            }
+          </div>
+          } @else {
+          <div #truncated>
+            <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
+            @if (!fullSummary) {
+            <a (click)="fullSummary = false" class="expand-link">...more</a>
+            }
+          </div>
+          }
         </div>
-        <br />
-        <div *ngIf="fullSummary; else truncated">
-          <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
-          <a
-            (click)="fullSummary = false"
-            *ngIf="fullSummary && truncatedSummary"
-            class="expand-link"
-          >
-            ...less</a
-          >
-        </div>
-        <ng-template #truncated>
-          <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
-          <a
-            (click)="fullSummary = true"
-            *ngIf="!fullSummary"
-            class="expand-link"
-          >
-            ...more</a
-          >
-        </ng-template>
         <br />
         <br />
 
@@ -92,63 +87,54 @@
             <br />
             <br />
             <div class="project-design-wrapper">
-              <mat-card
-                *ngFor="let studyDesign of trial.studyDesigns; let i = index"
-              >
+              @for (studyDesign of trial.studyDesigns; track studyDesign; let i
+              = $index) {
+              <mat-card>
                 <h2>Design {{ i + 1 }}</h2>
-                <div *ngIf="studyDesign.designPrimaryPurpose">
+                @if (studyDesign.designPrimaryPurpose) {
+                <div>
                   <div class="accent-chip-outlined">Primary Purpose</div>
                   <div class="list-item-content">
                     {{ studyDesign.designPrimaryPurpose }}
                   </div>
                 </div>
+                } @if (studyDesign.designInterventionModel ||
+                studyDesign.designInterventionModelDescription) {
+                <div class="accent-chip-outlined">Intervention Model</div>
+                } @if (studyDesign.designInterventionModel) {
                 <div>
-                  <div
-                    class="accent-chip-outlined"
-                    *ngIf="
-                      studyDesign.designInterventionModel ||
-                      studyDesign.designInterventionModelDescription
-                    "
-                  >
-                    Intervention Model
-                  </div>
-                </div>
-                <div *ngIf="studyDesign.designInterventionModel">
                   <b>Model: &nbsp;</b
                   ><span>{{ studyDesign.designInterventionModel }}</span>
                 </div>
-                <div *ngIf="studyDesign.designInterventionModelDescription">
-                  <b>Description: &nbsp;</b
-                  ><span>{{
+                } @if (studyDesign.designInterventionModelDescription) {
+                <div>
+                  <b>Description: &nbsp;</b>
+                  <span>{{
                     studyDesign.designInterventionModelDescription
                   }}</span>
                 </div>
+                } @if (studyDesign.designMasking ||
+                studyDesign.designMaskingDescription ) {
+                <div class="accent-chip-outlined">Design Masking</div>
+                } @if (studyDesign.designMasking) {
                 <div>
-                  <div
-                    class="accent-chip-outlined"
-                    *ngIf="
-                      studyDesign.designMasking ||
-                      studyDesign.designMaskingDescription
-                    "
-                  >
-                    Design Masking
-                  </div>
+                  <b>Masking: &nbsp;</b>
+                  <span>{{ studyDesign.designMasking }}</span>
                 </div>
-                <div *ngIf="studyDesign.designMasking">
-                  <b>Masking: &nbsp;</b
-                  ><span>{{ studyDesign.designMasking }}</span>
+                } @if (studyDesign.designMaskingDescription) {
+                <div>
+                  <b>Description: &nbsp;</b>
+                  <span>{{ studyDesign.designMaskingDescription }}</span>
                 </div>
-                <div *ngIf="studyDesign.designMaskingDescription">
-                  <b>Description: &nbsp;</b
-                  ><span>{{ studyDesign.designMaskingDescription }}</span>
-                </div>
-                <div *ngIf="studyDesign.designAllocation">
+                } @if (studyDesign.designAllocation) {
+                <div>
                   <div class="accent-chip-outlined">Design Allocation</div>
                   <div class="list-item-content">
                     {{ studyDesign.designAllocation }}
                   </div>
                 </div>
-                <div *ngIf="studyDesign.designObservationalModel">
+                } @if (studyDesign.designObservationalModel) {
+                <div>
                   <div class="accent-chip-outlined">
                     Design Observational Model
                   </div>
@@ -156,7 +142,8 @@
                     {{ studyDesign.designObservationalModel }}
                   </div>
                 </div>
-                <div *ngIf="studyDesign.designTimePerspective">
+                } @if (studyDesign.designTimePerspective) {
+                <div>
                   <div class="accent-chip-outlined">
                     Design Time Perspective
                   </div>
@@ -164,44 +151,42 @@
                     {{ studyDesign.designTimePerspective }}
                   </div>
                 </div>
-                <div *ngIf="studyDesign.samplingMethod">
+                } @if (studyDesign.samplingMethod) {
+                <div>
                   <div class="accent-chip-outlined">Sampling Method</div>
                   <div class="list-item-content">
                     {{ studyDesign.samplingMethod }}
                   </div>
                 </div>
+                } @if ( studyDesign.primaryOutcomeDescription ||
+                studyDesign.primaryOutcomeMeasure ||
+                studyDesign.primaryOutcomeTimeFrame ) {
+                <div class="accent-chip-outlined">Outcome</div>
+                } @if (studyDesign.primaryOutcomeDescription) {
                 <div>
-                  <div
-                    class="accent-chip-outlined"
-                    *ngIf="
-                      studyDesign.primaryOutcomeDescription ||
-                      studyDesign.primaryOutcomeMeasure ||
-                      studyDesign.primaryOutcomeTimeFrame
-                    "
-                  >
-                    Outcome
-                  </div>
+                  <b>Description: &nbsp;</b>
+                  <span>{{ studyDesign.primaryOutcomeDescription }}</span>
                 </div>
-                <div *ngIf="studyDesign.primaryOutcomeDescription">
-                  <b>Description: &nbsp;</b
-                  ><span>{{ studyDesign.primaryOutcomeDescription }}</span>
+                } @if (studyDesign.primaryOutcomeMeasure) {
+                <div>
+                  <b>Measure: &nbsp;</b>
+                  <span>{{ studyDesign.primaryOutcomeMeasure }}</span>
                 </div>
-                <div *ngIf="studyDesign.primaryOutcomeMeasure">
-                  <b>Measure: &nbsp;</b
-                  ><span>{{ studyDesign.primaryOutcomeMeasure }}</span>
+                } @if (studyDesign.primaryOutcomeTimeFrame) {
+                <div>
+                  <b>Timeframe: &nbsp;</b>
+                  <span>{{ studyDesign.primaryOutcomeTimeFrame }}</span>
                 </div>
-                <div *ngIf="studyDesign.primaryOutcomeTimeFrame">
-                  <b>Timeframe: &nbsp;</b
-                  ><span>{{ studyDesign.primaryOutcomeTimeFrame }}</span>
-                </div>
-
-                <div *ngIf="studyDesign.detailedDescription">
+                } @if (studyDesign.detailedDescription) {
+                <div>
                   <div class="accent-chip-outlined">Detailed Description</div>
                   <div class="list-item-content">
                     {{ studyDesign.detailedDescription }}
                   </div>
                 </div>
+                }
               </mat-card>
+              }
             </div>
           </mat-tab>
           <mat-tab
@@ -211,25 +196,29 @@
             "
           >
             <br />
-            <div *ngFor="let participant of trial.participantInfo">
+            @for (participant of trial.participantInfo; track participant) {
+            <div>
+              @for (criteria of participant.eligibilityCriteriaList; track
+              criteria) {
               <div
-                *ngFor="let criteria of participant.eligibilityCriteriaList"
                 class="eligibility-text"
                 [ngClass]="{ isHeader: isHeader(criteria) }"
               >
                 {{ criteria }}
               </div>
+              }
             </div>
+            }
           </mat-tab>
           <mat-tab
             [label]="getLabel('studyDiseases')"
             [disabled]="!trial.studyDiseases || trial.studyDiseases.length <= 1"
           >
             <mat-list>
-              <mat-list-item *ngFor="let disease of trial.studyDiseases">
-                <ng-container *ngIf="disease.gardId; then link; else nolink">
-                </ng-container>
-                <ng-template #link>
+              @for (disease of trial.studyDiseases; track disease) {
+              <mat-list-item>
+                @if (disease.gardId) {
+                <div #link>
                   <a
                     href="/disease?id={{ disease.gardId }}"
                     target="_blank"
@@ -237,11 +226,14 @@
                     aria-label="Link to disease details page"
                     >{{ disease.name }}</a
                   >
-                </ng-template>
-                <ng-template #nolink>
+                </div>
+                } @else {
+                <div #nolink>
                   {{ disease.name }}
-                </ng-template>
+                </div>
+                }
               </mat-list-item>
+              }
             </mat-list>
           </mat-tab>
           <mat-tab
@@ -249,59 +241,58 @@
             [disabled]="!trial.conditions || trial.conditions.length === 0"
           >
             <mat-list>
-              <mat-list-item *ngFor="let condition of trial.conditions">
+              @for (condition of trial.conditions; track condition) {
+              <mat-list-item>
                 {{ condition.condition }}
               </mat-list-item>
+              }
             </mat-list>
           </mat-tab>
           <mat-tab
             [label]="getLabel('locations')"
             [disabled]="!trial.locations || trial.locations.length === 0"
           >
-            <mat-list *ngFor="let location of trial.locations">
+            @for (location of trial.locations; track location) {
+            <mat-list>
               <mat-list-item>
                 <div>{{ location.locationFacility }}</div>
               </mat-list-item>
               <mat-list-item>
-                <span *ngIf="location.locationCity">
-                  {{ location.locationCity
-                  }}<span
-                    *ngIf="location.locationState || location.locationCountry"
-                    >,</span
-                  >&nbsp;</span
-                >
-                <span *ngIf="location.locationState">
-                  {{ location.locationState }}&nbsp;</span
-                >
-                <span *ngIf="location.locationCountry"
-                  >{{ location.locationCountry }}&nbsp;</span
-                >
-                <span *ngIf="location.locationZip"
-                  >{{ location.locationZip }}&nbsp;</span
-                >
+                @if (location.locationCity) {
+                {{ location.locationCity }}
+                @if (location.locationState || location.locationCountry) {
+                <span>,&nbsp;</span>
+                } } @if (location.locationState) {
+                <span>{{ location.locationState }}&nbsp;</span>
+                } @if (location.locationCountry) {
+                <span>{{ location.locationCountry }}&nbsp;</span>
+                } @if (location.locationZip) {
+                <span>{{ location.locationZip }}&nbsp;</span>
+                }
               </mat-list-item>
               <mat-list-item>
-                <span *ngIf="location.locationStatus"
-                  >Status: {{ location.locationStatus }}</span
-                >
+                @if (location.locationStatus) {
+                <span>Status: {{ location.locationStatus }}</span>
+                }
               </mat-list-item>
             </mat-list>
+            }
           </mat-tab>
           <mat-tab
             [label]="getLabel('sponsors')"
             [disabled]="!trial.sponsors || trial.sponsors.length === 0"
           >
-            <div *ngFor="let sponsor of trial.sponsors">
-              <div
-                class="accent-chip-outlined"
-                *ngIf="sponsor.leadSponsorClass"
-              >
+            @for (sponsor of trial.sponsors; track sponsor) {
+            <div>
+              @if (sponsor.leadSponsorClass) {
+              <div class="accent-chip-outlined">
                 {{ sponsor.leadSponsorClass }}
               </div>
-              <div class="list-item-content" *ngIf="sponsor.leadSponsorName">
-                {{ sponsor.leadSponsorName }}
-              </div>
+              } @if (sponsor.leadSponsorName) {
+              <div class="list-item-content">{{ sponsor.leadSponsorName }}</div>
+              }
             </div>
+            }
           </mat-tab>
           <mat-tab
             [label]="getLabel('interventions')"
@@ -309,20 +300,20 @@
               !trial.interventions || trial.interventions.length === 0
             "
           >
-            <div *ngFor="let intervention of trial.interventions">
-              <div
-                class="accent-chip-outlined"
-                *ngIf="intervention.interventionType"
-              >
+            @for (intervention of trial.interventions; track intervention) {
+            <div>
+              @if (intervention.interventionType) {
+              <div class="accent-chip-outlined">
                 {{ intervention.interventionType }}
               </div>
-              <div
-                class="list-item-content"
-                *ngIf="intervention.interventionName"
-              >
+
+              } @if (intervention.interventionName) {
+              <div class="list-item-content">
                 {{ intervention.interventionName }}
               </div>
+              }
             </div>
+            }
           </mat-tab>
           <mat-tab
             [label]="getLabel('references')"
@@ -330,12 +321,10 @@
           >
             <br />
             <br />
-            <div *ngFor="let reference of trial.references">
-              <ng-container
-                *ngIf="reference.referencePMID; then link; else nolink"
-              >
-              </ng-container>
-              <ng-template #link>
+            @for (reference of trial.references; track reference) {
+            <div>
+              @if (reference.referencePMID) {
+              <div #link>
                 <span class="list-item-content">{{
                   reference.referenceCitation
                 }}</span>
@@ -352,14 +341,17 @@
                   ></span
                 >
                 <br />
-              </ng-template>
-              <ng-template #nolink>
+              </div>
+              } @else {
+              <div #nolink>
                 <span class="list-item-content">{{
                   reference.referenceCitation
                 }}</span>
-              </ng-template>
+              </div>
+              }
               <br />
             </div>
+            }
           </mat-tab>
         </mat-tab-group>
       </mat-card-content>

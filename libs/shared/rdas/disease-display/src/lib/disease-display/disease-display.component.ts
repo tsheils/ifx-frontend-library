@@ -1,32 +1,37 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { ScrollDispatcher } from "@angular/cdk/overlay";
+import { ScrollingModule } from "@angular/cdk/scrolling";
 import {
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
-  computed,
-  DestroyRef,
+  Component, computed,
+  DestroyRef, ElementRef,
   EventEmitter,
-  HostListener,
   inject,
   Input,
-  OnChanges,
-  Output,
-  Signal,
-  SimpleChanges,
-  ViewEncapsulation,
-} from '@angular/core';
+  OnChanges, OnInit,
+  Output, QueryList,
+  Signal, ViewChildren,
+  ViewEncapsulation
+} from "@angular/core";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatExpansionModule } from "@angular/material/expansion";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Disease } from '@ncats-frontend-library/models/rdas';
+import { FilterCategory } from "@ncats-frontend-library/models/utils";
+import { SharedRdasArticleChartsComponent } from "@ncats-frontend-library/shared/rdas/article-charts";
 import { ArticleListComponent } from '@ncats-frontend-library/shared/rdas/article-display';
 import { ClinicalTrialsListComponent } from '@ncats-frontend-library/shared/rdas/clinical-trials-display';
 import { GeneListComponent } from '@ncats-frontend-library/shared/rdas/gene-display';
 import { PhenotypeListComponent } from '@ncats-frontend-library/shared/rdas/phenotype-display';
-import { MatTabChangeEvent, MatTabsModule } from '@angular/material/tabs';
-import { NgIf, ViewportScroller } from "@angular/common";
+import { ViewportScroller } from '@angular/common';
+import { SharedRdasProjectChartsComponent } from "@ncats-frontend-library/shared/rdas/project-charts";
 import { ProjectListComponent } from '@ncats-frontend-library/shared/rdas/project-display';
+import { SharedRdasTrialsChartsComponent } from "@ncats-frontend-library/shared/rdas/trials-charts";
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
-import { BehaviorSubject } from 'rxjs';
+import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
+import { RdasPanelTemplateComponent } from "@ncats-frontend-library/shared/utils/rdas-panel-template";
+import { SharedUtilsScatterPlotComponent } from "@ncats-frontend-library/shared/utils/scatter-plot";
+
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
 import { MatCardModule } from '@angular/material/card';
 
@@ -39,45 +44,75 @@ import { MatCardModule } from '@angular/material/card';
   imports: [
     MatCardModule,
     DiseaseHeaderComponent,
-    NgIf,
-    MatTabsModule,
     ArticleListComponent,
     ProjectListComponent,
     ClinicalTrialsListComponent,
     GeneListComponent,
     PhenotypeListComponent,
     SharedUtilsDataNotFoundComponent,
+    LoadingSpinnerComponent,
+    SharedUtilsScatterPlotComponent,
+    SharedRdasArticleChartsComponent,
+    SharedRdasProjectChartsComponent,
+    SharedRdasTrialsChartsComponent,
+    MatExpansionModule,
+    ScrollingModule,
+    RdasPanelTemplateComponent
   ],
 })
-export class DiseaseDisplayComponent implements OnChanges {
+export class DiseaseDisplayComponent implements OnInit, OnChanges {
+  @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
+
   destroyRef = inject(DestroyRef);
   @Input() disease!: Signal<Disease | undefined>;
+  @Input() filters!: Signal<FilterCategory[] | undefined>;
+  @Input() offset!: string;
+  @Input() id!: string;
+  filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
+    const map = new Map<string, FilterCategory[]>();
+    this.filters()!.forEach(filterCat => {
+      if(filterCat.parent) {
+        let filterCats: FilterCategory[] | undefined = map.get(filterCat.parent);
+        if (filterCats) {
+          filterCats.push(filterCat);
+        } else {
+          filterCats = [filterCat]
+        }
+        map.set(filterCat.parent, filterCats);
+      }
+      })
 
+    return map;
+  })
+
+  @Output() activeElement: EventEmitter<string> = new EventEmitter<string>()
   @Output() optionsChange: EventEmitter<{
-    variables: { [key: string]: string | number | undefined };
+    variables: { [key: string]: unknown };
     origin: string;
   }> = new EventEmitter<{
-    variables: { [key: string]: string | number | undefined };
+    variables: { [key: string]: unknown };
     origin: string;
   }>();
 
-  tabs = ['epiArticles', 'nonEpiArticles', 'project', 'trials'];
-  selectedIndex = 0;
   mobile = false;
 
   constructor(
     private changeRef: ChangeDetectorRef,
     private router: Router,
     private route: ActivatedRoute,
-    private scroller: ViewportScroller,
+    public scroller: ViewportScroller,
+    private scrollDispatcher: ScrollDispatcher,
     private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit() {
     if (this.route.snapshot.fragment) {
-      this.selectedIndex = this.tabs.indexOf(this.route.snapshot.fragment);
-      this.scroller.scrollToAnchor('disease-tabs');
+      this.activeElement.emit(this.route.snapshot.fragment);
+      this.scroller.scrollToAnchor(this.route.snapshot.fragment);
     }
+    console.log(this.offset)
+    console.log(this)
+
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -85,29 +120,52 @@ export class DiseaseDisplayComponent implements OnChanges {
         this.mobile = result.matches;
         this.changeRef.markForCheck();
       });
+
+    this.scrollDispatcher.scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+            let scrollTop: number = this.scroller.getScrollPosition()[1] + 120
+            if (this.scroller.getScrollPosition()[1] === 0) {
+              this.activeElement.emit('overview');
+            } else {
+               this.scrollSections.forEach((section) => {
+              scrollTop = scrollTop - section.nativeElement?.scrollHeight;
+              if (scrollTop >= 0) {
+                this.activeElement.emit(section.nativeElement.nextSibling.id);
+              }
+            })
+          }
+      });
   }
 
-  ngOnChanges(change: SimpleChanges) {
+  ngOnChanges() {
     this.changeRef.detectChanges();
   }
 
   pageList(
-    variables: { [key: string]: string | number | undefined },
+    variables: { [key: string]: string | number | undefined | string[]  },
     pageField: string,
     origin: string
   ): void {
-    this.setUrl(origin, variables['offset']);
+    this.setUrl(origin, variables );
     this.optionsChange.emit({ variables, origin });
   }
 
-  setTabUrl(tab: MatTabChangeEvent) {
-    this.setUrl(this.tabs[tab.index]);
+  fetchList(
+    variables: { [key: string]: unknown },
+    pageField: string,
+    origin: string
+  ): void {
+    this.setUrl(origin, variables );
+    console.log(variables)
+    console.log(origin)
+    this.optionsChange.emit({ variables, origin });
   }
 
-  setUrl(tab: string, page?: number | string | undefined) {
+  setUrl(fragment: string, params?: { [key: string]: unknown }) {
     this.router.navigate(['disease'], {
-      fragment: tab,
-      queryParams: { offset: page },
+      fragment: fragment,
+      queryParams: params,
       queryParamsHandling: 'merge',
     });
   }

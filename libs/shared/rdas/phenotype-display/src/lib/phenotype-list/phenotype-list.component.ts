@@ -17,7 +17,6 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import {
-  GeneAssociation,
   PhenotypeAssociation,
 } from '@ncats-frontend-library/models/rdas';
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
@@ -34,7 +33,6 @@ import { PhenotypeListCardComponent } from '../phenotype-list-card/phenotype-lis
     MatButtonModule,
     MatIconModule,
     MatSortModule,
-    MatCardModule,
     MatTableModule,
     SharedUtilsDataNotFoundComponent,
     ExternalLinkComponent,

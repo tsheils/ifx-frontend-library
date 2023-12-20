@@ -1,5 +1,5 @@
 import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
-import { CommonModule, NgClass, NgFor, NgIf } from '@angular/common';
+import { CommonModule, NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,8 +17,6 @@ import {
   animations: [slideInOutAnimation],
   imports: [
     MatToolbarModule,
-    NgFor,
-    NgIf,
     MatButtonModule,
     MatMenuModule,
     RouterLink,
@@ -47,12 +45,5 @@ export class MobileHeaderTemplateComponent {
 
   isActive(path: string | undefined) {
     return this.active === path;
-  }
-
-  ngOnInit() {
-    console.log(this.menu);
-    this.menu.onPositionChanged.subscribe((f) => console.log(f));
-    this.menu.closedStart.subscribe((f) => console.log(f));
-    this.menu.openedStart.subscribe((f) => console.log(f));
   }
 }

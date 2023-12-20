@@ -7,6 +7,7 @@
   >
     <input
       matInput
+      (keyup.enter)="searchString()"
       aria-label="Rare disease search"
       id="search-input"
       [placeholder]="'Rare disease search'"
@@ -17,18 +18,15 @@
       #autoOpts="matAutocomplete"
       [displayWith]="displayFn"
       (optionSelected)="selectDisease($event)"
-      [autoActiveFirstOption]="true"
       class="custom-autocomplete-panel"
     >
-      <mat-option
-        *ngFor="let option of options"
-        [value]="option"
-        class="dynamic-height"
-      >
+      @for (option of options; track option) {
+      <mat-option [value]="option" class="dynamic-height">
         <span
           [innerHTML]="option.name | highlight : searchFormCtl.value"
         ></span>
       </mat-option>
+      }
     </mat-autocomplete>
     <button matSuffix mat-icon-button aria-label="search">
       <mat-icon [color]="'primary'">search</mat-icon>

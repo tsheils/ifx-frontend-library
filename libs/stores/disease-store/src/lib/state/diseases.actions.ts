@@ -84,6 +84,23 @@ export const fetchDiseaseFailure = createAction(
   props<{ error: string | null | undefined }>()
 );
 
+export const fetchDiseaseFilters = createAction(
+  '[Diseases/API] fetch Disease Filters',
+  props<{
+    gardId: string;
+  }>()
+);
+
+export const fetchDiseaseFiltersSuccess = createAction(
+  '[Diseases/API] fetch Disease Filters Success',
+  props<{ filters: FilterCategory[]}>()
+);
+
+export const fetchDiseaseFiltersFailure = createAction(
+  '[Diseases/API] fetch Disease Filters Failure',
+  props<{ error: string | null | undefined }>()
+);
+
 export const fetchDiseaseList = createAction(
   '[Diseases/API] fetch Disease List',
   props<{

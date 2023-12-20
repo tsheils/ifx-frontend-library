@@ -7,9 +7,14 @@ import {
   OnChanges,
   Output,
 } from '@angular/core';
+import { ReactiveFormsModule } from "@angular/forms";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatSelectModule } from "@angular/material/select";
 import { NavigationExtras, Router } from '@angular/router';
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { ProjectListCardComponent } from '../project-list-card/project-list-card.component';
 
 @Component({
@@ -17,25 +22,23 @@ import { ProjectListCardComponent } from '../project-list-card/project-list-card
   templateUrl: './project-list.component.html',
   styleUrls: ['./project-list.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatPaginatorModule, ProjectListCardComponent],
+  imports: [
+    CommonModule,
+    MatPaginatorModule,
+    ProjectListCardComponent,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule
+  ],
 })
 export class ProjectListComponent implements OnChanges {
   @Input() projects!: CoreProject[] | undefined;
-  @Input() count: number | undefined = 0;
-  @Output() pageChange: EventEmitter<{ offset: number }> = new EventEmitter<{
-    offset: number;
-  }>();
+
   constructor(private changeRef: ChangeDetectorRef, private router: Router) {}
 
   ngOnChanges() {
     this.changeRef.markForCheck();
-  }
-
-  fetchProjects(event: PageEvent) {
-    const pageOptions: { offset: number } = {
-      offset: event.pageIndex * event.pageSize,
-    };
-    this.pageChange.emit(pageOptions);
   }
 
   navigate(id: string): void {

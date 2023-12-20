@@ -66,80 +66,6 @@ export const ARTICLEFIELDS = `
           }
   }
 `;
-/*export const FETCHARTICLESQUERY = gql`
-query Articles(
-  $gardWhere: GARDWhere,
-  $epiWhere: ArticleWhere,
-  $nonEpiWhere: ArticleWhere,
-  $epiOptions: ArticleOptions,
-  $nonEpiOptions: ArticleOptions
-) {
-    articles:gards(where: $gardWhere) {
-        _epiCount: mentionedInArticlesAggregate(where: $epiWhere) {
-            count
-        }
-        _nonEpiCount: mentionedInArticlesAggregate(where: $nonEpiWhere) {
-            count
-        }
-        epiArticles: mentionedInArticles(
-            options: $epiOptions
-            where: $epiWhere
-        ) {
-            ...articleFields
-        }
-        nonEpiArticles: mentionedInArticles(
-            options: $nonEpiOptions
-            where: $nonEpiWhere
-        ) {
-            ...articleFields
-            authorsWrote {
-                firstName
-                lastName
-                fullName
-            }
-          journals: appearsInJournalVolumes {
-            dateOfPublication
-            printPublicationDate
-            volume
-            contentOfJournals {
-              title
-            }
-          }
-          diseases: gardsmentionedIn {
-            gardId: GardId
-            name
-          }
-          sources: fullTextUrlsContentFor {
-            availability
-            documentStyle
-            site
-            url
-          }
-          keywords: keywordsKeywordFor {
-            keyword
-          }
-          meshTerms: meshTermsMeshTermFor {
-            descriptorName
-          #  isMajorTopic
-            _qualifier: meshQualifiersMeshQualifierFor {
-              abbreviation
-              qualifierName
-            }
-          }
-          annotations: pubtatorAnnotationsAnnotationFor {
-            infons_identifier
-            infons_type
-            type
-           # text
-          }
-          substances: substancesSubstanceAnnotatedByPubmed {
-            name
-          }
-        }
-    }
-}
-${ARTICLEFIELDS}
-`;*/
 
 export const FETCHARTICLESQUERY = gql`
   query Articles(
@@ -151,6 +77,7 @@ export const FETCHARTICLESQUERY = gql`
       _count: mentionedInArticlesAggregate(where: $articleWhere) {
         count
       }
+
       articles: mentionedInArticles(
         options: $articleOptions
         where: $articleWhere
@@ -284,3 +211,15 @@ export const ARTICLEDETAILSVARIABLES: {
     pubmed_id: '',
   },
 };
+
+export const ARTICLEFILTERS = gql`
+  query ArticleFilters(
+  $gardId: String
+) {
+  countsByYear(gardId: $gardId) {
+    term
+    count
+    label
+  }
+}
+`;

@@ -1,0 +1,70 @@
+{
+  "name": "adme-loader-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/adme-loader-backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/adme-loader-backend",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/adme-loader-backend/src/main.ts",
+        "tsConfig": "apps/adme-loader-backend/tsconfig.app.json",
+        "assets": ["apps/adme-loader-backend/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "adme-loader-backend:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "adme-loader-backend:build:development"
+        },
+        "production": {
+          "buildTarget": "adme-loader-backend:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/adme-loader-backend/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/adme-loader-backend/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

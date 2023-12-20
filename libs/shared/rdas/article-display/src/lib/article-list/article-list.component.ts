@@ -23,22 +23,10 @@ import { ArticleListCardComponent } from '../article-list-card/article-list-card
 })
 export class ArticleListComponent implements OnChanges {
   @Input() articles!: Article[] | undefined;
-  @Input() count: number | undefined = 0;
-  @Input() offset = 0;
-  @Output() pageChange: EventEmitter<{ offset: number }> = new EventEmitter<{
-    offset: number;
-  }>();
   constructor(private changeRef: ChangeDetectorRef, private router: Router) {}
 
   ngOnChanges() {
     this.changeRef.markForCheck();
-  }
-
-  fetchArticles(event: PageEvent) {
-    const pageOptions = {
-      offset: event.pageIndex * event.pageSize,
-    };
-    this.pageChange.emit(pageOptions);
   }
 
   navigate(id: string): void {

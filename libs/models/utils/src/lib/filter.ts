@@ -1,5 +1,6 @@
 export class Filter {
   term!: string;
+  label?: string;
   count = 0;
   selected = false;
 
@@ -11,6 +12,8 @@ export class Filter {
 export class FilterCategory {
   label!: string;
   query?: string;
+  parent?: string;
+  filterable?: true;
   page = 1;
   values!: Filter[];
 
@@ -22,6 +25,11 @@ export class FilterCategory {
     if (obj.query) {
       this.query = obj.query;
     }
+
+    if (obj.parent) {
+      this.parent = obj.parent;
+    }
+
     if (obj.label) {
       this.label = obj.label;
     }

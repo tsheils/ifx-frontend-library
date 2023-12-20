@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { DOCUMENT, NgFor, NgIf } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,9 +25,7 @@ import { GeneListCardComponent } from '../gene-list-card/gene-list-card.componen
   selector: 'ncats-frontend-library-gene-list',
   standalone: true,
   imports: [
-    NgIf,
     MatPaginatorModule,
-    NgFor,
     GeneListCardComponent,
     MatCardModule,
     MatButtonModule,

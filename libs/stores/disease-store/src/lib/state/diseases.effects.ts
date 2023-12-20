@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { inject, Injectable } from "@angular/core";
+import { ActivatedRouteSnapshot, Params } from "@angular/router";
 import { ApolloQueryResult } from '@apollo/client';
 import {
   Article,
@@ -24,8 +24,8 @@ import {
   FETCHTRIALSQUERY,
   EPIARTICLES,
   NONEPIARTICLES,
-  DISEASELIST,
-} from '@ncats-frontend-library/models/rdas';
+  DISEASELIST, ARTICLEFILTERS, PROJECTFILTERS, TRIALFILTERS
+} from "@ncats-frontend-library/models/rdas";
 import {
   Filter,
   FilterCategory,
@@ -48,15 +48,24 @@ import {
 import * as DiseasesActions from './diseases.actions';
 import * as fromDiseasesSelectors from './diseases.selectors';
 
+
+interface DEFAULTOPTIONS {
+  limit?: number,
+  offset?: number,
+  GardId?: string,
+  OverallStatus?: string | string[] | null| undefined,
+  StudyType?: string | string[] | null |undefined
+}
+
 @Injectable()
 export class DiseasesEffects {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchDiseases = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(DiseasesActions.searchDiseases),
       mergeMap((action: { term: string }) => {
         return this.diseaseService
-          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term + '~' })
+          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term + '~', limit: 10 })
           .pipe(
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
             map((res: any) => {
@@ -77,9 +86,9 @@ export class DiseasesEffects {
     )
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  loadDiseases$ = createEffect((): any => {
-    return this.actions$.pipe(
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadDiseases$ = createEffect((): any =>
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
         r.payload.routerState.url.startsWith('/diseases')
@@ -96,6 +105,7 @@ export class DiseasesEffects {
           direction?: string;
           phenotypes?: string;
           genes?: string;
+          q?: string;
         }) => {
           let query;
           let queryParams;
@@ -110,8 +120,8 @@ export class DiseasesEffects {
             query = FETCHPATHDISEASES;
             queryParams = DISEASEBRANCHPARAMETERS;
           } else {
-            LISTQUERYPARAMETERS.options.limit = +pageSize;
-            LISTQUERYPARAMETERS.options.offset = +pageSize * +pageIndex;
+            LISTQUERYPARAMETERS.options['limit'] = +pageSize;
+            LISTQUERYPARAMETERS.options['offset'] = +pageSize * +pageIndex;
             if (params.sort) {
               LISTQUERYPARAMETERS.options.sort = [
                 {
@@ -122,8 +132,16 @@ export class DiseasesEffects {
             queryParams = LISTQUERYPARAMETERS;
             query = FETCHDISEASESLISTQUERY;
           }
+          if(params.q){
+            if(!queryParams.where) {
+              queryParams.where = {GardName_CONTAINS: params.q}
+            } else {
+              queryParams.where.GardName_CONTAINS = params.q;
+            }
+          }
           if (params.phenotypes && params.genes) {
             queryParams.where = {
+              GardName_CONTAINS: params.q ? params.q : undefined,
               hasPhenotypePhenotypes_SOME: {
                 HPOTerm_IN: params.phenotypes.split('&'),
               },
@@ -138,6 +156,7 @@ export class DiseasesEffects {
           } else {
             if (params.phenotypes) {
               queryParams.where = {
+                GardName_CONTAINS: params.q ? params.q : undefined,
                 hasPhenotypePhenotypes_SOME: {
                   HPOTerm_IN: params.phenotypes.split('&'),
                 },
@@ -145,6 +164,7 @@ export class DiseasesEffects {
             }
             if (params.genes) {
               queryParams.where = {
+                GardName_CONTAINS: params.q ? params.q : undefined,
                 associatedWithGeneGenes_SOME: {
                   GeneSymbol_IN: params.genes.split('&'),
                 },
@@ -177,18 +197,90 @@ export class DiseasesEffects {
           );
         }
       )
-    );
-  });
+    )
+  );
 
-  //paginate through disease sub-sections (projects, publications, clinical trials)
+ /* //paginate through disease sub-sections (projects, publications, clinical trials)
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetchDisease = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(DiseasesActions.fetchDisease),
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       mergeMap((action: any) => {
         if (action.fragment) {
           this._setFragment(action.origin, action.variables);
+        }
+        return combineLatest(
+          this.diseaseService
+            .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
+            .pipe(take(1)),
+          this.diseaseService
+            .fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES)
+            .pipe(take(1)),
+          this.diseaseService
+            .fetchArticles(FETCHARTICLESQUERY, EPIARTICLES)
+            .pipe(take(1)),
+          this.diseaseService
+            .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
+            .pipe(take(1)),
+          this.diseaseService
+            .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
+            .pipe(take(1))
+        ).pipe(
+          map(
+            ([
+              diseaseData,
+              articleData,
+              epiArticleData,
+              projectsData,
+              trialsData,
+            ]: [
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>
+            ]) => {
+              console.log(trialsData)
+              if (diseaseData && diseaseData.data) {
+                const diseaseObj: Disease = this._makeDiseaseObj(
+                  diseaseData,
+                  articleData,
+                  epiArticleData,
+                  projectsData,
+                  trialsData
+                );
+                return DiseasesActions.fetchDiseaseSuccess({
+                  disease: diseaseObj,
+                });
+              } else
+                return DiseasesActions.fetchDiseaseFailure({
+                  error: 'No Disease found',
+                });
+            }
+          )
+        );
+      })
+    )
+  );
+*/
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  loadDisease$ = createEffect((): any =>
+    inject(Actions).pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease')
+      ),
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      switchMap((root: ActivatedRouteSnapshot) => {
+        const params = root.queryParams;
+        const gardid: string = params['id'];
+        this._setGardId(gardid);
+
+        if (root.fragment) {
+          this._setFragment(root.fragment, params as DEFAULTOPTIONS);
         }
         return combineLatest(
           this.diseaseService
@@ -243,9 +335,11 @@ export class DiseasesEffects {
     )
   );
 
+
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  loadDisease$ = createEffect((): any =>
-    this.actions$.pipe(
+  loadDiseaseFilters$ = createEffect((): any =>
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>
@@ -254,79 +348,112 @@ export class DiseasesEffects {
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       switchMap((root: ActivatedRouteSnapshot) => {
-        const params = root.queryParams;
-        const gardid = params['id'];
-        DISEASEQUERYPARAMETERS.where = { GardId: gardid };
-        EPIARTICLES.gardWhere.GardId = gardid;
-        NONEPIARTICLES.gardWhere.GardId = gardid;
-        PROJECTVARIABLES.coreProjectsWhere = {
-          projectsUnderCoreConnection_ALL: {
-            node: { gardsresearchedBy_SINGLE: { GardId: gardid } },
-          },
-        };
-        FETCHTRIALSVARIABLES.gardId = gardid;
+        const params: Params = root.queryParams;
+        const gardid: string = params['id'];
+        this._setGardId(gardid);
+
         if (root.fragment) {
           this._setFragment(root.fragment, {
             limit: params['limit'],
             offset: params['offset'],
           });
         }
-        return forkJoin(
+        return combineLatest(
           this.diseaseService
-            .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
+            .fetchArticles(ARTICLEFILTERS, { gardId: gardid})
             .pipe(take(1)),
           this.diseaseService
-            .fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES)
+            .fetchProjects(PROJECTFILTERS, { gardId: gardid})
             .pipe(take(1)),
           this.diseaseService
-            .fetchArticles(FETCHARTICLESQUERY, EPIARTICLES)
+            .fetchTrials(TRIALFILTERS, FETCHTRIALSVARIABLES)
             .pipe(take(1)),
-          this.diseaseService
-            .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
-            .pipe(take(1)),
-          this.diseaseService
-            .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
-            .pipe(take(1))
-        ).pipe(
-          map(
-            ([
-              diseaseData,
-              articleData,
-              epiArticleData,
-              projectsData,
-              trialsData,
-            ]: [
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>
-            ]) => {
-              if (diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = this._makeDiseaseObj(
-                  diseaseData,
-                  articleData,
-                  epiArticleData,
-                  projectsData,
-                  trialsData
-                );
-                return DiseasesActions.fetchDiseaseSuccess({
-                  disease: diseaseObj,
-                });
-              } else
-                return DiseasesActions.fetchDiseaseFailure({
-                  error: 'No Disease found',
-                });
-            }
-          )
-        );
+        )
+          .pipe(
+            map(
+              ([
+                 articleFilterData,
+                 projectFilterData,
+                 trialFilterData
+               ]: [
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ApolloQueryResult<any>,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ApolloQueryResult<any>,
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                ApolloQueryResult<any>
+              ]) => {
+                const filters: FilterCategory[] = []
+                if (articleFilterData && articleFilterData.data) {
+                  if(articleFilterData.data.countsByYear.length) {
+                  filters.push(new FilterCategory(
+                      {
+                        parent: 'articles',
+                        label: "Articles by Year",
+                        values: articleFilterData.data.countsByYear.map((fil: Partial<Filter>) => new Filter(fil))
+                      }
+                    ))
+                  }
+                  if (projectFilterData && projectFilterData.data) {
+                    if (projectFilterData.data.countsByYear.length) {
+                      filters.push(new FilterCategory(
+                        {
+                          parent: 'projects',
+                          label: "Projects Count by Year",
+                          values: projectFilterData.data.countsByYear.map((fil: Partial<Filter>) => new Filter(fil))
+                        }
+                      ))
+                    }
+                    if (projectFilterData.data.costByYear.length) {
+                      filters.push(new FilterCategory(
+                        {
+                          parent: 'projects',
+                          label: "Projects Funding by Year",
+                          values: projectFilterData.data.costByYear.map((fil: Partial<Filter>) => new Filter(fil))
+                        }
+                      ))
+                    }
+                  }
+                  if (trialFilterData && trialFilterData.data) {
+                    if (trialFilterData.data.trialsByStatus.length) {
+                      filters.push(new FilterCategory(
+                        {
+                          parent: 'trials',
+                          label: "Clinical Trials by Status",
+                          values: trialFilterData.data.trialsByStatus.map((fil: Partial<Filter>) => new Filter({...fil, selected:
+                            params['OverallStatus'] === fil.term || params['OverallStatus']?.includes(fil.term)
+                      }))
+                        }
+                      ))
+                    }
+                    if (trialFilterData.data.trialsByType.length) {
+                      filters.push(new FilterCategory(
+                        {
+                          parent: 'trials',
+                          label: "Clinical Trials by Type",
+                          values: trialFilterData.data.trialsByType.map((fil: Partial<Filter>) => new Filter(fil))
+                        }
+                      ))
+                    }
+                  }
+
+                  return DiseasesActions.fetchDiseaseFiltersSuccess({
+                    filters: filters,
+                  });
+                } else
+                  return DiseasesActions.fetchDiseaseFiltersFailure({
+                    error: 'No Disease found',
+                  });
+              }
+            )
+          );
       })
     )
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   fetchTreeBranch$ = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
         r.payload.routerState.url.startsWith('/diseases')
@@ -441,8 +568,8 @@ export class DiseasesEffects {
   );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  loadDiseaseList$ = createEffect((): any => {
-    return this.actions$.pipe(
+  loadDiseaseList$ = createEffect((): any =>
+    inject(Actions).pipe(
       ofType(DiseasesActions.fetchDiseaseList),
       mergeMap((action: { gardIds: string[] }) => {
         return this.diseaseService
@@ -464,8 +591,8 @@ export class DiseasesEffects {
             })
           );
       })
-    );
-  });
+    )
+  );
 
   'where': {
     GardId_IN: null;
@@ -473,7 +600,7 @@ export class DiseasesEffects {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isLoadingDisease$ = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(DiseasesActions.fetchDisease),
       mergeMap(() => {
         return of(DiseasesActions.loading());
@@ -482,7 +609,7 @@ export class DiseasesEffects {
   );
 
   isLoadingDiseaseList$ = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       mergeMap(() => {
         return of(DiseasesActions.loading());
@@ -536,7 +663,7 @@ export class DiseasesEffects {
         diseaseObj.clinicalTrials = trialsData.data.clinicalTrials.map(
           (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial)
         );
-        diseaseObj.clinicalTrialCount = trialsData.data.count;
+        diseaseObj.clinicalTrialCount = trialsData.data.count.count;
       }
       return diseaseObj;
     } else return new Disease({});
@@ -583,46 +710,66 @@ export class DiseasesEffects {
 
   _setFragment(
     origin: string | null,
-    options: { limit?: number; offset?: number }
+    options: DEFAULTOPTIONS
   ) {
     switch (origin) {
       case 'epiArticles': {
         EPIARTICLES.articleOptions.limit = options.limit ? options.limit : 10;
         if (options.offset) {
-          EPIARTICLES.articleOptions.offset = Number(options.offset);
+          EPIARTICLES.articleOptions.offset = options.offset * 1;
         }
         break;
       }
       case 'nonEpiArticles': {
-        NONEPIARTICLES.articleOptions.limit = options.limit
-          ? options.limit
-          : 10;
+        NONEPIARTICLES.articleOptions.limit = options.limit ? options.limit : 10;
         if (options.offset) {
-          NONEPIARTICLES.articleOptions.offset = Number(options.offset);
+          NONEPIARTICLES.articleOptions.offset = options.offset * 1;
         }
         break;
       }
       case 'project': {
-        PROJECTVARIABLES.coreProjectsOptions.limit = options.limit
-          ? options.limit
-          : 10;
+        PROJECTVARIABLES.coreProjectsOptions.limit = options.limit ? options.limit : 10;
         if (options.offset) {
-          PROJECTVARIABLES.coreProjectsOptions.offset = Number(options.offset);
+          PROJECTVARIABLES.coreProjectsOptions.offset = options.offset * 1;
         }
         break;
       }
       case 'trials': {
-        FETCHTRIALSVARIABLES.limit = options.limit ? options.limit : 10;
+        FETCHTRIALSVARIABLES.ctoptions.limit = options.limit ? options.limit : 10;
         if (options.offset) {
-          FETCHTRIALSVARIABLES.offset = Number(options.offset);
+          FETCHTRIALSVARIABLES.ctoptions.offset = options.offset * 1;
+        }
+        if (options['GardId']) {
+            FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = <string>options['GardId']
+        }
+        if (options.OverallStatus) {
+          if(options.OverallStatus.length) {
+            FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = options.OverallStatus;
+          } else {
+            FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = undefined;
+          }
+        }
+        if (options.StudyType) {
+          if(options.StudyType.length) {
+            FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = options.StudyType;
+          } else {
+            FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = undefined;
+          }
         }
         break;
       }
     }
   }
 
+  _setGardId(gardid: string) {
+    DISEASEQUERYPARAMETERS.where = { GardId: gardid };
+    EPIARTICLES.gardWhere.GardId = gardid;
+    NONEPIARTICLES.gardWhere.GardId = gardid;
+    PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId = gardid;
+    FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = gardid;
+  }
+
   constructor(
-    private readonly actions$: Actions,
     private diseaseService: DiseaseService,
     private store: Store
   ) {}

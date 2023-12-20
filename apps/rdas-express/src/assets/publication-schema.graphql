@@ -1,4 +1,7 @@
-type Article @exclude(operations: [CREATE, DELETE, UPDATE]){
+extend schema @mutation(operations: [])
+scalar JSON
+
+type Article  {
   DateCreatedRDAS: String!
   abstractText: String!
   affiliation: String!
@@ -21,6 +24,7 @@ type Article @exclude(operations: [CREATE, DELETE, UPDATE]){
   meshTermsMeshTermFor: [MeshTerm!]!
     @relationship(type: "MESH_TERM_FOR", direction: IN)
   omim_evidence: Boolean
+  publicationYear: String
   pubType: [String]
   pubmed_evidence: Boolean
   pubmed_id: String!
@@ -33,14 +37,14 @@ type Article @exclude(operations: [CREATE, DELETE, UPDATE]){
   title: String!
 }
 
-type Author @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Author  {
   firstName: String!
   fullName: String!
   lastName: String!
   wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
 }
 
-type EpidemiologyAnnotation @exclude(operations: [CREATE, DELETE, UPDATE]){
+type EpidemiologyAnnotation  {
   date: [String]!
   epidemiologyAnnotationForArticles: [Article!]!
     @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: OUT)
@@ -52,7 +56,7 @@ type EpidemiologyAnnotation @exclude(operations: [CREATE, DELETE, UPDATE]){
   sex: [String]!
 }
 
-type FullTextUrl @exclude(operations: [CREATE, DELETE, UPDATE]){
+type FullTextUrl  {
   availability: String!
   availabilityCode: String!
   contentForArticles: [Article!]!
@@ -62,7 +66,7 @@ type FullTextUrl @exclude(operations: [CREATE, DELETE, UPDATE]){
   url: String!
 }
 
-type GARD @exclude(operations: [CREATE, DELETE, UPDATE]){
+type GARD  {
   GardId: String!
   is_rare: Boolean!
   mentionedInArticles: [Article!]!
@@ -70,7 +74,7 @@ type GARD @exclude(operations: [CREATE, DELETE, UPDATE]){
   GardName: String!
 }
 
-type Journal @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Journal  {
   essn: String!
   issn: String!
   journalVolumesContentOf: [JournalVolume!]!
@@ -80,7 +84,7 @@ type Journal @exclude(operations: [CREATE, DELETE, UPDATE]){
   title: String!
 }
 
-type JournalVolume @exclude(operations: [CREATE, DELETE, UPDATE]){
+type JournalVolume  {
   articlesAppearsIn: [Article!]!
     @relationship(type: "APPEARS_IN", direction: IN)
   contentOfJournals: [Journal!]!
@@ -94,13 +98,13 @@ type JournalVolume @exclude(operations: [CREATE, DELETE, UPDATE]){
   yearOfPublication: BigInt!
 }
 
-type Keyword @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Keyword  {
   keyword: String!
   keywordForArticles: [Article!]!
     @relationship(type: "KEYWORD_FOR", direction: OUT)
 }
 
-type MeshQualifier @exclude(operations: [CREATE, DELETE, UPDATE]){
+type MeshQualifier  {
   abbreviation: String!
   isMajorTopic: Boolean
   majorTopic_YN: String
@@ -109,7 +113,7 @@ type MeshQualifier @exclude(operations: [CREATE, DELETE, UPDATE]){
   qualifierName: String!
 }
 
-type MeshTerm @exclude(operations: [CREATE, DELETE, UPDATE]){
+type MeshTerm  {
   descriptorName: String!
   isMajorTopic: Boolean
   majorTopic_YN: String
@@ -119,7 +123,7 @@ type MeshTerm @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "MESH_TERM_FOR", direction: OUT)
 }
 
-type OMIMRef @exclude(operations: [CREATE, DELETE, UPDATE]){
+type OMIMRef  {
   articlesHasOmimRef: [Article!]!
     @relationship(type: "HAS_OMIM_REF", direction: IN)
   omimId: String!
@@ -127,7 +131,7 @@ type OMIMRef @exclude(operations: [CREATE, DELETE, UPDATE]){
   omimSections: [String]!
 }
 
-type PubtatorAnnotation @exclude(operations: [CREATE, DELETE, UPDATE]){
+type PubtatorAnnotation  {
   annotationForArticles: [Article!]!
     @relationship(type: "ANNOTATION_FOR", direction: OUT)
   infons_identifier: String!
@@ -136,9 +140,33 @@ type PubtatorAnnotation @exclude(operations: [CREATE, DELETE, UPDATE]){
   text: [String]
 }
 
-type Substance @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Substance  {
   name: String!
   registryNumber: String!
   substanceAnnotatedByPubmedArticles: [Article!]!
     @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: OUT)
 }
+
+type FilterCount  {
+  term: String
+  count: Int
+  label: String
+}
+
+type Query {
+  countsByYear(gardId: String): [FilterCount]
+    @cypher(
+      statement: """
+       match (d:GARD {GardId: $gardId})-[]-(a:Article {isEpi: true})
+       WITH a.publicationYear as year
+       with count(year) as ct, year
+       RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as yearCounts order by year
+       UNION ALL
+       match (d:GARD {GardId: $gardId})-[]-(a:Article {isEpi: false})
+       WITH a.publicationYear as year
+       with count(year) as ct, year
+       RETURN {term: year, count: ct, label: 'Non Epidemiology Articles'} as yearCounts order by year
+      """, columnName: "yearCounts"
+    )
+}
+

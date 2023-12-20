@@ -12,7 +12,7 @@ import {
 } from '@ncats-frontend-library/stores/user-store';
 import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
-import { NgIf } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -29,7 +29,6 @@ import { MatButtonModule } from '@angular/material/button';
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
   ],
 })
 export class EmailSignOnModalComponent {

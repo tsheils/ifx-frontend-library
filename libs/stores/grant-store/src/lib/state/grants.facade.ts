@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
 import { select, Store, Action } from '@ngrx/store';
 import * as GrantsActions from './grants.actions';
 import * as GrantsFeature from './grants.reducer';
@@ -6,7 +6,7 @@ import * as GrantsSelectors from './grants.selectors';
 
 @Injectable()
 export class GrantsFacade {
-  constructor(private store: Store<GrantsFeature.GrantsPartialState>) {}
+  private readonly store = inject(Store);
   /**
    * Combine pieces of state using createSelector,
    * and expose them as observables through the facade.

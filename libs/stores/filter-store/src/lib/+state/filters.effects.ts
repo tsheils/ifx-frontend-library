@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
 import { Params } from '@angular/router';
 import {
   GENEFILTERPARAMETERS,
@@ -38,8 +38,8 @@ export class FiltersEffects {
   /**
    * initial load and paging of filter list
    */
-  loadFilters$ = createEffect((): any => {
-    return this.actions$.pipe(
+  loadFilters$ = createEffect((): any =>
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
         r.payload.routerState.url.startsWith('/diseases')
@@ -78,12 +78,12 @@ export class FiltersEffects {
           })
         );
       })
-    );
-  });
+    )
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  searchFilters$ = createEffect((): any => {
-    return this.actions$.pipe(
+  searchFilters$ = createEffect((): any =>
+    inject(Actions).pipe(
       ofType(FiltersActions.fetchFilters),
       concatLatestFrom(() =>
         this.store.select(FiltersSelectors.selectAllFilters)
@@ -165,8 +165,8 @@ export class FiltersEffects {
           })
         );
       })
-    );
-  });
+    )
+  );
 
   private parseFilterResponse(
     res: any,

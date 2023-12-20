@@ -1,63 +1,53 @@
 <div class="row space-between-row top-align">
-  <div class="width-75">
-    <ng-container *ngIf="article.doi; then link; else nolink"> </ng-container>
-    <ng-template #link>
-      <div class="centered">
-        <div class="mat-card-title">{{ article.title }}</div>
-        <!--<span class="centered" *ngIf = "article.isOpenAccess=== 'N'">
-        &nbsp;<mat-icon [color]="'primary'">lock</mat-icon> &nbsp;<span class="small-text">(not open access)</span>
-        </span>-->
-      </div>
-    </ng-template>
-    <ng-template #nolink>
-      <span class="mat-card-title">{{ article.title }}</span>
-    </ng-template>
-    <div *ngFor="let journal of article.journals">
-      <i
-        >{{ journal.title }}
-        <span *ngIf="journal.volume"
-          >&nbsp;Vol&nbsp;{{ journal.volume }}</span
-        ></i
-      >
+  <div class="width-sm-100 width-75">
+    <div class="rdas-article-title">{{ article.title }}</div>
+    @for (journal of article.journals; track journal) {
+    <div>
+      <i>{{ journal.title }}</i>
+    </div>
+    }
+    <div>
+      @for (author of article.authorsWrote; track author; let last = $last) {
+      <span>
+        <i>{{ author.fullName }}</i>
+        @if (!last) {
+        <span>, </span>
+        }
+      </span>
+      }
     </div>
   </div>
-  <div class="mat-h3 right-text" *ngIf="article.pubmed_id">
-    PMID:
-    <a
-      href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pubmed_id }}"
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Link to publication in PubMed"
-      >{{ article.pubmed_id }}</a
-    >
-    <br />
-    <a
-      href="https://doi.org/{{ article.doi }}"
-      target="_blank"
-      rel="noreferrer"
-      aria-label="Link to publication via DOI"
-      >DOI: {{ article.doi }}</a
-    >
-  </div>
-</div>
-
-<div class="row space-between-row top-align">
-  <div class="width-70">
-    <span *ngFor="let author of article.authorsWrote; let last = last">
-      <i>{{ author.fullName }}</i> <span *ngIf="!last">, </span>
-    </span>
-    <br />
-    <span *ngIf="article.affiliation">{{ article.affiliation }}</span
-    ><br /><br />
-  </div>
-  <div class="width-25 right-text">
-    <span class="mat-h3">First Published: </span>
+  <div class="width-sm-100 width-25 right-text">
+    <span class="mat-h3">Published: </span>
     {{ article.firstPublicationDate | date }}<br />
-    <span class="mat-h3" *ngIf="article.citedByCount">Cited By: </span>
-    {{ article.citedByCount }}<br />
-    <span class="mat-h3" *ngIf="article.pubType">Publication Type: </span>
-    <span *ngFor="let pubType of article.pubType; let last = last">
-      <span>{{ pubType }}</span> <span *ngIf="!last">, </span> </span
-    ><br />
+    @if (article.pubmed_id) {
+    <div class="mat-h3 right-text">
+      PMID:
+      <a
+        href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pubmed_id }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to publication in PubMed"
+        >{{ article.pubmed_id }}</a
+      >
+      <br />
+      <a
+        href="https://doi.org/{{ article.doi }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to publication via DOI"
+        >DOI: {{ article.doi }}</a
+      >
+    </div>
+    } @if (article.pubType) {
+    <span class="mat-h3">Publication Type: </span>
+    } @for (pubType of article.pubType; track pubType; let last = $last) {
+    <span>
+      <span>{{ pubType }}</span>
+      @if (!last) {
+      <span> , </span>
+      }
+    </span>
+    }
   </div>
 </div>

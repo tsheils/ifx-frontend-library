@@ -4,7 +4,9 @@
       {{ trial.briefTitle ? trial.briefTitle : trial.officialTitle }}
     </span>
   </div>
-  <div class="mat-h3" *ngIf="trial.NCTId">
+  @if (trial.NCTId) {
+  <div class="mat-h3">
     {{ trial.NCTId }}
   </div>
+  }
 </div>

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
 import { ApolloQueryResult } from '@apollo/client';
 import {
   CoreProject,
@@ -13,10 +13,10 @@ import * as GrantsActions from './grants.actions';
 
 @Injectable()
 export class GrantsEffects {
-  constructor(private actions$: Actions, private grantService: GrantService) {}
+  constructor(private grantService: GrantService) {}
 
   init$ = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(GrantsActions.initGrants),
       switchMap(() => of(GrantsActions.loadGrantsSuccess({ grants: [] }))),
       catchError((error) => {
@@ -27,7 +27,7 @@ export class GrantsEffects {
   );
 
   loadGrant$ = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>

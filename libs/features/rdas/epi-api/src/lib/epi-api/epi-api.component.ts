@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   Component,
   ElementRef,
   Inject,
@@ -26,17 +27,16 @@ export class EpiApiComponent {
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
-  }
-
-  /**
-   * create swagger ui viewer
-   */
-  ngAfterViewInit() {
-    if (this.isBrowser) {
-      SwaggerUI({
-        url: '/assets/epi-api/epi4rdas.json',
-        domNode: this.el.nativeElement,
-      });
-    }
+    /**
+     * create swagger ui viewer
+     */
+    afterNextRender(() => {
+      if (this.isBrowser) {
+        SwaggerUI({
+          url: '/assets/epi-api/epi4rdas.json',
+          domNode: this.el.nativeElement,
+        });
+      }
+    });
   }
 }

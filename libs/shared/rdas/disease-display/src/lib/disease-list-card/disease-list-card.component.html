@@ -13,20 +13,20 @@
       </div>
     </div>
     <div class="width-75">
-      <div class="primary-chip-outlined" *ngIf="disease.classificationLevel">
+      @if (disease.classificationLevel) {
+      <div class="primary-chip-outlined">
         {{ disease.classificationLevel }}
       </div>
-      &nbsp;&nbsp;&nbsp;
-      <div
-        class="accent-chip-outlined"
-        *ngIf="disease.disorderType && disease.disorderType?.length"
-      >
+      } &nbsp;&nbsp;&nbsp; @if (disease.disorderType &&
+      disease.disorderType?.length) {
+      <div class="accent-chip-outlined">
         {{ disease.disorderType?.join(', ') }}
       </div>
+      }
     </div>
-    <div class="width-75" *ngIf="disease.synonyms && disease.synonyms?.length">
-      Synonyms: {{ disease.synonyms?.join(', ') }}
-    </div>
+    @if (disease.synonyms && disease.synonyms?.length) {
+    <div class="width-75">Synonyms: {{ disease.synonyms?.join(', ') }}</div>
+    }
     <div class="count-grid">
       <mat-card [appearance]="'outlined'" class="count-card">
         <mat-card-title class="bottom-border-primary count-title"

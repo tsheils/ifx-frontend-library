@@ -138,6 +138,27 @@
       ],
       "@ncats-frontend-library/stores/user-store": [
         "libs/stores/user-store/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/rdas-panel-template": ["libs/shared/rdas/panel-template/src/index.ts"],
+      "@ncats-frontend-library/shared/rdas/article-charts": [
+        "libs/shared/rdas/article-charts/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/project-charts": [
+        "libs/shared/rdas/project-charts/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/trials-charts": [
+        "libs/shared/rdas/trials-charts/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/bar-chart": ["libs/shared/utils/bar-chart/src/index.ts"],
+      "@ncats-frontend-library/shared/utils/file-upload": [
+        "libs/shared/utils/file-upload/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/list-filter-row": [
+        "libs/shared/utils/list-filter-row/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/pie-chart": ["libs/shared/utils/pie-chart/src/index.ts"],
+      "@ncats-frontend-library/shared/utils/scatter-plot": [
+        "libs/shared/utils/scatter-plot/src/index.ts"
       ]
     },
     "allowSyntheticDefaultImports": true

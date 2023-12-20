@@ -1,7 +1,9 @@
-<div *ngFor="let disease of diseases()">
+@for (disease of diseases(); track disease) {
+<div>
   <ncats-frontend-library-disease-list-card
     [disease]="disease"
   ></ncats-frontend-library-disease-list-card>
   <br />
   <br />
 </div>
+}

@@ -1,10 +1,12 @@
+extend schema @mutation(operations: [])
+
 interface AssociatedWithGeneProperties @relationshipProperties {
   AssociationStatus: String!
   AssociationType: String!
   Reference: [String]
 }
 
-type GARD @exclude(operations: [CREATE, DELETE, UPDATE]){
+type GARD  {
   COUNT_ARTICLES: BigInt!
   COUNT_GENES: BigInt!
   COUNT_PHENOTYPES: BigInt!
@@ -45,7 +47,7 @@ type GARD @exclude(operations: [CREATE, DELETE, UPDATE]){
   subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
 }
 
-type Gene @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Gene  {
   Ensembl: String
   GeneIdentifier: String!
   GeneSymbol: String!
@@ -71,7 +73,7 @@ interface HasPhenotypeProperties @relationshipProperties {
   ValidationStatus: Boolean!
 }
 
-type Phenotype @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Phenotype  {
   HPOId: String!
   HPOTerm: String!
   Modifier: [String]
@@ -89,13 +91,13 @@ type Phenotype @exclude(operations: [CREATE, DELETE, UPDATE]){
 scalar JSON
 
 type Query {
-  diseaseSearch(searchString: String): [GARD]
+  diseaseSearch(searchString: String, limit: Int): [GARD]
     @cypher(
       statement: """
       CALL db.index.fulltext.queryNodes(
         'allNameIndex', $searchString)
-      YIELD node RETURN node LIMIT 10
-      """
+      YIELD node RETURN node as node LIMIT $limit
+      """, columnName: "node"
     )
 }
 
@@ -106,8 +108,8 @@ type Query {
       match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
       WITH COUNT(s) as childrenCount, l
       WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
-      return collect(DISTINCT(parents))
-      """
+      return collect(DISTINCT(parents)) as treeParents
+      """, columnName: "treeParents"
     )
 }
 
@@ -119,8 +121,8 @@ type Query {
           WITH COUNT(s) as childrenCount, l
       WITH {gardId: l.GardId, name: l.GardName, _childrenCount:childrenCount} as parents
         match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
-         return {paths: collect(distinct(p)), nodes: collect(distinct(parents))}
-      """
+         return {paths: collect(distinct(p)), nodes: collect(distinct(parents))} as data
+      """, columnName: "data"
     )
 }
 
@@ -134,8 +136,8 @@ type Query {
           labelFilter: "GARD"
       })
       YIELD path
-      return {paths: collect(distinct(path)), nodes: collect(distinct(nodes(path)))}
-      """
+      return {paths: collect(distinct(path)), nodes: collect(distinct(nodes(path)))} as data
+      """, columnName: "data"
     )
 }
 
@@ -147,8 +149,8 @@ type Query {
       with distinct(d) as ds
       SKIP $skip
       LIMIT $limit
-      return ds
-      """
+      return ds as data
+      """, columnName: "data"
     )
 }
 
@@ -159,11 +161,11 @@ type Query {
       match (d)-[*0..]->(e) WHERE e.GardId = $searchString
       with count(distinct d) as count
       return count
-      """
+      """, columnName: "count"
     )
 }
 
-type FilterCount @exclude(operations: [CREATE, DELETE, UPDATE]){
+type FilterCount  {
   term: String
   count: Int
 }
@@ -181,7 +183,7 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """
+      """, columnName: "ret"
     )
 }
 
@@ -197,9 +199,10 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """
+      """, columnName: "ret"
     )
 }
+
 type Query {
   phenotypeFilteredCounts(terms: [String]): [FilterCount]
     @cypher(
@@ -210,7 +213,7 @@ type Query {
       WITH {term: n.HPOTerm, count: nCount} as ret
       ORDER BY ret.count DESC
       return ret
-      """
+      """, columnName: "ret"
     )
 }
 
@@ -227,7 +230,7 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """
+      """, columnName: "ret"
     )
 }
 
@@ -243,7 +246,7 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """
+      """, columnName: "ret"
     )
 }
 
@@ -257,6 +260,6 @@ type Query {
       WITH {term: n.GeneSymbol, count: nCount} as ret
       ORDER BY ret.count DESC
       return ret
-      """
+      """, columnName: "ret"
     )
 }

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
 import { User } from '@ncats-frontend-library/models/utils';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
@@ -12,13 +12,12 @@ import { UsersPartialState } from './users.reducer';
 @Injectable()
 export class UsersEffects {
   constructor(
-    private readonly actions$: Actions,
     private userService: UserService,
     private store: Store<UsersPartialState>
   ) {}
 
   init = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.init),
       map(() => {
         const user = localStorage.getItem('userEntity');
@@ -32,7 +31,7 @@ export class UsersEffects {
   );
 
   loginUser = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.loginUser),
       mergeMap((action: { provider: string }) => {
         return this.userService.doLogin(action.provider).pipe(
@@ -55,7 +54,7 @@ export class UsersEffects {
   );
 
   loginEmailUser = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.loginEmailUser),
       mergeMap((action: { email: string; pw: string }) => {
         return this.userService.doEmailLogin(action.email, action.pw).pipe(
@@ -90,7 +89,7 @@ export class UsersEffects {
   );
 
   registerEmailUser = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.registerEmailUser),
       mergeMap((action: { email: string; pw: string }) => {
         return this.userService.doRegister(action.email, action.pw).pipe(
@@ -114,7 +113,7 @@ export class UsersEffects {
   );
 
   loginLinkUser = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.loginLinkUser),
       mergeMap((action: { email: string }) => {
         return this.userService.doEmailLinkLogin(action.email).pipe(
@@ -133,7 +132,7 @@ export class UsersEffects {
   );
 
   resetEmailPassword = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.resetPasswordEmail),
       mergeMap((action: { email: string }) => {
         return this.userService.doResetEmail(action.email).pipe(
@@ -152,7 +151,7 @@ export class UsersEffects {
 
   logoutUser = createEffect(
     () =>
-      this.actions$.pipe(
+      inject(Actions).pipe(
         ofType(UsersActions.logoutUser),
         tap(() => {
           this.userService.logout();
@@ -164,7 +163,7 @@ export class UsersEffects {
   );
 
   fetchUserProfile = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.loginUserSuccess),
       mergeMap((action: { user: User }) => {
         return this.userService.fetchUserProfile(action.user).pipe(
@@ -185,7 +184,7 @@ export class UsersEffects {
   );
 
   updateUserProfile = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(UsersActions.updateUserSubscriptions),
       withLatestFrom(this.store),
       mergeMap(([action, state]) => {

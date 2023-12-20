@@ -1,7 +1,6 @@
 @use '@angular/material' as mat;
-@use 'libs/styles/src/styles/_utils' as utils;
-@import 'libs/shared/utils/header-template/src/theming';
-@import 'libs/styles/src/styles/rdas-theme2';
+@use '_utils' as utils;
+@import 'rdas-theme2';
 
 html,
 body {
@@ -31,6 +30,7 @@ header {
 .full-width {
   width: 95%;
 }
+
 .content-panel {
   margin-top: 10vh;
   padding-bottom: 5vh;
@@ -104,6 +104,11 @@ header {
   padding: 0;
 }
 
+@include utils.width-sm(90);
+@include utils.width-sm(95);
+@include utils.width-sm(100);
+
+@include utils.width(90);
 @include utils.width(80);
 @include utils.width(75);
 @include utils.width(70);
@@ -207,8 +212,22 @@ span.search-highlight {
   text-decoration: underline;
 }
 
+.bar-chart-fill {
+  fill: mat.get-color-from-palette($app-primary);
+}
+
+#Epidemiology-Articles-fill {
+  fill: mat.get-color-from-palette($app-accent);
+}
+
+#Non-Epidemiology-Articles-fill {
+  fill: mat.get-color-from-palette($app-primary);
+}
+
+
+
 button.mat-ripple.mat-mdc-tab-header-pagination.mat-mdc-tab-header-pagination-after {
-  z-index: 1;
+ // z-index: 1;
 }
 
 @media only screen and (max-width: 1024px) {

@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,12 +16,12 @@ import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/su
   styleUrls: ['./disease-header.component.scss'],
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatIconModule, SubscribeButtonComponent, NgIf],
+  imports: [MatIconModule, SubscribeButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DiseaseHeaderComponent {
   @Input() disease!: Signal<Disease | undefined>;
-  title = computed(() => `${this.disease()?.name}: ${this.disease()?.gardId}`);
+ // title = computed(() => `${this.disease()?.name}: ${this.disease()?.gardId}`);
   parsedId = computed(() => this.getID());
 
   getID() {

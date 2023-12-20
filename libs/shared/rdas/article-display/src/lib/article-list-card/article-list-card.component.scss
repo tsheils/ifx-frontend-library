@@ -1,7 +1,13 @@
 @use '@angular/material' as mat;
-@import 'libs/styles/src/styles/rdas-theme2';
+@import 'rdas-theme2';
 
 ncats-frontend-library-article-list-card {
+
+  .rdas-article-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
   width: 98%;
   -ms-overflow-style: none; //windows
   scrollbar-width: none; //firefox

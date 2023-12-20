@@ -68,33 +68,17 @@ export const FETCHTRIALDETAILS = gql`
   ${TRIALFIELDS}
 `;
 export const FETCHTRIALSQUERY = gql`
-  query ClinicalTrialsList($gardId: String, $offset: Int, $limit: Int) {
-    clinicalTrials: clinicalTrialsByGardList(
-      gardId: $gardId
-      offset: $offset
-      limit: $limit
-    ) {
-      ...trialFields
+  query ClinicalTrialsList($ctwhere: ClinicalTrialWhere, $ctoptions: ClinicalTrialOptions) {
+     clinicalTrials(where: $ctwhere, options: $ctoptions){
+     ...trialFields
+   }
+    count: clinicalTrialsAggregate(where: $ctwhere) {
+    count
     }
-    count: clinicalTrialsByGardCount(gardId: $gardId)
   }
   ${TRIALFIELDS}
 `;
 
-export const FETCHTRIALSQUERYOLD = gql`
-  query ClinicalTrials(
-    $ctwhere: ClinicalTrialWhere
-    $ctoptions: ClinicalTrialOptions
-  ) {
-    clinicalTrials(where: $ctwhere, options: $ctoptions) {
-      ...trialFields
-    }
-    clinicalTrialsAggregate(where: $ctwhere) {
-      count
-    }
-  }
-  ${TRIALFIELDS}
-`;
 
 export const TRIALDETAILSVARIABLES: {
   ctwhere: {
@@ -106,50 +90,51 @@ export const TRIALDETAILSVARIABLES: {
   },
 };
 
+
 export const FETCHTRIALSVARIABLES: {
-  gardId?: string;
-  limit?: number;
-  offset?: number;
-} = {
-  limit: 10,
-  offset: 0,
-};
-export const FETCHTRIALSVARIABLESOLD: {
-  ctwhere?: {
-    investigatesConditionConditions_SINGLE?: {
-      hasAnnotationAnnotationsConnection_SINGLE?: {
-        node?: {
-          mappedToGardGards_SINGLE?: {
-            GardId?: null | string;
-          };
-        };
-      };
-    };
-  };
-  ctoptions: {
-    sort: [{ StartDate?: string }];
-    limit?: number;
-    offset?: number;
-  };
-} = {
   ctwhere: {
-    investigatesConditionConditions_SINGLE: {
-      hasAnnotationAnnotationsConnection_SINGLE: {
-        node: {
-          mappedToGardGards_SINGLE: {
-            GardId: null,
-          },
-        },
-      },
+    investigatesConditionConditions_SOME: {
+      hasAnnotationAnnotations_SOME: {
+        mappedToGardGards_SOME: {
+          GardId: string | null | undefined
+        }
+      }
     },
-  },
+    StudyType_IN?: null | undefined | string[] | string;
+    OverallStatus_IN?: null | undefined | string[] | string;
+  }
   ctoptions: {
-    sort: [
-      {
-        StartDate: 'DESC',
-      },
-    ],
+    limit: number,
+    offset: number
+  }
+} = {
+  ctoptions: {
     limit: 10,
     offset: 0,
   },
+  ctwhere: {
+    investigatesConditionConditions_SOME : {
+      hasAnnotationAnnotations_SOME : {
+        mappedToGardGards_SOME : {
+          GardId : undefined
+        }
+      }
+    }
+  }
 };
+
+export const TRIALFILTERS = gql`
+  query TrialFilters($ctwhere: ClinicalTrialWhere) {
+    trialsByStatus(where: $ctwhere) {
+      term
+      count
+      label
+    }
+    trialsByType(where: $ctwhere) {
+      term
+      count
+      label
+    }
+  }
+`;
+

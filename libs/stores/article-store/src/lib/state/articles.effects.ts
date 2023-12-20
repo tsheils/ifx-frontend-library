@@ -1,26 +1,25 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
 import { ApolloQueryResult } from '@apollo/client';
 import {
   Article,
-  ARTICLEDETAILSVARIABLES,
-  FETCHARTICLEDETAILS,
-} from '@ncats-frontend-library/models/rdas';
+  ARTICLEDETAILSVARIABLES, ARTICLEFILTERS,
+  FETCHARTICLEDETAILS
+} from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { switchMap, catchError, of, filter, map } from 'rxjs';
+import { switchMap, catchError, of, filter, map, forkJoin, take } from "rxjs";
 import { ArticleService } from '../article.service';
 import * as ArticleActions from './articles.actions';
 
 @Injectable()
 export class ArticlesEffects {
   constructor(
-    private actions$: Actions,
     private articleService: ArticleService
   ) {}
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   init$ = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(ArticleActions.initArticleStore),
       switchMap(() => of(ArticleActions.loadArticlesSuccess({ articles: [] }))),
       catchError((error) => {
@@ -30,9 +29,9 @@ export class ArticlesEffects {
     )
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+ // eslint-disable-next-line @typescript-eslint/no-explicit-any
   loadArticle$ = createEffect((): any =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>

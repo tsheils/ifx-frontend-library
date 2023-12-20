@@ -1,163 +1,159 @@
-<div *ngIf="disease()">
-  <div class="disease-header-section">
-    <ncats-frontend-library-disease-header
-      [disease]="disease"
-    ></ncats-frontend-library-disease-header>
+@if (disease()) {
+<div class="scroll-container" >
+  <div class="disease-display-panel" id="overview" #overview #scrollSection>
+    <mat-expansion-panel [expanded] = true class="disease-display-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="disease-accordion-title bottom-border-primary">Overview</span>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+<div class= "row space-around-row">
 
-    <ng-container *ngIf="mobile; else fullScreen">
-      <mat-tab-group
-        [color]="'primary'"
-        mat-align-tabs="start"
-        mat-stretch-tabs="true"
-        (selectedTabChange)="setTabUrl($event)"
-        [selectedIndex]="selectedIndex"
-        class="mobile-tabs"
-      >
-        <mat-tab>
-          <ng-template mat-tab-label
-            >Associated Genes ({{
-              disease()?.geneAssociations?.length
-            }})</ng-template
-          >
-          <ncats-frontend-library-gene-list
-            *ngIf="disease() && disease()?.geneAssociations"
-            [genes]="disease()?.geneAssociations"
-            [showTab]="false"
-          >
-          </ncats-frontend-library-gene-list>
-        </mat-tab>
-        <mat-tab>
-          <ng-template mat-tab-label
-            >Phenotypes ({{
-              disease()?.phenotypeAssociations?.length
-            }})</ng-template
-          >
-          <ncats-frontend-library-phenotype-list
-            *ngIf="disease() && disease()?.phenotypeAssociations"
-            [phenotypes]="disease()?.phenotypeAssociations"
-            [showTab]="false"
-          >
-          </ncats-frontend-library-phenotype-list>
-        </mat-tab>
-      </mat-tab-group>
-    </ng-container>
-    <ng-template #fullScreen>
-      <div class="grid-list">
-        <div>
-          <ncats-frontend-library-gene-list
-            *ngIf="disease() && disease()?.geneAssociations"
-            [genes]="disease()?.geneAssociations"
-          >
-          </ncats-frontend-library-gene-list>
-        </div>
+@if(filterMap() && filterMap().has('articles')) {
+<div class="width-30">
+<lib-shared-rdas-article-charts [filters]="filterMap().get('articles')!"></lib-shared-rdas-article-charts>
+  <br>
+</div>
+}
+@if(filterMap() && filterMap().has('projects')) {
+<div class="width-30">
+<lib-shared-rdas-project-charts [filters]="filterMap().get('projects')!"></lib-shared-rdas-project-charts>
+  <br>
+</div>
+}
+@if(filterMap() && filterMap().has('trials')) {
+<div class="width-30">
+<lib-shared-rdas-trials-charts [filters]="filterMap().get('trials')!"></lib-shared-rdas-trials-charts>
+  <br>
+</div>
+}
+</div>
 
-        <div>
-          <ncats-frontend-library-phenotype-list
-            *ngIf="disease() && disease()?.phenotypeAssociations"
-            [phenotypes]="disease()?.phenotypeAssociations"
-          >
-          </ncats-frontend-library-phenotype-list>
-        </div>
-      </div>
-    </ng-template>
-    <br />
+    </mat-expansion-panel>
   </div>
 
-  <mat-card [appearance]="'outlined'" class="main-disease-display" #tabs id="disease-tabs">
-    <div class="row centered-row">
-      <div class="width-75">
-        <mat-tab-group
-          [color]="'primary'"
-          mat-align-tabs="start"
-          mat-stretch-tabs="true"
-          (selectedTabChange)="setTabUrl($event)"
-          [selectedIndex]="selectedIndex"
-        >
-          <mat-tab [label]="'Epidemiology Articles ' + disease()?.epiCount" #epiArticles>
-            <div *ngIf="disease() && disease()?.epiArticles; else notFoundEpi">
-              <ncats-frontend-library-article-list
-                [articles]="disease()?.epiArticles"
-                [count]="disease()?.epiCount"
-                (pageChange)="
-                  pageList($event, 'articleOptions', 'epiArticles')
-                "
-              >
-              </ncats-frontend-library-article-list>
-            </div>
-            <ng-template #notFoundEpi>
-              <ncats-frontend-library-shared-utils-data-not-found
-                [message]="'No Epidemiological Articles Found'"
-              ></ncats-frontend-library-shared-utils-data-not-found>
-            </ng-template>
-          </mat-tab>
-          <mat-tab
-            [label]="'Non-Epidemiology Articles ' + disease()?.nonEpiCount" #nonEpiArticles
-          >
-            <div
-              *ngIf="
-                disease() && disease()?.nonEpiArticles;
-                else notFoundArticles
-              "
-            >
-              <ncats-frontend-library-article-list
-                [articles]="disease()?.nonEpiArticles"
-                [count]="disease()?.nonEpiCount"
-                (pageChange)="
-                  pageList($event, 'articleOptions', 'nonEpiArticles')
-                "
-              >
-              </ncats-frontend-library-article-list>
-            </div>
-            <ng-template #notFoundArticles>
-              <ncats-frontend-library-shared-utils-data-not-found
-                [message]="'No Articles Found'"
-              ></ncats-frontend-library-shared-utils-data-not-found>
-            </ng-template>
-          </mat-tab>
-          <!--<mat-tab [label]="'Articles ' + (disease.epiCount + disease.nonEpiCount )">
-          <mat-tab-group [color]="'accent'">
-
-          </mat-tab-group>
-        </mat-tab>-->
-          <mat-tab [label]="'NIH-funded Projects ' + disease()?.projectCount" #projects>
-            <div
-              *ngIf="disease() && disease()?.projects; else notFoundProjects"
-            >
-              <ncats-frontend-library-project-list
-                [projects]="disease()?.projects"
-                [count]="disease()?.projectCount"
-                (pageChange)="
-                  pageList($event, 'coreProjectsOptions', 'project')
-                "
-              ></ncats-frontend-library-project-list>
-            </div>
-            <ng-template #notFoundProjects>
-              <ncats-frontend-library-shared-utils-data-not-found
-                [message]="'No NIH Funded Projects Available'"
-              ></ncats-frontend-library-shared-utils-data-not-found>
-            </ng-template>
-          </mat-tab>
-          <mat-tab [label]="'Clinical Trials ' + disease()?.clinicalTrialCount">
-            <div
-              *ngIf="
-                disease() && disease()?.clinicalTrials;
-                else notFoundTrials
-              "
-            >
-              <ncats-frontend-library-clinical-trials-list
-                [trials]="disease()?.clinicalTrials"
-                [count]="disease()?.clinicalTrialCount"
-                (pageChange)="pageList($event, 'ctoptions', 'trials')"
-              ></ncats-frontend-library-clinical-trials-list>
-            </div>
-            <ng-template #notFoundTrials>
-              <ncats-frontend-library-shared-utils-data-not-found
-                [message]="'No Clinical Trial Data Available'"
-              ></ncats-frontend-library-shared-utils-data-not-found>
-            </ng-template>
-          </mat-tab>
-        </mat-tab-group>
-      </div>
-    </div>
-  </mat-card>
+<div class="disease-display-panel" id='genes' #genes #scrollSection>
+<mat-expansion-panel [disabled]=!disease()?.geneAssociations [expanded] = disease()?.geneAssociations>
+<mat-expansion-panel-header>
+<mat-panel-title>
+  <span class="disease-accordion-title bottom-border-primary">Associated Genes {{disease()?.geneAssociations?.length}}</span>
+    </mat-panel-title>
+</mat-expansion-panel-header>
+  <ncats-frontend-library-gene-list
+    [genes]="disease()?.geneAssociations"
+    [showTab]="false"
+  >
+  </ncats-frontend-library-gene-list>
+</mat-expansion-panel>
 </div>
+<div class="disease-display-panel" id='phenotypes' #phenotypes #scrollSection>
+<mat-expansion-panel [disabled]=!disease()?.phenotypeAssociations [expanded] = disease()?.phenotypeAssociations  >
+<mat-expansion-panel-header>
+<mat-panel-title>
+  <span class="disease-accordion-title bottom-border-primary">Phenotypes {{disease()?.phenotypeAssociations?.length}}</span>
+    </mat-panel-title>
+</mat-expansion-panel-header>
+<ncats-frontend-library-phenotype-list
+[phenotypes]="disease()?.phenotypeAssociations"
+[showTab]="false"
+>
+</ncats-frontend-library-phenotype-list>
+</mat-expansion-panel>
+</div>
+
+<div class="disease-display-panel" id='epiArticles' #epiArticles #scrollSection>
+<mat-expansion-panel [disabled]=!disease()?.epiCount [expanded] = disease()?.epiCount>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span class="disease-accordion-title bottom-border-primary"> Epidemiology Articles {{disease()?.epiCount}}</span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+<lib-rdas-panel-template
+[count]="disease()?.epiCount!"
+[filters]="filterMap().get('articles')!"
+[message]="'No Epidemiology Articles Found'"
+(listChange)="fetchList($event, 'articleOptions', 'epiArticles')"
+>
+@if ( disease() && disease()?.nonEpiArticles) {
+<div class="data-list">
+  <ncats-frontend-library-article-list [articles]="disease()?.epiArticles"></ncats-frontend-library-article-list>
+</div>
+}
+</lib-rdas-panel-template>
+</mat-expansion-panel>
+</div>
+
+<div class="disease-display-panel" id='nonEpiArticles' #nonEpiArticles #scrollSection>
+<mat-expansion-panel [disabled]=!disease()?.nonEpiCount [expanded] = disease()?.nonEpiCount>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span class="disease-accordion-title bottom-border-primary">Non-Epidemiology Articles {{disease()?.nonEpiCount}}</span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+<lib-rdas-panel-template
+[count]="disease()?.nonEpiCount!"
+[filters]="filterMap().get('articles')!"
+[message]="'No Articles Found'"
+(listChange)="fetchList($event, 'articleOptions', 'nonEpiArticles')"
+>
+  @if ( disease() && disease()?.nonEpiArticles) {
+  <div class="data-list">
+    <ncats-frontend-library-article-list [articles]="disease()?.nonEpiArticles"></ncats-frontend-library-article-list>
+  </div>
+  }
+</lib-rdas-panel-template>
+
+
+</mat-expansion-panel>
+</div>
+
+<div class="disease-display-panel" id='projects' #projects #scrollSection>
+<mat-expansion-panel [disabled]=!disease()?.projectCount [expanded] = disease()?.projectCount>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span class="disease-accordion-title bottom-border-primary">NIH-funded Projects {{disease()?.projectCount}}</span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+<lib-rdas-panel-template
+[count]="disease()?.projectCount!"
+[filters]="filterMap().get('projects')!"
+[message]="'No NIH Funded Projects Available'"
+(listChange)="fetchList($event, 'coreProjectsOptions', 'projects')"
+>
+@if (disease() && disease()?.projects) {
+<div class="data-list">
+  <ncats-frontend-library-project-list
+    [projects]="disease()?.projects"
+  ></ncats-frontend-library-project-list>
+</div>
+}
+</lib-rdas-panel-template>
+</mat-expansion-panel>
+</div>
+<div class="disease-display-panel" id='trials' #trials #scrollSection>
+<mat-expansion-panel [disabled]=!disease()?.clinicalTrialCount [expanded] = disease()?.clinicalTrialCount>
+  <mat-expansion-panel-header>
+    <mat-panel-title>
+      <span class="disease-accordion-title bottom-border-primary">Clinical Trials {{disease()?.clinicalTrialCount}}</span>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+
+<lib-rdas-panel-template
+[count] = "disease()?.clinicalTrialCount!"
+[filters]="filterMap().get('trials')!"
+[message]="'No Clinical Trial Data Available'"
+(listChange)="fetchList($event, 'ctoptions', 'trials')"
+>
+@if (disease() && disease()?.clinicalTrials) {
+<div class="data-list">
+  <ncats-frontend-library-clinical-trials-list
+    [trials]="disease()?.clinicalTrials"
+  ></ncats-frontend-library-clinical-trials-list>
+</div>
+}
+</lib-rdas-panel-template>
+</mat-expansion-panel>
+</div>
+</div>
+}

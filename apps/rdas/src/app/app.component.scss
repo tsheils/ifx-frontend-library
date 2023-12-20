@@ -1,5 +1,5 @@
 @use '@angular/material' as mat;
-@import 'libs/styles/src/styles/rdas-theme2';
+@import 'rdas-theme2';
 
 a {
   color: mat.get-color-from-palette($app-primary);
@@ -138,4 +138,25 @@ img.rdas-footer-logo {
 
 .rdas-tab-label {
   font-size: 16px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22%, 2%));
+  grid-gap: 2%;
+  text-align: center;
+}
+
+.scatter-line {
+  stroke: mat.get-color-from-palette($app-accent);
+}
+
+@media only screen and (max-width: 768px) {
+  .main-content {
+    padding-top: 55px;
+  }
+
+  img.rdas-footer-logo {
+    height: 6rem;
+  }
 }

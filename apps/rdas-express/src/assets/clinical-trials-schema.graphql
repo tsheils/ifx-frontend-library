@@ -1,4 +1,6 @@
-type Annotation @exclude(operations: [CREATE, DELETE, UPDATE]){
+extend schema @mutation(operations: [])
+scalar JSON
+type Annotation  {
   CandidatePreferred: String!
   MATCH_TYPE: String!
   SEMANTIC_TYPE: [String]
@@ -13,7 +15,7 @@ type Annotation @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "mapped_to_gard", direction: OUT)
 }
 
-type ClinicalTrial @exclude(operations: [CREATE, DELETE, UPDATE]){
+type ClinicalTrial  {
   Acronym: String
   BriefSummary: String!
   BriefTitle: String!
@@ -65,14 +67,14 @@ type ClinicalTrial @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "sponsored_by", direction: OUT)
 }
 
-type Collaborator @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Collaborator  {
   CollaboratorClass: String!
   CollaboratorName: String!
   clinicalTrialscollaboratedWith: [ClinicalTrial!]!
     @relationship(type: "collaborated_with", direction: IN)
 }
 
-type Condition @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Condition  {
   Condition: String!
   clinicalTrialsinvestigatesCondition: [ClinicalTrial!]!
     @relationship(type: "investigates_condition", direction: IN)
@@ -84,7 +86,7 @@ type Condition @exclude(operations: [CREATE, DELETE, UPDATE]){
     )
 }
 
-type Drug @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Drug  {
   ACTIVATED: [String]
   ANDA: [String]
   ATC: [String]
@@ -132,7 +134,7 @@ type Drug @exclude(operations: [CREATE, DELETE, UPDATE]){
     )
 }
 
-type ExpandedAccess @exclude(operations: [CREATE, DELETE, UPDATE]){
+type ExpandedAccess  {
   ExpAccTypeIndividual: String
   ExpAccTypeIntermediate: String
   ExpAccTypeTreatment: String
@@ -143,7 +145,7 @@ type ExpandedAccess @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "expanded_access_info", direction: IN)
 }
 
-type GARD @exclude(operations: [CREATE, DELETE, UPDATE]){
+type GARD  {
   GardId: String!
   GardName: String!
   Synonyms: [String]!
@@ -158,7 +160,7 @@ interface HasAnnotationProperties @relationshipProperties {
   METAMAP_SCORE: BigInt
 }
 
-type IndividualPatientData @exclude(operations: [CREATE, DELETE, UPDATE]){
+type IndividualPatientData  {
   IPDSharing: String!
   IPDSharingAccessCriteria: String
   IPDSharingDescription: String
@@ -169,7 +171,7 @@ type IndividualPatientData @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "has_individual_patient_data", direction: IN)
 }
 
-type Intervention @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Intervention  {
   InterventionDescription: String
   InterventionName: String
   InterventionType: String!
@@ -183,7 +185,7 @@ type Intervention @exclude(operations: [CREATE, DELETE, UPDATE]){
     )
 }
 
-type Location @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Location  {
   LocationCity: String
   LocationCountry: String
   LocationFacility: String
@@ -198,19 +200,19 @@ interface MappedToRxnormProperties @relationshipProperties {
   WITH_SPACY: Boolean!
 }
 
-type Participant @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Participant  {
   EligibilityCriteria: String!
   clinicalTrialshasParticipantInfo: [ClinicalTrial!]!
     @relationship(type: "has_participant_info", direction: IN)
 }
 
-type PatientRegistry @exclude(operations: [CREATE, DELETE, UPDATE]){
+type PatientRegistry  {
   PatientRegistry: String!
   clinicalTrialspatientRegistryInfo: [ClinicalTrial!]!
     @relationship(type: "patient_registry_info", direction: IN)
 }
 
-type Reference @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Reference  {
   ReferenceCitation: String!
   ReferencePMID: String
   ReferenceType: String!
@@ -218,14 +220,14 @@ type Reference @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "is_about", direction: OUT)
 }
 
-type Sponsor @exclude(operations: [CREATE, DELETE, UPDATE]){
+type Sponsor  {
   LeadSponsorClass: String!
   LeadSponsorName: String!
   clinicalTrialssponsoredBy: [ClinicalTrial!]!
     @relationship(type: "sponsored_by", direction: IN)
 }
 
-type StudyDesign @exclude(operations: [CREATE, DELETE, UPDATE]){
+type StudyDesign  {
   DesignAllocation: String
   DesignInterventionModel: String
   DesignInterventionModelDescription: String
@@ -240,31 +242,64 @@ type StudyDesign @exclude(operations: [CREATE, DELETE, UPDATE]){
     @relationship(type: "has_study_design", direction: IN)
 }
 
+type FilterCount  {
+  term: String
+  count: Int
+  label: String
+}
+
 type Query {
-  clinicalTrialsByGardList(
-    gardId: String
-    offset: Int
-    limit: Int
-  ): [ClinicalTrial]
+  trialsByStatus(where: ClinicalTrialWhere): [FilterCount]
     @cypher(
       statement: """
-      MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
-       WHERE n.GardId= $gardId
-       return distinct(cl)
-      ORDER BY cl.StartDate DESC
-      SKIP $offset
-      LIMIT $limit
-      """
+  MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
+         WITH cl.OverallStatus as status, count(distinct(cl)) as ct
+       return {term: status, count:ct, label: 'OverallStatus'} as data order by ct DESC
+      """, columnName: "data"
     )
 }
 
 type Query {
-  clinicalTrialsByGardCount(gardId: String): BigInt
+  trialsByType(where: ClinicalTrialWhere): [FilterCount]
+    @cypher(
+      statement: """
+  MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
+         WITH cl.StudyType as studyType, count(distinct(cl)) as ct
+       return {term: studyType, count:ct, label: 'StudyType'} as data order by ct DESC
+      """, columnName: "data"
+    )
+}
+
+
+
+
+
+
+
+
+type Query {
+  clinicalTrialsByGardList(where: ClinicalTrialWhere): [ClinicalTrial]
     @cypher(
       statement: """
       MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
-        WHERE n.GardId= $gardId
-      RETURN count(distinct(cl))
-      """
+      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
+       return distinct(cl) as trials
+      ORDER BY cl.StartDate DESC
+      SKIP $offset
+      LIMIT $limit
+      """, columnName: "trials"
+    )
+}
+
+type Query {
+  clinicalTrialsByGardCount(where: ClinicalTrialWhere): BigInt
+    @cypher(
+      statement: """
+      MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
+      RETURN count(distinct(cl)) as count
+      """, columnName: "count"
     )
 }

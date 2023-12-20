@@ -13,7 +13,7 @@ import {
   UsersFacade,
 } from '@ncats-frontend-library/stores/user-store';
 import { map } from 'rxjs';
-import { NgIf } from '@angular/common';
+
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -54,7 +54,6 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
-    NgIf,
   ],
 })
 export class RegisterModalComponent {

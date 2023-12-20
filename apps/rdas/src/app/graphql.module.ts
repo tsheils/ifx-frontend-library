@@ -18,26 +18,34 @@ import { environment } from '../environments/environment';
           diseases: /* <-- this settings will be saved as default client */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}${environment.production ? '/' : ':4000/'}api/diseases`,
+              uri: `${environment.baseUrl}${
+                environment.production ? '/' : ':4000/'
+              }api/diseases`,
             }),
           },
           articles: /* <-- this settings will be saved as default client */ {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}${environment.production ? '/' : ':4001/'}api/articles`,
+              uri: `${environment.baseUrl}${
+                environment.production ? '/' : ':4001/'
+              }api/articles`,
             }),
           },
           projects: {
             cache: new InMemoryCache(),
             link: httpLink.create({
-              uri: `${environment.baseUrl}${environment.production ? '/' : ':4002/'}api/grants`,
+              uri: `${environment.baseUrl}${
+                environment.production ? '/' : ':4002/'
+              }api/grants`,
             }),
           },
           trials:
             /* <-- these settings will be saved by name: newClientName */ {
               cache: new InMemoryCache(),
               link: httpLink.create({
-                uri: `${environment.baseUrl}${environment.production ? '/' : ':4003/'}api/trials`,
+                uri: `${environment.baseUrl}${
+                  environment.production ? '/' : ':4003/'
+                }api/trials`,
               }),
             },
         };

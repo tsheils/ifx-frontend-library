@@ -33,6 +33,7 @@ export const DISEASEBRANCHPARAMETERS: {
   skip?: number;
   limit?: number;
   where?: {
+    GardName_CONTAINS?: string | null | undefined;
     hasPhenotypePhenotypes_SOME?: {
       HPOTerm_IN?: string[];
     };
@@ -113,8 +114,8 @@ export const FETCHPATHDISEASES = gql`
 `;
 
 export const DISEASETYPEAHEAD = gql`
-  query Gards($searchString: String) {
-    diseaseSearch(searchString: $searchString) {
+  query Gards($searchString: String, $limit:Int) {
+    diseaseSearch(searchString: $searchString, limit: $limit) {
       name: GardName
       gardId: GardId
     }
@@ -236,6 +237,7 @@ export const LISTQUERYPARAMETERS: {
     sort?: [{ [key: string]: string }];
   };
   where?: {
+    GardName_CONTAINS?: string | null | undefined;
     hasPhenotypePhenotypes_SOME?: {
       HPOTerm_IN?: string[];
     };

@@ -112,14 +112,12 @@ export const GRANTDETAILSVARIABLES: {
 };
 
 export const PROJECTVARIABLES: {
-  coreProjectsWhere: {
-    projectsUnderCoreConnection_ALL: {
-      node: {
-        gardsresearchedBy_SINGLE: {
+    coreProjectsWhere: {
+      projectsUnderCore_SOME: {
+        gardsresearchedBy_SOME: {
           GardId?: string | null;
-        };
-      };
-    };
+        }
+      }
   };
   coreProjectsOptions: {
     limit?: number;
@@ -134,14 +132,12 @@ export const PROJECTVARIABLES: {
   };
 } = {
   coreProjectsWhere: {
-    projectsUnderCoreConnection_ALL: {
-      node: {
-        gardsresearchedBy_SINGLE: {
-          GardId: null,
-        },
-      },
+      projectsUnderCore_SOME: {
+        gardsresearchedBy_SOME: {
+          GardId: null
+        }
+      }
     },
-  },
   coreProjectsOptions: {
     limit: 10,
   },
@@ -153,3 +149,20 @@ export const PROJECTVARIABLES: {
     ],
   },
 };
+
+export const PROJECTFILTERS = gql`
+  query ProjectFilters(
+    $gardId: String
+  ) {
+    countsByYear(gardId: $gardId) {
+      term
+      count
+      label
+    }
+    costByYear(gardId: $gardId) {
+      term
+      count
+      label
+    }
+  }
+`;

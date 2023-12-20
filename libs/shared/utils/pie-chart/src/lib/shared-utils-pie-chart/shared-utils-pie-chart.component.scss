@@ -1,0 +1,25 @@
+lib-shared-utils-pie-chart {
+  .pie-chart-container {
+    padding-left: 2vw;
+  }
+
+  .pie-chart {
+    min-height: 30vh;
+  }
+
+  .labelName {
+    font-size: 1.2em;
+    font-style: italic;
+  }
+
+  text.toolCircle {
+    font-style: normal;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .value {
+    font-size: 2.4em;
+  }
+
+}

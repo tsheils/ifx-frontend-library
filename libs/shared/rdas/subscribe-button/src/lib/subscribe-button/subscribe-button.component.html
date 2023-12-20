@@ -1,42 +1,33 @@
 <div class="centered">
+  @if (!subscribed && userExists) {
   <button
     mat-stroked-button
-    *ngIf="!subscribed && userExists"
     (click)="subscribe()"
     [color]="theme"
     [disabled]="!userExists"
   >
     SUBSCRIBE
   </button>
+  } @if (!userExists) {
   <ncats-frontend-library-social-sign-on-button
-    *ngIf="!userExists"
     [theme]="theme"
   ></ncats-frontend-library-social-sign-on-button>
+  }
   <!--
   <button mat-stroked-button   (click)="subscribe()" [color]="'warn'">SIGN IN TO SUBSCRIBE</button>
 -->
-  <button
-    mat-stroked-button
-    [color]="theme"
-    *ngIf="subscribed"
-    [matMenuTriggerFor]="menu"
-  >
+  @if (subscribed) {
+  <button mat-stroked-button [color]="theme" [matMenuTriggerFor]="menu">
     <div class="grid-button">
       <div>
-        <mat-icon *ngIf="subscriptionSelection.selected.length === 3"
-          >notifications_active</mat-icon
-        >
-        <mat-icon
-          *ngIf="
-            subscriptionSelection.selected.length === 1 ||
-            subscriptionSelection.selected.length === 2
-          "
-          class="material-symbols-outlined"
-          >notifications</mat-icon
-        >
-        <mat-icon *ngIf="subscriptionSelection.selected.length === 0"
-          >notifications_off</mat-icon
-        >
+        @if (subscriptionSelection.selected.length === 3) {
+        <mat-icon>notifications_active</mat-icon>
+        } @if ( subscriptionSelection.selected.length === 1 ||
+        subscriptionSelection.selected.length === 2 ) {
+        <mat-icon class="material-symbols-outlined">notifications</mat-icon>
+        } @if (subscriptionSelection.selected.length === 0) {
+        <mat-icon>notifications_off</mat-icon>
+        }
       </div>
       <div>SUBSCRIBED</div>
       <div>
@@ -44,6 +35,7 @@
       </div>
     </div>
   </button>
+  }
   <mat-menu #menu="matMenu">
     <div mat-menu-item>
       <mat-checkbox

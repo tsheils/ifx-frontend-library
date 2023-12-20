@@ -9,12 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/disease-display"],
       "options": {
-        "jestConfig": "libs/shared/rdas/disease-display/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/rdas/disease-display/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "libs/shared/rdas/disease-display/**/*.ts",

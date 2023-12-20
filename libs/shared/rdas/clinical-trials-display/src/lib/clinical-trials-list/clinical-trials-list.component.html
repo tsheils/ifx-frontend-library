@@ -1,17 +1,10 @@
-<div class="row right-justified-row" *ngIf="trials">
-  <mat-paginator
-    #paginator
-    [length]="count"
-    [pageIndex]="0"
-    [pageSize]="10"
-    [hidePageSize]="true"
-    (page)="fetchTrials($event)"
-  ></mat-paginator>
-</div>
-<div class="row centered-row" *ngFor="let trial of trials">
+@for (trial of trials; track trial) {
+<div class="row centered-row">
   <ncats-frontend-library-clinical-trials-list-card
     [trial]="trial"
     (click)="navigate(trial.NCTId)"
     class="clickable-area"
   ></ncats-frontend-library-clinical-trials-list-card>
 </div>
+}
+

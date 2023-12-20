@@ -8,15 +8,16 @@
       [formControl]="searchCtl"
       [value]="filter.query"
     />
+    @if (searchCtl.value) {
     <button
       matSuffix
       mat-icon-button
       aria-label="close"
       (click)="clearSearch()"
-      *ngIf="searchCtl.value"
     >
       <mat-icon [color]="'primary'">backspace</mat-icon>
     </button>
+    }
   </mat-form-field>
   <div>
     <ncats-frontend-library-loading-spinner
@@ -55,9 +56,10 @@
             {{ field['count'] }}
           </span>
         </div>
-        <br *ngIf="last" />
+        @if (last) {
+        <br />
+        } @if (last && filter.values.length >= 200) {
         <button
-          *ngIf="last && filter.values.length >= 200"
           matButton
           mat-stroked-button
           (click)="loadMore()"
@@ -66,6 +68,7 @@
         >
           see more
         </button>
+        }
       </div>
     </cdk-virtual-scroll-viewport>
   </div>

@@ -25,8 +25,6 @@ export const rdasBrowseRoutes: Route[] = [
     component: RdasBrowseComponent,
     providers: [
       UsersFacade,
-      provideState(fromUsers.USERS_FEATURE_KEY, fromUsers.usersReducer),
-      provideEffects(UsersEffects),
       DiseasesFacade,
       provideState(
         fromDiseases.DISEASES_FEATURE_KEY,

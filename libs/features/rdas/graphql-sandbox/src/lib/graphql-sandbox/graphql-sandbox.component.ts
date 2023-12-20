@@ -1,6 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
-  AfterViewInit,
+  afterNextRender,
   ChangeDetectorRef,
   Component,
   ElementRef,
@@ -20,9 +20,8 @@ import { ApolloSandbox } from '@apollo/sandbox';
   styleUrls: ['./graphql-sandbox.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class GraphqlSandboxComponent implements AfterViewInit {
+export class GraphqlSandboxComponent {
   @ViewChild('embeddedsandbox', { static: true }) embeddedsandbox!: ElementRef;
-  isBrowser: boolean;
   url!: string;
 
   constructor(
@@ -32,20 +31,17 @@ export class GraphqlSandboxComponent implements AfterViewInit {
     private route: ActivatedRoute,
     private changeRef: ChangeDetectorRef
   ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
-
-  ngAfterViewInit(): void {
-    if (this.isBrowser) {
-      this.route.data.subscribe((data) => {
-        this.url = data['instance'];
-        this.changeRef.markForCheck();
-        new ApolloSandbox({
-          target: this.embeddedsandbox.nativeElement,
-          initialEndpoint: this.url,
-          includeCookies: false
+    afterNextRender(() => {
+      if (isPlatformBrowser(platformId)) {
+        this.route.data.subscribe((data) => {
+          this.url = data['instance'];
+          this.changeRef.markForCheck();
+          new ApolloSandbox({
+            target: this.embeddedsandbox.nativeElement,
+            initialEndpoint: this.url,
+          });
         });
-      });
-    }
+      }
+    });
   }
 }

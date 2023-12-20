@@ -11,12 +11,11 @@
         "{workspaceRoot}/coverage/libs/features/rdas/rdas-disease-page"
       ],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-disease-page/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/features/rdas/rdas-disease-page/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "libs/features/rdas/rdas-disease-page/**/*.ts",

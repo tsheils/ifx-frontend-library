@@ -8,10 +8,7 @@ describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [
-        AppComponent,
-        RouterModule
-      ],
+      imports: [AppComponent, RouterModule],
       providers: [
         { provide: DiseasesFacade, useValue: {} },
         { provide: UsersFacade, useValue: {} },

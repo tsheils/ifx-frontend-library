@@ -1,3 +1,12 @@
+@mixin width-sm($width) {
+  @media only screen and (max-width: 768px) {
+    .width-sm-#{$width} {
+      width: $width * 1% !important;
+      flex-basis: $width * 1% !important;
+    }
+  }
+}
+
 @mixin width($width) {
   .width-#{$width} {
     width: $width * 1%;

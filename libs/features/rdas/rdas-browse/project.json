@@ -9,12 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/features/rdas/rdas-browse"],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-browse/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/features/rdas/rdas-browse/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "libs/features/rdas/rdas-browse/**/*.ts",

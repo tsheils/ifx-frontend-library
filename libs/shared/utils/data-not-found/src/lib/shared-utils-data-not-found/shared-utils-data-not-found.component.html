@@ -1,12 +1,19 @@
-<div class="text-align-center" *ngIf="!subscribed">
-  <h2 *ngIf="message">{{ message }}</h2>
+@if (!subscribed) {
+<div class="text-align-center">
+  @if (message) {
+  <h2>{{ message }}</h2>
+  }
   <h3>Subscribe to receive updates when new data is available.</h3>
   <div class="row centered-row">
     <ncats-frontend-library-subscribe-button (isSubscribed)="setSub($event)">
     </ncats-frontend-library-subscribe-button>
   </div>
 </div>
-<div class="text-align-center" *ngIf="subscribed">
-  <h2 *ngIf="message">{{ message }}</h2>
+} @if (subscribed) {
+<div class="text-align-center">
+  @if (message) {
+  <h2>{{ message }}</h2>
+  }
   <h3>You will receive updates when new data is available.</h3>
 </div>
+}

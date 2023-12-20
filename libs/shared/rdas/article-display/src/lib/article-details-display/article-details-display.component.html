@@ -1,88 +1,89 @@
 <div class="row centered-row">
-  <div class="width-75">
+  <div class="width-sm-100 width-75">
     <mat-card>
       <ncats-frontend-library-article-list-card
         [article]="article"
       ></ncats-frontend-library-article-list-card>
       <mat-card-content>
-        <mat-card
-          [appearance]="'outlined'"
-          *ngIf="article.epidemiologies && article.epidemiologies.length"
-        >
+        @if (article.epidemiologies && article.epidemiologies.length) {
+        <mat-card [appearance]="'outlined'">
           <div class="project-sub-header bottom-border-accent">
             Epidemiologies: {{ article.epidemiologies.length }}
           </div>
           <div class="project-content-wrapper">
-            <mat-card
-              [appearance]="'outlined'"
-              *ngFor="let epidemiology of article.epidemiologies"
-            >
-              <div
-                *ngIf="
-                  epidemiology.epidemiology_type &&
-                  epidemiology.epidemiology_type.length
-                "
-              >
-                <b>Epidemiology Type:</b><br />
-                {{ epidemiology.epidemiology_type.join(', ') }}
-              </div>
-              <div
-                *ngIf="
-                  epidemiology.epidemiology_rate &&
-                  epidemiology.epidemiology_rate.length
-                "
-              >
-                <b>Epidemiology Rate:</b><br />
-                <span *ngFor="let rate of epidemiology.epidemiology_rate"
-                  >{{ rate }}<br
-                /></span>
-              </div>
-              <div
-                *ngIf="epidemiology.location && epidemiology.location.length"
-              >
-                <b>Location: </b><br />{{ epidemiology.location.join(', ') }}
-              </div>
-              <div *ngIf="epidemiology.sex && epidemiology.sex.length">
-                <b>Sex Affected: </b><br />{{ epidemiology.sex.join(', ') }}
-              </div>
-            </mat-card>
+            @for (epidemiology of article.epidemiologies; track epidemiology) {
+            @if ( epidemiology.epidemiology_type &&
+            epidemiology.epidemiology_type.length ) {
+            <div>
+              <b>Epidemiology Type:</b><br />
+              {{ epidemiology.epidemiology_type.join(', ') }}
+            </div>
+            } @if ( epidemiology.epidemiology_rate &&
+            epidemiology.epidemiology_rate.length ) {
+            <div>
+              <b>Epidemiology Rate:</b><br />
+              @for (rate of epidemiology.epidemiology_rate; track rate) {
+              <span>{{ rate }}<br /></span>
+              }
+            </div>
+            } @if (epidemiology.location && epidemiology.location.length) {
+            <div>
+              <b>Location: </b><br />{{ epidemiology.location.join(', ') }}
+            </div>
+            } @if (epidemiology.sex && epidemiology.sex.length) {
+            <div>
+              <b>Sex Affected: </b><br />{{ epidemiology.sex.join(', ') }}
+            </div>
+            } }
           </div>
         </mat-card>
+        }
 
         <div class="row space-between-row">
+          @if (article.abstractText && article.abstractText.length) {
           <button
             mat-flat-button
             [color]="'accent'"
-            *ngIf="article.abstractText && article.abstractText.length"
             (click)="showAbstract = !showAbstract"
           >
             {{ showAbstract ? 'Hide ' : 'Show ' }}Abstract
           </button>
-          <div *ngIf="showAbstract">
+          } @if (showAbstract) {
+          <div>
             <span
               class="mat-subtitle-2"
               [innerHTML]="getArticleAbstract()"
             ></span>
           </div>
+          }
         </div>
-        <div *ngIf="article.substances && article.substances.length">
+        @if (article.substances && article.substances.length) {
+        <div>
           <div class="primary-chip-outlined">Substances</div>
           <br />
-          <span *ngFor="let substance of article.substances">
+          @for (substance of article.substances; track substance) {
+          <span>
             {{ substance.name }}
           </span>
+          }
           <br />
           <br />
         </div>
-        <div *ngIf="article.keywords && article.keywords.length">
+        } @if (article.keywords && article.keywords.length) {
+        <div>
           <div class="primary-chip-outlined">Keywords</div>
           <br />
-          <span *ngFor="let keyword of article.keywords; let last = last">
-            {{ keyword.keyword }}<span *ngIf="!last">,&nbsp;</span>
+          @for (keyword of article.keywords; track keyword; let last = $last) {
+          <span>
+            {{ keyword.keyword }}@if (!last) {
+            <span>,&nbsp;</span>
+            }
           </span>
+          }
           <br />
           <br />
         </div>
+        }
         <div class="project-content-wrapper">
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
@@ -90,10 +91,10 @@
               {{ article.diseases ? article.diseases.length : 0 }}
             </div>
             <br />
-            <div *ngFor="let disease of article.diseases">
-              <ng-container *ngIf="disease.gardId; then link; else nolink">
-              </ng-container>
-              <ng-template #link>
+            @for (disease of article.diseases; track disease) {
+            <div>
+              @if (disease.gardId) {
+              <div #link>
                 <a
                   href="/disease?id={{ disease.gardId }}"
                   target="_blank"
@@ -101,46 +102,51 @@
                   aria-label="Link to disease details page"
                   >{{ disease.name }}</a
                 >
-              </ng-template>
-              <ng-template #nolink>
-                {{ disease.name }}
-              </ng-template>
+              </div>
+              } @else {
+              {{ disease.name }}
+              }
+
               <br />
               <br />
             </div>
+            }
           </mat-card>
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Annotations:
               {{ article.annotations ? article.annotations.length : 0 }}
             </div>
-            <div *ngIf="article.annotations && article.annotations.length">
-              <div *ngFor="let annotation of annotationsMap | keyvalue">
-                <div class="primary-chip-outlined">{{ annotation.key }}</div>
-                <div
-                  *ngFor="let term of annotation.value"
-                  class="annotation-term"
-                >
-                  {{ term }}
-                </div>
+            @if (article.annotations && article.annotations.length) { @for
+            (annotation of annotationsMap | keyvalue; track annotation) {
+            <div>
+              <div class="primary-chip-outlined">{{ annotation.key }}</div>
+              @for (term of annotation.value; track term) {
+              <div class="annotation-term">
+                {{ term }}
               </div>
-              <br />
-              <!--
-                <div class="list-item-content">Found In: {{annotation.type}}</div>
-    -->
+              }
             </div>
+            }
+            <br />
+            <!--
+            <div class="list-item-content">Found In: {{annotation.type}}</div>
+    -->
+            }
           </mat-card>
+
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Mesh Terms: {{ article.meshTerms ? article.meshTerms.length : 0 }}
             </div>
-            <div *ngIf="article.meshTerms && article.meshTerms.length">
-              <div *ngFor="let term of article.meshTerms">
-                <div class="list-item-content">{{ term.qualifierName }}</div>
-                <div class="list-item-content">{{ term.abbreviation }}</div>
-                <div class="list-item-content">{{ term.descriptorName }}</div>
-              </div>
+            @if (article.meshTerms && article.meshTerms.length) { @for (term of
+            article.meshTerms; track term) {
+            <div>
+              <div class="list-item-content">{{ term.qualifierName }}</div>
+              <div class="list-item-content">{{ term.abbreviation }}</div>
+              <div class="list-item-content">{{ term.descriptorName }}</div>
             </div>
+            } }
           </mat-card>
         </div>
       </mat-card-content>

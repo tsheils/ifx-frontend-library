@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
-  Component,
+  Component, ElementRef,
   EventEmitter,
   OnDestroy,
   OnInit,
-  Output,
-} from '@angular/core';
+  Output, ViewChild
+} from "@angular/core";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
+  MatAutocomplete,
   MatAutocompleteModule,
-  MatAutocompleteSelectedEvent,
-} from '@angular/material/autocomplete';
+  MatAutocompleteSelectedEvent, MatAutocompleteTrigger
+} from "@angular/material/autocomplete";
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -52,13 +53,18 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
 
   @Output()
   diseaseSelect: EventEmitter<Disease> = new EventEmitter<Disease>();
+  @Output()
+  diseaseSearch: EventEmitter<string> = new EventEmitter<string>();
   options: Disease[] = [];
+  @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
 
   constructor(
     private changeRef: ChangeDetectorRef,
     private diseaseService: DiseaseService,
     private diseaseFacade: DiseasesFacade
-  ) {}
+  ) {
+
+  }
 
   ngOnInit(): void {
     this.diseaseFacade.searchDiseases$
@@ -85,6 +91,11 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
 
   selectDisease(event: MatAutocompleteSelectedEvent) {
     this.diseaseSelect.next(event.option.value as Disease);
+  }
+
+  searchString() {
+    this.autocomplete.closePanel()
+    this.diseaseSearch.next(this.searchFormCtl.value)
   }
 
   displayFn(option: { name: string; id: string }): string {

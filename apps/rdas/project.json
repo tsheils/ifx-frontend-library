@@ -2,17 +2,18 @@
   "name": "rdas",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/rdas/src",
   "prefix": "rdas",
+  "sourceRoot": "apps/rdas/src",
+  "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/rdas/browser",
         "index": "apps/rdas/src/index.html",
-        "main": "apps/rdas/src/main.ts",
-        "polyfills": "apps/rdas/src/polyfills.ts",
+        "browser": "apps/rdas/src/main.ts",
+        "polyfills": ["zone.js"],
         "tsConfig": "apps/rdas/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -57,7 +58,11 @@
           "node_modules/swagger-ui/dist/swagger-ui.css"
         ],
         "scripts": [],
-        "webWorkerTsConfig": "apps/rdas/tsconfig.worker.json"
+        "server": "apps/rdas/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/rdas/server.ts"
+        }
       },
       "configurations": {
         "production": {
@@ -89,25 +94,27 @@
             "fonts": false
           }
         },
-        "development": {
-          "buildOptimizer": false,
-          "optimization": false,
-          "vendorChunk": true,
-          "extractLicenses": false,
-          "sourceMap": true,
-          "namedChunks": true
+          "development": {
+            "optimization": false,
+            "extractLicenses": false,
+            "sourceMap": true
         }
       },
-      "defaultConfiguration": "production"
+      "defaultConfiguration": "production",
+      "allowedCommonJsDependencies": [
+        "swagger-ui",
+        "lodash",
+        "three-forcegraph"
+      ]
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "configurations": {
         "production": {
-          "browserTarget": "rdas:build:production"
+          "buildTarget": "rdas:build:production"
         },
         "development": {
-          "browserTarget": "rdas:build:development"
+          "buildTarget": "rdas:build:development"
         }
       },
       "defaultConfiguration": "development"
@@ -115,11 +122,11 @@
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
       "options": {
-        "browserTarget": "rdas:build"
+        "buildTarget": "rdas:build"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": ["apps/rdas/**/*.ts", "apps/rdas/**/*.html"]
       }
@@ -129,7 +136,6 @@
       "outputs": ["{workspaceRoot}/coverage/apps/rdas"],
       "options": {
         "jestConfig": "apps/rdas/jest.config.ts",
-        "passWithNoTests": true,
         "webWorkerTsConfig": "apps/rdas/tsconfig.worker.json"
       }
     },
@@ -165,7 +171,7 @@
       "defaultConfiguration": "production"
     },
     "serve-ssr": {
-      "executor": "@nguniversal/builders:ssr-dev-server",
+      "executor": "@angular-devkit/build-angular:ssr-dev-server",
       "configurations": {
         "development": {
           "browserTarget": "rdas:build:development",
@@ -179,10 +185,10 @@
       "defaultConfiguration": "development"
     },
     "prerender": {
-      "executor": "@nguniversal/builders:prerender",
+      "executor": "@angular-devkit/build-angular:prerender",
       "options": {
-        "guessRoutes": false,
-        "routesFile": "./apps/rdas/routes.txt"
+        "routesFile": "./apps/rdas/routes.txt",
+        "discoverRoutes": false
       },
       "configurations": {
         "production": {
@@ -196,6 +202,5 @@
       },
       "defaultConfiguration": "production"
     }
-  },
-  "tags": []
+  }
 }

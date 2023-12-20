@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ncats-frontend-library-external-link',
   standalone: true,
-  imports: [CommonModule, MatIconModule],
+  imports: [MatIconModule],
   template: `
     <a
       href="https://www.hhs.gov/web/policies-and-standards/hhs-web-policies/disclaimer/index.html"

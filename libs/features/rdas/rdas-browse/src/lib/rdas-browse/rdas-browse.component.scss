@@ -1,11 +1,23 @@
 ncats-frontend-library-rdas-browse {
+
+  ncats-frontend-library-loading-spinner {
+    .progress-bar-container {
+       position: fixed;
+       top: 0;
+       bottom: 0;
+      right: -20vw;
+      left: 0;
+    }
+  }
+
   .browse-page {
-  //  margin-top: 60px;
+    //  margin-top: 60px;
     padding: 1vw;
   }
 
   .drawer-container-content {
     padding-left: 1vw;
+    min-height: 70vh;
   }
 
   .spinner-holder {

@@ -75,7 +75,7 @@ export class Article {
 
     if (obj.diseases) {
       this.diseases = obj.diseases
-        .map((disease: Partial<Disease> = {}) => new Disease(disease))
+    .map((disease: Partial<Disease> = {}) => new Disease(disease))
         .sort((a: Disease, b: Disease) => a.name.localeCompare(b.name));
     }
 

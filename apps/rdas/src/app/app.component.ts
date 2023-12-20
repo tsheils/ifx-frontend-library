@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { DOCUMENT, isPlatformBrowser, NgClass, NgIf } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -51,7 +51,6 @@ import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-se
   standalone: true,
   imports: [
     RouterLink,
-    NgIf,
     NgClass,
     MatSidenavModule,
     RdasSearchComponent,
@@ -199,6 +198,15 @@ export class AppComponent implements OnInit {
       },
     };
     this.router.navigate(['/disease'], navigationExtras);
+  }
+
+  searchDiseaseString(event: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        q: event,
+      },
+    };
+    this.router.navigate(['/diseases'], navigationExtras);
   }
 
   /**

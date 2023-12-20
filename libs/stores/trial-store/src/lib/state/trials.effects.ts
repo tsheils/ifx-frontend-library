@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from "@angular/core";
 import { ApolloQueryResult } from '@apollo/client';
 import {
   ClinicalTrial,
@@ -16,7 +16,7 @@ export class TrialsEffects {
   constructor(private actions$: Actions, private trialService: TrialService) {}
 
   init$ = createEffect(() =>
-    this.actions$.pipe(
+    inject(Actions).pipe(
       ofType(TrialsActions.initTrials),
       switchMap(() => of(TrialsActions.loadTrialsSuccess({ trials: [] }))),
       catchError((error) => {
@@ -26,8 +26,8 @@ export class TrialsEffects {
     )
   );
 
-  loadTrial$ = createEffect(() => {
-    return this.actions$.pipe(
+  loadTrial$ = createEffect(() =>
+    inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>
@@ -55,6 +55,6 @@ export class TrialsEffects {
             })
           );
       })
-    );
-  });
+    )
+  );
 }

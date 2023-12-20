@@ -11,10 +11,7 @@ describe('ClinicalTrialsListCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [
-        MatCardModule,
-        ClinicalTrialsListCardComponent
-      ],
+      imports: [MatCardModule, ClinicalTrialsListCardComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ClinicalTrialsListCardComponent);

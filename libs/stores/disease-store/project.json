@@ -9,12 +9,11 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/stores/disease-store"],
       "options": {
-        "jestConfig": "libs/stores/disease-store/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/stores/disease-store/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "libs/stores/disease-store/**/*.ts",

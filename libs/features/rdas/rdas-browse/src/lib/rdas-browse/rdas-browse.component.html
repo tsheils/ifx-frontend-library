@@ -19,24 +19,27 @@
     </div>
     <mat-tab-group>
       <mat-tab label="Filters">
+        @for (filter of filters; track filter) {
         <ncats-frontend-library-shared-utils-filter-panel
-          *ngFor="let filter of filters"
           [filter]="filter"
           (filterSelectionChange)="filterSelectionChange($event)"
           (filterChange)="filterChange($event)"
         ></ncats-frontend-library-shared-utils-filter-panel>
+        }
       </mat-tab>
       <mat-tab label="Hierarchy">
+        @if (diseaseTree) {
         <ncats-frontend-library-rdas-tree
-          *ngIf="diseaseTree"
           (leafExpand)="treeExpand($event)"
           [data]="diseaseTree"
         ></ncats-frontend-library-rdas-tree>
+        }
       </mat-tab>
     </mat-tab-group>
   </mat-drawer>
   <mat-drawer-content class="drawer-container-content">
-    <div class="row" *ngIf="!filtersidenav.opened">
+    @if (!filtersidenav.opened) {
+    <div class="row">
       <button
         [color]="'primary'"
         mat-stroked-button
@@ -47,10 +50,12 @@
         Filters <mat-icon>filter_list</mat-icon>
       </button>
     </div>
+    }
     <div class="row centered-row">
       <div class="width-75">
         <ncats-frontend-library-rdas-search
           (diseaseSelect)="selectDisease($event)"
+          (diseaseSearch)="searchDiseaseString($event)"
         ></ncats-frontend-library-rdas-search>
       </div>
     </div>
@@ -81,18 +86,18 @@
         </mat-form-field>
       </div>
       <div class="row centered">
+        @if (showDownload) {
         <button
           mat-stroked-button
           class="tool-button list-download"
           (click)="downloadData()"
           matTooltip="Download Data"
           color="accent"
-          *ngIf="showDownload"
         >
           <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
         </button>
+        } @if (page) {
         <mat-paginator
-          *ngIf="page"
           [pageSize]="page.pageSize"
           [pageIndex]="page.pageIndex"
           [pageSizeOptions]="[10, 25, 50]"
@@ -100,6 +105,7 @@
           [length]="page.total"
           class="browse-paginator"
         ></mat-paginator>
+        }
       </div>
     </div>
     <div class="row spinner-holder width-70">
@@ -113,8 +119,8 @@
       class="fill-container"
     ></ncats-frontend-library-disease-list>
     <div class="row right-justified-row">
+      @if (page) {
       <mat-paginator
-        *ngIf="page"
         [pageSize]="page.pageSize"
         [pageIndex]="page.pageIndex"
         [hidePageSize]="true"
@@ -122,6 +128,7 @@
         [length]="page.total"
         class="browse-paginator"
       ></mat-paginator>
+      }
       <ncats-frontend-library-scroll-to-top
         [color]="'accent'"
       ></ncats-frontend-library-scroll-to-top>

@@ -23,7 +23,6 @@ import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { NgIf } from '@angular/common';
 
 @Component({
   selector: 'ncats-frontend-library-social-sign-on-button',
@@ -31,7 +30,6 @@ import { NgIf } from '@angular/common';
   styleUrls: ['./social-sign-on-button.component.scss'],
   standalone: true,
   imports: [
-    NgIf,
     MatMenuModule,
     MatIconModule,
     MatButtonModule,

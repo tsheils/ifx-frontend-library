@@ -11,12 +11,11 @@
         "{workspaceRoot}/coverage/libs/shared/rdas/clinical-trials-display"
       ],
       "options": {
-        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/linter:eslint",
+      "executor": "@nx/eslint:lint",
       "options": {
         "lintFilePatterns": [
           "libs/shared/rdas/clinical-trials-display/**/*.ts",
