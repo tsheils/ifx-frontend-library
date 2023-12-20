@@ -13,7 +13,7 @@ export class FilterCategory {
   label!: string;
   query?: string;
   parent?: string;
-  filterable?: true;
+  filterable = true;
   page = 1;
   values!: Filter[];
 
@@ -28,6 +28,10 @@ export class FilterCategory {
 
     if (obj.parent) {
       this.parent = obj.parent;
+    }
+
+    if (obj.filterable) {
+      this.filterable = obj.filterable;
     }
 
     if (obj.label) {

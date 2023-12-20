@@ -390,8 +390,23 @@ export class DiseasesEffects {
                       {
                         parent: 'articles',
                         label: "Articles by Year",
+                        filterable: false,
                         values: articleFilterData.data.countsByYear.map((fil: Partial<Filter>) => new Filter(fil))
                       }
+                    )
+                  )
+                  filters.push(new FilterCategory(
+                      {
+                        parent: 'epiArticles',
+                        label: "Epidemiology Articles by Year",
+                        values: articleFilterData.data.countsByYear.filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles').map((fil: Partial<Filter>) => new Filter(fil))
+                      }
+                    ))
+                filters.push(new FilterCategory(
+                      {
+                        parent: 'nonEpiArticles',
+                        label: "Articles by Year",
+                        values: articleFilterData.data.countsByYear.filter((year: Partial<Filter>) => year.label == 'Non Epidemiology Articles').map((fil: Partial<Filter>) => new Filter(fil)) }
                     ))
                   }
                   if (projectFilterData && projectFilterData.data) {
