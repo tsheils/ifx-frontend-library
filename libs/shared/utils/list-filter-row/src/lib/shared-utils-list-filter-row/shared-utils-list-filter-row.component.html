@@ -2,6 +2,7 @@
 <div [formGroup]="filterFormControls">
 <div class = "filter-grid">
 @for (filter of filters; track filter) {
+@if(filter.filterable == true){
 <div>
   <mat-form-field appearance="outline" class="full-width">
     <mat-label>{{filter.label}}</mat-label>
@@ -13,6 +14,7 @@
   </mat-form-field>
   {{filterFormControls.controls[filter.values[0].label!].value}}
 </div>
+}
 }
 </div>
 </div>

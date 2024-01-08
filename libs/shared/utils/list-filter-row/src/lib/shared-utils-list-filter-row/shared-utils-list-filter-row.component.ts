@@ -26,7 +26,8 @@ export class SharedUtilsListFilterRowComponent implements OnInit {
   @Output() filterChange: EventEmitter<{ [key: string]: any }> = new EventEmitter<{[key: string]: any}>();
 
   ngOnInit() {
-    this.filters.forEach(filter=> {
+    this.filters = this.filters.filter((f: FilterCategory) => f.filterable);
+      this.filters.forEach((filter: FilterCategory)=> {
       const selected = filter.values.filter(val => val.selected).map(term => term.term);
       this.filterFormControls.setControl(filter.values[0].label!, new FormControl(selected))
     })

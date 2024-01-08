@@ -1,17 +1,16 @@
-import ForceGraph3D, { ForceGraph3DInstance } from '3d-force-graph';
+ import ForceGraph3D from '3d-force-graph';
 import { CdkScrollable } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { NgOptimizedImage } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from "@angular/common";
 import { HttpClient } from '@angular/common/http';
 import {
   afterNextRender,
   AfterRenderPhase,
   Component,
-  ElementRef,
-  OnInit,
+  ElementRef, Inject, PLATFORM_ID,
   ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+  ViewEncapsulation
+} from "@angular/core";
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
@@ -39,45 +38,56 @@ export class RdasHomeComponent {
    * element of the page to scroll to
    */
   @ViewChild('details', { read: ElementRef, static: true }) elemRef!: ElementRef;
+data!: unknown;
 
-  constructor(private router: Router, private http: HttpClient) {
+  constructor(
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: any,
+    private http: HttpClient
+  ) {
     afterNextRender(
       () => {
-        const elem: HTMLElement | null = document.getElementById('3d-graph');
-        if (elem) {
-          this.http
-            .get('/assets/rdas-home/graph.json')
-            .subscribe((data: unknown) => {
-              const distance = 1400;
-              const scene: ForceGraph3DInstance = ForceGraph3D()(elem)
-                .graphData(<never>data)
-                .backgroundColor('rgba(255,255,255,.01)')
-                .nodeAutoColorBy('label')
-                .nodeVal('size')
-                .nodeRelSize(7)
-                .nodeOpacity(9)
-                .linkColor('#000000')
-                .linkWidth('weight')
-                .showNavInfo(false);
-
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              const ctls: any = scene.controls();
-              ctls.maxDistance = 750;
-
-              let angle = 0;
-              setInterval(() => {
-                scene.cameraPosition({
-                  x: distance * Math.sin(angle),
-                  z: distance * Math.cos(angle),
-                });
-                angle += Math.PI / 500;
-              }, 20);
-            });
-        }
-      },
-      { phase: AfterRenderPhase.Write }
-    );
+      })
   }
+
+/*
+  ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
+      const elem: HTMLElement | null = document.getElementById('3d-graph');
+      if (elem) {
+        this.http
+          .get('/assets/rdas-home/graph.json')
+          .subscribe((data: unknown) => {
+            this.data = data;
+            const distance = 1400;
+            const scene = ForceGraph3D()(elem)
+              .graphData(<never>data)
+              .backgroundColor('rgba(255,255,255,.01)')
+              .nodeAutoColorBy('label')
+              .nodeVal('size')
+              .nodeRelSize(7)
+              .nodeOpacity(9)
+              .linkColor('#000000')
+              .linkWidth('weight')
+              .showNavInfo(false);
+
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            const ctls: any = scene.controls();
+            ctls.maxDistance = 750;
+
+            let angle = 0;
+            setInterval(() => {
+              scene.cameraPosition({
+                x: distance * Math.sin(angle),
+                z: distance * Math.cos(angle),
+              });
+              angle += Math.PI / 500;
+            }, 20);
+          });
+      }
+    }
+  }
+*/
 
   /**
    * scroll to details section of the home page

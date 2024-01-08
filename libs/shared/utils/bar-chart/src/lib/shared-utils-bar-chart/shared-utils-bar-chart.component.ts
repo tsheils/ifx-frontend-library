@@ -37,6 +37,9 @@ margins: {top: number, bottom: number, left: number, right: number} = {top:20, b
 ngOnInit() {
   if (this.barChartElement) {
     const element = this.barChartElement.nativeElement;
+    console.log(this.barChartElement.nativeElement)
+    console.log(this.barChartElement)
+    console.log(element)
     this.width = element.offsetWidth - this.margins.left - this.margins.right;
     this.height = element.offsetHeight - this.margins.top - this.margins.bottom;
     select(element).select('svg').remove();

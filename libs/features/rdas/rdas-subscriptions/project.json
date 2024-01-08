@@ -15,13 +15,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/features/rdas/rdas-subscriptions/**/*.ts",
-          "libs/features/rdas/rdas-subscriptions/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

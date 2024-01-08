@@ -1,17 +1,25 @@
 <div class="home-content" cdkScrollable>
   <div class="graph-holder">
     <div class="home-component">
-      <div class="width-50 rdas-headline">
+      <div class="width-50 width-md-80 rdas-headline">
         Meeting the Needs of Rare Disease Patients, Clinicians, and Scientists
       </div>
 
-      <div class="width-50 rdas-subheadline">
+      <div class="width-50 width-md-80 rdas-subheadline">
         Integrating the latest biomedical data in a structured, standardized,
         and semantic way to empower the rare disease research community in their
         efforts, and provide an educational resource to all.
       </div>
     </div>
-    <div id="3d-graph" class="graph"></div>
+    <div id="3d-graph" class="graph">
+      <video playsinline autoplay muted loop poster="/assets/rdas-home/graph-placeholder.png">
+<!--
+        <source src="my-video-url.webm" type="video/webm">
+-->
+        <source src="/assets/rdas-home/graph-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
   </div>
   <a (click)="goToDetails()">
     <div class="primary-background learn-more">
@@ -72,7 +80,7 @@
       </mat-card>
     </div>
     <div class="grid-wrapper annotation-standardization-grid">
-      <mat-card>
+      <mat-card class="white-background rdas-card centered">
         <div class="heading-text">Annotated</div>
         <div class="horizontal-padding-2vw">
           <h3>
@@ -114,7 +122,7 @@
         </p>
         </div>
       </mat-card>
-      <mat-card>
+      <mat-card class="white-background rdas-card centered">
         <div class="heading-text">Standardized</div>
         <div class="horizontal-padding-2vw">
           <h3>RDAS data is standardized using industry standards</h3>

@@ -2,6 +2,16 @@
   padding-top: 8vh;
 }
 
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 85vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+}
+
 .home-component {
   padding-left: 5vw;
   position: relative;
@@ -53,13 +63,13 @@ img.annotations-logo {
 }
 
 .rdas-headline {
-  font-size: 9vh;
+  font-size: 4rem;
   font-weight: bold;
   padding-bottom: 2rem;
 }
 
 .rdas-subheadline {
-  font-size: 4vh;
+  font-size: 2rem;
 }
 
 .graph {
@@ -140,7 +150,7 @@ img.annotations-logo {
     grid-row-gap: 2vh;
   }
 
-  .graph {
+  video {
     height: 65vh;
   }
 }

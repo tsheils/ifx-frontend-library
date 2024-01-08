@@ -12,3 +12,5 @@
 /libs/features/rdas/rdas-about/src/assets/yanji_xu.jpg filter=lfs diff=lfs merge=lfs -text
 /apps/rdas/src/assets/rdas_final_gradient_no_logo.png filter=lfs diff=lfs merge=lfs -text
 /libs/features/rdas/rdas-disease-page/src/assets/graph-background.png filter=lfs diff=lfs merge=lfs -text
+/libs/features/rdas/rdas-home/src/assets/graph-placeholder.png filter=lfs diff=lfs merge=lfs -text
+/libs/features/rdas/rdas-home/src/assets/graph-video.mp4 filter=lfs diff=lfs merge=lfs -text

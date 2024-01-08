@@ -9,9 +9,12 @@ ncats-frontend-library-rdas-disease-page {
     z-index: 100;
   }
 
+  .navigation-menu-panel {
+    top: calc(60px + 17vh) !important
+  }
 
   .disease-page {
-    margin-top: 16vh; //-60px for main content css and -1vh for row padding
+    margin-top: 17vh; //-60px for main content css and -1vh for row padding
   }
 
   .disease-header-section .disease-link {
@@ -20,23 +23,6 @@ ncats-frontend-library-rdas-disease-page {
 
   .mdc-button--outlined .mdc-button__ripple {
     border-color: #ffffff;
-  }
-
-
-  .navigation-menu-panel {
-    width: 25%;
-    position: fixed;
-    top: calc(60px + 17vh)
-  }
-
-  .drawer-container-content {
-   // padding-left:2vw;
-  }
-
-  @media only screen and (max-width: 1024px) {
-    .navigation-menu-panel {
-      width: 50%;
-    }
   }
 
   @media only screen and (max-width: 960px) {
@@ -49,10 +35,6 @@ ncats-frontend-library-rdas-disease-page {
   @media only screen and (max-width: 768px) {
     .main-disease-display {
       padding: 2vh 0 2vh 0;
-    }
-
-    .navigation-menu-panel {
-      width: 100%;
     }
   }
 }

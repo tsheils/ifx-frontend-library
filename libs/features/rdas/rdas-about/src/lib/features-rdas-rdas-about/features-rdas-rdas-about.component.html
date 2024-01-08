@@ -1,6 +1,23 @@
-<div class="row about-content" cdkScrollable>
-  <div class="width-20 toc-wrapper" cdkScrollable>
+<mat-sidenav-container class="about-page" >
+  <mat-sidenav
+    #navigationsidenav
+    class="navigation-menu-panel"
+    [opened]="!mobile"
+    [mode]="'side'"
+  >
+    <div class="toc-wrapper" cdkScrollable>
     <div class="toc">
+      <div class="row right-justified-row">
+        <button
+          [color]="'primary'"
+          mat-icon-button
+          class="close-button"
+          aria-label="close filters"
+          (click)="navigationsidenav.toggle()"
+        >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
       <mat-nav-list>
         <a
           mat-list-item
@@ -53,18 +70,29 @@
       </mat-nav-list>
     </div>
   </div>
-  <div
-    id="scroller-wrapper"
-    class="about-wrapper width-70"
-    cdkVirtualScrollingElement
-  >
+  </mat-sidenav>
+  <mat-sidenav-content class="drawer-container-content" >
+    @if (!navigationsidenav.opened) {
+    <div class="row">
+      <button
+        [color]="'primary'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="navigationsidenav.toggle()"
+      >
+        Jump to...<mat-icon>bookmark</mat-icon>
+      </button>
+    </div>
+    }
+    <div class="row centered-row">
+      <div [ngClass]="{ 'full-width': navigationsidenav.opened, 'width-70': !navigationsidenav.opened }">
     <div class="row">
       <div>
         <h1 class="rdas-title"><b>RDAS</b>: Rare Disease Alert System</h1>
       </div>
     </div>
     <div class="row" id="about" #about #scrollSection>
-      <div class="width-75">
         <div
           class="section-header"
           [ngClass]="{ 'active-sidemenu': isActive('about') }"
@@ -107,11 +135,9 @@
             abstracts of NIH funded projects related to rare diseases.
           </p>
         </div>
-      </div>
     </div>
 
     <div class="row" id="citation" #citation #scrollSection>
-      <div class="width-75">
         <div
           class="section-header"
           [ngClass]="{ 'active-sidemenu': isActive('citation') }"
@@ -133,11 +159,9 @@
             >
           </p>
         </div>
-      </div>
     </div>
 
     <div class="row" id="publications" #publications #scrollSection>
-      <div class="width-75">
         <div
           class="section-header"
           [ngClass]="{ 'active-sidemenu': isActive('publications') }"
@@ -194,24 +218,16 @@
             </a>
           </p>
         </div>
-      </div>
     </div>
 
-    <div class="row" id="contact" #contact #scrollSection>
-      <div class="width-75">
-        <div
-          class="section-header"
-          [ngClass]="{ 'active-sidemenu': isActive('contact') }"
-        >
+    <div class="" id="contact" #contact #scrollSection>
+        <div class="section-header" [ngClass]="{ 'active-sidemenu': isActive('contact') }">
           RDAS Team and Contact
         </div>
         <div class="section-content">
-          <br />
-          <br />
-          <br />
           <h2 class="contributor-header">Current Contributors</h2>
           <div class="row space-around-row">
-            <div class="portrait-holder width-20">
+            <div class="portrait-holder width-20 width-sm-50">
               <picture>
                 <source
                   srcset="/assets/rdas-about/devon_leadman.webp"
@@ -237,7 +253,7 @@
                 <h2>Devon Leadman</h2>
               </a>
             </div>
-            <div class="portrait-holder width-20">
+            <div class="portrait-holder width-20 width-sm-50">
               <picture>
                 <source
                   srcset="/assets/rdas-about/timothy_sheils.webp"
@@ -263,7 +279,7 @@
                 <h2>Timothy Sheils</h2>
               </a>
             </div>
-            <div class="portrait-holder width-20">
+            <div class="portrait-holder width-20 width-sm-50">
               <picture>
                 <source
                   srcset="/assets/rdas-about/yanji_xu.webp"
@@ -289,7 +305,7 @@
                 <h2>Yanji Xu, Ph.D.</h2>
               </a>
             </div>
-            <div class="portrait-holder width-20">
+            <div class="portrait-holder width-20 width-sm-50">
               <picture>
                 <source
                   srcset="/assets/rdas-about/qian_zhu.webp"
@@ -316,9 +332,6 @@
               </a>
             </div>
           </div>
-          <br />
-          <br />
-
           <p>
             For questions or issues
             <!--, please submit an issue on our
@@ -336,19 +349,15 @@
             >
           </p>
         </div>
-      </div>
     </div>
 
-    <div class="row" id="code" #code #scrollSection>
-      <div class="width-75">
-        <div
-          class="section-header"
-          [ngClass]="{ 'active-sidemenu': isActive('code') }"
-        >
-          Code
-        </div>
+    <div class="" id="code" #code #scrollSection>
+        <div class="section-header" [ngClass]="{ 'active-sidemenu': isActive('code') }">Code</div>
         <div class="section-content">
+          <p>
           RDAS source code is freely available via our GitHub pages:
+          </p>
+          <p>
           <mat-list>
             <mat-list-item
               ><a
@@ -361,8 +370,8 @@
               &nbsp;Source code for the RDAS backend</mat-list-item
             >
           </mat-list>
+          </p>
         </div>
-      </div>
     </div>
     <!--
     <div class="row" id="license" #license #scrollSection>
@@ -387,4 +396,6 @@
     </div>-->
     <div class="spacer"></div>
   </div>
-</div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

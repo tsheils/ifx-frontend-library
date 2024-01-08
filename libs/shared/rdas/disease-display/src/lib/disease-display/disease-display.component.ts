@@ -2,6 +2,7 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScrollDispatcher } from "@angular/cdk/overlay";
 import { ScrollingModule } from "@angular/cdk/scrolling";
 import {
+  AfterViewInit,
   ChangeDetectorRef,
   Component, computed,
   DestroyRef, ElementRef,
@@ -15,6 +16,7 @@ import {
 } from "@angular/core";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatExpansionModule } from "@angular/material/expansion";
+import { MatTabsModule } from "@angular/material/tabs";
 import { ActivatedRoute, Router } from '@angular/router';
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { FilterCategory } from "@ncats-frontend-library/models/utils";
@@ -56,12 +58,14 @@ import { MatCardModule } from '@angular/material/card';
     SharedRdasProjectChartsComponent,
     SharedRdasTrialsChartsComponent,
     MatExpansionModule,
+    MatTabsModule,
     ScrollingModule,
     RdasPanelTemplateComponent
   ],
 })
-export class DiseaseDisplayComponent implements OnInit, OnChanges {
+export class DiseaseDisplayComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
+  @ViewChildren(RdasPanelTemplateComponent) templates!: QueryList<RdasPanelTemplateComponent>;
 
   destroyRef = inject(DestroyRef);
   @Input() disease!: Signal<Disease | undefined>;
@@ -87,11 +91,11 @@ export class DiseaseDisplayComponent implements OnInit, OnChanges {
 
   @Output() activeElement: EventEmitter<string> = new EventEmitter<string>()
   @Output() optionsChange: EventEmitter<{
-    variables: { [key: string]: unknown };
-    origin: string;
+    params: { [key: string]: unknown };
+    fragment: string;
   }> = new EventEmitter<{
-    variables: { [key: string]: unknown };
-    origin: string;
+    params: { [key: string]: unknown };
+    fragment: string;
   }>();
 
   mobile = false;
@@ -106,12 +110,11 @@ export class DiseaseDisplayComponent implements OnInit, OnChanges {
   ) {}
 
   ngOnInit() {
+    console.log(this);
     if (this.route.snapshot.fragment) {
-      this.activeElement.emit(this.route.snapshot.fragment);
       this.scroller.scrollToAnchor(this.route.snapshot.fragment);
+
     }
-    console.log(this.offset)
-    console.log(this)
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -138,35 +141,22 @@ export class DiseaseDisplayComponent implements OnInit, OnChanges {
       });
   }
 
+  ngAfterViewInit(){
+    if(this.route.snapshot.queryParamMap.has('offset')) {
+      const template: RdasPanelTemplateComponent[] = this.templates
+        .filter((template: RdasPanelTemplateComponent) => template._id === this.route.snapshot.fragment)
+      template[0].paginator.pageIndex = Number(this.route.snapshot.queryParamMap.get('offset'))/10
+    }
+  }
+
   ngOnChanges() {
     this.changeRef.detectChanges();
   }
 
-  pageList(
-    variables: { [key: string]: string | number | undefined | string[]  },
-    pageField: string,
-    origin: string
-  ): void {
-    this.setUrl(origin, variables );
-    this.optionsChange.emit({ variables, origin });
-  }
-
   fetchList(
-    variables: { [key: string]: unknown },
-    pageField: string,
-    origin: string
+    params: { [key: string]: unknown },
+    fragment: string
   ): void {
-    this.setUrl(origin, variables );
-    console.log(variables)
-    console.log(origin)
-    this.optionsChange.emit({ variables, origin });
-  }
-
-  setUrl(fragment: string, params?: { [key: string]: unknown }) {
-    this.router.navigate(['disease'], {
-      fragment: fragment,
-      queryParams: params,
-      queryParamsHandling: 'merge',
-    });
+    this.optionsChange.emit({ params, fragment });
   }
 }

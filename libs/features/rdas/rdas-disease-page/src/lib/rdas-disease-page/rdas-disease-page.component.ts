@@ -1,38 +1,33 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { ScrollDispatcher } from "@angular/cdk/overlay";
-import { CommonModule, ViewportScroller } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import {
-  afterNextRender,
   ChangeDetectorRef,
   Component,
   computed,
-  ContentChildren, DestroyRef, ElementRef,
-  HostListener, inject,
+  DestroyRef,
+  inject,
   Input,
   OnInit,
-  QueryList,
-  Signal, ViewChild,
-  ViewChildren, ViewEncapsulation
+  Signal,
+  ViewEncapsulation
 } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from "@angular/material/list";
 import { MatMenuModule } from "@angular/material/menu";
-import { MatPaginator } from '@angular/material/paginator';
 import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatTabsModule } from "@angular/material/tabs";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from "@angular/router";
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { DiseaseDisplayComponent, DiseaseHeaderComponent } from "@ncats-frontend-library/shared/rdas/disease-display";
+import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
 import {
   DiseasesFacade,
-  fetchDisease,
 } from '@ncats-frontend-library/stores/disease-store';
-import { Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: 'ncats-frontend-library-rdas-disease-page',
@@ -51,13 +46,13 @@ import { Subject, takeUntil } from "rxjs";
     MatButtonModule,
     MatSelectModule,
     MatListModule,
-    ScrollToTopComponent],
+    LoadingSpinnerComponent,
+    ScrollToTopComponent
+  ],
 })
 export class RdasDiseasePageComponent implements OnInit {
   @Input() disease!: Signal<Disease | undefined>;
   @Input() diseaseFilters!: Signal<FilterCategory[] | undefined>;
-  @ViewChild(DiseaseDisplayComponent) diseaseDisplayComponent!: DiseaseDisplayComponent;
-  @Input() offset!: string;
   @Input() id!: string;
   /**
    * default active element for menu highlighting, will be replaced on scroll
@@ -73,26 +68,24 @@ export class RdasDiseasePageComponent implements OnInit {
     () => this.disease()?.gardId === this.id
   );
 
-  options = {
-    gardId: '',
-    source: 'article',
-    options: {},
-  };
-
   constructor(
     private diseaseFacade: DiseasesFacade,
     private changeRef: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
-    private scrollDispatcher: ScrollDispatcher,
-    private scroller: ViewportScroller
+    private router: Router,
+    private route: ActivatedRoute
   ) {
 
   }
 
   ngOnInit(): void {
     console.log(this)
-    this.disease = this.diseaseFacade.selectedDiseases$;
+;    this.disease = this.diseaseFacade.selectedDiseases$;
     this.diseaseFilters = this.diseaseFacade.diseaseFilters$;
+    if (this.route.snapshot.fragment) {
+      this.activeElement = this.route.snapshot.fragment;
+    }
+
 
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
@@ -103,29 +96,11 @@ export class RdasDiseasePageComponent implements OnInit {
       });
   }
 
-  fetchDisease(disease: Disease) {
-    this.options.gardId = disease.gardId;
-    this.options.options = {
-      mentionedInArticlesOptions: {
-        limit: 10,
-        offset: 0,
-        sort: [
-          {
-            firstPublicationDate: 'DESC',
-          },
-        ],
-      },
-    };
-   // this.diseaseFacade.dispatch(fetchDisease(this.options));
-  }
-
-  fetchDiseaseInfo(options: {
-    variables: { [key: string]: unknown };
-    origin: string;
-  }) {
-    this.options.options = options.variables;
-    this.options.source = options.origin;
-  //  this.diseaseFacade.dispatch(loadDisease$(this.options));
+    setUrl(event: {fragment: string, params?: { [key: string]: unknown }}) {
+    this.router.navigate(['disease'], {
+      fragment: event.fragment,
+      queryParams: {id: this.id, ...event.params}
+    });
   }
 
   setActiveElement(event: string) {
@@ -136,8 +111,7 @@ export class RdasDiseasePageComponent implements OnInit {
    * @param el
    */
   public scroll(el: string): void {
-    //  el.scrollIntoView(true);
-    this.diseaseDisplayComponent.setUrl(el)
+    this.setUrl({fragment: el})
   }
 
   /**

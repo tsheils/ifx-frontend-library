@@ -1,35 +1,45 @@
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { OverlayModule, ScrollDispatcher } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule } from '@angular/common';
+import { CommonModule, ViewportScroller } from "@angular/common";
 import {
   ChangeDetectorRef,
-  Component,
-  ElementRef,
-  OnDestroy,
+  Component, DestroyRef,
+  ElementRef, inject,
   OnInit,
   QueryList,
   ViewChildren,
-  ViewEncapsulation,
-} from '@angular/core';
+  ViewEncapsulation
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { MatListModule } from '@angular/material/list';
-import { Subject, takeUntil } from 'rxjs';
+import { MatMenuModule } from "@angular/material/menu";
+import { MatSidenavModule } from "@angular/material/sidenav";
 
 @Component({
   selector: 'ncats-frontend-library-features-rdas-about',
   standalone: true,
-  imports: [CommonModule, MatListModule, ScrollingModule, OverlayModule],
+  imports: [
+    CommonModule,
+    MatListModule,
+    ScrollingModule,
+    OverlayModule,
+    MatMenuModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatButtonModule
+  ],
   templateUrl: './features-rdas-rdas-about.component.html',
   styleUrls: ['./features-rdas-rdas-about.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
-export class FeaturesRdasRdasAboutComponent implements OnInit, OnDestroy {
+export class FeaturesRdasRdasAboutComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
 
-  /**
-   * Behaviour subject to allow extending class to unsubscribe on destroy
-   * @type {Subject<any>}
-   */
-  protected ngUnsubscribe: Subject<any> = new Subject();
+  destroyRef = inject(DestroyRef);
+  mobile = false;
 
   /**
    * default active element for menu highlighting, will be replaced on scroll
@@ -38,31 +48,37 @@ export class FeaturesRdasRdasAboutComponent implements OnInit, OnDestroy {
   activeElement = 'about';
 
   constructor(
-    private changeDetector: ChangeDetectorRef,
-    private scrollDispatcher: ScrollDispatcher
+    private changeRef: ChangeDetectorRef,
+    private scrollDispatcher: ScrollDispatcher,
+    public scroller: ViewportScroller,
+    private breakpointObserver: BreakpointObserver,
   ) {}
 
   ngOnInit(): void {
-    this.scrollDispatcher
-      .scrolled()
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((data) => {
-        if (data) {
-          let scrollTop: number =
-            data.getElementRef().nativeElement.scrollTop + 60;
-          if (scrollTop === 175) {
-            this.activeElement = 'about';
-            this.changeDetector.detectChanges();
-          } else {
-            this.scrollSections.forEach((section) => {
-              scrollTop = scrollTop - section.nativeElement.scrollHeight;
-              if (scrollTop >= 0) {
-                this.activeElement = section.nativeElement.nextSibling.id;
-                this.changeDetector.detectChanges();
-              }
-            });
-          }
+    this.scrollDispatcher.scrolled()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        let scrollTop: number = this.scroller.getScrollPosition()[1] + 60
+        if (scrollTop === 60) {
+          this.activeElement = 'about';
+          this.changeRef.detectChanges();
+        } else {
+          this.scrollSections.forEach((section) => {
+            scrollTop = scrollTop - section.nativeElement?.scrollHeight;
+            if (scrollTop >= 0) {
+              this.activeElement = section.nativeElement.nextSibling.id;
+              this.changeRef.detectChanges();
+            }
+          })
         }
+      });
+
+    this.breakpointObserver
+      .observe([Breakpoints.XSmall, Breakpoints.Small])
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((result) => {
+        this.mobile = result.matches;
+        this.changeRef.markForCheck();
       });
   }
 
@@ -86,13 +102,5 @@ export class FeaturesRdasRdasAboutComponent implements OnInit, OnDestroy {
    */
   isActive(check: string): boolean {
     return this.activeElement === check;
-  }
-
-  /**
-   * clean up on leaving component
-   */
-  ngOnDestroy() {
-    this.ngUnsubscribe.next('bye-bye');
-    this.ngUnsubscribe.complete();
   }
 }
