@@ -1,23 +1,19 @@
 import { NgModule } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Disease } from "@ncats-frontend-library/models/rdas";
+import { Disease } from '@ncats-frontend-library/models/rdas';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule, Store } from '@ngrx/store';
-import { NxModule } from '@nrwl/angular';
-import { readFirst } from '@nrwl/angular/testing';
-import { Apollo } from "apollo-angular";
+import { readFirst } from '@nx/angular/testing';
+import { Apollo } from 'apollo-angular';
 
 import * as DiseasesActions from './diseases.actions';
 import { DiseasesEffects } from './diseases.effects';
 import { DiseasesFacade } from './diseases.facade';
-import { DiseasesEntity } from './diseases.models';
 import {
   DISEASES_FEATURE_KEY,
   State,
-  initialState,
   diseasesReducer,
 } from './diseases.reducer';
-import * as DiseasesSelectors from './diseases.selectors';
 
 interface TestSchema {
   diseases: State;
@@ -26,14 +22,15 @@ interface TestSchema {
 describe('DiseasesFacade', () => {
   let facade: DiseasesFacade;
   let store: Store<TestSchema>;
-  const createDiseasesEntity = (gard_id: string, name = ''): Disease => ({
-    gard_id,
-    name: name || `name-${gard_id}`,
-    epiCount: 0,
-    nonEpiCount: 0,
-    projectCount: 0,
-    clinicalTrialsCount: 0
-  });
+  const createDiseasesEntity = (gardId: string, name = ''): Disease =>
+    new Disease({
+      gardId,
+      name: name || `name-${gardId}`,
+      epiCount: 0,
+      nonEpiCount: 0,
+      projectCount: 0,
+      clinicalTrialsCount: 0,
+    });
 
   describe('used in NgModule', () => {
     beforeEach(() => {
@@ -48,14 +45,11 @@ describe('DiseasesFacade', () => {
 
       @NgModule({
         imports: [
-          NxModule.forRoot(),
           StoreModule.forRoot({}),
           EffectsModule.forRoot([]),
           CustomFeatureModule,
         ],
-        providers: [
-          Apollo
-        ]
+        providers: [Apollo],
       })
       class RootModule {}
       TestBed.configureTestingModule({ imports: [RootModule] });

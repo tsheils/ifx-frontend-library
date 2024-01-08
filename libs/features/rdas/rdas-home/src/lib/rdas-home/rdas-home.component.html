@@ -1,3 +1,170 @@
-<div class="home-component">
-  <ncats-frontend-library-rdas-search (onSelect)="fetchDisease($event)"></ncats-frontend-library-rdas-search>
+<div class="home-content" cdkScrollable>
+  <div class="graph-holder">
+    <div class="home-component">
+      <div class="width-50 width-md-80 rdas-headline">
+        Meeting the Needs of Rare Disease Patients, Clinicians, and Scientists
+      </div>
+
+      <div class="width-50 width-md-80 rdas-subheadline">
+        Integrating the latest biomedical data in a structured, standardized,
+        and semantic way to empower the rare disease research community in their
+        efforts, and provide an educational resource to all.
+      </div>
+    </div>
+    <div id="3d-graph" class="graph">
+      <video playsinline autoplay muted loop poster="/assets/rdas-home/graph-placeholder.png">
+<!--
+        <source src="my-video-url.webm" type="video/webm">
+-->
+        <source src="/assets/rdas-home/graph-video.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+    </div>
+  </div>
+  <a (click)="goToDetails()">
+    <div class="primary-background learn-more">
+      <div class="row centered-row no-padding learn-more-text">
+        <p>Learn More</p>
+      </div>
+      <div class="row centered-row top-align no-padding more-arrow">
+        <mat-icon>expand_more</mat-icon>
+      </div>
+    </div>
+  </a>
+  <div #details class="primary-background">
+    @defer(on viewport) {
+    <div class="grid-wrapper">
+      <mat-card class="white-background rdas-card centered">
+        <div class="bottom-border-primary heading-text">
+          Browse comprehensive disease data
+        </div>
+        <div class="">
+          <h3>
+            Integrated information from publications, clinical trials, and
+            grants
+          </h3>
+        </div>
+        <div class="">
+          <img
+            ngSrc="/assets/rdas-home/sources/sources.png"
+            width="577"
+            height="349"
+            alt="sources used"
+            class="datasource-logo"
+          /><br />
+        </div>
+      </mat-card>
+      <mat-card class="white-background rdas-card centered">
+        <div class="bottom-border-primary heading-text">
+          Subscribe for disease knowledge updates
+        </div>
+        <h3 class="">
+          Subscribe to and receive weekly alerts for updates to disease
+          information
+        </h3>
+      </mat-card>
+      <mat-card class="white-background rdas-card centered">
+        <div class="bottom-border-primary heading-text">
+          Access and analyze the underlying data
+        </div>
+        <h3>Web user interface and GraphQL API for programmatic access</h3>
+        <div class="">
+          <img
+            ngSrc="/assets/rdas-home/tools/tools.png"
+            width="577"
+            height="349"
+            alt="tools used"
+            class="tools-logo"
+          /><br />
+        </div>
+      </mat-card>
+    </div>
+    <div class="grid-wrapper annotation-standardization-grid">
+      <mat-card class="white-background rdas-card centered">
+        <div class="heading-text">Annotated</div>
+        <div class="horizontal-padding-2vw">
+          <h3>
+            RDAS data is annotated using a variety of automated learning methods
+            to link disparate data sets
+          </h3>
+        </div>
+        <div class="row centered-row">
+        <div class="annotations-column">
+          <img
+            ngSrc="/assets/rdas-home/annotations/pubtator.png"
+            width="524"
+            height="96"
+            alt="Pubtator logo"
+            class="annotations-logo"
+          /><br />
+          <img
+            ngSrc="/assets/rdas-home/annotations/scispacy-logo-square.png"
+            width="100"
+            height="96"
+            alt="SciSpacy logo"
+            class="scispacy-logo"
+          /><br />
+          <div class="big-logo accent-color-font">BioBERT</div>
+          <br />
+        </div>
+        <p>
+          Read more about our annotation process here:<br />
+          <a
+            href="https://rdcu.be/c7G35"
+            target="_blank"
+            rel="noreferrer"
+            aria-label="Link to publication describing annotation process"
+            >Zhu, Q., Nguyễn, ÐT., Sheils, T. et al. Scientific evidence based
+            rare disease research discovery with research funding data in
+            knowledge graph. Orphanet J Rare Dis 16, 483 (2021).
+            https://doi.org/10.1186/s13023-021-02120-9</a
+          >
+        </p>
+        </div>
+      </mat-card>
+      <mat-card class="white-background rdas-card centered">
+        <div class="heading-text">Standardized</div>
+        <div class="horizontal-padding-2vw">
+          <h3>RDAS data is standardized using industry standards</h3>
+        </div>
+        <div class="row centered-row">
+          <div class="annotations-column">
+            <img
+              ngSrc="/assets/rdas-home/standardization/GARD_Logo.svg"
+              width="509"
+              height="40"
+              alt="tools used"
+              class="standards-logo"
+            /><br />
+            <img
+              ngSrc="/assets/rdas-home/standardization/hpo.png"
+              width="1280"
+              height="640"
+              alt="tools used"
+              class="standards-logo"
+            /><br />
+            <img
+              ngSrc="/assets/rdas-home/standardization/omim.jpeg"
+              width="470"
+              height="380"
+              alt="tools used"
+              class="standards-logo"
+            /><br />
+            <img
+              ngSrc="/assets/rdas-home/standardization/orphanet.png"
+              width="519"
+              height="97"
+              alt="tools used"
+              class="standards-logo"
+            /><br />
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    } @placeholder {
+    <ncats-frontend-library-loading-spinner
+      [isLoaded]="false"
+    ></ncats-frontend-library-loading-spinner>
+    }
+  </div>
 </div>

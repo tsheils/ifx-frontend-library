@@ -1,153 +1,137 @@
-import {gql} from "apollo-angular";
-import { Article, ARTICLEFIELDS } from "./article";
-import { AUTHORFIELDS } from "./author";
-import {ClinicalTrial} from "./clinical-trial";
-import {Project} from "./project";
+import { Article } from './article';
+import { ClinicalTrial } from './clinical-trial';
+import { GeneAssociation } from './gene';
+import { PhenotypeAssociation } from './phenotype';
+import { CoreProject } from './project';
 
 export class Disease {
+  articleCount = 0;
+  classificationLevel?: string;
+  dataSource!: string;
+  dataSourceId!: string;
+  diseaseOntology?: string[];
+  disorderType?: string[];
   name!: string;
-  gard_id!: string;
-  all_ids?:  string[];
+  gardId!: string;
+  geneticAlliance?: string[];
+  geneticsHomeReference?: string[];
+  icd10?: string[];
+  icd10cm?: string[];
+  icd11?: string[];
+  mesh?: string[];
+  medra?: string[];
+  omim?: string[];
+  orphanet?: string[];
+  snomed?: string[];
+  synonyms?: string[];
+  umls?: string[];
+
+  /* all_ids?:  string[];
   all_names?: string[];
   categories?: string[];
-  is_rare?: boolean;
-  synonyms?:  string[];
+  is_rare?: boolean;*/
   epiArticles?: Article[];
   nonEpiArticles?: Article[];
   epiCount = 0;
   nonEpiCount = 0;
-  _epiCount?: {count: number};
-  _nonEpiCount?: {count: number};
-  projects?: Project[];
+  projects?: CoreProject[];
   projectCount = 0;
   clinicalTrials?: ClinicalTrial[];
-  clinicalTrialsCount = 0;
+  clinicalTrialCount = 0;
+  geneAssociations?: GeneAssociation[];
+  _geneAssociations?: { edges?: Partial<GeneAssociation>[] };
+  phenotypeAssociations?: PhenotypeAssociation[];
+  _phenotypeAssociations?: { edges?: Partial<PhenotypeAssociation>[] };
+  geneCount: number | undefined = 0;
+  phenotypeCount = 0;
+  parentId?: string;
+  _genesCount?: { count?: number; low: 0 };
+  _phenotypesCount?: { count: number; low: 0 };
+  _epiCount?: { count: number };
+  _nonEpiCount?: { count: number };
+  _childrenCount?: { count?: number; low: 0 };
 
   constructor(obj: Partial<Disease>) {
     Object.assign(this, obj);
 
-    if(obj.epiArticles) {
-      this.epiArticles = obj.epiArticles.map((article: Partial<Article> = {}) => new Article(article));
+    if (obj.epiArticles) {
+      this.epiArticles = obj.epiArticles.map(
+        (article: Partial<Article> = {}) => new Article(article)
+      );
     }
 
-    if(obj.nonEpiArticles) {
-      this.nonEpiArticles = obj.nonEpiArticles.map((article: Partial<Article> = {}) => new Article(article));
+    if (obj.nonEpiArticles) {
+      this.nonEpiArticles = obj.nonEpiArticles.map(
+        (article: Partial<Article> = {}) => new Article(article)
+      );
     }
 
-    if(obj._epiCount) {
+    if (obj._geneAssociations && obj._geneAssociations.edges) {
+      this.geneAssociations = obj._geneAssociations.edges.map(
+        (gene: Partial<GeneAssociation> = {}) => new GeneAssociation(gene)
+      );
+      delete this._geneAssociations;
+    }
+
+    if (obj._phenotypeAssociations && obj._phenotypeAssociations.edges) {
+      this.phenotypeAssociations = obj._phenotypeAssociations.edges.map(
+        (gene: Partial<PhenotypeAssociation> = {}) =>
+          new PhenotypeAssociation(gene)
+      );
+      delete this._phenotypeAssociations;
+    }
+
+    if (obj._epiCount) {
       this.epiCount = obj._epiCount.count;
+      delete this._epiCount;
     }
-    if(obj._nonEpiCount) {
+
+    if (obj._genesCount && obj._genesCount.count) {
+      this.geneCount = obj._genesCount.count;
+      delete this._genesCount;
+    }
+
+    if (obj._phenotypesCount && obj._phenotypesCount.count) {
+      this.phenotypeCount = obj._phenotypesCount.count;
+      delete this._phenotypesCount;
+    }
+
+    if (obj._nonEpiCount) {
       this.nonEpiCount = obj._nonEpiCount.count;
+      delete this._nonEpiCount;
+    }
+
+    if (obj.synonyms) {
+      this.synonyms = [...new Set(obj.synonyms)];
     }
   }
 }
 
+export class DiseaseNode {
+  classificationLevel?: string;
+  disorderType?: string[];
+  name?: string;
+  gardId!: string;
+  childrenCount = 0;
+  children!: DiseaseNode[];
+  _childrenCount?: { count: 0; low: 0 };
 
+  constructor(obj: Partial<DiseaseNode>) {
+    Object.assign(this, obj);
 
-const DISEASEFIELDS = gql`
-  fragment diseaseFields on Disease {
-    gard_id
-    name
-    all_ids
-    synonyms
-    _epiCount: mentionedInArticlesAggregate(
-      where: {isEpi: "Y"}
-    ) {
-      count
+    if (obj?._childrenCount && obj._childrenCount.count) {
+      this.childrenCount = obj._childrenCount.count;
     }
-    _nonEpiCount: mentionedInArticlesAggregate(
-      where: {isEpi: null}
-    ) {
-      count
+
+    if (obj?._childrenCount && obj._childrenCount.low) {
+      this.childrenCount = obj._childrenCount.low;
+    }
+
+    if (obj?.children) {
+      this.children = obj.children
+        .map((c) => new DiseaseNode(c))
+        .sort((a, b) => b.childrenCount - a.childrenCount);
+      this.childrenCount = obj.children.length;
     }
   }
-`;
-
-export const FETCHDISEASESLISTQUERY = gql`
-  query Diseases($options: DiseaseOptions) {
-    diseases(options: $options) {
-      name
-      gard_id
-      is_rare
-      synonyms
-      mentionedInArticlesAggregate {
-        count
-      }
-    }
-    total: diseasesAggregate {
-      count
-    }
-  }
-`
-
-export const FETCHDISEASEQUERY = gql`
-  query Diseases(
-    $diseasesWhere: DiseaseWhere
-    $mentionedInEpiArticlesOptions: ArticleOptions
-    $mentionedInEpiArticlesWhere: ArticleWhere
-    $meshTermsMeshTermForEpiOptions: MeshTermOptions
-    $mentionedInNonEpiArticlesOptions: ArticleOptions
-    $mentionedInNonEpiArticlesWhere: ArticleWhere
-    $meshTermsMeshTermForNonEpiOptions: MeshTermOptions
-  ) {
-    diseases(where: $diseasesWhere) {
-      ...diseaseFields
-      epiArticles: mentionedInArticles(
-        options: $mentionedInEpiArticlesOptions
-        where: $mentionedInEpiArticlesWhere
-      ) {
-        ...articleFields
-        authorsWrote {
-          ...authorFields
-        }
-        meshTermsMeshTermForAggregate {
-          count
-        }
-        meshTermsMeshTermFor(options: $meshTermsMeshTermForEpiOptions) {
-          descriptorName
-          majorTopic_YN
-        }
-      }
-      nonEpiArticles: mentionedInArticles(
-        options: $mentionedInNonEpiArticlesOptions
-        where: $mentionedInNonEpiArticlesWhere
-      ) {
-        ...articleFields
-        authorsWrote {
-          ...authorFields
-        }
-        meshTermsMeshTermForAggregate {
-          count
-        }
-        meshTermsMeshTermFor(options: $meshTermsMeshTermForNonEpiOptions) {
-          descriptorName
-          majorTopic_YN
-        }
-      }
-    }
-  }
-  ${DISEASEFIELDS}
-  ${ARTICLEFIELDS}
-  ${AUTHORFIELDS}
-`;
-
-export const LISTQUERYPARAMETERS: {
-  options: {
-    limit?: number,
-    offset?: number,
-    sort?: [{ [key: string]: string }]
-  }
-  } =
-  {
-    options: {
-      limit: 10,
-      offset: 0,
-      sort: [
-        {
-          name: "ASC"
-        }
-      ]
-    }
-  }
-;
+}

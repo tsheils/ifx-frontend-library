@@ -1,10 +1,16 @@
-
 @use '@angular/material' as mat;
-@import 'libs/styles/src/styles/rdas-theme';
-
+@import 'rdas-theme2';
 
 a {
   color: mat.get-color-from-palette($app-primary);
+}
+
+a:visited {
+  color: mat.get-color-from-palette($app-primary, 900);
+}
+
+.rdas-headline {
+  color: mat.get-color-from-palette($app-accent);
 }
 
 .content-wrapper {
@@ -14,21 +20,143 @@ a {
 }
 
 .toolbar-template {
-  background-color: mat.get-color-from-palette($app-primary);
-  color: #ffffff !important;
-  //  z-index: 666;
+  background-color: #ffffff;
+  color: mat.get-color-from-palette($app-primary) !important;
+  height: 75px;
 }
-
 .footer-template {
   background-color: mat.get-color-from-palette($app-primary);
   color: #ffffff;
 }
+
+.primary-background {
+  background-color: mat.get-color-from-palette($app-primary);
+  color: #ffffff;
+  scroll-margin: 10vh;
+}
+
+.accent-background {
+  background-color: mat.get-color-from-palette($app-accent);
+  color: #ffffff;
+}
+
+.white-background {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.primary-chip {
+  background-color: mat.get-color-from-palette($app-primary);
+  color: #ffffff;
+  border-radius: 50px;
+  padding: 6px 12px 6px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 16px;
+  font-weight: 700;
+  display: inline-flex;
+}
+
+.primary-chip-outlined {
+  color: mat.get-color-from-palette($app-primary);
+  background-color: #ffffff;
+  border-radius: 50px;
+  border: mat.get-color-from-palette($app-primary) solid 2px;
+  padding: 6px 12px 6px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 16px;
+  font-weight: 700;
+  display: inline-flex;
+}
+
+.accent-chip {
+  background-color: mat.get-color-from-palette($app-accent);
+  color: #ffffff;
+  border-radius: 50px;
+  padding: 6px 12px 6px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 16px;
+  font-weight: 700;
+  display: inline-flex;
+}
+
+.accent-chip-outlined {
+  color: mat.get-color-from-palette($app-accent);
+  background-color: #ffffff;
+  border-radius: 50px;
+  border: mat.get-color-from-palette($app-accent) solid 2px;
+  padding: 6px 12px 6px;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  font-size: 16px;
+  font-weight: 700;
+  display: inline-flex;
+}
+
+.disabled-chip {
+  background-color: #e0e0e0;
+  color: #000000;
+}
+
 .main-content {
-  margin-top: 15vh;
+  background-color: #fafafa;
+  padding-top: 60px;
+  min-height: 60vh;
+}
+
+.search-row {
+  background-color: #ffffff;
 }
 
 .header-search {
   width: 30vw;
   padding-right: 2vw;
   color: white;
+}
+
+.right-options {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+img.rdas-logo {
+  height: 3rem;
+  display: flex;
+  padding-right: 2vw;
+}
+
+img.rdas-footer-logo {
+  height: 8rem;
+}
+
+.rdas-tab-label {
+  font-size: 16px;
+}
+
+.filter-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(22%, 2%));
+  grid-gap: 2%;
+  text-align: center;
+}
+
+.scatter-line {
+  stroke: mat.get-color-from-palette($app-accent);
+}
+
+@media only screen and (max-width: 768px) {
+  .main-content {
+    padding-top: 55px;
+  }
+
+  img.rdas-footer-logo {
+    height: 6rem;
+  }
 }

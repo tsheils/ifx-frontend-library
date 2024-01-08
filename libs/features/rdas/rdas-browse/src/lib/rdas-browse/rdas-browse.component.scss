@@ -1,0 +1,47 @@
+ncats-frontend-library-rdas-browse {
+
+  ncats-frontend-library-loading-spinner {
+    .progress-bar-container {
+       position: fixed;
+       top: 0;
+       bottom: 0;
+      right: -20vw;
+      left: 0;
+    }
+  }
+
+  .browse-page {
+    //  margin-top: 60px;
+    padding: 1vw;
+  }
+
+  .drawer-container-content {
+    padding-left: 1vw;
+    min-height: 70vh;
+  }
+
+  .spinner-holder {
+    // height: 100%;
+    // position: absolute;
+  }
+
+  .browse-paginator {
+    background-color: transparent;
+  }
+
+  .filters-menu-panel {
+    width: 25%;
+  }
+
+  @media only screen and (max-width: 1024px) {
+    .filters-menu-panel {
+      width: 50%;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .filters-menu-panel {
+      width: 100%;
+    }
+  }
+}

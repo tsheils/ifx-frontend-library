@@ -1,22 +1,137 @@
-<div fxLayout = "row" fxLayoutAlign="space-around start">
-  <div fxFlex = 75>
-    <ncats-frontend-library-rdas-search ></ncats-frontend-library-rdas-search>
-  </div>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-around start">
-  <div fxLayout="50"></div>
-  <div fxLayout="25">
-    <mat-paginator *ngIf="page"
-      [pageSize]="page.pageSize"
-      [pageIndex]="page.pageIndex"
-      [pageSizeOptions]="[10, 25, 50]"
-      (page)="paginationChanges($event)"
-      [length] = "page.total"
-    ></mat-paginator>
-  </div>
-</div>
-<div fxLayout="row" fxLayoutAlign="space-around start">
-  <div fxFlex = 75>
-    <ncats-frontend-library-disease-list [diseases] = diseases [loading]="loading"></ncats-frontend-library-disease-list>
-  </div>
-</div>
+<mat-drawer-container class="browse-page">
+  <mat-drawer
+    #filtersidenav
+    class="filters-menu-panel"
+    [position]="'start'"
+    [opened]="!mobile"
+    [mode]="'side'"
+  >
+    <div class="row right-justified-row">
+      <button
+        [color]="'primary'"
+        mat-icon-button
+        class="close-button"
+        aria-label="close filters"
+        (click)="filtersidenav.toggle()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <mat-tab-group>
+      <mat-tab label="Filters">
+        @for (filter of filters; track filter) {
+        <ncats-frontend-library-shared-utils-filter-panel
+          [filter]="filter"
+          (filterSelectionChange)="filterSelectionChange($event)"
+          (filterChange)="filterChange($event)"
+        ></ncats-frontend-library-shared-utils-filter-panel>
+        }
+      </mat-tab>
+      <mat-tab label="Hierarchy">
+        @if (diseaseTree) {
+        <ncats-frontend-library-rdas-tree
+          (leafExpand)="treeExpand($event)"
+          [data]="diseaseTree"
+        ></ncats-frontend-library-rdas-tree>
+        }
+      </mat-tab>
+    </mat-tab-group>
+  </mat-drawer>
+  <mat-drawer-content class="drawer-container-content">
+    @if (!filtersidenav.opened) {
+    <div class="row">
+      <button
+        [color]="'primary'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="filtersidenav.toggle()"
+      >
+        Filters <mat-icon>filter_list</mat-icon>
+      </button>
+    </div>
+    }
+    <div class="row centered-row">
+      <div class="width-75">
+        <ncats-frontend-library-rdas-search
+          (diseaseSelect)="selectDisease($event)"
+          (diseaseSearch)="searchDiseaseString($event)"
+        ></ncats-frontend-library-rdas-search>
+      </div>
+    </div>
+    <ncats-frontend-library-shared-utils-selected-filter-list
+      [filters]="selectedValues"
+      (filterChange)="filterSelectionChange($event)"
+    ></ncats-frontend-library-shared-utils-selected-filter-list>
+
+    <div class="row space-between-row">
+      <div>
+        <mat-form-field
+          appearance="outline"
+          subscriptSizing="dynamic"
+          [color]="'primary'"
+        >
+          <mat-label>Sort</mat-label>
+          <mat-select
+            (selectionChange)="changeSort($event)"
+            [value]="this.sort"
+          >
+            <mat-option [value]="'COUNT_ARTICLES'">Articles</mat-option>
+            <mat-option [value]="'COUNT_PROJECTS'">Projects</mat-option>
+            <mat-option [value]="'COUNT_TRIALS'">Clinical Trials</mat-option>
+            <mat-option [value]="'COUNT_GENES'">Genes</mat-option>
+            <mat-option [value]="'COUNT_PHENOTYPES'">Phenotypes</mat-option>
+            <mat-option [value]="'GardName'">Name (A-Z)</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <div class="row centered">
+        @if (showDownload) {
+        <button
+          mat-stroked-button
+          class="tool-button list-download"
+          (click)="downloadData()"
+          matTooltip="Download Data"
+          color="accent"
+        >
+          <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+        </button>
+        } @if (page) {
+        <mat-paginator
+          [pageSize]="page.pageSize"
+          [pageIndex]="page.pageIndex"
+          [pageSizeOptions]="[10, 25, 50]"
+          (page)="paginationChanges($event)"
+          [length]="page.total"
+          class="browse-paginator"
+        ></mat-paginator>
+        }
+      </div>
+    </div>
+    <div class="row spinner-holder width-70">
+      <ncats-frontend-library-loading-spinner
+        [isLoaded]="loaded"
+      ></ncats-frontend-library-loading-spinner>
+    </div>
+    <ncats-frontend-library-disease-list
+      [diseases]="diseases"
+      [loading]="loaded"
+      class="fill-container"
+    ></ncats-frontend-library-disease-list>
+    <div class="row right-justified-row">
+      @if (page) {
+      <mat-paginator
+        [pageSize]="page.pageSize"
+        [pageIndex]="page.pageIndex"
+        [hidePageSize]="true"
+        (page)="paginationChanges($event)"
+        [length]="page.total"
+        class="browse-paginator"
+      ></mat-paginator>
+      }
+      <ncats-frontend-library-scroll-to-top
+        [color]="'accent'"
+      ></ncats-frontend-library-scroll-to-top>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

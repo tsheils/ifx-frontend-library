@@ -1,1 +1,2 @@
-export * from './lib/features-rdas-rdas-home.module';
+export * from './lib/rdas-home/rdas-home.component';
+export * from './lib/lib.routes';

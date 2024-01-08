@@ -1,0 +1,37 @@
+<div class="row space-around-row">
+  <div class="width-5">
+    <a
+      href="https://pharos.nih.gov/targets/{{
+        geneAssociation.gene.geneSymbol
+      }}"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Link to pharos gene data"
+      >{{ geneAssociation.gene.geneSymbol }}</a
+    >
+  </div>
+  <div class="width-80">
+    <div class="row">
+      {{ geneAssociation.gene.geneTitle }}&nbsp;
+      <a
+        href="https://www.omim.org/entry/{{ geneAssociation.gene.omim }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to OMIM gene data"
+        >OMIM:{{ geneAssociation.gene.omim }}</a
+      >
+    </div>
+    <br />
+    {{ geneAssociation.associationType }} ({{
+      geneAssociation.associationStatus
+    }}): @for (ref of geneAssociation.reference; track ref) {
+    <a
+      href="https://pubmed.ncbi.nlm.nih.gov/{{ ref }}"
+      target="_blank"
+      rel="noreferrer"
+      aria-label="Link to publication in PubMed"
+      >{{ ref }}</a
+    >
+    }
+  </div>
+</div>

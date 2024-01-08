@@ -1,24 +1,19 @@
 {
+  "name": "models-rdas",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/models/rdas/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/models/rdas"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/models/rdas"],
       "options": {
-        "jestConfig": "libs/models/rdas/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/models/rdas/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/models/rdas/**/*.ts",
-          "libs/models/rdas/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

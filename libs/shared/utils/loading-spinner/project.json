@@ -1,24 +1,19 @@
 {
+  "name": "shared-utils-loading-spinner",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/utils/loading-spinner/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/utils/loading-spinner"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/utils/loading-spinner"],
       "options": {
-        "jestConfig": "libs/shared/utils/loading-spinner/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/utils/loading-spinner/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/shared/utils/loading-spinner/**/*.ts",
-          "libs/shared/utils/loading-spinner/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

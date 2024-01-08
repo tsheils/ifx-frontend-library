@@ -1,3 +1,156 @@
+.home-content {
+  padding-top: 8vh;
+}
+
+video {
+  object-fit: cover;
+  width: 100vw;
+  height: 85vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+}
+
 .home-component {
+  padding-left: 5vw;
+  position: relative;
+  z-index: 1;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 1) 0%,
+    rgba(255, 255, 255, 0.3) 60%,
+    rgba(255, 255, 255, 0.1) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+.annotation-standardization-grid > mat-card {
+  color: black;
+}
+
+p {
+  padding: 0 1vw 0 1vw;
+}
+
+.grid-wrapper {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(30vw, 0vw));
+  justify-content: space-around;
+  padding-bottom: 5vh;
+}
+
+img.datasource-logo,
+img.tools-logo {
+  width: 100%;
+  height: auto;
+}
+
+img.standards-logo,
+img.annotations-logo {
+  width: 70%;
+  height: auto;
+}
+
+.scispacy-logo {
+  width: 100px;
+  margin: 0 auto;
+}
+
+.big-logo {
+  font-size: 3rem;
+  font-weight: bold;
+}
+
+.rdas-headline {
+  font-size: 4rem;
+  font-weight: bold;
+  padding-bottom: 2rem;
+}
+
+.rdas-subheadline {
+  font-size: 2rem;
+}
+
+.graph {
+  min-width: 100vw;
+  width: 100vw;
+  height: 85vh;
+  position: absolute;
+  top: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+.graph-holder {
+  height: 70vh;
+}
+
+.learn-more {
+  padding-bottom: 5vh;
+}
+
+.learn-more-text {
+  height: 12vh;
+  font-size: 20px;
+  align-content: end;
+}
+
+.more-arrow {
+  margin-top: -2vh;
+}
+
+.annotations-column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.annotation-standardization-grid {
   padding-top: 5vh;
+}
+
+@media only screen and (max-width: 768px) {
+  .home-content {
+    padding-top: 5vh;
+  }
+
+  .home-component {
+    padding-top: 5vh;
+    padding-left: 0;
+    background: linear-gradient(
+      to right,
+      rgb(255, 255, 255) 0%,
+      rgba(255, 255, 255, 0.7) 80%,
+      rgba(255, 255, 255, 0) 100%
+    );
+  }
+  .rdas-headline {
+    font-size: 2.5rem;
+    font-weight: bold;
+    padding: 1rem;
+  }
+
+  .rdas-subheadline {
+    font-size: 1.3rem;
+    padding: 1rem;
+  }
+
+  .graph-holder {
+    height: 60vh;
+    // z-index: 0;
+  }
+
+  .big-logo {
+    font-size: 2.5rem;
+  }
+
+  .grid-wrapper {
+    grid-template-columns: repeat(auto-fit, minmax(90vw, 0vw));
+    grid-row-gap: 2vh;
+  }
+
+  video {
+    height: 65vh;
+  }
 }

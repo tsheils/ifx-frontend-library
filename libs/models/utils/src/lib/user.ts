@@ -1,16 +1,30 @@
+import { Disease } from '@ncats-frontend-library/models/rdas';
+import firebase from 'firebase/compat';
+
 export class User {
-  displayName!: string;
+  displayName!: string | null | undefined;
   uid!: string;
-  photoURL?: string;
+  photoURL?: string | null | undefined;
   interests?: string[];
   subscriptions: Subscription[] = [];
 
   constructor(obj: Partial<User>) {
     Object.assign(this, obj);
+    if (obj.subscriptions) {
+      this.subscriptions = obj.subscriptions.map(
+        (sub) => new Subscription(sub)
+      );
+    }
   }
 }
 
 export class Subscription {
-  disease!: string;
+  diseaseName!: string;
+  gardID = '';
+  disease?: Disease;
   alerts?: string[];
+
+  constructor(obj: Partial<Subscription>) {
+    Object.assign(this, obj);
+  }
 }

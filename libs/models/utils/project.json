@@ -1,24 +1,19 @@
 {
+  "name": "models-utils",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/models/utils/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/models/utils"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/models/utils"],
       "options": {
-        "jestConfig": "libs/models/utils/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/models/utils/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/models/utils/**/*.ts",
-          "libs/models/utils/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

@@ -1,0 +1,7 @@
+ncats-frontend-library-annotations-display {
+  .annotations-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, 18%);
+    gap: 2%;
+  }
+}

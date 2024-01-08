@@ -1,11 +1,9 @@
-<mat-card *ngIf = "articles">
-  <div fxLayout="row" fxLayoutAlign="end center">
-    <div fxFlex="25">
-      <mat-paginator #paginator [length]="count" [pageIndex]="0" [pageSize]="10" (page)="fetchArticles($event)"></mat-paginator>
-    </div>
+  @for (article of articles; track article) {
+  <div class="row centered-row">
+    <ncats-frontend-library-article-list-card
+      [article]="article"
+      (click)="navigate(article.pubmed_id)"
+      class="clickable-area"
+    ></ncats-frontend-library-article-list-card>
   </div>
-  <div *ngFor="let article of articles">
-    <ncats-frontend-library-article-list-card [article]="article"></ncats-frontend-library-article-list-card>
-    <br>
-  </div>
-</mat-card>
+  }

@@ -1,30 +1,32 @@
-import { ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output } from "@angular/core";
-import { PageEvent } from "@angular/material/paginator";
-import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
+import {
+  Component,
+  Input,
+} from "@angular/core";
+import { NavigationExtras, Router } from '@angular/router';
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/clinical-trials-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-list',
   templateUrl: './clinical-trials-list.component.html',
-  styleUrls: ['./clinical-trials-list.component.scss']
+  styleUrls: ['./clinical-trials-list.component.scss'],
+  standalone: true,
+  imports: [
+    ClinicalTrialsListCardComponent
+  ],
 })
-export class ClinicalTrialsListComponent implements OnChanges {
-  @Input() trials!: ClinicalTrial[];
-  @Input() count = 0;
-  @Output() pageChange: EventEmitter< {offset:number}> = new EventEmitter<{offset:number}>();
+export class ClinicalTrialsListComponent {
+  @Input() trials!: ClinicalTrial[] | undefined;
+
   constructor(
-    private changeRef: ChangeDetectorRef
-  ) { }
+    private router: Router) {}
 
-
-  ngOnChanges() {
-    this.changeRef.markForCheck()
+  navigate(id: string): void {
+    const navigationExtras: NavigationExtras = {
+      queryParams: {
+        nctid: id,
+      },
+    };
+    this.router.navigate(['/trial'], navigationExtras);
   }
-
-  fetchTrials(event: PageEvent) {
-    const pageOptions: {offset:number} = {
-      offset: event.pageIndex * event.pageSize,
-    }
-    this.pageChange.emit(pageOptions);
-  }
-
 }

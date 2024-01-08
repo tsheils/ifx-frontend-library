@@ -1,5 +1,3 @@
-import {gql} from "apollo-angular";
-
 export class Author {
   firstName!: string;
   fullName!: string;
@@ -10,8 +8,7 @@ export class Author {
   }
 }
 
-
-export const AUTHORFIELDS = gql`
+export const AUTHORFIELDS = `
   fragment authorFields on Author {
     firstName
     lastName

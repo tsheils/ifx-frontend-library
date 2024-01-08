@@ -1,0 +1,44 @@
+ncats-frontend-library-article-details-display {
+  width: 98%;
+  -ms-overflow-style: none; //windows
+  scrollbar-width: none; //firefox
+  padding-bottom: 2vh;
+  //chrome
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  mat-card {
+    padding: 1rem;
+    padding-bottom: 2vh;
+    margin-bottom: 2vh;
+  }
+
+  .expand-link {
+    font-style: italic;
+    cursor: pointer;
+  }
+
+  span.small-text {
+    font-size: 12px;
+  }
+
+  .project-content-wrapper {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3%;
+    grid-auto-rows: minmax(100px, auto);
+  }
+
+  .project-content-wrapper > mat-card {
+    max-height: 50vh;
+    overflow: scroll;
+  }
+
+  .annotation-term {
+    padding-left: 1vw;
+  }
+  ncats-frontend-library-article-list-card .mat-card-title {
+    font-size: 1.5rem;
+  }
+}

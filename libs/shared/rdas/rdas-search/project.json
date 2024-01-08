@@ -1,24 +1,19 @@
 {
+  "name": "shared-rdas-rdas-search",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/rdas-search/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/rdas-search"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/rdas-search"],
       "options": {
-        "jestConfig": "libs/shared/rdas/rdas-search/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/rdas/rdas-search/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/shared/rdas/rdas-search/**/*.ts",
-          "libs/shared/rdas/rdas-search/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

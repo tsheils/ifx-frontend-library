@@ -1,61 +1,53 @@
-
-<mat-card>
-  <div fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxFlex="100">
-      <span class="mat-h2">{{article.title}}</span>
-      <br>
+<div class="row space-between-row top-align">
+  <div class="width-sm-100 width-75">
+    <div class="rdas-article-title">{{ article.title }}</div>
+    @for (journal of article.journals; track journal) {
+    <div>
+      <i>{{ journal.title }}</i>
+    </div>
+    }
+    <div>
+      @for (author of article.authorsWrote; track author; let last = $last) {
+      <span>
+        <i>{{ author.fullName }}</i>
+        @if (!last) {
+        <span>, </span>
+        }
+      </span>
+      }
     </div>
   </div>
-
-  <div fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxFlex="70">
-<span *ngFor="let author of article.authorsWrote; let last = last">
-      <i>{{author.fullName}}</i> <span *ngIf="!last">, </span>
-    </span><br><br>
-      <span *ngIf="article.affiliation">{{article.affiliation}}</span><br><br>
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="20" class = "mat-h3" *ngIf = "article.pubmed_id">PMID:
-          <a
-            href="https://pubmed.ncbi.nlm.nih.gov/{{article.pubmed_id}}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to publication in PubMed"
-          >{{article.pubmed_id}}</a></div>
-        <div fxFlex="50" class = "mat-h3" *ngIf = "article.doi">DOI:
-          <a
-            href="https://doi.org/{{article.doi}}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to publication via DOI"
-          >{{article.doi}}</a>
-
-          <span *ngIf = "article.doi" [ngSwitch]="article.isOpenAccess">
-            <span *ngSwitchDefault>&nbsp;<mat-icon [color]="'primary'">lock</mat-icon> &nbsp;<span class="small-text">(not open access)</span></span>
+  <div class="width-sm-100 width-25 right-text">
+    <span class="mat-h3">Published: </span>
+    {{ article.firstPublicationDate | date }}<br />
+    @if (article.pubmed_id) {
+    <div class="mat-h3 right-text">
+      PMID:
+      <a
+        href="https://pubmed.ncbi.nlm.nih.gov/{{ article.pubmed_id }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to publication in PubMed"
+        >{{ article.pubmed_id }}</a
+      >
+      <br />
+      <a
+        href="https://doi.org/{{ article.doi }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to publication via DOI"
+        >DOI: {{ article.doi }}</a
+      >
+    </div>
+    } @if (article.pubType) {
+    <span class="mat-h3">Publication Type: </span>
+    } @for (pubType of article.pubType; track pubType; let last = $last) {
+    <span>
+      <span>{{ pubType }}</span>
+      @if (!last) {
+      <span> , </span>
+      }
     </span>
-        </div>
-      </div>
-    </div>
-    <div fxFlex="25">
-      <span class = "mat-h3">First Published: </span> {{article.firstPublicationDate | date}}<br>
-      <span class = "mat-h3" *ngIf = "article.citedByCount">Cited By: </span> {{article.citedByCount}}<br>
-      <span class = "mat-h3" *ngIf="article.pubType">Publication Type: </span>
-      <span *ngFor="let pubType of article.pubType; let last = last">
-      <span>{{pubType}}</span> <span *ngIf="!last">, </span>
-    </span><br>
-    </div>
+    }
   </div>
-
-  <mat-card-subtitle *ngIf="article.abstractText && article.abstractText.length">Abstract</mat-card-subtitle>
-  <div *ngIf="fullAbstract; else truncated">
-    <span class="mat-body-1" [innerHTML]="getArticleAbstract()"></span>
-    <a (click) = "fullAbstract = false" *ngIf="fullAbstract && truncatedAbstract" class = "expand-link"> ...less</a>
-  </div>
-  <ng-template #truncated>
-    <span class="mat-body-1" [innerHTML]="getArticleAbstract()"></span>
-    <a (click) = "fullAbstract = true" *ngIf="!fullAbstract" class = "expand-link"> ...more</a>
-  </ng-template>
-
-  <div ></div>
-
-  {{article.substancesSubstanceAnnotatedByPubmed | json}}
-</mat-card>
+</div>

@@ -1,0 +1,22 @@
+
+lib-shared-utils-scatter-plot {
+  .scatter-plot-container {
+    padding-left: 2vw;
+
+
+  }
+
+  .scatter-plot {
+    min-height: 50vh;
+    width: 50vw;
+  }
+
+  .scatter-line {
+   /// stroke: black;
+  }
+
+  .scatter-title {
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+}

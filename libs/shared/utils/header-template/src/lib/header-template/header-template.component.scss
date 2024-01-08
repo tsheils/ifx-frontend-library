@@ -16,7 +16,16 @@ ncats-frontend-library-header-template {
     text-decoration: underline;
   }
 
-  .mobile-menu-container {
-    z-index: 2;
+  @media only screen and (max-width: 768px) {
+    .menu-button {
+      display: block;
+    }
+    .toolbar-template {
+      justify-content: end;
+    }
+
+    .menu-content {
+      display: none;
+    }
   }
 }

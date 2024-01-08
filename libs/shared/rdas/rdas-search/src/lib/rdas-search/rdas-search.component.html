@@ -1,22 +1,35 @@
-<div >
-<div class ="search-row">
-  <mat-form-field class = "typeahead-field search" [floatLabel] = "'never'">
-      <input matInput
-             (keydown.enter)="search()"
-             aria-label="Search for a rare disease"
-             [placeholder]="'Search for a rare disease'"
-             [formControl]=searchFormCtl
-             [matAutocomplete]="auto">
+<div class="search-row">
+  <mat-form-field
+    class="typeahead-field search"
+    appearance="outline"
+    subscriptSizing="dynamic"
+    [color]="'primary'"
+  >
+    <input
+      matInput
+      (keyup.enter)="searchString()"
+      aria-label="Rare disease search"
+      id="search-input"
+      [placeholder]="'Rare disease search'"
+      [formControl]="searchFormCtl"
+      [matAutocomplete]="autoOpts"
+    />
     <mat-autocomplete
-      #auto="matAutocomplete"
-        [displayWith]="displayFn"
-        (optionSelected)="selectDisease($event)"
-        [autoActiveFirstOption]="true"
-        class="custom-autocomplete-panel" >
-        <mat-option *ngFor="let option of options" [value]="option" class="dynamic-height">
-          {{option.name}}
-        </mat-option>
-      </mat-autocomplete>
-    <button mat-button mat-icon-button matSuffix aria-label="search" (click)="search()"><mat-icon>search</mat-icon></button>
+      #autoOpts="matAutocomplete"
+      [displayWith]="displayFn"
+      (optionSelected)="selectDisease($event)"
+      class="custom-autocomplete-panel"
+    >
+      @for (option of options; track option) {
+      <mat-option [value]="option" class="dynamic-height">
+        <span
+          [innerHTML]="option.name | highlight : searchFormCtl.value"
+        ></span>
+      </mat-option>
+      }
+    </mat-autocomplete>
+    <button matSuffix mat-icon-button aria-label="search">
+      <mat-icon [color]="'primary'">search</mat-icon>
+    </button>
   </mat-form-field>
-  </div>
+</div>

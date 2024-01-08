@@ -1,24 +1,21 @@
 {
+  "name": "features-rdas-rdas-disease-page",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/features/rdas/rdas-disease-page/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/features/rdas/rdas-disease-page"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/features/rdas/rdas-disease-page"
+      ],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-disease-page/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/features/rdas/rdas-disease-page/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/features/rdas/rdas-disease-page/**/*.ts",
-          "libs/features/rdas/rdas-disease-page/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

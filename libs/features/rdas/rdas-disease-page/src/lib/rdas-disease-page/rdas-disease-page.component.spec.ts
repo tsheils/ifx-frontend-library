@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DISEASES_FEATURE_KEY, DiseasesFacade, reducer } from "@ncats-frontend-library/stores/disease-store";
-import { EffectsModule } from "@ngrx/effects";
-import { Store, StoreModule } from "@ngrx/store";
+import {
+  DISEASES_FEATURE_KEY,
+  DiseasesFacade,
+  reducer,
+} from '@ncats-frontend-library/stores/disease-store';
+import { StoreModule } from '@ngrx/store';
 
 import { RdasDiseasePageComponent } from './rdas-disease-page.component';
 
@@ -11,16 +14,13 @@ describe('RdasDiseasePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ RdasDiseasePageComponent ],
+      declarations: [RdasDiseasePageComponent],
       imports: [
         StoreModule.forRoot({}),
-        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer)
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer),
       ],
-      providers: [
-        DiseasesFacade
-      ]
-    })
-    .compileComponents();
+      providers: [DiseasesFacade],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RdasDiseasePageComponent);
     component = fixture.componentInstance;

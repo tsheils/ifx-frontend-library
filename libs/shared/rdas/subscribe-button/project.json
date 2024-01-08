@@ -1,24 +1,19 @@
 {
+  "name": "shared-rdas-subscribe-button",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/subscribe-button/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/subscribe-button"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/subscribe-button"],
       "options": {
-        "jestConfig": "libs/shared/rdas/subscribe-button/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/rdas/subscribe-button/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/shared/rdas/subscribe-button/**/*.ts",
-          "libs/shared/rdas/subscribe-button/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

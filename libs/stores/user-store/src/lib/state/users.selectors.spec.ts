@@ -1,19 +1,15 @@
-import { User } from "@ncats-frontend-library/models/utils";
-import {
-  usersAdapter,
-  UsersPartialState,
-  initialState,
-} from './users.reducer';
+import { User } from '@ncats-frontend-library/models/utils';
+import { usersAdapter, UsersPartialState, initialState } from './users.reducer';
 import * as UsersSelectors from './users.selectors';
 
 describe('Users Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getUsersId = (it: User) => it.uid;
-  const createUsersEntity = (uid= 'sgsg', displayName = 'dsdsg') =>
-    (new User({
+  const createUsersEntity = (uid = 'sgsg', displayName = 'dsdsg') =>
+    new User({
       uid,
       displayName,
-    }));
+    });
 
   let state: UsersPartialState;
 
