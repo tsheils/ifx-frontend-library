@@ -18,25 +18,8 @@ export class FilterCategory {
   values!: Filter[];
 
   constructor(obj: Partial<FilterCategory>) {
-    if (obj.page) {
-      this.page = obj.page;
-    }
+    Object.assign(this, obj);
 
-    if (obj.query) {
-      this.query = obj.query;
-    }
-
-    if (obj.parent) {
-      this.parent = obj.parent;
-    }
-
-    if (obj.filterable) {
-      this.filterable = obj.filterable;
-    }
-
-    if (obj.label) {
-      this.label = obj.label;
-    }
     if (obj.values && obj.values.length) {
       this.values = obj.values.map((val) => new Filter(val));
     }

@@ -10,7 +10,7 @@
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/rdas/browser",
+        "outputPath": "dist/apps/rdas",
         "index": "apps/rdas/src/index.html",
         "browser": "apps/rdas/src/main.ts",
         "polyfills": ["zone.js"],
@@ -54,8 +54,7 @@
           "includePaths": ["libs/styles/src/styles"]
         },
         "styles": [
-          "apps/rdas/src/styles.scss",
-          "node_modules/swagger-ui/dist/swagger-ui.css"
+          "apps/rdas/src/styles.scss"
         ],
         "scripts": [],
         "server": "apps/rdas/src/main.server.ts",
@@ -94,17 +93,46 @@
             "fonts": false
           }
         },
-          "development": {
-            "optimization": false,
-            "extractLicenses": false,
-            "sourceMap": true
+        "test": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "500mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "400kb"
+            }
+          ],
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas/src/environments/environment.ts",
+              "with": "apps/rdas/src/environments/environment.test.ts"
+            }
+          ],
+          "outputHashing": "all",
+          "optimization": {
+            "scripts": true,
+            "styles": {
+              "minify": true,
+              "inlineCritical": true
+            },
+            "fonts": false
+          }
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
         }
       },
       "defaultConfiguration": "production",
       "allowedCommonJsDependencies": [
         "swagger-ui",
         "lodash",
-        "three-forcegraph"
+        "3d-force-graph"
       ]
     },
     "serve": {
@@ -115,6 +143,9 @@
         },
         "development": {
           "buildTarget": "rdas:build:development"
+        },
+        "test": {
+          "buildTarget": "rdas:build:test"
         }
       },
       "defaultConfiguration": "development"
@@ -126,10 +157,7 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "options": {
-        "lintFilePatterns": ["apps/rdas/**/*.ts", "apps/rdas/**/*.html"]
-      }
+      "executor": "@nx/eslint:lint"
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -160,6 +188,15 @@
             }
           ]
         },
+        "test": {
+          "outputHashing": "media",
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas/src/environments/environment.ts",
+              "with": "apps/rdas/src/environments/environment.test.ts"
+            }
+          ]
+        },
         "development": {
           "buildOptimizer": false,
           "optimization": false,
@@ -180,6 +217,10 @@
         "production": {
           "browserTarget": "rdas:build:production",
           "serverTarget": "rdas:server:production"
+        },
+        "test": {
+          "browserTarget": "rdas:build:test",
+          "serverTarget": "rdas:server:test"
         }
       },
       "defaultConfiguration": "development"
@@ -198,6 +239,10 @@
         "development": {
           "browserTarget": "rdas:build:development",
           "serverTarget": "rdas:server:development"
+        },
+        "test": {
+          "browserTarget": "rdas:build:test",
+          "serverTarget": "rdas:server:test"
         }
       },
       "defaultConfiguration": "production"

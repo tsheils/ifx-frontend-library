@@ -1,2 +1,4 @@
 /
 /diseases
+/about
+/api

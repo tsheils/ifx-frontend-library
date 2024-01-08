@@ -100,8 +100,8 @@ export const FETCHTRIALSVARIABLES: {
         }
       }
     },
-    StudyType_IN?: null | undefined | string[] | string;
-    OverallStatus_IN?: null | undefined | string[] | string;
+    StudyType_IN?: unknown;
+    OverallStatus_IN?: unknown;
   }
   ctoptions: {
     limit: number,

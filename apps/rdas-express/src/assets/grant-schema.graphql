@@ -140,7 +140,7 @@ type Query {
       statement: """
        MATCH (d:GARD {GardId: $gardId})-[]-(p:Project)
        WITH toString(p.funding_year) as year, count(p) as ct
-       return {term: year, count:ct, label: 'Project Counts by Year'} as yearCounts order by year
+       return {term: year, count:ct, label: 'Project Counts by Year'} as yearCounts order by year DESC
       """, columnName: "yearCounts"
     )
 }
@@ -151,7 +151,7 @@ type Query {
       statement: """
        MATCH (d:GARD {GardId: $gardId})-[]-(p:Project)
        WITH toString(p.funding_year) as year, sum(p.total_cost) as ct
-       return {term: year, count:ct, label: 'Project Funding by Year'} as yearCounts order by year
+       return {term: year, count:ct, label: 'Project Funding by Year'} as yearCounts order by year DESC
       """, columnName: "yearCounts"
     )
 }

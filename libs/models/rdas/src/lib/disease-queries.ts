@@ -244,7 +244,7 @@ export const LISTQUERYPARAMETERS: {
     associatedWithGeneGenes_SOME?: {
       GeneSymbol_IN?: string[];
     };
-    AND?: any[];
+    AND?: unknown[];
   };
 } = {
   options: {

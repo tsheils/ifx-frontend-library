@@ -91,8 +91,9 @@ export const FETCHARTICLESQUERY = gql`
 
 class ARTICLEVARIABLES {
   gardWhere!: { GardId: undefined | string };
-  articleWhere?: {
+  articleWhere!: {
     isEpi?: null | string | boolean;
+    publicationYear_IN?: unknown;
   };
   articleOptions!: {
     limit: number;
@@ -106,6 +107,7 @@ export const EPIARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
   articleWhere: {
     isEpi: true,
+    publicationYear_IN: undefined
   },
   articleOptions: {
     limit: 10,
@@ -120,6 +122,7 @@ export const NONEPIARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
   articleWhere: {
     isEpi: false,
+    publicationYear_IN: undefined
   },
   articleOptions: {
     limit: 10,

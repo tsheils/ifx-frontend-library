@@ -52,6 +52,9 @@
       "@ncats-frontend-library/models/utils": [
         "libs/models/utils/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/article-charts": [
+        "libs/shared/rdas/article-charts/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/article-display": [
         "libs/shared/rdas/article-display/src/index.ts"
       ],
@@ -70,6 +73,9 @@
       "@ncats-frontend-library/shared/rdas/phenotype-display": [
         "libs/shared/rdas/phenotype-display/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/project-charts": [
+        "libs/shared/rdas/project-charts/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/project-display": [
         "libs/shared/rdas/project-display/src/index.ts"
       ],
@@ -85,11 +91,20 @@
       "@ncats-frontend-library/shared/rdas/subscribe-button": [
         "libs/shared/rdas/subscribe-button/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/trials-charts": [
+        "libs/shared/rdas/trials-charts/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/bar-chart": [
+        "libs/shared/utils/bar-chart/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/utils/data-not-found": [
         "libs/shared/utils/data-not-found/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/external-link": [
         "libs/shared/utils/external-link/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/file-upload": [
+        "libs/shared/utils/file-upload/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/filter-panel": [
         "libs/shared/utils/filter-panel/src/index.ts"
@@ -103,6 +118,9 @@
       "@ncats-frontend-library/shared/utils/highlight-pipe": [
         "libs/shared/utils/highlight-pipe/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/utils/list-filter-row": [
+        "libs/shared/utils/list-filter-row/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/utils/loading-spinner": [
         "libs/shared/utils/loading-spinner/src/index.ts"
       ],
@@ -111,6 +129,15 @@
       ],
       "@ncats-frontend-library/shared/utils/ncats-datatable": [
         "libs/shared/utils/ncats-datatable/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/pie-chart": [
+        "libs/shared/utils/pie-chart/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/rdas-panel-template": [
+        "libs/shared/rdas/panel-template/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/scatter-plot": [
+        "libs/shared/utils/scatter-plot/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/scroll-to-top": [
         "libs/shared/utils/scroll-to-top/src/index.ts"
@@ -139,26 +166,11 @@
       "@ncats-frontend-library/stores/user-store": [
         "libs/stores/user-store/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/utils/rdas-panel-template": ["libs/shared/rdas/panel-template/src/index.ts"],
-      "@ncats-frontend-library/shared/rdas/article-charts": [
-        "libs/shared/rdas/article-charts/src/index.ts"
+      "utils-animated-force-directed-graph": [
+        "libs/shared/utils/animated-force-directed-graph/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/rdas/project-charts": [
-        "libs/shared/rdas/project-charts/src/index.ts"
-      ],
-      "@ncats-frontend-library/shared/rdas/trials-charts": [
-        "libs/shared/rdas/trials-charts/src/index.ts"
-      ],
-      "@ncats-frontend-library/shared/utils/bar-chart": ["libs/shared/utils/bar-chart/src/index.ts"],
-      "@ncats-frontend-library/shared/utils/file-upload": [
-        "libs/shared/utils/file-upload/src/index.ts"
-      ],
-      "@ncats-frontend-library/shared/utils/list-filter-row": [
-        "libs/shared/utils/list-filter-row/src/index.ts"
-      ],
-      "@ncats-frontend-library/shared/utils/pie-chart": ["libs/shared/utils/pie-chart/src/index.ts"],
-      "@ncats-frontend-library/shared/utils/scatter-plot": [
-        "libs/shared/utils/scatter-plot/src/index.ts"
+      "utils-force-directed-graph": [
+        "libs/shared/utils/force-directed-graph/src/index.ts"
       ]
     },
     "allowSyntheticDefaultImports": true

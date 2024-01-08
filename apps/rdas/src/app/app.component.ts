@@ -7,11 +7,9 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  HostListener,
   inject,
   Inject,
   InjectionToken,
-  OnDestroy,
   OnInit,
   PLATFORM_ID,
   ViewChild,
@@ -23,7 +21,6 @@ import {
   Event,
   NavigationEnd,
   NavigationExtras,
-  NavigationStart,
   Router,
   RouterLink,
   RouterOutlet,
@@ -92,6 +89,7 @@ export class AppComponent implements OnInit {
     {
       link: 'apis',
       label: 'APIs',
+      hideMobile: true,
       children: [
         {
           link: 'apis/epi',
@@ -117,11 +115,6 @@ export class AppComponent implements OnInit {
     },
   ];
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    // this.setMobile();
-  }
-
   constructor(
     @Inject(PLATFORM_ID)
     private platformId: InjectionToken<NonNullable<unknown>>,
@@ -140,6 +133,9 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         this.mobile = result.matches;
+        if(this.mobile) {
+          this.links = this.links.filter(link => !link.hideMobile)
+        }
         this.changeRef.markForCheck();
       });
 

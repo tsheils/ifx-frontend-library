@@ -2,9 +2,9 @@ import { Disease } from '@ncats-frontend-library/models/rdas';
 import firebase from 'firebase/compat';
 
 export class User {
-  displayName!: string;
+  displayName!: string | null | undefined;
   uid!: string;
-  photoURL?: string;
+  photoURL?: string | null | undefined;
   interests?: string[];
   subscriptions: Subscription[] = [];
 

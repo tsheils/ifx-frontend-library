@@ -160,12 +160,12 @@ type Query {
        match (d:GARD {GardId: $gardId})-[]-(a:Article {isEpi: true})
        WITH a.publicationYear as year
        with count(year) as ct, year
-       RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as yearCounts order by year
+       RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as yearCounts order by year DESC
        UNION ALL
        match (d:GARD {GardId: $gardId})-[]-(a:Article {isEpi: false})
        WITH a.publicationYear as year
        with count(year) as ct, year
-       RETURN {term: year, count: ct, label: 'Non Epidemiology Articles'} as yearCounts order by year
+       RETURN {term: year, count: ct, label: 'Non Epidemiology Articles'} as yearCounts order by year DESC
       """, columnName: "yearCounts"
     )
 }

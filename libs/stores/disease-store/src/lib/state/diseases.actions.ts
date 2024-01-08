@@ -1,11 +1,8 @@
 import {
   Disease,
-  DiseaseNode,
-  Gene,
-  Phenotype,
+  DiseaseNode
 } from '@ncats-frontend-library/models/rdas';
 import {
-  Filter,
   FilterCategory,
   Page,
 } from '@ncats-frontend-library/models/utils';

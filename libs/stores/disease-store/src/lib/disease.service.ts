@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { ApolloQueryResult, DocumentNode } from '@apollo/client';
-import { Disease } from '@ncats-frontend-library/models/rdas';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
 
@@ -52,12 +51,4 @@ export class DiseaseService {
       })
       .valueChanges.pipe();
   }
-
-  /*manualQuery(query: string, variables: object = {}, database: string) {
-    return this.apollo.use(database).watchQuery({
-        query,
-        variables
-      }
-    ).valueChanges.pipe()
-  }*/
 }

@@ -38,7 +38,6 @@ import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
   combineLatest,
   filter,
-  forkJoin,
   map,
   mergeMap,
   of,
@@ -47,15 +46,6 @@ import {
 } from 'rxjs';
 import * as DiseasesActions from './diseases.actions';
 import * as fromDiseasesSelectors from './diseases.selectors';
-
-
-interface DEFAULTOPTIONS {
-  limit?: number,
-  offset?: number,
-  GardId?: string,
-  OverallStatus?: string | string[] | null| undefined,
-  StudyType?: string | string[] | null |undefined
-}
 
 @Injectable()
 export class DiseasesEffects {
@@ -280,7 +270,8 @@ export class DiseasesEffects {
         this._setGardId(gardid);
 
         if (root.fragment) {
-          this._setFragment(root.fragment, params as DEFAULTOPTIONS);
+          console.log("from load disease")
+          this._setFragment(root.fragment, params);
         }
         return combineLatest(
           this.diseaseService
@@ -353,6 +344,7 @@ export class DiseasesEffects {
         this._setGardId(gardid);
 
         if (root.fragment) {
+          console.log("from filters")
           this._setFragment(root.fragment, {
             limit: params['limit'],
             offset: params['offset'],
@@ -399,14 +391,18 @@ export class DiseasesEffects {
                       {
                         parent: 'epiArticles',
                         label: "Epidemiology Articles by Year",
-                        values: articleFilterData.data.countsByYear.filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles').map((fil: Partial<Filter>) => new Filter(fil))
+                        values: articleFilterData.data.countsByYear
+                          .filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles')
+                          .map((fil: Partial<Filter>) => new Filter({...fil, label: 'year'}))
                       }
                     ))
                 filters.push(new FilterCategory(
                       {
                         parent: 'nonEpiArticles',
                         label: "Articles by Year",
-                        values: articleFilterData.data.countsByYear.filter((year: Partial<Filter>) => year.label == 'Non Epidemiology Articles').map((fil: Partial<Filter>) => new Filter(fil)) }
+                        values: articleFilterData.data.countsByYear
+                          .filter((year: Partial<Filter>) => year.label == 'Non Epidemiology Articles')
+                          .map((fil: Partial<Filter>) => new Filter({...fil, label: 'year'})) }
                     ))
                   }
                   if (projectFilterData && projectFilterData.data) {
@@ -415,6 +411,7 @@ export class DiseasesEffects {
                         {
                           parent: 'projects',
                           label: "Projects Count by Year",
+                          filterable: false,
                           values: projectFilterData.data.countsByYear.map((fil: Partial<Filter>) => new Filter(fil))
                         }
                       ))
@@ -424,6 +421,7 @@ export class DiseasesEffects {
                         {
                           parent: 'projects',
                           label: "Projects Funding by Year",
+                          filterable: false,
                           values: projectFilterData.data.costByYear.map((fil: Partial<Filter>) => new Filter(fil))
                         }
                       ))
@@ -609,10 +607,6 @@ export class DiseasesEffects {
     )
   );
 
-  'where': {
-    GardId_IN: null;
-  };
-
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   isLoadingDisease$ = createEffect((): any =>
     inject(Actions).pipe(
@@ -725,52 +719,58 @@ export class DiseasesEffects {
 
   _setFragment(
     origin: string | null,
-    options: DEFAULTOPTIONS
+    options: {[key: string]: any}
   ) {
     switch (origin) {
       case 'epiArticles': {
-        EPIARTICLES.articleOptions.limit = options.limit ? options.limit : 10;
-        if (options.offset) {
-          EPIARTICLES.articleOptions.offset = options.offset * 1;
+        EPIARTICLES.articleOptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
+        if (<number>options['offset']) {
+          EPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
+        }
+        if(options['year'] && options['year'].length > 0) {
+          EPIARTICLES.articleWhere.publicationYear_IN = options['year'];
+        } else {
+          EPIARTICLES.articleWhere.publicationYear_IN =undefined;
         }
         break;
       }
       case 'nonEpiArticles': {
-        NONEPIARTICLES.articleOptions.limit = options.limit ? options.limit : 10;
-        if (options.offset) {
-          NONEPIARTICLES.articleOptions.offset = options.offset * 1;
+        NONEPIARTICLES.articleOptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
+        if (<number>options['offset']) {
+          NONEPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
+        }
+        if(options['year'] && options['year'].length > 0) {
+          NONEPIARTICLES.articleWhere.publicationYear_IN = options['year'];
+        } else {
+          NONEPIARTICLES.articleWhere.publicationYear_IN = undefined;
         }
         break;
       }
       case 'project': {
-        PROJECTVARIABLES.coreProjectsOptions.limit = options.limit ? options.limit : 10;
-        if (options.offset) {
-          PROJECTVARIABLES.coreProjectsOptions.offset = options.offset * 1;
+        PROJECTVARIABLES.coreProjectsOptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
+        if (<number>options['offset']) {
+          PROJECTVARIABLES.coreProjectsOptions.offset = <number>options['offset'] * 1;
         }
         break;
       }
       case 'trials': {
-        FETCHTRIALSVARIABLES.ctoptions.limit = options.limit ? options.limit : 10;
-        if (options.offset) {
-          FETCHTRIALSVARIABLES.ctoptions.offset = options.offset * 1;
+        FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
+        if (<number>options['offset']) {
+          FETCHTRIALSVARIABLES.ctoptions.offset = <number>options['offset'] * 1;
         }
         if (options['GardId']) {
             FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = <string>options['GardId']
         }
-        if (options.OverallStatus) {
-          if(options.OverallStatus.length) {
-            FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = options.OverallStatus;
+        if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
+            FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = options['OverallStatus'];
           } else {
-            FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = undefined;
+          FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = undefined;
           }
-        }
-        if (options.StudyType) {
-          if(options.StudyType.length) {
-            FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = options.StudyType;
+        if (options['StudyType'] && options['StudyType'].length > 0) {
+            FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = options['StudyType'];
           } else {
             FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = undefined;
           }
-        }
         break;
       }
     }

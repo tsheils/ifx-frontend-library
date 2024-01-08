@@ -14,7 +14,8 @@
         "outputPath": "dist/apps/rdas-express",
         "main": "apps/rdas-express/src/main.ts",
         "tsConfig": "apps/rdas-express/tsconfig.app.json",
-        "assets": ["apps/rdas-express/src/assets"]
+        "assets": ["apps/rdas-express/src/assets"],
+        "webpackConfig": "apps/rdas-express/webpack.config.js"
       },
       "configurations": {
         "production": {
@@ -57,10 +58,7 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["apps/rdas-express/**/*.ts"]
-      }
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/jest:jest",
