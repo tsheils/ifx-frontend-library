@@ -53,5 +53,6 @@ testem.log
 Thumbs.db
 
 .angular
+.nx
 
 apps/rdas-e2e
