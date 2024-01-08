@@ -1,17 +1,73 @@
 <mat-card>
-  <div fxLayout = "row" fxLayoutAlign="space-between start"  class = "link-row">
-    <div fxFlex="80" (click)="navigate(disease.gard_id)">
-      <h3 class ="disease-name" mat-card-title>{{disease.name}}: {{disease.gard_id}}</h3>
-    </div>
-    <div fxFlex="12">
-      <ncats-frontend-library-subscribe-button [diseaseId]="disease.gard_id" ></ncats-frontend-library-subscribe-button>
-    </div>
-  </div>
-  <div fxLayout = "row" fxLayoutAlign="space-between center">
-    <div fxFlex="75">
-      <div *ngIf=" disease && disease.synonyms">
-        Synonyms: {{disease.synonyms.join(', ')}}
+  <mat-card-content class="row centered-row">
+    <div class="row space-between-row link-row">
+      <div (click)="navigate(disease.gardId)" class="width-75 clickable-area">
+        <h3 class="disease-name" mat-card-title>
+          {{ disease.name }}: {{ disease.gardId }}
+        </h3>
+      </div>
+      <div>
+        <ncats-frontend-library-subscribe-button
+          [disease]="disease"
+        ></ncats-frontend-library-subscribe-button>
       </div>
     </div>
-  </div>
+    <div class="width-75">
+      @if (disease.classificationLevel) {
+      <div class="primary-chip-outlined">
+        {{ disease.classificationLevel }}
+      </div>
+      } &nbsp;&nbsp;&nbsp; @if (disease.disorderType &&
+      disease.disorderType?.length) {
+      <div class="accent-chip-outlined">
+        {{ disease.disorderType?.join(', ') }}
+      </div>
+      }
+    </div>
+    @if (disease.synonyms && disease.synonyms?.length) {
+    <div class="width-75">Synonyms: {{ disease.synonyms?.join(', ') }}</div>
+    }
+    <div class="count-grid">
+      <mat-card [appearance]="'outlined'" class="count-card">
+        <mat-card-title class="bottom-border-primary count-title"
+          >Published Articles</mat-card-title
+        >
+        <span class="card-count">
+          {{ disease.articleCount }}
+        </span>
+      </mat-card>
+      <mat-card [appearance]="'outlined'" class="count-card">
+        <mat-card-title class="bottom-border-primary"
+          >Funded Projects</mat-card-title
+        >
+        <span class="card-count">
+          {{ disease.projectCount }}
+        </span>
+      </mat-card>
+      <mat-card [appearance]="'outlined'" class="count-card">
+        <mat-card-title class="bottom-border-primary"
+          >Clinical Trials</mat-card-title
+        >
+        <span class="card-count">
+          {{ disease.clinicalTrialCount }}
+        </span>
+      </mat-card>
+      <mat-card [appearance]="'outlined'" class="count-card">
+        <mat-card-title class="bottom-border-primary"
+          >Associated Genes</mat-card-title
+        >
+        <span class="card-count">
+          {{ disease.geneCount }}
+        </span>
+      </mat-card>
+      <mat-card [appearance]="'outlined'" class="count-card">
+        <mat-card-title class="bottom-border-primary"
+          >Phenotypes</mat-card-title
+        >
+        <span class="card-count">
+          {{ disease.phenotypeCount }}
+        </span>
+      </mat-card>
+    </div>
+  </mat-card-content>
 </mat-card>

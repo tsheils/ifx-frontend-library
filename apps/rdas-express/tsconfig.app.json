@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["es2020"],
+    "module": "esnext",
+    "moduleResolution": "node",
+    "target": "es6",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "outDir": "../../dist/out-tsc",
+    "types": ["node", "express"]
+  },
+  "exclude": ["jest.config.ts", "**/*.spec.ts", "**/*.test.ts"],
+  "include": ["**/*.ts"]
+}

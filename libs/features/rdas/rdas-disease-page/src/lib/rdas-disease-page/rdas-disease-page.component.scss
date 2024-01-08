@@ -1,0 +1,40 @@
+ncats-frontend-library-rdas-disease-page {
+  .disease-header-section {
+    padding: 0 2vw 0 2vw;
+    background-image: url(/assets/disease-display/graph-background.png);
+    background-position: top;
+    position: fixed;
+    top: 60px;
+    width: 100vw;
+    z-index: 100;
+  }
+
+  .navigation-menu-panel {
+    top: calc(60px + 17vh) !important
+  }
+
+  .disease-page {
+    margin-top: 17vh; //-60px for main content css and -1vh for row padding
+  }
+
+  .disease-header-section .disease-link {
+    color: #ffffff;
+  }
+
+  .mdc-button--outlined .mdc-button__ripple {
+    border-color: #ffffff;
+  }
+
+  @media only screen and (max-width: 960px) {
+    .disease-header-section {
+      padding: 0 2vw 0 2vw;
+      height: auto;
+    }
+  }
+
+  @media only screen and (max-width: 768px) {
+    .main-disease-display {
+      padding: 2vh 0 2vh 0;
+    }
+  }
+}

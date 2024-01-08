@@ -1,0 +1,70 @@
+<div class="row right-justified-row no-padding">
+  <button mat-icon-button (click)="closeModal()">
+    <mat-icon>close</mat-icon>
+  </button>
+</div>
+<form (keydown.enter)="register()" [formGroup]="registerForm">
+  <div class="row centered-row">
+    <mat-form-field appearance="outline" class="modal-button">
+      <mat-label>Enter your email</mat-label>
+      <input
+        matInput
+        type="email"
+        [placeholder]="'Email Sign in'"
+        [formControlName]="'email'"
+      />
+      @if (registerForm.controls['email'].invalid) {
+      <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="row centered-row">
+    <mat-form-field appearance="outline" class="modal-button">
+      <input
+        matInput
+        type="password"
+        [placeholder]="'Password'"
+        [formControlName]="'pw'"
+      />
+      @if (registerForm.controls['pw'].invalid) {
+      <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+  <div class="row centered-row">
+    <mat-form-field appearance="outline" class="modal-button">
+      <input
+        matInput
+        type="password"
+        [placeholder]="'Verify Password'"
+        [formControlName]="'pwVerify'"
+      />
+      @if (registerForm.controls['pwVerify'].invalid) {
+      <mat-error>{{ getPasswordVerifyErrorMessage() }}</mat-error>
+      }
+    </mat-form-field>
+  </div>
+</form>
+<div class="row centered-row">
+  <button
+    mat-flat-button
+    [color]="'primary'"
+    (click)="register()"
+    class="modal-button"
+    [disabled]="registerForm.invalid"
+  >
+    Register
+  </button>
+</div>
+<div class="row centered-row">
+  <p class="disclaimer">
+    By continuing, you are indicating that you accept our
+    <a href="https://ncats.nih.gov/disclaimer" target="_blank" rel="noreferrer"
+      >Terms of Service</a
+    >
+    and
+    <a href="https://ncats.nih.gov/privacy" target="_blank" rel="noreferrer"
+      >Privacy Policy</a
+    >.
+  </p>
+</div>

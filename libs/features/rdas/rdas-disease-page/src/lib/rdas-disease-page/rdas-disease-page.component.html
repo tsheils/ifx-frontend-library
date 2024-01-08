@@ -1,9 +1,123 @@
-<div fxLayout = "row" fxLayoutAlign="space-around start">
-  <div fxFlex = 75>
-    <ncats-frontend-library-disease-display
-      *ngIf="disease"
-      [disease] = disease
-      (optionsChange)="fetchDiseaseInfo($event)"
-    ></ncats-frontend-library-disease-display>
-  </div>
+<div class="disease-header-section">
+  <ncats-frontend-library-disease-header
+    [disease]="disease"
+  ></ncats-frontend-library-disease-header>
 </div>
+@if(loaded()) {
+<mat-sidenav-container class="disease-page" >
+  <mat-sidenav
+    #navigationsidenav
+    class="navigation-menu-panel"
+    [opened]="!mobile"
+    [mode]="'side'"
+  >
+    <div class="toc-wrapper" >
+      <div class="toc">
+        <div class="row right-justified-row">
+          <button
+            [color]="'primary'"
+            mat-icon-button
+            class="close-button"
+            aria-label="close filters"
+            (click)="navigationsidenav.toggle()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
+        <mat-nav-list>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('overview')"
+            [ngClass]="{ 'active-sidemenu': isActive('overview') }"
+          >
+            Overview
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('genes')"
+            [ngClass]="{ 'active-sidemenu': isActive('genes') }"
+          >
+            Genes {{ disease()?.geneCount || 0 }}
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('phenotypes')"
+            [ngClass]="{ 'active-sidemenu': isActive('phenotypes') }"
+          >
+            Phenotypes {{ disease()?.phenotypeCount || 0 }}
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('nonEpiArticles')"
+            [ngClass]="{ 'active-sidemenu': isActive('nonEpiArticles') }"
+          >
+            Articles {{ disease()?.nonEpiCount || 0 }}
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('epiArticles')"
+            [ngClass]="{ 'active-sidemenu': isActive('epiArticles') }"
+          >
+            Epidemiology Articles {{ disease()?.epiCount || 0 }}
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('projects')"
+            [ngClass]="{ 'active-sidemenu': isActive('projects') }"
+          >
+            NIH funded Projects {{ disease()?.projectCount || 0 }}
+          </a>
+          <a
+            mat-list-item
+            class="list-button"
+            (click)="scroll('trials')"
+            [ngClass]="{ 'active-sidemenu': isActive('trials') }"
+          >
+            Clinical Trials {{ disease()?.clinicalTrialCount || 0 }}
+          </a>
+        </mat-nav-list>
+      </div>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="drawer-container-content" >
+    @if (!navigationsidenav.opened) {
+    <div class="row">
+      <button
+        [color]="'primary'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="navigationsidenav.toggle()"
+      >
+        Filters <mat-icon>bookmark</mat-icon>
+      </button>
+    </div>
+    }
+    <div class="row centered-row">
+      <div class = "full-width">
+      @if (!disease.name) {
+      <div>
+        <h1>No disease info found</h1>
+      </div>
+      } @if (disease() && loaded()) {
+        <ncats-frontend-library-disease-display
+    [disease]="disease"
+    [filters]="diseaseFilters"
+    (optionsChange)="setUrl($event)"
+  (activeElement)="setActiveElement($event)"
+  ></ncats-frontend-library-disease-display>
+        <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+      }
+    </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+} @else {
+<ncats-frontend-library-loading-spinner></ncats-frontend-library-loading-spinner>
+}

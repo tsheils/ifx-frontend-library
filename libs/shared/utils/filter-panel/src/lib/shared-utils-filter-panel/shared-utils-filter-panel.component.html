@@ -1,0 +1,75 @@
+<mat-card class="filter-card">
+  <mat-card-title>{{ filter.label | titlecase }}</mat-card-title>
+  <mat-form-field class="table-search">
+    <input
+      matInput
+      #searchInput
+      placeholder="Search {{ filter.label }}"
+      [formControl]="searchCtl"
+      [value]="filter.query"
+    />
+    @if (searchCtl.value) {
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="close"
+      (click)="clearSearch()"
+    >
+      <mat-icon [color]="'primary'">backspace</mat-icon>
+    </button>
+    }
+  </mat-form-field>
+  <div>
+    <ncats-frontend-library-loading-spinner
+      [isLoaded]="!loading"
+    ></ncats-frontend-library-loading-spinner>
+    <cdk-virtual-scroll-viewport
+      appendOnly
+      itemSize="10"
+      class="filter-viewport"
+      (scrolledIndexChange)="scrollDetected()"
+    >
+      <div
+        *cdkVirtualFor="let field of filter.values; let last = last"
+        class="filter-grid"
+      >
+        <div class="filter-cell checkbox">
+          <mat-checkbox
+            (click)="$event.stopPropagation()"
+            aria-label="Select filter option"
+            (change)="$event ? filterSelection.toggle(field['term']) : null"
+            [checked]="filterSelection.isSelected(field['term'])"
+            ><label class="hidden">Select filter option</label>
+          </mat-checkbox>
+        </div>
+        <div class="filter-cell name">
+          <span class="field-text">
+            <span
+              [innerHTML]="
+                field['term'] | highlight : (filter.query ? filter.query : '')
+              "
+            ></span>
+          </span>
+        </div>
+        <div class="filter-cell count">
+          <span class="field-text">
+            {{ field['count'] }}
+          </span>
+        </div>
+        @if (last) {
+        <br />
+        } @if (last && filter.values.length >= 200) {
+        <button
+          matButton
+          mat-stroked-button
+          (click)="loadMore()"
+          [color]="'primary'"
+          class="full-width"
+        >
+          see more
+        </button>
+        }
+      </div>
+    </cdk-virtual-scroll-viewport>
+  </div>
+</mat-card>

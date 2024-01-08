@@ -1,1 +1,1 @@
-export * from './lib/features-rdas-rdas-disease-page.module';
+export * from './lib/rdas-disease-page/rdas-disease-page.component';

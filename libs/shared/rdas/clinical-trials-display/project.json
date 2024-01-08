@@ -1,24 +1,21 @@
 {
+  "name": "shared-rdas-clinical-trials-display",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/clinical-trials-display/src",
   "prefix": "ncats-frontend-library",
   "targets": {
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/libs/shared/rdas/clinical-trials-display"],
+      "executor": "@nx/jest:jest",
+      "outputs": [
+        "{workspaceRoot}/coverage/libs/shared/rdas/clinical-trials-display"
+      ],
       "options": {
-        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts",
-        "passWithNoTests": true
+        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": [
-          "libs/shared/rdas/clinical-trials-display/**/*.ts",
-          "libs/shared/rdas/clinical-trials-display/**/*.html"
-        ]
-      }
+      "executor": "@nx/eslint:lint"
     }
   },
   "tags": []

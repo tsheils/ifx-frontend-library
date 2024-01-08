@@ -4,12 +4,16 @@
 /dist
 /tmp
 /out-tsc
+dist.zip
 
 #environments
 apps/rdas/src/environments/environment.ts
 apps/rdas/src/environments/environment.prod.ts
 apps/rdas-graphql/src/environments/environment.ts
 apps/rdas-graphql/src/environments/environment.prod.ts
+apps/rdas-express/src/environments
+apps/rdas-express/src/environments/environment.ts
+apps/rdas-express/src/environments/environment.prod.ts
 apps/neo4j-introspection/src/environments/environment.ts
 apps/neo4j-introspection/src/environments/environment.prod.ts
 .dev.ts
@@ -42,9 +46,13 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/logs
 
 # System Files
 .DS_Store
 Thumbs.db
 
 .angular
+.nx
+
+apps/rdas-e2e

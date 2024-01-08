@@ -1,22 +1,47 @@
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
-  Component,
+  Component, ElementRef,
   EventEmitter,
   OnDestroy,
   OnInit,
-  Output
+  Output, ViewChild
 } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatAutocompleteSelectedEvent } from "@angular/material/autocomplete";
-import { Disease } from "@ncats-frontend-library/models/rdas";
-import { DiseaseService, DiseasesFacade, searchDiseases } from "@ncats-frontend-library/stores/disease-store";
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from "rxjs";
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent, MatAutocompleteTrigger
+} from "@angular/material/autocomplete";
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { Disease } from '@ncats-frontend-library/models/rdas';
+import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
+import {
+  clearTypeahead,
+  DiseaseService,
+  DiseasesFacade,
+  searchDiseases,
+} from '@ncats-frontend-library/stores/disease-store';
+import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-rdas-search',
   templateUrl: './rdas-search.component.html',
-  styleUrls: ['./rdas-search.component.scss']
-
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatIconModule,
+    MatButtonModule,
+    HighlightPipe,
+  ],
+  styleUrls: ['./rdas-search.component.scss'],
+  standalone: true,
 })
 export class RdasSearchComponent implements OnInit, OnDestroy {
   /**
@@ -28,53 +53,61 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
 
   @Output()
   diseaseSelect: EventEmitter<Disease> = new EventEmitter<Disease>();
+  @Output()
+  diseaseSearch: EventEmitter<string> = new EventEmitter<string>();
   options: Disease[] = [];
+  @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
 
   constructor(
     private changeRef: ChangeDetectorRef,
     private diseaseService: DiseaseService,
     private diseaseFacade: DiseasesFacade
-  ) { }
+  ) {
+
+  }
 
   ngOnInit(): void {
-    this.diseaseFacade.searchDiseases$.pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(res => {
-      if(res && res.length) {
-        this.options = res.map(disease => new Disease(disease));
-        this.changeRef.markForCheck();
-      }
-    })
-
-    this.searchFormCtl.valueChanges.pipe(
-      takeUntil(this.ngUnsubscribe),
-      debounceTime(200),
-      distinctUntilChanged())
-      .subscribe((term) => {
-        if(term && term.length) {
-          this.diseaseFacade.dispatch(searchDiseases({term: term}))
+    this.diseaseFacade.searchDiseases$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((res) => {
+        if (res && res.length) {
+          this.options = res.map((disease) => new Disease(disease));
+          this.changeRef.markForCheck();
         }
-      })
+      });
+
+    this.searchFormCtl.valueChanges
+      .pipe(
+        takeUntil(this.ngUnsubscribe),
+        debounceTime(200),
+        distinctUntilChanged()
+      )
+      .subscribe((term) => {
+        if (term && term.length) {
+          this.diseaseFacade.dispatch(searchDiseases({ term: term }));
+        }
+      });
   }
 
   selectDisease(event: MatAutocompleteSelectedEvent) {
     this.diseaseSelect.next(event.option.value as Disease);
   }
 
-  displayFn(option: {name: string, id: string }): string {
-    return option && option.name ? option.name : '';
+  searchString() {
+    this.autocomplete.closePanel()
+    this.diseaseSearch.next(this.searchFormCtl.value)
   }
 
-  search() {
-   // console.log(this.searchFormCtl.value);
+  displayFn(option: { name: string; id: string }): string {
+    return option && option.name ? option.name : '';
   }
 
   /**
    * clean up on leaving component
    */
   ngOnDestroy() {
+    this.diseaseFacade.dispatch(clearTypeahead());
     this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
   }
-
 }

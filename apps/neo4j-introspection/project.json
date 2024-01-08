@@ -1,12 +1,16 @@
 {
+  "name": "neo4j-introspection",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/neo4j-introspection/src",
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
+        "generatePackageJson": true,
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/apps/neo4j-introspection",
         "main": "apps/neo4j-introspection/src/main.ts",
         "tsConfig": "apps/neo4j-introspection/tsconfig.app.json",
@@ -27,7 +31,7 @@
       }
     },
     "serve": {
-      "executor": "@nrwl/node:node",
+      "executor": "@nrwl/js:node",
       "options": {
         "buildTarget": "neo4j-introspection:build"
       },
@@ -38,15 +42,15 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/neo4j-introspection/**/*.ts"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/neo4j-introspection"],
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/neo4j-introspection"],
       "options": {
         "jestConfig": "apps/neo4j-introspection/jest.config.ts",
         "passWithNoTests": true

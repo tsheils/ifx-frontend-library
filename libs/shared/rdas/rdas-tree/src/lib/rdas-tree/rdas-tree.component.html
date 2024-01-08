@@ -1,0 +1,33 @@
+<mat-card>
+  <ncats-frontend-library-loading-spinner
+    [isLoaded]="loaded"
+  ></ncats-frontend-library-loading-spinner>
+  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+      <button mat-icon-button disabled></button>
+      <a
+        aria-label="Link to disease details page"
+        href="/disease?id={{ node.gardId }}"
+        rel="noreferrer"
+        target="_blank"
+        >{{ node.name }}</a
+      >
+    </mat-tree-node>
+    <mat-tree-node
+      *matTreeNodeDef="let node; when: hasChild"
+      matTreeNodePadding
+      (click)="selectDisease(node)"
+      class="clickable-area"
+      matTreeNodeToggle
+    >
+      <button mat-icon-button [attr.aria-label]="'Toggle ' + node.item">
+        <mat-icon class="mat-icon-rtl-mirror">
+          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+        </mat-icon>
+      </button>
+      {{ node.name }}
+      {{ node.GardId }}
+      <!--({{node.childrenCount}})-->
+    </mat-tree-node>
+  </mat-tree>
+</mat-card>

@@ -1,118 +1,129 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@include mat.core();
 
 $rdas-primary: (
-  50 : #e6eaed,
-  100 : #c1cbd3,
-  200 : #98a8b6,
-  300 : #6e8599,
-  400 : #4f6b83,
-  500 : #30516d,
-  600 : #2b4a65,
-  700 : #24405a,
-  800 : #1e3750,
-  900 : #13273e,
-  A100 : #7bb4ff,
-  A200 : #4897ff,
-  A400 : #157aff,
-  A700 : #006cfb,
+  50: #e6eaed,
+  100: #c1cbd3,
+  200: #98a8b6,
+  300: #6e8599,
+  400: #4f6b83,
+  500: #30516d,
+  600: #2b4a65,
+  700: #24405a,
+  800: #1e3750,
+  900: #13273e,
+  A100: #7bb4ff,
+  A200: #4897ff,
+  A400: #157aff,
+  A700: #006cfb,
   contrast: (
-    50 : #000000,
-    100 : #000000,
-    200 : #000000,
-    300 : #000000,
-    400 : #ffffff,
-    500 : #ffffff,
-    600 : #ffffff,
-    700 : #ffffff,
-    800 : #ffffff,
-    900 : #ffffff,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #ffffff,
-    A700 : #ffffff
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #ffffff,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #ffffff,
+    A700: #ffffff,
   ),
 );
 
 $rdas-secondary: (
-  50 : #f6f7f5,
-  100 : #e7ece6,
-  200 : #d8e0d6,
-  300 : #c8d3c5,
-  400 : #bcc9b8,
-  500 : #b0c0ac,
-  600 : #a9baa5,
-  700 : #a0b29b,
-  800 : #97aa92,
-  900 : #879c82,
-  A100 : #ffffff,
-  A200 : #f8fff7,
-  A400 : #ceffc3,
-  A700 : #b9ffaa,
+  50: #f6f7f5,
+  100: #e7ece6,
+  200: #d8e0d6,
+  300: #c8d3c5,
+  400: #bcc9b8,
+  500: #b0c0ac,
+  600: #a9baa5,
+  700: #a0b29b,
+  800: #97aa92,
+  900: #879c82,
+  A100: #ffffff,
+  A200: #f8fff7,
+  A400: #ceffc3,
+  A700: #b9ffaa,
   contrast: (
-    50 : #000000,
-    100 : #000000,
-    200 : #000000,
-    300 : #000000,
-    400 : #000000,
-    500 : #000000,
-    600 : #000000,
-    700 : #000000,
-    800 : #000000,
-    900 : #000000,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #000000,
-    A700 : #000000,
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #000000,
+    600: #000000,
+    700: #000000,
+    800: #000000,
+    900: #000000,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
   ),
 );
 
 $rdas-warn: (
-  50 : #fcebe9,
-  100 : #f7ccc9,
-  200 : #f1aaa5,
-  300 : #eb8881,
-  400 : #e76f66,
-  500 : #e3554b,
-  600 : #e04e44,
-  700 : #dc443b,
-  800 : #d83b33,
-  900 : #d02a23,
-  A100 : #ffffff,
-  A200 : #ffd9d8,
-  A400 : #ffa8a5,
-  A700 : #ff8f8b,
+  50: #fcebe9,
+  100: #f7ccc9,
+  200: #f1aaa5,
+  300: #eb8881,
+  400: #e76f66,
+  500: #e3554b,
+  600: #e04e44,
+  700: #dc443b,
+  800: #d83b33,
+  900: #d02a23,
+  A100: #ffffff,
+  A200: #ffd9d8,
+  A400: #ffa8a5,
+  A700: #ff8f8b,
   contrast: (
-    50 : #000000,
-    100 : #000000,
-    200 : #000000,
-    300 : #000000,
-    400 : #000000,
-    500 : #ffffff,
-    600 : #ffffff,
-    700 : #ffffff,
-    800 : #ffffff,
-    900 : #ffffff,
-    A100 : #000000,
-    A200 : #000000,
-    A400 : #000000,
-    A700 : #000000,
+    50: #000000,
+    100: #000000,
+    200: #000000,
+    300: #000000,
+    400: #000000,
+    500: #ffffff,
+    600: #ffffff,
+    700: #ffffff,
+    800: #ffffff,
+    900: #ffffff,
+    A100: #000000,
+    A200: #000000,
+    A400: #000000,
+    A700: #000000,
   ),
 );
 
-$app-primary: mat-palette($rdas-primary);
-$app-accent: mat-palette($rdas-secondary);
+$app-primary: mat.define-palette($rdas-primary);
+$app-accent: mat.define-palette($rdas-secondary);
 
-$app-warn: mat-palette($rdas-warn);
+// The "warn" palette is optional and defaults to red if not specified.
+$app-warn: mat.define-palette($rdas-warn);
 
-$app-theme: mat-light-theme($app-primary, $app-accent, $app-warn);
+$app-theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $app-primary,
+      accent: $app-accent,
+      warn: $app-warn,
+    ),
+    typography: mat.define-typography-config(),
+    density: 0,
+  )
+);
 
-
-@include angular-material-theme($app-theme);
+@include mat.all-component-themes($app-theme);

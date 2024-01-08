@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
-import { Apollo } from "apollo-angular";
-import { ApolloTestingModule } from "apollo-angular/testing";
+import { Apollo } from 'apollo-angular';
+import { ApolloTestingModule } from 'apollo-angular/testing';
 
 import { DiseaseService } from './disease.service';
 
@@ -10,7 +10,7 @@ describe('DiseaseService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [ApolloTestingModule],
-      providers: [Apollo]
+      providers: [Apollo],
     });
     service = TestBed.inject(DiseaseService);
   });

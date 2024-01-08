@@ -1,40 +1,12 @@
-<mat-card>
-  <div fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxFlex="100">
-      <span class="mat-h2">{{trial.officialTitle}}</span>
-    </div>
+<div class="row space-between-row">
+  <div class="width-75">
+    <span class="mat-card-title">
+      {{ trial.briefTitle ? trial.briefTitle : trial.officialTitle }}
+    </span>
   </div>
-
-  <div fxLayout="row" fxLayoutAlign="space-between start">
-    <div fxFlex="70">
-      <span *ngIf="trial">{{trial.lastUpdatePostDate}}</span><br>
-      <div fxLayout="row" fxLayoutAlign="start start">
-        <div fxFlex="20" class = "mat-h3" *ngIf = "trial.NCTId">NCT ID:
-          <a
-            href="https://clinicaltrials.gov/ct2/show/{{trial.NCTId}}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to clinical trial in at Clinicaltrials.gov"
-          >{{trial.NCTId}}</a></div>
-      </div>
-    </div>
-    <div fxFlex="25">
-      <span class = "mat-h3">Study Type: </span> {{trial.studyType}}<br>
-      <span class = "mat-h3" *ngIf = "trial.overallStatus || trial.lastKnownStatus">Status: </span> {{trial.overallStatus || trial.lastKnownStatus}}<br>
-      <span class = "mat-h3" *ngIf="trial.phase">Phase: </span><span>{{trial.phase}}</span><br>
-      <span class = "mat-h3" *ngIf="trial.studyFirstPostDate">First Posted: </span><span>{{trial.studyFirstPostDate}}</span><br>
-      <span class = "mat-h3" *ngIf="trial.lastUpdatePostDate">Last Update: </span><span>{{trial.lastUpdatePostDate}}</span><br>
-    </div>
-
+  @if (trial.NCTId) {
+  <div class="mat-h3">
+    {{ trial.NCTId }}
   </div>
-  <mat-card-subtitle *ngIf="trial.briefSummary && trial.briefSummary.length">Summary</mat-card-subtitle>
-  <div *ngIf="fullSummary; else truncated">
-    <span class="mat-body-1">{{getTrialSummary()}}</span>
-    <a (click) = "fullSummary = false" *ngIf="fullSummary && truncatedSummary" class = "expand-link"> ...less</a>
-  </div>
-  <ng-template #truncated>
-    <span class="mat-body-1">{{getTrialSummary()}}</span>
-    <a (click) = "fullSummary = true" *ngIf="!fullSummary" class = "expand-link"> ...more</a>
-  </ng-template>
-
-</mat-card>
+  }
+</div>

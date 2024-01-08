@@ -1,29 +1,51 @@
-import { Disease } from "@ncats-frontend-library/models/rdas";
-import { Page } from "@ncats-frontend-library/models/utils";
+import {
+  Disease,
+  DiseaseNode
+} from '@ncats-frontend-library/models/rdas';
+import {
+  FilterCategory,
+  Page,
+} from '@ncats-frontend-library/models/utils';
 import { createAction, props } from '@ngrx/store';
 
 export const init = createAction('[Diseases Page] Init');
 
+export const loading = createAction('[Loading] start');
+
 export const loadDiseases = createAction(
   '[Diseases/API] Load Diseases',
   props<{
-    top: number
-    skip: number
+    top: number;
+    skip: number;
   }>()
 );
 
 export const loadDiseasesSuccess = createAction(
   '[Diseases/API] Load Diseases Success',
   props<{
-    diseases: Disease[],
-    page?: Page
+    diseases: Disease[];
+    page?: Page;
   }>()
 );
 
 export const loadDiseasesFailure = createAction(
   '[Diseases/API] Load Diseases Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
+
+export const loadDiseaseTreeSuccess = createAction(
+  '[Diseases/API] Load Disease Tree Success',
+  props<{
+    diseases: DiseaseNode[];
+  }>()
+);
+
+export const loadDiseaseTreeFailure = createAction(
+  '[Diseases/API] Load Disease Tree Failure',
+  props<{ error: string | null | undefined }>()
+);
+
+export const clearTypeahead = createAction('[Diseases/API] Clear Typeahead');
 
 export const searchDiseases = createAction(
   '[Diseases/API] Search Diseases',
@@ -37,15 +59,15 @@ export const searchDiseasesSuccess = createAction(
 
 export const searchDiseasesFailure = createAction(
   '[Diseases/API] Search Diseases Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
 );
 
 export const fetchDisease = createAction(
   '[Diseases/API] fetch Disease',
   props<{
-    gard_id: string,
-    source: string,
-    options?: { [key: string]: string }
+    gardId: string;
+    source: string;
+    options?: { [key: string]: string };
   }>()
 );
 
@@ -56,5 +78,39 @@ export const fetchDiseaseSuccess = createAction(
 
 export const fetchDiseaseFailure = createAction(
   '[Diseases/API] fetch Disease Failure',
-  props<{ error: string }>()
+  props<{ error: string | null | undefined }>()
+);
+
+export const fetchDiseaseFilters = createAction(
+  '[Diseases/API] fetch Disease Filters',
+  props<{
+    gardId: string;
+  }>()
+);
+
+export const fetchDiseaseFiltersSuccess = createAction(
+  '[Diseases/API] fetch Disease Filters Success',
+  props<{ filters: FilterCategory[]}>()
+);
+
+export const fetchDiseaseFiltersFailure = createAction(
+  '[Diseases/API] fetch Disease Filters Failure',
+  props<{ error: string | null | undefined }>()
+);
+
+export const fetchDiseaseList = createAction(
+  '[Diseases/API] fetch Disease List',
+  props<{
+    gardIds: string[];
+  }>()
+);
+
+export const fetchDiseaseListSuccess = createAction(
+  '[Diseases/API] fetch Disease List Success',
+  props<{ diseases: Disease[] }>()
+);
+
+export const fetchDiseaseListFailure = createAction(
+  '[Diseases/API] fetch Disease List Failure',
+  props<{ error: string | null | undefined }>()
 );

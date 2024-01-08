@@ -15,18 +15,45 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@ncats-frontend-library/feature/rdas/rdas-about": [
+        "libs/feature/rdas/rdas-about/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/epi-api": [
+        "libs/features/rdas/epi-api/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/graphql-sandbox": [
+        "libs/features/rdas/graphql-sandbox/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-about": [
+        "libs/features/rdas/rdas-about/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-article-page": [
+        "libs/features/rdas/rdas-article-page/src/index.ts"
+      ],
       "@ncats-frontend-library/features/rdas/rdas-browse": [
         "libs/features/rdas/rdas-browse/src/index.ts"
       ],
       "@ncats-frontend-library/features/rdas/rdas-disease-page": [
         "libs/features/rdas/rdas-disease-page/src/index.ts"
       ],
+      "@ncats-frontend-library/features/rdas/rdas-grant-page": [
+        "libs/features/rdas/rdas-grant-page/src/index.ts"
+      ],
       "@ncats-frontend-library/features/rdas/rdas-home": [
         "libs/features/rdas/rdas-home/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-subscriptions": [
+        "libs/features/rdas/rdas-subscriptions/src/index.ts"
+      ],
+      "@ncats-frontend-library/features/rdas/rdas-trial-page": [
+        "libs/features/rdas/rdas-trial-page/src/index.ts"
       ],
       "@ncats-frontend-library/models/rdas": ["libs/models/rdas/src/index.ts"],
       "@ncats-frontend-library/models/utils": [
         "libs/models/utils/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/article-charts": [
+        "libs/shared/rdas/article-charts/src/index.ts"
       ],
       "@ncats-frontend-library/shared/rdas/article-display": [
         "libs/shared/rdas/article-display/src/index.ts"
@@ -37,29 +64,113 @@
       "@ncats-frontend-library/shared/rdas/disease-display": [
         "libs/shared/rdas/disease-display/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/disease-subscription-list": [
+        "libs/shared/rdas/disease-subscription-list/src/disease-subscription-list.component.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/gene-display": [
+        "libs/shared/rdas/gene-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/phenotype-display": [
+        "libs/shared/rdas/phenotype-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/project-charts": [
+        "libs/shared/rdas/project-charts/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/project-display": [
         "libs/shared/rdas/project-display/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/rdas-footer": [
+        "libs/shared/rdas/rdas-footer/src/index.ts"
       ],
       "@ncats-frontend-library/shared/rdas/rdas-search": [
         "libs/shared/rdas/rdas-search/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/rdas/rdas-tree": [
+        "libs/shared/rdas/rdas-tree/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/subscribe-button": [
         "libs/shared/rdas/subscribe-button/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/rdas/trials-charts": [
+        "libs/shared/rdas/trials-charts/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/bar-chart": [
+        "libs/shared/utils/bar-chart/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/data-not-found": [
+        "libs/shared/utils/data-not-found/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/external-link": [
+        "libs/shared/utils/external-link/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/file-upload": [
+        "libs/shared/utils/file-upload/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/filter-panel": [
+        "libs/shared/utils/filter-panel/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/footer-template": [
+        "libs/shared/utils/footer-template/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/header-template": [
         "libs/shared/utils/header-template/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/utils/highlight-pipe": [
+        "libs/shared/utils/highlight-pipe/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/list-filter-row": [
+        "libs/shared/utils/list-filter-row/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/utils/loading-spinner": [
         "libs/shared/utils/loading-spinner/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/mobile-header-template": [
+        "libs/shared/utils/mobile-header-template/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/ncats-datatable": [
+        "libs/shared/utils/ncats-datatable/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/pie-chart": [
+        "libs/shared/utils/pie-chart/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/rdas-panel-template": [
+        "libs/shared/rdas/panel-template/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/scatter-plot": [
+        "libs/shared/utils/scatter-plot/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/scroll-to-top": [
+        "libs/shared/utils/scroll-to-top/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/selected-filter-list": [
+        "libs/shared/utils/selected-filter-list/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/social-sign-on": [
         "libs/shared/utils/social-sign-on/src/index.ts"
       ],
+      "@ncats-frontend-library/stores/article-store": [
+        "libs/stores/article-store/src/index.ts"
+      ],
       "@ncats-frontend-library/stores/disease-store": [
         "libs/stores/disease-store/src/index.ts"
       ],
+      "@ncats-frontend-library/stores/filter-store": [
+        "libs/stores/filter-store/src/index.ts"
+      ],
+      "@ncats-frontend-library/stores/grant-store": [
+        "libs/stores/grant-store/src/index.ts"
+      ],
+      "@ncats-frontend-library/stores/trial-store": [
+        "libs/stores/trial-store/src/index.ts"
+      ],
       "@ncats-frontend-library/stores/user-store": [
         "libs/stores/user-store/src/index.ts"
+      ],
+      "utils-animated-force-directed-graph": [
+        "libs/shared/utils/animated-force-directed-graph/src/index.ts"
+      ],
+      "utils-force-directed-graph": [
+        "libs/shared/utils/force-directed-graph/src/index.ts"
       ]
     },
     "allowSyntheticDefaultImports": true

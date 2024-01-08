@@ -1,59 +1,117 @@
-<button mat-flat-button  *ngIf= !subscribed (click)="subscribe()" [color]="'primary'">SUBSCRIBE</button>
-<button mat-button [color]="'primary'" *ngIf= subscribed (click)="unSubscribe()">SUBSCRIBED</button>
-<button mat-icon-button *ngIf= subscribed [matMenuTriggerFor]="menu" aria-label="Alert options menu">
-  <mat-icon [color]="'primary'" *ngIf="subscriptionSelection.selected.length === 3">notifications_active</mat-icon>
-  <mat-icon [color]="'primary'" *ngIf="subscriptionSelection.selected.length === 1 || subscriptionSelection.selected.length === 2" class="material-symbols-outlined">notifications</mat-icon>
-  <mat-icon [color]="'primary'" *ngIf="subscriptionSelection.selected.length === 0">notifications_off</mat-icon>
-
-</button>
-<mat-menu #menu="matMenu">
-  <div mat-menu-item>
-    <mat-checkbox
-      [color]="'primary'"
-      (click)="$event.stopPropagation()" aria-label="Select filter option"
-      (change)="$event ? toggleAll() : null"
-      [indeterminate]="subscriptionSelection.selected.length > 0 && subscriptionSelection.selected.length < 3"
-      [checked]="subscriptionSelection.selected.length === 3">
-       <mat-icon [color]="'primary'" class="outlined-icon">notifications_outline</mat-icon>
+<div class="centered">
+  @if (!subscribed && userExists) {
+  <button
+    mat-stroked-button
+    (click)="subscribe()"
+    [color]="theme"
+    [disabled]="!userExists"
+  >
+    SUBSCRIBE
+  </button>
+  } @if (!userExists) {
+  <ncats-frontend-library-social-sign-on-button
+    [theme]="theme"
+  ></ncats-frontend-library-social-sign-on-button>
+  }
+  <!--
+  <button mat-stroked-button   (click)="subscribe()" [color]="'warn'">SIGN IN TO SUBSCRIBE</button>
+-->
+  @if (subscribed) {
+  <button mat-stroked-button [color]="theme" [matMenuTriggerFor]="menu">
+    <div class="grid-button">
+      <div>
+        @if (subscriptionSelection.selected.length === 3) {
+        <mat-icon>notifications_active</mat-icon>
+        } @if ( subscriptionSelection.selected.length === 1 ||
+        subscriptionSelection.selected.length === 2 ) {
+        <mat-icon class="material-symbols-outlined">notifications</mat-icon>
+        } @if (subscriptionSelection.selected.length === 0) {
+        <mat-icon>notifications_off</mat-icon>
+        }
+      </div>
+      <div>SUBSCRIBED</div>
+      <div>
+        <mat-icon aria-label="Alert options menu">expand_more</mat-icon>
+      </div>
+    </div>
+  </button>
+  }
+  <mat-menu #menu="matMenu">
+    <div mat-menu-item>
+      <mat-checkbox
+        [color]="'primary'"
+        (click)="$event.stopPropagation()"
+        aria-label="Select filter option"
+        (change)="$event ? toggleAll() : null"
+        [indeterminate]="
+          subscriptionSelection.selected.length > 0 &&
+          subscriptionSelection.selected.length < 3
+        "
+        [checked]="subscriptionSelection.selected.length === 3"
+      >
+        <mat-icon [color]="'primary'" class="outlined-icon"
+          >notifications_outline</mat-icon
+        >
         All Alerts
-    </mat-checkbox>
-  </div>
-  <ul class="subscribe-menu">
-    <li>
-      <button mat-menu-item class="subscribe-button">
-        <mat-checkbox
-          [color]="'primary'"
-          (click)="$event.stopPropagation()" aria-label="Select filter option"
-          (change)="$event ? subscriptionSelection.toggle('articles') : null"
-          [checked]="subscriptionSelection.isSelected('articles')">
-        <mat-icon [color]="'primary'" class="material-symbols-outlined">article</mat-icon>
-          <span>Article alerts</span>
-        </mat-checkbox>
-      </button>
-    </li>
-    <li>
-      <button mat-menu-item>
-        <mat-checkbox
-          [color]="'primary'"
-          (click)="$event.stopPropagation()" aria-label="Select filter option"
-          (change)="$event ? subscriptionSelection.toggle('grants') : null"
-          [checked]="subscriptionSelection.isSelected('grants')">
-        <mat-icon [color]="'primary'">biotech</mat-icon>
-        <span>Grant alerts</span>
-        </mat-checkbox>
-      </button>
-    </li>
-    <li>
-      <button mat-menu-item>
-        <mat-checkbox
-          [color]="'primary'"
-          (click)="$event.stopPropagation()" aria-label="Select filter option"
-          (change)="$event ? subscriptionSelection.toggle('trials') : null"
-          [checked]="subscriptionSelection.isSelected('trials')">
-        <mat-icon [color]="'primary'">safety_divider</mat-icon>
-        <span>Clinical trial alerts</span>
-        </mat-checkbox>
-      </button>
-    </li>
-  </ul>
-</mat-menu>
+      </mat-checkbox>
+    </div>
+    <ul class="subscribe-menu">
+      <li>
+        <button mat-menu-item class="subscribe-button">
+          <mat-checkbox
+            [color]="'primary'"
+            (click)="$event.stopPropagation()"
+            aria-label="Select filter option"
+            (change)="$event ? subscriptionSelection.toggle('articles') : null"
+            [checked]="subscriptionSelection.isSelected('articles')"
+          >
+            <mat-icon [color]="'primary'" class="material-symbols-outlined"
+              >article</mat-icon
+            >
+            <span>Article alerts</span>
+          </mat-checkbox>
+        </button>
+      </li>
+      <li>
+        <button mat-menu-item>
+          <mat-checkbox
+            [color]="'primary'"
+            (click)="$event.stopPropagation()"
+            aria-label="Select filter option"
+            (change)="$event ? subscriptionSelection.toggle('grants') : null"
+            [checked]="subscriptionSelection.isSelected('grants')"
+          >
+            <mat-icon [color]="'primary'">biotech</mat-icon>
+            <span>Grant alerts</span>
+          </mat-checkbox>
+        </button>
+      </li>
+      <li>
+        <button mat-menu-item>
+          <mat-checkbox
+            [color]="'primary'"
+            (click)="$event.stopPropagation()"
+            aria-label="Select filter option"
+            (change)="$event ? subscriptionSelection.toggle('trials') : null"
+            [checked]="subscriptionSelection.isSelected('trials')"
+          >
+            <mat-icon [color]="'primary'">safety_divider</mat-icon>
+            <span>Clinical trial alerts</span>
+          </mat-checkbox>
+        </button>
+      </li>
+    </ul>
+    <button mat-menu-item (click)="unSubscribe()">
+      <mat-icon [color]="'primary'">unsubscribe</mat-icon>
+      <span>Unsubscribe</span>
+    </button>
+  </mat-menu>
+
+  <button
+    mat-mini-fab
+    class="about-subscribe-button"
+    (click)="aboutSubscribe()"
+  >
+    <mat-icon>question_mark</mat-icon>
+  </button>
+</div>

@@ -1,8 +1,9 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
   DISEASES_FEATURE_KEY,
-  diseasesAdapter, State
-} from "./diseases.reducer";
+  diseasesAdapter,
+  State,
+} from './diseases.reducer';
 
 // Lookup the 'Diseases' feature state managed by NgRx
 export const getDiseasesState =
@@ -13,7 +14,7 @@ const { selectAll, selectEntities } = diseasesAdapter.getSelectors();
 export const getDiseasesLoaded = createSelector(
   getDiseasesState,
   (state: State) => {
-    return state.loaded
+    return state.loaded;
   }
 );
 
@@ -23,13 +24,19 @@ export const getDiseasesError = createSelector(
 );
 
 export const getAllDiseases = createSelector(getDiseasesState, (state: State) =>
-     selectAll(state)
+  selectAll(state)
 );
 
+/*
 export const searchDiseasesEntities = createSelector(
   getDiseasesState,
   (state: State) =>  selectAll(state)
+);
+*/
 
+export const searchDiseasesEntities = createSelector(
+  getDiseasesState,
+  (state: State) => state.typeahead
 );
 
 export const getDiseasesEntities = createSelector(
@@ -47,11 +54,26 @@ export const getDiseasesPage = createSelector(
   (state: State) => state.page
 );
 
+export const getDiseasesSubscriptions = createSelector(
+  getDiseasesState,
+  (state: State) => state.subscriptions
+);
+
+export const getDiseaseTree = createSelector(
+  getDiseasesState,
+  (state: State) => state.tree
+);
+
+export const getDiseaseFilters = createSelector(
+  getDiseasesState,
+  (state: State) => state.diseaseFilters
+);
+
 export const getSelected = createSelector(
   getDiseasesEntities,
   getSelectedId,
   getDiseasesState,
   (entities, selectedId) => {
-    return (selectedId ? entities[selectedId] : undefined)
+    return selectedId ? entities[selectedId] : undefined;
   }
 );

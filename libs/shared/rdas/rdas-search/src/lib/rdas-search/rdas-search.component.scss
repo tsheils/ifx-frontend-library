@@ -1,3 +1,6 @@
+.search-row {
+}
+
 .search {
   width: 100%;
 }
@@ -9,10 +12,10 @@ span.search-highlight {
 }
 
 .search-label-small {
-  font-size: .6em;
+  font-size: 0.6em;
 }
 
-.mat-option {
+.mat-mdc-option {
   height: auto !important;
 }
 
@@ -21,7 +24,7 @@ span.search-highlight {
   padding-left: 16px;
   padding-right: 16px;
   padding-bottom: 4vh;
-  font-size: .9em;
+  font-size: 0.9em;
 }
 
 .cdk-overlay-panel {

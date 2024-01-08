@@ -1,0 +1,178 @@
+<div class="row centered-row">
+  <div class="width-75">
+    <mat-card>
+      <div class="row space-between-row">
+        <div class="width-75">
+          <span class="mat-card-title"> {{ latestGrant.title }}</span>
+        </div>
+        @if (grant.core_project_num) {
+        <div class="mat-h3">
+          <a
+            aria-label="Link to project at NIH Reporter"
+            href="https://reporter.nih.gov/project-details/{{
+              grant.core_project_num
+            }}"
+            rel="noreferrer"
+            target="_blank"
+            >{{ grant.core_project_num }}</a
+          >
+        </div>
+        }
+      </div>
+      <mat-card-content>
+        @if (latestGrant.abstract && latestGrant.abstract.length) {
+        <div class="primary-chip-outlined">Abstract</div>
+        }
+        <br />
+        @if (fullAbstract) {
+        <div>
+          <span class="mat-subtitle-2">{{ latestGrant.abstract }}</span>
+          @if (fullAbstract && truncatedAbstract) {
+          <a (click)="fullAbstract = false" class="expand-link"> ...less</a>
+          }
+        </div>
+        } @else {
+        <div #truncated>
+          <span class="mat-subtitle-2">{{ truncatedAbstract }}</span>
+          @if (!fullAbstract) {
+          <a (click)="fullAbstract = true" class="expand-link"> ...more</a>
+          }
+        </div>
+        }
+
+        <br />
+        <br />
+
+        <div class="grant-content-wrapper">
+          <mat-card [appearance]="'outlined'">
+            <div class="grant-sub-header bottom-border-accent">Funding</div>
+            <div class="primary-chip-outlined">Funding Agency</div>
+            <div class="list-item-content">
+              {{ funding ? funding : 'None Listed' }}
+            </div>
+            @if (grant.rd_total_cost) {
+            <div>
+              <div class="primary-chip-outlined">Total Cost</div>
+              <div class="list-item-content">
+                {{ grant.rd_total_cost | currency }}
+              </div>
+            </div>
+            }
+          </mat-card>
+          <mat-card [appearance]="'outlined'">
+            <div class="grant-sub-header bottom-border-accent">
+              Patents: {{ grant.patents ? grant.patents.length : 0 }}
+            </div>
+            @if (grant.patents && grant.patents.length) {
+            <div>
+              @for (patent of grant.patents; track patent) {
+              <div>
+                <div class="list-item-title">{{ patent.title }}</div>
+                <div class="list-item-content">{{ patent.org_name }}</div>
+              </div>
+              }
+            </div>
+            }
+          </mat-card>
+          <mat-card [appearance]="'outlined'">
+            <div class="grant-sub-header bottom-border-accent">
+              Clinical Studies:
+              {{ grant.clinicalStudies ? grant.clinicalStudies.length : 0 }}
+            </div>
+            @if (grant.clinicalStudies && grant.clinicalStudies.length) {
+            <div>
+              @for (study of grant.clinicalStudies; track study) {
+              <div>
+                <div class="list-item-title">{{ study.title }}</div>
+                <div class="list-item-content">{{ study.status }}</div>
+              </div>
+              }
+            </div>
+            }
+          </mat-card>
+        </div>
+        <mat-tab-group
+          [backgroundColor]="'accent'"
+          mat-align-tabs="start"
+          mat-stretch-tabs="false"
+        >
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <div class="rdas-tab-label">
+                Sub Projects: {{ grant.projects?.length }}
+              </div>
+            </ng-template>
+            <mat-accordion [displayMode]="'flat'" multi>
+              @for (grant of grant.projects; track grant; let i = $index) {
+              <mat-expansion-panel [expanded]="i === 0">
+                <mat-expansion-panel-header>
+                  <mat-panel-title>
+                    <div class="mat-mdc-card-title">
+                      {{ grant.funding_year }} &nbsp;&nbsp;&nbsp;
+                      {{ grant.title }}&nbsp;&nbsp;&nbsp;
+                      {{ grant.total_cost | currency }}
+                    </div>
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="grant-content-wrapper">
+                  <mat-card [appearance]="'outlined'">
+                    <div class="grant-sub-header bottom-border-primary">
+                      Diseases Studied:
+                      {{
+                        grant.researchedDiseases
+                          ? grant.researchedDiseases.length
+                          : 0
+                      }}
+                    </div>
+                    @for (disease of grant.researchedDiseases; track disease) {
+                    <div>
+                      @if (disease.gardId) {
+                      <div #link>
+                        <a
+                          aria-label="Link to disease details page"
+                          href="/disease?id={{ disease.gardId }}"
+                          rel="noreferrer"
+                          target="_blank"
+                          >{{ disease.name }}</a
+                        >
+                      </div>
+                      } @else {
+                      <div #nolink>
+                        {{ disease.name }}
+                      </div>
+                      }
+                    </div>
+                    }
+                  </mat-card>
+                  <mat-card [appearance]="'outlined'">
+                    <div class="grant-sub-header bottom-border-primary">
+                      Annotations:
+                      {{ grant.annotations ? grant.annotations.length : 0 }}
+                    </div>
+                    @if (grant.annotations && grant.annotations.length) {
+                    <ncats-frontend-library-annotations-display
+                      [annotations]="grant.annotations"
+                    ></ncats-frontend-library-annotations-display>
+                    }
+                  </mat-card>
+                  <mat-card [appearance]="'outlined'">
+                    <div class="grant-sub-header bottom-border-primary">
+                      Key Terms: {{ grant.terms ? grant.terms.length : 0 }}
+                    </div>
+                    <br />
+                    @for (term of grant.terms; track term) {
+                    <div>
+                      {{ term }}
+                    </div>
+                    }
+                  </mat-card>
+                </div>
+              </mat-expansion-panel>
+              }
+            </mat-accordion>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

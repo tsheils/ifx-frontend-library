@@ -1,27 +1,18 @@
 import { TestBed } from '@angular/core/testing';
-import { ActivatedRoute, RouterModule } from "@angular/router";
-import { SharedUtilsHeaderTemplateModule } from "@ncats-frontend-library/shared/utils/header-template";
-import { SharedUtilsLoadingSpinnerModule } from "@ncats-frontend-library/shared/utils/loading-spinner";
-import { SharedSocialSignOnModule } from "@ncats-frontend-library/shared/utils/social-sign-on";
-import { DiseasesFacade } from "@ncats-frontend-library/stores/disease-store";
-import { UsersFacade } from "@ncats-frontend-library/stores/user-store";
+import { RouterModule } from '@angular/router';
+import { DiseasesFacade } from '@ncats-frontend-library/stores/disease-store';
+import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      imports: [
-        SharedUtilsHeaderTemplateModule,
-        SharedSocialSignOnModule,
-        SharedUtilsLoadingSpinnerModule,
-        RouterModule
-      ],
+      declarations: [],
+      imports: [AppComponent, RouterModule],
       providers: [
-        {provide: DiseasesFacade, useValue: {}},
-        {provide: UsersFacade, useValue: {}},
-        {provide: ActivatedRoute, useValue: {}}
-      ]
+        { provide: DiseasesFacade, useValue: {} },
+        { provide: UsersFacade, useValue: {} },
+      ],
     }).compileComponents();
   });
 
@@ -36,5 +27,4 @@ describe('AppComponent', () => {
     const app = fixture.componentInstance;
     expect(app.title).toEqual('rdas');
   });
-
 });
