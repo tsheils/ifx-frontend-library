@@ -270,7 +270,7 @@ export class DiseasesEffects {
         this._setGardId(gardid);
 
         if (root.fragment) {
-          console.log("from load disease")
+       //   console.log("from load disease")
           this._setFragment(root.fragment, params);
         }
         return combineLatest(
@@ -344,7 +344,7 @@ export class DiseasesEffects {
         this._setGardId(gardid);
 
         if (root.fragment) {
-          console.log("from filters")
+       //   console.log("from filters")
           this._setFragment(root.fragment, {
             limit: params['limit'],
             offset: params['offset'],

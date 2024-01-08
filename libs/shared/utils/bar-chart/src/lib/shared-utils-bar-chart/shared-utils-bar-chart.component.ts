@@ -2,11 +2,11 @@
 
 import {
   Component,
-  ElementRef,
-  Input, OnChanges, OnInit, ViewChild,
+  ElementRef, Inject,
+  Input, OnChanges, OnInit, PLATFORM_ID, ViewChild,
   ViewEncapsulation
 } from "@angular/core";
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from "@angular/common";
 import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { axisBottom, axisLeft, index, scaleBand, stack, union } from "d3";
 import { max } from "d3-array";
@@ -31,15 +31,15 @@ width!: number;
 height!: number;
 margins: {top: number, bottom: number, left: number, right: number} = {top:20, bottom: 30, right: 30, left: 30}
   keys!: string[];
+  isBrowser = false;
 
-  constructor() {}
+  constructor(@Inject(PLATFORM_ID) private platformId){
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
 ngOnInit() {
-  if (this.barChartElement) {
+  if (this.barChartElement && this.isBrowser) {
     const element = this.barChartElement.nativeElement;
-    console.log(this.barChartElement.nativeElement)
-    console.log(this.barChartElement)
-    console.log(element)
     this.width = element.offsetWidth - this.margins.left - this.margins.right;
     this.height = element.offsetHeight - this.margins.top - this.margins.bottom;
     select(element).select('svg').remove();
@@ -134,14 +134,14 @@ ngOnChanges(){
   }
 
   clicked(event, d){
-    console.log(event)
-    console.log(d)
+   // console.log(event)
+  //  console.log(d)
    // this.getData(d.data)
   }
 
   hovered(event, d){
-    console.log(event)
-    console.log(d.data)
+  //  console.log(event)
+  //  console.log(d.data)
    // this.getData(d.data)
   }
 

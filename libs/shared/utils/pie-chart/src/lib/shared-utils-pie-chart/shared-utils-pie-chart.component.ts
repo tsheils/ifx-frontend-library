@@ -1,7 +1,16 @@
 // @ts-nocheck
 
-import { CommonModule } from "@angular/common";
-import { Component, ElementRef, EventEmitter, Input, Output, ViewChild, ViewEncapsulation } from "@angular/core";
+import { CommonModule, isPlatformBrowser } from "@angular/common";
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  Inject,
+  Input,
+  Output, PLATFORM_ID,
+  ViewChild,
+  ViewEncapsulation
+} from "@angular/core";
 import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
 import { Arc, DefaultArcObject, interpolate, interpolateRgb, interpolateSpectral, Pie, quantize } from "d3";
 import { scaleOrdinal } from "d3-scale";
@@ -37,10 +46,14 @@ export class SharedUtilsPieChartComponent {
    */
   @Output() readonly clickSlice: EventEmitter<any> = new EventEmitter<any>();
 
-  constructor() {}
+  isBrowser = false;
+
+  constructor(@Inject(PLATFORM_ID) private platformId){
+    this.isBrowser = isPlatformBrowser(this.platformId);
+  }
 
   ngOnInit() {
-    if (this.pieChartElement) {
+    if (this.pieChartElement && this.isBrowser) {
       const element = this.pieChartElement.nativeElement;
       this.width = element.offsetWidth - this.margins.left - this.margins.right;
       this.height = element.offsetHeight - this.margins.top - this.margins.bottom;

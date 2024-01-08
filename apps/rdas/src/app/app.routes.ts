@@ -31,6 +31,14 @@ export const routes: Routes = [
     path: 'diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    providers: [
+      importProvidersFrom(
+        // register feature reducer
+        StoreModule.forFeature('diseaseStore', diseasesReducer),
+        // run feature effects
+        EffectsModule.forFeature([DiseasesEffects])
+      ),
+    ],
     loadChildren: () =>
       import('@ncats-frontend-library/features/rdas/rdas-browse').then(
         (m) => m.rdasBrowseRoutes

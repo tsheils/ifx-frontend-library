@@ -110,7 +110,6 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit, OnChanges
   ) {}
 
   ngOnInit() {
-    console.log(this);
     if (this.route.snapshot.fragment) {
       this.scroller.scrollToAnchor(this.route.snapshot.fragment);
 
