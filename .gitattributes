@@ -1,3 +1,4 @@
+*.mp4 filter=lfs diff=lfs merge=lfs -text
 /package-lock.json filter=lfs diff=lfs merge=lfs -text
 /libs/features/rdas/rdas-home/src/assets/graph.json filter=lfs diff=lfs merge=lfs -text
 /apps/rdas/src/assets/rdas_light_final_gradient.png filter=lfs diff=lfs merge=lfs -text
