@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnDestroy, OnInit } from "@angular/core";
 import {
   FormControl,
   FormGroup,
@@ -31,10 +31,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
   ],
 })
-export class EmailSignOnModalComponent {
+export class EmailSignOnModalComponent implements OnInit, OnDestroy {
   loginError = '';
 
-  signOnForm: FormGroup = new FormGroup<any>({
+  signOnForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     pw: new FormControl('', [Validators.required]),
   });

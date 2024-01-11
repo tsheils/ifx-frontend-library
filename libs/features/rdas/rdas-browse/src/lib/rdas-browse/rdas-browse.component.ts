@@ -97,7 +97,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
 
   page?: Page;
   loaded = false;
-  diseases!: Signal<Disease[] | undefined>;
+  diseases!: Signal<Disease[] |undefined>;
   diseaseTree!: DiseaseNode[] | undefined;
   filters: FilterCategory[] = [];
   sort = 'COUNT_ARTICLES';
@@ -334,7 +334,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     return rows;
   }
 
-  _downloadFile(data: any, name: string, type = 'text/tsv') {
+  _downloadFile(data: string, name: string, type = 'text/tsv') {
     if (this.dom) {
       const file = new Blob([data], { type: type });
       const link = this.dom.createElement('a');

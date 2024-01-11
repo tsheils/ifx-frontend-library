@@ -3,8 +3,8 @@ import { ApolloQueryResult } from '@apollo/client';
 import {
   CoreProject,
   FETCHGRANTDETAILS,
-  GRANTDETAILSVARIABLES,
-} from '@ncats-frontend-library/models/rdas';
+  GRANTDETAILSVARIABLES
+} from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { switchMap, catchError, of, filter, map } from 'rxjs';
@@ -43,10 +43,11 @@ export class GrantsEffects {
         return this.grantService
           .fetchGrants(FETCHGRANTDETAILS, GRANTDETAILSVARIABLES)
           .pipe(
-            map((grantData: ApolloQueryResult<any>) => {
-              if (grantData.data) {
+            map((grantData: ApolloQueryResult<unknown>) => {
+              const data: {coreProjects: CoreProject[]} = grantData.data as {coreProjects: CoreProject[]};
+              if (data) {
                 const grant: CoreProject = new CoreProject(
-                  grantData.data.coreProjects[0]
+                  data.coreProjects[0]
                 );
                 return GrantsActions.fetchGrantSuccess({ grant: grant });
               } else

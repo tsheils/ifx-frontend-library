@@ -42,10 +42,11 @@ export class TrialsEffects {
         return this.trialService
           .fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
           .pipe(
-            map((trialData: ApolloQueryResult<any>) => {
-              if (trialData.data) {
+            map((trialData: ApolloQueryResult<unknown>) => {
+              const data: {clinicalTrials: ClinicalTrial[]} = trialData.data as {clinicalTrials: ClinicalTrial[]};
+              if (data) {
                 const trial: ClinicalTrial = new ClinicalTrial(
-                  trialData.data.clinicalTrials[0]
+                  data.clinicalTrials[0]
                 );
                 return TrialsActions.fetchTrialSuccess({ trial: trial });
               } else

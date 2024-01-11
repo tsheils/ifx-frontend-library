@@ -28,7 +28,7 @@ describe('DiseasesEffects', () => {
   ];
 
   let actions: Observable<Action>;
-  let effects: DiseasesEffects;
+ // let effects: DiseasesEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

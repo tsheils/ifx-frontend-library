@@ -1,25 +1,20 @@
 import { ListRange, SelectionModel } from '@angular/cdk/collections';
 import {
   CdkVirtualScrollViewport,
-  ScrollDispatcher,
   ScrollingModule,
 } from '@angular/cdk/scrolling';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
   EventEmitter,
-  HostListener,
-  Inject,
   inject,
-  InjectionToken,
   Input,
   OnChanges,
   OnInit,
   Output,
-  PLATFORM_ID,
   ViewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -30,11 +25,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
-import { debounceTime, distinctUntilChanged, map, takeUntil } from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-filter-panel',

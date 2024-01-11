@@ -11,7 +11,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
@@ -134,7 +133,7 @@ export class PhenotypeListComponent implements AfterViewInit, OnChanges {
     return rows;
   }
 
-  _downloadFile(data: any, name: string, type = 'text/tsv') {
+  _downloadFile(data: string, name: string, type = 'text/tsv') {
     if (this.dom) {
       const file = new Blob([data], { type: type });
       const link = this.dom.createElement('a');

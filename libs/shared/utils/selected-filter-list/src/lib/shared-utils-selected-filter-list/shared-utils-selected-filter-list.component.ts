@@ -3,13 +3,10 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
-  Input,
+  Input, OnInit,
   Output,
-  Signal,
-  SimpleChange,
-  ViewEncapsulation,
-  WritableSignal,
-} from '@angular/core';
+  ViewEncapsulation
+} from "@angular/core";
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
@@ -22,7 +19,7 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./shared-utils-selected-filter-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SharedUtilsSelectedFilterListComponent {
+export class SharedUtilsSelectedFilterListComponent implements OnInit {
   /**
    * list of selected facets
    */

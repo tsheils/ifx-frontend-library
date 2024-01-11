@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
-  Component, ElementRef,
+  Component,
   EventEmitter,
   OnDestroy,
   OnInit,
@@ -9,7 +9,6 @@ import {
 } from "@angular/core";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
-  MatAutocomplete,
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent, MatAutocompleteTrigger
 } from "@angular/material/autocomplete";

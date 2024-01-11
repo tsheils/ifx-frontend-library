@@ -1,5 +1,4 @@
 import { Disease } from '@ncats-frontend-library/models/rdas';
-import firebase from 'firebase/compat';
 
 export class User {
   displayName!: string | null | undefined;

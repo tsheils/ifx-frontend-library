@@ -1,3 +1,4 @@
+// eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 import { CommonModule, isPlatformBrowser } from "@angular/common";
@@ -5,18 +6,17 @@ import {
   Component,
   ElementRef,
   EventEmitter,
-  Inject,
-  Input,
+  Inject, InjectionToken,
+  Input, OnChanges, OnInit,
   Output, PLATFORM_ID,
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
 import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
-import { Arc, DefaultArcObject, interpolate, interpolateRgb, interpolateSpectral, Pie, quantize } from "d3";
+import { Arc, DefaultArcObject, interpolate, Pie, quantize, ScaleOrdinal } from "d3";
 import { scaleOrdinal } from "d3-scale";
 import { select } from "d3-selection";
 import { arc, pie } from "d3-shape";
-
 
 @Component({
   selector: 'lib-shared-utils-pie-chart',
@@ -26,29 +26,30 @@ import { arc, pie } from "d3-shape";
   styleUrl: './shared-utils-pie-chart.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class SharedUtilsPieChartComponent {
+export class SharedUtilsPieChartComponent implements OnInit, OnChanges {
   @ViewChild('pieChart', { static: true }) pieChartElement!: ElementRef;
   @Input() data!: FilterCategory;
-  svg: any;
-  arcShape!:  Arc<any, DefaultArcObject>;
-  pieChart!: Pie<any, number | {valueOf(): number}>;
-  tooltip: any;
+  svg;
+  arcShape!:  Arc<never, DefaultArcObject>;
+  pieChart!: Pie<never, number | {valueOf(): number | Filter}>;
   width!: number;
   height!: number;
   radius!: number;
   margins: {top: number, bottom: number, left: number, right: number} = {top:20, bottom: 30, right: 30, left: 30}
   keys!: string[];
-  color!: string[];
+  color!: ScaleOrdinal<string, unknown>;
 
   /**
    * output event on slice click
    * @type {EventEmitter<any>}
    */
-  @Output() readonly clickSlice: EventEmitter<any> = new EventEmitter<any>();
+  @Output() readonly clickSlice: EventEmitter<Filter> = new EventEmitter<Filter>();
 
   isBrowser = false;
 
-  constructor(@Inject(PLATFORM_ID) private platformId){
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
+  ){
     this.isBrowser = isPlatformBrowser(this.platformId);
   }
 
@@ -82,16 +83,6 @@ export class SharedUtilsPieChartComponent {
         .attr("height", this.height)
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
-
-      this.tooltip = select(element)
-        .append("div")
-        .style("opacity", 0)
-        .attr("class", "tooltip")
-        .style("background-color", "white")
-        .style("border", "solid")
-        .style("border-width", "2px")
-        .style("border-radius", "5px")
-        .style("padding", "5px")
       this.makeChart();
     }
   }
@@ -110,46 +101,44 @@ export class SharedUtilsPieChartComponent {
       .selectAll()
       .data(this.pieChart(this.data.values))
       .join("path")
-      .attr("fill", d => this.color(d.data.term))
+      .attr("fill", (d: {data: Filter}) => this.color(d.data.term))
       .attr('class', 'slice')
       .attr("d", this.arcShape)
-      .on('mouseover', (event, d) => {
+      .on('mouseover', (event: Event, d: {data: Filter}) => {
         this.svg.selectAll('.toolCircle').remove();
-        this.addTooltip(d);
+        this.addTooltip(d.data);
       })
-      .on('mouseout', (event, d) => {
+      .on('mouseout', () => {
         /*  div.transition()
             .duration(500)
             .style('opacity', 0);*/
       })
-      .on('click', (event, d) => {
+      .on('click', (event: Event, d: {data: Filter}) => {
         this.clickSlice.emit(d.data);
       });
     const firstSlice = this.svg.select('.slices').selectAll('path.slice').data();
-    this.addTooltip(firstSlice.reverse()[firstSlice.length-1]);
+    this.addTooltip(firstSlice.reverse()[firstSlice.length-1].data);
   }
 
   /**
    * add tooltip as donut chart center fill
-   * @param element
    * @param d
-   * @param color
    */
-  addTooltip(d: any): void {
+  addTooltip(d: Filter): void {
     if (!d){return; }
     this.svg.append('circle')
       .attr('class', 'toolCircle')
       .attr('r', this.radius * 0.65) // radius of tooltip circle
-      .style('fill', this.color(d.data.term)) // colour based on category mouse is over
+      .style('fill', this.color(d.term)) // colour based on category mouse is over
       .style('fill-opacity', 0.35);
     this.svg.append('text')
       .attr('class', 'toolCircle')
       .attr('dy', -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip*/
-      .html(d.data.term); // add text to the circle.
+      .html(d.term); // add text to the circle.
     this.svg.append('text')
       .attr('class', 'toolCircle value')
       .attr('dy', 30) // hard-coded. can adjust this to adjust text vertical alignment in tooltip*/
-      .html(d.data.count);
+      .html(d.count);
     this.svg.transition()
       .duration(200)
       .style('opacity', .9);

@@ -1,7 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { select, Store, Action } from '@ngrx/store';
 import * as GrantsActions from './grants.actions';
-import * as GrantsFeature from './grants.reducer';
 import * as GrantsSelectors from './grants.selectors';
 
 @Injectable()
