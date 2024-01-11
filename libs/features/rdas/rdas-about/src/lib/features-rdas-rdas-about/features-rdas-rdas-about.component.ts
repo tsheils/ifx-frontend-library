@@ -86,7 +86,7 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
    * scroll to section
    * @param el
    */
-  public scroll(el: any): void {
+  public scroll(el: HTMLElement): void {
     //  el.scrollIntoView(true);
     el.scrollIntoView({
       behavior: 'smooth',

@@ -20,21 +20,30 @@ import { FilterCategory } from "@ncats-frontend-library/models/utils";
   styleUrl: './shared-utils-list-filter-row.component.scss',
 })
 export class SharedUtilsListFilterRowComponent implements OnInit {
-  @Input() filters!: FilterCategory[];
-  filterFormControls: FormGroup = new FormGroup<any>({});
+  @Input() filters!: FilterCategory[] | undefined;
+  filterFormControls!: FormGroup;
 
-  @Output() filterChange: EventEmitter<{ [key: string]: any }> = new EventEmitter<{[key: string]: any}>();
+  @Output() filterChange: EventEmitter<{ [key: string]: unknown }> = new EventEmitter<{[key: string]: unknown}>();
 
   ngOnInit() {
-    this.filters = this.filters.filter((f: FilterCategory) => f.filterable);
-      this.filters.forEach((filter: FilterCategory)=> {
-      const selected = filter.values.filter(val => val.selected).map(term => term.term);
-      this.filterFormControls.setControl(filter.values[0].label!, new FormControl(selected))
-    })
+    if (this.filters && this.filters.length) {
+      const controls: {[key:string]: FormControl} = {};
+      this.filters = this.filters.filter((f: FilterCategory) => f.filterable);
+        if (this.filters) {
+          this.filters.forEach((filter: FilterCategory) => {
+            const selected = filter.values.filter(val => val.selected).map(term => term.term);
+            controls[this.getFilterName(filter)] = new FormControl(selected);
+          })
+          this.filterFormControls = new FormGroup(controls)
+      }
+    }
 
     this.filterFormControls.valueChanges.subscribe(() => {
       this.filterChange.emit(this.filterFormControls.value);
     })
   }
 
+  getFilterName(filter: FilterCategory): string {
+    return filter.values.length ? filter.values[0].label : 'Filter';
+  }
 }

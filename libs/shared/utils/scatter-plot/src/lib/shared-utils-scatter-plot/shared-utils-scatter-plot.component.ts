@@ -1,8 +1,9 @@
+// eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
 import { CommonModule } from "@angular/common";
 import { afterNextRender, Component, Input, ViewEncapsulation } from "@angular/core";
-import { FilterCategory } from "@ncats-frontend-library/models/utils";
+import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { axisBottom, axisLeft } from "d3";
 import { extent, max } from "d3-array";
@@ -21,7 +22,7 @@ import { line } from "d3-shape";
 })
 export class SharedUtilsScatterPlotComponent {
   @Input() filter!: FilterCategory;
-  svg: any;
+  svg!: unknown;
   width!: number;
   height!: number;
   margins: {top: number, bottom: number, left: number, right: number} = {top:20, bottom: 30, right: 30, left: 40}
@@ -49,17 +50,15 @@ export class SharedUtilsScatterPlotComponent {
 
   makeChart(){
       // Declare the x (horizontal position) scale.
-      const x = scaleLinear(extent(this.filter.values.map(d => d.term)), [this.margins.left, this.width - this.margins.right]);
+      const x = scaleLinear(extent(this.filter.values.map((d: Filter) => <number>d.term)), [this.margins.left, this.width - this.margins.right]);
 
       // Declare the y (vertical position) scale.
-      const y = scaleLinear([0, max(this.filter.values, d => d.count)], [this.height - this.margins.bottom, this.margins.top]);
+      const y = scaleLinear([0, max(this.filter.values, (d: Filter) => d.count)], [this.height - this.margins.bottom, this.margins.top]);
 
       // Declare the line generator.
        const lineFunction = line()
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-         .x((d: any) => x(d.term))
-         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-         .y((d: any) => y(d.count));
+         .x((d: Filter) => x(<string>d.term))
+         .y((d: Filter) => y(<number>d.count));
 
       // Create the SVG container.
 
@@ -76,7 +75,6 @@ export class SharedUtilsScatterPlotComponent {
      this.svg.append("g")
         .attr("transform", `translate(${this.margins.left},0)`)
         .call(axisLeft(y))//.ticks(this.height / 40))
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .call((g) => g.select(".domain").remove())
         .call((g) => g.selectAll(".tick line").clone()
           .attr("x2", this.width - this.margins.left - this.margins.right)
@@ -87,9 +85,7 @@ export class SharedUtilsScatterPlotComponent {
         .attr("fill", "none")
         .attr("class", "scatter-line")
         .attr("stroke-width", 2.5)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         .attr("d", lineFunction(this.filter.values));
 
-      return this.svg.node();
   }
 }

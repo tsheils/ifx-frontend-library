@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import {
   AbstractControl,
   FormControl,
@@ -12,7 +12,6 @@ import {
   registerEmailUser,
   UsersFacade,
 } from '@ncats-frontend-library/stores/user-store';
-import { map } from 'rxjs';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,11 +55,11 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
     MatInputModule,
   ],
 })
-export class RegisterModalComponent {
+export class RegisterModalComponent implements OnInit{
   showPassword = false;
   inputType = 'password';
 
-  registerForm: FormGroup = new FormGroup<any>({
+  registerForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     pw: new FormControl('', [Validators.required, securePassword()]),
     pwVerify: new FormControl('', [Validators.required, securePassword()]),

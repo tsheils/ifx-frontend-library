@@ -35,12 +35,13 @@ export class UsersEffects {
       ofType(UsersActions.loginUser),
       mergeMap((action: { provider: string }) => {
         return this.userService.doLogin(action.provider).pipe(
-          map((res: any) => {
-            if (res && res.user) {
+          map((res: unknown) => {
+            const data: {user: User} = res as {user: User};
+            if (data) {
               const u: User = new User({
-                displayName: res.user.displayName,
-                photoURL: res.user.photoURL,
-                uid: res.user.uid,
+                displayName: data.user.displayName,
+                photoURL: data.user.photoURL,
+                uid: data.user.uid,
               } as Partial<User>);
 
               return UsersActions.loginUserSuccess({ user: u });
@@ -58,16 +59,17 @@ export class UsersEffects {
       ofType(UsersActions.loginEmailUser),
       mergeMap((action: { email: string; pw: string }) => {
         return this.userService.doEmailLogin(action.email, action.pw).pipe(
-          map((res: any) => {
-            if (res.code) {
-              const errMessage: string = this._getErrorMesssage(res.code);
+          map((res: unknown) => {
+            const data: {code: string, user: User } = res as {code: string, user: User };
+            if (data.code) {
+              const errMessage: string = this._getErrorMesssage(data.code);
               return UsersActions.loginEmailUserFailure({ error: errMessage });
             } else {
-              if (res.user) {
+              if (data.user) {
                 const u: User = new User({
-                  displayName: res.user.displayName,
-                  photoURL: res.user.photoURL,
-                  uid: res.user.uid,
+                  displayName: data.user.displayName,
+                  photoURL: data.user.photoURL,
+                  uid: data.user.uid,
                 });
                 if (u) {
                   return UsersActions.loginUserSuccess({ user: u });

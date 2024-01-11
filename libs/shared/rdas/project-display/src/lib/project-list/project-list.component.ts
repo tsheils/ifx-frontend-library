@@ -2,19 +2,16 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnChanges,
-  Output,
 } from '@angular/core';
 import { ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from "@angular/material/select";
 import { NavigationExtras, Router } from '@angular/router';
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { ProjectListCardComponent } from '../project-list-card/project-list-card.component';
 
 @Component({

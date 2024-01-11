@@ -13,9 +13,8 @@ import {
   TrialsEffects,
   trialsReducer,
 } from '@ncats-frontend-library/stores/trial-store';
-import { USERS_FEATURE_KEY, UsersFacade, usersReducer } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from '@ngrx/effects';
-import { provideState, StoreModule } from "@ngrx/store";
+import { StoreModule } from "@ngrx/store";
 import { environment } from '../environments/environment';
 
 export const routes: Routes = [
