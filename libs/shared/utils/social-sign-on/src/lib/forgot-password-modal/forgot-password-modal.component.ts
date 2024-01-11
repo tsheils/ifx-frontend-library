@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -35,7 +35,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   loginError = '';
   emailSent = false;
 
-  signOnForm: FormGroup = new FormGroup<any>({
+  signOnForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
   });
 

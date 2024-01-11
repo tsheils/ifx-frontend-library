@@ -3,12 +3,10 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnChanges,
-  Output,
 } from '@angular/core';
-import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { NavigationExtras, Router } from '@angular/router';
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';

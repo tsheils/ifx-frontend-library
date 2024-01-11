@@ -1,4 +1,4 @@
-@if(filters) {
+@if(filters && filters.length) {
 <lib-shared-utils-list-filter-row
 [filters]="filters"
 (filterChange)="fetchList($event)"

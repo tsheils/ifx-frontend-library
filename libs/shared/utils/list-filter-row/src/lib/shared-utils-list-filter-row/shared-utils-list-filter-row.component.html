@@ -2,17 +2,17 @@
 <div [formGroup]="filterFormControls">
 <div class = "filter-grid">
 @for (filter of filters; track filter) {
-@if(filter.filterable == true){
+@if(filter.values && filter.filterable == true) {
 <div>
   <mat-form-field appearance="outline" class="full-width">
-    <mat-label>{{filter.label}}</mat-label>
-    <mat-select  [formControlName] = filter.values[0].label! multiple >
+    <mat-label>{{filter?.label}}</mat-label>
+    <mat-select [formControlName] = getFilterName(filter) multiple >
       @for (value of filter.values; track value) {
       <mat-option [value]="value.term">{{value.term}} {{value.count}}</mat-option>
       }
     </mat-select>
   </mat-form-field>
-  {{filterFormControls.controls[filter.values[0].label!].value}}
+  {{filterFormControls.controls[getFilterName(filter)].value}}
 </div>
 }
 }

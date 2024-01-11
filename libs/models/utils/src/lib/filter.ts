@@ -1,6 +1,6 @@
 export class Filter {
   term!: string;
-  label?: string;
+  label!: string;
   count = 0;
   selected = false;
 

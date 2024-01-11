@@ -1,7 +1,6 @@
 import { inject, Injectable } from "@angular/core";
 import { select, Store, Action } from '@ngrx/store';
 
-import * as FiltersFeature from './filters.reducer';
 import * as FiltersSelectors from './filters.selectors';
 
 @Injectable()

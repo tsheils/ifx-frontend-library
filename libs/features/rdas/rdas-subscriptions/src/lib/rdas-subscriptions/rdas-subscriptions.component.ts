@@ -6,7 +6,7 @@ import {
   Signal,
 } from '@angular/core';
 import { Disease } from '@ncats-frontend-library/models/rdas';
-import { Subscription, User } from '@ncats-frontend-library/models/utils';
+import { User } from '@ncats-frontend-library/models/utils';
 import {
   fetchDiseaseList,
   DiseasesFacade,

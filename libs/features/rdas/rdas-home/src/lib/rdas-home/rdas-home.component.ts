@@ -1,13 +1,11 @@
- import ForceGraph3D from '3d-force-graph';
 import { CdkScrollable } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { isPlatformBrowser, NgOptimizedImage } from "@angular/common";
+import { NgOptimizedImage } from "@angular/common";
 import { HttpClient } from '@angular/common/http';
 import {
   afterNextRender,
-  AfterRenderPhase,
   Component,
-  ElementRef, Inject, PLATFORM_ID,
+  ElementRef, Inject, InjectionToken, PLATFORM_ID,
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
@@ -42,7 +40,7 @@ data!: unknown;
 
   constructor(
     private router: Router,
-    @Inject(PLATFORM_ID) private platformId: any,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
     private http: HttpClient
   ) {
     afterNextRender(

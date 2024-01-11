@@ -4,11 +4,11 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject,
+  Inject, InjectionToken,
   PLATFORM_ID,
   ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+  ViewEncapsulation
+} from "@angular/core";
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApolloSandbox } from '@apollo/sandbox';
 
@@ -25,8 +25,7 @@ export class GraphqlSandboxComponent {
   url!: string;
 
   constructor(
-    // eslint-disable-next-line @typescript-eslint/ban-types
-    @Inject(PLATFORM_ID) platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
     private router: Router,
     private route: ActivatedRoute,
     private changeRef: ChangeDetectorRef

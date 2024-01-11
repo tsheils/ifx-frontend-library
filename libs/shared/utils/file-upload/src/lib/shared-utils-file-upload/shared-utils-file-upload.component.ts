@@ -16,7 +16,7 @@ export class SharedUtilsFileUploadComponent {
   @ViewChild('fileUpload') fileUpload!: ElementRef;
   @Output()fileSelect: EventEmitter<File | null> = new EventEmitter<File | null>();
   fileName = '';
-  file?: File;
+  file?: File | undefined | null;
 
   constructor(
     private ref: ChangeDetectorRef
@@ -24,12 +24,15 @@ export class SharedUtilsFileUploadComponent {
 
   }
 
-  onFileSelected(event: any) {
-    this.file = event.target.files[0];
-    if (this.file) {
-      this.fileName = this.file.name;
-      this.ref.markForCheck();
-      this.fileSelect.emit(this.file)
+  onFileSelected(event: Event) {
+    const target = (event.target as HTMLInputElement);
+    if(target && target.files.length) {
+      this.file = target.files[0];
+      if (this.file) {
+        this.fileName = this.file.name;
+        this.ref.markForCheck();
+        this.fileSelect.emit(this.file)
+      }
     }
   }
 

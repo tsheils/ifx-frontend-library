@@ -1,13 +1,13 @@
 import { inject, Injectable } from "@angular/core";
-import { ApolloQueryResult } from '@apollo/client';
+import { ApolloQueryResult } from "@apollo/client";
 import {
   Article,
-  ARTICLEDETAILSVARIABLES, ARTICLEFILTERS,
+  ARTICLEDETAILSVARIABLES,
   FETCHARTICLEDETAILS
 } from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { switchMap, catchError, of, filter, map, forkJoin, take } from "rxjs";
+import { switchMap, catchError, of, filter, map } from "rxjs";
 import { ArticleService } from '../article.service';
 import * as ArticleActions from './articles.actions';
 
@@ -17,8 +17,7 @@ export class ArticlesEffects {
     private articleService: ArticleService
   ) {}
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  init$ = createEffect((): any =>
+  init$ = createEffect(() =>
     inject(Actions).pipe(
       ofType(ArticleActions.initArticleStore),
       switchMap(() => of(ArticleActions.loadArticlesSuccess({ articles: [] }))),
@@ -29,8 +28,7 @@ export class ArticlesEffects {
     )
   );
 
- // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  loadArticle$ = createEffect((): any =>
+  loadArticle$ = createEffect(() =>
     inject(Actions).pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
@@ -46,11 +44,11 @@ export class ArticlesEffects {
         return this.articleService
           .fetchArticles(FETCHARTICLEDETAILS, ARTICLEDETAILSVARIABLES)
           .pipe(
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            map((articleData: any) => {
-              if (articleData.data) {
+              map((articleData: ApolloQueryResult<unknown>) => {
+                const data: {articles: Article[]} = articleData.data as {articles: Article[]};
+                if (data) {
                 const article: Article = new Article(
-                  articleData.data.articles[0]
+                  data.articles[0]
                 );
                 return ArticleActions.fetchArticleSuccess({ article: article });
               } else

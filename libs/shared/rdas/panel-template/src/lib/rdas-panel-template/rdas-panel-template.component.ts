@@ -18,7 +18,7 @@ import { SharedUtilsListFilterRowComponent } from "@ncats-frontend-library/share
   styleUrl: './rdas-panel-template.component.scss',
 })
 export class RdasPanelTemplateComponent {
-  @Input() filters!: FilterCategory[];
+  @Input() filters!: FilterCategory[] | undefined;
   @Input() _id!: string;
   @Input() message?: string;
   @Input() count: number = 0;

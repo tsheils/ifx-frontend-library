@@ -2,7 +2,6 @@ import { inject, Injectable } from "@angular/core";
 import { select, Store, Action } from '@ngrx/store';
 
 import * as DiseasesActions from './diseases.actions';
-import * as DiseasesFeature from './diseases.reducer';
 import * as DiseasesSelectors from './diseases.selectors';
 
 @Injectable()

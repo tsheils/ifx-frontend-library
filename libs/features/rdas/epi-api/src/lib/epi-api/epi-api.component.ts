@@ -2,11 +2,11 @@ import {
   afterNextRender,
   Component,
   ElementRef,
-  Inject,
+  Inject, InjectionToken,
   PLATFORM_ID,
   ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+  ViewEncapsulation
+} from "@angular/core";
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
@@ -25,7 +25,9 @@ export class EpiApiComponent {
   @ViewChild('documentation') el!: ElementRef;
   isBrowser: boolean;
 
-  constructor(@Inject(PLATFORM_ID) platformId: object) {
+  constructor(
+    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
+  ) {
     this.isBrowser = isPlatformBrowser(platformId);
     /**
      * create swagger ui viewer
