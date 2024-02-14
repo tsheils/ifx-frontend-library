@@ -75,6 +75,7 @@
   </ncats-frontend-library-gene-list>
 </mat-expansion-panel>
 </div>
+
 <div class="disease-display-panel" id='phenotypes' #phenotypes #scrollSection>
 <mat-expansion-panel [disabled]=!disease()?.phenotypeAssociations [expanded] = disease()?.phenotypeAssociations  >
 <mat-expansion-panel-header>
@@ -89,6 +90,7 @@
 </ncats-frontend-library-phenotype-list>
 </mat-expansion-panel>
 </div>
+
 <div class="disease-display-panel" id='nonEpiArticles' #nonEpiArticles #scrollSection>
 <mat-expansion-panel [disabled]=!disease()?.nonEpiCount [expanded] = disease()?.nonEpiCount>
 <mat-expansion-panel-header>

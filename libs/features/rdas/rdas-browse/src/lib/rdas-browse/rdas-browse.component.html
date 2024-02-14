@@ -96,13 +96,13 @@
         >
           <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
         </button>
-        } @if (page) {
+        } @if (page()) {
         <mat-paginator
-          [pageSize]="page.pageSize"
-          [pageIndex]="page.pageIndex"
+          [pageSize]="page()?.pageSize"
+          [pageIndex]="page()?.pageIndex"
           [pageSizeOptions]="[10, 25, 50]"
           (page)="paginationChanges($event)"
-          [length]="page.total"
+          [length]="page()?.total"
           class="browse-paginator"
         ></mat-paginator>
         }
@@ -110,22 +110,21 @@
     </div>
     <div class="row spinner-holder width-70">
       <ncats-frontend-library-loading-spinner
-        [isLoaded]="loaded"
+        [isLoaded]="loaded()"
       ></ncats-frontend-library-loading-spinner>
     </div>
     <ncats-frontend-library-disease-list
       [diseases]="diseases"
-      [loading]="loaded"
       class="fill-container"
     ></ncats-frontend-library-disease-list>
     <div class="row right-justified-row">
-      @if (page) {
+      @if (page()) {
       <mat-paginator
-        [pageSize]="page.pageSize"
-        [pageIndex]="page.pageIndex"
+        [pageSize]="page()?.pageSize"
+        [pageIndex]="page()?.pageIndex"
         [hidePageSize]="true"
         (page)="paginationChanges($event)"
-        [length]="page.total"
+        [length]="page()?.total"
         class="browse-paginator"
       ></mat-paginator>
       }
@@ -135,3 +134,4 @@
     </div>
   </mat-drawer-content>
 </mat-drawer-container>
+

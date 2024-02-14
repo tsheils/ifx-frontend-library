@@ -1,28 +1,17 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { User } from '@ncats-frontend-library/models/utils';
-import {
-  UsersFacade,
-  logoutUser,
-} from '@ncats-frontend-library/stores/user-store';
-import { Subject } from 'rxjs';
-import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-on-modal.component';
-import { RouterLink } from '@angular/router';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
+import { ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit, ViewEncapsulation } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+import { MatButtonModule } from "@angular/material/button";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatIconModule } from "@angular/material/icon";
+import { MatMenuModule } from "@angular/material/menu";
+import { RouterLink } from "@angular/router";
+import { User } from "@ncats-frontend-library/models/utils";
+import { UserLoginActions, UserSelectors } from "@ncats-frontend-library/stores/user-store";
+import { Store } from "@ngrx/store";
+import { map } from "rxjs";
+import { SocialSignOnModalComponent } from "../social-sign-on-modal/social-sign-on-modal.component";
+
 
 @Component({
   selector: 'ncats-frontend-library-social-sign-on-button',
@@ -38,25 +27,23 @@ import { MatMenuModule } from '@angular/material/menu';
   ],
 })
 export class SocialSignOnButtonComponent
-  implements OnInit, OnChanges, OnDestroy
+  implements OnInit
+    //, OnChanges
 {
   destroyRef = inject(DestroyRef);
+  store = inject(Store);
   mobile = false;
-  protected ngUnsubscribe: Subject<boolean> = new Subject();
 
   /**
    * profile object
    */
-  @Input()
-  user?: User;
+  user!: User;
 
-  photoURL = '';
   @Input() theme = 'primary';
 
   constructor(
     public dialog: MatDialog,
     public ref: ChangeDetectorRef,
-    private userFacade: UsersFacade,
     private breakpointObserver: BreakpointObserver,
     private changeRef: ChangeDetectorRef
   ) {}
@@ -69,16 +56,17 @@ export class SocialSignOnButtonComponent
         this.mobile = result.matches;
         this.changeRef.markForCheck();
       });
-  }
 
-  ngOnChanges(change: SimpleChanges) {
-    if (change['user'] && !change['user'].firstChange) {
-      if (this.user?.photoURL) {
-        this.photoURL = this.user.photoURL;
-      }
-      this.dialog.closeAll();
-      this.ref.detectChanges();
-    }
+    this.store.select(UserSelectors.getUser).pipe(
+      takeUntilDestroyed(this.destroyRef),
+      map((user:User) => {
+        this.user = user;
+        if(user){
+          this.dialog.closeAll();
+         // this.ref.markForCheck();
+        }
+      })
+    ).subscribe()
   }
 
   /**
@@ -88,26 +76,13 @@ export class SocialSignOnButtonComponent
     this.dialog.open(SocialSignOnModalComponent, {
       height: '45vh',
       width: this.mobile ? '90vw' : '35vw',
-    });
+    })
   }
 
   /**
    * sign out user
    */
   signOut(): void {
-    this.userFacade.dispatch(logoutUser());
-  }
-
-  viewProfile() {
-    //todo
-  }
-
-  handleMissingImage() {
-    this.photoURL = '';
-  }
-
-  ngOnDestroy() {
-    this.ngUnsubscribe.next(true);
-    this.ngUnsubscribe.complete();
+    this.store.dispatch(UserLoginActions.logoutUser())
   }
 }

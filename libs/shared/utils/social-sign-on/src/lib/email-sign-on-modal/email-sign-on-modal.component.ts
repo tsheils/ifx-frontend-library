@@ -1,4 +1,5 @@
-import { Component, OnDestroy, OnInit } from "@angular/core";
+import { Component, DestroyRef, inject, OnDestroy, OnInit } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import {
   FormControl,
   FormGroup,
@@ -7,9 +8,10 @@ import {
 } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
-  loginEmailUser,
-  UsersFacade,
-} from '@ncats-frontend-library/stores/user-store';
+   LoginEmailUserActions, UserSelectors,
+} from "@ncats-frontend-library/stores/user-store";
+import { select, Store } from "@ngrx/store";
+import { map } from "rxjs";
 import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
 import { RegisterModalComponent } from '../register-modal/register-modal.component';
 
@@ -28,10 +30,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatIconModule,
     ReactiveFormsModule,
     MatFormFieldModule,
-    MatInputModule,
-  ],
+    MatInputModule
+  ]
 })
 export class EmailSignOnModalComponent implements OnInit, OnDestroy {
+  private readonly store = inject(Store);
+  destroyRef = inject(DestroyRef);
+
   loginError = '';
 
   signOnForm: FormGroup = new FormGroup({
@@ -41,17 +46,31 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<EmailSignOnModalComponent>,
-    private userFacade: UsersFacade,
     public dialog: MatDialog
   ) {}
 
   ngOnInit() {
-    this.userFacade.error$.subscribe((err) => {
-      if (err) {
-        this.loginError = err;
-      }
-      console.log(err);
-    });
+    this.store
+      .pipe(
+      select(UserSelectors.getUsersError),
+      takeUntilDestroyed(this.destroyRef),
+      map((res: any) => {
+        if (res) {
+          this.loginError = res;
+        }
+      })
+    ).subscribe();
+
+    this.store
+      .pipe(
+      select(UserSelectors.getUser),
+      takeUntilDestroyed(this.destroyRef),
+      map((res: unknown) => {
+        if (res) {
+          this.closeModal();
+        }
+      })
+    ).subscribe();
 
     this.signOnForm.controls['pw'].valueChanges.subscribe(
       () => (this.loginError = '')
@@ -77,7 +96,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
   login() {
     this.loginError = '';
     if (this.signOnForm.valid) {
-      this.userFacade.dispatch(loginEmailUser(this.signOnForm.value));
+      this.store.dispatch(LoginEmailUserActions.loginEmailUser(this.signOnForm.value));
     }
   }
 

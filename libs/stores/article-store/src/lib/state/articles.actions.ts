@@ -1,44 +1,27 @@
-import { Article } from '@ncats-frontend-library/models/rdas';
+import { Article } from "@ncats-frontend-library/models/rdas";
 import { Page } from '@ncats-frontend-library/models/utils';
-import { createAction, props } from '@ngrx/store';
+import { createActionGroup, props } from "@ngrx/store";
 
-export const initArticleStore = createAction('[Articles Page] Init');
+export const FetchArticleActions = createActionGroup({
+  source: 'Fetch Article',
+  events: {
+    fetchArticle: props<{
+      pmid: string;
+      options?: { [key: string]: string };
+    }>(),
+    fetchArticleSuccess: props<{ article: Article }>(),
+    fetchArticleFailure: props<{ error: string }>()
+  }
+})
 
-export const loadArticles = createAction(
-  '[Articles/API] Load Articles',
-  props<{
-    top: number;
-    skip: number;
-  }>()
-);
-
-export const loadArticlesSuccess = createAction(
-  '[Articles/API] Load Articles Success',
-  props<{
-    articles: Article[];
-    page?: Page;
-  }>()
-);
-
-export const loadArticlesFailure = createAction(
-  '[Articles/API] Load Articles Failure',
-  props<{ error: string }>()
-);
-
-export const fetchArticle = createAction(
-  '[Articles/API] fetch Article',
-  props<{
-    pmid: string;
-    options?: { [key: string]: string };
-  }>()
-);
-
-export const fetchArticleSuccess = createAction(
-  '[Articles/API] fetch Article Success',
-  props<{ article: Article }>()
-);
-
-export const fetchArticleFailure = createAction(
-  '[Articles/API] fetch Article Failure',
-  props<{ error: string }>()
-);
+export const LoadArticlesActions = createActionGroup({
+  source: 'Load Articles',
+  events: {
+    loadArticles: props<{
+      top: number;
+      skip: number;
+    }>(),
+    loadArticlesSuccess: props<{ articles: Article[], page?: Page }>(),
+    loadArticlesFailure: props<{ error: string }>()
+  }
+})

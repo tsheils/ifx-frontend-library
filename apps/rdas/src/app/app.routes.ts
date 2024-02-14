@@ -1,29 +1,29 @@
-import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
 import {
-  ArticlesEffects,
-  articlesReducer,
-} from '@ncats-frontend-library/stores/article-store';
-import { DiseasesEffects, diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
+  ARTICLE_STORE_FEATURE_KEY,
+  ArticleEffects, articlesReducer
+} from "@ncats-frontend-library/stores/article-store";
 import {
-  GrantsEffects,
-  grantsReducer,
-} from '@ncats-frontend-library/stores/grant-store';
+  FILTERS_FEATURE_KEY,
+  FilterEffects,
+  filtersReducer
+} from "@ncats-frontend-library/stores/filter-store";
 import {
-  TrialsEffects,
-  trialsReducer,
-} from '@ncats-frontend-library/stores/trial-store';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from "@ngrx/store";
+  GRANTS_FEATURE_KEY,
+  GrantEffects, grantsReducer
+} from "@ncats-frontend-library/stores/grant-store";
+import { provideEffects } from "@ngrx/effects";
+import { provideState } from "@ngrx/store";
 import { environment } from '../environments/environment';
+import { TrialEffects, TRIALS_FEATURE_KEY, trialsReducer } from "@ncats-frontend-library/stores/trial-store";
 
 export const routes: Routes = [
   {
     path: '',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    loadChildren: () =>
+    loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-home').then(
-        (m) => m.rdasHomeRoutes
+        (m) => m.RdasHomeComponent
       ),
   },
   {
@@ -31,30 +31,26 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     providers: [
-      importProvidersFrom(
-        // register feature reducer
-        StoreModule.forFeature('diseaseStore', diseasesReducer),
-        // run feature effects
-        EffectsModule.forFeature([DiseasesEffects])
-      ),
+      provideState(FILTERS_FEATURE_KEY, filtersReducer),
+      provideEffects([FilterEffects]),
     ],
-    loadChildren: () =>
+    loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-browse').then(
-        (m) => m.rdasBrowseRoutes
+        (m) => m.RdasBrowseComponent
       ),
   },
   {
     path: 'disease',
     pathMatch: 'full',
     runGuardsAndResolvers: 'pathParamsChange',
-    providers: [
+   /* providers: [
       importProvidersFrom(
         // register feature reducer
         StoreModule.forFeature('diseaseStore', diseasesReducer),
         // run feature effects
         EffectsModule.forFeature([DiseasesEffects])
       ),
-    ],
+    ],*/
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-disease-page').then(
         (m) => m.RdasDiseasePageComponent
@@ -70,15 +66,20 @@ export const routes: Routes = [
       ),
   },
   {
+    path: 'privacy',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('@ncats-frontend-library/features/rdas/privacy-page').then(
+        (m) => m.RdasPrivacyPageComponent
+      ),
+  },
+  {
     path: 'article',
     pathMatch: 'full',
     providers: [
-      importProvidersFrom(
-        // register feature reducer
-        StoreModule.forFeature('articleStore', articlesReducer),
-        // run feature effects
-        EffectsModule.forFeature([ArticlesEffects])
-      ),
+      provideState(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
+      provideEffects(ArticleEffects)
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
@@ -90,12 +91,8 @@ export const routes: Routes = [
     path: 'grant',
     pathMatch: 'full',
     providers: [
-      importProvidersFrom(
-        // register feature reducer
-        StoreModule.forFeature('grants', grantsReducer),
-        // run feature effects
-        EffectsModule.forFeature([GrantsEffects])
-      ),
+      provideState(GRANTS_FEATURE_KEY, grantsReducer),
+      provideEffects(GrantEffects)
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
@@ -107,12 +104,8 @@ export const routes: Routes = [
     path: 'trial',
     pathMatch: 'full',
     providers: [
-      importProvidersFrom(
-        // register feature reducer
-        StoreModule.forFeature('trials', trialsReducer),
-        // run feature effects
-        EffectsModule.forFeature([TrialsEffects])
-      ),
+      provideState(TRIALS_FEATURE_KEY, trialsReducer),
+      provideEffects(TrialEffects)
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>

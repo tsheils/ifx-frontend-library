@@ -113,7 +113,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         takeUntilDestroyed(this.destroyRef),
         debounceTime(400),
         distinctUntilChanged(),
-        map((term) => {
+        map((term: string) => {
           this.filterChange.next({
             label: this.filter.label,
             term: term ? term : ' ',

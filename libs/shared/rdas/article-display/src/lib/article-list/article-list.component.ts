@@ -28,11 +28,13 @@ export class ArticleListComponent implements OnChanges {
   }
 
   navigate(id: string): void {
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        pmid: id,
-      },
-    };
-    this.router.navigate(['/article'], navigationExtras);
+    if (id) {
+      const navigationExtras: NavigationExtras = {
+        queryParams: {
+          pmid: id,
+        },
+      };
+      this.router.navigate(['/article'], navigationExtras);
+    }
   }
 }

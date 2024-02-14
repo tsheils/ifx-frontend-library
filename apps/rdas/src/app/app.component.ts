@@ -34,10 +34,11 @@ import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/he
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { MobileHeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/mobile-header-template';
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
-import { DiseasesFacade } from '@ncats-frontend-library/stores/disease-store';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
+import { UserSelectors } from "@ncats-frontend-library/stores/user-store";
 import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
 import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
+import { select, Store } from "@ngrx/store";
+import { map } from "rxjs";
 
 @Component({
   selector: 'ncats-frontend-library-root',
@@ -68,6 +69,7 @@ export class AppComponent implements OnInit {
    */
   @ViewChild(MobileHeaderTemplateComponent, { static: false })
   header!: MobileHeaderTemplateComponent;
+  private readonly userStore = inject(Store);
   destroyRef = inject(DestroyRef);
 
   title = 'rdas';
@@ -121,8 +123,6 @@ export class AppComponent implements OnInit {
     @Inject(DOCUMENT) private document: Document,
     private scrollDispatcher: ScrollDispatcher,
     private router: Router,
-    private userFacade: UsersFacade,
-    private diseaseFacade: DiseasesFacade,
     private changeRef: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver
   ) {}
@@ -139,13 +139,14 @@ export class AppComponent implements OnInit {
         this.changeRef.markForCheck();
       });
 
-    this.userFacade.user$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res) => {
-        if (res) {
-          this.user = res[0];
-        }
-      });
+    this.userStore.pipe(
+      select(UserSelectors.getUser),
+      takeUntilDestroyed(this.destroyRef),
+      map((res: User) => {
+          this.user = res;
+      })
+    ).subscribe();
+
 
     /**
      * This shows loading spinner for page navigation - usually navigation is finished before the page is finished loading

@@ -1,26 +1,38 @@
-import { Injectable } from '@angular/core';
-import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { inject, Injectable } from "@angular/core";
+import {
+  Auth,
+  authState, createUserWithEmailAndPassword,
+  getAuth, sendPasswordResetEmail,
+  sendSignInLinkToEmail,
+  signInWithEmailAndPassword,
+  signInWithPopup, signInWithRedirect, signOut
+} from "@angular/fire/auth";
+import { collection, doc, Firestore, getDoc, getDocs, setDoc } from "@angular/fire/firestore";
+import { AuthProvider } from "@firebase/auth";
+import { GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, TwitterAuthProvider, EmailAuthProvider } from "firebase/auth";
 import { User } from '@ncats-frontend-library/models/utils';
-import firebase from 'firebase/compat/app';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { from, Observable, ObservedValueOf } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
+  private auth: Auth = inject(Auth);
+  firestore = inject(Firestore);
+  authState$ = authState(this.auth);
+
   /**
    * list of provider objects used by the auth service
    */
-  providers: Map<string, firebase.auth.AuthProvider> = new Map<
+  providers: Map<string, AuthProvider> = new Map<
     string,
-    firebase.auth.AuthProvider
+    AuthProvider
   >([
-    ['facebook', new firebase.auth.FacebookAuthProvider()],
-    ['google', new firebase.auth.GoogleAuthProvider()],
-    ['twitter', new firebase.auth.TwitterAuthProvider()],
-    ['github', new firebase.auth.GithubAuthProvider()],
-    ['email', new firebase.auth.EmailAuthProvider()],
+    ['facebook', new FacebookAuthProvider()],
+    ['google', new GoogleAuthProvider()],
+    ['twitter', new TwitterAuthProvider()],
+    ['github', new GithubAuthProvider()],
+    ['email', new EmailAuthProvider()],
   ]);
 
   actionCodeSettings = {
@@ -32,14 +44,14 @@ export class UserService {
     handleCodeInApp: true,
   };
 
+
   /**
    * get user info from firebase
    * @param userCollection
    * @param afAuth
    */
   constructor(
-    private userCollection: AngularFirestore,
-    public afAuth: AngularFireAuth
+
   ) {}
 
   /**
@@ -50,25 +62,38 @@ export class UserService {
    */
   doLogin(
     providerName: string
-  ): Observable<firebase.auth.UserCredential | User> {
-    const provider: unknown = this.providers.get(providerName);
-    return from(
-      this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider)
-    );
+  ){
+    const auth: Auth = getAuth();
+    const provider: AuthProvider = <AuthProvider>this.providers.get(providerName);
+    if(providerName ==="facebook") {
+      const fProvider = new FacebookAuthProvider();
+      fProvider.addScope('email')
+      fProvider.addScope('public_profile')
+      return from(
+        signInWithPopup(auth, fProvider))
+    } else {
+      // this.auth.
+      return from(
+        signInWithPopup(auth, provider)
+        //  this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider)
+      );
+    }
   }
 
   doEmailLogin(
     email: string,
     pw: string
-  ): Observable<ObservedValueOf<Promise<firebase.auth.UserCredential>>> {
+  ) {
+    const auth: Auth = getAuth();
     return from(
-      this.afAuth.signInWithEmailAndPassword(email, pw).catch((error) => error)
+      signInWithEmailAndPassword(auth, email, pw).catch((error) => error)
     );
   }
 
   doEmailLinkLogin(email: string): Observable<void> {
+    const auth: Auth = getAuth();
     return from(
-      this.afAuth.sendSignInLinkToEmail(email, this.actionCodeSettings)
+      sendSignInLinkToEmail(auth, email, this.actionCodeSettings)
     );
   }
 
@@ -79,13 +104,14 @@ export class UserService {
    * @param pw
    */
   doRegister(email: string, pw: string) {
-    return from(this.afAuth.createUserWithEmailAndPassword(email, pw));
+    const auth: Auth = getAuth();
+    return from(createUserWithEmailAndPassword(auth, email, pw));
   }
 
   doResetEmail(email: string) {
+    const auth: Auth = getAuth();
     return from(
-      this.afAuth
-        .sendPasswordResetEmail(email, this.actionCodeSettings)
+     sendPasswordResetEmail(auth, email, this.actionCodeSettings)
         .catch((error) => error)
     );
   }
@@ -94,7 +120,8 @@ export class UserService {
    * logout user, remove profile via profile service
    */
   logout() {
-    this.afAuth.signOut().then(() => {
+    const auth: Auth = getAuth();
+    signOut(auth).then(() => {
       return;
     });
   }
@@ -104,23 +131,20 @@ export class UserService {
    * @param user
    */
   createUserProfile(user: User) {
-    this.userCollection
-      .collection('users')
-      .doc(user.uid)
-      .set({ ...user });
+    const docRef = doc(this.firestore, "users", user.uid);
+    setDoc(docRef, {...user})
     return this.fetchUserProfile(user);
   }
 
   updateUserProfile(user: User) {
-    this.userCollection
-      .collection('users')
-      .doc(user.uid)
-      .update(JSON.parse(JSON.stringify(user)));
+      const docRef = doc(this.firestore, "users", user.uid);
+      setDoc(docRef, JSON.parse(JSON.stringify(user)), { merge: true })
     return this.fetchUserProfile(user);
   }
 
   fetchUserProfile(user: User) {
-    return this.userCollection.collection('users').doc(user.uid).get();
+    const docRef = doc(this.firestore, "users", user.uid);
+   return from(getDoc(docRef))
   }
 
   /*  /!**
@@ -191,4 +215,22 @@ export class UserService {
     }
 
   }*/
+
+  getErrorMesssage(code:string): string {
+    switch (code) {
+      case "auth/user-not-found": {
+        return "User not found. Please double check your email address";
+      }
+      case "auth/wrong-password": {
+        return "Invalid password";
+      }
+      case "auth/invalid-email": {
+        return "Invalid email";
+      }
+      default: {
+        return "Unable to login with these credentials";
+      }
+    }
+  }
+
 }

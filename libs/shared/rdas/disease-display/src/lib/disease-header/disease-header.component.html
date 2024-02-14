@@ -18,8 +18,8 @@
         >
       </div>
       <ncats-frontend-library-subscribe-button
-        [disease]="disease"
-        [theme]="'warn'"
+        [subscriptionName]="disease()?.name"
+        [subscriptionId] = "disease()?.gardId"
       ></ncats-frontend-library-subscribe-button>
     </div>
     <div class="row space-between-row">

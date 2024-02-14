@@ -1,138 +1,79 @@
 import { Subscription, User } from '@ncats-frontend-library/models/utils';
-import { createAction, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from "@ngrx/store";
 
-export const init = createAction('[Users/API] Init');
+export const RdasUsersInitActions = createActionGroup({
+  source: 'Users Init',
+  events: {
+    init: emptyProps(),
+    initSuccess: props<{ user: User }>(),
+    initFailure: props<{ error: string }>()
+  }
+});
 
-export const resetPasswordEmail = createAction(
-  '[Users/API] Reset Password Email',
-  props<{
-    email: string;
-  }>()
-);
 
-export const resetPasswordEmailSuccess = createAction(
-  '[Users/API] Reset Password Email Success'
-);
+export const ResetPasswordEmailActions = createActionGroup({
+  source: 'Reset Password Email',
+  events: {
+    resetPasswordEmail: props<{ email: string; }>(),
+    resetPasswordEmailSuccess: emptyProps(),
+    resetPasswordEmailFailure:  props<{ error: string }>()
+  }
+})
 
-export const resetPasswordEmailFailure = createAction(
-  '[Users/API] Reset Password Email Failure',
-  props<{ error: string | null | undefined }>()
-);
+export const LoginLinkActions = createActionGroup({
+  source: 'Login Link',
+  events: {
+    loginLinkUser: props<{ email: string; }>(),
+    loginLinkUserSuccess: props<{ email: string; }>(),
+    loginLinkUserFailure:  props<{ error: string }>()
+  }
+})
 
-export const loginLinkUser = createAction(
-  '[Users/API] Login Link User',
-  props<{
-    email: string;
-  }>()
-);
+export const LoginEmailUserActions = createActionGroup({
+  source: 'Login Email User',
+  events: {
+    loginEmailUser: props<{ email: string;  pw: string;}>(),
+    loginEmailUserSuccess: props<{ user: User }>(),
+    loginEmailUserFailure:  props<{ error: string }>()
+  }
+})
 
-export const loginLinkUserSuccess = createAction(
-  '[Users/API] Login Link User Success',
-  props<{
-    email: string;
-  }>()
-);
+export const RegisterEmailUserActions = createActionGroup({
+  source: 'Login Email User',
+  events: {
+    RegisterEmailUser: props<{ email: string;  pw: string; pwVerify: string;}>(),
+    RegisterEmailUserSuccess: props<{ user: User }>(),
+    RegisterEmailUserFailure:  props<{ error: string }>()
+  }
+})
 
-export const loginLinkUserFailure = createAction(
-  '[Users/API] Login Link User Failure',
-  props<{ error: string | null | undefined }>()
-);
+export const UserLoginActions = createActionGroup({
+  source: 'User',
+  events: {
+    loginUser: props<{ provider: string }>(),
+    loginUserSuccess: props<{ user: User }>(),
+    loginUserFailure:  props<{ error: string }>(),
+    fetchUserProfile:  props<{ user: User }>(),
+    fetchUserProfileSuccess:  props<{ user: User }>(),
+    fetchUserProfileFailure:  props<{ error: string }>(),
+    logoutUser: emptyProps(),
+    logoutUserSuccess: emptyProps(),
+    logoutUserFailure:  props<{ error: string }>(),
 
-export const loginEmailUser = createAction(
-  '[Users/API] Login Email User',
-  props<{
-    email: string;
-    pw: string;
-  }>()
-);
+  }
+})
 
-export const loginEmailUserSuccess = createAction(
-  '[Users/API] Login Email User Success',
-  props<{ user: User }>()
-);
+export const UpdateUserActions = createActionGroup({
+  source: 'Login Email User',
+  events: {
+    updateUserSubscriptions: props<{ subscriptions: Subscription[] }>(),
+    updateUserSubscriptionsSuccess: props<{ user: User }>(),
+    updateUserSubscriptionsFailure:  props<{ error: string }>()
+  }
+})
 
-export const loginEmailUserFailure = createAction(
-  '[Users/API] Login Email User Failure',
-  props<{ error: string | null | undefined }>()
-);
 
-export const registerEmailUser = createAction(
-  '[Users/API] Register Email User',
-  props<{
-    email: string;
-    pw: string;
-    pwVerify: string;
-  }>()
-);
-
-export const registerEmailUserSuccess = createAction(
-  '[Users/API] Register Email User Success',
-  props<{ user: User }>()
-);
-
-export const registerEmailUserFailure = createAction(
-  '[Users/API] Register Email User Failure',
-  props<{ error: string | null | undefined }>()
-);
-
-export const loginUser = createAction(
-  '[Users/API] Login User',
-  props<{
-    provider: string;
-  }>()
-);
-
-export const loginUserSuccess = createAction(
-  '[Users/API] Login User Success',
-  props<{ user: User }>()
-);
-
-export const loginUserFailure = createAction(
-  '[Users/API] Login User Failure',
-  props<{ error: string | null | undefined }>()
-);
-
-export const fetchUserProfile = createAction(
-  '[Users/API] Fetch User Profile User',
-  props<{ user: User }>()
-);
-
-export const fetchUserProfileSuccess = createAction(
-  '[Users/API] Fetch User Profile Success',
-  props<{ user: User }>()
-);
-
-export const fetchUserProfileFailure = createAction(
-  '[Users/API] Fetch User Profile Failure',
-  props<{ error: string | null | undefined }>()
-);
-
-export const updateUserSubscriptions = createAction(
-  '[Users/API] Update User Subscriptions',
-  props<{ subscriptions: Subscription[] }>()
-);
-
-export const updateUserSubscriptionsSuccess = createAction(
-  '[Users/API] Update User Subscriptions Success',
-  props<{ user: User }>()
-);
-
-export const updateUserSubscriptionsFailure = createAction(
-  '[Users/API] Update User Subscriptions Failure',
-  props<{ error: string | null | undefined }>()
-);
-
-export const logoutUser = createAction('[Users/API] Logout User Success');
-
-export const logoutUserSuccess = createAction(
-  '[Users/API] Logout User Success'
-);
-
-export const logoutUserFailure = createAction(
-  '[Users/API] Logout User Failure',
-  props<{ error: string | null | undefined }>()
-);
-
+/*
 export const fetchUser = createAction('[Users/API] Fetch User Success');
 
 export const fetchUserSuccess = createAction(
@@ -144,3 +85,4 @@ export const fetchUserFailure = createAction(
   '[Users/API] Fetch User Failure',
   props<{ error: string | null | undefined }>()
 );
+*/

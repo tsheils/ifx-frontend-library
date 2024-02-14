@@ -12,8 +12,8 @@ import {
   OnInit,
   Signal,
   ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+  ViewEncapsulation, WritableSignal
+} from "@angular/core";
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -46,12 +46,16 @@ import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
 import { SharedUtilsSelectedFilterListComponent } from '@ncats-frontend-library/shared/utils/selected-filter-list';
-import { DiseasesFacade } from '@ncats-frontend-library/stores/disease-store';
 import {
-  fetchFilters,
-  FiltersFacade,
-} from '@ncats-frontend-library/stores/filter-store';
-import { Subject, takeUntil } from 'rxjs';
+  FetchFiltersActions,
+  FilterSelectors
+} from "@ncats-frontend-library/stores/filter-store";
+import {
+  BrowseDiseaseListActions,
+  DiseaseSelectors
+} from "@ncats-frontend-library/stores/disease-store";
+import { Store } from "@ngrx/store";
+import { map, Subject } from "rxjs";
 
 /**
  * navigation options to merge query parameters that are added on in navigation/query/facets/pagination
@@ -91,12 +95,12 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
    * @type {Subject<any>}
    */
   protected ngUnsubscribe: Subject<boolean> = new Subject();
-
+  private readonly store = inject(Store);
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   destroyRef = inject(DestroyRef);
 
-  page?: Page;
-  loaded = false;
+  page!: Signal<Page |undefined>;
+  loaded!: Signal<boolean |undefined>;
   diseases!: Signal<Disease[] |undefined>;
   diseaseTree!: DiseaseNode[] | undefined;
   filters: FilterCategory[] = [];
@@ -108,8 +112,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private changeRef: ChangeDetectorRef,
-    private diseaseFacade: DiseasesFacade,
-    private filterFacade: FiltersFacade,
     private breakpointObserver: BreakpointObserver,
     private scroll: ScrollDispatcher,
     @Inject(DOCUMENT) protected dom?: Document
@@ -127,13 +129,15 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         this.changeRef.markForCheck();
       });
 
-    this.diseases = this.diseaseFacade.allDiseases$;
+    this.diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
+    this.loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
+    this.page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
 
     this.router.events
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
         if (e instanceof NavigationStart) {
-          this.loaded = false;
+          this.store.dispatch(BrowseDiseaseListActions.setLoading())
         }
         if (e instanceof NavigationEnd) {
           this.selectedValues.clear();
@@ -141,31 +145,14 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.diseaseFacade.diseaseTree$
-      .pipe(takeUntil(this.ngUnsubscribe))
+      this.store.select(DiseaseSelectors.getDiseaseTree)
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         if (res) {
           this.diseaseTree = res;
           this.changeRef.markForCheck();
         }
       });
-
-    this.diseaseFacade.page$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((res) => {
-        if (res) {
-          this.page = res;
-          if (this.page.total <= 1000) {
-            //    this.showDownload = true
-            this.changeRef.markForCheck();
-          }
-          this.changeRef.markForCheck();
-        }
-      });
-
-    this.diseaseFacade.loaded$.pipe().subscribe((res) => {
-      this.loaded = res;
-    });
 
     if (this.router.routerState.root.snapshot.queryParamMap.has('sort')) {
       const sort =
@@ -175,19 +162,22 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.filterFacade.allFilters$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((res) => {
-        if (res && res.length) {
-          const tempMap: Map<string, FilterCategory> = new Map<
-            string,
-            FilterCategory
-          >();
-          res.forEach((filter) => tempMap.set(filter.label, filter));
-          this.filters = [...tempMap.values()];
-          this.changeRef.markForCheck()
-        }
-      });
+    this.store.select(FilterSelectors.selectAllFilters)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        map((res) => {
+          if (res && res.length) {
+            const tempMap: Map<string, FilterCategory> = new Map<
+              string,
+              FilterCategory
+              >();
+            res.forEach((filter) => tempMap.set(filter.label, filter));
+            this.filters = [...tempMap.values()];
+            this.changeRef.markForCheck()
+          }
+        })
+      )
+      .subscribe();
   }
 
   /**
@@ -234,18 +224,15 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   filterChange(event: { label: string; term?: string; page?: number }): void {
     const skip = event.page ? event.page * 200 : 0;
     if (event.term) {
-      this.filterFacade.dispatch(
-        fetchFilters({
+        this.store.dispatch(FetchFiltersActions.fetchFilters({
           label: event.label,
           term: event.term,
           limit: 200,
           skip: 0,
         })
-      );
+        );
     } else {
-      this.filterFacade.dispatch(
-        fetchFilters({ label: event.label, limit: 200, skip: skip })
-      );
+      this.store.dispatch(FetchFiltersActions.fetchFilters({ label: event.label, limit: 200, skip: skip }));
     }
   }
 

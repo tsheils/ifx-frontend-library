@@ -2,12 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component,
-  Input,
-} from '@angular/core';
+  Component, DestroyRef, inject,
+  Input
+} from "@angular/core";
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { ArticleDetailsDisplayComponent } from '@ncats-frontend-library/shared/rdas/article-display';
-import { ArticlesFacade } from '@ncats-frontend-library/stores/article-store';
+import { ArticleSelectors } from "@ncats-frontend-library/stores/article-store";
+import { Store } from "@ngrx/store";
 
 @Component({
   selector: 'ncats-frontend-library-features-rdas-rdas-article-page',
@@ -18,15 +19,16 @@ import { ArticlesFacade } from '@ncats-frontend-library/stores/article-store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeaturesRdasRdasArticlePageComponent {
+  private readonly articleStore = inject(Store);
+  destroyRef = inject(DestroyRef);
   @Input() article!: Article;
 
   constructor(
-    private articleFacade: ArticlesFacade,
     private changeRef: ChangeDetectorRef
   ) {}
 
   ngOnInit() {
-    this.articleFacade.selectedArticle$.subscribe((res) => {
+    this.articleStore.select(ArticleSelectors.selectEntity).subscribe((res) => {
       if (res) {
         this.article = res;
         this.changeRef.markForCheck();

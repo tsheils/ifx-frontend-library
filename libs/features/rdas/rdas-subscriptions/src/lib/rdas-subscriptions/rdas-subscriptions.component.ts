@@ -1,19 +1,19 @@
 import {
   ChangeDetectorRef,
-  Component,
-  OnDestroy,
+  Component, DestroyRef, inject,
   OnInit,
-  Signal,
-} from '@angular/core';
+  Signal
+} from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { User } from '@ncats-frontend-library/models/utils';
-import {
-  fetchDiseaseList,
-  DiseasesFacade,
-} from '@ncats-frontend-library/stores/disease-store';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
-import { Subject, takeUntil } from 'rxjs';
+import { FetchDiseaseListActions } from "@ncats-frontend-library/stores/disease-store";
 import { DiseaseListComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
+import { DiseaseSelectors } from "@ncats-frontend-library/stores/disease-store";
+import { UserSelectors } from "@ncats-frontend-library/stores/user-store";
+import { select, Store } from "@ngrx/store";
+import { map } from "rxjs";
+
 
 @Component({
   selector: 'ncats-frontend-library-rdas-subscriptions',
@@ -22,42 +22,37 @@ import { DiseaseListComponent } from '@ncats-frontend-library/shared/rdas/diseas
   standalone: true,
   imports: [DiseaseListComponent],
 })
-export class RdasSubscriptionsComponent implements OnInit, OnDestroy {
-  /**
-   * Behaviour subject to allow extending class to unsubscribe on destroy
-   * @type {Subject<any>}
-   */
-  protected ngUnsubscribe: Subject<boolean> = new Subject();
+export class RdasSubscriptionsComponent implements OnInit {
+  private readonly store = inject(Store);
+  destroyRef = inject(DestroyRef);
+
   subscriptions!: Signal<Disease[] | undefined>;
   loading = true;
 
   constructor(
-    private userFacade: UsersFacade,
-    private diseaseFacade: DiseasesFacade,
     private changeRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.userFacade.user$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((userArr) => {
-        if (userArr && userArr.length) {
-          const user: User = JSON.parse(JSON.stringify(userArr[0]));
+
+    this.store.pipe(
+      select(UserSelectors.getSelected),
+      takeUntilDestroyed(this.destroyRef),
+      map((user: User | undefined) => {
+        if (user) {
           if (user && user.subscriptions) {
             const ids: string[] = user.subscriptions.map((sub) => sub.gardID);
-            this.diseaseFacade.dispatch(fetchDiseaseList({ gardIds: ids }));
+            this.store.dispatch(FetchDiseaseListActions.fetchDiseaseList({ gardIds: ids }));
           }
           //   this.subscriptions = user?.subscriptions;
           this.loading = false;
           this.changeRef.markForCheck();
         }
-      });
+      })
+    ).subscribe();
 
-    this.subscriptions = this.diseaseFacade.subscribedDiseases$;
-  }
-
-  ngOnDestroy() {
-    this.ngUnsubscribe.next(true);
-    this.ngUnsubscribe.complete();
+    this.subscriptions = this.store.selectSignal(
+      DiseaseSelectors.getDiseasesSubscriptions
+    );
   }
 }

@@ -76,6 +76,7 @@ function startSchema(instance) {
     const port = instance.port;
     const server = app.listen(port, () => {
     });
+    console.log(environment.url)
     console.log(server.address());
    // server.on('error')
   });

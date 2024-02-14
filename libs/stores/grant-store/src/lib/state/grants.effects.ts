@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { ApolloQueryResult } from '@apollo/client';
 import {
   CoreProject,
@@ -7,56 +7,45 @@ import {
 } from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { switchMap, catchError, of, filter, map } from 'rxjs';
+import { filter, map, mergeMap } from "rxjs";
 import { GrantService } from '../grant.service';
-import * as GrantsActions from './grants.actions';
+import { FetchGrantActions } from "./grants.actions";
 
-@Injectable()
-export class GrantsEffects {
-  constructor(private grantService: GrantService) {}
 
-  init$ = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(GrantsActions.initGrants),
-      switchMap(() => of(GrantsActions.loadGrantsSuccess({ grants: [] }))),
-      catchError((error) => {
-        console.error('Error', error);
-        return of(GrantsActions.loadGrantsFailure({ error }));
-      })
-    )
-  );
-
-  loadGrant$ = createEffect(() =>
-    inject(Actions).pipe(
+export const loadGrant$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    grantService = inject(GrantService)
+  ) => {
+    return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/grants') &&
           r.payload.routerState.url.startsWith('/grant')
       ),
-      map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
-      ),
-      switchMap((params: { projectid?: string }) => {
+      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
+      mergeMap((params: { projectid?: string }) => {
         GRANTDETAILSVARIABLES.coreProjectsWhere.core_project_num =
           params.projectid;
-        return this.grantService
+        return grantService
           .fetchGrants(FETCHGRANTDETAILS, GRANTDETAILSVARIABLES)
           .pipe(
             map((grantData: ApolloQueryResult<unknown>) => {
-              const data: {coreProjects: CoreProject[]} = grantData.data as {coreProjects: CoreProject[]};
+              const data: { coreProjects: CoreProject[] } = grantData.data as { coreProjects: CoreProject[] };
               if (data) {
                 const grant: CoreProject = new CoreProject(
                   data.coreProjects[0]
                 );
-                return GrantsActions.fetchGrantSuccess({ grant: grant });
+                return FetchGrantActions.fetchGrantSuccess({ grant: grant });
               } else
-                return GrantsActions.fetchGrantFailure({
-                  error: 'No Disease found',
+                return FetchGrantActions.fetchGrantFailure({
+                  error: 'No Project found',
                 });
             })
           );
       })
     )
-  );
-}
+  }, {functional: true}
+  )
+
