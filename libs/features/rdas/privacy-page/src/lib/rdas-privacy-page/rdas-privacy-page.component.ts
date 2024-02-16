@@ -6,7 +6,7 @@ import {
   Component,
   DestroyRef,
   ElementRef,
-  inject,
+  inject, OnInit,
   QueryList,
   ViewChildren,
   ViewEncapsulation
@@ -36,7 +36,7 @@ import { MatSidenavModule } from "@angular/material/sidenav";
   styleUrl: './rdas-privacy-page.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class RdasPrivacyPageComponent {
+export class RdasPrivacyPageComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
 
   destroyRef = inject(DestroyRef);

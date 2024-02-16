@@ -1,25 +1,23 @@
 import { inject, Injectable } from "@angular/core";
 import {
   Auth,
-  authState, createUserWithEmailAndPassword,
+  createUserWithEmailAndPassword,
   getAuth, sendPasswordResetEmail,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
-  signInWithPopup, signInWithRedirect, signOut
+  signInWithPopup, signOut
 } from "@angular/fire/auth";
-import { collection, doc, Firestore, getDoc, getDocs, setDoc } from "@angular/fire/firestore";
+import { doc, Firestore, getDoc, setDoc } from "@angular/fire/firestore";
 import { AuthProvider } from "@firebase/auth";
 import { GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, TwitterAuthProvider, EmailAuthProvider } from "firebase/auth";
 import { User } from '@ncats-frontend-library/models/utils';
-import { from, Observable, ObservedValueOf } from 'rxjs';
+import { from, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class UserService {
-  private auth: Auth = inject(Auth);
   firestore = inject(Firestore);
-  authState$ = authState(this.auth);
 
   /**
    * list of provider objects used by the auth service
@@ -43,16 +41,6 @@ export class UserService {
     // This must be true.
     handleCodeInApp: true,
   };
-
-
-  /**
-   * get user info from firebase
-   * @param userCollection
-   * @param afAuth
-   */
-  constructor(
-
-  ) {}
 
   /**
    * gets info from modal

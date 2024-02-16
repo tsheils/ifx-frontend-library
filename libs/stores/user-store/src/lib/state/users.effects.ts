@@ -1,4 +1,6 @@
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
+import { UserCredential, UserInfo } from "@firebase/auth";
+import { DocumentSnapshot } from "@firebase/firestore";
 import { User } from "@ncats-frontend-library/models/utils";
 import { createEffect, Actions, concatLatestFrom, ofType } from "@ngrx/effects";
 import { Store } from "@ngrx/store";
@@ -12,8 +14,7 @@ import {
   ResetPasswordEmailActions, UpdateUserActions, UserLoginActions
 } from "./users.actions";
 
-import * as UsersActions from "./users.actions";
-import { getSelected, getUser } from "./users.selectors";
+import { getSelected } from "./users.selectors";
 
 export const init = createEffect(
   (
@@ -44,13 +45,13 @@ export const loginUser = createEffect(
       mergeMap((action: { provider: string }) => {
         return userService.doLogin(action.provider)
           .pipe(
-          map((res: { user: any }) => {
+          map((res: UserCredential) => {
               if (res && res.user) {
-                const newUser: User = new User({
-                  displayName: res.user?.displayName, //.users.entities[state.users.selectedId || "null"],
-                  uid: res.user?.uid
-                });
-                return UserLoginActions.loginUserSuccess({ user: newUser });
+                  const tempUser: UserInfo = <unknown>res.user as UserInfo;
+                return UserLoginActions.loginUserSuccess({ user: new User({
+                    displayName: tempUser.displayName, //.users.entities[state.users.selectedId || "null"],
+                    uid: tempUser.uid
+                  }) });
               } else {
                 return UserLoginActions.loginUserFailure({ error: "Login Failed" });
               }
@@ -111,9 +112,12 @@ export const loginEmailUser = createEffect(
           ofType(RegisterEmailUserActions.registerEmailUser),
           mergeMap((action: { email: string; pw: string }) => {
             return userService.doRegister(action.email, action.pw).pipe(
-              map((res: any) => {
+              map((res: UserCredential) => {
                 if (res && res.user) {
-                  const u: User = new User(res.user);
+                  const u: User = new User({
+                      displayName: res.user.displayName, //.users.entities[state.users.selectedId || "null"],
+                      uid: res.user.uid
+                    });
                   return RegisterEmailUserActions.registerEmailUserSuccess({ user: u });
                 } else {
                   return RegisterEmailUserActions.registerEmailUserFailure({
@@ -206,7 +210,7 @@ export const loginEmailUser = createEffect(
           mergeMap((action: { user: User }) => {
             return userService.fetchUserProfile(action.user)
               .pipe(
-                map((res: any) => {
+                map((res: DocumentSnapshot) => {
                   let user: User = action.user;
                   if (res && !res.exists) {
                     userService.createUserProfile(user);

@@ -24,6 +24,7 @@ describe('Diseases Selectors', () => {
 
   beforeEach(() => {
     state = {
+      entities: undefined, ids: undefined, loaded: undefined,
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
       diseases: diseasesAdapter.setAll(diseasesArr, {
@@ -32,7 +33,7 @@ describe('Diseases Selectors', () => {
         error: ERROR_MSG,
         loaded: true,
         typeahead: undefined,
-      }),
+      })
     };
   });
 

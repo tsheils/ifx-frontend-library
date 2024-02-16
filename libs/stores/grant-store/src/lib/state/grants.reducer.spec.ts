@@ -1,7 +1,7 @@
+import { CoreProject } from "@ncats-frontend-library/models/rdas";
 import { Action } from '@ngrx/store';
+import { LoadGrantsActions } from "./grants.actions";
 
-import * as GrantsActions from './grants.actions';
-import { GrantsEntity } from './grants.models';
 import {
   GrantsState,
   initialGrantsState,
@@ -9,10 +9,10 @@ import {
 } from './grants.reducer';
 
 describe('Grants Reducer', () => {
-  const createGrantsEntity = (id: string, name = ''): GrantsEntity => ({
-    id,
-    name: name || `name-${id}`,
-  });
+  const createGrantsEntity = (id: string) =>
+    new CoreProject({
+      core_project_num: id,
+    });
 
   describe('valid Grants actions', () => {
     it('loadGrantsSuccess should return the list of known Grants', () => {
@@ -20,7 +20,7 @@ describe('Grants Reducer', () => {
         createGrantsEntity('PRODUCT-AAA'),
         createGrantsEntity('PRODUCT-zzz'),
       ];
-      const action = GrantsActions.loadGrantsSuccess({ grants });
+      const action = LoadGrantsActions.loadGrantsSuccess({ grants });
 
       const result: GrantsState = grantsReducer(initialGrantsState, action);
 

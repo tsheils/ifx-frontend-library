@@ -76,14 +76,18 @@ ngOnInit() {
       .style("border-width", "2px")
       .style("border-radius", "5px")
       .style("padding", "5px")*/
-    this.makeChart();
+    if(this.data) {
+      this.makeChart();
+    }
   }
 }
 
 ngOnChanges(){
   if(this.data && this.svg) {
     this.svg.selectAll('*').remove();
-    this.makeChart();
+    if(this.data) {
+      this.makeChart();
+    }
     }
   }
 

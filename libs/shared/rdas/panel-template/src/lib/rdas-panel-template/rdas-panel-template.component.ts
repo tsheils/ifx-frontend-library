@@ -21,7 +21,7 @@ export class RdasPanelTemplateComponent {
   @Input() filters!: FilterCategory[] | undefined;
   @Input() _id!: string;
   @Input() message?: string;
-  @Input() count: number = 0;
+  @Input() count = 0;
   @Input() showPagination = true;
   @Output() listChange: EventEmitter< { [key: string]: unknown }> = new EventEmitter< { [key: string]: unknown }>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;

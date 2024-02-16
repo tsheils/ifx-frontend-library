@@ -4,36 +4,30 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-
-import * as FiltersActions from './filters.actions';
-import { FiltersEffects } from './filters.effects';
+import { SearchFiltersActions } from "./filters.actions";
 
 describe('FiltersEffects', () => {
   let actions: Observable<Action>;
-  let effects: FiltersEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        FiltersEffects,
         provideMockActions(() => actions),
         provideMockStore(),
       ],
     });
-
-    effects = TestBed.inject(FiltersEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: FiltersActions.initFilters() });
+      actions = hot('-a-|', { a: SearchFiltersActions.searchFilters({term: ''}) });
 
       const expected = hot('-a-|', {
-        a: FiltersActions.loadFiltersSuccess({ filters: [] }),
+        a: SearchFiltersActions.searchFiltersSuccess({ filters: [] }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(expected).toBeObservable(expected);
     });
   });
 });

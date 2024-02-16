@@ -39,7 +39,7 @@ export class ArticleDetailsDisplayComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (this.article.annotations) {
+    if (this.article && this.article.annotations) {
       this.article.annotations.forEach((annotation: PubtatorAnnotation) => {
         if (annotation.text) {
           if (this.annotationsMap.has(annotation.infons_type)) {

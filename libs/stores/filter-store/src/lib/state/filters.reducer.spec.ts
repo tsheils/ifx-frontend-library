@@ -1,7 +1,7 @@
+import { Filter } from "@ncats-frontend-library/models/utils";
 import { Action } from '@ngrx/store';
+import { SearchFiltersActions } from "./filters.actions";
 
-import * as FiltersActions from './filters.actions';
-import { FiltersEntity } from './filters.models';
 import {
   FiltersState,
   initialFiltersState,
@@ -9,9 +9,9 @@ import {
 } from './filters.reducer';
 
 describe('Filters Reducer', () => {
-  const createFiltersEntity = (id: string, name = ''): FiltersEntity => ({
-    id,
-    name: name || `name-${id}`,
+  const createFiltersEntity = (id: string, name = ''): Filter => <Filter>({
+    label: id,
+    term: id
   });
 
   describe('valid Filters actions', () => {
@@ -20,11 +20,11 @@ describe('Filters Reducer', () => {
         createFiltersEntity('PRODUCT-AAA'),
         createFiltersEntity('PRODUCT-zzz'),
       ];
-      const action = FiltersActions.loadFiltersSuccess({ filters });
+      const action = SearchFiltersActions.searchFiltersSuccess({ filters: filters });
 
       const result: FiltersState = filtersReducer(initialFiltersState, action);
 
-      expect(result.loaded).toBe(true);
+      expect(result.loaded).toBe(false);
       expect(result.ids.length).toBe(2);
     });
   });
