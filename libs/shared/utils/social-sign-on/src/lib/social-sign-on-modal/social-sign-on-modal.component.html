@@ -6,13 +6,13 @@
 <div class="row centered-row">
   <mat-list class="buttons-list">
     <mat-list-item>
-      <div (click)="login('google')" class="login-button google">
+      <div matRipple (click)="login('google')" class="login-button google">
         <img src="./assets/social-sign-on/ggl.png" class="login-icon" />
         &nbsp; &nbsp; Sign In with Google
       </div>
     </mat-list-item>
     <mat-list-item>
-      <div (click)="login('facebook')" class="login-button facebook">
+      <div matRipple (click)="login('facebook')" class="login-button facebook">
         <img src="./assets/social-sign-on/fbk.png" class="login-icon" />
         &nbsp; &nbsp; Sign In with Facebook
       </div>
@@ -42,7 +42,7 @@
         </div>
       </mat-list-item >-->
     <mat-list-item>
-      <div (click)="loginEmail()" class="login-button primary-background">
+      <div matRipple (click)="loginEmail()" class="login-button primary-background">
         <mat-icon class="login-icon">lock</mat-icon>
         &nbsp; &nbsp; Use an Email and Password
       </div>

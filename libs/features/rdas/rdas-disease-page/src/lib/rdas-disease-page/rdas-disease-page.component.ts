@@ -25,9 +25,10 @@ import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { DiseaseDisplayComponent, DiseaseHeaderComponent } from "@ncats-frontend-library/shared/rdas/disease-display";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
+import { Store } from "@ngrx/store";
 import {
-  DiseasesFacade,
-} from '@ncats-frontend-library/stores/disease-store';
+  DiseaseSelectors
+} from "@ncats-frontend-library/stores/disease-store";
 
 @Component({
   selector: 'ncats-frontend-library-rdas-disease-page',
@@ -51,6 +52,9 @@ import {
   ],
 })
 export class RdasDiseasePageComponent implements OnInit {
+  private readonly store = inject(Store);
+  private readonly route = inject(ActivatedRoute);
+
   @Input() disease!: Signal<Disease | undefined>;
   @Input() diseaseFilters!: Signal<FilterCategory[] | undefined>;
   @Input() id!: string;
@@ -69,18 +73,17 @@ export class RdasDiseasePageComponent implements OnInit {
   );
 
   constructor(
-    private diseaseFacade: DiseasesFacade,
     private changeRef: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
-    private router: Router,
-    private route: ActivatedRoute
+    private router: Router
   ) {
 
   }
 
   ngOnInit(): void {
-;    this.disease = this.diseaseFacade.selectedDiseases$;
-    this.diseaseFilters = this.diseaseFacade.diseaseFilters$;
+    this.disease = this.store.selectSignal(DiseaseSelectors.getSelected);
+    this.diseaseFilters = this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
+
     if (this.route.snapshot.fragment) {
       this.activeElement = this.route.snapshot.fragment;
     }
@@ -96,10 +99,18 @@ export class RdasDiseasePageComponent implements OnInit {
   }
 
     setUrl(event: {fragment: string, params?: { [key: string]: unknown }}) {
-    this.router.navigate(['disease'], {
-      fragment: event.fragment,
-      queryParams: {id: this.id, ...event.params}
-    });
+     if(this.route.snapshot.fragment && (this.route.snapshot.fragment === event.fragment)) {
+       this.router.navigate(['disease'], {
+         fragment: event.fragment,
+         queryParams: {id: this.id, ...event.params},
+         onSameUrlNavigation: "ignore"
+       });
+     } else {
+       this.router.navigate(['disease'], {
+         fragment: event.fragment,
+         queryParams: {id: this.id, ...event.params}
+       });
+     }
   }
 
   setActiveElement(event: string) {

@@ -1,12 +1,13 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
-  Component,
-  EventEmitter,
+  Component, DestroyRef,
+  EventEmitter, inject,
   OnDestroy,
   OnInit,
   Output, ViewChild
 } from "@angular/core";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
@@ -19,12 +20,11 @@ import { MatInputModule } from '@angular/material/input';
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
 import {
-  clearTypeahead,
-  DiseaseService,
-  DiseasesFacade,
-  searchDiseases,
-} from '@ncats-frontend-library/stores/disease-store';
-import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
+  DiseaseSelectors,
+  SearchDiseasesActions
+} from "@ncats-frontend-library/stores/disease-store";
+import { Store } from "@ngrx/store";
+import { debounceTime, distinctUntilChanged, map, Subject, takeUntil } from "rxjs";
 
 @Component({
   selector: 'ncats-frontend-library-rdas-search',
@@ -43,6 +43,8 @@ import { debounceTime, distinctUntilChanged, Subject, takeUntil } from 'rxjs';
   standalone: true,
 })
 export class RdasSearchComponent implements OnInit, OnDestroy {
+  private readonly diseaseStore = inject(Store);
+  destroyRef = inject(DestroyRef);
   /**
    * Behaviour subject to allow extending class to unsubscribe on destroy
    * @type {Subject<any>}
@@ -58,22 +60,23 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
   @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
 
   constructor(
-    private changeRef: ChangeDetectorRef,
-    private diseaseService: DiseaseService,
-    private diseaseFacade: DiseasesFacade
+    private changeRef: ChangeDetectorRef
   ) {
 
   }
 
   ngOnInit(): void {
-    this.diseaseFacade.searchDiseases$
-      .pipe(takeUntil(this.ngUnsubscribe))
-      .subscribe((res) => {
-        if (res && res.length) {
-          this.options = res.map((disease) => new Disease(disease));
-          this.changeRef.markForCheck();
-        }
-      });
+    this.diseaseStore.select(DiseaseSelectors.searchDiseasesEntities)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+          map((res) => {
+            if (res && res.length) {
+              this.options = res.map((disease) => new Disease(disease));
+              this.changeRef.markForCheck();
+            }
+          })
+      )
+          .subscribe();
 
     this.searchFormCtl.valueChanges
       .pipe(
@@ -83,7 +86,7 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
       )
       .subscribe((term) => {
         if (term && term.length) {
-          this.diseaseFacade.dispatch(searchDiseases({ term: term }));
+          this.diseaseStore.dispatch(SearchDiseasesActions.searchDiseases({ term: term }));
         }
       });
   }
@@ -105,7 +108,7 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
    * clean up on leaving component
    */
   ngOnDestroy() {
-    this.diseaseFacade.dispatch(clearTypeahead());
+    this.diseaseStore.dispatch(SearchDiseasesActions.clearTypeahead());
     this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
   }

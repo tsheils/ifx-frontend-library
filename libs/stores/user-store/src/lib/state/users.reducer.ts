@@ -1,11 +1,16 @@
 import { User } from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import * as UsersActions from './users.actions';
+import {
+  LoginEmailUserActions,
+  LoginLinkActions, RdasUsersInitActions,
+  RegisterEmailUserActions,
+  ResetPasswordEmailActions, UpdateUserActions, UserLoginActions
+} from "./users.actions";
 
-export const USERS_FEATURE_KEY = 'users';
+export const USERS_FEATURE_KEY = 'user';
 
-export interface State extends EntityState<User> {
+export interface UserState extends EntityState<User> {
   selectedId?: string | number; // which Users record has been selected
   loaded: boolean; // has the Users list been loaded
   error?: string | null; // last known error (if any)
@@ -13,24 +18,27 @@ export interface State extends EntityState<User> {
 }
 
 export interface UsersPartialState {
-  readonly [USERS_FEATURE_KEY]: State;
+  readonly [USERS_FEATURE_KEY]: UserState;
 }
 
 export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>({
   selectId: (user) => user.uid,
 });
 
-export const initialState: State = usersAdapter.getInitialState({
+export const initialState: UserState = usersAdapter.getInitialState({
   // set initial required properties
-  loaded: false,
+  loaded: false
 });
 
-export const usersReducer = createReducer(
+ const reducer = createReducer(
   initialState,
   on(
-    UsersActions.loginUserSuccess,
-    UsersActions.fetchUserProfileSuccess,
-    UsersActions.updateUserSubscriptionsSuccess,
+    RdasUsersInitActions.initSuccess,
+    LoginEmailUserActions.loginEmailUserSuccess,
+    RegisterEmailUserActions.registerEmailUserSuccess,
+    UserLoginActions.loginUserSuccess,
+  //  UserLoginActions.fetchUserProfileSuccess,
+    UpdateUserActions.updateUserSubscriptionsSuccess,
     (state, { user }) =>
       usersAdapter.setOne(user, {
         ...state,
@@ -38,22 +46,28 @@ export const usersReducer = createReducer(
         selectedId: user.uid,
       })
   ),
-  on(UsersActions.resetPasswordEmailSuccess, (state) => {
+  on(ResetPasswordEmailActions.resetPasswordEmailSuccess, (state) => {
     return { ...state, email: 'reset' };
   }),
-  on(UsersActions.loginLinkUserSuccess, (state, { email }) => ({
+  on(LoginLinkActions.loginLinkUserSuccess, (state, { email }) => ({
     ...state,
     email: email,
   })),
-  on(UsersActions.logoutUserSuccess, (state) => usersAdapter.removeAll(state)),
+  on(UserLoginActions.logoutUserSuccess, (state) => {
+    return usersAdapter.removeAll(state)
+  }),
+
   on(
-    UsersActions.loginUserFailure,
-    UsersActions.loginEmailUserFailure,
-    UsersActions.loginLinkUserFailure,
+    RdasUsersInitActions.initFailure,
+    UserLoginActions.loginUserFailure,
+    UpdateUserActions.updateUserSubscriptionsFailure,
+    RegisterEmailUserActions.registerEmailUserFailure,
+    LoginEmailUserActions.loginEmailUserFailure,
+    LoginLinkActions.loginLinkUserFailure,
     (state, { error }) => ({ ...state, error })
   )
 );
 
-export function reducer(state: State | undefined, action: Action) {
-  return usersReducer(state, action);
+export function usersReducer(state: UserState | undefined, action: Action) {
+  return reducer(state, action);
 }

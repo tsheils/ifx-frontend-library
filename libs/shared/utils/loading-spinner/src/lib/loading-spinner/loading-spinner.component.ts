@@ -10,7 +10,7 @@ import { NgClass } from '@angular/common';
   imports: [NgClass, MatProgressSpinnerModule],
 })
 export class LoadingSpinnerComponent {
-  @Input() isLoaded = false;
+  @Input() isLoaded: boolean|undefined = false;
   @Input() position: 'left' | 'right' | 'center' = 'center';
   @Input() size: 'small' | 'medium' | 'large' = 'large';
   sizes = {

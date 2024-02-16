@@ -1,21 +1,18 @@
 import { CdkScrollable } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
 import { NgOptimizedImage } from "@angular/common";
-import { HttpClient } from '@angular/common/http';
 import {
-  afterNextRender,
   Component,
-  ElementRef, Inject, InjectionToken, PLATFORM_ID,
+  ElementRef,
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-home',
+  selector: 'rdas-home',
   templateUrl: './rdas-home.component.html',
   styleUrls: ['./rdas-home.component.scss'],
   standalone: true,
@@ -37,16 +34,6 @@ export class RdasHomeComponent {
    */
   @ViewChild('details', { read: ElementRef, static: true }) elemRef!: ElementRef;
 data!: unknown;
-
-  constructor(
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
-    private http: HttpClient
-  ) {
-    afterNextRender(
-      () => {
-      })
-  }
 
 /*
   ngOnInit() {

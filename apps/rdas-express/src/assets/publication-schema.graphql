@@ -2,17 +2,17 @@ extend schema @mutation(operations: [])
 scalar JSON
 
 type Article  {
-  DateCreatedRDAS: String!
-  abstractText: String!
-  affiliation: String!
+  DateCreatedRDAS: String
+  abstractText: String
+  affiliation: String
   appearsInJournalVolumes: [JournalVolume!]!
     @relationship(type: "APPEARS_IN", direction: OUT)
   authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
-  citedByCount: BigInt!
-  doi: String!
+  citedByCount: BigInt
+  doi: String
   epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]!
     @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: IN)
-  firstPublicationDate: String!
+  firstPublicationDate: String
   fullTextUrlsContentFor: [FullTextUrl!]!
     @relationship(type: "CONTENT_FOR", direction: IN)
   gardsmentionedIn: [GARD!]! @relationship(type: "MENTIONED_IN", direction: IN)
@@ -27,11 +27,11 @@ type Article  {
   publicationYear: String
   pubType: [String]
   pubmed_evidence: Boolean
-  pubmed_id: String!
+  pubmed_id: String
   pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]!
     @relationship(type: "ANNOTATION_FOR", direction: IN)
   refInOMIM: Boolean
-  source: String!
+  source: String
   substancesSubstanceAnnotatedByPubmed: [Substance!]!
     @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
   title: String!

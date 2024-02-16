@@ -1,23 +1,7 @@
 <div class="centered">
-  @if (!subscribed && userExists) {
-  <button
-    mat-stroked-button
-    (click)="subscribe()"
-    [color]="theme"
-    [disabled]="!userExists"
-  >
-    SUBSCRIBE
-  </button>
-  } @if (!userExists) {
-  <ncats-frontend-library-social-sign-on-button
-    [theme]="theme"
-  ></ncats-frontend-library-social-sign-on-button>
-  }
-  <!--
-  <button mat-stroked-button   (click)="subscribe()" [color]="'warn'">SIGN IN TO SUBSCRIBE</button>
--->
+  @if (user) {
   @if (subscribed) {
-  <button mat-stroked-button [color]="theme" [matMenuTriggerFor]="menu">
+  <button mat-stroked-button [color]=theme [matMenuTriggerFor]="menu" class="subscribed-button">
     <div class="grid-button">
       <div>
         @if (subscriptionSelection.selected.length === 3) {
@@ -35,7 +19,25 @@
       </div>
     </div>
   </button>
+  } @else {
+  <button
+    mat-stroked-button
+    class="subscribe-button"
+    (click)="subscribe()"
+    [color]= theme
+    [disabled]="!user"
+  >
+    SUBSCRIBE
+  </button>
   }
+} @else {
+  <ncats-frontend-library-social-sign-on-button
+    [theme]= theme
+  ></ncats-frontend-library-social-sign-on-button>
+  }
+
+
+
   <mat-menu #menu="matMenu">
     <div mat-menu-item>
       <mat-checkbox

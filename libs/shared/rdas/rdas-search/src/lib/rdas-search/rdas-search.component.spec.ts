@@ -8,7 +8,6 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
   DiseaseService,
-  DiseasesFacade,
   reducer,
 } from '@ncats-frontend-library/stores/disease-store';
 import { StoreModule } from '@ngrx/store';
@@ -34,7 +33,7 @@ describe('RdasSearchComponent', () => {
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer),
       ],
-      providers: [DiseaseService, Apollo, DiseasesFacade],
+      providers: [],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RdasSearchComponent);

@@ -1,8 +1,10 @@
+global.TextEncoder = require("util").TextEncoder;
+global.TextDecoder = require("util").TextDecoder;
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
@@ -31,7 +33,6 @@ describe('SocialSignOnButtonComponent', () => {
         ),
         EffectsModule.forRoot([]),
       ],
-      providers: [UsersFacade],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SocialSignOnButtonComponent);

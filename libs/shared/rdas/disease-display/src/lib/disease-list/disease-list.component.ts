@@ -12,5 +12,4 @@ import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card
 })
 export class DiseaseListComponent {
   @Input() diseases!: Signal<Disease[] | undefined>;
-  @Input() loading = true;
 }

@@ -29,6 +29,17 @@
             }
           ]
         },
+        "testenv": {
+          "optimization": true,
+          "extractLicenses": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/rdas-express/src/environments/environment.ts",
+              "with": "apps/rdas-express/src/environments/environment.test.ts"
+            }
+          ]
+        },
         "local": {
           "optimization": true,
           "extractLicenses": true,
@@ -50,6 +61,9 @@
       "configurations": {
         "production": {
           "buildTarget": "rdas-express:build:production"
+        },
+        "testenv": {
+          "buildTarget": "rdas-express:build:testenv"
         },
         "local": {
           "buildTarget": "rdas-express:build:local"

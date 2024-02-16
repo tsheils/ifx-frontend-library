@@ -1,10 +1,11 @@
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
+import { FetchArticleActions } from "./articles.actions";
 
 import * as ArticleActions from './articles.actions';
 
-export const ARTICLE_STORE_FEATURE_KEY = 'articleStore';
+export const ARTICLE_STORE_FEATURE_KEY = 'articles';
 
 export interface ArticleState extends EntityState<Article> {
   selectedId?: string | number; // which ArticleStore record has been selected
@@ -31,19 +32,14 @@ export const initialState: ArticleState = articlesAdapter.getInitialState({
 
 const reducer = createReducer(
   initialState,
-  on(ArticleActions.initArticleStore, (state) => ({
-    ...state,
-    loaded: false,
-    error: null,
-  })),
-  on(ArticleActions.fetchArticleSuccess, (state, { article }) =>
+  on(FetchArticleActions.fetchArticleSuccess, (state, { article }) =>
     articlesAdapter.setOne(article, {
       ...state,
       selectedId: article.pubmed_id,
       loaded: true,
     })
   ),
-  on(ArticleActions.fetchArticleFailure, (state, { error }) => ({
+  on(FetchArticleActions.fetchArticleFailure, (state, { error }) => ({
     ...state,
     error,
   }))

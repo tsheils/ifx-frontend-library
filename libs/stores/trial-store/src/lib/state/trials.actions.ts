@@ -1,40 +1,28 @@
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
-import { createAction, props } from '@ngrx/store';
+import { createActionGroup, props } from "@ngrx/store";
 
-export const initTrials = createAction('[Trials Page] Init');
 
-export const fetchTrial = createAction(
-  '[Trials/API] fetch Trial',
-  props<{
-    NCTId?: string;
-    options?: { [key: string]: string };
-  }>()
-);
+export const FetchTrialActions = createActionGroup({
+  source: 'Fetch Trial',
+  events: {
+    fetchTrial: props<{
+      NCTId?: string;
+      options?: { [key: string]: string };
+    }>(),
+    fetchTrialSuccess:   props<{ trial: ClinicalTrial }>(),
+    fetchTrialFailure:  props<{ error: string }>()
+  }
+})
 
-export const fetchTrialSuccess = createAction(
-  '[Trials/API] Fetch Trial Success',
-  props<{ trial: ClinicalTrial }>()
-);
+export const LoadTrialsActions = createActionGroup({
+  source: 'Load Trials',
+  events: {
+    loadTrials: props<{
+      top: number;
+      skip: number;
+    }>(),
+    loadTrialsSuccess:   props<{ trials: ClinicalTrial[] }>(),
+    loadTrialsFailure:  props<{ error: string }>()
+  }
+})
 
-export const fetchTrialFailure = createAction(
-  '[Trials/API] Fetch Trial Failure',
-  props<{ error: string | null | undefined }>()
-);
-
-export const loadTrials = createAction(
-  '[Trials/API] Load Trials',
-  props<{
-    top: number;
-    skip: number;
-  }>()
-);
-
-export const loadTrialsSuccess = createAction(
-  '[Trials/API] Load Trials Success',
-  props<{ trials: ClinicalTrial[] }>()
-);
-
-export const loadTrialsFailure = createAction(
-  '[Trials/API] Load Trials Failure',
-  props<{ error: string | null | undefined }>()
-);

@@ -32,7 +32,6 @@ import { HeaderTemplateComponent } from "@ncats-frontend-library/shared/utils/he
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { MobileHeaderTemplateComponent } from "@ncats-frontend-library/shared/utils/mobile-header-template";
 import { SocialSignOnButtonComponent } from "@ncats-frontend-library/shared/utils/social-sign-on";
-import { SharedUtilsFileUploadComponent } from "shared/utils/file-upload";
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -50,8 +49,7 @@ import { SharedUtilsFileUploadComponent } from "shared/utils/file-upload";
     CdkScrollableModule,
     ScrollingModule,
     LoadingSpinnerComponent,
-    MobileHeaderTemplateComponent,
-    SharedUtilsFileUploadComponent
+    MobileHeaderTemplateComponent
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -94,7 +92,6 @@ export class AppComponent {
     @Inject(DOCUMENT) private document: Document,
     private scrollDispatcher: ScrollDispatcher,
     private router: Router,
-   // private userFacade: UsersFacade,
     private changeRef: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver
   ) {}
@@ -108,14 +105,7 @@ export class AppComponent {
         this.changeRef.markForCheck();
       });
 
-    /*this.userFacade.user$
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res) => {
-        if (res) {
-          this.user = res[0];
-        }
-      });
-*/
+
     /**
      * This shows loading spinner for page navigation - usually navigation is finished before the page is finished loading
      */

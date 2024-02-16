@@ -15,7 +15,7 @@ describe('Users Selectors', () => {
 
   beforeEach(() => {
     state = {
-      users: usersAdapter.setAll(
+      user: usersAdapter.setAll(
         [
           createUsersEntity('PRODUCT-AAA'),
           createUsersEntity('PRODUCT-BBB'),
@@ -27,7 +27,7 @@ describe('Users Selectors', () => {
           error: ERROR_MSG,
           loaded: true,
         }
-      ),
+      )
     };
   });
 

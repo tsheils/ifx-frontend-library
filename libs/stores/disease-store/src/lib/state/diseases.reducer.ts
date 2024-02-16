@@ -2,14 +2,18 @@ import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
 import { FilterCategory, Page } from "@ncats-frontend-library/models/utils";
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-
-import * as DiseasesActions from './diseases.actions';
+import {
+  BrowseDiseaseListActions,
+  FetchDiseaseActions,
+  FetchDiseaseListActions,
+  SearchDiseasesActions
+} from "./diseases.actions";
 
 export const DISEASES_FEATURE_KEY = 'diseases';
 
 export interface State extends EntityState<Disease> {
   selectedId?: string | number; // which Diseases record has been selected
-  loaded: boolean; // has the Diseases list been loaded
+  loaded: boolean | undefined; // has the Diseases list been loaded
   error?: string | null; // last known error (if any)
   typeahead?: Disease[];
   disease?: Disease;
@@ -36,26 +40,30 @@ export const initialState: State = diseasesAdapter.getInitialState({
   typeahead: [],
 });
 
-export const diseasesReducer = createReducer(
+export const reducer = createReducer(
   initialState,
   on(
-    DiseasesActions.init,
-    DiseasesActions.loadDiseases,
-    DiseasesActions.fetchDisease,
-    DiseasesActions.loading,
-    (state) => ({ ...state, loaded: false, error: null })
+    BrowseDiseaseListActions.fetchDiseaseList,
+    BrowseDiseaseListActions.setLoading,
+    FetchDiseaseActions.fetchDisease,
+    (state) =>  {
+      return { ...state,
+        loaded: false,
+        error: null
+      }
+    }
   ),
 
-  on(DiseasesActions.loadDiseaseTreeSuccess, (state, { diseases }) => ({
+  on(BrowseDiseaseListActions.fetchDiseaseTreeSuccess, (state, { diseases }) => ({
     ...state,
-    tree: diseases,
+    tree: diseases
   })),
 
-  on(DiseasesActions.loadDiseasesSuccess, (state, { diseases, page }) =>
-    diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true })
+  on(BrowseDiseaseListActions.fetchDiseaseListSuccess, (state, { diseases, page }) =>
+    diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true})
   ),
 
-  on(DiseasesActions.fetchDiseaseSuccess, (state, { disease }) =>
+  on(FetchDiseaseActions.fetchDiseaseSuccess, (state, { disease }) =>
     diseasesAdapter.setOne(disease, {
       ...state,
       selectedId: disease.gardId,
@@ -63,43 +71,42 @@ export const diseasesReducer = createReducer(
     })
   ),
 
-  on(DiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => ({
+  on(SearchDiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => ({
     ...state,
     typeahead: typeahead,
-    loaded: true,
   })),
 
-  on(DiseasesActions.fetchDiseaseListSuccess, (state, { diseases }) => ({
+  on(FetchDiseaseListActions.fetchDiseaseListSuccess, (state, { diseases }) => ({
     ...state,
     subscriptions: diseases,
     loaded: true,
   })),
 
-  on(DiseasesActions.fetchDiseaseFiltersSuccess, (state, { filters }) => ({
+  on(FetchDiseaseActions.fetchDiseaseFiltersSuccess, (state, { filters }) => ({
     ...state,
     diseaseFilters: filters,
-    loaded: true,
   })),
 
-  on(DiseasesActions.clearTypeahead, (state) => ({
+  on(SearchDiseasesActions.clearTypeahead, (state) => ({
     ...state,
-    typeahead: [],
-    loaded: true,
+    typeahead: []
   })),
 
   on(
-    DiseasesActions.loadDiseasesFailure,
-    DiseasesActions.searchDiseasesFailure,
-    DiseasesActions.fetchDiseaseFailure,
-    DiseasesActions.fetchDiseaseListFailure,
-    DiseasesActions.loadDiseaseTreeFailure,
+    BrowseDiseaseListActions.fetchDiseaseListFailure,
+    SearchDiseasesActions.searchDiseasesFailure,
+    FetchDiseaseActions.fetchDiseaseFailure,
+    FetchDiseaseListActions.fetchDiseaseListFailure,
+    FetchDiseaseActions.fetchDiseaseFiltersFailure,
+    BrowseDiseaseListActions.fetchDiseaseTreeFailure,
     (state, { error }) => ({
       ...state,
+      loaded: false,
       error,
     })
   )
 );
 
-export function reducer(state: State | undefined, action: Action) {
-  return diseasesReducer(state, action);
+export function diseasesReducer(state: State | undefined, action: Action) {
+  return reducer(state, action);
 }

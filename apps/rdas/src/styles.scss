@@ -229,6 +229,9 @@ span.search-highlight {
   fill: mat.get-color-from-palette($app-primary);
 }
 
+.fill-spinner > .progress-bar-container {
+  min-height: 60vh
+}
 
 
 button.mat-ripple.mat-mdc-tab-header-pagination.mat-mdc-tab-header-pagination-after {

@@ -2,10 +2,11 @@ import {
   provideHttpClient, withFetch,
   withInterceptorsFromDi
 } from "@angular/common/http";
-import { ApplicationConfig, importProvidersFrom } from '@angular/core';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFireAuthModule, PERSISTENCE } from '@angular/fire/compat/auth';
-import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, inject } from "@angular/core";
+import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
+import { getAuth, provideAuth } from "@angular/fire/auth";
+import { getFirestore, provideFirestore } from "@angular/fire/firestore";
+import { getStorage, provideStorage } from "@angular/fire/storage";
 import {
   BrowserModule,
   provideClientHydration,
@@ -19,23 +20,47 @@ import {
   withInMemoryScrolling,
   withPreloading, withViewTransitions
 } from "@angular/router";
-import { DISEASES_FEATURE_KEY, DiseasesFacade, diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
-import { FiltersFacade } from '@ncats-frontend-library/stores/filter-store';
-import { GrantsFacade } from '@ncats-frontend-library/stores/grant-store';
-import { TrialsFacade } from '@ncats-frontend-library/stores/trial-store';
-import { USERS_FEATURE_KEY, UsersFacade, usersReducer } from "@ncats-frontend-library/stores/user-store";
-import { EffectsModule, provideEffects } from "@ngrx/effects";
-import { routerReducer, StoreRouterConnectingModule } from '@ngrx/router-store';
-import { provideState, provideStore, StoreModule } from "@ngrx/store";
-import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { ArticlesFacade } from '@ncats-frontend-library/stores/article-store';
+import {
+  DiseaseEffects, DISEASES_FEATURE_KEY,
+  diseasesReducer
+} from "@ncats-frontend-library/stores/disease-store";
+import {
+  FILTERS_FEATURE_KEY,
+  filtersReducer
+} from "@ncats-frontend-library/stores/filter-store";
+import {  grantsReducer } from "@ncats-frontend-library/stores/grant-store";
+import { TrialEffects, trialsReducer } from "@ncats-frontend-library/stores/trial-store";
+import {
+  USERS_FEATURE_KEY,
+  usersReducer,
+  UserEffects,
+  RdasUsersInitActions
+} from "@ncats-frontend-library/stores/user-store";
+import { provideEffects } from "@ngrx/effects";
+import { provideRouterStore, routerReducer } from "@ngrx/router-store";
+import { provideState, provideStore, Store } from "@ngrx/store";
+import { provideStoreDevtools } from "@ngrx/store-devtools";
+import {  articlesReducer } from "@ncats-frontend-library/stores/article-store";
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
 import { GraphQLModule } from './graphql.module';
 
+export function rdasInit(store = inject(Store)) {
+  return () => {
+    store.dispatch(RdasUsersInitActions.init());
+  };
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    BrowserModule,
+    {
+      provide: APP_INITIALIZER,
+      useFactory: rdasInit,
+      deps: [],
+      multi: true,
+    },
     provideRouter(
       routes,
       withViewTransitions(),
@@ -47,43 +72,31 @@ export const appConfig: ApplicationConfig = {
       }),
       withPreloading(PreloadAllModules)
     ),
-    provideEffects(),
-    provideStore(),
+  //  provideEffects([UserEffects, DiseasesEffects]),
+    provideStore({
+      router: routerReducer,
+      user: usersReducer,
+    //  articles: articlesReducer,
+    //  trials: trialsReducer,
+    //  grants: grantsReducer,
+   //   filters: filtersReducer,
+      diseases: diseasesReducer
+    }),
+    provideEffects([UserEffects, DiseaseEffects]),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),
     provideState(USERS_FEATURE_KEY, usersReducer),
     importProvidersFrom(
-      BrowserModule,
-      AngularFireModule.initializeApp(environment.firebase),
-      AngularFireAuthModule,
-      AngularFirestoreModule,
-      StoreModule.forRoot(
-        {
-          router: routerReducer
-        },
-        {
-          metaReducers: !environment.production ? [] : [],
-          runtimeChecks: {
-            strictActionImmutability: true,
-            strictStateImmutability: true
-          }
-        }
-      ),
-      EffectsModule.forRoot([]),
-      StoreRouterConnectingModule.forRoot(),
-      !environment.production ? StoreDevtoolsModule.instrument() : [],
-      GraphQLModule
+      GraphQLModule,
+      provideFirebaseApp(() => initializeApp(environment.firebase)),
+      provideAuth(() => getAuth()),
+      provideFirestore(() => getFirestore()),
+      provideStorage(() => getStorage()),
     ),
-    { provide: PERSISTENCE, useValue: "local" },
     provideAnimations(),
     provideAnimationsAsync(),
-
+    provideRouterStore(),
+    provideStoreDevtools(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideClientHydration(),
-    UsersFacade,
-    DiseasesFacade,
-    ArticlesFacade,
-    FiltersFacade,
-    GrantsFacade,
-    TrialsFacade
   ]
 };

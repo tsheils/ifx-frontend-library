@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { ApolloQueryResult } from "@apollo/client";
 import {
   Article,
@@ -7,57 +7,44 @@ import {
 } from "@ncats-frontend-library/models/rdas";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { switchMap, catchError, of, filter, map } from "rxjs";
-import { ArticleService } from '../article.service';
-import * as ArticleActions from './articles.actions';
+import {  filter, map, mergeMap } from "rxjs";
+import { ArticleService } from "../article.service";
+import { FetchArticleActions } from "./articles.actions";
 
-@Injectable()
-export class ArticlesEffects {
-  constructor(
-    private articleService: ArticleService
-  ) {}
 
-  init$ = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(ArticleActions.initArticleStore),
-      switchMap(() => of(ArticleActions.loadArticlesSuccess({ articles: [] }))),
-      catchError((error) => {
-        console.error('Error', error);
-        return of(ArticleActions.loadArticlesFailure({ error }));
-      })
-    )
-  );
-
-  loadArticle$ = createEffect(() =>
-    inject(Actions).pipe(
+  export const loadArticle$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    articleService = inject(ArticleService)
+  ) => {
+    return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/articles') &&
           r.payload.routerState.url.startsWith('/article')
       ),
-      map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
-      ),
-      switchMap((params: { pmid?: string }) => {
+      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
+      mergeMap((params: { pmid?: string }) => {
         ARTICLEDETAILSVARIABLES.articleWhere.pubmed_id = params.pmid;
-        return this.articleService
+        return articleService
           .fetchArticles(FETCHARTICLEDETAILS, ARTICLEDETAILSVARIABLES)
           .pipe(
-              map((articleData: ApolloQueryResult<unknown>) => {
-                const data: {articles: Article[]} = articleData.data as {articles: Article[]};
-                if (data) {
+            map((articleData: ApolloQueryResult<unknown>) => {
+              const data: { articles: Article[] } = articleData.data as { articles: Article[] };
+              if (data) {
                 const article: Article = new Article(
                   data.articles[0]
                 );
-                return ArticleActions.fetchArticleSuccess({ article: article });
+                return FetchArticleActions.fetchArticleSuccess({ article: article });
               } else
-                return ArticleActions.fetchArticleFailure({
+                return FetchArticleActions.fetchArticleFailure({
                   error: 'No Disease found',
                 });
             })
           );
       })
     )
-  );
-}
+  },{functional:true}
+  )
+

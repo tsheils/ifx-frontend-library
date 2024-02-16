@@ -1,225 +1,257 @@
-import { inject, Injectable } from "@angular/core";
-import { User } from '@ncats-frontend-library/models/utils';
-import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { Store } from '@ngrx/store';
-import firebase from 'firebase/compat';
-import { map, mergeMap, tap, withLatestFrom } from 'rxjs';
-import { UserService } from '../user.service';
+import { inject } from "@angular/core";
+import { UserCredential, UserInfo } from "@firebase/auth";
+import { DocumentSnapshot } from "@firebase/firestore";
+import { User } from "@ncats-frontend-library/models/utils";
+import { createEffect, Actions, concatLatestFrom, ofType } from "@ngrx/effects";
+import { Store } from "@ngrx/store";
+import { map, mergeMap, tap } from "rxjs";
+import { LocalStorageService } from "../local-storage.service";
+import { UserService } from "../user.service";
+import {
+  LoginEmailUserActions,
+  LoginLinkActions, RdasUsersInitActions,
+  RegisterEmailUserActions,
+  ResetPasswordEmailActions, UpdateUserActions, UserLoginActions
+} from "./users.actions";
 
-import * as UsersActions from './users.actions';
-import { UsersPartialState } from './users.reducer';
+import { getSelected } from "./users.selectors";
 
-@Injectable()
-export class UsersEffects {
-  constructor(
-    private userService: UserService,
-    private store: Store<UsersPartialState>
-  ) {}
-
-  init = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.init),
+export const init = createEffect(
+  (
+    actions$ = inject(Actions),
+    localStorageService = inject(LocalStorageService)
+  ) => {
+    return actions$.pipe(
+      ofType(RdasUsersInitActions.init),
       map(() => {
-        const user = localStorage.getItem('userEntity');
+        const user: string | null = localStorageService.fetchFromStorage('userEntity');
         if (user) {
-          return UsersActions.loginUserSuccess({ user: JSON.parse(user) });
+          return RdasUsersInitActions.initSuccess({ user: JSON.parse(<string>user) as User });
         } else {
-          return UsersActions.loginUserFailure({ error: '' });
+          return RdasUsersInitActions.initFailure({ error: "" });
         }
       })
-    )
-  );
+    );
+  }, { functional: true }
+);
 
-  loginUser = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.loginUser),
+export const loginUser = createEffect(
+  (
+    actions$ = inject(Actions),
+    userService = inject(UserService)
+  ) => {
+    return actions$.pipe(
+      ofType(UserLoginActions.loginUser),
       mergeMap((action: { provider: string }) => {
-        return this.userService.doLogin(action.provider).pipe(
-          map((res: unknown) => {
-            const data: {user: User} = res as {user: User};
-            if (data) {
-              const u: User = new User({
-                displayName: data.user.displayName,
-                photoURL: data.user.photoURL,
-                uid: data.user.uid,
-              } as Partial<User>);
-
-              return UsersActions.loginUserSuccess({ user: u });
-            } else {
-              return UsersActions.loginUserFailure({ error: 'Login Failed' });
+        return userService.doLogin(action.provider)
+          .pipe(
+          map((res: UserCredential) => {
+              if (res && res.user) {
+                  const tempUser: UserInfo = <unknown>res.user as UserInfo;
+                return UserLoginActions.loginUserSuccess({ user: new User({
+                    displayName: tempUser.displayName, //.users.entities[state.users.selectedId || "null"],
+                    uid: tempUser.uid
+                  }) });
+              } else {
+                return UserLoginActions.loginUserFailure({ error: "Login Failed" });
+              }
             }
-          })
-        );
+            )
+        )
       })
     )
-  );
+  }, { functional: true }
+);
 
-  loginEmailUser = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.loginEmailUser),
+export const loginEmailUser = createEffect(
+  (
+    actions$ = inject(Actions),
+    userService = inject(UserService)
+  ) => {
+    return actions$.pipe(
+      ofType(LoginEmailUserActions.loginEmailUser),
       mergeMap((action: { email: string; pw: string }) => {
-        return this.userService.doEmailLogin(action.email, action.pw).pipe(
-          map((res: unknown) => {
-            const data: {code: string, user: User } = res as {code: string, user: User };
-            if (data.code) {
-              const errMessage: string = this._getErrorMesssage(data.code);
-              return UsersActions.loginEmailUserFailure({ error: errMessage });
+        return userService.doEmailLogin(action.email, action.pw).pipe(
+          map((res: { code: string, user: User }) => {
+            if (res.code) {
+              const errMessage: string = userService.getErrorMesssage(res.code);
+              return LoginEmailUserActions.loginEmailUserFailure({ error: errMessage });
             } else {
-              if (data.user) {
+              if (res.user) {
                 const u: User = new User({
-                  displayName: data.user.displayName,
-                  photoURL: data.user.photoURL,
-                  uid: data.user.uid,
+                  displayName: res.user?.displayName, //.users.entities[state.users.selectedId || "null"],
+                  uid: res.user?.uid
                 });
                 if (u) {
-                  return UsersActions.loginUserSuccess({ user: u });
+                  return LoginEmailUserActions.loginEmailUserSuccess({ user: u });
                 } else {
-                  return UsersActions.loginEmailUserFailure({
-                    error: 'Login Failed',
+                  return LoginEmailUserActions.loginEmailUserFailure({
+                    error: "Login Failed"
                   });
                 }
               } else {
-                return UsersActions.loginEmailUserFailure({
-                  error: 'Login Failed',
+                return LoginEmailUserActions.loginEmailUserFailure({
+                  error: "Login Failed"
                 });
               }
             }
           })
         );
       })
-    )
-  );
+    );
+  }, { functional: true }
+);
 
-  registerEmailUser = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.registerEmailUser),
-      mergeMap((action: { email: string; pw: string }) => {
-        return this.userService.doRegister(action.email, action.pw).pipe(
-          map((res: firebase.auth.UserCredential | null) => {
-            if (res && res.user) {
-              const u: User = new User({
-                displayName: res.user.displayName,
-                photoURL: res.user.photoURL,
-                uid: res.user.uid,
-              } as Partial<User>);
-              return UsersActions.loginUserSuccess({ user: u });
-            } else {
-              return UsersActions.registerEmailUserFailure({
-                error: 'Registration Failed',
-              });
-            }
+
+    export const registerEmailUser = createEffect(
+      (
+        actions$ = inject(Actions),
+        userService = inject(UserService)
+      ) => {
+        return actions$.pipe(
+          ofType(RegisterEmailUserActions.registerEmailUser),
+          mergeMap((action: { email: string; pw: string }) => {
+            return userService.doRegister(action.email, action.pw).pipe(
+              map((res: UserCredential) => {
+                if (res && res.user) {
+                  const u: User = new User({
+                      displayName: res.user.displayName, //.users.entities[state.users.selectedId || "null"],
+                      uid: res.user.uid
+                    });
+                  return RegisterEmailUserActions.registerEmailUserSuccess({ user: u });
+                } else {
+                  return RegisterEmailUserActions.registerEmailUserFailure({
+                    error: "Registration Failed"
+                  });
+                }
+              })
+            );
           })
         );
-      })
-    )
-  );
+      }, { functional: true }
+    );
 
-  loginLinkUser = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.loginLinkUser),
-      mergeMap((action: { email: string }) => {
-        return this.userService.doEmailLinkLogin(action.email).pipe(
-          map((res: unknown) => {
-            if (res) {
-              return UsersActions.loginLinkUserSuccess({ email: action.email });
-            } else {
-              return UsersActions.loginLinkUserFailure({
-                error: 'Login Link Failed',
-              });
-            }
+    export const loginLinkUser = createEffect(
+      (
+        actions$ = inject(Actions),
+        userService = inject(UserService)
+      ) => {
+        return actions$.pipe(
+          ofType(LoginLinkActions.loginLinkUser),
+          mergeMap((action: { email: string }) => {
+            return userService.doEmailLinkLogin(action.email).pipe(
+              map((res: unknown) => {
+                if (res) {
+                  return LoginLinkActions.loginLinkUserSuccess({ email: action.email });
+                } else {
+                  return LoginLinkActions.loginLinkUserFailure({
+                    error: "Login Link Failed"
+                  });
+                }
+              })
+            );
           })
         );
-      })
-    )
-  );
+      }, { functional: true }
+    );
 
-  resetEmailPassword = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.resetPasswordEmail),
-      mergeMap((action: { email: string }) => {
-        return this.userService.doResetEmail(action.email).pipe(
-          map((res: { code: string }) => {
-            if (res && res.code) {
-              const errMessage: string = this._getErrorMesssage(res.code);
-              return UsersActions.loginEmailUserFailure({ error: errMessage });
-            } else {
-              return UsersActions.resetPasswordEmailSuccess();
-            }
+    export const resetEmailPassword = createEffect(
+      (
+        actions$ = inject(Actions),
+        userService = inject(UserService)
+      ) => {
+        return actions$.pipe(
+          ofType(ResetPasswordEmailActions.resetPasswordEmail),
+          mergeMap((action: { email: string }) => {
+            return userService.doResetEmail(action.email).pipe(
+              map((res: { code: string }) => {
+                if (res && res.code) {
+                  const errMessage: string = userService.getErrorMesssage(res.code);
+                  return ResetPasswordEmailActions.resetPasswordEmailFailure({ error: errMessage });
+                } else {
+                  return ResetPasswordEmailActions.resetPasswordEmailSuccess();
+                }
+              })
+            );
           })
         );
-      })
-    )
-  );
+      }, { functional: true }
+    );
 
-  logoutUser = createEffect(
-    () =>
-      inject(Actions).pipe(
-        ofType(UsersActions.logoutUser),
-        tap(() => {
-          this.userService.logout();
-          localStorage.removeItem('userEntity');
-          return UsersActions.logoutUserSuccess();
-        })
-      ),
-    { dispatch: false }
-  );
 
-  fetchUserProfile = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.loginUserSuccess),
-      mergeMap((action: { user: User }) => {
-        return this.userService.fetchUserProfile(action.user).pipe(
-          map((res) => {
-            let user: User = action.user;
-            if (res && !res.exists) {
-              this.userService.createUserProfile(user);
-            } else {
-              user = res.data() as User;
-              localStorage.removeItem('userEntity');
-              localStorage.setItem('userEntity', JSON.stringify(user));
-            }
-            return UsersActions.fetchUserProfileSuccess({ user: user });
+    export const logoutUser = createEffect(
+      (
+        actions$ = inject(Actions),
+        userService = inject(UserService),
+        localStorageService = inject(LocalStorageService),
+        store = inject(Store),
+
+      ) => {
+        return actions$.pipe(
+          ofType(UserLoginActions.logoutUser),
+          tap(() => {
+            userService.logout();
+            localStorageService.removeItem("userEntity");
+            store.dispatch(UserLoginActions.logoutUserSuccess())
+          //  return UserLoginActions.logoutUserSuccess();
           })
         );
-      })
-    )
-  );
+      }, { functional: true, dispatch: false }
+    );
 
-  updateUserProfile = createEffect(() =>
-    inject(Actions).pipe(
-      ofType(UsersActions.updateUserSubscriptions),
-      withLatestFrom(this.store),
-      mergeMap(([action, state]) => {
-        const newUser: User = new User({
-          ...state.users.entities[state.users.selectedId || 'null'],
-          subscriptions: action.subscriptions,
-        });
-        return this.userService.updateUserProfile(newUser).pipe(
-          map((res) => {
-            const user = res.data() as User;
-            localStorage.removeItem('userEntity');
-            localStorage.setItem('userEntity', JSON.stringify(res.data()));
-            return UsersActions.updateUserSubscriptionsSuccess({ user: user });
+    export const fetchUserProfile = createEffect(
+      (
+        actions$ = inject(Actions),
+        userService = inject(UserService),
+        localStorageService = inject(LocalStorageService)
+      ) => {
+        return actions$.pipe(
+          ofType(RdasUsersInitActions.initSuccess, UserLoginActions.loginUserSuccess, LoginEmailUserActions.loginEmailUserSuccess, RegisterEmailUserActions.registerEmailUserSuccess),
+          mergeMap((action: { user: User }) => {
+            return userService.fetchUserProfile(action.user)
+              .pipe(
+                map((res: DocumentSnapshot) => {
+                  let user: User = action.user;
+                  if (res && !res.exists) {
+                    userService.createUserProfile(user);
+                  } else {
+                    user = res.data() as User;
+                    localStorageService.removeItem("userEntity");
+                    localStorageService.setItem("userEntity", JSON.stringify(user));
+                  }
+                  return UserLoginActions.fetchUserProfileSuccess({ user: user });
+                })
+              );
           })
         );
-      })
-    )
-  );
+      }, { functional: true }
+    );
 
-  _getErrorMesssage(code: string): string {
-    switch (code) {
-      case 'auth/user-not-found': {
-        return 'User not found. Please double check your email address';
-      }
-      case 'auth/wrong-password': {
-        return 'Invalid password';
-      }
-      case 'auth/invalid-email': {
-        return 'Invalid email';
-      }
-      default: {
-        return 'Unable to login with these credentials';
-      }
-    }
-  }
-}
+    export const updateUserProfile = createEffect(
+      (
+        actions$ = inject(Actions),
+        userService = inject(UserService),
+        store = inject(Store),
+        localStorageService = inject(LocalStorageService)
+      ) => {
+        return actions$.pipe(
+          ofType(UpdateUserActions.updateUserSubscriptions),
+          concatLatestFrom(() => store.select(getSelected)),
+          mergeMap(([action, state]) => {
+            const newUser: User = new User({
+              displayName: state?.displayName, //.users.entities[state.users.selectedId || "null"],
+              uid: state?.uid,
+              subscriptions: action.subscriptions
+            });
+            return userService.updateUserProfile(newUser).pipe(
+              map((res: any) => {
+                const user = res.data() as User;
+                localStorageService.removeItem("userEntity");
+                localStorageService.setItem("userEntity", JSON.stringify(user));
+                return UpdateUserActions.updateUserSubscriptionsSuccess({ user: user });
+              })
+            );
+          })
+        );
+      }, { functional: true }
+    );

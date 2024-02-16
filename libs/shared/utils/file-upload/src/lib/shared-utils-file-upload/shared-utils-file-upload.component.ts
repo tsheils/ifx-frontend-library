@@ -26,8 +26,8 @@ export class SharedUtilsFileUploadComponent {
 
   onFileSelected(event: Event) {
     const target = (event.target as HTMLInputElement);
-    if(target && target.files.length) {
-      this.file = target.files[0];
+    if (target && target?.files?.length) {
+      this.file = target?.files[0];
       if (this.file) {
         this.fileName = this.file.name;
         this.ref.markForCheck();

@@ -4,36 +4,35 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-
-import * as ArticleStoreActions from './articles.actions';
-import { ArticlesEffects } from './articles.effects';
+import { LoadArticlesActions } from "./articles.actions";
+import { loadArticle$ } from "./articles.effects";
+import * as ArticleEffects from './articles.effects';
 
 describe('ArticleStoreEffects', () => {
   let actions: Observable<Action>;
-  let effects: ArticlesEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [],
       providers: [
-        ArticlesEffects,
+        ArticleEffects,
         provideMockActions(() => actions),
         provideMockStore(),
       ],
     });
 
-    effects = TestBed.inject(ArticlesEffects);
+   // effects = TestBed.inject(ArticleEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: ArticleStoreActions.initArticleStore() });
+      actions = hot('-a-|', { a: LoadArticlesActions.loadArticles });
 
       const expected = hot('-a-|', {
-        a: ArticleStoreActions.loadArticleStoreSuccess({ articleStore: [] }),
+        a: LoadArticlesActions.loadArticlesSuccess({ articles: [] }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(loadArticle$).toBeObservable(expected);
     });
   });
 });

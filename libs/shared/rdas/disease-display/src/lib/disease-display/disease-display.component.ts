@@ -63,13 +63,15 @@ import { MatCardModule } from '@angular/material/card';
     RdasPanelTemplateComponent
   ],
 })
-export class DiseaseDisplayComponent implements OnInit, AfterViewInit, OnChanges {
+export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
   @ViewChildren(RdasPanelTemplateComponent) templates!: QueryList<RdasPanelTemplateComponent>;
-
+  private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
+
   @Input() disease!: Signal<Disease | undefined>;
   @Input() filters!: Signal<FilterCategory[] | undefined>;
+  @Input() fragment!: string;
   @Input() offset!: string;
   @Input() id!: string;
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
@@ -103,7 +105,6 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit, OnChanges
   constructor(
     private changeRef: ChangeDetectorRef,
     private router: Router,
-    private route: ActivatedRoute,
     public scroller: ViewportScroller,
     private scrollDispatcher: ScrollDispatcher,
     private breakpointObserver: BreakpointObserver
@@ -148,9 +149,9 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit, OnChanges
     }
   }
 
-  ngOnChanges() {
+/*  ngOnChanges() {
     this.changeRef.detectChanges();
-  }
+  }*/
 
   fetchList(
     params: { [key: string]: unknown },

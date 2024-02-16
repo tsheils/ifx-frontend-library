@@ -154,7 +154,8 @@ $app-theme: mat.define-light-theme(
     color: (
       primary: $app-primary,
       accent: $app-accent,
-      warn: mat.define-palette($rdas-white),
+      white: mat.define-palette($rdas-white),
+      warn: $app-warn,
     ),
     typography: mat.define-typography-config(),
     density: 0,

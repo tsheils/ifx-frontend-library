@@ -1,6 +1,7 @@
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
+import { FetchTrialActions, LoadTrialsActions } from "./trials.actions";
 
 import * as TrialsActions from './trials.actions';
 
@@ -30,16 +31,11 @@ export const initialTrialsState: TrialsState = trialsAdapter.getInitialState({
 
 const reducer = createReducer(
   initialTrialsState,
-  on(TrialsActions.initTrials, (state) => ({
-    ...state,
-    loaded: false,
-    error: null,
-  })),
-  on(TrialsActions.loadTrialsSuccess, (state, { trials }) =>
+  on(LoadTrialsActions.loadTrialsSuccess, (state, { trials }) =>
     trialsAdapter.setAll(trials, { ...state, loaded: true })
   ),
 
-  on(TrialsActions.fetchTrialSuccess, (state, { trial }) =>
+  on(FetchTrialActions.fetchTrialSuccess, (state, { trial }) =>
     trialsAdapter.setOne(trial, {
       ...state,
       selectedId: trial.NCTId,
@@ -48,8 +44,8 @@ const reducer = createReducer(
   ),
 
   on(
-    TrialsActions.loadTrialsFailure,
-    TrialsActions.fetchTrialFailure,
+    LoadTrialsActions.loadTrialsFailure,
+    FetchTrialActions.fetchTrialFailure,
     (state, { error }) => ({
       ...state,
       error,
