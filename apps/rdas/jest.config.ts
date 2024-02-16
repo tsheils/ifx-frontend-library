@@ -1,4 +1,6 @@
 /* eslint-disable */
+global.TextEncoder = require("util").TextEncoder;
+global.TextDecoder = require("util").TextDecoder;
 export default {
   displayName: 'rdas',
   preset: '../../jest.preset.js',
