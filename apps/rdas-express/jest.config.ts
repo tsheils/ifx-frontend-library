@@ -11,6 +11,7 @@ export default {
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)', '/environment.*'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/rdas-express',
 };

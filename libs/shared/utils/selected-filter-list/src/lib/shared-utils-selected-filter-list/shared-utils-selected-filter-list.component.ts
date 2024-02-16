@@ -23,7 +23,7 @@ export class SharedUtilsSelectedFilterListComponent implements OnInit {
   /**
    * list of selected facets
    */
-  @Input() filters!: Map<string, string[]>;
+  @Input() filters: Map<string, string[]> = new Map<string, string[]>();
   @Output() filterChange: EventEmitter<{ label: string; values: string[] }[]> =
     new EventEmitter<{ label: string; values: string[] }[]>();
 

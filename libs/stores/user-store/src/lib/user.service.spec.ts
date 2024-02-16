@@ -1,8 +1,7 @@
+global.TextEncoder = require("util").TextEncoder;
+global.TextDecoder = require("util").TextDecoder;
 import { TestBed } from '@angular/core/testing';
-import { AngularFireModule } from '@angular/fire/compat';
-import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { COMMON_CONFIG, FIRESTORESTUB } from '../lib/firebase-stubs';
-
+import { Firestore } from "@angular/fire/firestore";
 import { UserService } from './user.service';
 
 describe('UserService', () => {
@@ -10,8 +9,7 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [AngularFireModule.initializeApp(COMMON_CONFIG)],
-      providers: [{ provide: AngularFirestore, useValue: FIRESTORESTUB }],
+      providers: [{provide: Firestore, useValue: {}}]
     });
     service = TestBed.inject(UserService);
   });

@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { Params } from '@angular/router';
 import { ApolloQueryResult, DocumentNode } from "@apollo/client";
 import {
@@ -8,14 +8,12 @@ import {
   PHENOTYPEFILTERS
 } from "@ncats-frontend-library/models/rdas";
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
-import { GrantService } from "@ncats-frontend-library/stores/grant-store";
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import { switchMap, filter, map, combineLatest, ObservableInput, Observable, mergeMap } from "rxjs";
+import { filter, map, combineLatest, ObservableInput, Observable, mergeMap } from "rxjs";
 import { FilterService } from '../filter.service';
 import { FetchFiltersActions } from "./filters.actions";
-import * as FiltersActions from './filters.actions';
 import * as FiltersSelectors from './filters.selectors';
 
 interface FilterResponse {

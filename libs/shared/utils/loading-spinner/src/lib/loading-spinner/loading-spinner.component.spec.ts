@@ -10,8 +10,7 @@ describe('LoadingSpinnerComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [LoadingSpinnerComponent],
-      imports: [BrowserAnimationsModule, MatProgressSpinnerModule],
+      imports: [BrowserAnimationsModule, MatProgressSpinnerModule, LoadingSpinnerComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LoadingSpinnerComponent);

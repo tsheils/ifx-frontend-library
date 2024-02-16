@@ -6,8 +6,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
-import { of } from 'rxjs';
 
 import { ForgotPasswordModalComponent } from './forgot-password-modal.component';
 
@@ -29,7 +27,6 @@ describe('ForgotPasswordModalComponent', () => {
       providers: [
         { provide: MatDialog, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
-        { provide: UsersFacade, useValue: { error$: of(), email$: of() } },
       ],
     }).compileComponents();
 

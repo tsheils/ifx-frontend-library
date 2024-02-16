@@ -1,11 +1,10 @@
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { ApolloQueryResult } from "@apollo/client";
 import {
   Article,
   ARTICLEDETAILSVARIABLES,
   FETCHARTICLEDETAILS
 } from "@ncats-frontend-library/models/rdas";
-import { GrantService } from "@ncats-frontend-library/stores/grant-store";
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {  filter, map, mergeMap } from "rxjs";

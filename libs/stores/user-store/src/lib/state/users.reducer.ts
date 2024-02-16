@@ -7,7 +7,6 @@ import {
   RegisterEmailUserActions,
   ResetPasswordEmailActions, UpdateUserActions, UserLoginActions
 } from "./users.actions";
-import * as UsersActions from './users.actions';
 
 export const USERS_FEATURE_KEY = 'user';
 

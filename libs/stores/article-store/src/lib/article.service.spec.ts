@@ -1,12 +1,14 @@
 import { TestBed } from '@angular/core/testing';
-
+import { Apollo } from 'apollo-angular';
 import { ArticleService } from './article.service';
 
 describe('ArticleService', () => {
   let service: ArticleService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      providers: [Apollo]
+    });
     service = TestBed.inject(ArticleService);
   });
 

@@ -8,7 +8,6 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
 
 import { SocialSignOnModalComponent } from './social-sign-on-modal.component';
 
@@ -29,7 +28,6 @@ describe('SocialSignOnModalComponent', () => {
       providers: [
         { provide: MatDialog, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
-        { provide: UsersFacade, useValue: {} },
       ],
     }).compileComponents();
 

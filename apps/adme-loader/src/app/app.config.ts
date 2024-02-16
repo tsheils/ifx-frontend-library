@@ -13,7 +13,7 @@ import {
   withViewTransitions
 } from "@angular/router";
 import { diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
-import { UsersFacade, usersReducer } from "@ncats-frontend-library/stores/user-store";
+import { usersReducer } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule, provideEffects } from "@ngrx/effects";
 import { routerReducer, StoreRouterConnectingModule } from "@ngrx/router-store";
 import { provideStore, StoreModule } from "@ngrx/store";
@@ -63,7 +63,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimations(),
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    provideClientHydration(),
-    UsersFacade
+    provideClientHydration()
   ],
 };

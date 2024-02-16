@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
-  DiseasesFacade,
   reducer,
 } from '@ncats-frontend-library/stores/disease-store';
 import { StoreModule } from '@ngrx/store';
@@ -20,10 +19,11 @@ describe('RdasBrowseComponent', () => {
       imports: [
         RdasBrowseComponent,
         BrowserAnimationsModule,
-        StoreModule.forRoot({}),
-        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer),
+        StoreModule,
       ],
-      providers: [Apollo, DiseasesFacade],
+      providers: [
+
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RdasBrowseComponent);

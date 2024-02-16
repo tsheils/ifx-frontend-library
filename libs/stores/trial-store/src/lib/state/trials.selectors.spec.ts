@@ -1,4 +1,4 @@
-import { TrialsEntity } from './trials.models';
+import { ClinicalTrial } from "@ncats-frontend-library/models/rdas";
 import {
   trialsAdapter,
   TrialsPartialState,
@@ -8,12 +8,12 @@ import * as TrialsSelectors from './trials.selectors';
 
 describe('Trials Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getTrialsId = (it: TrialsEntity) => it.id;
-  const createTrialsEntity = (id: string, name = '') =>
+  const getTrialsId = (it: ClinicalTrial) => it['NCTId'];
+  const createTrialsEntity = (NCTId: string, briefTitle = '') =>
     ({
-      id,
-      name: name || `name-${id}`,
-    } as TrialsEntity);
+      NCTId,
+      briefTitle: briefTitle || `name-${NCTId}`,
+    } as ClinicalTrial);
 
   let state: TrialsPartialState;
 
@@ -45,8 +45,13 @@ describe('Trials Selectors', () => {
     });
 
     it('selectEntity() should return the selected Entity', () => {
-      const result = TrialsSelectors.selectEntity(state) as TrialsEntity;
-      const selId = getTrialsId(result);
+      const result = TrialsSelectors.selectEntity(state);
+      let selId
+      if(result) {
+         selId = getTrialsId(result);
+      } else {
+        selId = undefined
+      }
 
       expect(selId).toBe('PRODUCT-BBB');
     });

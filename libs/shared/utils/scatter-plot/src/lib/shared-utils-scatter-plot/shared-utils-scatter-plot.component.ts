@@ -42,7 +42,9 @@ export class SharedUtilsScatterPlotComponent {
             .attr("viewBox", [0, 0, this.width, this.height])
             .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
 
-          this.makeChart();
+          if(this.filter) {
+            this.makeChart();
+          }
         }
       }
     )

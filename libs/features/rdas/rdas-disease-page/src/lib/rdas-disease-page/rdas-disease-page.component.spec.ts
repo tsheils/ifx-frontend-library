@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  DISEASES_FEATURE_KEY,
-  DiseasesFacade,
-  reducer,
-} from '@ncats-frontend-library/stores/disease-store';
-import { StoreModule } from '@ngrx/store';
+  DiseaseEffects, diseasesReducer
+} from "@ncats-frontend-library/stores/disease-store";
+import { provideEffects } from "@ngrx/effects";
+import { provideStore, StoreModule } from "@ngrx/store";
+import { provideStoreDevtools } from "@ngrx/store-devtools";
 
 import { RdasDiseasePageComponent } from './rdas-disease-page.component';
 
@@ -14,12 +14,17 @@ describe('RdasDiseasePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [RdasDiseasePageComponent],
       imports: [
-        StoreModule.forRoot({}),
-        StoreModule.forFeature(DISEASES_FEATURE_KEY, reducer),
+        RdasDiseasePageComponent,
+        StoreModule
       ],
-      providers: [DiseasesFacade],
+      providers: [
+        provideStore({
+          diseases: diseasesReducer
+        }),
+        provideEffects([DiseaseEffects]),
+        provideStoreDevtools({ maxAge: 25, logOnly: false }),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RdasDiseasePageComponent);
@@ -30,4 +35,5 @@ describe('RdasDiseasePageComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
 });

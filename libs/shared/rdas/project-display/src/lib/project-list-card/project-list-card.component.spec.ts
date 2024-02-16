@@ -16,8 +16,8 @@ describe('ProjectListCardComponent', () => {
 
     fixture = TestBed.createComponent(ProjectListCardComponent);
     component = fixture.componentInstance;
-    component.project = new CoreProject({ core_project_num: 'sdgsgsgs' });
-    component.latestProject = new Project({ title: 'sdgsgsgs' });
+    component.grant = new CoreProject({ core_project_num: 'sdgsgsgs' });
+    component.latestGrant = new Project({ title: 'sdgsgsgs' });
     fixture.detectChanges();
   });
 

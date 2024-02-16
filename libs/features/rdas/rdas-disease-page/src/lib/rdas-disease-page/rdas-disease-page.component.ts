@@ -81,7 +81,7 @@ export class RdasDiseasePageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-;    this.disease = this.store.selectSignal(DiseaseSelectors.getSelected);
+    this.disease = this.store.selectSignal(DiseaseSelectors.getSelected);
     this.diseaseFilters = this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
 
     if (this.route.snapshot.fragment) {

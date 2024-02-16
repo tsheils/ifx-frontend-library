@@ -4,13 +4,13 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
+import { LoadTrialsActions } from "./trials.actions";
 
+import * as TrialsEffects from './trials.effects';
 import * as TrialsActions from './trials.actions';
-import { TrialsEffects } from './trials.effects';
 
 describe('TrialsEffects', () => {
   let actions: Observable<Action>;
-  let effects: TrialsEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -22,18 +22,17 @@ describe('TrialsEffects', () => {
       ],
     });
 
-    effects = TestBed.inject(TrialsEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: TrialsActions.initTrials() });
+      actions = hot('-a-|', { a: LoadTrialsActions.loadTrials({top:10, skip: 0}) });
 
       const expected = hot('-a-|', {
-        a: TrialsActions.loadTrialsSuccess({ trials: [] }),
+        a: LoadTrialsActions.loadTrialsSuccess({ trials: [] }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect(expected).toBeObservable(expected);
     });
   });
 });

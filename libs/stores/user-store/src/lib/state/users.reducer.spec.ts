@@ -1,8 +1,7 @@
 import { User } from '@ncats-frontend-library/models/utils';
-import { initialState, reducer, State } from './users.reducer';
-import { Action } from '@ngrx/store';
-
-import * as UsersActions from './users.actions';
+import { UserLoginActions } from "./users.actions";
+import { initialState, usersReducer, UserState } from "./users.reducer";
+import { Action } from "@ngrx/store";
 
 describe('Users Reducer', () => {
   const createUsersEntity = (uid: string, displayName = ''): User =>
@@ -14,9 +13,9 @@ describe('Users Reducer', () => {
   describe('valid Users actions', () => {
     it('loadUsersSuccess should return the list of known Users', () => {
       const users = createUsersEntity('PRODUCT-zzz');
-      const action = UsersActions.loginUserSuccess({ user: users });
+      const action = UserLoginActions.loginUserSuccess({ user: users });
 
-      const result: State = reducer(initialState, action);
+      const result: UserState = usersReducer(initialState, action);
 
       expect(result.loaded).toBe(true);
       expect(result.ids.length).toBe(1);
@@ -27,7 +26,7 @@ describe('Users Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = reducer(initialState, action);
+      const result = usersReducer(initialState, action);
 
       expect(result).toBe(initialState);
     });

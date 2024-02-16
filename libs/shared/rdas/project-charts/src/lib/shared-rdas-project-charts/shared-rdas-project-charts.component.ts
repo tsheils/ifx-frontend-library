@@ -1,4 +1,4 @@
-import { Component, computed, Input, signal, Signal, WritableSignal } from "@angular/core";
+import { Component, computed, Input, OnInit, signal, Signal, WritableSignal } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -21,17 +21,13 @@ import { SharedUtilsBarChartComponent } from "@ncats-frontend-library/shared/uti
   templateUrl: './shared-rdas-project-charts.component.html',
   styleUrl: './shared-rdas-project-charts.component.scss',
 })
-export class SharedRdasProjectChartsComponent {
+export class SharedRdasProjectChartsComponent implements OnInit {
   @Input() filters!: FilterCategory[];
-  filterTypes: Signal<string[]> = computed(() => this.filters!.map(filter => filter.label));
+  filterTypes: Signal<string[]> = computed(() => this.filters?.map(filter => filter.label));
     selectedFilterLabel: WritableSignal<string> = signal('');
-    selectedFilter: Signal<FilterCategory> = computed(()=> this.filters?.filter(filter=> filter.label === this.selectedFilterLabel!())[0])
+    selectedFilter: Signal<FilterCategory> = computed(()=> this.filters?.filter(filter=> filter.label === this.selectedFilterLabel?.())[0])
 
   filterControl: FormControl<string | null> = new FormControl<string | null>('');
-
-  constructor() {
-
-  }
 
   ngOnInit(){
     this.selectedFilterLabel.set(this.filters[0].label);
@@ -42,7 +38,9 @@ export class SharedRdasProjectChartsComponent {
       .valueChanges
       .subscribe(
     (filterLabel: string | null) => {
-      this.selectedFilterLabel.set(filterLabel!);
+      if (filterLabel != null) {
+        this.selectedFilterLabel.set(filterLabel);
+      }
     })
   }
 }

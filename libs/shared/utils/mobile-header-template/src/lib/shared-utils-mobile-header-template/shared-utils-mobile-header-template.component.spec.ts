@@ -1,16 +1,22 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedUtilsMobileHeaderTemplateComponent } from './shared-utils-mobile-header-template.component';
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import {
+  MobileHeaderTemplateComponent,
+} from "./shared-utils-mobile-header-template.component";
 
-describe('SharedUtilsMobileHeaderTemplateComponent', () => {
-  let component: SharedUtilsMobileHeaderTemplateComponent;
-  let fixture: ComponentFixture<SharedUtilsMobileHeaderTemplateComponent>;
+describe('MobileHeaderTemplateComponent', () => {
+  let component: MobileHeaderTemplateComponent;
+  let fixture: ComponentFixture<MobileHeaderTemplateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUtilsMobileHeaderTemplateComponent],
+      imports: [
+        NoopAnimationsModule,
+        MobileHeaderTemplateComponent
+      ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SharedUtilsMobileHeaderTemplateComponent);
+    fixture = TestBed.createComponent(MobileHeaderTemplateComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

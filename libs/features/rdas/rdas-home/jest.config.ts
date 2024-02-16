@@ -3,15 +3,15 @@ export default {
   displayName: 'features-rdas-rdas-home',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {
-    'ts-jest': {
-      tsconfig: '<rootDir>/tsconfig.spec.json',
-      stringifyContentPathRegex: '\\.(html|svg)$',
-    },
-  },
   coverageDirectory: '../../../../coverage/libs/features/rdas/rdas-home',
   transform: {
-    '^.+\\.(ts|mjs|js|html)$': 'jest-preset-angular',
+    '^.+\\.(ts|mjs|js|html)$': [
+      'jest-preset-angular',
+      {
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
+      },
+    ],
   },
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)'],
   snapshotSerializers: [
