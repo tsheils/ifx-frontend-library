@@ -118,6 +118,7 @@ export const DISEASETYPEAHEAD = gql`
     diseaseSearch(searchString: $searchString, limit: $limit) {
       name: GardName
       gardId: GardId
+      synonyms: Synonyms
     }
   }
 `;

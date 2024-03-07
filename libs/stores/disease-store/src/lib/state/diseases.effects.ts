@@ -324,7 +324,7 @@ export const searchDiseases$ =  createEffect(
       ofType(SearchDiseasesActions.searchDiseases),
       mergeMap((action: { term: string }) => {
         return diseaseService
-          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term + '~', limit: 10 })
+          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term.split(' ').join('~ AND ') + '*', limit: 10 })
           .pipe(
             map((res: ApolloQueryResult<unknown>) => {
               const data: { diseaseSearch: Disease[] } = res.data as { diseaseSearch: Disease[] };

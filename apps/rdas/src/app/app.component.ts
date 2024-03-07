@@ -16,6 +16,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {
   Event,
@@ -60,6 +62,8 @@ import { map } from "rxjs";
     ScrollingModule,
     LoadingSpinnerComponent,
     MobileHeaderTemplateComponent,
+    MatIconModule,
+    MatButtonModule
   ],
 })
 export class AppComponent implements OnInit {

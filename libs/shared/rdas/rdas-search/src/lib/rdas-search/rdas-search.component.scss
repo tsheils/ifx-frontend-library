@@ -5,6 +5,16 @@
   width: 100%;
 }
 
+span.main-value {
+  font-weight: 500;
+}
+
+span.sub-value {
+  font-size: .8rem;
+  display: block;
+  padding-left: 30px;
+}
+
 span.search-highlight {
   font-weight: 500;
   color: black;

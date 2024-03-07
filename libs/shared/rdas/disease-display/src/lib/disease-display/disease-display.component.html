@@ -7,37 +7,7 @@
           <span class="disease-accordion-title bottom-border-primary">Overview</span>
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-
-@if(mobile) {
-<mat-tab-group preserveContent>
-  <mat-tab [bodyClass]="'chart-tab'" label="Articles">
-    @if(filterMap() && filterMap().has('articles')) {
-    <lib-shared-rdas-article-charts [filters]="filterMap().get('articles')!"></lib-shared-rdas-article-charts>
-    } @else {
-    <h2>No Charts Available</h2>
-    }
-  </mat-tab>
-  <mat-tab label="Projects">
-    @if(filterMap() && filterMap().has('projects')) {
-    <lib-shared-rdas-project-charts [filters]="filterMap().get('projects')!"></lib-shared-rdas-project-charts>
-    } @else {
-    <h2>No Charts Available</h2>
-    }
-  </mat-tab>
-  <mat-tab label="Trials">
-    @if(filterMap() && filterMap().has('trials')) {
-    <lib-shared-rdas-trials-charts [filters]="filterMap().get('trials')!"></lib-shared-rdas-trials-charts>
-    }  @else {
-    <h2>No Charts Available</h2>
-    }
-  </mat-tab>
-  <mat-tab></mat-tab>
-  <mat-tab></mat-tab>
-</mat-tab-group>
-} @else{
 <div class= "row space-around-row">
-
   @if(filterMap() && filterMap().has('articles')) {
   <div class="width-30">
   <lib-shared-rdas-article-charts [filters]="filterMap().get('articles')!"></lib-shared-rdas-article-charts>
@@ -57,7 +27,6 @@
   </div>
   }
 </div>
-}
     </mat-expansion-panel>
   </div>
 

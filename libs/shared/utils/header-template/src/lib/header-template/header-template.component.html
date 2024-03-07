@@ -9,13 +9,16 @@
       <div>
         @if (link.children) {
         <div #menu>
-          <button mat-button [matMenuTriggerFor]="dynamicMenu">
+          <button mat-button
+                  [color] = "'primary'"
+                  [matMenuTriggerFor]="dynamicMenu">
             {{ link.label ? link.label : link.link }}
           </button>
           <mat-menu #dynamicMenu="matMenu">
             @for (child of link.children; track child) {
             <span>
-              <button mat-menu-item [routerLink]="child.link">
+              <button
+              mat-menu-item [routerLink]="child.link">
                 {{ child.label ? child.label : child.link }}
               </button>
             </span>
@@ -26,7 +29,9 @@
         <div #menulink>
           @if (link.external) {
           <div #external>
-            <a mat-button href="{{ link.link }}" class="header-link-button"
+            <a mat-button
+            [color] = "'primary'"
+            href="{{ link.link }}" class="header-link-button"
               >{{ link.label ? link.label : link.link }}
               <mat-icon>open_in_new</mat-icon>
             </a>
@@ -35,6 +40,7 @@
           <div #internal>
             <a
               mat-button
+              [color] = "'primary'"
               routerLink="/{{ link.link }}"
               [ngClass]="{ active: isActive(link?.link) }"
               class="header-link-button"
