@@ -60,7 +60,7 @@ export const reducer = createReducer(
   })),
 
   on(BrowseDiseaseListActions.fetchDiseaseListSuccess, (state, { diseases, page }) =>
-    diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true, disease: undefined})
+    diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true})
   ),
 
   on(FetchDiseaseActions.fetchDiseaseSuccess, (state, { disease }) =>

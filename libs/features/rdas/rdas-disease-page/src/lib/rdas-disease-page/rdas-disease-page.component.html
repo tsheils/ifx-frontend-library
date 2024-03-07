@@ -1,7 +1,7 @@
 @if(loaded()) {
 <div class="disease-header-section">
 <ncats-frontend-library-disease-header
-[disease]="disease"
+[disease]="disease()"
 ></ncats-frontend-library-disease-header>
 </div>
 <mat-sidenav-container class="disease-page" >
@@ -119,5 +119,9 @@
   </mat-sidenav-content>
 </mat-sidenav-container>
 } @else {
+<div class="disease-header-section">
+<ncats-frontend-library-disease-header
+></ncats-frontend-library-disease-header>
+</div>
 <ncats-frontend-library-loading-spinner class="fill-spinner"></ncats-frontend-library-loading-spinner>
 }

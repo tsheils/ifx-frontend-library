@@ -1,5 +1,5 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit, ViewEncapsulation } from "@angular/core";
+import { ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit } from "@angular/core";
 import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 import { MatButtonModule } from "@angular/material/button";
 import { MatDialog, MatDialogModule } from "@angular/material/dialog";

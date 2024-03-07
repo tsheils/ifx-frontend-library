@@ -1,6 +1,6 @@
-@if (disease()) {
 <div>
   <div class="disease-header">
+    @if (disease()) {
     <div class="row space-between-row link-row">
       <div class="width-sm-95 width-75">
         <a
@@ -22,6 +22,7 @@
         [subscriptionId] = "disease()?.gardId"
       ></ncats-frontend-library-subscribe-button>
     </div>
+    }
     <div class="row space-between-row">
       @if (disease()?.synonyms && disease()?.synonyms?.length) {
       <div class="width-75">
@@ -32,4 +33,4 @@
     <br />
   </div>
 </div>
-}
+
