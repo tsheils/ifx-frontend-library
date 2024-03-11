@@ -21,7 +21,7 @@ import { SharedUtilsPieChartComponent } from "@ncats-frontend-library/shared/uti
   styleUrl: './shared-rdas-trials-charts.component.scss',
 })
 export class SharedRdasTrialsChartsComponent implements OnInit {
-  @Input() filters!: FilterCategory[];
+  @Input() filters: FilterCategory[] = [];
   filterTypes: Signal<string[]> = computed(() => this.filters?.map(filter => filter.label));
   selectedFilterLabel: WritableSignal<string> = signal('');
   selectedFilter: Signal<FilterCategory> = computed(()=> this.filters?.filter(filter=> filter.label === this.selectedFilterLabel?.())[0])

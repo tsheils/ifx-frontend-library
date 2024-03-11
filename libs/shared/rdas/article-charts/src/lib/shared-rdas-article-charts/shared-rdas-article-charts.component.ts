@@ -22,7 +22,7 @@ import { SharedUtilsBarChartComponent } from "@ncats-frontend-library/shared/uti
   styleUrl: './shared-rdas-article-charts.component.scss',
 })
 export class SharedRdasArticleChartsComponent implements OnInit {
-  @Input() filters!: FilterCategory[];
+  @Input() filters: FilterCategory[] = [];
   filterTypes: Signal<string[]> = computed(() => this.filters?.map(filter => filter.label));
   selectedFilterLabel: WritableSignal<string> = signal('');
   selectedFilter: Signal<FilterCategory> = computed(()=> this.filters?.filter(filter=> filter.label === this.selectedFilterLabel?.())[0])
@@ -30,6 +30,7 @@ export class SharedRdasArticleChartsComponent implements OnInit {
   filterControl: FormControl<string | null> = new FormControl<string | null>('');
 
   ngOnInit() {
+    console.log(this.filters)
     this.selectedFilterLabel.set(this.filters[0].label);
     this.filterControl.setValue(this.selectedFilterLabel());
 

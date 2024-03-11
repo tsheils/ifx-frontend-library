@@ -41,7 +41,6 @@
     "@ngrx/router-store": "^17.1.1",
     "@ngrx/store": "^17.1.1",
     "@nx/angular": "18.0.7",
-    "@nx/jest": "^17.2.8",
     "@nx/webpack": "18.0.7",
     "@types/d3": "^7.4.3",
     "@types/d3-selection": "^3.0.10",
@@ -94,11 +93,11 @@
     "@types/node": "^20.11.25",
     "@types/swagger-ui": "^3.52.4",
     "@types/three": "^0.162.0",
-    "@typescript-eslint/eslint-plugin": "^7.1.1",
-    "@typescript-eslint/parser": "^7.1.1",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.13.2",
     "autoprefixer": "^10.4.18",
     "cypress": "^13.6.6",
-    "esbuild": "^0.20.1",
+    "esbuild": "^0.19.2",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-cypress": "^2.15.1",
@@ -115,4 +114,3 @@
     "typescript": "5.2.2"
   }
 }
-

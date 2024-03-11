@@ -24,6 +24,9 @@
       "@ncats-frontend-library/features/rdas/graphql-sandbox": [
         "libs/features/rdas/graphql-sandbox/src/index.ts"
       ],
+      "@ncats-frontend-library/features/rdas/privacy-page": [
+        "libs/features/rdas/privacy-page/src/index.ts"
+      ],
       "@ncats-frontend-library/features/rdas/rdas-about": [
         "libs/features/rdas/rdas-about/src/index.ts"
       ],
@@ -167,9 +170,6 @@
         "libs/stores/user-store/src/index.ts"
       ],
       "adme-store": ["libs/stores/adme-store/src/index.ts"],
-      "@ncats-frontend-library/features/rdas/privacy-page": [
-        "libs/features/rdas/privacy-page/src/index.ts"
-      ],
       "utils-animated-force-directed-graph": [
         "libs/shared/utils/animated-force-directed-graph/src/index.ts"
       ],

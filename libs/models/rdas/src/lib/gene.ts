@@ -23,15 +23,15 @@ export class GeneAssociation {
   gene!: Gene;
   _reference?: string[];
 
-  constructor(obj: Partial<GeneAssociation> = {}) {
-    Object.assign(this, obj);
+  constructor(obj: {gene?: Partial<Gene>, properties?: Partial<GeneAssociation>}) {
+    Object.assign(this, obj.properties);
 
     if (obj.gene) {
       this.gene = new Gene(obj.gene);
     }
 
-    if (obj._reference) {
-      this.reference = obj._reference.map(
+    if (obj.properties && obj.properties._reference) {
+      this.reference = obj.properties._reference.map(
         (ref) => new Reference({ code: ref })
       );
       delete this._reference;
