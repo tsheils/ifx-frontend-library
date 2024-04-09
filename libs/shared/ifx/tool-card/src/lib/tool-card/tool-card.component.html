@@ -1,0 +1,56 @@
+<mat-card appearance="outlined" class = "tool-card">
+  <div class="tool-content">
+    <a class = "tool-link" routerLink="{{tool()?.toolUrl}}">
+      <div class = "row space-between-row tool-header">
+        <div class="width-80">
+          <span class="headline">{{tool()?.toolName}}</span>
+        </div>
+        @if(tool()?.public) {
+        <div class="width-10">
+          <mat-icon
+            matTooltip="public NCATS tool"
+            [matTooltipPosition]="'above'"
+            [color]="'primary'" class="public-icon">_public_</mat-icon>
+        </div>
+        }
+      </div>
+      <br>
+      <br>
+      @if(tool()?.image) {
+      <div class = "row centered-row">
+        <div class = "width-80">
+          <img mat-card-image ngSrc= {{imgSrc()}}
+               alt='{{tool()?.toolName}} representative image' class="card-image" fill priority>
+        </div>
+      </div>
+      }
+      <br>
+      <div class = "row centered-row">
+        <div class="width-90">
+          <mat-card-subtitle>{{tool()?.description}}</mat-card-subtitle>
+        </div>
+      </div>
+    </a>
+  </div>
+  <div class ="tool-footer">
+    @if(tool()?.url){
+    <div class = "row centered-row">
+      <div class="width-90">
+        <span class="headline-6"><i>
+        <a href = {{tool()?.url}} target="_blank">Direct Link: {{tool()?.toolName}}&nbsp;<mat-icon>open_in_new</mat-icon></a></i><br>
+    </span>
+      </div>
+    </div>
+    }
+    <div class = "row centered-row">
+      <div class="width-90">
+          @if(tool()?.category){
+          <div class="chip primary-chip"  selected="true">{{tool()?.category}}</div>
+          }
+          @for(type of tool()?.toolType?.split('|'); track type) {
+          <div class="chip accent-chip"  selected="true"> {{type}}</div>
+          }
+      </div>
+    </div>
+  </div>
+</mat-card>

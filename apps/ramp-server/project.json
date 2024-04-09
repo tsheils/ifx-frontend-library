@@ -1,0 +1,88 @@
+{
+  "name": "ramp-server",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/ramp-server/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ramp-server",
+        "index": "apps/ramp-server/src/index.html",
+        "browser": "apps/ramp-server/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/ramp-server/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/ramp-server/src/favicon.ico",
+          "apps/ramp-server/src/assets"
+        ],
+        "styles": ["apps/ramp-server/src/styles.scss"],
+        "scripts": [],
+        "server": "apps/ramp-server/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/ramp-server/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "ramp-server:build:production"
+        },
+        "development": {
+          "buildTarget": "ramp-server:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "ramp-server:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/ramp-server/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "ramp-server:build",
+        "staticFilePath": "dist/apps/ramp-server/browser"
+      }
+    }
+  }
+}

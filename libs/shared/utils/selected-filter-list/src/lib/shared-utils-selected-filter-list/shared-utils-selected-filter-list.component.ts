@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter,
+  EventEmitter, input,
   Input, OnInit,
   Output,
   ViewEncapsulation
@@ -26,7 +26,6 @@ export class SharedUtilsSelectedFilterListComponent implements OnInit {
   @Input() filters: Map<string, string[]> = new Map<string, string[]>();
   @Output() filterChange: EventEmitter<{ label: string; values: string[] }[]> =
     new EventEmitter<{ label: string; values: string[] }[]>();
-
   /**
    * set up route watching
    * @param changeRef

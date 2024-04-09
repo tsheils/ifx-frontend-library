@@ -39,7 +39,7 @@
             (click)="scroll('genes')"
             [ngClass]="{ 'active-sidemenu': isActive('genes') }"
           >
-            Genes {{ disease()?.geneCount || 0 }}
+           <div class="row space-between-row"><div> Genes </div><div>{{ disease()?.geneCount || 0 }}</div></div>
           </a>
           <a
             mat-list-item
@@ -47,7 +47,7 @@
             (click)="scroll('phenotypes')"
             [ngClass]="{ 'active-sidemenu': isActive('phenotypes') }"
           >
-            Phenotypes {{ disease()?.phenotypeCount || 0 }}
+            <div class="row space-between-row"><div> Phenotypes </div><div>{{ disease()?.phenotypeCount || 0 }}</div></div>
           </a>
           <a
             mat-list-item
@@ -55,7 +55,7 @@
             (click)="scroll('nonEpiArticles')"
             [ngClass]="{ 'active-sidemenu': isActive('nonEpiArticles') }"
           >
-            Articles {{ disease()?.nonEpiCount || 0 }}
+<div class="row space-between-row"><div> Articles </div><div>{{ disease()?.nonEpiCount || 0 }}</div></div>
           </a>
           <a
             mat-list-item
@@ -63,7 +63,7 @@
             (click)="scroll('epiArticles')"
             [ngClass]="{ 'active-sidemenu': isActive('epiArticles') }"
           >
-            Epidemiology Articles {{ disease()?.epiCount || 0 }}
+<div class="row space-between-row"><div>Epidemiology Articles </div><div>{{ disease()?.epiCount || 0 }}</div></div>
           </a>
           <a
             mat-list-item
@@ -71,7 +71,7 @@
             (click)="scroll('projects')"
             [ngClass]="{ 'active-sidemenu': isActive('projects') }"
           >
-            NIH funded Projects {{ disease()?.projectCount || 0 }}
+<div class="row space-between-row"><div> NIH funded Projects </div><div>{{ disease()?.projectCount || 0 }}</div></div>
           </a>
           <a
             mat-list-item
@@ -79,7 +79,7 @@
             (click)="scroll('trials')"
             [ngClass]="{ 'active-sidemenu': isActive('trials') }"
           >
-            Clinical Trials {{ disease()?.clinicalTrialCount || 0 }}
+<div class="row space-between-row"><div> Clinical Trials </div><div>{{ disease()?.clinicalTrialCount || 0 }}</div></div>
           </a>
         </mat-nav-list>
       </div>
@@ -123,5 +123,6 @@
 <ncats-frontend-library-disease-header
 ></ncats-frontend-library-disease-header>
 </div>
+<mat-sidenav-container class="disease-page" ></mat-sidenav-container>
 <ncats-frontend-library-loading-spinner class="fill-spinner"></ncats-frontend-library-loading-spinner>
 }

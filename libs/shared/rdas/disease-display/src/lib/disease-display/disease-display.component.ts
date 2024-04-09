@@ -27,18 +27,15 @@ import { MatTabsModule } from "@angular/material/tabs";
 import { ActivatedRoute, Router } from "@angular/router";
 import { Disease } from "@ncats-frontend-library/models/rdas";
 import { FilterCategory } from "@ncats-frontend-library/models/utils";
-import { SharedRdasArticleChartsComponent } from "@ncats-frontend-library/shared/rdas/article-charts";
 import { ArticleListComponent } from "@ncats-frontend-library/shared/rdas/article-display";
 import { ClinicalTrialsListComponent } from "@ncats-frontend-library/shared/rdas/clinical-trials-display";
 import { GeneListComponent } from "@ncats-frontend-library/shared/rdas/gene-display";
 import { PhenotypeListComponent } from "@ncats-frontend-library/shared/rdas/phenotype-display";
-import { SharedRdasProjectChartsComponent } from "@ncats-frontend-library/shared/rdas/project-charts";
 import { ProjectListComponent } from "@ncats-frontend-library/shared/rdas/project-display";
-import { SharedRdasTrialsChartsComponent } from "@ncats-frontend-library/shared/rdas/trials-charts";
+import { ChartWrapperComponent } from "@ncats-frontend-library/shared/utils/chart-wrapper";
 import { SharedUtilsDataNotFoundComponent } from "@ncats-frontend-library/shared/utils/data-not-found";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { RdasPanelTemplateComponent } from "@ncats-frontend-library/shared/utils/rdas-panel-template";
-import { SharedUtilsScatterPlotComponent } from "@ncats-frontend-library/shared/utils/scatter-plot";
 
 import { DiseaseHeaderComponent } from "../disease-header/disease-header.component";
 
@@ -47,7 +44,6 @@ import { DiseaseHeaderComponent } from "../disease-header/disease-header.compone
   templateUrl: './disease-display.component.html',
   styleUrls: ['./disease-display.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     MatCardModule,
@@ -59,14 +55,11 @@ import { DiseaseHeaderComponent } from "../disease-header/disease-header.compone
     PhenotypeListComponent,
     SharedUtilsDataNotFoundComponent,
     LoadingSpinnerComponent,
-    SharedUtilsScatterPlotComponent,
-    SharedRdasArticleChartsComponent,
-    SharedRdasProjectChartsComponent,
-    SharedRdasTrialsChartsComponent,
     MatExpansionModule,
     MatTabsModule,
     ScrollingModule,
-    RdasPanelTemplateComponent
+    RdasPanelTemplateComponent,
+    ChartWrapperComponent
   ],
 })
 export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
@@ -81,9 +74,6 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   @Input() offset!: string;
   @Input() id!: string;
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
-    console.log("yyyyyy ")
-    console.log(this.disease())
-    console.log(this.filters())
     const map = new Map<string, FilterCategory[]>();
     this.filters()!.forEach(filterCat => {
       if(filterCat.parent) {
@@ -96,7 +86,6 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
         map.set(filterCat.parent, filterCats);
       }
       })
-    console.log(map);
     return map;
   })
 
@@ -153,7 +142,7 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(){
     if(this.route.snapshot.queryParamMap.has('offset')) {
       const template: RdasPanelTemplateComponent[] = this.templates
-        .filter((template: RdasPanelTemplateComponent) => template._id === this.route.snapshot.fragment)
+        .filter((template: RdasPanelTemplateComponent) => template._id() === this.route.snapshot.fragment)
       if(template && template.length) {
         template[0].paginator.pageIndex = Number(this.route.snapshot.queryParamMap.get('offset')) / 10
       }
@@ -168,6 +157,7 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
     params: { [key: string]: unknown },
     fragment: string
   ): void {
+    console.log(params);
     this.optionsChange.emit({ params, fragment });
   }
 }
