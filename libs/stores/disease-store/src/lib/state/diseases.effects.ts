@@ -99,7 +99,6 @@ export const loadDiseaseFilters$ =  createEffect(
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        console.log("get filters")
         const params: Params = root.queryParams;
         const gardid: string = params['id'];
         _setGardId(gardid);
@@ -155,7 +154,6 @@ export const loadDiseaseFilters$ =  createEffect(
                       }
                     )
                     filters.push(fc);
-                    console.log(fc)
                     filters.push(new FilterCategory(
                       {
                         parent: 'nonEpiArticles',
@@ -217,12 +215,9 @@ export const loadDiseaseFilters$ =  createEffect(
                     }
                   }
                    if(root.fragment) {
-                     console.log(root.fragment)
                      filters.forEach(filter => {
                        if (filter.parent === root.fragment) {
-                         console.log(filter)
                          if (filter.field) {
-                         console.log(params[filter.field])
                          filter.values.map(val => {
                            if (Array.isArray(params[filter.field])) {
                              params[filter.field].forEach((filter: string) => {
@@ -273,13 +268,10 @@ export const loadDisease$ =  createEffect(
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        console.log("get disease data")
       const params = root.queryParams;
       const gardid: string = params['id'];
       _setGardId(gardid);
-  console.log(params);
       if (root.fragment) {
-        //   console.log("from load disease")
         _setFragment(root.fragment, params);
       }
       return combineLatest(

@@ -29,9 +29,7 @@ export class RdasPanelTemplateComponent {
 
   fetchList(event: { [key: string]: Filter[] }) {
     const retObj: {[key: string]: string[]} = {};
-    console.log(event)
       Object.entries(event).forEach(([key, filters]) => retObj[key] = [...filters.map((filter) => filter.term)])
-    console.log(retObj)
     this.listChange.emit(retObj);
   }
 

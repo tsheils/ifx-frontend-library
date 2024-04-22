@@ -99,14 +99,12 @@ export class RdasDiseasePageComponent implements OnInit {
 
     setUrl(event: {fragment: string, params?: { [key: string]: unknown }}) {
      if(this.route.snapshot.fragment && (this.route.snapshot.fragment === event.fragment)) {
-       console.log("yyyyyyy")
        this.router.navigate(['disease'], {
          fragment: event.fragment,
          queryParams: {id: this.id, ...event.params},
          onSameUrlNavigation: "ignore"
        });
      } else {
-       console.log("NNNNNNNN")
        this.router.navigate(['disease'], {
          fragment: event.fragment,
          queryParams: {id: this.id, ...event.params}

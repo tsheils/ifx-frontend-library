@@ -11,7 +11,7 @@
         "generatePackageJson": true,
         "target": "node",
         "compiler": "tsc",
-        "outputPath": "dist/apps/rdas-express",
+        "outputPath": "dist/rdas-express",
         "main": "apps/rdas-express/src/main.ts",
         "tsConfig": "apps/rdas-express/tsconfig.app.json",
         "assets": ["apps/rdas-express/src/assets"],

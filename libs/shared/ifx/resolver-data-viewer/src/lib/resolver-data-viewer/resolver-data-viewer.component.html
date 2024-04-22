@@ -16,8 +16,8 @@
 <br>
 <div class="row space-around-row data-display">
   <div class="width-95">
-@if(showTable == true) {
-<lib-ncats-datatable [data]="dataAsDataProperty()" [fieldsConfig] = "fields"></lib-ncats-datatable>
+@if(showTable === true) {
+<ncats-datatable [data]="dataAsDataProperty()" [fieldsConfig] = "fields"></ncats-datatable>
 } @else {
 <pre class= "raw-data">
 {{dataAsCSV()}}

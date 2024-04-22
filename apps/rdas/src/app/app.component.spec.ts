@@ -1,7 +1,5 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
-import { DiseasesFacade } from '@ncats-frontend-library/stores/disease-store';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -10,8 +8,6 @@ describe('AppComponent', () => {
       declarations: [],
       imports: [AppComponent, RouterModule],
       providers: [
-        { provide: DiseasesFacade, useValue: {} },
-        { provide: UsersFacade, useValue: {} },
       ],
     }).compileComponents();
   });

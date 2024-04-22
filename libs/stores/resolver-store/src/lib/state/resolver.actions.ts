@@ -5,6 +5,7 @@ import { ResolverForm, ResolverResponse } from "ifx";
 export const LoadResolverOptionsActions = createActionGroup({
   source: 'Load Resolver Options',
   events: {
+    setPreviousFilters: props<{filters: string[]}>(),
     loadResolverOptions: emptyProps(),
     loadResolverOptionsSuccess: props<{ options: Filter[]}>(),
     loadResolverOptionsFailure: props<{ error: string }>()

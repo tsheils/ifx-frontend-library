@@ -63,7 +63,7 @@ const _sortingDataAccessor = (
  * also handles standard table operations, primarily with event emitters for the end user to react to
  */
 @Component({
-  selector: 'lib-ncats-datatable',
+  selector: 'ncats-datatable',
   templateUrl: './ncats-datatable.component.html',
   styleUrl: './ncats-datatable.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from "@angular/common";
 import { provideHttpClient, withFetch, withInterceptorsFromDi } from "@angular/common/http";
-import { APP_INITIALIZER, ApplicationConfig, inject } from "@angular/core";
+import { APP_INITIALIZER, ApplicationConfig, inject, PLATFORM_ID } from "@angular/core";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
 import {
@@ -22,12 +23,35 @@ export function load_resolver(resolverService: ResolverService, store = inject(S
   return () => {
     resolverService._setOptionsUrl(environment.resolverOptionsUrl);
     resolverService._setResolverUrl(environment.resolverUrl);
+    resolverService._setextraString(environment.extraString);
     store.dispatch(LoadResolverOptionsActions.loadResolverOptions());
   };
 }
 
+export function load_from_local_storage(
+  platformId = inject((PLATFORM_ID)),
+  store = inject(Store)) {
+  return () => {
+    if (isPlatformBrowser(platformId)) {
+      if (localStorage && localStorage.getItem('previouslyUsedOptions')) {
+        const temp: string = <string>localStorage.getItem('previouslyUsedOptions');
+        if (temp) {
+          const filterOptionsList = JSON.parse(temp)
+          store.dispatch(LoadResolverOptionsActions.setPreviousFilters({filters: filterOptionsList}))
+        }
+      }
+    }
+  }
+}
+
 export const appConfig: ApplicationConfig = {
   providers: [
+    {
+      provide: APP_INITIALIZER,
+      useFactory: load_from_local_storage,
+      deps: [],
+      multi: true,
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: load_resolver,

@@ -130,6 +130,8 @@ header {
 @include utils.width-sm(75);
 @include utils.width-md(100);
 
+@include utils.width(100);
+@include utils.width(95);
 @include utils.width(90);
 @include utils.width(80);
 @include utils.width(75);

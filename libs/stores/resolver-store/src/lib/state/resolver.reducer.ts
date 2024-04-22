@@ -13,6 +13,7 @@ export interface ResolverState extends EntityState<ResolverResponse> {
   loaded: boolean; // has the Resolver list been loaded
   error?: string | null; // last known error (if any)
   options?: Filter[];
+  previousOptions?: string[];
 }
 
 export interface ResolverPartialState {
@@ -40,9 +41,12 @@ const reducer = createReducer(
     ({ ...state, options: options, loaded: true, error: null}),
   ),
 
-  on(ResolveQueryActions.resolveQuerySuccess, (state, {data}) => {
-console.log(data)
+on(LoadResolverOptionsActions.setPreviousFilters, (state, { filters }) => {
+   return ({ ...state, previousOptions: filters, loaded: true, error: null })
+  }
+  ),
 
+  on(ResolveQueryActions.resolveQuerySuccess, (state, {data}) => {
       return resolverAdapter.setAll(data, { ...state, loaded: true, error: null })
     }
   ),

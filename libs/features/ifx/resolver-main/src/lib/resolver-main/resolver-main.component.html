@@ -8,7 +8,7 @@
     </textarea>
     </mat-form-field>
   </div>
-  <div class="width-25">
+  <div class="width-25 right-justified-row">
     <mat-radio-group [formControl]=resolveCtrl [value]="'FRAGMENT'">
       <mat-radio-button [value]="'FRAGMENT'" [checked]="true">Largest Fragment</mat-radio-button>
       <mat-radio-button [value]="'CHARGE_NORMALIZE'">Normalize Charges</mat-radio-button>
@@ -16,9 +16,19 @@
     </mat-radio-group>
 
     @if(optionCategories() && optionCategories().length) {
+    <div class="row right-justified-row">
+    <div class="width-35">
+    <button mat-flat-button [color]="'accent'" (click)=clearParams()>Clear Selected</button>
+    </div>
+    <br>
+    </div>
+   <div class="row">
+   <div class="width-100">
     <lib-shared-utils-list-filter-row [filters] = optionCategories() (filterChange)="filterOptions($event)" [showCount]=false [showSelected]=false></lib-shared-utils-list-filter-row>
+    </div>
+    </div>
     }
-    <button mat-flat-button [color]="'primary'" (click) = resolve() [disabled]="!filterOptionsList || !inputCtrl.value">Resolve</button>
+    <button mat-flat-button [color]="'primary'" (click) = resolve() [disabled]=!searchDisabled()>Resolve</button>
   </div>
   <div class="width-45">
     @if(resolvedData() && resolvedData().length) {

@@ -41,6 +41,11 @@ export const selectSelectedId = createSelector(
   (state: ResolverState) => state.selectedId,
 );
 
+export const fetchPreviousFilters = createSelector(
+  selectResolverState,
+  (state: ResolverState) => state.previousOptions,
+);
+
 export const selectEntity = createSelector(
   selectResolverEntities,
   selectSelectedId,

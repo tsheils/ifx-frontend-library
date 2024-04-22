@@ -4,7 +4,6 @@ import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
 import { MatMenuModule } from "@angular/material/menu";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
-import { MatTableDataSource, MatTableModule } from "@angular/material/table";
 import { Filter } from "@ncats-frontend-library/models/utils";
 import { ResolverResponse } from "ifx";
 import { DataProperty, NcatsDatatableComponent } from "ncats-datatable";
@@ -38,7 +37,6 @@ export class ResolverDataViewerComponent {
          const newObj =  Object.assign(retObj, responseObj)
       objArr.push(newObj)
       })
-    console.log(objArr)
     return objArr;
     }
   )
@@ -64,7 +62,6 @@ export class ResolverDataViewerComponent {
   fields: DataProperty[] = [];
 
   showTable = false;
-  dataSource = new MatTableDataSource<unknown[]>([]);
 
   constructor(
     @Inject(DOCUMENT) private dom: Document
@@ -72,7 +69,6 @@ export class ResolverDataViewerComponent {
 
 
   downloadData(format: string) {
-console.log(format)
     switch(format){
       case 'json': {
       this._downloadFile(JSON.stringify(this.dataAsObject()), 'resolver.json','json')
@@ -110,16 +106,12 @@ console.log(format)
       const lines: string[] = [];
       data.forEach(input => {
         const inputLine: string[] = [];
-        console.log(input)
         headers.forEach(field => {
-          inputLine.push(input[field] ? input[field] : ' ')
+          inputLine.push(input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' ')
         })
         lines.push(inputLine.join(','))
       })
-      console.log(lines);
-      console.log(lines.join('\n'));
        ret = headers.join(',') + ' \n ' + lines.join('\n');
-      console.log(ret)
     }
     return ret;
   }

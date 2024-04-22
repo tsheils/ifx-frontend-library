@@ -157,7 +157,6 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
     params: { [key: string]: unknown },
     fragment: string
   ): void {
-    console.log(params);
     this.optionsChange.emit({ params, fragment });
   }
 }

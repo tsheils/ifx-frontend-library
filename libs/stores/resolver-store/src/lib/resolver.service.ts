@@ -15,6 +15,7 @@ const httpOptions = {
 export class ResolverService {
   private resolverUrl!: string;
   private optionsUrl!: string;
+  private extraString!: string;
 
   constructor(
     private http: HttpClient,
@@ -28,12 +29,17 @@ export class ResolverService {
     this.resolverUrl = url;
   }
 
+  _setextraString(key: string): void {
+    this.extraString = key;
+  }
+
   fetchOptions(): Observable<any> {
     return this.http.get(this.optionsUrl)
   }
 
   resolve(urlStub: string, form: ResolverForm){
-    return this.http.post<ResolverResponse[]>(this.resolverUrl + urlStub, this.toUrlEncodedParams(form), httpOptions)
+    const newForm: ResolverForm = {...form, apikey: this.extraString }
+    return this.http.post<ResolverResponse[]>(this.resolverUrl + urlStub, this.toUrlEncodedParams(newForm), httpOptions)
   }
 
   private toUrlEncodedParams(body: ResolverForm): string {

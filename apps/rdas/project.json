@@ -10,7 +10,7 @@
       "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/rdas",
+        "outputPath": "dist/rdas",
         "index": "apps/rdas/src/index.html",
         "browser": "apps/rdas/src/main.ts",
         "polyfills": ["zone.js"],
@@ -68,12 +68,12 @@
           "budgets": [
             {
               "type": "initial",
-              "maximumWarning": "500kb",
+              "maximumWarning": "5000kb",
               "maximumError": "500mb"
             },
             {
               "type": "anyComponentStyle",
-              "maximumWarning": "2kb",
+              "maximumWarning": "2000kb",
               "maximumError": "400kb"
             }
           ],

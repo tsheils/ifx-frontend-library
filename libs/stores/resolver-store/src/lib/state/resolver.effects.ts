@@ -1,21 +1,27 @@
-import { inject } from '@angular/core';
+import { inject } from "@angular/core";
 import { Filter } from "@ncats-frontend-library/models/utils";
-import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { createEffect, Actions, ofType, concatLatestFrom } from "@ngrx/effects";
+import { RouterNavigationAction } from "@ngrx/router-store";
+import { Store } from "@ngrx/store";
 import { ResolverForm, ResolverResponse } from "ifx";
-import { catchError, of, exhaustMap, map } from "rxjs";
+import { catchError, of, exhaustMap, map, mergeMap } from "rxjs";
 import { ResolverService } from "../resolver.service";
 import { LoadResolverOptionsActions, ResolveQueryActions } from "./resolver.actions";
-import * as ResolverActions from './resolver.actions';
-import * as ResolverFeature from './resolver.reducer';
+import * as ResolverSelectors  from "./resolver.selectors";
 
 
 
 
 export const init$ = createEffect(
-  (actions$ = inject(Actions), resolverService = inject(ResolverService)) => {
+  (
+    store = inject(Store),
+    actions$ = inject(Actions),
+resolverService = inject(ResolverService),
+  ) => {
     return actions$.pipe(
-      ofType(LoadResolverOptionsActions.loadResolverOptions),
-      exhaustMap(() => {
+      ofType(LoadResolverOptionsActions.loadResolverOptions, LoadResolverOptionsActions.setPreviousFilters),
+      concatLatestFrom(() => store.select(ResolverSelectors.fetchPreviousFilters)),
+      mergeMap(([action, opts]) => {
         return resolverService.fetchOptions().pipe(
           map(
             (ret: { [key: string]: unknown }[]) => {
@@ -29,6 +35,13 @@ export const init$ = createEffect(
                 )
                 return new Filter({...opt, value: <string>opt['name'], term: <string>opt['title']})
               }).sort((a,b) => a.term.localeCompare(b.term))
+                    if(opts && opts.length) {
+                           retArr.forEach((opt: Filter) => {
+                             if (opts.includes(<string>opt.value)) {
+                               opt.selected = true;
+                             }
+                           })
+                       }
               return LoadResolverOptionsActions.loadResolverOptionsSuccess({ options: retArr });
             },
             catchError((error: ErrorEvent) =>
@@ -50,7 +63,6 @@ export const resolveQuery = createEffect(
         return resolverService.resolve(action.urlStub, action.form).pipe(
           map(
             (response: ResolverResponse[]) => {
-              console.log(response)
               return ResolveQueryActions.resolveQuerySuccess({ data: response });
             },
             catchError((error: ErrorEvent) =>

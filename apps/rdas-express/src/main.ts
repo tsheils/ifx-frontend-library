@@ -24,18 +24,16 @@ const logger = winston.createLogger({
     new winston.transports.File({ filename: 'logs/app.log' }),
   ],
 });
-const app: Express = express();
 
+const app: Express = express();
 // Our httpServer handles incoming requests to our Express app.
 // Below, we tell Apollo Server to "drain" this httpServer,
 // enabling our servers to shut down gracefully.
 const httpServer = http.createServer(app);
-
 const driver = neo4j.driver(
   environment.url,
   neo4j.auth.basic(environment.neo4jUser, environment.neo4jPassword)
 );
-
 const instances = environment.instances;
 
 instances.forEach((instance) => startSchema(instance));
@@ -52,12 +50,12 @@ function startSchema(instance) {
       driver
     });
 
-    const apolloServer: ApolloServer = new ApolloServer({
-      schema: await neoSchema.getSchema(),
-      plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
-    });
-
-     await apolloServer.start();
+    try {
+      const apolloServer: ApolloServer = new ApolloServer({
+        schema: await neoSchema.getSchema(),
+        plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+      });
+      await apolloServer.start();
 
     app.use(
       `/api/${instance.name}`,
@@ -73,10 +71,19 @@ function startSchema(instance) {
         next();
       }
     )
-    const port = instance.port;
-    const server = app.listen(port);
-    console.log(environment.url)
-    console.log(server.address());
-   // server.on('error')
+    } catch(e) {
+      console.log(e)
+      logger.error(e);
+    }
+
+    try {
+      const port = instance.port;
+      const server = app.listen(port, () => {
+        logger.info(`${instance.name} API listening to port ${port} at ${environment.url}`);
+      });
+    } catch(e) {
+      console.log(e)
+      logger.error(e);
+    }
   });
 }

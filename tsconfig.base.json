@@ -55,9 +55,6 @@
       "@ncats-frontend-library/models/utils": [
         "libs/models/utils/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/rdas/article-charts": [
-        "libs/shared/rdas/article-charts/src/index.ts"
-      ],
       "@ncats-frontend-library/shared/rdas/article-display": [
         "libs/shared/rdas/article-display/src/index.ts"
       ],
@@ -76,9 +73,6 @@
       "@ncats-frontend-library/shared/rdas/phenotype-display": [
         "libs/shared/rdas/phenotype-display/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/rdas/project-charts": [
-        "libs/shared/rdas/project-charts/src/index.ts"
-      ],
       "@ncats-frontend-library/shared/rdas/project-display": [
         "libs/shared/rdas/project-display/src/index.ts"
       ],
@@ -94,11 +88,11 @@
       "@ncats-frontend-library/shared/rdas/subscribe-button": [
         "libs/shared/rdas/subscribe-button/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/rdas/trials-charts": [
-        "libs/shared/rdas/trials-charts/src/index.ts"
-      ],
       "@ncats-frontend-library/shared/utils/bar-chart": [
         "libs/shared/utils/bar-chart/src/index.ts"
+      ],
+      "@ncats-frontend-library/shared/utils/chart-wrapper": [
+        "libs/shared/utils/chart-wrapper/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/data-not-found": [
         "libs/shared/utils/data-not-found/src/index.ts"
@@ -129,9 +123,6 @@
       ],
       "@ncats-frontend-library/shared/utils/mobile-header-template": [
         "libs/shared/utils/mobile-header-template/src/index.ts"
-      ],
-      "@ncats-frontend-library/shared/utils/ncats-datatable": [
-        "libs/shared/utils/ncats-datatable/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/pie-chart": [
         "libs/shared/utils/pie-chart/src/index.ts"
@@ -170,6 +161,44 @@
         "libs/stores/user-store/src/index.ts"
       ],
       "adme-store": ["libs/stores/adme-store/src/index.ts"],
+      "chemkit": ["libs/features/ifx/chemkit/src/index.ts"],
+      "default-tool": ["libs/features/ifx/default-tool/src/index.ts"],
+      "filter-chip-list": ["libs/shared/utils/filter-chip-list/src/index.ts"],
+      "filter-download-button": [
+        "libs/shared/utils/filter-download-button/src/index.ts"
+      ],
+      "ifx": ["libs/models/ifx/src/index.ts"],
+      "ifx-tool-store": ["libs/stores/ifx-tool-store/src/index.ts"],
+      "iqc-convert": ["libs/features/ifx/IQC-convert/src/index.ts"],
+      "java-webstart": ["libs/shared/ifx/java-webstart/src/index.ts"],
+      "markdown-viewer": ["libs/shared/utils/markdown-viewer/src/index.ts"],
+      "ncats-datatable": ["libs/shared/utils/ncats-datatable/src/index.ts"],
+      "ncats-find-excel": ["libs/features/ifx/ncats-find-excel/src/index.ts"],
+      "ncats-footer": ["libs/shared/utils/ncats-footer/src/index.ts"],
+      "ncats-header": ["libs/shared/utils/ncats-header/src/index.ts"],
+      "options-panel": ["libs/shared/ifx/options-panel/src/index.ts"],
+      "qhts-data-browser": ["libs/features/ifx/qhts-data-browser/src/index.ts"],
+      "qhts-heatmap-browser": [
+        "libs/features/ifx/qhts-heatmap-browser/src/index.ts"
+      ],
+      "qhts-plate-browser": [
+        "libs/features/ifx/qhts-plate-browser/src/index.ts"
+      ],
+      "qhts-sample-client": [
+        "libs/features/ifx/qhts-sample-client/src/index.ts"
+      ],
+      "ramp-store": ["libs/stores/ramp-store/src/index.ts"],
+      "resolver-data-viewer": [
+        "libs/shared/ifx/resolver-data-viewer/src/index.ts"
+      ],
+      "resolver-main": ["libs/features/ifx/resolver-main/src/index.ts"],
+      "resolver-store": ["libs/stores/resolver-store/src/index.ts"],
+      "scaffold-hopper": ["libs/features/ifx/scaffold-hopper/src/index.ts"],
+      "screenshot-display": ["libs/shared/ifx/screenshot-display/src/index.ts"],
+      "tool-browse": ["libs/features/ifx/tool-browse/src/index.ts"],
+      "tool-card": ["libs/shared/ifx/tool-card/src/index.ts"],
+      "tool-details": ["libs/shared/ifx/tool-details/src/index.ts"],
+      "tool-list": ["libs/shared/ifx/tool-list/src/index.ts"],
       "utils-animated-force-directed-graph": [
         "libs/shared/utils/animated-force-directed-graph/src/index.ts"
       ],
