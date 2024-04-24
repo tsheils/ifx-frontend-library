@@ -1,6 +1,8 @@
 import { Action } from '@ngrx/store';
+import { Tool } from "ifx";
+import { TOOLSTATE } from "../../test-setup";
+import { LoadToolsActions } from "./ifx-tools.actions";
 
-import * as IfxToolsActions from './ifx-tools.actions';
 import {
   IfxToolsState,
   initialIfxToolsState,
@@ -8,18 +10,15 @@ import {
 } from './ifx-tools.reducer';
 
 describe('IfxTools Reducer', () => {
-  const createIfxToolsEntity = (id: string, name = ''): IfxToolsEntity => ({
-    id,
-    name: name || `name-${id}`,
-  });
 
   describe('valid IfxTools actions', () => {
     it('loadIfxToolsSuccess should return the list of known IfxTools', () => {
-      const ifxTools = [
-        createIfxToolsEntity('PRODUCT-AAA'),
-        createIfxToolsEntity('PRODUCT-zzz'),
-      ];
-      const action = IfxToolsActions.loadIfxToolsSuccess({ ifxTools });
+
+      const action = LoadToolsActions.loadToolsSuccess({
+        audienceList: TOOLSTATE.ifxTools.audienceList,
+        categoryList: TOOLSTATE.ifxTools.categoryList,
+        tools: [...Object.values(TOOLSTATE.ifxTools.entities)] as Tool[]
+      });
 
       const result: IfxToolsState = ifxToolsReducer(
         initialIfxToolsState,
@@ -27,7 +26,7 @@ describe('IfxTools Reducer', () => {
       );
 
       expect(result.loaded).toBe(true);
-      expect(result.ids.length).toBe(2);
+      expect(result.ids.length).toBe(31);
     });
   });
 

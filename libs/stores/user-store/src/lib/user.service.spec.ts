@@ -1,5 +1,3 @@
-global.TextEncoder = require("util").TextEncoder;
-global.TextDecoder = require("util").TextDecoder;
 import { TestBed } from '@angular/core/testing';
 import { Firestore } from "@angular/fire/firestore";
 import { UserService } from './user.service';

@@ -1,11 +1,10 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, computed, input, ViewEncapsulation } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { Router } from '@angular/router';
 import {
   Article,
   PubtatorAnnotation,
@@ -26,41 +25,47 @@ import { ArticleListCardComponent } from '../article-list-card/article-list-card
   styleUrls: ['./article-details-display.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ArticleDetailsDisplayComponent implements OnInit {
-  @Input() article!: Article;
-  annotationsMap: Map<string, string[]> = new Map<string, string[]>();
-
-  showAbstract = false;
-
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-    if (this.article && this.article.annotations) {
-      this.article.annotations.forEach((annotation: PubtatorAnnotation) => {
+export class ArticleDetailsDisplayComponent {
+  article = input<Article>();
+  annotationsMap = computed<Map<string, string[]>>(()=> {
+    const aMap: Map<string, string[]> = new Map<string, string[]>();
+    const art = this.article()
+    if(art && art.annotations) {
+      art.annotations.forEach((annotation: PubtatorAnnotation) => {
         if (annotation.text) {
-          if (this.annotationsMap.has(annotation.infons_type)) {
-            let types = this.annotationsMap.get(annotation.infons_type);
+          if (aMap.has(annotation.infons_type)) {
+            let types = aMap.get(annotation.infons_type);
             if (types) {
               types = [...types, ...annotation.text];
             } else {
               types = annotation.text;
             }
-            this.annotationsMap.set(annotation.infons_type, [
+            aMap.set(annotation.infons_type, [
               ...new Set(types),
             ]);
           } else {
-            this.annotationsMap.set(annotation.infons_type, annotation.text);
+            aMap.set(annotation.infons_type, annotation.text);
           }
         }
       });
     }
+    return aMap;
+  });
+
+  showAbstract = false;
+
+  constructor(
+    private breakpointObserver: BreakpointObserver,
+    private sanitizer: DomSanitizer
+  ) {
   }
 
-  getArticleAbstract(): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(this.article.abstractText);
+  getArticleAbstract(): SafeHtml | undefined {
+      const text = this.article()?.abstractText;
+    if(text) {
+      return this.sanitizer.bypassSecurityTrustHtml(text);
+    } else {
+      return undefined
+    }
   }
 }

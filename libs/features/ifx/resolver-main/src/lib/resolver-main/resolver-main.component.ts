@@ -66,7 +66,7 @@ export class ResolverMainComponent implements OnInit {
   resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver)
 
   ngOnInit(){
-    if (this.route.snapshot.queryParams) {
+    if (this.route.snapshot && this.route.snapshot.queryParams) {
       const params = this.route.snapshot.queryParamMap;
       const optsString: string= <string>params.get('options')
       if(optsString) {

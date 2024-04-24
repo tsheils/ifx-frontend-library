@@ -4,7 +4,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
   DiseaseService,
@@ -24,7 +24,7 @@ describe('RdasSearchComponent', () => {
       declarations: [],
       imports: [
         RdasSearchComponent,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
         MatFormFieldModule,
         ReactiveFormsModule,
         MatInputModule,

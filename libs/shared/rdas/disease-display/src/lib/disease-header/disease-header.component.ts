@@ -2,8 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed, input,
-  Input,
-  Signal,
   ViewEncapsulation
 } from "@angular/core";
 import { MatIconModule } from '@angular/material/icon';

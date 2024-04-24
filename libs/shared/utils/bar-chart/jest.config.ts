@@ -13,10 +13,6 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: [
-    'node_modules/?!d3-(selection|axis|scale|format|array|shape)',
-    'node_modules/?!d3',
-  ],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

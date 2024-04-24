@@ -1,12 +1,17 @@
+import { HttpClientTestingModule } from "@angular/common/http/testing";
 import { TestBed } from '@angular/core/testing';
 
-import { IfxToolsService } from './ifx-tool.service';
+import { IfxToolsService } from './ifx-tools.service';
 
-describe('IfxToolService', () => {
+describe('IfxToolsService', () => {
   let service: IfxToolsService;
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule
+      ]
+    });
     service = TestBed.inject(IfxToolsService);
   });
 

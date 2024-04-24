@@ -1,4 +1,4 @@
-import { ResolverEntity } from './resolver.models';
+import { ResolverResponse } from "ifx";
 import {
   resolverAdapter,
   ResolverPartialState,
@@ -8,12 +8,15 @@ import * as ResolverSelectors from './resolver.selectors';
 
 describe('Resolver Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getResolverId = (it: ResolverEntity) => it.id;
+  const getResolverId = (it: ResolverResponse ) => it.id;
   const createResolverEntity = (id: string, name = '') =>
     ({
       id,
-      name: name || `name-${id}`,
-    }) as ResolverEntity;
+      input: name || `name-${id}`,
+      response: name || `name-${id}`,
+      source: name || `name-${id}`,
+      url: name || `name-${id}`
+    }) as ResolverResponse;
 
   let state: ResolverPartialState;
 
@@ -45,7 +48,7 @@ describe('Resolver Selectors', () => {
     });
 
     it('selectEntity() should return the selected Entity', () => {
-      const result = ResolverSelectors.selectEntity(state) as ResolverEntity;
+      const result = ResolverSelectors.selectEntity(state) as ResolverResponse;
       const selId = getResolverId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

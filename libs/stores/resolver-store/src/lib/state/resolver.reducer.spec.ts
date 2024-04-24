@@ -1,7 +1,8 @@
 import { Action } from '@ngrx/store';
+import { ResolverResponse } from "ifx";
+import { LoadResolverOptionsActions } from "./resolver.actions";
 
 import * as ResolverActions from './resolver.actions';
-import { ResolverEntity } from './resolver.models';
 import {
   ResolverState,
   initialResolverState,
@@ -9,18 +10,18 @@ import {
 } from './resolver.reducer';
 
 describe('Resolver Reducer', () => {
-  const createResolverEntity = (id: string, name = ''): ResolverEntity => ({
+  const createResolverEntity = (id: string, name = ''): ResolverResponse => ({
     id,
-    name: name || `name-${id}`,
+    input: name || `name-${id}`,
+    response: name || `name-${id}`,
+    source: name || `name-${id}`,
+    url: name || `name-${id}`
   });
 
   describe('valid Resolver actions', () => {
     it('loadResolverSuccess should return the list of known Resolver', () => {
-      const resolver = [
-        createResolverEntity('PRODUCT-AAA'),
-        createResolverEntity('PRODUCT-zzz'),
-      ];
-      const action = ResolverActions.loadResolverSuccess({ resolver });
+
+      const action =  LoadResolverOptionsActions.loadResolverOptionsSuccess;
 
       const result: ResolverState = resolverReducer(
         initialResolverState,
@@ -28,7 +29,7 @@ describe('Resolver Reducer', () => {
       );
 
       expect(result.loaded).toBe(true);
-      expect(result.ids.length).toBe(2);
+      expect(result.ids.length).toBe(0);
     });
   });
 

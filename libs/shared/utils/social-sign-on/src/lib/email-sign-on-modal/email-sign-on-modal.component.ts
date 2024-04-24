@@ -54,7 +54,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
       .pipe(
       select(UserSelectors.getUsersError),
       takeUntilDestroyed(this.destroyRef),
-      map((res: any) => {
+      map((res: string | null | undefined) => {
         if (res) {
           this.loginError = res;
         }

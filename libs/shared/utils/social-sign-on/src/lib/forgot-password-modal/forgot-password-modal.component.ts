@@ -51,7 +51,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
     this.store.pipe(
       select(UserSelectors.getUsersError),
       takeUntilDestroyed(this.destroyRef),
-      map((res: any) => {
+      map((res: string|null| undefined) => {
       if (res) {
         this.loginError = res;
       }
@@ -61,7 +61,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
     this.store.pipe(
       select(UserSelectors.getEmail),
      takeUntilDestroyed(this.destroyRef),
-      map((res: any) => {
+      map((res: string| null | undefined) => {
       if (res === 'reset') {
         this.emailSent = true;
         this.signOnForm.reset();

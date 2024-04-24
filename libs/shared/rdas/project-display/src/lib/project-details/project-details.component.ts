@@ -1,6 +1,6 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnChanges, ViewEncapsulation } from '@angular/core';
+import { Component, computed, inject, input, ViewEncapsulation } from "@angular/core";
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -23,47 +23,50 @@ import { ProjectListCardComponent } from '../project-list-card/project-list-card
   styleUrls: ['./project-details.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class ProjectDetailsComponent implements OnChanges {
-  @Input() grant!: CoreProject;
+export class ProjectDetailsComponent {
 
-  latestGrant!: Project;
-  /**
-   * truncated abstract text
-   */
-  truncatedAbstract = '';
-
+  breakpointObserver = inject(BreakpointObserver)
   /**
    * boolean to show full or truncated abstract
    */
   fullAbstract = true;
 
-  funding?: string;
+  grant = input<CoreProject>();
+  latestGrant = computed<Project>(() => {
+      const g = this.grant()
+      if (g && g.projects) {
+        return g.projects[0]
+      } else {
+        return {} as Project
+      }
+    }
+  );
+  /**
+   * truncated abstract text
+   */
+  truncatedAbstract = computed(() => {
+    const abs = this.latestGrant()?.abstract;
+    let ret = abs;
+    if (abs && abs.length > 800) {
+      this.fullAbstract = false;
+      ret = abs.slice(0, 800);
+    }
+    if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
+      this.fullAbstract = false;
+      if (abs && abs.length > 400) {
+        ret = abs.slice(0, 400);
+      }
+    }
+    return ret;
+  });
 
-  constructor(private breakpointObserver: BreakpointObserver) {}
 
-  ngOnChanges(): void {
-    if (this.grant.fundedByAgents) {
-      this.funding = this.grant.fundedByAgents
+  funding = computed(() => {
+    const gr = this.grant();
+    if (gr && gr.fundedByAgents) {
+      return gr.fundedByAgents
         .map((obj) => obj.name)
         .join(', ');
-    }
-    if (this.grant.projects && this.grant.projects.length > 0) {
-      this.latestGrant = this.grant.projects[0];
-      this.fullAbstract = true;
-      this.truncatedAbstract = '';
-      if (this.latestGrant.abstract && this.latestGrant.abstract.length > 800) {
-        this.fullAbstract = false;
-        this.truncatedAbstract = this.latestGrant.abstract.slice(0, 800);
-      }
-      if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
-        this.fullAbstract = false;
-        if (
-          this.latestGrant.abstract &&
-          this.latestGrant.abstract.length > 400
-        ) {
-          this.truncatedAbstract = this.latestGrant.abstract.slice(0, 400);
-        }
-      }
-    }
-  }
+    } else return null
+  })
 }

@@ -2,6 +2,6 @@ import { Tool } from './tool';
 
 describe('Tool', () => {
   it('should create an instance', () => {
-    expect(new Tool()).toBeTruthy();
+    expect(new Tool({toolName: "dsdfdssdg"})).toBeTruthy();
   });
 });

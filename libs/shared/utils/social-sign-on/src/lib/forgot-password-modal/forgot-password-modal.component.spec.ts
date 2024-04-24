@@ -5,7 +5,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { USERS_FEATURE_KEY, usersReducer } from "@ncats-frontend-library/stores/user-store";
+import { StoreModule } from "@ngrx/store";
 
 import { ForgotPasswordModalComponent } from './forgot-password-modal.component';
 
@@ -15,14 +17,17 @@ describe('ForgotPasswordModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ForgotPasswordModalComponent],
+      declarations: [],
       imports: [
+        ForgotPasswordModalComponent,
         ReactiveFormsModule,
         MatFormFieldModule,
         MatInputModule,
         MatIconModule,
         MatButtonModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
       providers: [
         { provide: MatDialog, useValue: {} },

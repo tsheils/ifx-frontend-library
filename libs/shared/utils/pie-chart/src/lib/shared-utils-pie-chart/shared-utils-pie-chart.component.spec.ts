@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { PIEFILTERS } from "../../test-setup";
 import { SharedUtilsPieChartComponent } from './shared-utils-pie-chart.component';
 
 describe('SharedUtilsPieChartComponent', () => {
@@ -12,6 +13,7 @@ describe('SharedUtilsPieChartComponent', () => {
 
     fixture = TestBed.createComponent(SharedUtilsPieChartComponent);
     component = fixture.componentInstance;
+    component.data = PIEFILTERS
     fixture.detectChanges();
   });
 

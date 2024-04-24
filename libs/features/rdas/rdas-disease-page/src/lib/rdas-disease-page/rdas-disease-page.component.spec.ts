@@ -1,7 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { ActivatedRoute } from "@angular/router";
 import {
-  DiseaseEffects, diseasesReducer
+  DiseaseEffects, DISEASES_FEATURE_KEY, diseasesReducer
 } from "@ncats-frontend-library/stores/disease-store";
+import { USERS_FEATURE_KEY, usersReducer } from "@ncats-frontend-library/stores/user-store";
 import { provideEffects } from "@ngrx/effects";
 import { provideStore, StoreModule } from "@ngrx/store";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
@@ -16,15 +19,14 @@ describe('RdasDiseasePageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RdasDiseasePageComponent,
-        StoreModule
+        NoopAnimationsModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
+        StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer)
       ],
       providers: [
-        provideStore({
-          diseases: diseasesReducer
-        }),
-        provideEffects([DiseaseEffects]),
-        provideStoreDevtools({ maxAge: 25, logOnly: false }),
-      ],
+        {provide: ActivatedRoute, useValue: {} as ActivatedRoute}
+      ]
     }).compileComponents();
 
     fixture = TestBed.createComponent(RdasDiseasePageComponent);

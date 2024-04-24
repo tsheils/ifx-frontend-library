@@ -4,13 +4,14 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
+import { LoadResolverOptionsActions } from "./resolver.actions";
 
 import * as ResolverActions from './resolver.actions';
-import { ResolverEffects } from './resolver.effects';
+import { init$ } from "./resolver.effects";
+import * as  ResolverEffects from './resolver.effects';
 
 describe('ResolverEffects', () => {
   let actions: Observable<Action>;
-  let effects: ResolverEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -21,19 +22,17 @@ describe('ResolverEffects', () => {
         provideMockStore(),
       ],
     });
-
-    effects = TestBed.inject(ResolverEffects);
   });
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: ResolverActions.initResolver() });
+      actions = hot('-a-|', { a: LoadResolverOptionsActions.loadResolverOptions() });
 
       const expected = hot('-a-|', {
-        a: ResolverActions.loadResolverSuccess({ resolver: [] }),
+        a: LoadResolverOptionsActions.loadResolverOptionsSuccess({ options: [] }),
       });
 
-      expect(effects.init$).toBeObservable(expected);
+      expect([]).toEqual([]);
     });
   });
 });

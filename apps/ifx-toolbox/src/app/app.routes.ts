@@ -11,8 +11,8 @@ export const appRoutes: Route[] = [
     path: 'toolbox',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('default-tool').then(
-        (m) => m.DefaultToolComponent,
+      import('tool-browse').then(
+        (m) => m.ToolBrowseComponent,
       )
   },
   {

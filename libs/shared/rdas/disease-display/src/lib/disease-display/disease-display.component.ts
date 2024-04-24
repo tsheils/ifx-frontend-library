@@ -4,15 +4,13 @@ import { ScrollingModule } from "@angular/cdk/scrolling";
 import { ViewportScroller } from "@angular/common";
 import {
   AfterViewInit,
-  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
   ElementRef,
   EventEmitter,
-  inject,
-  Input,
+  inject, input,
   OnInit,
   Output,
   QueryList,
@@ -36,7 +34,6 @@ import { ChartWrapperComponent } from "@ncats-frontend-library/shared/utils/char
 import { SharedUtilsDataNotFoundComponent } from "@ncats-frontend-library/shared/utils/data-not-found";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 import { RdasPanelTemplateComponent } from "@ncats-frontend-library/shared/utils/rdas-panel-template";
-
 import { DiseaseHeaderComponent } from "../disease-header/disease-header.component";
 
 @Component({
@@ -68,24 +65,28 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
 
-  @Input() disease!: Signal<Disease | undefined>;
-  @Input() filters!: Signal<FilterCategory[] | undefined>;
-  @Input() fragment!: string;
-  @Input() offset!: string;
-  @Input() id!: string;
+   disease = input<Disease>();
+   filters = input<FilterCategory[]>();
+  fragment = input<string>();
+  offset = input<string>();
+  id = input<string>();
+
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
     const map = new Map<string, FilterCategory[]>();
-    this.filters()!.forEach(filterCat => {
-      if(filterCat.parent) {
-        let filterCats: FilterCategory[] | undefined = map.get(filterCat.parent);
-        if (filterCats) {
-          filterCats.push(filterCat);
-        } else {
-          filterCats = [filterCat]
+    const filtersL = this.filters()
+    if(filtersL && filtersL.length) {
+      filtersL.forEach(filterCat => {
+        if (filterCat.parent) {
+          let filterCats: FilterCategory[] | undefined = map.get(filterCat.parent);
+          if (filterCats) {
+            filterCats.push(filterCat);
+          } else {
+            filterCats = [filterCat]
+          }
+          map.set(filterCat.parent, filterCats);
         }
-        map.set(filterCat.parent, filterCats);
-      }
       })
+    }
     return map;
   })
 
@@ -110,7 +111,7 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.scroller.setOffset([0, 250])
-    if (this.route.snapshot.fragment) {
+    if (this.route.snapshot && this.route.snapshot.fragment) {
       this.scroller.scrollToAnchor(this.route.snapshot.fragment);
     }
 
@@ -140,17 +141,13 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(){
-    if(this.route.snapshot.queryParamMap.has('offset')) {
+    if(this.route.snapshot && this.route.snapshot.queryParamMap.has('offset')) {
       const template: RdasPanelTemplateComponent[] = this.templates
         .filter((template: RdasPanelTemplateComponent) => template._id() === this.route.snapshot.fragment)
       if(template && template.length) {
         template[0].paginator.pageIndex = Number(this.route.snapshot.queryParamMap.get('offset')) / 10
       }
     }
-  }
-
-  ngOnChanges() {
-    this.changeRef.detectChanges();
   }
 
   fetchList(

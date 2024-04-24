@@ -1,32 +1,47 @@
-import { ArticleStoreEntity } from './article-store.models';
 import {
-  articleStoreAdapter,
-  ArticleStorePartialState,
-  initialArticleStoreState,
-} from './articles.reducer';
+  Article,
+  Author,
+  Disease, Epidemiology,
+  JournalVolume,
+  MeshTerm,
+  PubtatorAnnotation, Source
+} from "@ncats-frontend-library/models/rdas";
+import {
+  articlesAdapter,
+  ArticleStorePartialState, initialState
+} from "./articles.reducer";
 import * as ArticleStoreSelectors from './articles.selectors';
 
 describe('ArticleStore Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getArticleStoreId = (it: ArticleStoreEntity) => it.id;
-  const createArticleStoreEntity = (id: string, name = '') =>
+  const getArticleStoreId = (it: Article) => it.pubmed_id;
+  const createArticleStoreEntity = (pubmed_id: string, name = '') =>
     ({
-      id,
-      name: name || `name-${id}`,
-    } as ArticleStoreEntity);
+      pubmed_id,
+      title: name || `name-${pubmed_id}`,
+      DateCreatedRDAS: "string",
+      abstractText: "string",
+      affiliation: "string",
+      citedByCount: 0,
+      doi: "string",
+      firstPublicationDate: "string",
+      diseases: [],
+      journals: [],
+      sources: []
+    } as Article);
 
   let state: ArticleStorePartialState;
 
   beforeEach(() => {
     state = {
-      articleStore: articleStoreAdapter.setAll(
+      articles: articlesAdapter.setAll(
         [
           createArticleStoreEntity('PRODUCT-AAA'),
           createArticleStoreEntity('PRODUCT-BBB'),
           createArticleStoreEntity('PRODUCT-CCC'),
         ],
         {
-          ...initialArticleStoreState,
+          ...initialState,
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
@@ -47,7 +62,7 @@ describe('ArticleStore Selectors', () => {
     it('selectEntity() should return the selected Entity', () => {
       const result = ArticleStoreSelectors.selectEntity(
         state
-      ) as ArticleStoreEntity;
+      ) as Article;
       const selId = getArticleStoreId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

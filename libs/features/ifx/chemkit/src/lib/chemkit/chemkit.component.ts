@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, Signal } from "@angular/core";
+import { Component, computed, inject, Signal } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { Store } from "@ngrx/store";
 import { DefaultToolComponent } from "default-tool";

@@ -1,6 +1,6 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CommonModule, formatDate, isPlatformBrowser } from "@angular/common";
+import { CommonModule, isPlatformBrowser } from "@angular/common";
 import {
   Component,
   ElementRef,
@@ -17,19 +17,18 @@ import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
 import {
   axisBottom,
   axisLeft,
-  BaseType, bisect, bisector, create,
   index,
-  InternMap, map, pointer,
+  InternMap, pointer,
   ScaleBand,
   scaleBand,
-  ScaleLinear, selectAll,
+  ScaleLinear,
   SeriesPoint,
   stack,
   union
 } from "d3";
 import { max } from "d3-array";
 import { scaleLinear } from "d3-scale";
-import { select, Selection } from "d3-selection";
+import { select } from "d3-selection";
 import { Series } from "d3-shape";
 
 interface ChartPoint extends SeriesPoint<{[key: string]: number}> {

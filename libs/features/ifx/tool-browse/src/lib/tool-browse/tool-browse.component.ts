@@ -25,7 +25,7 @@ import { MatInputModule } from "@angular/material/input";
 import { HighlightPipe } from "@ncats-frontend-library/shared/utils/highlight-pipe";
 import { Store } from "@ngrx/store";
 import { Tool } from "ifx";
-import { FetchToolActions, IFXToolsSelectors } from "ifx-tool-store";
+import { IFXToolsSelectors } from "ifx-tool-store";
 import { debounceTime, distinctUntilChanged } from "rxjs";
 import { ToolCardComponent } from "tool-card";
 

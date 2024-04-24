@@ -1,4 +1,5 @@
 import { inject } from "@angular/core";
+import { DocumentData } from "@angular/fire/compat/firestore";
 import { UserCredential, UserInfo } from "@firebase/auth";
 import { DocumentSnapshot } from "@firebase/firestore";
 import { User } from "@ncats-frontend-library/models/utils";
@@ -244,7 +245,7 @@ export const loginEmailUser = createEffect(
               subscriptions: action.subscriptions
             });
             return userService.updateUserProfile(newUser).pipe(
-              map((res: any) => {
+              map((res: DocumentSnapshot<DocumentData, DocumentData>) => {
                 const user = res.data() as User;
                 localStorageService.removeItem("userEntity");
                 localStorageService.setItem("userEntity", JSON.stringify(user));

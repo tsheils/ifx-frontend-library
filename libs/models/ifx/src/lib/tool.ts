@@ -9,7 +9,7 @@ export class Tool {
   audience!: string;
   codebase!: string;
   image!: boolean;
-  publicCodebase!: boolean;
+  publicCodebase?: boolean;
   component!: string;
   toolUrl!: string;
 

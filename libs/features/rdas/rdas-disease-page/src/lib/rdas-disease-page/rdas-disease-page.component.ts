@@ -83,7 +83,7 @@ export class RdasDiseasePageComponent implements OnInit {
     this.disease = this.store.selectSignal(DiseaseSelectors.getSelected);
     this.diseaseFilters = this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
 
-    if (this.route.snapshot.fragment) {
+    if (this.route.snapshot && this.route.snapshot.fragment) {
       this.activeElement = this.route.snapshot.fragment;
     }
 
