@@ -1,0 +1,45 @@
+
+
+img.full-width-banner {
+  height: 25vh;
+  width: 99vw;
+  object-fit: cover;
+}
+
+.placeholder {
+  height: 25vh;
+}
+
+.tool-name {
+  position: absolute;
+  font-size:6rem;
+  background-color: rgba(255,255,255,0.75);
+  height: 25vh;
+  left: 2vw;
+  width: 55vw;
+  text-align: center;
+  border-radius: 3px;
+  display: block;
+}
+
+.tool-link {
+  word-break: break-all;
+}
+
+.link-button {
+  padding-left: 2vw;
+}
+
+@media only screen and (max-width: 1280px) {
+  .tool-name {
+    width:75vw;
+    font-size: 5rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .tool-name {
+    width: 95vw;
+    font-size: 4rem;
+  }
+}

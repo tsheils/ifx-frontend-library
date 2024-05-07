@@ -16,6 +16,10 @@ apps/rdas-express/src/environments/environment.ts
 apps/rdas-express/src/environments/environment.prod.ts
 apps/neo4j-introspection/src/environments/environment.ts
 apps/neo4j-introspection/src/environments/environment.prod.ts
+apps/rdas/src/environments/environment.test.ts
+apps/resolver/src/environments
+apps/resolver/src/environments/environment.ts
+
 .dev.ts
 .prod.ts
 # dependencies
@@ -56,3 +60,4 @@ Thumbs.db
 .nx
 
 apps/rdas-e2e
+/apps/adme-loader-backend/src/environments/environment.ts

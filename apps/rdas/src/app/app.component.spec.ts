@@ -1,17 +1,22 @@
 import { TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RouterModule } from '@angular/router';
-import { DiseasesFacade } from '@ncats-frontend-library/stores/disease-store';
-import { UsersFacade } from '@ncats-frontend-library/stores/user-store';
+import { DISEASES_FEATURE_KEY, diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
+import { StoreModule } from "@ngrx/store";
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [AppComponent, RouterModule],
+      imports: [
+        AppComponent,
+        RouterModule,
+        NoopAnimationsModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
+      ],
       providers: [
-        { provide: DiseasesFacade, useValue: {} },
-        { provide: UsersFacade, useValue: {} },
       ],
     }).compileComponents();
   });

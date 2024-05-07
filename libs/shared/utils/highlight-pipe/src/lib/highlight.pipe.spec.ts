@@ -12,7 +12,7 @@ describe('AutoComplete Component - Highlight pipe', () => {
         {
           provide: DomSanitizer,
           useValue: {
-            bypassSecurityTrustHtml: (v) => v,
+            bypassSecurityTrustHtml: (v: string) => v,
           },
         },
         HighlightPipe,
@@ -20,7 +20,7 @@ describe('AutoComplete Component - Highlight pipe', () => {
     });
   }));
 
-  beforeEach(inject([HighlightPipe], (p) => {
+  beforeEach(inject([HighlightPipe], (p:HighlightPipe) => {
     pipe = p;
   }));
 

@@ -143,20 +143,22 @@ export const loadDiseaseFilters$ =  createEffect(
                         }
                       )
                     )
-                    filters.push(new FilterCategory(
-                        {
-                          parent: 'epiArticles',
-                          label: "Epidemiology Articles by Year",
-                          values: articleFilterDataList.countsByYear
-                            .filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles')
-                            .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }))
-                        }
-                      )
+                    const fc = new FilterCategory(
+                      {
+                        parent: 'epiArticles',
+                        label: "Epidemiology Articles by Year",
+                        field: "year",
+                        values: articleFilterDataList.countsByYear
+                        .filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles')
+                          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year'}))
+                      }
                     )
+                    filters.push(fc);
                     filters.push(new FilterCategory(
                       {
                         parent: 'nonEpiArticles',
                         label: "Articles by Year",
+                        field: "year",
                         values: articleFilterDataList.countsByYear
                           .filter((year: Partial<Filter>) => year.label == 'Non Epidemiology Articles')
                           .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }))
@@ -188,11 +190,12 @@ export const loadDiseaseFilters$ =  createEffect(
                   }
                   if (trialFilterData) {
                     const trialFilterDataList: { trialsByStatus: Filter[], trialsByType: Filter[] } = trialFilterData.data as { trialsByStatus: Filter[], trialsByType: Filter[] };
-                    if (trialFilterDataList.trialsByStatus) {
+                    if (trialFilterDataList.trialsByStatus && trialFilterDataList.trialsByStatus.length) {
                       filters.push(new FilterCategory(
                         {
                           parent: 'trials',
                           label: "Clinical Trials by Status",
+                          field: "OverallStatus",
                           values: trialFilterDataList.trialsByStatus.map((fil: Partial<Filter>) => new Filter({
                             ...fil, selected:
                               params['OverallStatus'] === fil.term || params['OverallStatus']?.includes(fil.term)
@@ -200,16 +203,41 @@ export const loadDiseaseFilters$ =  createEffect(
                         }
                       ))
                     }
-                    if (trialFilterDataList.trialsByType.length) {
+                    if (trialFilterDataList.trialsByType && trialFilterDataList.trialsByType.length) {
                       filters.push(new FilterCategory(
                         {
                           parent: 'trials',
                           label: "Clinical Trials by Type",
+                          field: "StudyType",
                           values: trialFilterDataList.trialsByType.map((fil: Partial<Filter>) => new Filter(fil))
                         }
                       ))
                     }
                   }
+                   if(root.fragment) {
+                     filters.forEach(filter => {
+                       if (filter.parent === root.fragment) {
+                         if (filter.field) {
+                         filter.values.map(val => {
+                           if (Array.isArray(params[filter.field])) {
+                             params[filter.field].forEach((filter: string) => {
+                               if (val.term === filter) {
+                                 val.selected = true;
+                               }
+                             })
+                           } else {
+                             if (val.term === params[filter.field]) {
+                               val.selected = true;
+                             }
+                           }
+                           return val;
+                         })
+                       }
+                     }
+                     })
+                   }
+
+
                   return FetchDiseaseActions.fetchDiseaseFiltersSuccess({
                     filters: filters,
                   });
@@ -243,9 +271,7 @@ export const loadDisease$ =  createEffect(
       const params = root.queryParams;
       const gardid: string = params['id'];
       _setGardId(gardid);
-
       if (root.fragment) {
-        //   console.log("from load disease")
         _setFragment(root.fragment, params);
       }
       return combineLatest(
@@ -324,7 +350,7 @@ export const searchDiseases$ =  createEffect(
       ofType(SearchDiseasesActions.searchDiseases),
       mergeMap((action: { term: string }) => {
         return diseaseService
-          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term + '~', limit: 10 })
+          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term.split(' ').join('~ AND ') + '*', limit: 10 })
           .pipe(
             map((res: ApolloQueryResult<unknown>) => {
               const data: { diseaseSearch: Disease[] } = res.data as { diseaseSearch: Disease[] };

@@ -1,0 +1,49 @@
+<div class="row space-around-row">
+  <div class = "width-66">
+    <h3>Software Requirements</h3>
+  </div>
+</div>
+<div class="row space-around-row">
+  <div class = "width-66">
+    (requires <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/javaws/" target="_blank">Java WebStart</a>)<br>
+    <p>
+      The {{tool()?.toolName}} requires Java to run. Java is routinely available on most windows and Mac workstations and laptops.
+      The {{tool()?.toolName}} launches by hitting a URL link and downloads the application and launches it using a technology called Java Web Start (JWS).
+      Security warnings will warn about trusting the software. We don’t have an officially signed Java Archive (JAR file)
+      so just accept the application when prompted.  The client extracts data from our internal databases so the client
+      will only function when connected to our internal NCATS network, either when working on-site or via a Virtual Private Network (VPN)
+      connection or Remote Desktop Session (RDS).
+    </p>
+  </div>
+</div>
+
+<div class="row space-around-row">
+  <div class = "width-66">
+    <h3>Where do I find the {{tool()?.toolName}}?</h3>
+  </div>
+</div>
+<div class="row space-around-row">
+  <div class = "width-66">
+    <p>
+      <a class = "mat-headline-6 tool-link secondary-color" href = {{tool()?.url}}>{{tool()?.toolName}} &nbsp;<mat-icon>file_download</mat-icon></a><br>
+    </p>
+  </div>
+</div>
+
+<div class="row space-around-row">
+  <div class = "width-66">
+    <h3>Launching the {{tool()?.toolName}}</h3>
+  </div>
+</div>
+
+<div class="row space-around-row">
+  <div class = "width-66">
+    <p>
+      Use the <a href = {{tool()?.url}}>{{tool()?.toolName}}</a> Launch URL to start the application.
+      You can bookmark this url or add it to a bookmark toolbar for easy access.
+      Initially you will be prompted on how to handle the ‘jnlp’ launch file. Select to ‘Open’ the file using Java Web Start Launcher.
+      Next you will be prompted or warned about security.
+      Java webstart downloads the program in a compressed file and launches the program on your machine. Select to ‘Run’ the application.
+    </p>
+  </div>
+</div>

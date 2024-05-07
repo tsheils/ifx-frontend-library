@@ -17,7 +17,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription, User } from '@ncats-frontend-library/models/utils';
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
-import { select, Store } from "@ngrx/store";
+import { Store } from "@ngrx/store";
 import { debounceTime, distinctUntilChanged, map } from "rxjs";
 import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
 import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-modal.component';

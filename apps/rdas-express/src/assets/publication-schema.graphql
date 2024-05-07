@@ -1,150 +1,146 @@
-extend schema @mutation(operations: [])
 scalar JSON
+extend schema @mutation(operations: [])
 
-type Article  {
-  DateCreatedRDAS: String
-  abstractText: String
-  affiliation: String
-  appearsInJournalVolumes: [JournalVolume!]!
-    @relationship(type: "APPEARS_IN", direction: OUT)
-  authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
-  citedByCount: BigInt
-  doi: String
-  epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]!
-    @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: IN)
-  firstPublicationDate: String
-  fullTextUrlsContentFor: [FullTextUrl!]!
-    @relationship(type: "CONTENT_FOR", direction: IN)
-  gardsmentionedIn: [GARD!]! @relationship(type: "MENTIONED_IN", direction: IN)
-  hasOmimRefomimRefs: [OMIMRef!]!
-    @relationship(type: "HAS_OMIM_REF", direction: OUT)
-  isEpi: Boolean
-  keywordsKeywordFor: [Keyword!]!
-    @relationship(type: "KEYWORD_FOR", direction: IN)
-  meshTermsMeshTermFor: [MeshTerm!]!
-    @relationship(type: "MESH_TERM_FOR", direction: IN)
-  omim_evidence: Boolean
-  publicationYear: String
-  pubType: [String]
-  pubmed_evidence: Boolean
-  pubmed_id: String
-  pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]!
-    @relationship(type: "ANNOTATION_FOR", direction: IN)
-  refInOMIM: Boolean
-  source: String
-  substancesSubstanceAnnotatedByPubmed: [Substance!]!
-    @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
-  title: String!
+type Article {
+	DateCreatedRDAS: String!
+	LastUpdatedRDAS: String
+	ReferenceOrigin: [String]!
+	abstractText: String
+	affiliation: String
+	appearsInJournalVolumes: [JournalVolume!]! @relationship(type: "APPEARS_IN", direction: OUT)
+	authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
+	citedByCount: BigInt
+	doi: String!
+	epi_processed: Boolean!
+	epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]! @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: IN, properties: "EpidemiologyAnnotationForProperties")
+	firstPublicationDate: String
+	fullTextUrlsContentFor: [FullTextUrl!]! @relationship(type: "CONTENT_FOR", direction: IN)
+	gardsmentionedIn: [GARD!]! @relationship(type: "MENTIONED_IN", direction: IN, properties: "MentionedInProperties")
+	hasOmimRefomimRefs: [OMIMRef!]! @relationship(type: "HAS_OMIM_REF", direction: OUT)
+	hasPubtatorAnnotation: Boolean!
+	isEpi: Boolean!
+	keywordsKeywordFor: [Keyword!]! @relationship(type: "KEYWORD_FOR", direction: IN)
+	meshTermsMeshTermFor: [MeshTerm!]! @relationship(type: "MESH_TERM_FOR", direction: IN)
+	pubType: [String]
+	publicationYear: String!
+	pubmed_id: String
+	pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]! @relationship(type: "ANNOTATION_FOR", direction: IN)
+	source: String
+	substancesSubstanceAnnotatedByPubmed: [Substance!]! @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
+	title: String!
 }
 
-type Author  {
-  firstName: String!
-  fullName: String!
-  lastName: String!
-  wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
+type Author {
+	firstName: String!
+	fullName: String!
+	lastName: String!
+	wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
 }
 
-type EpidemiologyAnnotation  {
-  date: [String]!
-  epidemiologyAnnotationForArticles: [Article!]!
-    @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: OUT)
-  epidemiology_rate: [String]!
-  epidemiology_type: [String]!
-  ethnicity: [String]!
-  isEpi: Boolean!
-  location: [String]!
-  sex: [String]!
+type EpidemiologyAnnotation {
+	DateCreatedRDAS: String
+	LastUpdatedRDAS: String
+	date: [String]!
+	epidemiologyAnnotationForArticles: [Article!]! @relationship(type: "EPIDEMIOLOGY_ANNOTATION_FOR", direction: OUT, properties: "EpidemiologyAnnotationForProperties")
+	epidemiology_rate: [String]!
+	epidemiology_type: [String]!
+	ethnicity: [String]!
+	isEpi: Boolean!
+	location: [String]!
+	sex: [String]!
 }
 
-type FullTextUrl  {
-  availability: String!
-  availabilityCode: String!
-  contentForArticles: [Article!]!
-    @relationship(type: "CONTENT_FOR", direction: OUT)
-  documentStyle: String!
-  site: String!
-  url: String!
+type EpidemiologyAnnotationForProperties @relationshipProperties {
+	epidemiology_probability: String
 }
 
-type GARD  {
-  GardId: String!
-  is_rare: Boolean!
-  mentionedInArticles: [Article!]!
-    @relationship(type: "MENTIONED_IN", direction: OUT)
-  GardName: String!
+type FullTextUrl {
+	availability: String!
+	availabilityCode: String!
+	contentForArticles: [Article!]! @relationship(type: "CONTENT_FOR", direction: OUT)
+	documentStyle: String!
+	site: String!
+	url: String!
 }
 
-type Journal  {
-  essn: String!
-  issn: String!
-  journalVolumesContentOf: [JournalVolume!]!
-    @relationship(type: "CONTENT_OF", direction: IN)
-  medlineAbbreviation: String!
-  nlmid: String!
-  title: String!
+type GARD {
+	Classification: String!
+	GardId: String!
+	GardName: String!
+	Synonyms: [String]!
+	Type: [String]!
+	mentionedInArticles: [Article!]! @relationship(type: "MENTIONED_IN", direction: OUT, properties: "MentionedInProperties")
 }
 
-type JournalVolume  {
-  articlesAppearsIn: [Article!]!
-    @relationship(type: "APPEARS_IN", direction: IN)
-  contentOfJournals: [Journal!]!
-    @relationship(type: "CONTENT_OF", direction: OUT)
-  dateOfPublication: String!
-  issue: String!
-  journalIssueId: BigInt!
-  monthOfPublication: BigInt!
-  printPublicationDate: String!
-  volume: String!
-  yearOfPublication: BigInt!
+type Journal {
+	essn: String!
+	issn: String!
+	journalVolumesContentOf: [JournalVolume!]! @relationship(type: "CONTENT_OF", direction: IN)
+	medlineAbbreviation: String!
+	nlmid: String!
+	title: String!
 }
 
-type Keyword  {
-  keyword: String!
-  keywordForArticles: [Article!]!
-    @relationship(type: "KEYWORD_FOR", direction: OUT)
+type JournalVolume {
+	articlesAppearsIn: [Article!]! @relationship(type: "APPEARS_IN", direction: IN)
+	contentOfJournals: [Journal!]! @relationship(type: "CONTENT_OF", direction: OUT)
+	dateOfPublication: String!
+	issue: String!
+	journalIssueId: BigInt!
+	monthOfPublication: BigInt!
+	printPublicationDate: String!
+	volume: String!
+	yearOfPublication: BigInt!
 }
 
-type MeshQualifier  {
-  abbreviation: String!
-  isMajorTopic: Boolean
-  majorTopic_YN: String
-  meshQualifierForMeshTerms: [MeshTerm!]!
-    @relationship(type: "MESH_QUALIFIER_FOR", direction: OUT)
-  qualifierName: String!
+type Keyword {
+	keyword: String!
+	keywordForArticles: [Article!]! @relationship(type: "KEYWORD_FOR", direction: OUT)
 }
 
-type MeshTerm  {
-  descriptorName: String!
-  isMajorTopic: Boolean
-  majorTopic_YN: String
-  meshQualifiersMeshQualifierFor: [MeshQualifier!]!
-    @relationship(type: "MESH_QUALIFIER_FOR", direction: IN)
-  meshTermForArticles: [Article!]!
-    @relationship(type: "MESH_TERM_FOR", direction: OUT)
+type MentionedInProperties @relationshipProperties {
+	MatchedTermRDAS: String
 }
 
-type OMIMRef  {
-  articlesHasOmimRef: [Article!]!
-    @relationship(type: "HAS_OMIM_REF", direction: IN)
-  omimId: String!
-  omimName: String!
-  omimSections: [String]!
+type MeshQualifier {
+	abbreviation: String!
+	isMajorTopic: Boolean
+	majorTopic_YN: String
+	meshQualifierForMeshTerms: [MeshTerm!]! @relationship(type: "MESH_QUALIFIER_FOR", direction: OUT)
+	qualifierName: String!
 }
 
-type PubtatorAnnotation  {
-  annotationForArticles: [Article!]!
-    @relationship(type: "ANNOTATION_FOR", direction: OUT)
-  infons_identifier: String!
-  infons_type: String!
-  type: String!
-  text: [String]
+type MeshTerm {
+	descriptorName: String!
+	isMajorTopic: Boolean
+	majorTopic_YN: String
+	meshQualifiersMeshQualifierFor: [MeshQualifier!]! @relationship(type: "MESH_QUALIFIER_FOR", direction: IN)
+	meshTermForArticles: [Article!]! @relationship(type: "MESH_TERM_FOR", direction: OUT)
 }
 
-type Substance  {
-  name: String!
-  registryNumber: String!
-  substanceAnnotatedByPubmedArticles: [Article!]!
-    @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: OUT)
+type OMIMRef {
+	DateCreatedRDAS: String!
+	LastUpdatedRDAS: String!
+	articlesHasOmimRef: [Article!]! @relationship(type: "HAS_OMIM_REF", direction: IN)
+	omimId: BigInt!
+	omimName: String!
+	omimSections: [String]!
+}
+
+type PubtatorAnnotation {
+	DateCreatedRDAS: String!
+	LastUpdatedRDAS: String!
+	annotationForArticles: [Article!]! @relationship(type: "ANNOTATION_FOR", direction: OUT)
+	infons_identifier: String!
+	infons_type: String!
+	text: [String]!
+	type: String!
+}
+
+type Substance {
+	name: String!
+	registryNumber: String!
+	substanceAnnotatedByPubmedArticles: [Article!]! @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: OUT)
 }
 
 type FilterCount  {
@@ -169,4 +165,3 @@ type Query {
       """, columnName: "yearCounts"
     )
 }
-

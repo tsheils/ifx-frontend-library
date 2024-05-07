@@ -10,11 +10,12 @@ ncats-frontend-library-rdas-disease-page {
   }
 
   .navigation-menu-panel {
-    top: calc(60px + 17vh) !important
+    width: 25%;
+    top: calc(60px + 30vh) !important
   }
 
   .disease-page {
-    margin-top: 17vh; //-60px for main content css and -1vh for row padding
+    margin-top:30vh; //-60px for main content css and -1vh for row padding
   }
 
   .disease-header-section .disease-link {

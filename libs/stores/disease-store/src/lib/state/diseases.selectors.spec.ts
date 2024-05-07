@@ -1,56 +1,31 @@
 import { Disease } from '@ncats-frontend-library/models/rdas';
-import { diseasesAdapter, State, initialState } from './diseases.reducer';
+import { DISEASESTATEMOCK } from "../../test-setup";
+import { State } from "./diseases.reducer";
 import * as DiseasesSelectors from './diseases.selectors';
 
 describe('Diseases Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getDiseasesId = (it: Disease) => it.gardId;
-  const createDiseasesEntity = (gardId: string, name = ''): Disease => ({
-    gardId: gardId,
-    name: name || `name-${gardId}`,
-    epiCount: 0,
-    nonEpiCount: 0,
-    projectCount: 0,
-    clinicalTrialsCount: 0,
-  });
 
   let state: State;
 
-  const diseasesArr = [
-    createDiseasesEntity('PRODUCT-AAA'),
-    createDiseasesEntity('PRODUCT-BBB'),
-    createDiseasesEntity('PRODUCT-CCC'),
-  ];
-
   beforeEach(() => {
-    state = {
-      entities: undefined, ids: undefined, loaded: undefined,
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      diseases: diseasesAdapter.setAll(diseasesArr, {
-        ...initialState,
-        selectedId: 'PRODUCT-BBB',
-        error: ERROR_MSG,
-        loaded: true,
-        typeahead: undefined,
-      })
-    };
+    state = DISEASESTATEMOCK as unknown as State;
   });
 
   describe('Diseases Selectors', () => {
     it('getAllDiseases() should return the list of Diseases', () => {
       const results = DiseasesSelectors.getAllDiseases(state);
-      const selId = getDiseasesId(results[1]);
+      const selId = results[0].gardId;
 
-      expect(results.length).toBe(3);
-      expect(selId).toBe('PRODUCT-BBB');
+      expect(results.length).toBe(10);
+      expect(selId).toBe('GARD:0017280');
     });
 
     it('getSelected() should return the selected Entity', () => {
       const result = DiseasesSelectors.getSelected(state) as Disease;
-      const selId = getDiseasesId(result);
-
-      expect(selId).toBe('PRODUCT-BBB');
+      console.log(result)
+      const selId = result.gardId;
+      expect(selId).toBe('GARD:0017280');
     });
 
     it('getDiseasesLoaded() should return the current "loaded" status', () => {
@@ -61,7 +36,6 @@ describe('Diseases Selectors', () => {
 
     it('getDiseasesError() should return the current "error" state', () => {
       const result = DiseasesSelectors.getDiseasesError(state);
-
       expect(result).toBe(ERROR_MSG);
     });
   });

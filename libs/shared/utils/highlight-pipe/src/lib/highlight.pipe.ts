@@ -11,8 +11,8 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
 export class HighlightPipe implements PipeTransform {
 
   constructor(private sanitizer: DomSanitizer) {}
-  transform(text: string, search: string): SafeHtml | string {
-    if (search && text) {
+  transform(text: string, search: unknown): SafeHtml | string {
+    if ((search && text) &&(typeof search =='string')) {
       let pattern = search.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
       pattern = pattern
         .split(' ')

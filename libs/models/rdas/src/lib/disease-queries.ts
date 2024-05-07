@@ -118,6 +118,7 @@ export const DISEASETYPEAHEAD = gql`
     diseaseSearch(searchString: $searchString, limit: $limit) {
       name: GardName
       gardId: GardId
+      synonyms: Synonyms
     }
   }
 `;
@@ -161,9 +162,11 @@ export const FETCHDISEASEQUERY = gql`
       }
       _geneAssociations: associatedWithGeneGenesConnection {
         edges {
-          associationStatus: AssociationStatus
-          associationType: AssociationType
-          _reference: Reference
+          properties {
+            associationStatus: AssociationStatus
+            associationType: AssociationType
+            _reference: Reference
+          }
           gene: node {
             ensembl: Ensembl
             geneIdentifier: GeneIdentifier
@@ -187,10 +190,12 @@ export const FETCHDISEASEQUERY = gql`
 
       _phenotypeAssociations: hasPhenotypePhenotypesConnection {
         edges {
-          hpoFrequency: HPOFrequency
-          status: ValidationStatus
-          _evidence: Evidence
-          _reference: Reference
+          properties {
+              hpoFrequency: HPOFrequency
+              status: ValidationStatus
+              _evidence: Evidence
+              _reference: Reference
+          }
           phenotype: node {
             hpoId: HPOId
             hpoTerm: HPOTerm

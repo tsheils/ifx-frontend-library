@@ -1,7 +1,7 @@
 import { Article } from './article';
 import { ClinicalTrial } from './clinical-trial';
-import { GeneAssociation } from './gene';
-import { PhenotypeAssociation } from './phenotype';
+import { Gene, GeneAssociation } from "./gene";
+import { Phenotype, PhenotypeAssociation } from "./phenotype";
 import { CoreProject } from './project';
 
 export class Disease {
@@ -68,16 +68,14 @@ export class Disease {
 
     if (obj._geneAssociations && obj._geneAssociations.edges) {
       this.geneAssociations = obj._geneAssociations.edges.map(
-        (gene: Partial<GeneAssociation> = {}) => new GeneAssociation(gene)
-      );
+        (data: unknown) => new GeneAssociation(data as {gene: Partial<Gene>, properties: Partial<GeneAssociation>}));
       delete this._geneAssociations;
     }
 
     if (obj._phenotypeAssociations && obj._phenotypeAssociations.edges) {
       this.phenotypeAssociations = obj._phenotypeAssociations.edges.map(
-        (gene: Partial<PhenotypeAssociation> = {}) =>
-          new PhenotypeAssociation(gene)
-      );
+        (data: unknown) => new PhenotypeAssociation(data as {phenotype: Partial<Phenotype>, properties: Partial<PhenotypeAssociation>}));
+
       delete this._phenotypeAssociations;
     }
 

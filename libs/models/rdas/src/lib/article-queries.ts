@@ -18,52 +18,6 @@ export const ARTICLEFIELDS = `
                 lastName
                 fullName
             }
-          epidemiologies: epidemiologyAnnotationsEpidemiologyAnnotationFor {
-            epidemiology_rate
-           epidemiology_type
-            ethnicity
-           location
-           sex
-          }
-          journals: appearsInJournalVolumes {
-            dateOfPublication
-            printPublicationDate
-            volume
-            _title: contentOfJournals {
-              title
-            }
-          }
-          diseases: gardsmentionedIn {
-            gardId: GardId
-            name: GardName
-          }
-          sources: fullTextUrlsContentFor {
-            availability
-            documentStyle
-            site
-            url
-          }
-          keywords: keywordsKeywordFor {
-            keyword
-          }
-          meshTerms: meshTermsMeshTermFor {
-            descriptorName
-          #  majorTopic_YN
-            _qualifier: meshQualifiersMeshQualifierFor {
-              abbreviation
-              qualifierName
-            }
-          }
-          annotations: pubtatorAnnotationsAnnotationFor {
-            infons_identifier
-            infons_type
-            type
-            text
-          }
-          substances: substancesSubstanceAnnotatedByPubmed {
-            name
-            registryNumber
-          }
   }
 `;
 

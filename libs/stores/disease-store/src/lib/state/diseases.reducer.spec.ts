@@ -1,5 +1,6 @@
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { Action } from '@ngrx/store';
+import { BrowseDiseaseListActions } from "./diseases.actions";
 
 import * as DiseasesActions from './diseases.actions';
 import { State, initialState, diseasesReducer } from './diseases.reducer';
@@ -12,7 +13,7 @@ describe('Diseases Reducer', () => {
       epiCount: 0,
       nonEpiCount: 0,
       projectCount: 0,
-      clinicalTrialsCount: 0,
+      clinicalTrialCount: 0,
     });
 
   describe('valid Diseases actions', () => {
@@ -21,7 +22,7 @@ describe('Diseases Reducer', () => {
         createDiseasesEntity('PRODUCT-AAA'),
         createDiseasesEntity('PRODUCT-zzz'),
       ];
-      const action = DiseasesActions.loadDiseasesSuccess({ diseases });
+      const action = BrowseDiseaseListActions.fetchDiseaseListSuccess({diseases: diseases });
 
       const result: State = diseasesReducer(initialState, action);
 

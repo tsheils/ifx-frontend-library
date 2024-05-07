@@ -1,0 +1,98 @@
+{
+  "name": "ifx-toolbox",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "prefix": "app",
+  "sourceRoot": "apps/ifx-toolbox/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@angular-devkit/build-angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/ifx-toolbox",
+        "index": "apps/ifx-toolbox/src/index.html",
+        "browser": "apps/ifx-toolbox/src/main.ts",
+        "polyfills": ["zone.js"],
+        "tsConfig": "apps/ifx-toolbox/tsconfig.app.json",
+        "inlineStyleLanguage": "scss",
+        "assets": [
+          "apps/ifx-toolbox/src/favicon.ico",
+          "apps/ifx-toolbox/src/assets",
+          {
+            "input": "libs/shared/utils/ncats-header/src/assets",
+            "glob": "**/*",
+            "output": "assets/ncats-header"
+          }
+        ],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src/styles"]
+        },
+        "styles": ["apps/ifx-toolbox/src/styles.scss"],
+        "scripts": [
+
+        ],
+        "server": "apps/ifx-toolbox/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/ifx-toolbox/server.ts"
+        }
+      },
+      "configurations": {
+        "production": {
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "500kb",
+              "maximumError": "1mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "2kb",
+              "maximumError": "4kb"
+            }
+          ],
+          "outputHashing": "all"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@angular-devkit/build-angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "ifx-toolbox:build:production"
+        },
+        "development": {
+          "buildTarget": "ifx-toolbox:build:development"
+        }
+      },
+      "defaultConfiguration": "development"
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "ifx-toolbox:build"
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/ifx-toolbox/jest.config.ts"
+      }
+    },
+    "serve-static": {
+      "executor": "@nx/web:file-server",
+      "options": {
+        "buildTarget": "ifx-toolbox:build",
+        "staticFilePath": "dist/apps/ifx-toolbox/browser"
+      }
+    }
+  }
+}

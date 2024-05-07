@@ -38,6 +38,7 @@ export const initialState: State = diseasesAdapter.getInitialState({
   loaded: false,
   error: 'No Error Available',
   typeahead: [],
+  subscriptions: []
 });
 
 export const reducer = createReducer(

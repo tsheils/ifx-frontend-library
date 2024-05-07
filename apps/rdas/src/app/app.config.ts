@@ -25,12 +25,6 @@ import {
   diseasesReducer
 } from "@ncats-frontend-library/stores/disease-store";
 import {
-  FILTERS_FEATURE_KEY,
-  filtersReducer
-} from "@ncats-frontend-library/stores/filter-store";
-import {  grantsReducer } from "@ncats-frontend-library/stores/grant-store";
-import { TrialEffects, trialsReducer } from "@ncats-frontend-library/stores/trial-store";
-import {
   USERS_FEATURE_KEY,
   usersReducer,
   UserEffects,
@@ -40,7 +34,6 @@ import { provideEffects } from "@ngrx/effects";
 import { provideRouterStore, routerReducer } from "@ngrx/router-store";
 import { provideState, provideStore, Store } from "@ngrx/store";
 import { provideStoreDevtools } from "@ngrx/store-devtools";
-import {  articlesReducer } from "@ncats-frontend-library/stores/article-store";
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';

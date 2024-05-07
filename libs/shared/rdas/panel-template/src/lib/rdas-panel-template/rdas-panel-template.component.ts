@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, Output, ViewChild } from "@angular/core";
+import { Component, EventEmitter, input, Input, Output, ViewChild } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/paginator";
-import { FilterCategory } from "@ncats-frontend-library/models/utils";
+import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
 import { SharedUtilsDataNotFoundComponent } from "@ncats-frontend-library/shared/utils/data-not-found";
 import { SharedUtilsListFilterRowComponent } from "@ncats-frontend-library/shared/utils/list-filter-row";
 
@@ -18,19 +18,19 @@ import { SharedUtilsListFilterRowComponent } from "@ncats-frontend-library/share
   styleUrl: './rdas-panel-template.component.scss',
 })
 export class RdasPanelTemplateComponent {
-  @Input() filters!: FilterCategory[] | undefined;
-  @Input() _id!: string;
-  @Input() message?: string;
-  @Input() count = 0;
-  @Input() showPagination = true;
+  filters= input<FilterCategory[]>();
+  _id = input<string>();
+  message = input<string>();
+  count = input<number>(0);
+  showPagination = input<boolean>(true);
   @Output() listChange: EventEmitter< { [key: string]: unknown }> = new EventEmitter< { [key: string]: unknown }>();
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
 
-  fetchList(event: { [key: string]: unknown }) {
-   // event['offset'] = 0;
-    this.listChange.emit(event);
- //   this.paginator.pageIndex = 0
+  fetchList(event: { [key: string]: Filter[] }) {
+    const retObj: {[key: string]: string[]} = {};
+      Object.entries(event).forEach(([key, filters]) => retObj[key] = [...filters.map((filter) => filter.term)])
+    this.listChange.emit(retObj);
   }
 
   pageList(event: PageEvent) {

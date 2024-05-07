@@ -69,7 +69,6 @@ export const getDiseaseFilters = createSelector(
 export const getSelected = createSelector(
   getDiseasesEntities,
   getSelectedId,
-  getDiseasesState,
   (entities, selectedId) => {
     return selectedId ? entities[selectedId] : undefined;
   }

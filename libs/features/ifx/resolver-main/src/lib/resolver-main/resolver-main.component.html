@@ -1,0 +1,38 @@
+
+<div class="row space-around-row top-align">
+  <div class="width-20">
+    Enter a drug name or structure, one per line and click the 'Resolve' button
+    <br>
+    <mat-form-field [appearance]="'outline'" >
+    <textarea matInput cdkTextareaAutosize [rows]="25" placeholder="glycine" [formControl]= inputCtrl>
+    </textarea>
+    </mat-form-field>
+  </div>
+  <div class="width-25 right-justified-row">
+    <mat-radio-group [formControl]=resolveCtrl [value]="'FRAGMENT'">
+      <mat-radio-button [value]="'FRAGMENT'" [checked]="true">Largest Fragment</mat-radio-button>
+      <mat-radio-button [value]="'CHARGE_NORMALIZE'">Normalize Charges</mat-radio-button>
+      <mat-radio-button [value]="'IDENTITY'">Basic</mat-radio-button>
+    </mat-radio-group>
+
+    @if(optionCategories() && optionCategories().length) {
+    <div class="row right-justified-row">
+    <div class="width-35">
+    <button mat-flat-button [color]="'accent'" (click)=clearParams()>Clear Selected</button>
+    </div>
+    <br>
+    </div>
+   <div class="row">
+   <div class="width-100">
+    <lib-shared-utils-list-filter-row [filters] = optionCategories() (filterChange)="filterOptions($event)" [showCount]=false [showSelected]=false></lib-shared-utils-list-filter-row>
+    </div>
+    </div>
+    }
+    <button mat-flat-button [color]="'primary'" (click) = resolve() [disabled]=!searchDisabled()>Resolve</button>
+  </div>
+  <div class="width-45">
+    @if(resolvedData() && resolvedData().length) {
+    <lib-resolver-data-viewer [data]="resolvedData()" [params]="filterOptionsList"></lib-resolver-data-viewer>
+    }
+  </div>
+</div>

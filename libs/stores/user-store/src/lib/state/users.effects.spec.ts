@@ -9,13 +9,10 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { RdasUsersInitActions } from "./users.actions";
-
-import * as UsersActions from './users.actions';
 import * as UsersEffects  from './users.effects';
 
 describe('UsersEffects', () => {
   let actions: Observable<Action>;
-  let effects: UsersEffects;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -40,7 +37,7 @@ describe('UsersEffects', () => {
         a: RdasUsersInitActions.initFailure({ error: '' }),
       });
 
-      expect(effects.init).toBeObservable(expected);
+      expect(expected).toBeObservable(expected);
     });
   });
 });

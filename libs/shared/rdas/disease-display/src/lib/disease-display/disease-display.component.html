@@ -7,57 +7,28 @@
           <span class="disease-accordion-title bottom-border-primary">Overview</span>
         </mat-panel-title>
       </mat-expansion-panel-header>
-
-
-@if(mobile) {
-<mat-tab-group preserveContent>
-  <mat-tab [bodyClass]="'chart-tab'" label="Articles">
-    @if(filterMap() && filterMap().has('articles')) {
-    <lib-shared-rdas-article-charts [filters]="filterMap().get('articles')!"></lib-shared-rdas-article-charts>
-    } @else {
-    <h2>No Charts Available</h2>
-    }
-  </mat-tab>
-  <mat-tab label="Projects">
-    @if(filterMap() && filterMap().has('projects')) {
-    <lib-shared-rdas-project-charts [filters]="filterMap().get('projects')!"></lib-shared-rdas-project-charts>
-    } @else {
-    <h2>No Charts Available</h2>
-    }
-  </mat-tab>
-  <mat-tab label="Trials">
-    @if(filterMap() && filterMap().has('trials')) {
-    <lib-shared-rdas-trials-charts [filters]="filterMap().get('trials')!"></lib-shared-rdas-trials-charts>
-    }  @else {
-    <h2>No Charts Available</h2>
-    }
-  </mat-tab>
-  <mat-tab></mat-tab>
-  <mat-tab></mat-tab>
-</mat-tab-group>
-} @else{
 <div class= "row space-around-row">
-
-  @if(filterMap() && filterMap().has('articles')) {
-  <div class="width-30">
-  <lib-shared-rdas-article-charts [filters]="filterMap().get('articles')!"></lib-shared-rdas-article-charts>
-    <br>
-  </div>
-  }
-  @if(filterMap() && filterMap().has('projects')) {
-  <div class="width-30">
-  <lib-shared-rdas-project-charts [filters]="filterMap().get('projects')!"></lib-shared-rdas-project-charts>
-    <br>
-  </div>
-  }
-  @if(filterMap() && filterMap().has('trials')) {
-  <div class="width-30">
-  <lib-shared-rdas-trials-charts [filters]="filterMap().get('trials')!"></lib-shared-rdas-trials-charts>
-    <br>
-  </div>
-  }
+ @if(!mobile) {
+@if(filterMap() && filterMap().has('articles')) {
+<div class="width-30">
+<lib-chart-wrapper [chartType] ="'bar'" [filters] = "filterMap().get('articles')!"></lib-chart-wrapper>
+<br>
 </div>
 }
+@if(filterMap() && filterMap().has('projects')) {
+<div class="width-30">
+<lib-chart-wrapper [chartType] ="'bar'" [filters] = "filterMap().get('projects')!"></lib-chart-wrapper>
+<br>
+</div>
+}
+@if(filterMap() && filterMap().has('trials')) {
+<div class="width-30">
+<lib-chart-wrapper [chartType] ="'pie'" [filters] = "filterMap().get('trials')!"></lib-chart-wrapper>
+<br>
+</div>
+}
+}
+</div>
     </mat-expansion-panel>
   </div>
 
@@ -148,7 +119,6 @@
 <lib-rdas-panel-template
 [_id]= "'projects'"
 [count]="disease()?.projectCount!"
-[filters]="filterMap().get('projects')!"
 [message]="'No NIH Funded Projects Available'"
 (listChange)="fetchList($event, 'projects')"
 >

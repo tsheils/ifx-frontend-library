@@ -5,7 +5,7 @@
         [article]="article"
       ></ncats-frontend-library-article-list-card>
       <mat-card-content>
-        @if (article.epidemiologies && article.epidemiologies.length) {
+        @if (article?.epidemiologies && article?.epidemiologies.length) {
         <mat-card [appearance]="'outlined'">
           <div class="project-sub-header bottom-border-accent">
             Epidemiologies: {{ article.epidemiologies.length }}

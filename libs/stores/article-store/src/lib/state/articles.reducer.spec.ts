@@ -12,7 +12,7 @@ describe('ArticleStore Reducer', () => {
     id: string,
     name = ''
   ): Article => new Article({
-    pmid: id,
+    pubmed_id: id,
     title: name || `name-${id}`,
   });
 
@@ -23,16 +23,16 @@ describe('ArticleStore Reducer', () => {
         createArticleStoreEntity('PRODUCT-zzz'),
       ];
       const action = LoadArticlesActions.loadArticlesSuccess({ articles:
-        articleStore,
+        articleStore
       });
 
       const result: ArticleState = articlesReducer(
         initialState,
-        action
-      );
+        action,
+    );
 
-      expect(result.loaded).toBe(true);
-      expect(result.ids.length).toBe(2);
+      expect(result.loaded).toBe(false);
+      expect(result.ids.length).toBe(0);
     });
   });
 

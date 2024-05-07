@@ -116,8 +116,11 @@ export class SharedUtilsPieChartComponent implements OnInit, OnChanges {
       .on('click', (event: Event, d: {data: Filter}) => {
         this.clickSlice.emit(d.data);
       });
-    const firstSlice = this.svg.select('.slices').selectAll('path.slice').data();
-    this.addTooltip(firstSlice.reverse()[firstSlice.length-1].data);
+    const firstSlice = this.svg.select('.slices').selectAll('path.slice').data().reverse();
+    const firstSliceIndex = firstSlice.length - 1 || 0;
+    if(firstSlice[firstSliceIndex] && firstSlice[firstSliceIndex].data) {
+      this.addTooltip(firstSlice[firstSliceIndex].data);
+    }
   }
 
   /**

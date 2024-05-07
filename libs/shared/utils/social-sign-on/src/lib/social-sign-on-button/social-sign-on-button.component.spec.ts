@@ -1,10 +1,8 @@
-global.TextEncoder = require("util").TextEncoder;
-global.TextDecoder = require("util").TextDecoder;
-
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { USERS_FEATURE_KEY, usersReducer } from "@ncats-frontend-library/stores/user-store";
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
@@ -16,22 +14,14 @@ describe('SocialSignOnButtonComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SocialSignOnButtonComponent],
+      declarations: [],
       imports: [
-        BrowserAnimationsModule,
+        SocialSignOnButtonComponent,
+        NoopAnimationsModule,
         MatDialogModule,
         MatMenuModule,
-        StoreModule.forRoot(
-          {},
-          {
-            metaReducers: [],
-            runtimeChecks: {
-              strictActionImmutability: true,
-              strictStateImmutability: true,
-            },
-          }
-        ),
-        EffectsModule.forRoot([]),
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer)
       ],
     }).compileComponents();
 

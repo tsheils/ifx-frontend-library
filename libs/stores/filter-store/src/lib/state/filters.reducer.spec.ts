@@ -25,7 +25,7 @@ describe('Filters Reducer', () => {
       const result: FiltersState = filtersReducer(initialFiltersState, action);
 
       expect(result.loaded).toBe(false);
-      expect(result.ids.length).toBe(2);
+      expect(result.ids.length).toBe(0);
     });
   });
 

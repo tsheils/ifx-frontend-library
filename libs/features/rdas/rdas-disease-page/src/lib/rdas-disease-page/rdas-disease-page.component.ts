@@ -1,6 +1,7 @@
 import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
 import { CommonModule } from "@angular/common";
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -20,15 +21,13 @@ import { MatSelectModule } from "@angular/material/select";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatTabsModule } from "@angular/material/tabs";
 import { ActivatedRoute, Router } from "@angular/router";
-import { Disease } from '@ncats-frontend-library/models/rdas';
+import { Disease } from "@ncats-frontend-library/models/rdas";
 import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { DiseaseDisplayComponent, DiseaseHeaderComponent } from "@ncats-frontend-library/shared/rdas/disease-display";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
-import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
+import { ScrollToTopComponent } from "@ncats-frontend-library/shared/utils/scroll-to-top";
+import { DiseaseSelectors } from "@ncats-frontend-library/stores/disease-store";
 import { Store } from "@ngrx/store";
-import {
-  DiseaseSelectors
-} from "@ncats-frontend-library/stores/disease-store";
 
 @Component({
   selector: 'ncats-frontend-library-rdas-disease-page',
@@ -84,7 +83,7 @@ export class RdasDiseasePageComponent implements OnInit {
     this.disease = this.store.selectSignal(DiseaseSelectors.getSelected);
     this.diseaseFilters = this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
 
-    if (this.route.snapshot.fragment) {
+    if (this.route.snapshot && this.route.snapshot.fragment) {
       this.activeElement = this.route.snapshot.fragment;
     }
 

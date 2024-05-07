@@ -7,7 +7,9 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { USERS_FEATURE_KEY, usersReducer } from "@ncats-frontend-library/stores/user-store";
+import { StoreModule } from "@ngrx/store";
 
 import { SocialSignOnModalComponent } from './social-sign-on-modal.component';
 
@@ -17,13 +19,16 @@ describe('SocialSignOnModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [SocialSignOnModalComponent],
+      declarations: [],
       imports: [
+        SocialSignOnModalComponent,
         MatDialogModule,
         MatListModule,
         MatIconModule,
         MatButtonModule,
-        BrowserAnimationsModule,
+        NoopAnimationsModule,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
       providers: [
         { provide: MatDialog, useValue: {} },

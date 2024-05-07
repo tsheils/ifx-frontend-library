@@ -23,25 +23,27 @@ export class PhenotypeAssociation {
   frequencyRank = 0;
   _evidence?: string;
 
-  constructor(obj: Partial<PhenotypeAssociation> = {}) {
-    Object.assign(this, obj);
+  constructor(obj: {phenotype?: Partial<Phenotype>, properties?: Partial<PhenotypeAssociation>}) {
+    Object.assign(this, obj.properties);
 
     if (obj.phenotype) {
       this.phenotype = new Phenotype(obj.phenotype);
     }
-    if (obj.hpoFrequency) {
-      this.frequencyRank = FREQUENCYRANK.indexOf(obj.hpoFrequency);
+    if (obj.properties && obj.properties.hpoFrequency) {
+      this.frequencyRank = FREQUENCYRANK.indexOf(obj.properties.hpoFrequency);
     }
 
-    if (obj._reference) {
-      this.reference = obj._reference.map(
+    if (obj.properties && obj.properties._reference) {
+      this.reference = obj.properties._reference.map(
         (ref) => new Reference({ code: ref })
       );
       delete this._reference;
     }
 
-    if (obj._evidence) {
-      this.evidence = EVIDENCE.filter((e) => e.code == obj._evidence)[0];
+    if (obj.properties && obj.properties._evidence) {
+      if(obj.properties._evidence.length) {
+        this.evidence = EVIDENCE.filter((e) => e.code == obj.properties?._evidence)[0];
+      }
       delete this._evidence;
     }
   }

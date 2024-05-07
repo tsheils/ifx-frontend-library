@@ -80,13 +80,13 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
 
     this.searchFormCtl.valueChanges
       .pipe(
-        takeUntil(this.ngUnsubscribe),
+        takeUntilDestroyed(this.destroyRef),
         debounceTime(200),
         distinctUntilChanged()
       )
       .subscribe((term) => {
         if (term && term.length) {
-          this.diseaseStore.dispatch(SearchDiseasesActions.searchDiseases({ term: term }));
+          this.diseaseStore.dispatch(SearchDiseasesActions.searchDiseases({ term: term.trim() }));
         }
       });
   }
@@ -97,7 +97,8 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
 
   searchString() {
     this.autocomplete.closePanel()
-    this.diseaseSearch.next(this.searchFormCtl.value)
+    const searchVal: string = this.searchFormCtl.value.name ? this.searchFormCtl.value.name : this.searchFormCtl.value
+    this.diseaseSearch.next(searchVal)
   }
 
   displayFn(option: { name: string; id: string }): string {
@@ -109,6 +110,7 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
    */
   ngOnDestroy() {
     this.diseaseStore.dispatch(SearchDiseasesActions.clearTypeahead());
+    this.searchFormCtl.reset();
     this.ngUnsubscribe.next(true);
     this.ngUnsubscribe.complete();
   }
