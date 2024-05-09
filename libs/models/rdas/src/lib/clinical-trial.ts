@@ -15,7 +15,7 @@ export class ClinicalTrial {
   NCTIdAlias?: string[];
   officialTitle?: string;
   overallStatus?: string;
-  phase?: string[];
+  phase?: string;
   primaryCompletionDate?: string;
   primaryCompletionDateType?: string;
   resultsFirstPostDate?: string;

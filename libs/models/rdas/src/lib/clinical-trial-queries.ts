@@ -102,6 +102,7 @@ export const FETCHTRIALSVARIABLES: {
     },
     StudyType_IN?: unknown;
     OverallStatus_IN?: unknown;
+    Phase_IN?: unknown;
   }
   ctoptions: {
     limit: number,
@@ -131,6 +132,11 @@ export const TRIALFILTERS = gql`
       label
     }
     trialsByType(where: $ctwhere) {
+      term
+      count
+      label
+    }
+    trialsByPhase(where: $ctwhere) {
       term
       count
       label

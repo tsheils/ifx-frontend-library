@@ -167,8 +167,10 @@
       "filter-download-button": [
         "libs/shared/utils/filter-download-button/src/index.ts"
       ],
+      "generic-chart": ["libs/shared/utils/generic-chart/src/index.ts"],
       "ifx": ["libs/models/ifx/src/index.ts"],
       "ifx-tool-store": ["libs/stores/ifx-tool-store/src/index.ts"],
+      "image-download": ["libs/shared/utils/image-download/src/index.ts"],
       "iqc-convert": ["libs/features/ifx/IQC-convert/src/index.ts"],
       "java-webstart": ["libs/shared/ifx/java-webstart/src/index.ts"],
       "markdown-viewer": ["libs/shared/utils/markdown-viewer/src/index.ts"],

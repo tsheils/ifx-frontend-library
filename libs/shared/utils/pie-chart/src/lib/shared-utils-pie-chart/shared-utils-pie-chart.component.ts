@@ -12,50 +12,41 @@ import {
   ViewChild,
   ViewEncapsulation
 } from "@angular/core";
-import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
+import { Filter } from "@ncats-frontend-library/models/utils";
 import { Arc, DefaultArcObject, interpolate, Pie, quantize, ScaleOrdinal } from "d3";
 import { scaleOrdinal } from "d3-scale";
 import { select } from "d3-selection";
 import { arc, pie } from "d3-shape";
+import { GenericChartComponent } from "generic-chart";
+import { ImageDownloadComponent } from "image-download";
 
 @Component({
   selector: 'lib-shared-utils-pie-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ImageDownloadComponent
+  ],
   templateUrl: './shared-utils-pie-chart.component.html',
   styleUrl: './shared-utils-pie-chart.component.scss',
   encapsulation: ViewEncapsulation.None
 })
-export class SharedUtilsPieChartComponent implements OnInit, OnChanges {
-  @ViewChild('pieChart', { static: true }) pieChartElement!: ElementRef;
-  @Input() data!: FilterCategory;
-  svg;
+export class SharedUtilsPieChartComponent extends GenericChartComponent implements OnInit, OnChanges {
   arcShape!:  Arc<never, DefaultArcObject>;
   pieChart!: Pie<never, number | {valueOf(): number | Filter}>;
-  width!: number;
-  height!: number;
   radius!: number;
-  margins: {top: number, bottom: number, left: number, right: number} = {top:20, bottom: 30, right: 30, left: 30}
-  keys!: string[];
+  margins = {top:20, bottom: 30, right: 30, left: 30}
   color!: ScaleOrdinal<string, unknown>;
-
-  /**
-   * output event on slice click
-   * @type {EventEmitter<any>}
-   */
-  @Output() readonly clickSlice: EventEmitter<Filter> = new EventEmitter<Filter>();
-
-  isBrowser = false;
 
   constructor(
     @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
   ){
-    this.isBrowser = isPlatformBrowser(this.platformId);
+   super(platformId);
   }
 
   ngOnInit() {
-    if (this.pieChartElement && this.isBrowser) {
-      const element = this.pieChartElement.nativeElement;
+    if (this.chartElement && this.isBrowser) {
+      const element = this.chartElement.nativeElement;
       this.width = element.offsetWidth - this.margins.left - this.margins.right;
       this.height = element.offsetHeight - this.margins.top - this.margins.bottom;
 
@@ -79,8 +70,9 @@ export class SharedUtilsPieChartComponent implements OnInit, OnChanges {
       select(element).select('svg').remove();
       this.svg = select(element)
         .append("svg:svg")
-        .attr("width", this.width)
-        .attr("height", this.height)
+        .attr("xmlns", "http://www.w3.org/2000/svg")
+        .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+        .attr("class", 'chart-id')
         .attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
         .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
       this.makeChart();
@@ -96,7 +88,17 @@ export class SharedUtilsPieChartComponent implements OnInit, OnChanges {
 
 
   makeChart() {
-    this.svg.append("g")
+    this.svg.append('text')
+      .attr('class', 'chart-title')
+      .attr('x', this.width / 2)
+      .attr('y', this.margins.top/2)
+      .attr('text-anchor', 'middle')
+      .text(this.data.label);
+
+    this.svg
+   .append("g")
+      .attr('class', 'pie-chart')
+      .append("g")
       .attr('class', 'slices')
       .selectAll()
       .data(this.pieChart(this.data.values))
@@ -114,13 +116,17 @@ export class SharedUtilsPieChartComponent implements OnInit, OnChanges {
             .style('opacity', 0);*/
       })
       .on('click', (event: Event, d: {data: Filter}) => {
-        this.clickSlice.emit(d.data);
+        this.clickElement.emit(d.data);
       });
     const firstSlice = this.svg.select('.slices').selectAll('path.slice').data().reverse();
     const firstSliceIndex = firstSlice.length - 1 || 0;
     if(firstSlice[firstSliceIndex] && firstSlice[firstSliceIndex].data) {
       this.addTooltip(firstSlice[firstSliceIndex].data);
     }
+
+
+
+    this.svgExport = select(this.chartElement.nativeElement).select('svg').node() as SVGElement
   }
 
   /**

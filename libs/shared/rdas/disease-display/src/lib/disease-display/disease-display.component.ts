@@ -65,8 +65,8 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
 
-   disease = input<Disease>();
-   filters = input<FilterCategory[]>();
+  disease = input<Disease>();
+  filters = input<FilterCategory[]>();
   fragment = input<string>();
   offset = input<string>();
   id = input<string>();

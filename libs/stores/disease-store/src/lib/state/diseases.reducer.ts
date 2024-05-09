@@ -35,7 +35,7 @@ export const diseasesAdapter: EntityAdapter<Disease> =
 
 export const initialState: State = diseasesAdapter.getInitialState({
   // set initial required properties
-  loaded: false,
+  loaded: true,
   error: 'No Error Available',
   typeahead: [],
   subscriptions: []
@@ -49,7 +49,7 @@ export const reducer = createReducer(
     FetchDiseaseActions.fetchDisease,
     (state) =>  {
       return { ...state,
-        loaded: false,
+        loaded: true,
         error: null
       }
     }

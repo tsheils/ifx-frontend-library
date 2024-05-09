@@ -23,7 +23,6 @@ describe('Diseases Selectors', () => {
 
     it('getSelected() should return the selected Entity', () => {
       const result = DiseasesSelectors.getSelected(state) as Disease;
-      console.log(result)
       const selId = result.gardId;
       expect(selId).toBe('GARD:0017280');
     });

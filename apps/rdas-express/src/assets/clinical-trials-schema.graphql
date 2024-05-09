@@ -26,7 +26,7 @@ type ClinicalTrial {
 	NCTIdAlias: [String]
 	OfficialTitle: String
 	OverallStatus: String!
-	Phase: [String]
+	Phase: String
 	PrimaryCompletionDate: String
 	PrimaryCompletionDateType: String
 	ResultsFirstPostDate: String
@@ -253,6 +253,18 @@ type Query {
       WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
          WITH cl.StudyType as studyType, count(distinct(cl)) as ct
        return {term: studyType, count:ct, label: 'StudyType'} as data order by ct DESC
+      """, columnName: "data"
+    )
+}
+
+type Query {
+  trialsByPhase(where: ClinicalTrialWhere): [FilterCount]
+    @cypher(
+      statement: """
+  MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+   WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
+   WITH cl.Phase AS phase, count(distinct(cl)) as ct
+  return {term: phase, count:ct, label: 'Phase'} as data order by phase ASC
       """, columnName: "data"
     )
 }

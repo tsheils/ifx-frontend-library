@@ -161,7 +161,6 @@ export class UserService {
               // Step 4a.
               return res.user.linkWithCredential(pendingCred);
             }).then(function(res) {
-              console.log(res);
               // GitHub account successfully linked to the existing Firebase user.
               this.fetchUserProfile(res.user);
             });

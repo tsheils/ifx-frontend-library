@@ -1,4 +1,14 @@
-import { Component, computed, input, OnInit, signal, WritableSignal } from "@angular/core";
+import {
+  Component,
+  computed,
+  ContentChild,
+  ElementRef,
+  input,
+  OnInit,
+  signal,
+  ViewChild,
+  WritableSignal
+} from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -8,6 +18,8 @@ import { FilterCategory } from "@ncats-frontend-library/models/utils";
 import { SharedUtilsBarChartComponent } from "@ncats-frontend-library/shared/utils/bar-chart";
 import { SharedUtilsPieChartComponent } from "@ncats-frontend-library/shared/utils/pie-chart";
 import { FilterDownloadButtonComponent } from "filter-download-button";
+import { GenericChartComponent } from "generic-chart";
+import { ImageDownloadComponent } from "image-download";
 
 @Component({
   selector: 'lib-chart-wrapper',
@@ -17,6 +29,7 @@ import { FilterDownloadButtonComponent } from "filter-download-button";
     SharedUtilsPieChartComponent,
     SharedUtilsBarChartComponent,
     FilterDownloadButtonComponent,
+    ImageDownloadComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -26,6 +39,8 @@ import { FilterDownloadButtonComponent } from "filter-download-button";
   styleUrl: './chart-wrapper.component.scss',
 })
 export class ChartWrapperComponent implements OnInit {
+ // @ContentChild('chart', { static: false }) chartComponent!: GenericChartComponent;
+  @ViewChild('chart', { static: false }) chartComponent!: GenericChartComponent;
   chartType = input<string>();
   filters = input<FilterCategory[]>();
   filterTypes= computed(() => this.filters()?.map(filter => filter.label));
@@ -40,7 +55,6 @@ export class ChartWrapperComponent implements OnInit {
       this.selectedFilterLabel.set(fil[0].label);
     }
     this.filterControl.setValue(this.selectedFilterLabel());
-
 
     this.filterControl
       .valueChanges

@@ -1,19 +1,16 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CommonModule, isPlatformBrowser } from "@angular/common";
+import { CommonModule } from "@angular/common";
 import {
   Component,
-  ElementRef,
   Inject,
   InjectionToken,
-  Input,
   OnChanges,
   OnInit,
   PLATFORM_ID,
-  ViewChild,
   ViewEncapsulation
 } from "@angular/core";
-import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
+import { Filter } from "@ncats-frontend-library/models/utils";
 import {
   axisBottom,
   axisLeft,
@@ -30,6 +27,9 @@ import { max } from "d3-array";
 import { scaleLinear } from "d3-scale";
 import { select } from "d3-selection";
 import { Series } from "d3-shape";
+import { GenericChartComponent } from "generic-chart";
+import { ImageDownloadComponent } from "image-download";
+import { ENCODEDFONTURL } from "../../assets/font";
 
 interface ChartPoint extends SeriesPoint<{[key: string]: number}> {
   key?: string;
@@ -38,23 +38,18 @@ interface ChartPoint extends SeriesPoint<{[key: string]: number}> {
 @Component({
   selector: 'lib-shared-utils-bar-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ImageDownloadComponent
+  ],
   templateUrl: './shared-utils-bar-chart.component.html',
   styleUrls: ['./shared-utils-bar-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
 
-export class SharedUtilsBarChartComponent implements OnInit, OnChanges {
-  @ViewChild('barChart', { static: true }) barChartElement!: ElementRef;
-@Input() data!: FilterCategory;
-svg!: any // Selection<BaseType, unknown, null, undefined>;
- tooltip: unknown;
- bars: unknown;
-width!: number;
-height!: number;
-margins: {top: number, bottom: number, left: number, right: number} = {top:20, bottom: 50, right: 30, left: 70}
-  keys!: string[];
-  isBrowser = false;
+export class SharedUtilsBarChartComponent extends GenericChartComponent implements OnInit, OnChanges {
+  bars: unknown;
+  margins = {top:20, bottom: 50, right: 30, left: 70}
   series!; unknown;
   xScale!: ScaleBand<string>;
   yScale!: ScaleLinear<number, number, never>
@@ -62,23 +57,28 @@ margins: {top: number, bottom: number, left: number, right: number} = {top:20, b
   constructor(
     @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
   ){
-    this.isBrowser = isPlatformBrowser(this.platformId);
+    super(platformId)
   }
 
 ngOnInit() {
-  if (this.barChartElement && this.isBrowser) {
-    const element = this.barChartElement.nativeElement;
+  if (this.chartElement && this.isBrowser) {
+    const element = this.chartElement.nativeElement;
     this.width = element.offsetWidth //+ this.margins.left + this.margins.right;
     this.height = element.offsetHeight + this.margins.top + this.margins.bottom;
     select(element).select('svg').remove();
 
     this.svg = select(element)
       .append("svg:svg")
+      .attr("xmlns", "http://www.w3.org/2000/svg")
+      .attr("xmlns:xlink", "http://www.w3.org/1999/xlink")
+      .attr("id", 'chart-id')
       .attr("width", this.width)
       .attr("height", this.height)
       .attr("viewBox", [0, 0, this.width, this.height])
       .attr("style", "max-width: 100%; height: auto; height: intrinsic; overflow: visible;")
        .on("touchstart", event => event.preventDefault())
+
+
 
     if(this.data) {
       this.makeChart();
@@ -94,7 +94,6 @@ ngOnChanges(){
     }
     }
   }
-
 
   makeChart() {
      // Determine the series that need to be stacked.
@@ -119,6 +118,15 @@ ngOnChanges(){
       this.yScale = scaleLinear()
         .domain([0, <number>yMax])
         .rangeRound([this.height - this.margins.bottom, this.margins.top]);
+
+    this.svg.append('text')
+      .attr('class', 'chart-title')
+      .attr('x', this.width / 2)
+      .attr('y', this.margins.top/2)
+      .attr('text-anchor', 'middle')
+      .text(this.data.label)
+
+
 
     // Append a group for each series, and a rect for each element in the series.
     this.bars = this.svg.append("g")
@@ -149,6 +157,7 @@ ngOnChanges(){
         .attr("dy", ".15em")
         .attr("transform", "rotate(-65)")
 
+
     // Append the vertical axis.
     this.svg.append("g")
       .attr("transform", `translate(${this.margins.left},0)`)
@@ -160,6 +169,14 @@ ngOnChanges(){
       .attr("class", "tooltip")
       .style("pointer-events", "none");
 
+    this.svg
+    .append('defs')
+      .append('style')
+      .attr('type', 'text/css')
+      .text(`"${ENCODEDFONTURL}"`);
+
+
+    this.svgExport = select(this.chartElement.nativeElement).select('svg').node() as SVGElement
   }
 
 /*  clicked(event: Event, d: unknown){
