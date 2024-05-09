@@ -33,9 +33,7 @@
             <div class="primary-chip-outlined">Phase</div>
             <div class="list-item-content">
               {{
-                trial.phase && trial.phase.length
-                  ? trial.phase.join(', ')
-                  : 'None Listed'
+                trial.phase || 'None Listed'
               }}
             </div>
           </div>

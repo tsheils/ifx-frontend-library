@@ -2,16 +2,16 @@
   <div class="width-sm-100 width-75">
     <mat-card>
       <ncats-frontend-library-article-list-card
-        [article]="article"
+        [article]="article()"
       ></ncats-frontend-library-article-list-card>
       <mat-card-content>
-        @if (article?.epidemiologies && article?.epidemiologies.length) {
+        @if (article()?.epidemiologies && article()?.epidemiologies?.length) {
         <mat-card [appearance]="'outlined'">
           <div class="project-sub-header bottom-border-accent">
-            Epidemiologies: {{ article.epidemiologies.length }}
+            Epidemiologies: {{ article()?.epidemiologies?.length }}
           </div>
           <div class="project-content-wrapper">
-            @for (epidemiology of article.epidemiologies; track epidemiology) {
+            @for (epidemiology of article()?.epidemiologies; track epidemiology) {
             @if ( epidemiology.epidemiology_type &&
             epidemiology.epidemiology_type.length ) {
             <div>
@@ -40,7 +40,7 @@
         }
 
         <div class="row space-between-row">
-          @if (article.abstractText && article.abstractText.length) {
+          @if (article()?.abstractText && article()?.abstractText?.length) {
           <button
             mat-flat-button
             [color]="'accent'"
@@ -57,11 +57,11 @@
           </div>
           }
         </div>
-        @if (article.substances && article.substances.length) {
+        @if (article()?.substances && article()?.substances?.length) {
         <div>
           <div class="primary-chip-outlined">Substances</div>
           <br />
-          @for (substance of article.substances; track substance) {
+          @for (substance of article()?.substances; track substance) {
           <span>
             {{ substance.name }}
           </span>
@@ -69,11 +69,11 @@
           <br />
           <br />
         </div>
-        } @if (article.keywords && article.keywords.length) {
+        } @if (article()?.keywords && article()?.keywords?.length) {
         <div>
           <div class="primary-chip-outlined">Keywords</div>
           <br />
-          @for (keyword of article.keywords; track keyword; let last = $last) {
+          @for (keyword of article()?.keywords; track keyword; let last = $last) {
           <span>
             {{ keyword.keyword }}@if (!last) {
             <span>,&nbsp;</span>
@@ -88,10 +88,10 @@
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Other Diseases Mentioned:
-              {{ article.diseases ? article.diseases.length : 0 }}
+              {{ article()?.diseases ? article()?.diseases?.length : 0 }}
             </div>
             <br />
-            @for (disease of article.diseases; track disease) {
+            @for (disease of article()?.diseases; track disease) {
             <div>
               @if (disease.gardId) {
               <div #link>
@@ -115,10 +115,10 @@
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Annotations:
-              {{ article.annotations ? article.annotations.length : 0 }}
+              {{ article()?.annotations ? article()?.annotations?.length : 0 }}
             </div>
-            @if (article.annotations && article.annotations.length) { @for
-            (annotation of annotationsMap | keyvalue; track annotation) {
+            @if (article()?.annotations && article()?.annotations?.length) { @for
+            (annotation of annotationsMap() | keyvalue; track annotation) {
             <div>
               <div class="primary-chip-outlined">{{ annotation.key }}</div>
               @for (term of annotation.value; track term) {
@@ -137,10 +137,10 @@
 
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
-              Mesh Terms: {{ article.meshTerms ? article.meshTerms.length : 0 }}
+              Mesh Terms: {{ article()?.meshTerms ? article()?.meshTerms?.length : 0 }}
             </div>
-            @if (article.meshTerms && article.meshTerms.length) { @for (term of
-            article.meshTerms; track term) {
+            @if (article()?.meshTerms && article()?.meshTerms?.length) { @for (term of
+            article()?.meshTerms; track term) {
             <div>
               <div class="list-item-content">{{ term.qualifierName }}</div>
               <div class="list-item-content">{{ term.abbreviation }}</div>

@@ -18,16 +18,15 @@ RUN apk add --no-cache bash git openssh
 RUN npm i -g @angular/cli
 RUN npm install -g nx
 RUN npm install
-RUN nx g @nrwl/workspace:fix-configuration
-RUN npm i
-RUN NODE_OPTIONS=--max_old_space_size=4096 nx run resolver:prerender:production --verbose
+#RUN nx g @nrwl/workspace:fix-configuration  ##@nrwl package is deprecated, so i don't think this does anything
+RUN NODE_OPTIONS=--max_old_space_size=8192 nx run resolver:build:production --verbose
 
 FROM registry.ncats.nih.gov:5000/labshare/docker-base-web
 
 # Install NCATS required packages
 RUN apt-get update && apt-get install -y net-tools
 
-COPY --from=build /var/www/app/dist/resolver/browser /var/www/app
+COPY --from=build /var/www/app/dist/apps/resolver/browser /var/www/app
 
 # Add read permissions to all files under assets directory
 RUN chmod -R o+r /var/www/app/assets/*

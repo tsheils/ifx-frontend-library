@@ -3,37 +3,37 @@
     <mat-card>
       <div class="row space-between-row">
         <div class="width-75">
-          <span class="mat-card-title"> {{ latestGrant?.title }}</span>
+          <span class="mat-card-title"> {{ latestGrant()?.title }}</span>
         </div>
-        @if (grant.core_project_num) {
+        @if (grant()?.core_project_num) {
         <div class="mat-h3">
           <a
             aria-label="Link to project at NIH Reporter"
             href="https://reporter.nih.gov/project-details/{{
-              grant.core_project_num
+              grant()?.core_project_num
             }}"
             rel="noreferrer"
             target="_blank"
-            >{{ grant.core_project_num }}</a
+            >{{ grant()?.core_project_num }}</a
           >
         </div>
         }
       </div>
       <mat-card-content>
-        @if (latestGrant.abstract && latestGrant.abstract.length) {
+        @if (latestGrant()?.abstract && latestGrant()?.abstract?.length) {
         <div class="primary-chip-outlined">Abstract</div>
         }
         <br />
         @if (fullAbstract) {
         <div>
-          <span class="mat-subtitle-2">{{ latestGrant.abstract }}</span>
-          @if (fullAbstract && truncatedAbstract) {
+          <span class="mat-subtitle-2">{{ latestGrant()?.abstract }}</span>
+          @if (fullAbstract && truncatedAbstract()) {
           <a (click)="fullAbstract = false" class="expand-link"> ...less</a>
           }
         </div>
         } @else {
         <div #truncated>
-          <span class="mat-subtitle-2">{{ truncatedAbstract }}</span>
+          <span class="mat-subtitle-2">{{ truncatedAbstract() }}</span>
           @if (!fullAbstract) {
           <a (click)="fullAbstract = true" class="expand-link"> ...more</a>
           }
@@ -48,24 +48,24 @@
             <div class="grant-sub-header bottom-border-accent">Funding</div>
             <div class="primary-chip-outlined">Funding Agency</div>
             <div class="list-item-content">
-              {{ funding ? funding : 'None Listed' }}
+              {{ funding || 'None Listed' }}
             </div>
-            @if (grant.rd_total_cost) {
+            @if (grant()?.rd_total_cost) {
             <div>
               <div class="primary-chip-outlined">Total Cost</div>
               <div class="list-item-content">
-                {{ grant.rd_total_cost | currency }}
+                {{ grant()?.rd_total_cost | currency }}
               </div>
             </div>
             }
           </mat-card>
           <mat-card [appearance]="'outlined'">
             <div class="grant-sub-header bottom-border-accent">
-              Patents: {{ grant.patents ? grant.patents.length : 0 }}
+              Patents: {{ grant()?.patents ? grant()?.patents?.length : 0 }}
             </div>
-            @if (grant.patents && grant.patents.length) {
+            @if (grant()?.patents && grant()?.patents?.length) {
             <div>
-              @for (patent of grant.patents; track patent) {
+              @for (patent of grant()?.patents; track patent) {
               <div>
                 <div class="list-item-title">{{ patent.title }}</div>
                 <div class="list-item-content">{{ patent.org_name }}</div>
@@ -77,11 +77,11 @@
           <mat-card [appearance]="'outlined'">
             <div class="grant-sub-header bottom-border-accent">
               Clinical Studies:
-              {{ grant.clinicalStudies ? grant.clinicalStudies.length : 0 }}
+              {{ grant()?.clinicalStudies ? grant()?.clinicalStudies?.length : 0 }}
             </div>
-            @if (grant.clinicalStudies && grant.clinicalStudies.length) {
+            @if (grant()?.clinicalStudies && grant()?.clinicalStudies?.length) {
             <div>
-              @for (study of grant.clinicalStudies; track study) {
+              @for (study of grant()?.clinicalStudies; track study) {
               <div>
                 <div class="list-item-title">{{ study.title }}</div>
                 <div class="list-item-content">{{ study.status }}</div>
@@ -99,18 +99,18 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <div class="rdas-tab-label">
-                Sub Projects: {{ grant.projects?.length }}
+                Sub Projects: {{ grant()?.projects?.length }}
               </div>
             </ng-template>
             <mat-accordion [displayMode]="'flat'" multi>
-              @for (grant of grant.projects; track grant; let i = $index) {
+              @for (grantPr of grant()?.projects; track grant; let i = $index) {
               <mat-expansion-panel [expanded]="i === 0">
                 <mat-expansion-panel-header>
                   <mat-panel-title>
                     <div class="mat-mdc-card-title">
-                      {{ grant.funding_year }} &nbsp;&nbsp;&nbsp;
-                      {{ grant.title }}&nbsp;&nbsp;&nbsp;
-                      {{ grant.total_cost | currency }}
+                      {{ grantPr.funding_year }} &nbsp;&nbsp;&nbsp;
+                      {{ grantPr.title }}&nbsp;&nbsp;&nbsp;
+                      {{ grantPr.total_cost | currency }}
                     </div>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -119,12 +119,12 @@
                     <div class="grant-sub-header bottom-border-primary">
                       Diseases Studied:
                       {{
-                        grant.researchedDiseases
-                          ? grant.researchedDiseases.length
-                          : 0
+              grantPr?.researchedDiseases
+                ? grantPr?.researchedDiseases?.length
+                : 0
                       }}
                     </div>
-                    @for (disease of grant.researchedDiseases; track disease) {
+                    @for (disease of grantPr?.researchedDiseases; track disease) {
                     <div>
                       @if (disease.gardId) {
                       <div #link>
@@ -147,20 +147,20 @@
                   <mat-card [appearance]="'outlined'">
                     <div class="grant-sub-header bottom-border-primary">
                       Annotations:
-                      {{ grant.annotations ? grant.annotations.length : 0 }}
+                      {{ grantPr?.annotations ? grantPr?.annotations?.length : 0 }}
                     </div>
-                    @if (grant.annotations && grant.annotations.length) {
+                    @if (grantPr?.annotations && grantPr?.annotations?.length) {
                     <ncats-frontend-library-annotations-display
-                      [annotations]="grant.annotations"
+                      [annotations]="grantPr.annotations"
                     ></ncats-frontend-library-annotations-display>
                     }
                   </mat-card>
                   <mat-card [appearance]="'outlined'">
                     <div class="grant-sub-header bottom-border-primary">
-                      Key Terms: {{ grant.terms ? grant.terms.length : 0 }}
+                      Key Terms: {{ grantPr?.terms ? grantPr?.terms?.length : 0 }}
                     </div>
                     <br />
-                    @for (term of grant.terms; track term) {
+                    @for (term of grantPr?.terms; track term) {
                     <div>
                       {{ term }}
                     </div>

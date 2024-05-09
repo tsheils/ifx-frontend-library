@@ -7,15 +7,17 @@
   </mat-select>
 </mat-form-field>
 <div class="row right-justified-row">
-  <lib-filter-download-button [selectedFilter] = selectedFilter()></lib-filter-download-button>
+  @if(chartComponent){
+  <lib-image-download [chartComponent] = chartComponent></lib-image-download>
+  }
 </div>
 
 @switch (chartType()) {
 @case ("bar") {
-<lib-shared-utils-bar-chart [data]="selectedFilter()!"></lib-shared-utils-bar-chart>
+<lib-shared-utils-bar-chart [data]="selectedFilter()!" #chart></lib-shared-utils-bar-chart>
 }
 @case ("pie") {
-<lib-shared-utils-pie-chart [data]="selectedFilter()!"></lib-shared-utils-pie-chart>
+<lib-shared-utils-pie-chart [data]="selectedFilter()!" #chart></lib-shared-utils-pie-chart>
 }
   }
 

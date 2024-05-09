@@ -107,8 +107,8 @@
       </div>
       } @if (disease() && loaded()) {
         <ncats-frontend-library-disease-display
-    [disease]="disease"
-    [filters]="diseaseFilters"
+    [disease]="disease()"
+    [filters]="diseaseFilters()"
     (optionsChange)="setUrl($event)"
   (activeElement)="setActiveElement($event)"
   ></ncats-frontend-library-disease-display>

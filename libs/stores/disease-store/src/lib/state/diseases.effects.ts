@@ -1,4 +1,4 @@
-import { inject, Injectable } from "@angular/core";
+import { inject } from "@angular/core";
 import { ActivatedRouteSnapshot, Params } from "@angular/router";
 import { ApolloQueryResult } from '@apollo/client';
 import {
@@ -40,7 +40,6 @@ import {
   filter,
   map,
   mergeMap,
-  of,
   switchMap,
   take
 } from "rxjs";
@@ -50,7 +49,6 @@ import {
   FetchDiseaseListActions,
   SearchDiseasesActions
 } from "./diseases.actions";
-import * as DiseasesActions from './diseases.actions';
 import * as DiseaseSelectors from './diseases.selectors';
 
 export const fetchDiseaseListFromIds$ =  createEffect(
@@ -149,8 +147,8 @@ export const loadDiseaseFilters$ =  createEffect(
                         label: "Epidemiology Articles by Year",
                         field: "year",
                         values: articleFilterDataList.countsByYear
-                        .filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles')
-                          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year'}))
+                          .filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles')
+                          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }))
                       }
                     )
                     filters.push(fc);
@@ -189,7 +187,7 @@ export const loadDiseaseFilters$ =  createEffect(
                     }
                   }
                   if (trialFilterData) {
-                    const trialFilterDataList: { trialsByStatus: Filter[], trialsByType: Filter[] } = trialFilterData.data as { trialsByStatus: Filter[], trialsByType: Filter[] };
+                    const trialFilterDataList: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] } = trialFilterData.data as { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] };
                     if (trialFilterDataList.trialsByStatus && trialFilterDataList.trialsByStatus.length) {
                       filters.push(new FilterCategory(
                         {
@@ -210,6 +208,16 @@ export const loadDiseaseFilters$ =  createEffect(
                           label: "Clinical Trials by Type",
                           field: "StudyType",
                           values: trialFilterDataList.trialsByType.map((fil: Partial<Filter>) => new Filter(fil))
+                        }
+                      ))
+                    }
+                    if (trialFilterDataList.trialsByPhase && trialFilterDataList.trialsByPhase.length) {
+                      filters.push(new FilterCategory(
+                        {
+                          parent: 'trials',
+                          label: "Clinical Trials by Phase",
+                          field: "Phase",
+                          values: trialFilterDataList.trialsByPhase.map((fil: Partial<Filter>) => new Filter(fil))
                         }
                       ))
                     }
@@ -709,6 +717,7 @@ export const fetchDiseasesList$ =  createEffect(
       GardId?: string,
       OverallStatus?: string[];
       StudyType?: string[];
+      Phase?: string[];
     }
   ) {
     switch (origin) {
@@ -760,6 +769,11 @@ export const fetchDiseasesList$ =  createEffect(
             FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = options['StudyType'];
           } else {
             FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = undefined;
+          }
+        if (options['Phase'] && options['Phase'].length > 0) {
+            FETCHTRIALSVARIABLES.ctwhere.Phase_IN = options['Phase'];
+          } else {
+            FETCHTRIALSVARIABLES.ctwhere.Phase_IN = undefined;
           }
         break;
       }
