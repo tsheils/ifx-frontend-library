@@ -13,8 +13,8 @@ pipeline {
         pollSCM('H/5 * * * *')
     }  
     environment {
-        PROJECT_NAME     = "resolver"
-        DOCKER_REPO_NAME = "registry.ncats.nih.gov:5000/resolver"
+        PROJECT_NAME     = "resolver-frontend"
+        DOCKER_REPO_NAME = "registry.ncats.nih.gov:5000/resolver-frontend"
         APP_TYPE         = "ui"                                                          // Application Type is required to get Secret from Vault //
         INIT_TOKEN       = credentials('Vault-Access')                                   // OIDC provider this token is Auto Generated //
         SPHINX_TOKEN     = credentials('ncatssvcdvops-sphinx')                           // PatToken Read Only Access for the DevOps Artifacts Repo https://github.com/Sphinx-Automation/devops-pipeline-artifacts.git //
