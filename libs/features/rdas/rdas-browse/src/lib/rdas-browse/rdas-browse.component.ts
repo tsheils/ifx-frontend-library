@@ -288,8 +288,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
 
   downloadData() {
     // if(this.diseases) {
-    //  console.log(this.diseases());
-    //   console.log(this.page);
     // this.diseasesFacade.dispatch()
     //this._downloadFile(this._toTSV(this.genes), 'rdas-genes-download.tsv')
     // }

@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
   displayName: 'utils-animated-force-directed-graph',
-  preset: '../../../../jest.preset.js',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/shared/utils/animated-force-directed-graph',
+    '../../../../../coverage/libs/shared/utils/charts/animated-force-directed-graph',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

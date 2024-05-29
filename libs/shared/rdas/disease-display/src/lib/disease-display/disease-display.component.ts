@@ -64,8 +64,8 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
   @ViewChildren(RdasPanelTemplateComponent) templates!: QueryList<RdasPanelTemplateComponent>;
   private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
-
   disease = input<Disease>();
+  loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();
   fragment = input<string>();
   offset = input<string>();
@@ -132,7 +132,7 @@ export class DiseaseDisplayComponent implements OnInit, AfterViewInit {
             } else {
                this.scrollSections.forEach((section) => {
               scrollTop = scrollTop - section.nativeElement?.scrollHeight;
-              if (scrollTop >= 0) {
+              if (scrollTop >= 0 && section.nativeElement.nextSibling) {
                 this.activeElement.emit(section.nativeElement.nextSibling.id);
               }
             })

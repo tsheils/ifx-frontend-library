@@ -89,10 +89,10 @@
         "libs/shared/rdas/subscribe-button/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/bar-chart": [
-        "libs/shared/utils/bar-chart/src/index.ts"
+        "libs/shared/utils/charts/bar-chart/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/chart-wrapper": [
-        "libs/shared/utils/chart-wrapper/src/index.ts"
+        "libs/shared/utils/charts/chart-wrapper/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/data-not-found": [
         "libs/shared/utils/data-not-found/src/index.ts"
@@ -125,13 +125,13 @@
         "libs/shared/utils/mobile-header-template/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/pie-chart": [
-        "libs/shared/utils/pie-chart/src/index.ts"
+        "libs/shared/utils/charts/pie-chart/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/rdas-panel-template": [
         "libs/shared/rdas/panel-template/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/scatter-plot": [
-        "libs/shared/utils/scatter-plot/src/index.ts"
+        "libs/shared/utils/charts/scatter-plot/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/scroll-to-top": [
         "libs/shared/utils/scroll-to-top/src/index.ts"
@@ -167,14 +167,17 @@
       "filter-download-button": [
         "libs/shared/utils/filter-download-button/src/index.ts"
       ],
-      "generic-chart": ["libs/shared/utils/generic-chart/src/index.ts"],
+      "generic-chart": ["libs/shared/utils/charts/generic-chart/src/index.ts"],
+      "@ncats-frontend-library/features/rdas/history-api": ["libs/features/rdas/history-api/src/index.ts"],
       "ifx": ["libs/models/ifx/src/index.ts"],
       "ifx-tool-store": ["libs/stores/ifx-tool-store/src/index.ts"],
       "image-download": ["libs/shared/utils/image-download/src/index.ts"],
       "iqc-convert": ["libs/features/ifx/IQC-convert/src/index.ts"],
       "java-webstart": ["libs/shared/ifx/java-webstart/src/index.ts"],
       "markdown-viewer": ["libs/shared/utils/markdown-viewer/src/index.ts"],
-      "ncats-datatable": ["libs/shared/utils/ncats-datatable/src/index.ts"],
+      "ncats-datatable": [
+        "libs/shared/utils/charts/ncats-datatable/src/index.ts"
+      ],
       "ncats-find-excel": ["libs/features/ifx/ncats-find-excel/src/index.ts"],
       "ncats-footer": ["libs/shared/utils/ncats-footer/src/index.ts"],
       "ncats-header": ["libs/shared/utils/ncats-header/src/index.ts"],
@@ -202,10 +205,10 @@
       "tool-details": ["libs/shared/ifx/tool-details/src/index.ts"],
       "tool-list": ["libs/shared/ifx/tool-list/src/index.ts"],
       "utils-animated-force-directed-graph": [
-        "libs/shared/utils/animated-force-directed-graph/src/index.ts"
+        "libs/shared/utils/charts/animated-force-directed-graph/src/index.ts"
       ],
       "utils-force-directed-graph": [
-        "libs/shared/utils/force-directed-graph/src/index.ts"
+        "libs/shared/utils/charts/force-directed-graph/src/index.ts"
       ]
     },
     "allowSyntheticDefaultImports": true

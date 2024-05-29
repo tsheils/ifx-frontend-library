@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from "@angular/common";
+import { APP_BASE_HREF, isPlatformBrowser } from "@angular/common";
 import { provideHttpClient, withFetch, withInterceptorsFromDi } from "@angular/common/http";
 import { APP_INITIALIZER, ApplicationConfig, inject, PLATFORM_ID } from "@angular/core";
 import { provideAnimations } from "@angular/platform-browser/animations";
@@ -46,6 +46,10 @@ export function load_from_local_storage(
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    {
+      provide: APP_BASE_HREF,
+      useValue: environment.baseHref
+    },
     {
       provide: APP_INITIALIZER,
       useFactory: load_from_local_storage,

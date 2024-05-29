@@ -1,9 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from "@angular/core";
 import { CommonModule } from '@angular/common';
-
-
-
-
 @Component({
   selector: 'lib-utils-animated-force-directed-graph',
   standalone: true,

@@ -55,6 +55,7 @@ export class RdasDiseasePageComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
 
   @Input() disease!: Signal<Disease | undefined>;
+  @Input() loaded!: Signal<boolean | undefined>;
   @Input() diseaseFilters!: Signal<FilterCategory[] | undefined>;
   @Input() id!: string;
   /**
@@ -67,9 +68,9 @@ export class RdasDiseasePageComponent implements OnInit {
 
   mobile = false;
 
-  loaded = computed(
+/*  loaded = computed(
     () => this.disease()?.gardId === this.id
-  );
+  );*/
 
   constructor(
     private changeRef: ChangeDetectorRef,
@@ -81,6 +82,7 @@ export class RdasDiseasePageComponent implements OnInit {
 
   ngOnInit(): void {
     this.disease = this.store.selectSignal(DiseaseSelectors.getSelected);
+    this.loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
     this.diseaseFilters = this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
 
     if (this.route.snapshot && this.route.snapshot.fragment) {

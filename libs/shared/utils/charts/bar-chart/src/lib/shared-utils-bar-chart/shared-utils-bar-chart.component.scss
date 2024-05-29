@@ -1,0 +1,42 @@
+
+lib-shared-utils-bar-chart {
+  .bar-chart-container {
+    padding-top: 1vh;
+  }
+
+  .bar-chart {
+    min-height: 30vh;
+  }
+
+  .scatter-line {
+    /// stroke: black;
+  }
+
+  .chart-tab{
+    min-height: 30vh;
+  }
+
+  .hovered {
+    fill: #278F93
+  }
+
+  .chart-title {
+    font-family: Roboto, serif;
+    font-size: 24px;
+    padding-top: 4px;
+  }
+
+  @font-face {
+    font-family: Roboto;
+  }
+
+  @media only screen and (max-width: 960px) {
+    .bar-chart-container {
+    //  padding-left: .5vw;
+    }
+
+    .bar-chart {
+      min-height: 50vh;
+    }
+  }
+  }
