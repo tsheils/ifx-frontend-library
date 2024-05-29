@@ -59,5 +59,6 @@ Thumbs.db
 .angular
 .nx
 .git
+*.git/
 apps/rdas-e2e
 /apps/adme-loader-backend/src/environments/environment.ts
