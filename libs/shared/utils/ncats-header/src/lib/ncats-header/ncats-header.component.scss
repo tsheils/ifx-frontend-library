@@ -16,18 +16,18 @@ a:hover{
 }
 
 #ncats-banner img{
-  height: 26px;
-  padding: 10px;
+  height: auto;
+  padding: 0 10px 0 10px;
 }
 
-#ncats-logo{
-  min-height: 8vh;
+#ncats-logo {
+  height: auto;
   background-color: #fff;
-  width:100%
+  width: auto
 }
 
 #ncats-logo img{
-  height: 5vh;
+ // height: 5vh;
   padding: 10px;
 }
 
