@@ -191,6 +191,15 @@ export const routes: Routes = [
       import('@ncats-frontend-library/features/rdas/epi-api').then(
         (m) => m.EpiApiComponent
       ),
+  },{
+    path: 'apis/history',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      // eslint-disable-next-line @nx/enforce-module-boundaries
+      import('@ncats-frontend-library/features/rdas/history-api').then(
+        (m) => m.HistoryApiComponent
+      ),
   },
   { path: '**', redirectTo: '' },
 ];

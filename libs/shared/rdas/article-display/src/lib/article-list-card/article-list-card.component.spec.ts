@@ -14,10 +14,10 @@ describe('ArticleListCardComponent', () => {
 
     fixture = TestBed.createComponent(ArticleListCardComponent);
     component = fixture.componentInstance;
-    component.article = new Article({
+    /*component.article = new Article({
       title: 'fsgs',
       abstractText: 'sgsgsdsd',
-    });
+    });*/
     fixture.detectChanges();
   });
 

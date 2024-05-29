@@ -105,10 +105,11 @@
       <div>
         <h1>No disease info found</h1>
       </div>
-      } @if (disease() && loaded()) {
+      } @if (disease()) {
         <ncats-frontend-library-disease-display
     [disease]="disease()"
     [filters]="diseaseFilters()"
+    [loaded] = loaded()
     (optionsChange)="setUrl($event)"
   (activeElement)="setActiveElement($event)"
   ></ncats-frontend-library-disease-display>

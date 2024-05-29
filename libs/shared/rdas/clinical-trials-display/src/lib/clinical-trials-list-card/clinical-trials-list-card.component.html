@@ -1,12 +1,32 @@
 <div class="row space-between-row">
   <div class="width-75">
-    <span class="mat-card-title">
+    <h3>
       {{ trial.briefTitle ? trial.briefTitle : trial.officialTitle }}
-    </span>
+    </h3>
   </div>
   @if (trial.NCTId) {
   <div class="mat-h3">
     {{ trial.NCTId }}
   </div>
   }
+</div>
+<div class="row">
+  <div class ="width-60">
+    <div class="row space-around-row top-align">
+    <div class="width-30">
+    <b class="">Status</b> <br>
+    {{ trial.overallStatus || trial.lastKnownStatus }}
+    </div>
+  <div class="width-30">
+    <b class="">Study Type</b> <br>
+      {{ trial.studyType ? trial.studyType : 'None Listed' }}
+    </div>
+  <div class="width-30">
+    <b class="">Phase</b> <br>
+      {{
+      trial.phase || 'None Listed'
+      }}
+    </div>
+  </div>
+</div>
 </div>

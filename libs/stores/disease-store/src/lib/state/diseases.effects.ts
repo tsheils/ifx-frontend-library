@@ -32,6 +32,7 @@ import {
   Page,
 } from '@ncats-frontend-library/models/utils';
 import { Store } from "@ngrx/store";
+import { data } from "autoprefixer";
 import { DiseaseService } from '../disease.service';
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
@@ -114,7 +115,7 @@ export const loadDiseaseFilters$ =  createEffect(
             .fetchProjects(PROJECTFILTERS, { gardId: gardid })
             .pipe(take(1)),
           diseaseService
-            .fetchTrials(TRIALFILTERS, FETCHTRIALSVARIABLES)
+            .fetchTrials(TRIALFILTERS, _setTrialVariables(params))
             .pipe(take(1)),
         )
           .pipe(
@@ -187,7 +188,8 @@ export const loadDiseaseFilters$ =  createEffect(
                     }
                   }
                   if (trialFilterData) {
-                    const trialFilterDataList: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] } = trialFilterData.data as { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] };
+                    const dataObj: {allClinicalTrialsFilters: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] }} = trialFilterData.data as {allClinicalTrialsFilters: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] }}
+                    const trialFilterDataList: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] } = dataObj.allClinicalTrialsFilters as { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] };
                     if (trialFilterDataList.trialsByStatus && trialFilterDataList.trialsByStatus.length) {
                       filters.push(new FilterCategory(
                         {
@@ -788,3 +790,22 @@ export const fetchDiseasesList$ =  createEffect(
     FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = gardid;
   }
 
+function _setTrialVariables(params: Params) {
+   if(params['StudyType'] && params['StudyType'].length){
+     FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = params['StudyType']
+   } else {
+     FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = null
+   }
+   if(params['Phase'] && params['Phase'].length){
+     FETCHTRIALSVARIABLES.ctwhere.Phase_IN = params['Phase']
+   } else {
+     FETCHTRIALSVARIABLES.ctwhere.Phase_IN = null
+   }
+   if(params['OverallStatus'] && params['OverallStatus'].length){
+     FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = params['OverallStatus']
+   } else {
+     FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = null
+   }
+
+   return FETCHTRIALSVARIABLES
+}

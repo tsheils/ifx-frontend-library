@@ -1,6 +1,3 @@
-// eslint-disable-next-line  @typescript-eslint/ban-ts-comment
-// @ts-nocheck
-
 import { CommonModule } from "@angular/common";
 import { afterNextRender, Component, Input, ViewEncapsulation } from "@angular/core";
 import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
@@ -51,7 +48,7 @@ export class SharedUtilsScatterPlotComponent {
   }
 
   makeChart(){
-      // Declare the x (horizontal position) scale.
+    /*  // Declare the x (horizontal position) scale.
       const x = scaleLinear(extent(this.filter.values.map((d: Filter) => <number>d.term)), [this.margins.left, this.width - this.margins.right]);
 
       // Declare the y (vertical position) scale.
@@ -88,6 +85,6 @@ export class SharedUtilsScatterPlotComponent {
         .attr("class", "scatter-line")
         .attr("stroke-width", 2.5)
         .attr("d", lineFunction(this.filter.values));
-
+*/
   }
 }

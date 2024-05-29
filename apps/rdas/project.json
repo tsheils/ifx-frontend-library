@@ -43,6 +43,10 @@
             "input": "libs/features/rdas/epi-api/src/assets",
             "glob": "**/*",
             "output": "assets/epi-api"
+          },{
+            "input": "libs/features/rdas/history-api/src/assets",
+            "glob": "**/*",
+            "output": "assets/history-api"
           },
           {
             "input": "libs/shared/rdas/disease-display/src/assets",

@@ -19,8 +19,8 @@ describe('ProjectDetailsComponent', () => {
     });
     fixture = TestBed.createComponent(ProjectDetailsComponent);
     component = fixture.componentInstance;
-    const sig = signal<CoreProject>(PROJECTMOCK)
-    component.grant = sig as unknown as typeof component.grant
+  //  const sig = signal<CoreProject>(PROJECTMOCK)
+ //   component.grant = sig as unknown as typeof component.grant
     fixture.detectChanges();
   });
 

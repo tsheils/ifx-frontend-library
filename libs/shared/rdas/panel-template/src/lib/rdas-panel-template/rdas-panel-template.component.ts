@@ -4,6 +4,7 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from "@angular/material/p
 import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
 import { SharedUtilsDataNotFoundComponent } from "@ncats-frontend-library/shared/utils/data-not-found";
 import { SharedUtilsListFilterRowComponent } from "@ncats-frontend-library/shared/utils/list-filter-row";
+import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
 
 @Component({
   selector: 'lib-rdas-panel-template',
@@ -12,7 +13,8 @@ import { SharedUtilsListFilterRowComponent } from "@ncats-frontend-library/share
     CommonModule,
     MatPaginatorModule,
     SharedUtilsListFilterRowComponent,
-    SharedUtilsDataNotFoundComponent
+    SharedUtilsDataNotFoundComponent,
+    LoadingSpinnerComponent
   ],
   templateUrl: './rdas-panel-template.component.html',
   styleUrl: './rdas-panel-template.component.scss',
@@ -20,6 +22,7 @@ import { SharedUtilsListFilterRowComponent } from "@ncats-frontend-library/share
 export class RdasPanelTemplateComponent {
   filters= input<FilterCategory[]>();
   _id = input<string>();
+  loaded = input<boolean | undefined>();
   message = input<string>();
   count = input<number>(0);
   showPagination = input<boolean>(true);

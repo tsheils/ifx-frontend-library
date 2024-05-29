@@ -126,21 +126,40 @@ export const FETCHTRIALSVARIABLES: {
 
 export const TRIALFILTERS = gql`
   query TrialFilters($ctwhere: ClinicalTrialWhere) {
-    trialsByStatus(where: $ctwhere) {
-      term
-      count
-      label
-    }
-    trialsByType(where: $ctwhere) {
-      term
-      count
-      label
-    }
-    trialsByPhase(where: $ctwhere) {
-      term
-      count
-      label
+    allClinicalTrialsFilters(where: $ctwhere){
+      trialsByStatus:statuses {
+        count
+        label
+        term
+      }
+      trialsByType:studyTypes {
+        count
+        label
+        term
+      }
+      trialsByPhase:phases {
+        count
+        label
+        term
+      }
     }
   }
 `;
 
+
+/*
+trialsByStatus(where: $ctwhere) {
+  term
+  count
+  label
+}
+trialsByType(where: $ctwhere) {
+  term
+  count
+  label
+}
+trialsByPhase(where: $ctwhere) {
+  term
+  count
+  label
+}*/

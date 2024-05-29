@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit, Signal, ViewChild } from "@angular/core";
+import { Component, computed, inject, OnInit, signal, Signal, ViewChild, WritableSignal } from "@angular/core";
 import { CommonModule } from "@angular/common";
 import { FormControl, FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { MatButtonModule } from "@angular/material/button";
@@ -39,11 +39,17 @@ export class ResolverMainComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   resolveCtrl = new FormControl<string>('LARGEST');
   inputCtrl = new FormControl();
+  inputVal = signal(null)
   options: Signal<Filter[] | undefined> = this.store.selectSignal(ResolverSelectors.selectResolverOptions);
-  searchDisabled = computed(()=> {
-      return this.inputCtrl.value && (this.route.snapshot.queryParamMap.has('options') || this.filterOptionsList)
+  searchDisabled = computed(() => {
+    console.log(this)
+    console.log(this.filterOptionsList())
+    console.log(this.inputCtrl.valueChanges.subscribe(change => console.log(change)))
+    console.log(this.route.snapshot.queryParamMap)
+      return this.inputVal() && (this.route.snapshot.queryParamMap.has('options') || this.filterOptionsList())
     }
   )
+
   optionCategories: Signal<FilterCategory[]> = computed(() => {
       const retMap: Map<string, FilterCategory> = new Map<string, FilterCategory>();
       this.options()?.forEach((opt: Filter) => {
@@ -62,10 +68,12 @@ export class ResolverMainComponent implements OnInit {
       return Array.from(retMap.values());
     }
   )
-  filterOptionsList!: { [key: string]: Filter[] };
+  // filterOptionsList!: { [key: string]: Filter[] };
+  filterOptionsList: WritableSignal<{ [key: string]: Filter[] }> = signal({});
   resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver)
 
   ngOnInit(){
+    console.log(this.inputCtrl.valueChanges.subscribe(val => this.inputVal.set(val)))
     if (this.route.snapshot && this.route.snapshot.queryParams) {
       const params = this.route.snapshot.queryParamMap;
       const optsString: string= <string>params.get('options')
@@ -79,7 +87,9 @@ export class ResolverMainComponent implements OnInit {
   }
 
 filterOptions(event: { [key: string]: Filter[] }) {
-  this.filterOptionsList = event
+    console.log(event)
+  this.searchDisabled()
+  this.filterOptionsList.set(event)
 }
 
 resolve() {
@@ -90,12 +100,14 @@ resolve() {
   })
   let URL = ''
 
-  if(!this.filterOptionsList) {
-    this.filterOptionsList = {}
-    Object.keys(this.filtersRow.filterFormControls().controls).forEach(key=> this.filterOptionsList[key] = this.filtersRow.filterFormControls().controls[key].value)
+  console.log(this.filterOptionsList())
+  if(!Object.keys(this.filterOptionsList()).length) {
+    const tempObj: {[key: string]: Filter[]} = {};
+      Object.keys(this.filtersRow.filterFormControls().controls).forEach(key=> tempObj[key] = this.filtersRow.filterFormControls().controls[key].value)
+    this.filterOptionsList.set(tempObj)
   }
 
-  Object.values(this.filterOptionsList).forEach((category:Filter[]) => {
+  Object.values(this.filterOptionsList()).forEach((category:Filter[]) => {
     category.forEach((filter: Filter) => {
       if (filter.value) {
         URL = URL + '/' + filter.value
@@ -105,7 +117,7 @@ resolve() {
 
 
   localStorage.removeItem('previouslyUsedOptions');
-  localStorage.setItem('previouslyUsedOptions', JSON.stringify((Object.values(this.filterOptionsList)).flat().map(fil=> fil.value)));
+  localStorage.setItem('previouslyUsedOptions', JSON.stringify((Object.values(this.filterOptionsList())).flat().map(fil=> fil.value)));
   this.store.dispatch(ResolveQueryActions.resolveQuery({urlStub: URL, form: formData}))
   // ?params=aspirin&options=inchikey;molExactMass;lychi1;lychi3;molExactMassParent;molFormParent;img&standardize=CHARGE_NORMALIZE
   this.router.navigate(
@@ -113,13 +125,21 @@ resolve() {
     {
       queryParams: {
         'params': this.inputCtrl.value,
-        'options': (Object.values(this.filterOptionsList)).flat().map(fil=> fil.value).join(';'),
+        'options': (Object.values(this.filterOptionsList())).flat().map(fil=> fil.value).join(';'),
         'standardize': this.resolveCtrl.value
       },
       queryParamsHandling: 'merge'
     }
   );
 }
+
+/*  searchDisabled() {
+      console.log(this)
+      console.log(this.filterOptionsList())
+      console.log(this.inputCtrl.valueChanges.subscribe(change => console.log(change)))
+      console.log(this.route.snapshot.queryParamMap)
+      return this.inputCtrl.value && (this.route.snapshot.queryParamMap.has('options') || this.filterOptionsList)
+    }*/
 
 
   clearParams() {

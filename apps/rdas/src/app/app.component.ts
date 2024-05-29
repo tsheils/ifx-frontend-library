@@ -100,6 +100,9 @@ export class AppComponent implements OnInit {
         {
           link: 'apis/epi',
           label: 'EPIDEMIOLOGY',
+        },{
+          link: 'apis/history',
+          label: 'NATURAL HISTORY',
         },
         {
           link: 'apis/diseases',

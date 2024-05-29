@@ -25,7 +25,7 @@ type ClinicalTrial {
 	NCTId: String!
 	NCTIdAlias: [String]
 	OfficialTitle: String
-	OverallStatus: String!
+	OverallStatus: String
 	Phase: String
 	PrimaryCompletionDate: String
 	PrimaryCompletionDateType: String
@@ -37,7 +37,7 @@ type ClinicalTrial {
 	StartDateType: String
 	StudyFirstPostDate: String!
 	StudyFirstPostDateType: String!
-	StudyType: String!
+	StudyType: String
 	collaboratedWithCollaborators: [Collaborator!]! @relationship(type: "collaborated_with", direction: OUT)
 	conductedByOrganizations: [Organization!]! @relationship(type: "conducted_by", direction: OUT)
 	expandedAccessInfoExpandedAccesses: [ExpandedAccess!]! @relationship(type: "expanded_access_info", direction: OUT)
@@ -226,6 +226,11 @@ type StudyDesign {
 	clinicalTrialshasStudyDesign: [ClinicalTrial!]! @relationship(type: "has_study_design", direction: IN)
 }
 
+type CTFilters {
+  statuses: [FilterCount]
+  studyTypes: [FilterCount]
+  phases: [FilterCount]
+}
 
 type FilterCount  {
   term: String
@@ -269,34 +274,34 @@ type Query {
     )
 }
 
-
-
-
-
-
-
-
 type Query {
-  clinicalTrialsByGardList(where: ClinicalTrialWhere): [ClinicalTrial]
+  allClinicalTrialsFilters(where: ClinicalTrialWhere): CTFilters
     @cypher(
       statement: """
-      MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+      MATCH (n:GARD)
       WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
-       return distinct(cl) as trials
-      ORDER BY cl.StartDate DESC
-      SKIP $offset
-      LIMIT $limit
-      """, columnName: "trials"
-    )
-}
-
-type Query {
-  clinicalTrialsByGardCount(where: ClinicalTrialWhere): BigInt
-    @cypher(
-      statement: """
-      MATCH (n:GARD)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
-      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId
-      RETURN count(distinct(cl)) as count
-      """, columnName: "count"
+      MATCH (n)-[m:mapped_to_gard]-(a:Annotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+                 WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
+                 AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
+                 AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
+                 with collect(distinct(cl)) as trials
+                  with
+                  collect {
+                  unwind trials as tr
+                  WITH tr.OverallStatus as status, count(distinct(tr)) as statusCT
+                  return {term: status, count:statusCT, label: 'OverallStatus'}
+                  } as statuses,
+                  collect {
+                  unwind trials as tr
+                  WITH tr.Phase as phase, count(distinct(tr)) as phaseCT
+                  return {term: phase, count:phaseCT, label: 'Phase'}
+                  } as phases,
+                  collect {
+                  unwind trials as tr
+                  WITH tr.StudyType as studyType, count(distinct(tr)) as studyTypeCT
+                  return {term: studyType, count:studyTypeCT, label: 'StudyType'}
+                  } as studyTypes
+                return {statuses: statuses, phases: phases, studyTypes: studyTypes} as data
+      """, columnName: "data"
     )
 }

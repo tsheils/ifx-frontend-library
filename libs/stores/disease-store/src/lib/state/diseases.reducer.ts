@@ -49,7 +49,7 @@ export const reducer = createReducer(
     FetchDiseaseActions.fetchDisease,
     (state) =>  {
       return { ...state,
-        loaded: true,
+        loaded: false,
         error: null
       }
     }

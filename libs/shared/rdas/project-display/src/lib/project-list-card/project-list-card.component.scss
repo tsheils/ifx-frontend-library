@@ -6,7 +6,10 @@ ncats-frontend-library-project-list-card {
   -ms-overflow-style: none; //windows
   scrollbar-width: none; //firefox
   color: mat.get-color-from-palette($app-primary);
-
+  padding: 1rem;
+  padding-bottom: 2vh;
+  margin-bottom: 2vh;
+  border-bottom: 2px solid #6e4c8f;
   //chrome
   ::-webkit-scrollbar {
     display: none;

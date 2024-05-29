@@ -7,7 +7,7 @@
           <span class="disease-accordion-title bottom-border-primary">Overview</span>
         </mat-panel-title>
       </mat-expansion-panel-header>
-<div class= "row space-around-row">
+<div class= "row space-around-row top-align">
  @if(!mobile) {
 @if(filterMap() && filterMap().has('articles')) {
 <div class="width-30">
@@ -144,6 +144,7 @@
 [_id]= "'trials'"
 [count] = "disease()?.clinicalTrialCount!"
 [filters]="filterMap().get('trials')!"
+[loaded] = "loaded()"
 [message]="'No Clinical Trial Data Available'"
 (listChange)="fetchList($event, 'trials')"
 >

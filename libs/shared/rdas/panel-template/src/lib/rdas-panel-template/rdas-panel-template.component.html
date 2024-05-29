@@ -17,6 +17,7 @@
 ></mat-paginator>
 </div>
 }
+
 @if(count() > 0) {
 <ng-content select=".data-list"></ng-content>
 } @else {
@@ -24,3 +25,4 @@
 [message]=message()
 ></ncats-frontend-library-shared-utils-data-not-found>
 }
+

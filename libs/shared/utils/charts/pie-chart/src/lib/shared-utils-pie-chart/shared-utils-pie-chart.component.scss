@@ -1,0 +1,35 @@
+lib-shared-utils-pie-chart {
+  .pie-chart-container {
+    padding-left: 2vw;
+  }
+
+  .pie-chart {
+    min-height: 30vh;
+  }
+
+  .chart-title {
+    font-family: Roboto, serif;
+    font-size: 16px;
+    padding-top: 4px;
+  }
+
+  .labelName {
+    font-size: 24px;
+    font-style: italic;
+  }
+
+  text.toolCircle {
+    font-style: normal;
+    font-weight: 700;
+    text-anchor: middle;
+  }
+
+  .value {
+    font-size: 2.4em;
+  }
+
+  .clickedSlice {
+    fill: #278F93
+  }
+
+}
