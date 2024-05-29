@@ -19,7 +19,7 @@ RUN npm i -g @angular/cli
 RUN npm install -g nx
 RUN npm install
 #RUN nx g @nrwl/workspace:fix-configuration  ##@nrwl package is deprecated, so i don't think this does anything
-RUN NODE_OPTIONS=--max_old_space_size=8192 nx run resolver:build:production --verbose
+RUN NODE_OPTIONS=--max_old_space_size=8192 nx run resolver:build:production --base-href=/frontend/ --verbose
 
 FROM registry.ncats.nih.gov:5000/labshare/docker-base-web
 
