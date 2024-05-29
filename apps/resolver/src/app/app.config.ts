@@ -47,10 +47,6 @@ export function load_from_local_storage(
 export const appConfig: ApplicationConfig = {
   providers: [
     {
-      provide: APP_BASE_HREF,
-      useValue: environment.baseHref
-    },
-    {
       provide: APP_INITIALIZER,
       useFactory: load_from_local_storage,
       deps: [],
