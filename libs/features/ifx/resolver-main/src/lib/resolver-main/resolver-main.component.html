@@ -57,14 +57,13 @@
   </div>
 
   <div class="width-30">
+    @if(subscriptionSelection.hasValue()){
     <h2>Selected Filters</h2>
-    @if(selectedFilters()){
       <div class="row space-around-row">
         <div class="width-90 right-text">
           <button mat-flat-button [color]="'accent'" (click)=clearParams()>Remove All</button>
         </div>
       </div>
-    }
     <div class="chip-list-wrapper">
       @for (filterCategory of selectedFilters() | keyvalue; track filterCategory) {
         @if(filterCategory.value.length){
@@ -83,6 +82,7 @@
       }
         }
     </div>
+    }
   </div>
 </div>
 
