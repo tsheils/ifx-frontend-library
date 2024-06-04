@@ -1,4 +1,4 @@
-import { Component, computed, Inject, input } from "@angular/core";
+import { ChangeDetectionStrategy, Component, computed, Inject, input } from "@angular/core";
 import { CommonModule, DOCUMENT } from "@angular/common";
 import { MatButtonModule } from "@angular/material/button";
 import { MatIconModule } from "@angular/material/icon";
@@ -21,6 +21,7 @@ import { DataProperty, NcatsDatatableComponent } from "ncats-datatable";
   ],
   templateUrl: './resolver-data-viewer.component.html',
   styleUrl: './resolver-data-viewer.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResolverDataViewerComponent {
   data = input<ResolverResponse[]>()
