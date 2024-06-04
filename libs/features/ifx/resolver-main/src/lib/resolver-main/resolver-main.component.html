@@ -1,38 +1,96 @@
-
+<div class="resolver-main">
 <div class="row space-around-row top-align">
   <div class="width-20">
+    <h2>Input</h2>
     Enter a drug name or structure, one per line and click the 'Resolve' button
     <br>
     <mat-form-field [appearance]="'outline'" >
-    <textarea matInput cdkTextareaAutosize [rows]="25" placeholder="glycine" [formControl]= inputCtrl>
+    <textarea matInput cdkTextareaAutosize [rows]="15" placeholder="glycine" [formControl]= inputCtrl>
     </textarea>
     </mat-form-field>
   </div>
   <div class="width-25 right-justified-row">
+    <h2>Options</h2>
     <mat-radio-group [formControl]=resolveCtrl [value]="'FRAGMENT'">
       <mat-radio-button [value]="'FRAGMENT'" [checked]="true">Largest Fragment</mat-radio-button>
       <mat-radio-button [value]="'CHARGE_NORMALIZE'">Normalize Charges</mat-radio-button>
       <mat-radio-button [value]="'IDENTITY'">Basic</mat-radio-button>
     </mat-radio-group>
+    <mat-form-field class="full-width">
+      <input matInput type="text"
+             [placeholder]="'Search Filters'"
+             [matAutocomplete]="auto"
+             [formControl]="filterSearchCtrl">
+    </mat-form-field>
 
-    @if(optionCategories() && optionCategories().length) {
-    <div class="row right-justified-row">
-    <div class="width-35">
-    <button mat-flat-button [color]="'accent'" (click)=clearParams()>Clear Selected</button>
+    <mat-autocomplete #auto="matAutocomplete" >
+      @for (filter of filteredSearchOptions(); track filter) {
+      <mat-optgroup [label]="filter.label" multiple>
+        @for (value of filter.values; track value) {
+      <mat-option (click)="subscriptionSelection.toggle(value) ">
+          <mat-checkbox
+              (change)="$event ? subscriptionSelection.toggle(value) : null"
+                        [checked]="subscriptionSelection.isSelected(value)"
+                        (click)="$event.stopPropagation()">
+             <span class="main-value"
+                   [innerHTML]="value.term | highlight : filterSearchCtrl.value"
+             ></span>
+          </mat-checkbox>
+            @if(value.description) {
+          <div class="space-between-row filter-description">
+                 <span class="main-value"
+                       [innerHTML]="value.description | highlight : filterSearchCtrl.value"
+                 ></span>
+            </div>
+          }
+      </mat-option>
+      }
+      </mat-optgroup>
+      }
+    </mat-autocomplete>
+
+    <div class="row space-around-row">
+      <div class="width-90 right-text">
+    <button mat-flat-button [color]="'primary'" (click) = resolve() [disabled]="searchDisabled()">Resolve</button>
+      </div>
     </div>
-    <br>
-    </div>
-   <div class="row">
-   <div class="width-100">
-    <lib-shared-utils-list-filter-row [filters] = optionCategories() (filterChange)="filterOptions($event)" [showCount]=false [showSelected]=false></lib-shared-utils-list-filter-row>
-    </div>
-    </div>
-    }
-    <button mat-flat-button [color]="'primary'" (click) = resolve() [disabled]=!searchDisabled()>Resolve</button>
   </div>
-  <div class="width-45">
+
+  <div class="width-30">
+    <h2>Selected Filters</h2>
+    @if(selectedFilters()){
+      <div class="row space-around-row">
+        <div class="width-90 right-text">
+          <button mat-flat-button [color]="'accent'" (click)=clearParams()>Remove All</button>
+        </div>
+      </div>
+    }
+    <div class="chip-list-wrapper">
+      @for (filterCategory of selectedFilters() | keyvalue; track filterCategory) {
+        @if(filterCategory.value.length){
+          <div class="row">
+            <h3>{{filterCategory.key}}</h3>
+          </div>
+            <mat-chip-listbox>
+            @for (filter of filterCategory.value; track filter) {
+        <mat-chip (click)="removeChip(filter)">
+            {{ filter.term }}
+            <mat-icon class="mat-chip-remove">cancel</mat-icon>
+          </mat-chip>
+        }
+            </mat-chip-listbox>
+        <br>
+      }
+        }
+    </div>
+  </div>
+</div>
+
+<div class="row space-around-row top-align">
+  <div class="width-90">
     @if(resolvedData() && resolvedData().length) {
-    <lib-resolver-data-viewer [data]="resolvedData()" [params]="filterOptionsList()"></lib-resolver-data-viewer>
+    <lib-resolver-data-viewer [data]="resolvedData()" [params]="selectedFilters()"></lib-resolver-data-viewer>
     }
   </div>
+</div>
 </div>
