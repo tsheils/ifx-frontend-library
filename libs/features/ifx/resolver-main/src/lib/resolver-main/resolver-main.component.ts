@@ -65,17 +65,16 @@ export class ResolverMainComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
 
+  optsList = this.store.selectSignal(ResolverSelectors.selectResolverOptions);
+  resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver);
+
+  optionCategories: Signal<FilterCategory[]> = computed(() => this._mapFilterCategoriesFromArray(this.optsList()));
+  filteredSearchOptions: WritableSignal<FilterCategory[]> = signal(this.optionCategories());
+  selectedFilters: WritableSignal<{ [key: string]: Filter[] }> = signal(this._mapFilterArrayToObject(this.optsList()?.filter((opt:Filter) => opt.selected)));
+
   resolveCtrl = new FormControl<string>("LARGEST");
   inputCtrl = new FormControl();
   filterSearchCtrl = new FormControl();
-  optsList = this.store.selectSignal(ResolverSelectors.selectResolverOptions);
-  optionCategories: Signal<FilterCategory[]> = computed(() => {
-    return this._mapFilterCategoriesFromArray(this.optsList())
-  });
-
-  filteredSearchOptions: WritableSignal<FilterCategory[]> = signal(this.optionCategories());
-  selectedFilters: WritableSignal<{ [key: string]: Filter[] }> = signal(this._mapFilterArrayToObject(this.optsList()?.filter((opt:Filter) => opt.selected)));
-  resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver);
   subscriptionSelection = new SelectionModel<Filter>(true, this.optsList()?.filter((opt:Filter) => opt.selected));
 
   ngOnInit() {
@@ -136,15 +135,19 @@ export class ResolverMainComponent implements OnInit {
   }
 
   searchFilters() {
-    const searchCategories = this.optionCategories().flat().map((category) => category.values).flat();
-    const retArr = searchCategories.filter((filter) => {
-      if ((JSON.stringify(filter)).includes(this.filterSearchCtrl.value)) {
-        return filter;
-      } else {
-        return;
-      }
-    });
-    this.filteredSearchOptions.set(this._mapFilterCategoriesFromArray(retArr))
+    if(this.filterSearchCtrl.value) {
+      const searchCategories = this.optionCategories().flat().map((category) => category.values).flat();
+      const retArr = searchCategories.filter((filter) => {
+        if ((JSON.stringify(filter)).includes(this.filterSearchCtrl.value)) {
+          return filter;
+        } else {
+          return;
+        }
+      });
+      this.filteredSearchOptions.set(this._mapFilterCategoriesFromArray(retArr))
+    } else {
+      this.filteredSearchOptions.set(this.optionCategories())
+    }
   }
 
   removeChip(filter: Filter) {
