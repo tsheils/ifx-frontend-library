@@ -7,10 +7,9 @@ import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  HostListener,
   Inject,
   inject,
-  InjectionToken,
+  InjectionToken, OnInit,
   PLATFORM_ID,
   ViewChild, ViewEncapsulation
 } from "@angular/core";
@@ -19,14 +18,13 @@ import { MatSidenavModule } from "@angular/material/sidenav";
 import {
   Event,
   NavigationEnd,
-  NavigationExtras,
   Router,
   RouterLink,
-  RouterModule,
   RouterOutlet
 } from "@angular/router";
 import { LinkTemplateProperty, User } from "@ncats-frontend-library/models/utils";
 import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
+import { SharedUtilsFileUploadComponent } from "@ncats-frontend-library/shared/utils/file-upload";
 import { FooterTemplateComponent } from "@ncats-frontend-library/shared/utils/footer-template";
 import { HeaderTemplateComponent } from "@ncats-frontend-library/shared/utils/header-template";
 import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
@@ -49,13 +47,14 @@ import { SocialSignOnButtonComponent } from "@ncats-frontend-library/shared/util
     CdkScrollableModule,
     ScrollingModule,
     LoadingSpinnerComponent,
-    MobileHeaderTemplateComponent
+    MobileHeaderTemplateComponent,
+    SharedUtilsFileUploadComponent
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;
   /**
    * reference to header oject. used to change display options
@@ -64,7 +63,7 @@ export class AppComponent {
   header!: MobileHeaderTemplateComponent;
   destroyRef = inject(DestroyRef);
 
-  title = 'adme';
+  title = 'adme-loader';
   loaded = false;
   user?: User;
   mobile = false;
@@ -80,11 +79,6 @@ export class AppComponent {
       label: 'ABOUT',
     }
   ];
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event: Event) {
-    // this.setMobile();
-  }
 
   constructor(
     @Inject(PLATFORM_ID)
