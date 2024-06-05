@@ -138,7 +138,8 @@ export class ResolverMainComponent implements OnInit {
     if(this.filterSearchCtrl.value) {
       const searchCategories = this.optionCategories().flat().map((category) => category.values).flat();
       const retArr = searchCategories.filter((filter) => {
-        if (filter.term.includes(this.filterSearchCtrl.value) || filter.description?.includes(this.filterSearchCtrl.value)) {
+        const search: string = this.filterSearchCtrl.value.toLowerCase()
+        if (filter.term.toLowerCase().includes(search) || filter.description?.toLowerCase().includes(search)) {
           return filter;
         } else {
           return;
