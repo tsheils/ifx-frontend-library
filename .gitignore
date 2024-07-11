@@ -62,3 +62,7 @@ Thumbs.db
 *.git/
 apps/rdas-e2e
 /apps/adme-loader-backend/src/environments/environment.ts
+/apps/ramp-client/src/environments/
+/apps/rdas/src/environments/
+/apps/resolver/src/environments/
+/apps/ifx-toolbox/src/environments/

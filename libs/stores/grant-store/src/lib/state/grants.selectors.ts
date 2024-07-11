@@ -13,31 +13,31 @@ const { selectAll, selectEntities } = grantsAdapter.getSelectors();
 
 export const selectGrantsLoaded = createSelector(
   selectGrantsState,
-  (state: GrantsState) => state.loaded
+  (state: GrantsState) => state.loaded,
 );
 
 export const selectGrantsError = createSelector(
   selectGrantsState,
-  (state: GrantsState) => state.error
+  (state: GrantsState) => state.error,
 );
 
 export const selectAllGrants = createSelector(
   selectGrantsState,
-  (state: GrantsState) => selectAll(state)
+  (state: GrantsState) => selectAll(state),
 );
 
 export const selectGrantsEntities = createSelector(
   selectGrantsState,
-  (state: GrantsState) => selectEntities(state)
+  (state: GrantsState) => selectEntities(state),
 );
 
 export const selectSelectedId = createSelector(
   selectGrantsState,
-  (state: GrantsState) => state.selectedId
+  (state: GrantsState) => state.selectedId,
 );
 
 export const selectEntity = createSelector(
   selectGrantsEntities,
   selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
+  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
 );

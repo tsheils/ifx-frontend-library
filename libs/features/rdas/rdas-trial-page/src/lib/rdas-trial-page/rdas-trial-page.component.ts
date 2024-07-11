@@ -1,11 +1,16 @@
-import { ChangeDetectorRef, Component, DestroyRef, inject, Input, OnInit } from "@angular/core";
+import {
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 import { ClinicalTrialsDetailsComponent } from '@ncats-frontend-library/shared/rdas/clinical-trials-display';
-import { Store } from "@ngrx/store";
-import { TrialSelectors } from "@ncats-frontend-library/stores/trial-store";
-
-
+import { Store } from '@ngrx/store';
+import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
 
 @Component({
   selector: 'ncats-frontend-library-trial-page',
@@ -20,9 +25,7 @@ export class RdasTrialPageComponent implements OnInit {
 
   @Input() trial!: ClinicalTrial;
 
-  constructor(
-    private changeRef: ChangeDetectorRef
-  ) {}
+  constructor(private changeRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.trialStore.select(TrialSelectors.selectEntity).subscribe((res) => {

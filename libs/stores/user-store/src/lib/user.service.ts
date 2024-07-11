@@ -1,15 +1,23 @@
-import { inject, Injectable } from "@angular/core";
+import { inject, Injectable } from '@angular/core';
 import {
   Auth,
   createUserWithEmailAndPassword,
-  getAuth, sendPasswordResetEmail,
+  getAuth,
+  sendPasswordResetEmail,
   sendSignInLinkToEmail,
   signInWithEmailAndPassword,
-  signInWithPopup, signOut
-} from "@angular/fire/auth";
-import { doc, Firestore, getDoc, setDoc } from "@angular/fire/firestore";
-import { AuthProvider } from "@firebase/auth";
-import { GoogleAuthProvider, FacebookAuthProvider, GithubAuthProvider, TwitterAuthProvider, EmailAuthProvider } from "firebase/auth";
+  signInWithPopup,
+  signOut,
+} from '@angular/fire/auth';
+import { doc, Firestore, getDoc, setDoc } from '@angular/fire/firestore';
+import { AuthProvider } from '@firebase/auth';
+import {
+  GoogleAuthProvider,
+  FacebookAuthProvider,
+  GithubAuthProvider,
+  TwitterAuthProvider,
+  EmailAuthProvider,
+} from 'firebase/auth';
 import { User } from '@ncats-frontend-library/models/utils';
 import { from, Observable } from 'rxjs';
 
@@ -22,10 +30,7 @@ export class UserService {
   /**
    * list of provider objects used by the auth service
    */
-  providers: Map<string, AuthProvider> = new Map<
-    string,
-    AuthProvider
-  >([
+  providers: Map<string, AuthProvider> = new Map<string, AuthProvider>([
     ['facebook', new FacebookAuthProvider()],
     ['google', new GoogleAuthProvider()],
     ['twitter', new TwitterAuthProvider()],
@@ -48,41 +53,35 @@ export class UserService {
    * closes modal
    * @param providerName
    */
-  doLogin(
-    providerName: string
-  ){
+  doLogin(providerName: string) {
     const auth: Auth = getAuth();
-    const provider: AuthProvider = <AuthProvider>this.providers.get(providerName);
-    if(providerName ==="facebook") {
+    const provider: AuthProvider = <AuthProvider>(
+      this.providers.get(providerName)
+    );
+    if (providerName === 'facebook') {
       const fProvider = new FacebookAuthProvider();
-      fProvider.addScope('email')
-      fProvider.addScope('public_profile')
-      return from(
-        signInWithPopup(auth, fProvider))
+      fProvider.addScope('email');
+      fProvider.addScope('public_profile');
+      return from(signInWithPopup(auth, fProvider));
     } else {
       // this.auth.
       return from(
-        signInWithPopup(auth, provider)
+        signInWithPopup(auth, provider),
         //  this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider)
       );
     }
   }
 
-  doEmailLogin(
-    email: string,
-    pw: string
-  ) {
+  doEmailLogin(email: string, pw: string) {
     const auth: Auth = getAuth();
     return from(
-      signInWithEmailAndPassword(auth, email, pw).catch((error) => error)
+      signInWithEmailAndPassword(auth, email, pw).catch((error) => error),
     );
   }
 
   doEmailLinkLogin(email: string): Observable<void> {
     const auth: Auth = getAuth();
-    return from(
-      sendSignInLinkToEmail(auth, email, this.actionCodeSettings)
-    );
+    return from(sendSignInLinkToEmail(auth, email, this.actionCodeSettings));
   }
 
   /**
@@ -99,8 +98,9 @@ export class UserService {
   doResetEmail(email: string) {
     const auth: Auth = getAuth();
     return from(
-     sendPasswordResetEmail(auth, email, this.actionCodeSettings)
-        .catch((error) => error)
+      sendPasswordResetEmail(auth, email, this.actionCodeSettings).catch(
+        (error) => error,
+      ),
     );
   }
 
@@ -119,20 +119,20 @@ export class UserService {
    * @param user
    */
   createUserProfile(user: User) {
-    const docRef = doc(this.firestore, "users", user.uid);
-    setDoc(docRef, {...user})
+    const docRef = doc(this.firestore, 'users', user.uid);
+    setDoc(docRef, { ...user });
     return this.fetchUserProfile(user);
   }
 
   updateUserProfile(user: User) {
-      const docRef = doc(this.firestore, "users", user.uid);
-      setDoc(docRef, JSON.parse(JSON.stringify(user)), { merge: true })
+    const docRef = doc(this.firestore, 'users', user.uid);
+    setDoc(docRef, JSON.parse(JSON.stringify(user)), { merge: true });
     return this.fetchUserProfile(user);
   }
 
   fetchUserProfile(user: User) {
-    const docRef = doc(this.firestore, "users", user.uid);
-   return from(getDoc(docRef))
+    const docRef = doc(this.firestore, 'users', user.uid);
+    return from(getDoc(docRef));
   }
 
   /*  /!**
@@ -203,21 +203,20 @@ export class UserService {
 
   }*/
 
-  getErrorMesssage(code:string): string {
+  getErrorMesssage(code: string): string {
     switch (code) {
-      case "auth/user-not-found": {
-        return "User not found. Please double check your email address";
+      case 'auth/user-not-found': {
+        return 'User not found. Please double check your email address';
       }
-      case "auth/wrong-password": {
-        return "Invalid password";
+      case 'auth/wrong-password': {
+        return 'Invalid password';
       }
-      case "auth/invalid-email": {
-        return "Invalid email";
+      case 'auth/invalid-email': {
+        return 'Invalid email';
       }
       default: {
-        return "Unable to login with these credentials";
+        return 'Unable to login with these credentials';
       }
     }
   }
-
 }

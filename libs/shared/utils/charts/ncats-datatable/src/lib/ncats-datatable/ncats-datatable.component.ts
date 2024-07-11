@@ -1,8 +1,11 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, ComponentRef, DestroyRef,
-  EventEmitter, inject,
+  Component,
+  ComponentRef,
+  DestroyRef,
+  EventEmitter,
+  inject,
   Injector,
   Input,
   OnInit,
@@ -11,8 +14,8 @@ import {
   Type,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
-} from "@angular/core";
+  ViewContainerRef,
+} from '@angular/core';
 import {
   animate,
   state,
@@ -20,8 +23,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { BehaviorSubject, Observable } from "rxjs";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { BehaviorSubject, Observable } from 'rxjs';
 import {
   MatRow,
   MatTable,
@@ -34,14 +37,17 @@ import {
   MatPaginatorModule,
 } from '@angular/material/paginator';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
-import { CdkPortalOutletAttachedRef, ComponentPortal, PortalModule } from "@angular/cdk/portal";
+import {
+  CdkPortalOutletAttachedRef,
+  ComponentPortal,
+  PortalModule,
+} from '@angular/cdk/portal';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PageData } from './models/page-data';
 import { DataProperty } from './models/data-property';
 import { PropertyDisplayComponent } from './components/property-display/property-display.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgClass } from '@angular/common';
-
 
 const _sortingDataAccessor = (
   data: { [key: string]: DataProperty },
@@ -88,16 +94,14 @@ const _sortingDataAccessor = (
     NgClass,
     MatCheckboxModule,
     PropertyDisplayComponent,
-    PortalModule
+    PortalModule,
   ],
 })
 
 /**
  * Generic table Component that iterates over a list of options to display fields
  */
-export class NcatsDatatableComponent
-  implements OnInit
-{
+export class NcatsDatatableComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   /**
@@ -109,20 +113,20 @@ export class NcatsDatatableComponent
    * initialize a private variable _data, it's a BehaviorSubject
    *
    */
-  protected _data = new BehaviorSubject<{ [key: string]: DataProperty; }[]>([]);
+  protected _data = new BehaviorSubject<{ [key: string]: DataProperty }[]>([]);
 
   /**
    * pushes changed data to {BehaviorSubject}
    */
   @Input()
-  set data(value: { [key: string]: DataProperty; }[]) {
+  set data(value: { [key: string]: DataProperty }[]) {
     this._data.next(value);
   }
 
   /**
    * returns value of {BehaviorSubject}
    */
-  get data(): { [key: string]: DataProperty; }[] {
+  get data(): { [key: string]: DataProperty }[] {
     return this._data.getValue();
   }
 
@@ -253,7 +257,8 @@ export class NcatsDatatableComponent
    * main table datasource
    * @type {MatTableDataSource<any>}
    */
-  dataSource: MatTableDataSource<{[key: string]:DataProperty}> = new MatTableDataSource<{[key: string]: DataProperty}>();
+  dataSource: MatTableDataSource<{ [key: string]: DataProperty }> =
+    new MatTableDataSource<{ [key: string]: DataProperty }>();
 
   /**
    * whether to toggle the condensed class to make a more compact table
@@ -298,14 +303,14 @@ export class NcatsDatatableComponent
     this._data
       // listen to data as long as term is undefined or null
       // Unsubscribe once term has value
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((res: {[key: string]: DataProperty}[]) => {
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res: { [key: string]: DataProperty }[]) => {
         if (res) {
           if (this.useInternalPaginator) {
-            this.dataSource = new MatTableDataSource<{[key: string]: DataProperty}>(
-              res
+            this.dataSource = new MatTableDataSource<{
+              [key: string]: DataProperty;
+            }>(
+              res,
               //  res.map((val: Partial<DataProperty>) => new DataProperty(val)),
             );
             this.pageData = new PageData({ total: res.length });
@@ -327,15 +332,11 @@ export class NcatsDatatableComponent
       });
 
     this._fieldsConfig
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.fetchTableFields());
 
     this.selection.changed
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.ref.detectChanges();
         this.rowSelectionChange.emit(this.selection);
@@ -461,9 +462,7 @@ export class NcatsDatatableComponent
    * todo: table injected components need to implement an interface to get the substance or container
    * @param field
    */
-  getCustomComponent(
-    field: DataProperty
-  ): ComponentPortal<unknown> | null {
+  getCustomComponent(field: DataProperty): ComponentPortal<unknown> | null {
     if (this.rowOutlet && field.customComponent) {
       const comp = this._injector.get<Type<unknown>>(field.customComponent);
       return new ComponentPortal(comp);
@@ -480,12 +479,17 @@ export class NcatsDatatableComponent
    * @param index
    * @param field
    */
-  componentAttached(component: CdkPortalOutletAttachedRef, index: number, field: DataProperty) {
-    if(component ) {
-      const compRef: ComponentRef<Record<string, unknown>> = component as ComponentRef<Record<string, unknown>>;
+  componentAttached(
+    component: CdkPortalOutletAttachedRef,
+    index: number,
+    field: DataProperty,
+  ) {
+    if (component) {
+      const compRef: ComponentRef<Record<string, unknown>> =
+        component as ComponentRef<Record<string, unknown>>;
       if (compRef.instance['data'] === null && this.data[index][field.field]) {
         const dataField: string = field.field;
-        const dataPoint: {[p: string]: DataProperty} = this.data[index];
+        const dataPoint: { [p: string]: DataProperty } = this.data[index];
         compRef.instance['data'] = <unknown>dataPoint[dataField];
       }
 
@@ -499,7 +503,9 @@ export class NcatsDatatableComponent
         compRef.instance['parent'] = this.data[index];
       }
       if (compRef.instance['clickEvent']) {
-        const clickRef: Observable<MatRow> = compRef.instance['clickEvent'] as Observable<MatRow>;
+        const clickRef: Observable<MatRow> = compRef.instance[
+          'clickEvent'
+        ] as Observable<MatRow>;
         clickRef.subscribe((res: MatRow) => {
           this.cellClicked(res);
         });

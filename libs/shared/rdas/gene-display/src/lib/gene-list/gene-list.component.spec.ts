@@ -1,6 +1,9 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DISEASES_FEATURE_KEY, diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
-import { StoreModule } from "@ngrx/store";
+import {
+  DISEASES_FEATURE_KEY,
+  diseasesReducer,
+} from '@ncats-frontend-library/stores/disease-store';
+import { StoreModule } from '@ngrx/store';
 import { GeneListComponent } from './gene-list.component';
 
 describe('GeneListComponent', () => {
@@ -12,7 +15,7 @@ describe('GeneListComponent', () => {
       imports: [
         GeneListComponent,
         StoreModule.forRoot({}),
-        StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer)
+        StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
       ],
     }).compileComponents();
 

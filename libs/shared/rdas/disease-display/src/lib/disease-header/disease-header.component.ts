@@ -1,9 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed, input,
-  ViewEncapsulation
-} from "@angular/core";
+  computed,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
@@ -18,8 +19,8 @@ import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/su
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DiseaseHeaderComponent {
-  disease= input<Disease>();
- // title = computed(() => `${this.disease()?.name}: ${this.disease()?.gardId}`);
+  disease = input<Disease>();
+  // title = computed(() => `${this.disease()?.name}: ${this.disease()?.gardId}`);
   parsedId = computed(() => this.getID());
 
   getID() {

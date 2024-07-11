@@ -2,18 +2,18 @@
   <div class="width-sm-100 width-75">
     <div class="rdas-article-title">{{ article()?.title }}</div>
     @for (journal of article()?.journals; track journal) {
-    <div>
-      <i>{{ journal.title }}</i>
-    </div>
+      <div>
+        <i>{{ journal.title }}</i>
+      </div>
     }
     <div>
       @for (author of article()?.authorsWrote; track author; let last = $last) {
-      <span>
-        <i>{{ author.fullName }}</i>
-        @if (!last) {
-        <span>, </span>
-        }
-      </span>
+        <span>
+          <i>{{ author.fullName }}</i>
+          @if (!last) {
+            <span>, </span>
+          }
+        </span>
       }
     </div>
   </div>
@@ -21,33 +21,35 @@
     <span class="mat-h3">Published: </span>
     {{ article()?.firstPublicationDate | date }}<br />
     @if (article()?.pubmed_id) {
-    <div class="mat-h3 right-text">
-      PMID:
-      <a
-        href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmed_id }}"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Link to publication in PubMed"
-        >{{ article()?.pubmed_id }}</a
-      >
-      <br />
-      <a
-        href="https://doi.org/{{ article()?.doi }}"
-        target="_blank"
-        rel="noreferrer"
-        aria-label="Link to publication via DOI"
-        >DOI: {{ article()?.doi }}</a
-      >
-    </div>
-    } @if (article()?.pubType) {
-    <span class="mat-h3">Publication Type: </span>
-    } @for (pubType of article()?.pubType; track pubType; let last = $last) {
-    <span>
-      <span>{{ pubType }}</span>
-      @if (!last) {
-      <span> , </span>
-      }
-    </span>
+      <div class="mat-h3 right-text">
+        PMID:
+        <a
+          href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmed_id }}"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Link to publication in PubMed"
+          >{{ article()?.pubmed_id }}</a
+        >
+        <br />
+        <a
+          href="https://doi.org/{{ article()?.doi }}"
+          target="_blank"
+          rel="noreferrer"
+          aria-label="Link to publication via DOI"
+          >DOI: {{ article()?.doi }}</a
+        >
+      </div>
+    }
+    @if (article()?.pubType) {
+      <span class="mat-h3">Publication Type: </span>
+    }
+    @for (pubType of article()?.pubType; track pubType; let last = $last) {
+      <span>
+        <span>{{ pubType }}</span>
+        @if (!last) {
+          <span> , </span>
+        }
+      </span>
     }
   </div>
 </div>

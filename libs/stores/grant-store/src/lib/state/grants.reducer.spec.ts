@@ -1,6 +1,6 @@
-import { CoreProject } from "@ncats-frontend-library/models/rdas";
+import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { Action } from '@ngrx/store';
-import { LoadGrantsActions } from "./grants.actions";
+import { LoadGrantsActions } from './grants.actions';
 
 import {
   GrantsState,

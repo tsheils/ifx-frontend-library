@@ -3,10 +3,13 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
   LoginEmailUserActions,
-  LoginLinkActions, RdasUsersInitActions,
+  LoginLinkActions,
+  RdasUsersInitActions,
   RegisterEmailUserActions,
-  ResetPasswordEmailActions, UpdateUserActions, UserLoginActions
-} from "./users.actions";
+  ResetPasswordEmailActions,
+  UpdateUserActions,
+  UserLoginActions,
+} from './users.actions';
 
 export const USERS_FEATURE_KEY = 'user';
 
@@ -27,24 +30,24 @@ export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>({
 
 export const initialState: UserState = usersAdapter.getInitialState({
   // set initial required properties
-  loaded: false
+  loaded: false,
 });
 
- const reducer = createReducer(
+const reducer = createReducer(
   initialState,
   on(
     RdasUsersInitActions.initSuccess,
     LoginEmailUserActions.loginEmailUserSuccess,
     RegisterEmailUserActions.registerEmailUserSuccess,
     UserLoginActions.loginUserSuccess,
-  //  UserLoginActions.fetchUserProfileSuccess,
+    //  UserLoginActions.fetchUserProfileSuccess,
     UpdateUserActions.updateUserSubscriptionsSuccess,
     (state, { user }) =>
       usersAdapter.setOne(user, {
         ...state,
         loaded: true,
         selectedId: user.uid,
-      })
+      }),
   ),
   on(ResetPasswordEmailActions.resetPasswordEmailSuccess, (state) => {
     return { ...state, email: 'reset' };
@@ -54,7 +57,7 @@ export const initialState: UserState = usersAdapter.getInitialState({
     email: email,
   })),
   on(UserLoginActions.logoutUserSuccess, (state) => {
-    return usersAdapter.removeAll(state)
+    return usersAdapter.removeAll(state);
   }),
 
   on(
@@ -64,8 +67,8 @@ export const initialState: UserState = usersAdapter.getInitialState({
     RegisterEmailUserActions.registerEmailUserFailure,
     LoginEmailUserActions.loginEmailUserFailure,
     LoginLinkActions.loginLinkUserFailure,
-    (state, { error }) => ({ ...state, error })
-  )
+    (state, { error }) => ({ ...state, error }),
+  ),
 );
 
 export function usersReducer(state: UserState | undefined, action: Action) {

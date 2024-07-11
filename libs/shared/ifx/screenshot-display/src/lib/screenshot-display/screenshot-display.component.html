@@ -1,10 +1,17 @@
 <div class="grid-list">
-  @for(imageRef of images(); track imageRef){
-  <mat-card appearance="outlined">
-    <img mat-card-image ngSrc= {{imageRef.url}} alt={{imageRef.caption}} width="550" height="445" priority>
-    <mat-card-content>
-      <p>{{imageRef.caption}}</p>
-    </mat-card-content>
-  </mat-card>
-}
+  @for (imageRef of images(); track imageRef) {
+    <mat-card appearance="outlined">
+      <img
+        mat-card-image
+        ngSrc="{{ imageRef.url }}"
+        alt="{{ imageRef.caption }}"
+        width="550"
+        height="445"
+        priority
+      />
+      <mat-card-content>
+        <p>{{ imageRef.caption }}</p>
+      </mat-card-content>
+    </mat-card>
+  }
 </div>

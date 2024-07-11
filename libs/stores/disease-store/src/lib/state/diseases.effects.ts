@@ -1,5 +1,5 @@
-import { inject } from "@angular/core";
-import { ActivatedRouteSnapshot, Params } from "@angular/router";
+import { inject } from '@angular/core';
+import { ActivatedRouteSnapshot, Params } from '@angular/router';
 import { ApolloQueryResult } from '@apollo/client';
 import {
   Article,
@@ -24,39 +24,34 @@ import {
   FETCHTRIALSQUERY,
   EPIARTICLES,
   NONEPIARTICLES,
-  DISEASELIST, ARTICLEFILTERS, PROJECTFILTERS, TRIALFILTERS
+  DISEASELIST,
+  ARTICLEFILTERS,
+  PROJECTFILTERS,
+  TRIALFILTERS,
+  ALLARTICLEFILTERS,
+  ALLPROJECTFILTERS,
+  ALLTRIALFILTERS, TRIALTYPEFILTERS, TRIALSTATUSFILTERS, TRIALPHASEFILTERS
 } from "@ncats-frontend-library/models/rdas";
 import {
   Filter,
   FilterCategory,
   Page,
 } from '@ncats-frontend-library/models/utils';
-import { Store } from "@ngrx/store";
-import { data } from "autoprefixer";
+import { Store } from '@ngrx/store';
 import { DiseaseService } from '../disease.service';
 import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import {
-  combineLatest,
-  filter,
-  map,
-  mergeMap,
-  switchMap,
-  take
-} from "rxjs";
+import { combineLatest, filter, map, mergeMap, switchMap, take } from 'rxjs';
 import {
   BrowseDiseaseListActions,
   FetchDiseaseActions,
   FetchDiseaseListActions,
-  SearchDiseasesActions
-} from "./diseases.actions";
+  SearchDiseasesActions,
+} from './diseases.actions';
 import * as DiseaseSelectors from './diseases.selectors';
 
-export const fetchDiseaseListFromIds$ =  createEffect(
-  (
-    actions$ = inject(Actions),
-    diseaseService = inject(DiseaseService)
-  ) => {
+export const fetchDiseaseListFromIds$ = createEffect(
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
       ofType(FetchDiseaseListActions.fetchDiseaseList),
       mergeMap((action: { gardIds: string[] }) => {
@@ -64,10 +59,12 @@ export const fetchDiseaseListFromIds$ =  createEffect(
           .fetchDiseases(DISEASELIST, { where: { GardId_IN: action.gardIds } })
           .pipe(
             map((res: ApolloQueryResult<unknown>) => {
-              const data: { diseases: DiseaseNode[] } = res.data as { diseases: DiseaseNode[] };
+              const data: { diseases: DiseaseNode[] } = res.data as {
+                diseases: DiseaseNode[];
+              };
               if (data) {
                 const diseaseArr: Disease[] = data.diseases.map(
-                  (obj: Partial<Disease>) => new Disease(obj)
+                  (obj: Partial<Disease>) => new Disease(obj),
                 );
                 return FetchDiseaseListActions.fetchDiseaseListSuccess({
                   diseases: diseaseArr,
@@ -76,37 +73,27 @@ export const fetchDiseaseListFromIds$ =  createEffect(
                 return FetchDiseaseListActions.fetchDiseaseListFailure({
                   error: 'No Disease found',
                 });
-            })
+            }),
           );
-      })
-    )
-  },{functional: true}
+      }),
+    );
+  },
+  { functional: true },
 );
 
-
-export const loadDiseaseFilters$ =  createEffect(
-  (
-    actions$ = inject(Actions),
-    diseaseService = inject(DiseaseService)
-  ) => {
+export const loadStaticDiseaseFilters$ = createEffect(
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')
+          r.payload.routerState.url.startsWith('/disease'),
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
         const params: Params = root.queryParams;
         const gardid: string = params['id'];
-        _setGardId(gardid);
-        if (root.fragment) {
-          _setFragment(root.fragment, {
-            limit: params['limit'],
-            offset: params['offset'],
-          });
-        }
         return combineLatest(
           diseaseService
             .fetchArticles(ARTICLEFILTERS, { gardId: gardid })
@@ -115,229 +102,303 @@ export const loadDiseaseFilters$ =  createEffect(
             .fetchProjects(PROJECTFILTERS, { gardId: gardid })
             .pipe(take(1)),
           diseaseService
-            .fetchTrials(TRIALFILTERS, _setTrialVariables(params))
+            .fetchTrials(TRIALFILTERS, {
+              ctfilters: {
+                investigatesConditionConditions_SOME: {
+                  hasAnnotationConditionAnnotations_SOME: {
+                    mappedToGardGards_SOME: { GardId: gardid },
+                  },
+                },
+              },
+            })
             .pipe(take(1)),
-        )
-          .pipe(
-            map(
-              ([
-                 articleFilterData,
-                 projectFilterData,
-                 trialFilterData
-               ]: [
-                ApolloQueryResult<unknown>,
-                ApolloQueryResult<unknown>,
-                ApolloQueryResult<unknown>
-              ]) => {
-                const filters: FilterCategory[] = []
-                if (articleFilterData) {
-                  const articleFilterDataList: { countsByYear: Filter[] } = articleFilterData.data as { countsByYear: Filter[] };
-                  if (articleFilterDataList.countsByYear.length) {
-                    filters.push(new FilterCategory(
-                        {
-                          parent: 'articles',
-                          label: "Articles by Year",
-                          filterable: false,
-                          values: articleFilterDataList.countsByYear.map((fil: Partial<Filter>) => new Filter(fil))
-                        }
-                      )
-                    )
-                    const fc = new FilterCategory(
-                      {
-                        parent: 'epiArticles',
-                        label: "Epidemiology Articles by Year",
-                        field: "year",
-                        values: articleFilterDataList.countsByYear
-                          .filter((year: Partial<Filter>) => year.label == 'Epidemiology Articles')
-                          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }))
-                      }
-                    )
-                    filters.push(fc);
-                    filters.push(new FilterCategory(
-                      {
-                        parent: 'nonEpiArticles',
-                        label: "Articles by Year",
-                        field: "year",
-                        values: articleFilterDataList.countsByYear
-                          .filter((year: Partial<Filter>) => year.label == 'Non Epidemiology Articles')
-                          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }))
-                      }
-                    ))
-                  }
-                  if (projectFilterData) {
-                    const projectFilterDataList: { countsByYear: Filter[], costByYear: Filter[] } = projectFilterData.data as { countsByYear: Filter[], costByYear: Filter[] };
-                    if (projectFilterDataList.countsByYear.length) {
-                      filters.push(new FilterCategory(
-                        {
-                          parent: 'projects',
-                          label: "Projects Count by Year",
-                          filterable: false,
-                          values: projectFilterDataList.countsByYear.map((fil: Partial<Filter>) => new Filter(fil))
-                        }
-                      ))
-                    }
-                    if (projectFilterDataList.costByYear.length) {
-                      filters.push(new FilterCategory(
-                        {
-                          parent: 'projects',
-                          label: "Projects Funding by Year",
-                          filterable: false,
-                          values: projectFilterDataList.costByYear.map((fil: Partial<Filter>) => new Filter(fil))
-                        }
-                      ))
-                    }
-                  }
-                  if (trialFilterData) {
-                    const dataObj: {allClinicalTrialsFilters: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] }} = trialFilterData.data as {allClinicalTrialsFilters: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] }}
-                    const trialFilterDataList: { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] } = dataObj.allClinicalTrialsFilters as { trialsByStatus: Filter[], trialsByType: Filter[], trialsByPhase: Filter[] };
-                    if (trialFilterDataList.trialsByStatus && trialFilterDataList.trialsByStatus.length) {
-                      filters.push(new FilterCategory(
-                        {
-                          parent: 'trials',
-                          label: "Clinical Trials by Status",
-                          field: "OverallStatus",
-                          values: trialFilterDataList.trialsByStatus.map((fil: Partial<Filter>) => new Filter({
-                            ...fil, selected:
-                              params['OverallStatus'] === fil.term || params['OverallStatus']?.includes(fil.term)
-                          }))
-                        }
-                      ))
-                    }
-                    if (trialFilterDataList.trialsByType && trialFilterDataList.trialsByType.length) {
-                      filters.push(new FilterCategory(
-                        {
-                          parent: 'trials',
-                          label: "Clinical Trials by Type",
-                          field: "StudyType",
-                          values: trialFilterDataList.trialsByType.map((fil: Partial<Filter>) => new Filter(fil))
-                        }
-                      ))
-                    }
-                    if (trialFilterDataList.trialsByPhase && trialFilterDataList.trialsByPhase.length) {
-                      filters.push(new FilterCategory(
-                        {
-                          parent: 'trials',
-                          label: "Clinical Trials by Phase",
-                          field: "Phase",
-                          values: trialFilterDataList.trialsByPhase.map((fil: Partial<Filter>) => new Filter(fil))
-                        }
-                      ))
-                    }
-                  }
-                   if(root.fragment) {
-                     filters.forEach(filter => {
-                       if (filter.parent === root.fragment) {
-                         if (filter.field) {
-                         filter.values.map(val => {
-                           if (Array.isArray(params[filter.field])) {
-                             params[filter.field].forEach((filter: string) => {
-                               if (val.term === filter) {
-                                 val.selected = true;
-                               }
-                             })
-                           } else {
-                             if (val.term === params[filter.field]) {
-                               val.selected = true;
-                             }
-                           }
-                           return val;
-                         })
-                       }
-                     }
-                     })
-                   }
-
-
-                  return FetchDiseaseActions.fetchDiseaseFiltersSuccess({
-                    filters: filters,
-                  });
-                } else
-                  return FetchDiseaseActions.fetchDiseaseFiltersFailure({
-                    error: 'No Disease found',
-                  });
-              }
-            )
-          );
-      })
-    )
-  },{functional: true}
+        ).pipe(
+          map(
+            ([articleFilterData, projectFilterData, trialFilterData]: [
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+            ]) => {
+              if (articleFilterData || projectFilterData || trialFilterData) {
+                const filters = _parseFilterResponse(
+                  articleFilterData,
+                  projectFilterData,
+                  trialFilterData,
+                  params,
+                );
+                return FetchDiseaseActions.fetchStaticDiseaseFiltersSuccess({
+                  filters: filters,
+                });
+              } else
+                return FetchDiseaseActions.fetchStaticDiseaseFiltersFailure({
+                  error: 'No Disease found',
+                });
+            },
+          ),
+        );
+      }),
+    );
+  },
+  { functional: true },
 );
 
-
-export const loadDisease$ =  createEffect(
-  (
-    actions$ = inject(Actions),
-    diseaseService = inject(DiseaseService)
-  ) => {
+export const loadDiseaseFilters$ = createEffect(
+  (actions$ = inject(Actions),
+   store = inject(Store),
+   diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')
+          r.payload.routerState.url.startsWith('/disease'),
+      ),
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      concatLatestFrom(() => store.select(DiseaseSelectors.getStaticDiseaseFilters)),
+      mergeMap(([root, staticFilters]) => {
+        const params: Params = root.queryParams;
+        const gardid: string = params['id'];
+        console.log(staticFilters)
+        console.log(params)
+        return combineLatest(
+          diseaseService
+            .fetchArticles(ARTICLEFILTERS, { gardId: gardid })
+            .pipe(take(1)),
+          diseaseService
+            .fetchProjects(PROJECTFILTERS, { gardId: gardid })
+            .pipe(take(1)),
+          diseaseService
+            .fetchTrials(TRIALTYPEFILTERS, _setTrialVariables(params, 'type'))
+            .pipe(take(1)),
+          diseaseService
+            .fetchTrials(TRIALSTATUSFILTERS, _setTrialVariables(params, 'status'))
+            .pipe(take(1)),
+          diseaseService
+            .fetchTrials(TRIALPHASEFILTERS, _setTrialVariables(params, 'phase'))
+            .pipe(take(1)),
+        ).pipe(
+          map(
+            ([articleFilterData, projectFilterData, trialTypeFilterData, trialStatusFilterData, trialPhaseFilterData ]: [
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+            ]) => {
+              if (articleFilterData || projectFilterData || trialTypeFilterData || trialStatusFilterData || trialPhaseFilterData) {
+                console.log(trialTypeFilterData)
+                const typeData = trialTypeFilterData as {data: {trialsByType: Filter[]}}
+                const statusData = trialStatusFilterData as {data: {trialsByStatus: Filter[]}}
+                const phaseData = trialPhaseFilterData as {data: {trialsByPhase: Filter[]}}
+                console.log(trialStatusFilterData)
+                console.log(trialPhaseFilterData)
+                const trialFilterData = {
+                  data: {
+                    allClinicalTrialsFilters: {
+                      trialsByStatus:  statusData.data.trialsByStatus,
+                      trialsByType:  typeData.data.trialsByType,
+                      trialsByPhase: phaseData.data.trialsByPhase
+                    }
+                  }
+                } as ApolloQueryResult<unknown>
+                console.log(trialFilterData)
+                const filters = _parseFilterResponse(
+                  articleFilterData,
+                  projectFilterData,
+                  trialFilterData,
+                  params,
+                );
+                if (root.fragment) {
+                  filters.forEach((filter) => {
+                    if (filter.parent === root.fragment) {
+                      if (filter.field) {
+                        filter.values.map((val) => {
+                          if (Array.isArray(params[filter.field])) {
+                            params[filter.field].forEach((filter: string) => {
+                              if (val.term === filter) {
+                                val.selected = true;
+                              }
+                            });
+                          } else {
+                            if (val.term === params[filter.field]) {
+                              val.selected = true;
+                            }
+                          }
+                          return val;
+                        });
+                      }
+                    }
+                  });
+                }
+                return FetchDiseaseActions.fetchDiseaseFiltersSuccess({
+                  filters: filters,
+                });
+              } else
+                return FetchDiseaseActions.fetchDiseaseFiltersFailure({
+                  error: 'No Disease found',
+                });
+            },
+          ),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+
+/*export const loadDiseaseFilters2$ = createEffect(
+  (actions$ = inject(Actions),
+   store = inject(Store),
+   diseaseService = inject(DiseaseService)) => {
+    return actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease'),
+      ),
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      concatLatestFrom(() => store.select(DiseaseSelectors.getStaticDiseaseFilters)),
+      mergeMap(([root, staticFilters]) => {
+        const params: Params = root.queryParams;
+        const gardid: string = params['id'];
+        console.log(staticFilters)
+        console.log(params)
+        return combineLatest(
+          diseaseService
+            .fetchArticles(ARTICLEFILTERS, { gardId: gardid })
+            .pipe(take(1)),
+          diseaseService
+            .fetchProjects(PROJECTFILTERS, { gardId: gardid })
+            .pipe(take(1)),
+          diseaseService
+            .fetchTrials(TRIALFILTERS, _setTrialVariables(params, 'sgfsd'))
+            .pipe(take(1)),
+        ).pipe(
+          map(
+            ([articleFilterData, projectFilterData, trialFilterData]: [
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+            ]) => {
+              if (articleFilterData || projectFilterData || trialFilterData) {
+                const filters = _parseFilterResponse(
+                  articleFilterData,
+                  projectFilterData,
+                  trialFilterData,
+                  params,
+                );
+                console.log(filters)
+                if (root.fragment) {
+                  filters.forEach((filter) => {
+                    if (filter.parent === root.fragment) {
+                      if (filter.field) {
+                        filter.values.map((val) => {
+                          if (Array.isArray(params[filter.field])) {
+                            params[filter.field].forEach((filter: string) => {
+                              if (val.term === filter) {
+                                val.selected = true;
+                              }
+                            });
+                          } else {
+                            if (val.term === params[filter.field]) {
+                              val.selected = true;
+                            }
+                          }
+                          return val;
+                        });
+                      }
+                    }
+                  });
+                }
+                return FetchDiseaseActions.fetchDiseaseFiltersSuccess({
+                  filters: filters,
+                });
+              } else
+                return FetchDiseaseActions.fetchDiseaseFiltersFailure({
+                  error: 'No Disease found',
+                });
+            },
+          ),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);*/
+
+export const loadDisease$ = createEffect(
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
+    return actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease'),
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-      const params = root.queryParams;
-      const gardid: string = params['id'];
-      _setGardId(gardid);
-      if (root.fragment) {
-        _setFragment(root.fragment, params);
-      }
-      return combineLatest(
-        diseaseService
-          .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
-          .pipe(take(1)),
-        diseaseService
-          .fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES)
-          .pipe(take(1)),
-        diseaseService
-          .fetchArticles(FETCHARTICLESQUERY, EPIARTICLES)
-          .pipe(take(1)),
-        diseaseService
-          .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
-          .pipe(take(1)),
-        diseaseService
-          .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
-          .pipe(take(1))
-      ).pipe(
-        map(
-          ([
-             diseaseData,
-             articleData,
-             epiArticleData,
-             projectsData,
-             trialsData,
-           ]: [
-            ApolloQueryResult<unknown>,
-            ApolloQueryResult<unknown>,
-            ApolloQueryResult<unknown>,
-            ApolloQueryResult<unknown>,
-            ApolloQueryResult<unknown>
-          ]) => {
-            if (diseaseData && diseaseData.data) {
-              const diseaseObj: Disease = _makeDiseaseObj(
-                diseaseData,
-                articleData,
-                epiArticleData,
-                projectsData,
-                trialsData
-              );
-              return FetchDiseaseActions.fetchDiseaseSuccess({
-                disease: diseaseObj,
-              });
-            } else
-              return FetchDiseaseActions.fetchDiseaseFailure({
-                error: 'No Disease found',
-              });
-          }
-        )
-      );
-    })
-  )
-  },{functional: true}
-)
-
+        const params = root.queryParams;
+        const gardid: string = params['id'];
+        _setGardId(gardid);
+        if (root.fragment) {
+          _setFragment(root.fragment, params);
+        }
+        return combineLatest(
+          diseaseService
+            .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
+            .pipe(take(1)),
+          diseaseService
+            .fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES)
+            .pipe(take(1)),
+          diseaseService
+            .fetchArticles(FETCHARTICLESQUERY, EPIARTICLES)
+            .pipe(take(1)),
+          diseaseService
+            .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
+            .pipe(take(1)),
+          diseaseService
+            .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
+            .pipe(take(1)),
+        ).pipe(
+          map(
+            ([
+              diseaseData,
+              articleData,
+              epiArticleData,
+              projectsData,
+              trialsData,
+            ]: [
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+            ]) => {
+              if (diseaseData && diseaseData.data) {
+                const diseaseObj: Disease = _makeDiseaseObj(
+                  diseaseData,
+                  articleData,
+                  epiArticleData,
+                  projectsData,
+                  trialsData,
+                );
+                return FetchDiseaseActions.fetchDiseaseSuccess({
+                  disease: diseaseObj,
+                });
+              } else
+                return FetchDiseaseActions.fetchDiseaseFailure({
+                  error: 'No Disease found',
+                });
+            },
+          ),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);
 
 /*export const isLoadingDisease$ =  createEffect(
   (
@@ -351,22 +412,24 @@ export const loadDisease$ =  createEffect(
   )
 );*/
 
-export const searchDiseases$ =  createEffect(
-  (
-    actions$ = inject(Actions),
-    diseaseService = inject(DiseaseService)
-  ) => {
+export const searchDiseases$ = createEffect(
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
       ofType(SearchDiseasesActions.searchDiseases),
       mergeMap((action: { term: string }) => {
         return diseaseService
-          .fetchDiseases(DISEASETYPEAHEAD, { searchString: action.term.split(' ').join('~ AND ') + '*', limit: 10 })
+          .fetchDiseases(DISEASETYPEAHEAD, {
+            searchString: action.term.split(' ').join('~ AND ') + '*',
+            limit: 10,
+          })
           .pipe(
             map((res: ApolloQueryResult<unknown>) => {
-              const data: { diseaseSearch: Disease[] } = res.data as { diseaseSearch: Disease[] };
+              const data: { diseaseSearch: Disease[] } = res.data as {
+                diseaseSearch: Disease[];
+              };
               if (data) {
                 const diseaseArr = data.diseaseSearch.map(
-                  (obj: Partial<Disease>) => new Disease(obj)
+                  (obj: Partial<Disease>) => new Disease(obj),
                 );
                 return SearchDiseasesActions.searchDiseasesSuccess({
                   typeahead: diseaseArr,
@@ -375,32 +438,34 @@ export const searchDiseases$ =  createEffect(
                 return SearchDiseasesActions.searchDiseasesFailure({
                   error: 'No Diseases found',
                 });
-            })
+            }),
           );
-      })
-    )
-  },{functional: true}
+      }),
+    );
+  },
+  { functional: true },
 );
 
-export const fetchTreeBranch$ =  createEffect(
+export const fetchTreeBranch$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    diseaseService = inject(DiseaseService)
+    diseaseService = inject(DiseaseService),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseases')
+        r.payload.routerState.url.startsWith('/diseases'),
       ),
-      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
+      map(
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
+      ),
       concatLatestFrom(() => store.select(DiseaseSelectors.getDiseaseTree)),
       mergeMap(([params, tree]) => {
         let query;
         let qParams: { [key: string]: unknown } | undefined;
         if (!tree) {
           if (params['parentId']) {
-            //   console.log("no tree, maybe page, parent id")
             query = FETCHPATH;
             qParams = { searchString: params['parentId'] };
             if (params['phenotypes']) {
@@ -411,34 +476,31 @@ export const fetchTreeBranch$ =  createEffect(
               };
             }
           } else {
-            //   console.log("no tree, maybe page, no parent id")
             query = FETCHROOT;
             qParams = params['phenotypes']
               ? {
-                where: {
-                  hasPhenotypePhenotypes_SOME: {
-                    HPOTerm_IN: params['phenotypes'].split('&'),
+                  where: {
+                    hasPhenotypePhenotypes_SOME: {
+                      HPOTerm_IN: params['phenotypes'].split('&'),
+                    },
                   },
-                },
-              }
+                }
               : undefined;
           }
         } else {
           if (params['pageIndex']) {
-            //  console.log("tree, page, no parent id")
             query = FETCHROOT;
             qParams = params['phenotypes']
               ? {
-                where: {
-                  hasPhenotypePhenotypes_SOME: {
-                    HPOTerm_IN: params['phenotypes'].split('&'),
+                  where: {
+                    hasPhenotypePhenotypes_SOME: {
+                      HPOTerm_IN: params['phenotypes'].split('&'),
+                    },
                   },
-                },
-              }
+                }
               : undefined;
           } else {
             if (params['parentId']) {
-              //   console.log("tree, no page, parent id")
               DISEASEQUERYPARAMETERS.where = { GardId: params['parentId'] };
               if (params['phenotypes']) {
                 DISEASEQUERYPARAMETERS.where.hasPhenotypePhenotypes_SOME = {
@@ -448,16 +510,15 @@ export const fetchTreeBranch$ =  createEffect(
               query = CATEGORYTREEBRANCH;
               qParams = DISEASEQUERYPARAMETERS;
             } else {
-              //   console.log("tree, no page, no parent id")
               query = FETCHROOT;
               qParams = params['phenotypes']
                 ? {
-                  where: {
-                    hasPhenotypePhenotypes_SOME: {
-                      HPOTerm_IN: params['phenotypes'].split('&'),
+                    where: {
+                      hasPhenotypePhenotypes_SOME: {
+                        HPOTerm_IN: params['phenotypes'].split('&'),
+                      },
                     },
-                  },
-                }
+                  }
                 : undefined;
             }
           }
@@ -465,8 +526,13 @@ export const fetchTreeBranch$ =  createEffect(
 
         return diseaseService.fetchDiseases(query, qParams).pipe(
           map((res: ApolloQueryResult<unknown>) => {
-            const data: { treeBranch: { nodes: DiseaseNode[] }[], diseases: DiseaseNode[] }
-              = res.data as { treeBranch: { nodes: DiseaseNode[] }[], diseases: DiseaseNode[] };
+            const data: {
+              treeBranch: { nodes: DiseaseNode[] }[];
+              diseases: DiseaseNode[];
+            } = res.data as {
+              treeBranch: { nodes: DiseaseNode[] }[];
+              diseases: DiseaseNode[];
+            };
             let diseaseArr: DiseaseNode[] = [] as DiseaseNode[];
             if (data) {
               if (data.treeBranch) {
@@ -474,7 +540,7 @@ export const fetchTreeBranch$ =  createEffect(
                   .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
                   .sort(
                     (a: DiseaseNode, b: DiseaseNode) =>
-                      b.childrenCount - a.childrenCount
+                      b.childrenCount - a.childrenCount,
                   );
               } else if (tree) {
                 diseaseArr = _addToTree(data.diseases[0], tree);
@@ -483,7 +549,7 @@ export const fetchTreeBranch$ =  createEffect(
                   .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
                   .sort(
                     (a: DiseaseNode, b: DiseaseNode) =>
-                      b.childrenCount - a.childrenCount
+                      b.childrenCount - a.childrenCount,
                   );
               }
               return BrowseDiseaseListActions.fetchDiseaseTreeSuccess({
@@ -493,27 +559,31 @@ export const fetchTreeBranch$ =  createEffect(
               return BrowseDiseaseListActions.fetchDiseaseTreeFailure({
                 error: 'No Disease found',
               });
-          })
+          }),
         );
-      })
-    )
-  },{functional: true}
+      }),
+    );
+  },
+  { functional: true },
 );
 
-
-export const fetchDiseasesList$ =  createEffect(
+//diseases list for browse page
+export const fetchDiseasesList$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    diseaseService = inject(DiseaseService)
+    diseaseService = inject(DiseaseService),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseases')
+        r.payload.routerState.url.startsWith('/diseases'),
       ),
-      map((r: RouterNavigationAction) => r.payload.routerState.root.queryParams),
-      switchMap((params: {
+      map(
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
+      ),
+      switchMap(
+        (params: {
           pageSize?: number;
           pageIndex?: number;
           parentId?: string;
@@ -550,7 +620,7 @@ export const fetchDiseasesList$ =  createEffect(
           }
           if (params.q) {
             if (!queryParams.where) {
-              queryParams.where = { GardName_CONTAINS: params.q }
+              queryParams.where = { GardName_CONTAINS: params.q };
             } else {
               queryParams.where.GardName_CONTAINS = params.q;
             }
@@ -589,24 +659,30 @@ export const fetchDiseasesList$ =  createEffect(
           }
           return diseaseService.fetchDiseases(query, queryParams).pipe(
             map((res: ApolloQueryResult<unknown>) => {
-              const data: { diseases: Disease[], total: { count: number } | number } = res.data as { diseases: Disease[], total: { count: number } | number };
+              const data: {
+                diseases: Disease[];
+                total: { count: number } | number;
+              } = res.data as {
+                diseases: Disease[];
+                total: { count: number } | number;
+              };
               if (data) {
                 let page: Page;
-                if (typeof data.total !== "number") {
+                if (typeof data.total !== 'number') {
                   page = {
                     pageSize: pageSize,
                     pageIndex: pageIndex,
-                    total: data.total.count
+                    total: data.total.count,
                   } as Page;
                 } else {
                   page = {
                     pageSize: pageSize,
                     pageIndex: pageIndex,
-                    total: data.total
+                    total: data.total,
                   } as Page;
                 }
                 const diseaseArr: Disease[] = data.diseases.map(
-                  (obj: Partial<Disease>) => new Disease(obj)
+                  (obj: Partial<Disease>) => new Disease(obj),
                 );
                 return BrowseDiseaseListActions.fetchDiseaseListSuccess({
                   diseases: diseaseArr,
@@ -616,196 +692,644 @@ export const fetchDiseasesList$ =  createEffect(
                 return BrowseDiseaseListActions.fetchDiseaseListFailure({
                   error: 'No Disease found',
                 });
-            })
+            }),
           );
-        }
-      )
-    )
-  },{functional: true}
-  );
+        },
+      ),
+    );
+  },
+  { functional: true },
+);
 
- function  _makeDiseaseObj(
-    diseaseData: ApolloQueryResult<unknown>,
-    articleData?: ApolloQueryResult<unknown>,
-    epiArticleData?: ApolloQueryResult<unknown>,
-    projectsData?: ApolloQueryResult<unknown>,
-    trialsData?: ApolloQueryResult<unknown>
-  ): Disease {
-    const disease: {disease: Disease[]} = diseaseData.data as {disease: Disease[]};
-    if (disease) {
-      const diseaseObj: Disease = new Disease(disease.disease[0]);
-      if (articleData) {
-        const articles: {articles: {articles: Article[], _count: { count: number }}[]}  =
-          articleData.data as {articles: {articles: Article[], _count: {count: number}}[]};
-        if (articles) {
-          diseaseObj.nonEpiArticles = articles.articles[0].articles.map(
-            (art: Partial<Article>) => new Article(art)
-          );
-          diseaseObj.nonEpiCount = articles.articles[0]._count.count;
-        }
-      }
-      if (epiArticleData) {
-        const epiArticles: {articles: {articles: Article[], _count: { count: number }}[] } = epiArticleData.data as {articles: {articles: Article[], _count: { count: number }}[] };
-        if (epiArticles) {
-          diseaseObj.epiArticles = epiArticles.articles[0].articles.map(
-            (art: Partial<Article>) => new Article(art)
-          );
-          diseaseObj.epiCount = epiArticles.articles[0]._count.count;
-        }
-      }
-      if (projectsData) {
-        const projects: {coreProjects: CoreProject[], count: { count: number }} = projectsData.data as {coreProjects: CoreProject[], count: { count: number }};
-        diseaseObj.projects = projects.coreProjects.map(
-          (proj: Partial<CoreProject>) => new CoreProject(proj)
+// gets all filter for disease/trials/projects to show charts on browse page
+export const loadAllDiseaseFilters$ = createEffect(
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
+    return actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter((r: RouterNavigationAction) =>
+        r.payload.routerState.url.startsWith('/diseases'),
+      ),
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      mergeMap((root: ActivatedRouteSnapshot) => {
+        const params: Params = root.queryParams;
+        return combineLatest(
+          diseaseService.fetchArticles(ALLARTICLEFILTERS).pipe(take(1)),
+          diseaseService.fetchProjects(ALLPROJECTFILTERS).pipe(take(1)),
+          diseaseService.fetchTrials(ALLTRIALFILTERS).pipe(take(1)),
+        ).pipe(
+          map(
+            ([articleFilterData, projectFilterData, trialFilterData]: [
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+              ApolloQueryResult<unknown>,
+            ]) => {
+              const filters: FilterCategory[] = [];
+              if (articleFilterData || projectFilterData || trialFilterData) {
+                if (articleFilterData) {
+                  const articleFilterDataList: { allCountsByYear: Filter[] } =
+                    articleFilterData.data as {
+                      allCountsByYear: Filter[];
+                    };
+                  if (articleFilterDataList.allCountsByYear.length) {
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'articles',
+                        label: 'All Articles by Year',
+                       // filterable: false,
+                        field: 'year',
+                        values: articleFilterDataList.allCountsByYear
+                          .filter((fil) => fil.term != '')
+                          .map((fil: Partial<Filter>) => new Filter(fil)),
+                      }),
+                    );
+                    const fc = new FilterCategory({
+                      parent: 'articles',
+                      label: 'Epidemiology Articles by Year',
+                      field: 'year',
+                      values: articleFilterDataList.allCountsByYear
+                        .filter((fil) => fil.term != '')
+                        .filter(
+                          (year: Partial<Filter>) =>
+                            year.label == 'Epidemiology Articles',
+                        )
+                        .map(
+                          (fil: Partial<Filter>) =>
+                            new Filter({ ...fil, label: 'year' }),
+                        ),
+                    });
+                    filters.push(fc);
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'articles',
+                        label: 'Articles by Year',
+                        field: 'year',
+                        values: articleFilterDataList.allCountsByYear
+                          .filter((fil) => fil.term != '')
+                          .filter(
+                            (year: Partial<Filter>) =>
+                              year.label == 'Non Epidemiology Articles',
+                          )
+                          .map(
+                            (fil: Partial<Filter>) =>
+                              new Filter({ ...fil, label: 'year' }),
+                          ),
+                      }),
+                    );
+                  }
+                }
+                if (projectFilterData) {
+                  const dataObj: {
+                    allProjectFilters: {
+                      countsByYear: Filter[];
+                      fundingByYear: Filter[];
+                    };
+                  } = projectFilterData.data as {
+                    allProjectFilters: {
+                      countsByYear: Filter[];
+                      fundingByYear: Filter[];
+                    };
+                  };
+                  const projectFilterDataList: {
+                    countsByYear: Filter[];
+                    fundingByYear: Filter[];
+                  } = dataObj.allProjectFilters as {
+                    countsByYear: Filter[];
+                    fundingByYear: Filter[];
+                  };
+                  if (projectFilterDataList.countsByYear.length) {
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'projects',
+                        label: 'Projects Count by Year',
+                        filterable: false,
+                        values: projectFilterDataList.countsByYear.map(
+                          (fil: Partial<Filter>) => new Filter(fil),
+                        ),
+                      }),
+                    );
+                  }
+                  if (projectFilterDataList.fundingByYear.length) {
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'projects',
+                        label: 'Projects Funding by Year',
+                        filterable: false,
+                        values: projectFilterDataList.fundingByYear.map(
+                          (fil: Partial<Filter>) => new Filter(fil),
+                        ),
+                      }),
+                    );
+                  }
+                }
+                if (trialFilterData) {
+                  const dataObj: {
+                    allDiseaseClinicalTrialsFilters: {
+                      trialsByStatus: Filter[];
+                      trialsByType: Filter[];
+                      trialsByPhase: Filter[];
+                    };
+                  } = trialFilterData.data as {
+                    allDiseaseClinicalTrialsFilters: {
+                      trialsByStatus: Filter[];
+                      trialsByType: Filter[];
+                      trialsByPhase: Filter[];
+                    };
+                  };
+                  const trialFilterDataList: {
+                    trialsByStatus: Filter[];
+                    trialsByType: Filter[];
+                    trialsByPhase: Filter[];
+                  } = dataObj.allDiseaseClinicalTrialsFilters as {
+                    trialsByStatus: Filter[];
+                    trialsByType: Filter[];
+                    trialsByPhase: Filter[];
+                  };
+                  if (
+                    trialFilterDataList.trialsByStatus &&
+                    trialFilterDataList.trialsByStatus.length
+                  ) {
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'trials',
+                        label: 'Clinical Trials by Status',
+                        field: 'OverallStatus',
+                        values: trialFilterDataList.trialsByStatus.map(
+                          (fil: Partial<Filter>) =>
+                            new Filter({
+                              ...fil,
+                              selected:
+                                params['OverallStatus'] === fil.term ||
+                                params['OverallStatus']?.includes(fil.term),
+                            }),
+                        ),
+                      }),
+                    );
+                  }
+                  if (
+                    trialFilterDataList.trialsByType &&
+                    trialFilterDataList.trialsByType.length
+                  ) {
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'trials',
+                        label: 'Clinical Trials by Type',
+                        field: 'StudyType',
+                        values: trialFilterDataList.trialsByType.map(
+                          (fil: Partial<Filter>) => new Filter(fil),
+                        ),
+                      }),
+                    );
+                  }
+                  if (
+                    trialFilterDataList.trialsByPhase &&
+                    trialFilterDataList.trialsByPhase.length
+                  ) {
+                    filters.push(
+                      new FilterCategory({
+                        parent: 'trials',
+                        label: 'Clinical Trials by Phase',
+                        field: 'Phase',
+                        values: trialFilterDataList.trialsByPhase.map(
+                          (fil: Partial<Filter>) => new Filter(fil),
+                        ),
+                      }),
+                    );
+                  }
+                }
+                return FetchDiseaseListActions.fetchAllDiseaseFiltersSuccess({
+                  filters: filters,
+                });
+              } else
+                return FetchDiseaseListActions.fetchAllDiseaseFiltersFailure({
+                  error: 'No Filters found',
+                });
+            },
+          ),
         );
-        diseaseObj.projectCount = projects.count.count;
-      }
-      if (trialsData) {
-        const trials: {clinicalTrials: ClinicalTrial[], count: { count: number }} = trialsData.data as {clinicalTrials: ClinicalTrial[], count: { count: number }};
-        diseaseObj.clinicalTrials = trials.clinicalTrials.map(
-          (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial)
-        );
-        diseaseObj.clinicalTrialCount = trials.count.count;
-      }
-      return diseaseObj;
-    } else return new Disease({});
-  }
+      }),
+    );
+  },
+  { functional: true },
+);
 
- function _addToTree(data: DiseaseNode, parent?: DiseaseNode[] | undefined): DiseaseNode[] {
-    let ret: DiseaseNode[] = [] as DiseaseNode[];
-    const dNode = new DiseaseNode(data);
-    if (!parent) {
-      return [data];
+function _makeDiseaseObj(
+  diseaseData: ApolloQueryResult<unknown>,
+  articleData?: ApolloQueryResult<unknown>,
+  epiArticleData?: ApolloQueryResult<unknown>,
+  projectsData?: ApolloQueryResult<unknown>,
+  trialsData?: ApolloQueryResult<unknown>,
+): Disease {
+  const disease: { disease: Disease[] } = diseaseData.data as {
+    disease: Disease[];
+  };
+  if (disease) {
+    const diseaseObj: Disease = new Disease(disease.disease[0]);
+    if (articleData) {
+      const articles: {
+        articles: {
+          articles: Article[];
+          _count: { count: number };
+          allCount: { count: number };
+        }[];
+      } = articleData.data as {
+        articles: {
+          articles: Article[];
+          _count: { count: number };
+          allCount: { count: number };
+        }[];
+      };
+      if (articles) {
+        diseaseObj.nonEpiArticles = articles.articles[0].articles.map(
+          (art: Partial<Article>) => new Article(art),
+        );
+        diseaseObj.nonEpiCount = articles.articles[0]._count.count;
+        diseaseObj.allNonEpiCount = articles.articles[0].allCount.count;
+      }
+    }
+    if (epiArticleData) {
+      const epiArticles: {
+        articles: {
+          articles: Article[];
+          _count: { count: number };
+          allCount: { count: number };
+        }[];
+      } = epiArticleData.data as {
+        articles: {
+          articles: Article[];
+          _count: { count: number };
+          allCount: { count: number };
+        }[];
+      };
+      if (epiArticles) {
+        diseaseObj.epiArticles = epiArticles.articles[0].articles.map(
+          (art: Partial<Article>) => new Article(art),
+        );
+        diseaseObj.epiCount = epiArticles.articles[0]._count.count;
+        diseaseObj.allEpiCount = epiArticles.articles[0].allCount.count;
+      }
+    }
+    if (projectsData) {
+      const projects: {
+        coreProjects: CoreProject[];
+        count: { count: number };
+      } = projectsData.data as {
+        coreProjects: CoreProject[];
+        count: { count: number };
+      };
+      diseaseObj.projects = projects.coreProjects.map(
+        (proj: Partial<CoreProject>) => new CoreProject(proj),
+      );
+      diseaseObj.projectCount = projects.count.count;
+      diseaseObj.allProjectCount = projects.count.count;
+    }
+    if (trialsData) {
+      const trials: {
+        clinicalTrials: ClinicalTrial[];
+        count: { count: number };
+        allCount: { count: number };
+      } = trialsData.data as {
+        clinicalTrials: ClinicalTrial[];
+        count: { count: number };
+        allCount: { count: number };
+      };
+      diseaseObj.clinicalTrials = trials.clinicalTrials.map(
+        (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
+      );
+      diseaseObj.allClinicalTrialCount = trials.allCount.count;
+      diseaseObj.clinicalTrialCount = trials.count.count;
+    }
+    return diseaseObj;
+  } else return new Disease({});
+}
+
+function _addToTree(
+  data: DiseaseNode,
+  parent?: DiseaseNode[] | undefined,
+): DiseaseNode[] {
+  let ret: DiseaseNode[] = [] as DiseaseNode[];
+  const dNode = new DiseaseNode(data);
+  if (!parent) {
+    return [data];
+  } else {
+    const diseaseMap = new Map<string, DiseaseNode>();
+    let found = false;
+    parent.map((disease) => {
+      if (disease.gardId === dNode.gardId) {
+        found = true;
+        diseaseMap.set(dNode.gardId, dNode);
+      } else {
+        diseaseMap.set(disease.gardId, disease);
+      }
+    });
+    if (found) {
+      ret = [...diseaseMap.values()].sort(
+        (a, b) => b.childrenCount - a.childrenCount,
+      );
     } else {
-      const diseaseMap = new Map<string, DiseaseNode>();
-      let found = false;
-      parent.map((disease) => {
-        if (disease.gardId === dNode.gardId) {
-          found = true;
-          diseaseMap.set(dNode.gardId, dNode);
-        } else {
-          diseaseMap.set(disease.gardId, disease);
+      parent.some((disease) => {
+        if (disease.children) {
+          const lll = _addToTree(dNode, disease.children);
+          const d2: DiseaseNode = new DiseaseNode({
+            ...disease,
+            children: lll,
+          });
+          diseaseMap.set(d2.gardId, d2);
+          ret = [...diseaseMap.values()].sort(
+            (a, b) => b.childrenCount - a.childrenCount,
+          );
         }
       });
-      if (found) {
-        ret = [...diseaseMap.values()].sort(
-          (a, b) => b.childrenCount - a.childrenCount
-        );
+    }
+    return ret;
+  }
+}
+
+function _setFragment(
+  origin: string | null,
+  options: {
+    limit?: number;
+    offset?: number;
+    year?: string | string[];
+    GardId?: string;
+    OverallStatus?: string[];
+    StudyType?: string[];
+    Phase?: string[];
+  },
+) {
+  switch (origin) {
+    case 'epiArticles': {
+      EPIARTICLES.articleOptions.limit = <number>options['limit']
+        ? <number>options['limit']
+        : 10;
+      if (<number>options['offset']) {
+        EPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
+      }
+      if (options['year'] && options['year'].length > 0) {
+        EPIARTICLES.articleFilter.publicationYear_IN = options['year'];
       } else {
-        parent.some((disease) => {
-          if (disease.children) {
-            const lll = _addToTree(dNode, disease.children);
-            const d2: DiseaseNode = new DiseaseNode({
-              ...disease,
-              children: lll,
-            });
-            diseaseMap.set(d2.gardId, d2);
-            ret = [...diseaseMap.values()].sort(
-              (a, b) => b.childrenCount - a.childrenCount
-            );
-          }
-        });
+        EPIARTICLES.articleFilter.publicationYear_IN = undefined;
       }
-      return ret;
+      break;
+    }
+    case 'nonEpiArticles': {
+      NONEPIARTICLES.articleOptions.limit = <number>options['limit']
+        ? <number>options['limit']
+        : 10;
+      if (<number>options['offset']) {
+        NONEPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
+      }
+      if (options['year'] && options['year'].length > 0) {
+        NONEPIARTICLES.articleFilter.publicationYear_IN = options['year'];
+      } else {
+        //  NONEPIARTICLES.articleFilter.publicationYear_IN = undefined;
+      }
+      break;
+    }
+    case 'project': {
+      PROJECTVARIABLES.coreProjectsOptions.limit = <number>options['limit']
+        ? <number>options['limit']
+        : 10;
+      if (<number>options['offset']) {
+        PROJECTVARIABLES.coreProjectsOptions.offset =
+          <number>options['offset'] * 1;
+      }
+      break;
+    }
+    case 'trials': {
+      FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit']
+        ? <number>options['limit']
+        : 10;
+      if (<number>options['offset']) {
+        FETCHTRIALSVARIABLES.ctoptions.offset = <number>options['offset'] * 1;
+      } else {
+        FETCHTRIALSVARIABLES.ctoptions.offset = 0;
+      }
+      if (options['GardId']) {
+        FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
+          <string>options['GardId'];
+        FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
+          <string>options['GardId'];
+      }
+      if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
+        FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN =
+          options['OverallStatus'];
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = undefined;
+      }
+      if (options['StudyType'] && options['StudyType'].length > 0) {
+        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = options['StudyType'];
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
+      }
+      if (options['Phase'] && options['Phase'].length > 0) {
+        FETCHTRIALSVARIABLES.ctfilters.Phase_IN = options['Phase'];
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.Phase_IN = undefined;
+      }
+      break;
     }
   }
+}
 
- function _setFragment(
-    origin: string | null,
-    options: {
-      limit?: number,
-      offset?: number,
-      year?: string| string[];
-      GardId?: string,
-      OverallStatus?: string[];
-      StudyType?: string[];
-      Phase?: string[];
-    }
-  ) {
-    switch (origin) {
-      case 'epiArticles': {
-        EPIARTICLES.articleOptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
-        if (<number>options['offset']) {
-          EPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
-        }
-        if(options['year'] && options['year'].length > 0) {
-          EPIARTICLES.articleWhere.publicationYear_IN = options['year'];
-        } else {
-          EPIARTICLES.articleWhere.publicationYear_IN =undefined;
-        }
-        break;
-      }
-      case 'nonEpiArticles': {
-        NONEPIARTICLES.articleOptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
-        if (<number>options['offset']) {
-          NONEPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
-        }
-        if(options['year'] && options['year'].length > 0) {
-          NONEPIARTICLES.articleWhere.publicationYear_IN = options['year'];
-        } else {
-          NONEPIARTICLES.articleWhere.publicationYear_IN = undefined;
-        }
-        break;
-      }
-      case 'project': {
-        PROJECTVARIABLES.coreProjectsOptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
-        if (<number>options['offset']) {
-          PROJECTVARIABLES.coreProjectsOptions.offset = <number>options['offset'] * 1;
-        }
-        break;
-      }
-      case 'trials': {
-        FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit'] ? <number>options['limit'] : 10;
-        if (<number>options['offset']) {
-          FETCHTRIALSVARIABLES.ctoptions.offset = <number>options['offset'] * 1;
-        }
-        if (options['GardId']) {
-            FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = <string>options['GardId']
-        }
-        if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
-            FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = options['OverallStatus'];
-          } else {
-          FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = undefined;
-          }
-        if (options['StudyType'] && options['StudyType'].length > 0) {
-            FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = options['StudyType'];
-          } else {
-            FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = undefined;
-          }
-        if (options['Phase'] && options['Phase'].length > 0) {
-            FETCHTRIALSVARIABLES.ctwhere.Phase_IN = options['Phase'];
-          } else {
-            FETCHTRIALSVARIABLES.ctwhere.Phase_IN = undefined;
-          }
-        break;
-      }
-    }
+function _setGardId(gardid: string) {
+  DISEASEQUERYPARAMETERS.where = { GardId: gardid };
+  EPIARTICLES.gardWhere.GardId = gardid;
+  NONEPIARTICLES.gardWhere.GardId = gardid;
+  PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
+    gardid;
+  FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
+    gardid;
+  FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
+    gardid;
+}
+
+function _setTrialVariables(params: Params, origin: string) {
+  console.log(origin)
+  if (origin !== 'type' && (params['StudyType'] && params['StudyType'].length)) {
+    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = params['StudyType'];
+  } else {
+    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
+  }
+  if (origin !== 'phase' && (params['Phase'] && params['Phase'].length) ){
+    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = params['Phase'];
+  } else {
+    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = null;
+  }
+  if (origin !== 'status' && (params['OverallStatus'] && params['OverallStatus'].length)) {
+    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = params['OverallStatus'];
+  } else {
+    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = null;
+  }
+  console.log(FETCHTRIALSVARIABLES)
+  return FETCHTRIALSVARIABLES;
+}
+
+function _setArticleVariables(params: Params) {
+  if (params['year'] && params['year'].length) {
+    // FETCHART.ctfilters.StudyType_IN = params['StudyType']
+  } else {
+    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
   }
 
- function _setGardId(gardid: string) {
-    DISEASEQUERYPARAMETERS.where = { GardId: gardid };
-    EPIARTICLES.gardWhere.GardId = gardid;
-    NONEPIARTICLES.gardWhere.GardId = gardid;
-    PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId = gardid;
-    FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = gardid;
+  return FETCHTRIALSVARIABLES;
+}
+
+function _parseFilterResponse(
+  articleFilterData: ApolloQueryResult<unknown>,
+  projectFilterData: ApolloQueryResult<unknown>,
+  trialFilterData: ApolloQueryResult<unknown>,
+  params: Params,
+): FilterCategory[] {
+  const filters: FilterCategory[] = [];
+  if (articleFilterData) {
+    const articleFilterDataList: { countsByYear: Filter[] } =
+      articleFilterData.data as { countsByYear: Filter[] };
+    if (articleFilterDataList.countsByYear.length) {
+      filters.push(
+        new FilterCategory({
+          parent: 'articles',
+          label: 'Articles by Year',
+          filterable: false,
+          values: articleFilterDataList.countsByYear.map(
+            (fil: Partial<Filter>) => new Filter(fil),
+          ),
+        }),
+      );
+      const fc = new FilterCategory({
+        parent: 'epiArticles',
+        label: 'Epidemiology Articles by Year',
+        field: 'year',
+        values: articleFilterDataList.countsByYear
+          .filter(
+            (year: Partial<Filter>) => year.label == 'Epidemiology Articles',
+          )
+          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' })),
+      });
+      filters.push(fc);
+      filters.push(
+        new FilterCategory({
+          parent: 'nonEpiArticles',
+          label: 'Articles by Year',
+          field: 'year',
+          values: articleFilterDataList.countsByYear
+            .filter(
+              (year: Partial<Filter>) =>
+                year.label == 'Non Epidemiology Articles',
+            )
+            .map(
+              (fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }),
+            ),
+        }),
+      );
+    }
   }
-
-function _setTrialVariables(params: Params) {
-   if(params['StudyType'] && params['StudyType'].length){
-     FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = params['StudyType']
-   } else {
-     FETCHTRIALSVARIABLES.ctwhere.StudyType_IN = null
-   }
-   if(params['Phase'] && params['Phase'].length){
-     FETCHTRIALSVARIABLES.ctwhere.Phase_IN = params['Phase']
-   } else {
-     FETCHTRIALSVARIABLES.ctwhere.Phase_IN = null
-   }
-   if(params['OverallStatus'] && params['OverallStatus'].length){
-     FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = params['OverallStatus']
-   } else {
-     FETCHTRIALSVARIABLES.ctwhere.OverallStatus_IN = null
-   }
-
-   return FETCHTRIALSVARIABLES
+  if (projectFilterData) {
+    const projectFilterDataList: {
+      countsByYear: Filter[];
+      costByYear: Filter[];
+    } = projectFilterData.data as {
+      countsByYear: Filter[];
+      costByYear: Filter[];
+    };
+    if (projectFilterDataList.countsByYear.length) {
+      filters.push(
+        new FilterCategory({
+          parent: 'projects',
+          label: 'Projects Count by Year',
+          filterable: false,
+          values: projectFilterDataList.countsByYear.map(
+            (fil: Partial<Filter>) => new Filter(fil),
+          ),
+        }),
+      );
+    }
+    if (projectFilterDataList.costByYear.length) {
+      filters.push(
+        new FilterCategory({
+          parent: 'projects',
+          label: 'Projects Funding by Year',
+          filterable: false,
+          values: projectFilterDataList.costByYear.map(
+            (fil: Partial<Filter>) => new Filter(fil),
+          ),
+        }),
+      );
+    }
+  }
+  if (trialFilterData) {
+    const dataObj: {
+      allClinicalTrialsFilters: {
+        trialsByStatus: Filter[];
+        trialsByType: Filter[];
+        trialsByPhase: Filter[];
+      };
+    } = trialFilterData.data as {
+      allClinicalTrialsFilters: {
+        trialsByStatus: Filter[];
+        trialsByType: Filter[];
+        trialsByPhase: Filter[];
+      };
+    };
+    const trialFilterDataList: {
+      trialsByStatus: Filter[];
+      trialsByType: Filter[];
+      trialsByPhase: Filter[];
+    } = dataObj.allClinicalTrialsFilters as {
+      trialsByStatus: Filter[];
+      trialsByType: Filter[];
+      trialsByPhase: Filter[];
+    };
+    if (
+      trialFilterDataList.trialsByStatus &&
+      trialFilterDataList.trialsByStatus.length
+    ) {
+      filters.push(
+        new FilterCategory({
+          parent: 'trials',
+          label: 'Clinical Trials by Status',
+          field: 'OverallStatus',
+          values: trialFilterDataList.trialsByStatus.map(
+            (fil: Partial<Filter>) =>
+              new Filter({
+                ...fil,
+                selected:
+                  params['OverallStatus'] === fil.term ||
+                  params['OverallStatus']?.includes(fil.term),
+              }),
+          ),
+        }),
+      );
+    }
+    if (
+      trialFilterDataList.trialsByType &&
+      trialFilterDataList.trialsByType.length
+    ) {
+      filters.push(
+        new FilterCategory({
+          parent: 'trials',
+          label: 'Clinical Trials by Type',
+          field: 'StudyType',
+          values: trialFilterDataList.trialsByType.map(
+            (fil: Partial<Filter>) => new Filter(fil),
+          ),
+        }),
+      );
+    }
+    if (
+      trialFilterDataList.trialsByPhase &&
+      trialFilterDataList.trialsByPhase.length
+    ) {
+      filters.push(
+        new FilterCategory({
+          parent: 'trials',
+          label: 'Clinical Trials by Phase',
+          field: 'Phase',
+          values: trialFilterDataList.trialsByPhase.map(
+            (fil: Partial<Filter>) => new Filter(fil),
+          ),
+        }),
+      );
+    }
+  }
+  return filters;
 }

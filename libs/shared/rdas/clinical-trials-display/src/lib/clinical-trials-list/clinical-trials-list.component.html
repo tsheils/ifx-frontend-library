@@ -1,10 +1,9 @@
 @for (trial of trials; track trial) {
-<div class="row centered-row">
-  <ncats-frontend-library-clinical-trials-list-card
-    [trial]="trial"
-    (click)="navigate(trial.NCTId)"
-    class="clickable-area"
-  ></ncats-frontend-library-clinical-trials-list-card>
-</div>
+  <div class="row centered-row">
+    <ncats-frontend-library-clinical-trials-list-card
+      [trial]="trial"
+      (click)="navigate(trial.NCTId)"
+      class="clickable-area"
+    ></ncats-frontend-library-clinical-trials-list-card>
+  </div>
 }
-

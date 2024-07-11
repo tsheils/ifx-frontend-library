@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { LoadTrialsActions } from "./trials.actions";
+import { LoadTrialsActions } from './trials.actions';
 
 import * as TrialsActions from './trials.actions';
 import {
@@ -9,10 +9,8 @@ import {
 } from './trials.reducer';
 
 describe('Trials Reducer', () => {
-
   describe('valid Trials actions', () => {
     it('loadTrialsSuccess should return the list of known Trials', () => {
-
       const action = LoadTrialsActions.loadTrialsSuccess({ trials: [] });
 
       const result: TrialsState = trialsReducer(initialTrialsState, action);

@@ -6,10 +6,10 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { Apollo } from 'apollo-angular';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-import { BrowseDiseaseListActions } from "./diseases.actions";
+import { BrowseDiseaseListActions } from './diseases.actions';
 
 import * as DiseasesActions from './diseases.actions';
-import * as DiseasesEffects  from './diseases.effects';
+import * as DiseasesEffects from './diseases.effects';
 
 describe('DiseasesEffects', () => {
   const createDiseasesEntity = (gardId: string, name = ''): Disease =>
@@ -22,13 +22,13 @@ describe('DiseasesEffects', () => {
       snomed: [],
       icd10cm: [],
       clinicalTrialCount: 0,
-      dataSourceId: "",
-      dataSource: "",
+      dataSourceId: '',
+      dataSource: '',
       gardId,
       name: name || `name-${gardId}`,
       epiCount: 0,
       nonEpiCount: 0,
-      projectCount: 0
+      projectCount: 0,
     });
 
   const diseasesArr = [

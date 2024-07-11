@@ -119,7 +119,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
             term: term ? term : ' ',
           });
           this.loading = true;
-        })
+        }),
       )
       .subscribe();
 
@@ -134,14 +134,16 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         takeUntilDestroyed(this.destroyRef),
         map((range: ListRange) => {
           this.range = range;
-        })
+        }),
       )
       .subscribe();
   }
 
   ngOnChanges() {
     this.filterSelection.select(
-      ...this.filter.values.filter((val) => val.selected).map((val) => val.term)
+      ...this.filter.values
+        .filter((val) => val.selected)
+        .map((val) => val.term),
     );
   }
 

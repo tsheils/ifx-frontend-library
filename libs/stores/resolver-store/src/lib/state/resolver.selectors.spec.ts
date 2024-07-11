@@ -1,4 +1,4 @@
-import { ResolverResponse } from "ifx";
+import { ResolverResponse } from 'ifx';
 import {
   resolverAdapter,
   ResolverPartialState,
@@ -8,14 +8,14 @@ import * as ResolverSelectors from './resolver.selectors';
 
 describe('Resolver Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getResolverId = (it: ResolverResponse ) => it.id;
+  const getResolverId = (it: ResolverResponse) => it.id;
   const createResolverEntity = (id: string, name = '') =>
     ({
       id,
       input: name || `name-${id}`,
       response: name || `name-${id}`,
       source: name || `name-${id}`,
-      url: name || `name-${id}`
+      url: name || `name-${id}`,
     }) as ResolverResponse;
 
   let state: ResolverPartialState;

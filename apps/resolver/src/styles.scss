@@ -6,8 +6,14 @@ html,
 body {
   height: 100%;
   margin: 0 !important;
-  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
-  Lucida Grande, sans-serif;
+  font-family:
+    Roboto,
+    Helvetica Neue Light,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    Lucida Grande,
+    sans-serif;
 }
 
 a {
@@ -120,7 +126,6 @@ header {
   grid-gap: 1%;
 }
 
-
 @include utils.width-sm(50);
 @include utils.width-sm(90);
 @include utils.width-sm(95);
@@ -193,10 +198,10 @@ span.list-item-content {
   cursor: pointer;
 }
 
-.primary-background{
+.primary-background {
   background-color: mat.get-color-from-palette($app-primary) !important;
 }
-.accent-background{
+.accent-background {
   background-color: mat.get-color-from-palette($app-accent) !important;
 }
 
@@ -231,7 +236,6 @@ span.list-item-content {
   background-color: #ffffff;
   border: mat.get-color-from-palette($app-accent) solid 2px;
 }
-
 
 .clickable-area:hover {
   background-color: #f6f6f6;

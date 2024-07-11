@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute } from '@angular/router';
 import { ToolCardComponent } from './tool-card.component';
 
 describe('ToolCardComponent', () => {
@@ -9,7 +9,7 @@ describe('ToolCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ToolCardComponent],
-      providers: [{provide: ActivatedRoute, useValue: {}}]
+      providers: [{ provide: ActivatedRoute, useValue: {} }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ToolCardComponent);

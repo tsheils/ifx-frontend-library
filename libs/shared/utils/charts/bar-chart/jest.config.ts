@@ -3,7 +3,8 @@ export default {
   displayName: 'shared-utils-bar-chart',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/shared/utils/charts/bar-chart',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/utils/charts/bar-chart',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

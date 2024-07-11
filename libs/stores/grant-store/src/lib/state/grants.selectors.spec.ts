@@ -1,4 +1,4 @@
-import { CoreProject } from "@ncats-frontend-library/models/rdas";
+import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import {
   grantsAdapter,
   GrantsPartialState,
@@ -10,7 +10,7 @@ describe('Grants Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getGrantsId = (it: CoreProject) => it.core_project_num;
   const createGrantsEntity = (id: string, name = '') =>
-   new CoreProject({
+    new CoreProject({
       core_project_num: id,
     });
 
@@ -29,7 +29,7 @@ describe('Grants Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });
@@ -45,11 +45,11 @@ describe('Grants Selectors', () => {
 
     it('selectEntity() should return the selected Entity', () => {
       const result = GrantsSelectors.selectEntity(state);
-      let selId
-      if(result) {
+      let selId;
+      if (result) {
         selId = getGrantsId(result);
       } else {
-        selId = undefined
+        selId = undefined;
       }
 
       expect(selId).toBe('PRODUCT-BBB');

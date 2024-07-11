@@ -67,7 +67,7 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
     private platformId: InjectionToken<NonNullable<unknown>>,
     private scrollDispatcher: ScrollDispatcher,
     private changeRef: ChangeDetectorRef,
-    private router: Router
+    private router: Router,
   ) {}
 
   /**

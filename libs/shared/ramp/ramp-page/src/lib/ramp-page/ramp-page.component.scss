@@ -1,0 +1,38 @@
+.ramp-rail {
+  position: fixed;
+  width: 80px;
+  display: grid;
+  justify-items: center;
+}
+
+.ramp-sub {
+  background-color: white !important;
+}
+
+.rail-button {
+  padding-top: 12px;
+  height: 56px;
+  padding-bottom:12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+}
+
+.rail-label {
+  font-size: 12px;
+  font-weight: 500;
+  padding-top:4px;
+}
+
+.rail-icon {
+  font-size: 24px;
+}
+
+.rail-icon :hover {
+  background-color: red;
+}
+
+.drawer-container-content {
+  min-height: 100vh;
+}

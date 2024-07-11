@@ -1,7 +1,7 @@
 import { User } from '@ncats-frontend-library/models/utils';
-import { UserLoginActions } from "./users.actions";
-import { initialState, usersReducer, UserState } from "./users.reducer";
-import { Action } from "@ngrx/store";
+import { UserLoginActions } from './users.actions';
+import { initialState, usersReducer, UserState } from './users.reducer';
+import { Action } from '@ngrx/store';
 
 describe('Users Reducer', () => {
   const createUsersEntity = (uid: string, displayName = ''): User =>

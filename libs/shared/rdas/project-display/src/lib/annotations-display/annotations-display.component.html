@@ -1,13 +1,13 @@
 @if (annotations() && annotations()?.length) {
-<div>
-  @for (annotation of annotationsMap() | keyvalue; track annotation) {
   <div>
-    <div class="primary-chip-outlined">{{ annotation.key }}</div>
-    @for (term of annotation.value; track term) {
-    <div class="">{{ term }}</div>
+    @for (annotation of annotationsMap() | keyvalue; track annotation) {
+      <div>
+        <div class="primary-chip-outlined">{{ annotation.key }}</div>
+        @for (term of annotation.value; track term) {
+          <div class="">{{ term }}</div>
+        }
+      </div>
     }
+    <br />
   </div>
-  }
-  <br />
-</div>
 }

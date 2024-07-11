@@ -29,14 +29,14 @@ export class FilterCategory {
       this.values = obj.values.map((val) => new Filter(val));
     }
 
-    if(!obj.label) {
-      if(obj.parent) {
-        this.label= obj.parent;
+    if (!obj.label) {
+      if (obj.parent) {
+        this.label = obj.parent;
       }
     }
-    if(!obj.field) {
-      if(obj.parent) {
-        this.field= obj.parent;
+    if (!obj.field) {
+      if (obj.parent) {
+        this.field = obj.parent;
       }
     }
   }

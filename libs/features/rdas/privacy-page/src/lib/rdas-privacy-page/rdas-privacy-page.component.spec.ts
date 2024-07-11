@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
-import { RdasPrivacyPageComponent } from "./rdas-privacy-page.component";
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { RdasPrivacyPageComponent } from './rdas-privacy-page.component';
 
 describe('FeaturesRdasPrivacyPageComponent', () => {
   let component: RdasPrivacyPageComponent;
@@ -8,9 +8,7 @@ describe('FeaturesRdasPrivacyPageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        RdasPrivacyPageComponent],
+      imports: [NoopAnimationsModule, RdasPrivacyPageComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RdasPrivacyPageComponent);

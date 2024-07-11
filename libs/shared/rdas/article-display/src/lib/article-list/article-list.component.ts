@@ -21,7 +21,10 @@ import { ArticleListCardComponent } from '../article-list-card/article-list-card
 })
 export class ArticleListComponent implements OnChanges {
   @Input() articles!: Article[] | undefined;
-  constructor(private changeRef: ChangeDetectorRef, private router: Router) {}
+  constructor(
+    private changeRef: ChangeDetectorRef,
+    private router: Router,
+  ) {}
 
   ngOnChanges() {
     this.changeRef.markForCheck();

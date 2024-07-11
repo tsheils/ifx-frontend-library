@@ -1,7 +1,6 @@
-
 import { TestBed } from '@angular/core/testing';
-import { SharedUtilsFileUploadComponent } from "@ncats-frontend-library/shared/utils/file-upload";
-import { StoreModule } from "@ngrx/store";
+import { SharedUtilsFileUploadComponent } from '@ncats-frontend-library/shared/utils/file-upload';
+import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 import { RouterTestingModule } from '@angular/router/testing';
 
@@ -13,8 +12,7 @@ describe('AppComponent', () => {
         RouterTestingModule,
         SharedUtilsFileUploadComponent,
         StoreModule.forRoot({}),
-      ]
-      ,
+      ],
     }).compileComponents();
   });
 

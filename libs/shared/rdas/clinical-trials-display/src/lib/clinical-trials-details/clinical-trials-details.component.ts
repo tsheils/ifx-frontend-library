@@ -35,7 +35,7 @@ export class ClinicalTrialsDetailsComponent implements OnInit {
   fullSummary = true;
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
   ) {}
 
   ngOnInit(): void {

@@ -1,18 +1,18 @@
 @if (showPaginator && pageData) {
-<div class="row right-justified-row body-row paginator-row">
-<div class="width-55">
-<mat-paginator
-#paginatorTop
-[pageSizeOptions]="[10, 20, 50]"
-[pageSize]="pageData.skip > 0 ? pageData.skip : 10"
-[length]="pageData.total ? pageData.total : 10"
-[showFirstLastButtons]="true"
-(page)="changePage($event)"
-[hidePageSize]="hidePageSize"
->
-</mat-paginator>
-</div>
-</div>
+  <div class="row right-justified-row body-row paginator-row">
+    <div class="width-55">
+      <mat-paginator
+        #paginatorTop
+        [pageSizeOptions]="[10, 20, 50]"
+        [pageSize]="pageData.skip > 0 ? pageData.skip : 10"
+        [length]="pageData.total ? pageData.total : 10"
+        [showFirstLastButtons]="true"
+        (page)="changePage($event)"
+        [hidePageSize]="hidePageSize"
+      >
+      </mat-paginator>
+    </div>
+  </div>
 }
 <table
   mat-table
@@ -42,7 +42,7 @@
     </td>
   </ng-container>
   @for (field of displayFields; track field) {
-  <ng-container matColumnDef="{{ field.field }}">
+    <ng-container matColumnDef="{{ field.field }}">
       <th
         mat-header-cell
         *matHeaderCellDef
@@ -50,25 +50,24 @@
         [disabled]="!field.sortable"
         [style.width]="field.width"
       >
-  {{ field.label ? field.label : field.field }}
-  </th>
-  <td
-    mat-cell
-    *matCellDef="let row; let i = dataIndex"
-    [style.max-width]="field.width"
-  >
-    @if (checkCustomComponent(field)) {
-  <div
-    #customOutlet
-    [cdkPortalOutlet]="getCustomComponent(field)"
-    (attached)="componentAttached($event, i, field)"
-  >
-  </div>
-  } @else {
-  @if (row[field.field] && isArray(row[field.field])) {
-  <div>
-    @for (value of row[field.field]; track value) {
-  <span>
+        {{ field.label ? field.label : field.field }}
+      </th>
+      <td
+        mat-cell
+        *matCellDef="let row; let i = dataIndex"
+        [style.max-width]="field.width"
+      >
+        @if (checkCustomComponent(field)) {
+          <div
+            #customOutlet
+            [cdkPortalOutlet]="getCustomComponent(field)"
+            (attached)="componentAttached($event, i, field)"
+          ></div>
+        } @else {
+          @if (row[field.field] && isArray(row[field.field])) {
+            <div>
+              @for (value of row[field.field]; track value) {
+                <span>
                   <ncats-property-display
                     [property]="value"
                     [showLabel]="false"
@@ -76,18 +75,18 @@
                   ></ncats-property-display>
                   <br />
                 </span>
-  }
-  </div>
-  } @else {
-  <ncats-property-display
-    [property]="row[field.field]"
-    [showLabel]="false"
-    [displayType]="field.displayType"
-  ></ncats-property-display>
-  }
-  }
-  </td>
-</ng-container>
+              }
+            </div>
+          } @else {
+            <ncats-property-display
+              [property]="row[field.field]"
+              [showLabel]="false"
+              [displayType]="field.displayType"
+            ></ncats-property-display>
+          }
+        }
+      </td>
+    </ng-container>
   }
 
   <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->

@@ -7,7 +7,7 @@ describe('ArticleService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [Apollo]
+      providers: [Apollo],
     });
     service = TestBed.inject(ArticleService);
   });

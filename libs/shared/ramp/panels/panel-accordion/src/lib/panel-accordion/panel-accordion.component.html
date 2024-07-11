@@ -1,0 +1,38 @@
+<mat-accordion multi>
+  <mat-expansion-panel expanded>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Input</mat-panel-title>
+    </mat-expansion-panel-header>
+    <lib-input-panel [paths]="paths" [inputQuestions]="inputTab" (dataSearch)="searchData($event)" (dataDownload)="downloadData($event)"></lib-input-panel>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="resultsTabs" [disabled]="!resultsTabs">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Results</mat-panel-title>
+    </mat-expansion-panel-header>
+          <lib-results-panel [results]=resultsTabs></lib-results-panel>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="visualizationTabs.size" [disabled]="!visualizationTabs.size">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Visualizations</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      @for (tab of visualizationTabs | keyvalue; track tab) {
+        <mat-tab [label]="tab.key">
+          <lib-visualization-panel [data] = "tab.value"></lib-visualization-panel>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="dataTabs.size" [disabled]="!dataTabs.size">
+    <mat-expansion-panel-header>
+      <mat-panel-title>Data</mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      @for (tab of dataTabs | keyvalue : _originalOrder; track tab) {
+        <mat-tab [label]="tab.key">
+          <lib-data-panel [dataAsDataProperty]="tab.value['data']" [dataColumns]="tab.value['fields']"></lib-data-panel>
+        </mat-tab>
+      }
+    </mat-tab-group>
+  </mat-expansion-panel>
+</mat-accordion>

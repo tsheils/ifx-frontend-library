@@ -1,12 +1,18 @@
 import {
-  provideHttpClient, withFetch,
-  withInterceptorsFromDi
-} from "@angular/common/http";
-import { APP_INITIALIZER, ApplicationConfig, importProvidersFrom, inject } from "@angular/core";
-import { initializeApp, provideFirebaseApp } from "@angular/fire/app";
-import { getAuth, provideAuth } from "@angular/fire/auth";
-import { getFirestore, provideFirestore } from "@angular/fire/firestore";
-import { getStorage, provideStorage } from "@angular/fire/storage";
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import {
+  APP_INITIALIZER,
+  ApplicationConfig,
+  importProvidersFrom,
+  inject,
+} from '@angular/core';
+import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getStorage, provideStorage } from '@angular/fire/storage';
 import {
   BrowserModule,
   provideClientHydration,
@@ -15,25 +21,28 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   PreloadAllModules,
-  provideRouter, withComponentInputBinding,
+  provideRouter,
+  withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
-  withPreloading, withViewTransitions
-} from "@angular/router";
+  withPreloading,
+  withViewTransitions,
+} from '@angular/router';
 import {
-  DiseaseEffects, DISEASES_FEATURE_KEY,
-  diseasesReducer
-} from "@ncats-frontend-library/stores/disease-store";
+  DiseaseEffects,
+  DISEASES_FEATURE_KEY,
+  diseasesReducer,
+} from '@ncats-frontend-library/stores/disease-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
   UserEffects,
-  RdasUsersInitActions
-} from "@ncats-frontend-library/stores/user-store";
-import { provideEffects } from "@ngrx/effects";
-import { provideRouterStore, routerReducer } from "@ngrx/router-store";
-import { provideState, provideStore, Store } from "@ngrx/store";
-import { provideStoreDevtools } from "@ngrx/store-devtools";
+  RdasUsersInitActions,
+} from '@ncats-frontend-library/stores/user-store';
+import { provideEffects } from '@ngrx/effects';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { provideState, provideStore, Store } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
@@ -60,20 +69,20 @@ export const appConfig: ApplicationConfig = {
       withComponentInputBinding(),
       withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
-        anchorScrolling: "enabled",
-        scrollPositionRestoration: "enabled"
+        anchorScrolling: 'enabled',
+        scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
-  //  provideEffects([UserEffects, DiseasesEffects]),
+    //  provideEffects([UserEffects, DiseasesEffects]),
     provideStore({
       router: routerReducer,
       user: usersReducer,
-    //  articles: articlesReducer,
-    //  trials: trialsReducer,
-    //  grants: grantsReducer,
-   //   filters: filtersReducer,
-      diseases: diseasesReducer
+      //  articles: articlesReducer,
+      //  trials: trialsReducer,
+      //  grants: grantsReducer,
+      //   filters: filtersReducer,
+      diseases: diseasesReducer,
     }),
     provideEffects([UserEffects, DiseaseEffects]),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),
@@ -91,5 +100,5 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideClientHydration(),
-  ]
+  ],
 };

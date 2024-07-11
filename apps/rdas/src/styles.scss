@@ -6,8 +6,14 @@ html,
 body {
   height: 100%;
   margin: 0 !important;
-  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
-    Lucida Grande, sans-serif;
+  font-family:
+    Roboto,
+    Helvetica Neue Light,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    Lucida Grande,
+    sans-serif;
 }
 
 header {
@@ -229,18 +235,17 @@ span.search-highlight {
 }
 
 .fill-spinner > .progress-bar-container {
-  min-height: 60vh
+  min-height: 60vh;
 }
 
-
 button.mat-ripple.mat-mdc-tab-header-pagination.mat-mdc-tab-header-pagination-after {
- // z-index: 1;
+  // z-index: 1;
 }
 
 .navigation-menu-panel {
   width: 25%;
   position: fixed !important;
-  top: calc(60px + 17vh) !important
+  top: calc(60px + 17vh) !important;
 }
 
 @media only screen and (max-width: 1024px) {

@@ -18,12 +18,31 @@
         "inlineStyleLanguage": "scss",
         "assets": [
           "apps/ramp-client/src/favicon.ico",
-          "apps/ramp-client/src/assets"
+          "apps/ramp-client/src/assets",
+          {
+            "input": "libs/features/ramp/ramp-api/src/assets",
+            "glob": "**/*",
+            "output": "assets/ramp-api"
+          },
+          {
+            "input": "libs/features/ramp/ramp-about/src/assets",
+            "glob": "**/*",
+            "output": "assets/ramp-about"
+          }
         ],
-        "styles": ["apps/ramp-client/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["libs/styles/src/styles/"]
+        },
+        "styles": [
+          "node_modules/swagger-ui/dist/swagger-ui.css",
+          "apps/ramp-client/src/styles.scss"
+        ],
         "scripts": [],
         "server": "apps/ramp-client/src/main.server.ts",
-        "prerender": true,
+        "prerender": {
+          "discoverRoutes": false,
+          "routesFile": "./apps/ramp-client/routes.txt"
+        },
         "ssr": {
           "entry": "apps/ramp-client/server.ts"
         }

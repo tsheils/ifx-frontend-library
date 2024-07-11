@@ -1,10 +1,11 @@
 import { Article } from './article';
 import { ClinicalTrial } from './clinical-trial';
-import { Gene, GeneAssociation } from "./gene";
-import { Phenotype, PhenotypeAssociation } from "./phenotype";
+import { Gene, GeneAssociation } from './gene';
+import { Phenotype, PhenotypeAssociation } from './phenotype';
 import { CoreProject } from './project';
 
 export class Disease {
+  allArticleCount = 0;
   articleCount = 0;
   classificationLevel?: string;
   dataSource!: string;
@@ -32,11 +33,15 @@ export class Disease {
   is_rare?: boolean;*/
   epiArticles?: Article[];
   nonEpiArticles?: Article[];
+  allEpiCount = 0;
   epiCount = 0;
+  allNonEpiCount = 0;
   nonEpiCount = 0;
   projects?: CoreProject[];
   projectCount = 0;
+  allProjectCount = 0;
   clinicalTrials?: ClinicalTrial[];
+  allClinicalTrialCount = 0;
   clinicalTrialCount = 0;
   geneAssociations?: GeneAssociation[];
   _geneAssociations?: { edges?: Partial<GeneAssociation>[] };
@@ -56,25 +61,39 @@ export class Disease {
 
     if (obj.epiArticles) {
       this.epiArticles = obj.epiArticles.map(
-        (article: Partial<Article> = {}) => new Article(article)
+        (article: Partial<Article> = {}) => new Article(article),
       );
     }
 
     if (obj.nonEpiArticles) {
       this.nonEpiArticles = obj.nonEpiArticles.map(
-        (article: Partial<Article> = {}) => new Article(article)
+        (article: Partial<Article> = {}) => new Article(article),
       );
     }
 
     if (obj._geneAssociations && obj._geneAssociations.edges) {
       this.geneAssociations = obj._geneAssociations.edges.map(
-        (data: unknown) => new GeneAssociation(data as {gene: Partial<Gene>, properties: Partial<GeneAssociation>}));
+        (data: unknown) =>
+          new GeneAssociation(
+            data as {
+              gene: Partial<Gene>;
+              properties: Partial<GeneAssociation>;
+            },
+          ),
+      );
       delete this._geneAssociations;
     }
 
     if (obj._phenotypeAssociations && obj._phenotypeAssociations.edges) {
       this.phenotypeAssociations = obj._phenotypeAssociations.edges.map(
-        (data: unknown) => new PhenotypeAssociation(data as {phenotype: Partial<Phenotype>, properties: Partial<PhenotypeAssociation>}));
+        (data: unknown) =>
+          new PhenotypeAssociation(
+            data as {
+              phenotype: Partial<Phenotype>;
+              properties: Partial<PhenotypeAssociation>;
+            },
+          ),
+      );
 
       delete this._phenotypeAssociations;
     }

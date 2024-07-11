@@ -20,7 +20,7 @@ describe('AutoComplete Component - Highlight pipe', () => {
     });
   }));
 
-  beforeEach(inject([HighlightPipe], (p:HighlightPipe) => {
+  beforeEach(inject([HighlightPipe], (p: HighlightPipe) => {
     pipe = p;
   }));
 

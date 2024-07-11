@@ -4,11 +4,11 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-import { LoadResolverOptionsActions } from "./resolver.actions";
+import { LoadResolverOptionsActions } from './resolver.actions';
 
 import * as ResolverActions from './resolver.actions';
-import { init$ } from "./resolver.effects";
-import * as  ResolverEffects from './resolver.effects';
+import { init$ } from './resolver.effects';
+import * as ResolverEffects from './resolver.effects';
 
 describe('ResolverEffects', () => {
   let actions: Observable<Action>;
@@ -26,10 +26,14 @@ describe('ResolverEffects', () => {
 
   describe('init$', () => {
     it('should work', () => {
-      actions = hot('-a-|', { a: LoadResolverOptionsActions.loadResolverOptions() });
+      actions = hot('-a-|', {
+        a: LoadResolverOptionsActions.loadResolverOptions(),
+      });
 
       const expected = hot('-a-|', {
-        a: LoadResolverOptionsActions.loadResolverOptionsSuccess({ options: [] }),
+        a: LoadResolverOptionsActions.loadResolverOptionsSuccess({
+          options: [],
+        }),
       });
 
       expect([]).toEqual([]);

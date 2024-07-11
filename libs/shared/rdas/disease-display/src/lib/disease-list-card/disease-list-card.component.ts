@@ -1,4 +1,4 @@
-import { CommonModule } from "@angular/common";
+import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,11 +15,11 @@ import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/su
     CommonModule,
     MatCardModule,
     MatIconModule,
-    SubscribeButtonComponent
+    SubscribeButtonComponent,
   ],
 })
 export class DiseaseListCardComponent {
-  @Input() disease!: any | Disease;  //eslint-disable-line @typescript-eslint/no-explicit-any
+  @Input() disease!: any | Disease; //eslint-disable-line @typescript-eslint/no-explicit-any
 
   constructor(private router: Router) {}
 

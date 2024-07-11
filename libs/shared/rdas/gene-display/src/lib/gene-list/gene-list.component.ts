@@ -123,7 +123,7 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       )
       .join('\n');
     return rows;

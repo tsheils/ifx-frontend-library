@@ -17,9 +17,7 @@
   "paths": {
     "/": {
       "get": {
-        "tags": [
-          "root"
-        ],
+        "tags": ["root"],
         "summary": "Root",
         "operationId": "root__get",
         "responses": {
@@ -36,9 +34,7 @@
     },
     "/getAbsRD/term={search_term}": {
       "get": {
-        "tags": [
-          "get_rare_disease_abstracts"
-        ],
+        "tags": ["get_rare_disease_abstracts"],
         "summary": "Get Rare Disease Abstracts",
         "operationId": "get_rare_disease_abstracts_getAbsRD_term__search_term__get",
         "parameters": [
@@ -114,9 +110,7 @@
     },
     "/getEpiAbsPMID/term={PubMed_ID}": {
       "get": {
-        "tags": [
-          "get_rare_disease_epidemiology_abstracts_from_PubMed_ID"
-        ],
+        "tags": ["get_rare_disease_epidemiology_abstracts_from_PubMed_ID"],
         "summary": "Get Rare Disease Epidemiology Abstracts",
         "operationId": "get_rare_disease_epidemiology_abstracts_getEpiAbsPMID_term__PubMed_ID__get",
         "parameters": [
@@ -153,9 +147,7 @@
     },
     "/getEpiAbsRD/term={search_term}": {
       "get": {
-        "tags": [
-          "get_rare_disease_epidemiology_abstracts"
-        ],
+        "tags": ["get_rare_disease_epidemiology_abstracts"],
         "summary": "Get Rare Disease Epidemiology Abstracts",
         "operationId": "get_rare_disease_epidemiology_abstracts_getEpiAbsRD_term__search_term__get",
         "parameters": [
@@ -231,9 +223,7 @@
     },
     "/getEpiAbsExtractRD/term={search_term}": {
       "get": {
-        "tags": [
-          "get_rare_disease_epidemiology_extraction"
-        ],
+        "tags": ["get_rare_disease_epidemiology_extraction"],
         "summary": "Get Rare Disease Epidemiology Extraction",
         "operationId": "get_rare_disease_epidemiology_extraction_getEpiAbsExtractRD_term__search_term__get",
         "parameters": [
@@ -321,9 +311,7 @@
     },
     "/postEpiClassifyText/": {
       "post": {
-        "tags": [
-          "classify_text_as_epidemiological"
-        ],
+        "tags": ["classify_text_as_epidemiological"],
         "summary": "Classify Text As Epidemiological",
         "operationId": "classify_text_as_epidemiological_postEpiClassifyText__post",
         "requestBody": {
@@ -360,9 +348,7 @@
     },
     "/postEpiExtractText/": {
       "post": {
-        "tags": [
-          "extract_epidemiology_from_text"
-        ],
+        "tags": ["extract_epidemiology_from_text"],
         "summary": "Extract Epidemiology From Text",
         "operationId": "extract_epidemiology_from_text_postEpiExtractText__post",
         "requestBody": {
@@ -399,9 +385,7 @@
     },
     "/postEpiClassifyExtractText/": {
       "post": {
-        "tags": [
-          "classify_and_extract_epidemiology_from_text"
-        ],
+        "tags": ["classify_and_extract_epidemiology_from_text"],
         "summary": "Classify And Extract Epidemiology From Text",
         "operationId": "classify_and_extract_epidemiology_from_text_postEpiClassifyExtractText__post",
         "requestBody": {
@@ -438,9 +422,7 @@
     },
     "/postAbsBatch/": {
       "post": {
-        "tags": [
-          "get_batch_rare_disease_abstracts"
-        ],
+        "tags": ["get_batch_rare_disease_abstracts"],
         "summary": "Get Batch Rare Disease Abstracts",
         "operationId": "get_batch_rare_disease_abstracts_postAbsBatch__post",
         "requestBody": {
@@ -477,9 +459,7 @@
     },
     "/postEpiAbsBatch/": {
       "post": {
-        "tags": [
-          "get_batch_rare_disease_epidemiology_abstracts"
-        ],
+        "tags": ["get_batch_rare_disease_epidemiology_abstracts"],
         "summary": "Get Batch Rare Disease Epidemiology Abstracts",
         "operationId": "get_batch_rare_disease_epidemiology_abstracts_postEpiAbsBatch__post",
         "requestBody": {
@@ -516,9 +496,7 @@
     },
     "/postEpiExtractBatch/": {
       "post": {
-        "tags": [
-          "get_batch_rare_disease_epidemiology_extraction"
-        ],
+        "tags": ["get_batch_rare_disease_epidemiology_extraction"],
         "summary": "Get Batch Rare Disease Epidemiology Extraction",
         "operationId": "get_batch_rare_disease_epidemiology_extraction_postEpiExtractBatch__post",
         "requestBody": {
@@ -558,9 +536,7 @@
     "schemas": {
       "Batch": {
         "title": "Batch",
-        "required": [
-          "rd_list"
-        ],
+        "required": ["rd_list"],
         "type": "object",
         "properties": {
           "rd_list": {
@@ -596,11 +572,7 @@
       },
       "FilteringType": {
         "title": "FilteringType",
-        "enum": [
-          "none",
-          "lenient",
-          "strict"
-        ],
+        "enum": ["none", "lenient", "strict"],
         "type": "string",
         "description": "An enumeration."
       },
@@ -619,9 +591,7 @@
       },
       "Text": {
         "title": "Text",
-        "required": [
-          "text"
-        ],
+        "required": ["text"],
         "type": "object",
         "properties": {
           "text": {
@@ -639,11 +609,7 @@
       },
       "ValidationError": {
         "title": "ValidationError",
-        "required": [
-          "loc",
-          "msg",
-          "type"
-        ],
+        "required": ["loc", "msg", "type"],
         "type": "object",
         "properties": {
           "loc": {

@@ -8,7 +8,9 @@ ncats-frontend-library-disease-header {
     font-size: 3em;
   }
 
-  .subscribed-button, .subscribe-button, .signin-button {
+  .subscribed-button,
+  .subscribe-button,
+  .signin-button {
     color: white !important;
   }
 
@@ -33,7 +35,6 @@ ncats-frontend-library-disease-header {
     font-weight: bold;
     cursor: pointer;
   }
-
 
   @media only screen and (max-width: 768px) {
     .disease-title {

@@ -1,13 +1,13 @@
 import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory, Page } from "@ncats-frontend-library/models/utils";
+import { FilterCategory, Page } from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
   BrowseDiseaseListActions,
   FetchDiseaseActions,
   FetchDiseaseListActions,
-  SearchDiseasesActions
-} from "./diseases.actions";
+  SearchDiseasesActions,
+} from './diseases.actions';
 
 export const DISEASES_FEATURE_KEY = 'diseases';
 
@@ -22,6 +22,8 @@ export interface State extends EntityState<Disease> {
   tree?: DiseaseNode[];
   subscriptions?: Disease[];
   diseaseFilters?: FilterCategory[];
+  staticDiseaseFilters?: FilterCategory[];
+  allDiseaseFilters?: FilterCategory[];
 }
 
 export interface DiseasesPartialState {
@@ -38,7 +40,7 @@ export const initialState: State = diseasesAdapter.getInitialState({
   loaded: true,
   error: 'No Error Available',
   typeahead: [],
-  subscriptions: []
+  subscriptions: [],
 });
 
 export const reducer = createReducer(
@@ -47,21 +49,23 @@ export const reducer = createReducer(
     BrowseDiseaseListActions.fetchDiseaseList,
     BrowseDiseaseListActions.setLoading,
     FetchDiseaseActions.fetchDisease,
-    (state) =>  {
-      return { ...state,
-        loaded: false,
-        error: null
-      }
-    }
+    (state) => {
+      return { ...state, loaded: false, error: null };
+    },
   ),
 
-  on(BrowseDiseaseListActions.fetchDiseaseTreeSuccess, (state, { diseases }) => ({
-    ...state,
-    tree: diseases
-  })),
+  on(
+    BrowseDiseaseListActions.fetchDiseaseTreeSuccess,
+    (state, { diseases }) => ({
+      ...state,
+      tree: diseases,
+    }),
+  ),
 
-  on(BrowseDiseaseListActions.fetchDiseaseListSuccess, (state, { diseases, page }) =>
-    diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true})
+  on(
+    BrowseDiseaseListActions.fetchDiseaseListSuccess,
+    (state, { diseases, page }) =>
+      diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true }),
   ),
 
   on(FetchDiseaseActions.fetchDiseaseSuccess, (state, { disease }) =>
@@ -69,28 +73,42 @@ export const reducer = createReducer(
       ...state,
       selectedId: disease.gardId,
       loaded: true,
-    })
+    }),
   ),
 
-  on(SearchDiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => ({
-    ...state,
-    typeahead: typeahead,
-  })),
-
-  on(FetchDiseaseListActions.fetchDiseaseListSuccess, (state, { diseases }) => ({
-    ...state,
-    subscriptions: diseases,
-    loaded: true,
-  })),
+  on(
+    FetchDiseaseListActions.fetchDiseaseListSuccess,
+    (state, { diseases }) => ({
+      ...state,
+      subscriptions: diseases,
+      loaded: true,
+    }),
+  ),
 
   on(FetchDiseaseActions.fetchDiseaseFiltersSuccess, (state, { filters }) => ({
     ...state,
     diseaseFilters: filters,
   })),
 
+  on(
+    FetchDiseaseActions.fetchStaticDiseaseFiltersSuccess,
+    (state, { filters }) => ({
+      ...state,
+      staticDiseaseFilters: filters,
+    }),
+  ),
+
+  on(
+    FetchDiseaseListActions.fetchAllDiseaseFiltersSuccess,
+    (state, { filters }) => ({
+      ...state,
+      allDiseaseFilters: filters,
+    }),
+  ),
+
   on(SearchDiseasesActions.clearTypeahead, (state) => ({
     ...state,
-    typeahead: []
+    typeahead: [],
   })),
 
   on(
@@ -98,14 +116,16 @@ export const reducer = createReducer(
     SearchDiseasesActions.searchDiseasesFailure,
     FetchDiseaseActions.fetchDiseaseFailure,
     FetchDiseaseListActions.fetchDiseaseListFailure,
+    FetchDiseaseListActions.fetchAllDiseaseFiltersFailure,
     FetchDiseaseActions.fetchDiseaseFiltersFailure,
+    FetchDiseaseActions.fetchStaticDiseaseFiltersFailure,
     BrowseDiseaseListActions.fetchDiseaseTreeFailure,
     (state, { error }) => ({
       ...state,
       loaded: false,
       error,
-    })
-  )
+    }),
+  ),
 );
 
 export function diseasesReducer(state: State | undefined, action: Action) {

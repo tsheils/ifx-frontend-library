@@ -1,7 +1,7 @@
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { FetchArticleActions } from "./articles.actions";
+import { FetchArticleActions } from './articles.actions';
 
 import * as ArticleActions from './articles.actions';
 
@@ -37,17 +37,17 @@ const reducer = createReducer(
       ...state,
       selectedId: article.pubmed_id,
       loaded: true,
-    })
+    }),
   ),
   on(FetchArticleActions.fetchArticleFailure, (state, { error }) => ({
     ...state,
     error,
-  }))
+  })),
 );
 
 export function articlesReducer(
   state: ArticleState | undefined,
-  action: Action
+  action: Action,
 ) {
   return reducer(state, action);
 }

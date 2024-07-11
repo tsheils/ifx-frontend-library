@@ -1,16 +1,8 @@
-<button mat-button
-        [color] = "'primary'"
-        [matMenuTriggerFor]="dynamicMenu">
+<button mat-button [color]="'primary'" [matMenuTriggerFor]="dynamicMenu">
   Download <mat-icon iconPositionEnd>more_vert</mat-icon>
 </button>
 <mat-menu #dynamicMenu="matMenu">
-    <button mat-menu-item (click)= downloadPNG()>
-    PNG
-  </button>
-  <button mat-menu-item (click)= downloadSVG()>
-    SVG
-  </button>
-  <button mat-menu-item (click)= downloadTSV()>
-    TSV
-  </button>
+  <button mat-menu-item (click)="downloadPNG()">PNG</button>
+  <button mat-menu-item (click)="downloadSVG()">SVG</button>
+  <button mat-menu-item (click)="downloadTSV()">TSV</button>
 </mat-menu>

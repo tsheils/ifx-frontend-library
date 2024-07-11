@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   DestroyRef,
   inject,
   Inject,
@@ -12,8 +13,9 @@ import {
   OnInit,
   Signal,
   ViewChild,
-  ViewEncapsulation, WritableSignal
-} from "@angular/core";
+  ViewEncapsulation,
+  WritableSignal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -42,20 +44,21 @@ import { FilterCategory, Page } from '@ncats-frontend-library/models/utils';
 import { DiseaseListComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
 import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
 import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree';
+import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
 import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
 import { SharedUtilsSelectedFilterListComponent } from '@ncats-frontend-library/shared/utils/selected-filter-list';
 import {
   FetchFiltersActions,
-  FilterSelectors
-} from "@ncats-frontend-library/stores/filter-store";
+  FilterSelectors,
+} from '@ncats-frontend-library/stores/filter-store';
 import {
   BrowseDiseaseListActions,
-  DiseaseSelectors
-} from "@ncats-frontend-library/stores/disease-store";
-import { Store } from "@ngrx/store";
-import { map, Subject } from "rxjs";
+  DiseaseSelectors,
+} from '@ncats-frontend-library/stores/disease-store';
+import { Store } from '@ngrx/store';
+import { map, Subject } from 'rxjs';
 
 /**
  * navigation options to merge query parameters that are added on in navigation/query/facets/pagination
@@ -85,6 +88,7 @@ const navigationExtras: NavigationExtras = {
     MatSelectModule,
     SharedUtilsFilterPanelComponent,
     SharedUtilsSelectedFilterListComponent,
+    ChartWrapperComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -99,9 +103,32 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   destroyRef = inject(DestroyRef);
 
-  page!: Signal<Page |undefined>;
-  loaded!: Signal<boolean |undefined>;
-  diseases!: Signal<Disease[] |undefined>;
+  filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
+    const map = new Map<string, FilterCategory[]>();
+    const filtersL = this.store.selectSignal(
+      DiseaseSelectors.getAllDiseaseFilters,
+    );
+    if (filtersL() && filtersL()?.length) {
+      filtersL()?.forEach((filterCat) => {
+        if (filterCat.parent) {
+          let filterCats: FilterCategory[] | undefined = map.get(
+            filterCat.parent,
+          );
+          if (filterCats) {
+            filterCats.push(filterCat);
+          } else {
+            filterCats = [filterCat];
+          }
+          map.set(filterCat.parent, filterCats);
+        }
+      });
+    }
+    return map;
+  });
+
+  page!: Signal<Page | undefined>;
+  loaded!: Signal<boolean | undefined>;
+  diseases!: Signal<Disease[] | undefined>;
   diseaseTree!: DiseaseNode[] | undefined;
   filters: FilterCategory[] = [];
   sort = 'COUNT_ARTICLES';
@@ -114,7 +141,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     private changeRef: ChangeDetectorRef,
     private breakpointObserver: BreakpointObserver,
     private scroll: ScrollDispatcher,
-    @Inject(DOCUMENT) protected dom?: Document
+    @Inject(DOCUMENT) protected dom?: Document,
   ) {}
 
   ngOnInit(): void {
@@ -137,7 +164,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
         if (e instanceof NavigationStart) {
-          this.store.dispatch(BrowseDiseaseListActions.setLoading())
+          this.store.dispatch(BrowseDiseaseListActions.setLoading());
         }
         if (e instanceof NavigationEnd) {
           this.selectedValues.clear();
@@ -145,7 +172,8 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         }
       });
 
-      this.store.select(DiseaseSelectors.getDiseaseTree)
+    this.store
+      .select(DiseaseSelectors.getDiseaseTree)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
         if (res) {
@@ -162,7 +190,8 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       }
     }
 
-    this.store.select(FilterSelectors.selectAllFilters)
+    this.store
+      .select(FilterSelectors.selectAllFilters)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         map((res) => {
@@ -170,12 +199,12 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
             const tempMap: Map<string, FilterCategory> = new Map<
               string,
               FilterCategory
-              >();
+            >();
             res.forEach((filter) => tempMap.set(filter.label, filter));
             this.filters = [...tempMap.values()];
-            this.changeRef.markForCheck()
+            this.changeRef.markForCheck();
           }
-        })
+        }),
       )
       .subscribe();
   }
@@ -224,15 +253,22 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   filterChange(event: { label: string; term?: string; page?: number }): void {
     const skip = event.page ? event.page * 200 : 0;
     if (event.term) {
-        this.store.dispatch(FetchFiltersActions.fetchFilters({
+      this.store.dispatch(
+        FetchFiltersActions.fetchFilters({
           label: event.label,
           term: event.term,
           limit: 200,
           skip: 0,
-        })
-        );
+        }),
+      );
     } else {
-      this.store.dispatch(FetchFiltersActions.fetchFilters({ label: event.label, limit: 200, skip: skip }));
+      this.store.dispatch(
+        FetchFiltersActions.fetchFilters({
+          label: event.label,
+          limit: 200,
+          skip: skip,
+        }),
+      );
     }
   }
 
@@ -270,7 +306,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   fetchParameters(): void {
     const params =
       this.router.routerState.root.snapshot.queryParamMap.keys.filter(
-        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key)
+        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key),
       );
     if (params && params.length) {
       params.forEach((param) => {
@@ -313,7 +349,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       )
       .join('\n');
     return rows;

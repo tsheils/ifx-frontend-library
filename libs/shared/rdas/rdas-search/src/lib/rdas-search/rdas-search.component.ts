@@ -1,18 +1,22 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
-  Component, DestroyRef,
-  EventEmitter, inject,
+  Component,
+  DestroyRef,
+  EventEmitter,
+  inject,
   OnDestroy,
   OnInit,
-  Output, ViewChild
-} from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
+  Output,
+  ViewChild,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
-  MatAutocompleteSelectedEvent, MatAutocompleteTrigger
-} from "@angular/material/autocomplete";
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -21,10 +25,16 @@ import { Disease } from '@ncats-frontend-library/models/rdas';
 import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
 import {
   DiseaseSelectors,
-  SearchDiseasesActions
-} from "@ncats-frontend-library/stores/disease-store";
-import { Store } from "@ngrx/store";
-import { debounceTime, distinctUntilChanged, map, Subject, takeUntil } from "rxjs";
+  SearchDiseasesActions,
+} from '@ncats-frontend-library/stores/disease-store';
+import { Store } from '@ngrx/store';
+import {
+  debounceTime,
+  distinctUntilChanged,
+  map,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-rdas-search',
@@ -59,34 +69,33 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
   options: Disease[] = [];
   @ViewChild(MatAutocompleteTrigger) autocomplete!: MatAutocompleteTrigger;
 
-  constructor(
-    private changeRef: ChangeDetectorRef
-  ) {
-
-  }
+  constructor(private changeRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.diseaseStore.select(DiseaseSelectors.searchDiseasesEntities)
+    this.diseaseStore
+      .select(DiseaseSelectors.searchDiseasesEntities)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-          map((res) => {
-            if (res && res.length) {
-              this.options = res.map((disease) => new Disease(disease));
-              this.changeRef.markForCheck();
-            }
-          })
+        map((res) => {
+          if (res && res.length) {
+            this.options = res.map((disease) => new Disease(disease));
+            this.changeRef.markForCheck();
+          }
+        }),
       )
-          .subscribe();
+      .subscribe();
 
     this.searchFormCtl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(200),
-        distinctUntilChanged()
+        distinctUntilChanged(),
       )
       .subscribe((term) => {
         if (term && term.length) {
-          this.diseaseStore.dispatch(SearchDiseasesActions.searchDiseases({ term: term.trim() }));
+          this.diseaseStore.dispatch(
+            SearchDiseasesActions.searchDiseases({ term: term.trim() }),
+          );
         }
       });
   }
@@ -96,9 +105,11 @@ export class RdasSearchComponent implements OnInit, OnDestroy {
   }
 
   searchString() {
-    this.autocomplete.closePanel()
-    const searchVal: string = this.searchFormCtl.value.name ? this.searchFormCtl.value.name : this.searchFormCtl.value
-    this.diseaseSearch.next(searchVal)
+    this.autocomplete.closePanel();
+    const searchVal: string = this.searchFormCtl.value.name
+      ? this.searchFormCtl.value.name
+      : this.searchFormCtl.value;
+    this.diseaseSearch.next(searchVal);
   }
 
   displayFn(option: { name: string; id: string }): string {

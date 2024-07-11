@@ -13,15 +13,16 @@ const { selectAll, selectEntities } = diseasesAdapter.getSelectors();
 
 export const getDiseasesLoaded = createSelector(
   getDiseasesState,
-  (state: State) => state.loaded);
+  (state: State) => state.loaded,
+);
 
 export const getDiseasesError = createSelector(
   getDiseasesState,
-  (state: State) => state.error
+  (state: State) => state.error,
 );
 
 export const getAllDiseases = createSelector(getDiseasesState, (state: State) =>
-  selectAll(state)
+  selectAll(state),
 );
 
 /*
@@ -33,37 +34,47 @@ export const searchDiseasesEntities = createSelector(
 
 export const searchDiseasesEntities = createSelector(
   getDiseasesState,
-  (state: State) => state.typeahead
+  (state: State) => state.typeahead,
 );
 
 export const getDiseasesEntities = createSelector(
   getDiseasesState,
-  (state: State) => selectEntities(state)
+  (state: State) => selectEntities(state),
 );
 
 export const getSelectedId = createSelector(
   getDiseasesState,
-  (state: State) => state.selectedId
+  (state: State) => state.selectedId,
 );
 
 export const getDiseasesPage = createSelector(
   getDiseasesState,
-  (state: State) => state.page
+  (state: State) => state.page,
 );
 
 export const getDiseasesSubscriptions = createSelector(
   getDiseasesState,
-  (state: State) => state.subscriptions
+  (state: State) => state.subscriptions,
 );
 
 export const getDiseaseTree = createSelector(
   getDiseasesState,
-  (state: State) => state.tree
+  (state: State) => state.tree,
 );
 
 export const getDiseaseFilters = createSelector(
   getDiseasesState,
-  (state: State) => state.diseaseFilters
+  (state: State) => state.diseaseFilters,
+);
+
+export const getStaticDiseaseFilters = createSelector(
+  getDiseasesState,
+  (state: State) => state.staticDiseaseFilters,
+);
+
+export const getAllDiseaseFilters = createSelector(
+  getDiseasesState,
+  (state: State) => state.allDiseaseFilters,
 );
 
 export const getSelected = createSelector(
@@ -71,5 +82,5 @@ export const getSelected = createSelector(
   getSelectedId,
   (entities, selectedId) => {
     return selectedId ? entities[selectedId] : undefined;
-  }
+  },
 );

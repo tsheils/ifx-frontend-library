@@ -1,5 +1,5 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, computed, input, ViewEncapsulation } from "@angular/core";
+import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -27,10 +27,10 @@ import { ArticleListCardComponent } from '../article-list-card/article-list-card
 })
 export class ArticleDetailsDisplayComponent {
   article = input<Article>();
-  annotationsMap = computed<Map<string, string[]>>(()=> {
+  annotationsMap = computed<Map<string, string[]>>(() => {
     const aMap: Map<string, string[]> = new Map<string, string[]>();
-    const art = this.article()
-    if(art && art.annotations) {
+    const art = this.article();
+    if (art && art.annotations) {
       art.annotations.forEach((annotation: PubtatorAnnotation) => {
         if (annotation.text) {
           if (aMap.has(annotation.infons_type)) {
@@ -40,9 +40,7 @@ export class ArticleDetailsDisplayComponent {
             } else {
               types = annotation.text;
             }
-            aMap.set(annotation.infons_type, [
-              ...new Set(types),
-            ]);
+            aMap.set(annotation.infons_type, [...new Set(types)]);
           } else {
             aMap.set(annotation.infons_type, annotation.text);
           }
@@ -56,16 +54,15 @@ export class ArticleDetailsDisplayComponent {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer
-  ) {
-  }
+    private sanitizer: DomSanitizer,
+  ) {}
 
   getArticleAbstract(): SafeHtml | undefined {
-      const text = this.article()?.abstractText;
-    if(text) {
+    const text = this.article()?.abstractText;
+    if (text) {
       return this.sanitizer.bypassSecurityTrustHtml(text);
     } else {
-      return undefined
+      return undefined;
     }
   }
 }

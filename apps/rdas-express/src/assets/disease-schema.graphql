@@ -2,72 +2,92 @@ scalar JSON
 extend schema @mutation(operations: [])
 
 type AssociatedWithGeneProperties @relationshipProperties {
-	AssociationStatus: String!
-	AssociationType: String!
-	Reference: [String]
+  AssociationStatus: String!
+  AssociationType: String!
+  Reference: [String]
 }
 
 type GARD {
-	COUNT_ARTICLES: BigInt!
-	COUNT_GENES: BigInt!
-	COUNT_PHENOTYPES: BigInt!
-	COUNT_PROJECTS: BigInt!
-	COUNT_TRIALS: BigInt!
-	ClassificationLevel: String!
-	DataSource: String!
-	DataSourceId: String!
-	DiseaseOntology: [String]
-	DisorderType: [String]!
-	GardId: String!
-	GardName: String!
-	GeneticAlliance: [String]
-	GeneticsHomeReference: [String]
-	ICD10: [String]
-	ICD10CM: [String]
-	ICD11: [String]
-	MeSH: [String]
-	MedDRA: [String]
-	OMIM: [String]
-	Orphanet: [String]
-	SNOMEDCT: [String]
-	Synonyms: [String]!
-	UMLS: [String]
-	UMLS_Source: String
-	associatedWithGeneGenes: [Gene!]! @relationship(type: "associated_with_gene", direction: OUT, properties: "AssociatedWithGeneProperties")
-	gardSsubClassOf: [GARD!]! @relationship(type: "subClassOf", direction: IN)
-	hasPhenotypePhenotypes: [Phenotype!]! @relationship(type: "has_phenotype", direction: OUT, properties: "HasPhenotypeProperties")
-	subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
+  COUNT_ARTICLES: BigInt!
+  COUNT_GENES: BigInt!
+  COUNT_PHENOTYPES: BigInt!
+  COUNT_PROJECTS: BigInt!
+  COUNT_TRIALS: BigInt!
+  ClassificationLevel: String!
+  DataSource: String!
+  DataSourceId: String!
+  DiseaseOntology: [String]
+  DisorderType: [String]!
+  GardId: String!
+  GardName: String!
+  GeneticAlliance: [String]
+  GeneticsHomeReference: [String]
+  ICD10: [String]
+  ICD10CM: [String]
+  ICD11: [String]
+  MeSH: [String]
+  MedDRA: [String]
+  OMIM: [String]
+  Orphanet: [String]
+  SNOMEDCT: [String]
+  Synonyms: [String]!
+  UMLS: [String]
+  UMLS_Source: String
+  associatedWithGeneGenes: [Gene!]!
+    @relationship(
+      type: "associated_with_gene"
+      direction: OUT
+      properties: "AssociatedWithGeneProperties"
+    )
+  gardSsubClassOf: [GARD!]! @relationship(type: "subClassOf", direction: IN)
+  hasPhenotypePhenotypes: [Phenotype!]!
+    @relationship(
+      type: "has_phenotype"
+      direction: OUT
+      properties: "HasPhenotypeProperties"
+    )
+  subClassOfGards: [GARD!]! @relationship(type: "subClassOf", direction: OUT)
 }
 
 type Gene {
-	Ensembl: String
-	GeneIdentifier: String!
-	GeneSymbol: String!
-	GeneSynonyms: [String]
-	GeneTitle: String!
-	IUPHAR: String
-	Locus: String!
-	OMIM: String
-	Reactome: String
-	Swissprot: String
-	gardSassociatedWithGene: [GARD!]! @relationship(type: "associated_with_gene", direction: IN, properties: "AssociatedWithGeneProperties")
+  Ensembl: String
+  GeneIdentifier: String!
+  GeneSymbol: String!
+  GeneSynonyms: [String]
+  GeneTitle: String!
+  IUPHAR: String
+  Locus: String!
+  OMIM: String
+  Reactome: String
+  Swissprot: String
+  gardSassociatedWithGene: [GARD!]!
+    @relationship(
+      type: "associated_with_gene"
+      direction: IN
+      properties: "AssociatedWithGeneProperties"
+    )
 }
 
 type HasPhenotypeProperties @relationshipProperties {
-	Evidence: String!
-	HPOFrequency: String
-	Reference: [String]!
-	ValidationStatus: Boolean!
+  Evidence: String!
+  HPOFrequency: String
+  Reference: [String]!
+  ValidationStatus: Boolean!
 }
 
 type Phenotype {
-	HPOId: String!
-	HPOTerm: String!
-	Modifier: [String]
-	Online: Boolean!
-	Onset: String
-	Sex: String
-	gardShasPhenotype: [GARD!]! @relationship(type: "has_phenotype", direction: IN, properties: "HasPhenotypeProperties")
+  HPOId: String!
+  HPOTerm: String!
+  Modifier: [String]
+  Online: Boolean!
+  Onset: String
+  Sex: String
+  gardShasPhenotype: [GARD!]!
+    @relationship(
+      type: "has_phenotype"
+      direction: IN
+      properties: "HasPhenotypeProperties"
+    )
 }
 
 type Query {
@@ -77,7 +97,8 @@ type Query {
       CALL db.index.fulltext.queryNodes(
         'allNameIndex', $searchString)
       YIELD node RETURN node as node LIMIT $limit
-      """, columnName: "node"
+      """
+      columnName: "node"
     )
 }
 
@@ -89,7 +110,8 @@ type Query {
       WITH COUNT(s) as childrenCount, l
       WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
       return collect(DISTINCT(parents)) as treeParents
-      """, columnName: "treeParents"
+      """
+      columnName: "treeParents"
     )
 }
 
@@ -102,7 +124,8 @@ type Query {
       WITH {gardId: l.GardId, name: l.GardName, _childrenCount:childrenCount} as parents
         match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
          return {paths: collect(distinct(p)), nodes: collect(distinct(parents))} as data
-      """, columnName: "data"
+      """
+      columnName: "data"
     )
 }
 
@@ -117,7 +140,8 @@ type Query {
       })
       YIELD path
       return {paths: collect(distinct(path)), nodes: collect(distinct(nodes(path)))} as data
-      """, columnName: "data"
+      """
+      columnName: "data"
     )
 }
 
@@ -130,7 +154,8 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ds as data
-      """, columnName: "data"
+      """
+      columnName: "data"
     )
 }
 
@@ -141,11 +166,12 @@ type Query {
       match (d)-[*0..]->(e) WHERE e.GardId = $searchString
       with count(distinct d) as count
       return count
-      """, columnName: "count"
+      """
+      columnName: "count"
     )
 }
 
-type FilterCount  {
+type FilterCount {
   term: String
   count: Int
 }
@@ -163,7 +189,8 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """, columnName: "ret"
+      """
+      columnName: "ret"
     )
 }
 
@@ -179,7 +206,8 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """, columnName: "ret"
+      """
+      columnName: "ret"
     )
 }
 
@@ -193,7 +221,8 @@ type Query {
       WITH {term: n.HPOTerm, count: nCount} as ret
       ORDER BY ret.count DESC
       return ret
-      """, columnName: "ret"
+      """
+      columnName: "ret"
     )
 }
 
@@ -210,7 +239,8 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """, columnName: "ret"
+      """
+      columnName: "ret"
     )
 }
 
@@ -226,7 +256,8 @@ type Query {
       SKIP $skip
       LIMIT $limit
       return ret
-      """, columnName: "ret"
+      """
+      columnName: "ret"
     )
 }
 
@@ -240,6 +271,7 @@ type Query {
       WITH {term: n.GeneSymbol, count: nCount} as ret
       ORDER BY ret.count DESC
       return ret
-      """, columnName: "ret"
+      """
+      columnName: "ret"
     )
 }

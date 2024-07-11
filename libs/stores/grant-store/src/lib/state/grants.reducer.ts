@@ -1,7 +1,7 @@
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { FetchGrantActions, LoadGrantsActions } from "./grants.actions";
+import { FetchGrantActions, LoadGrantsActions } from './grants.actions';
 
 import * as GrantsActions from './grants.actions';
 
@@ -32,7 +32,7 @@ export const initialGrantsState: GrantsState = grantsAdapter.getInitialState({
 const reducer = createReducer(
   initialGrantsState,
   on(LoadGrantsActions.loadGrantsSuccess, (state, { grants }) =>
-    grantsAdapter.setAll(grants, { ...state, loaded: true })
+    grantsAdapter.setAll(grants, { ...state, loaded: true }),
   ),
 
   on(FetchGrantActions.fetchGrantSuccess, (state, { grant }) =>
@@ -40,7 +40,7 @@ const reducer = createReducer(
       ...state,
       selectedId: grant.core_project_num,
       loaded: true,
-    })
+    }),
   ),
   on(
     LoadGrantsActions.loadGrantsFailure,
@@ -48,8 +48,8 @@ const reducer = createReducer(
     (state, { error }) => ({
       ...state,
       error,
-    })
-  )
+    }),
+  ),
 );
 
 export function grantsReducer(state: GrantsState | undefined, action: Action) {

@@ -1,162 +1,220 @@
 @if (disease()) {
-<div class="scroll-container" >
-  <div class="disease-display-panel" id="overview" #overview #scrollSection>
-    <mat-expansion-panel [expanded] = true class="disease-display-panel">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <span class="disease-accordion-title bottom-border-primary">Overview</span>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-<div class= "row space-around-row top-align">
- @if(!mobile) {
-@if(filterMap() && filterMap().has('articles')) {
-<div class="width-30">
-<lib-chart-wrapper [chartType] ="'bar'" [filters] = "filterMap().get('articles')!"></lib-chart-wrapper>
-<br>
-</div>
-}
-@if(filterMap() && filterMap().has('projects')) {
-<div class="width-30">
-<lib-chart-wrapper [chartType] ="'bar'" [filters] = "filterMap().get('projects')!"></lib-chart-wrapper>
-<br>
-</div>
-}
-@if(filterMap() && filterMap().has('trials')) {
-<div class="width-30">
-<lib-chart-wrapper [chartType] ="'pie'" [filters] = "filterMap().get('trials')!"></lib-chart-wrapper>
-<br>
-</div>
-}
-}
-</div>
-    </mat-expansion-panel>
+  <div class="scroll-container">
+    <div class="disease-display-panel" id="overview" #overview #scrollSection>
+      <mat-expansion-panel [expanded]="true" class="disease-display-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >Overview</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row space-around-row top-align">
+          @if (!mobile) {
+            @if (staticFilterMap() && staticFilterMap().has('articles')) {
+              <div class="width-30">
+                <lib-chart-wrapper
+                  [chartType]="'bar'"
+                  [filters]="staticFilterMap().get('articles')!"
+                ></lib-chart-wrapper>
+                <br />
+              </div>
+            }
+            @if (staticFilterMap() && staticFilterMap().has('projects')) {
+              <div class="width-30">
+                <lib-chart-wrapper
+                  [chartType]="'bar'"
+                  [filters]="staticFilterMap().get('projects')!"
+                ></lib-chart-wrapper>
+                <br />
+              </div>
+            }
+            @if (staticFilterMap() && staticFilterMap().has('trials')) {
+              <div class="width-30">
+                <lib-chart-wrapper
+                  [chartType]="'pie'"
+                  [filters]="staticFilterMap().get('trials')!"
+                ></lib-chart-wrapper>
+                <br />
+              </div>
+            }
+          }
+        </div>
+      </mat-expansion-panel>
+    </div>
+
+    <div class="disease-display-panel" id="genes" #genes #scrollSection>
+      <mat-expansion-panel
+        [disabled]="!disease()?.geneAssociations"
+        [expanded]="disease()?.geneAssociations"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >Associated Genes {{ disease()?.geneAssociations?.length }}</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ncats-frontend-library-gene-list
+          [genes]="disease()?.geneAssociations"
+          [showTab]="false"
+        >
+        </ncats-frontend-library-gene-list>
+      </mat-expansion-panel>
+    </div>
+
+    <div
+      class="disease-display-panel"
+      id="phenotypes"
+      #phenotypes
+      #scrollSection
+    >
+      <mat-expansion-panel
+        [disabled]="!disease()?.phenotypeAssociations"
+        [expanded]="disease()?.phenotypeAssociations"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >Phenotypes {{ disease()?.phenotypeAssociations?.length }}</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ncats-frontend-library-phenotype-list
+          [phenotypes]="disease()?.phenotypeAssociations"
+          [showTab]="false"
+        >
+        </ncats-frontend-library-phenotype-list>
+      </mat-expansion-panel>
+    </div>
+
+    <div
+      class="disease-display-panel"
+      id="nonEpiArticles"
+      #nonEpiArticles
+      #scrollSection
+    >
+      <mat-expansion-panel
+        [disabled]="!disease()?.nonEpiCount"
+        [expanded]="disease()?.nonEpiCount"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >Articles {{ disease()?.nonEpiCount }}</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <lib-rdas-panel-template
+          [_id]="'nonEpiArticles'"
+          [count]="disease()?.nonEpiCount!"
+          [filters]="filterMap().get('nonEpiArticles')!"
+          [message]="'No Articles Found'"
+          (listChange)="fetchList($event, 'nonEpiArticles')"
+        >
+          @if (disease() && disease()?.nonEpiArticles) {
+            <div class="data-list">
+              <ncats-frontend-library-article-list
+                [articles]="disease()?.nonEpiArticles"
+              ></ncats-frontend-library-article-list>
+            </div>
+          }
+        </lib-rdas-panel-template>
+      </mat-expansion-panel>
+    </div>
+    <div
+      class="disease-display-panel"
+      id="epiArticles"
+      #epiArticles
+      #scrollSection
+    >
+      <mat-expansion-panel
+        [disabled]="!disease()?.epiCount"
+        [expanded]="disease()?.epiCount"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary">
+              Epidemiology Articles {{ disease()?.epiCount }}</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <lib-rdas-panel-template
+          [_id]="'epiArticles'"
+          [count]="disease()?.epiCount!"
+          [filters]="filterMap().get('epiArticles')!"
+          [message]="'No Epidemiology Articles Found'"
+          (listChange)="fetchList($event, 'epiArticles')"
+        >
+          @if (disease() && disease()?.epiArticles) {
+            <div class="data-list">
+              <ncats-frontend-library-article-list
+                [articles]="disease()?.epiArticles"
+              ></ncats-frontend-library-article-list>
+            </div>
+          }
+        </lib-rdas-panel-template>
+      </mat-expansion-panel>
+    </div>
+    <div class="disease-display-panel" id="projects" #projects #scrollSection>
+      <mat-expansion-panel
+        [disabled]="!disease()?.projectCount"
+        [expanded]="disease()?.projectCount"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >NIH-funded Projects {{ disease()?.projectCount }}</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <lib-rdas-panel-template
+          [_id]="'projects'"
+          [count]="disease()?.projectCount!"
+          [message]="'No NIH Funded Projects Available'"
+          (listChange)="fetchList($event, 'projects')"
+        >
+          @if (disease() && disease()?.projects) {
+            <div class="data-list">
+              <ncats-frontend-library-project-list
+                [projects]="disease()?.projects"
+              ></ncats-frontend-library-project-list>
+            </div>
+          }
+        </lib-rdas-panel-template>
+      </mat-expansion-panel>
+    </div>
+    <div class="disease-display-panel" id="trials" #trials #scrollSection>
+      <mat-expansion-panel
+        [disabled]="!disease()?.clinicalTrialCount"
+        [expanded]="disease()?.clinicalTrialCount"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >Clinical Trials {{ disease()?.clinicalTrialCount }}</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <lib-rdas-panel-template
+          [_id]="'trials'"
+          [count]="disease()?.clinicalTrialCount!"
+          [filters]="filterMap().get('trials')!"
+          [loaded]="loaded()"
+          [message]="'No Clinical Trial Data Available'"
+          (listChange)="fetchList($event, 'trials')"
+        >
+          @if (disease() && disease()?.clinicalTrials) {
+            <div class="data-list">
+              <ncats-frontend-library-clinical-trials-list
+                [trials]="disease()?.clinicalTrials"
+              ></ncats-frontend-library-clinical-trials-list>
+            </div>
+          }
+        </lib-rdas-panel-template>
+      </mat-expansion-panel>
+    </div>
   </div>
-
-<div class="disease-display-panel" id='genes' #genes #scrollSection>
-<mat-expansion-panel [disabled]=!disease()?.geneAssociations [expanded] = disease()?.geneAssociations>
-<mat-expansion-panel-header>
-<mat-panel-title>
-  <span class="disease-accordion-title bottom-border-primary">Associated Genes {{disease()?.geneAssociations?.length}}</span>
-    </mat-panel-title>
-</mat-expansion-panel-header>
-  <ncats-frontend-library-gene-list
-    [genes]="disease()?.geneAssociations"
-    [showTab]="false"
-  >
-  </ncats-frontend-library-gene-list>
-</mat-expansion-panel>
-</div>
-
-<div class="disease-display-panel" id='phenotypes' #phenotypes #scrollSection>
-<mat-expansion-panel [disabled]=!disease()?.phenotypeAssociations [expanded] = disease()?.phenotypeAssociations  >
-<mat-expansion-panel-header>
-<mat-panel-title>
-  <span class="disease-accordion-title bottom-border-primary">Phenotypes {{disease()?.phenotypeAssociations?.length}}</span>
-    </mat-panel-title>
-</mat-expansion-panel-header>
-<ncats-frontend-library-phenotype-list
-[phenotypes]="disease()?.phenotypeAssociations"
-[showTab]="false"
->
-</ncats-frontend-library-phenotype-list>
-</mat-expansion-panel>
-</div>
-
-<div class="disease-display-panel" id='nonEpiArticles' #nonEpiArticles #scrollSection>
-<mat-expansion-panel [disabled]=!disease()?.nonEpiCount [expanded] = disease()?.nonEpiCount>
-<mat-expansion-panel-header>
-<mat-panel-title>
-<span class="disease-accordion-title bottom-border-primary">Articles {{disease()?.nonEpiCount}}</span>
-</mat-panel-title>
-</mat-expansion-panel-header>
-<lib-rdas-panel-template
-[_id]= "'nonEpiArticles'"
-[count]="disease()?.nonEpiCount!"
-[filters]="filterMap().get('nonEpiArticles')!"
-[message]="'No Articles Found'"
-(listChange)="fetchList($event, 'nonEpiArticles')"
->
-@if ( disease() && disease()?.nonEpiArticles) {
-<div class="data-list">
-  <ncats-frontend-library-article-list [articles]="disease()?.nonEpiArticles"></ncats-frontend-library-article-list>
-</div>
-}
-</lib-rdas-panel-template>
-
-
-</mat-expansion-panel>
-</div>
-<div class="disease-display-panel" id='epiArticles' #epiArticles #scrollSection>
-<mat-expansion-panel [disabled]=!disease()?.epiCount [expanded] = disease()?.epiCount>
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      <span class="disease-accordion-title bottom-border-primary"> Epidemiology Articles {{disease()?.epiCount}}</span>
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-
-<lib-rdas-panel-template
-[_id]= "'epiArticles'"
-[count]="disease()?.epiCount!"
-[filters]="filterMap().get('epiArticles')!"
-[message]="'No Epidemiology Articles Found'"
-(listChange)="fetchList($event, 'epiArticles')"
->
-@if ( disease() && disease()?.epiArticles) {
-<div class="data-list">
-  <ncats-frontend-library-article-list [articles]="disease()?.epiArticles"></ncats-frontend-library-article-list>
-</div>
-}
-</lib-rdas-panel-template>
-</mat-expansion-panel>
-</div>
-<div class="disease-display-panel" id='projects' #projects #scrollSection>
-<mat-expansion-panel [disabled]=!disease()?.projectCount [expanded] = disease()?.projectCount>
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      <span class="disease-accordion-title bottom-border-primary">NIH-funded Projects {{disease()?.projectCount}}</span>
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-<lib-rdas-panel-template
-[_id]= "'projects'"
-[count]="disease()?.projectCount!"
-[message]="'No NIH Funded Projects Available'"
-(listChange)="fetchList($event, 'projects')"
->
-@if (disease() && disease()?.projects) {
-<div class="data-list">
-  <ncats-frontend-library-project-list
-    [projects]="disease()?.projects"
-  ></ncats-frontend-library-project-list>
-</div>
-}
-</lib-rdas-panel-template>
-</mat-expansion-panel>
-</div>
-<div class="disease-display-panel" id='trials' #trials #scrollSection>
-<mat-expansion-panel [disabled]=!disease()?.clinicalTrialCount [expanded] = disease()?.clinicalTrialCount>
-  <mat-expansion-panel-header>
-    <mat-panel-title>
-      <span class="disease-accordion-title bottom-border-primary">Clinical Trials {{disease()?.clinicalTrialCount}}</span>
-    </mat-panel-title>
-  </mat-expansion-panel-header>
-
-<lib-rdas-panel-template
-[_id]= "'trials'"
-[count] = "disease()?.clinicalTrialCount!"
-[filters]="filterMap().get('trials')!"
-[loaded] = "loaded()"
-[message]="'No Clinical Trial Data Available'"
-(listChange)="fetchList($event, 'trials')"
->
-@if (disease() && disease()?.clinicalTrials) {
-<div class="data-list">
-  <ncats-frontend-library-clinical-trials-list
-    [trials]="disease()?.clinicalTrials"
-  ></ncats-frontend-library-clinical-trials-list>
-</div>
-}
-</lib-rdas-panel-template>
-</mat-expansion-panel>
-</div>
-</div>
 }

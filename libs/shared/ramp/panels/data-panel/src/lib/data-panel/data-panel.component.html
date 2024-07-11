@@ -1,0 +1,23 @@
+@if (dataAsDataProperty && dataAsDataProperty.length > 0) {
+  @if (dataAsDataProperty) {
+    <div class="row space-around-row">
+      <div class="width-90">
+        <ncats-datatable
+          [fieldsConfig]="dataColumns"
+          [data]="dataAsDataProperty"
+          [asDataSource]="true"
+          [internalSort]="true"
+          [useInternalPaginator]="true"
+        ></ncats-datatable>
+      </div>
+    </div>
+  }
+} @else {
+  @if (noDataArr) {
+    <div class="row space-around-row">
+      <div class="width-90">
+        <h1>no data found!</h1>
+      </div>
+    </div>
+  }
+}

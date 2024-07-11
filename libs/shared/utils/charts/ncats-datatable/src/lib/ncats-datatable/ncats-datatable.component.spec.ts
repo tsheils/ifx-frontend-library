@@ -9,9 +9,7 @@ describe('NcatsDatatableComponent', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      imports: [
-        NcatsDatatableComponent
-      ],
+      imports: [NcatsDatatableComponent],
     }).compileComponents();
   }));
 

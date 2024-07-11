@@ -323,11 +323,11 @@ function(metabolites="", property="all") {
 #' Return analytes involved in same reaction as given list of analytes
 #' @param analyte
 #' @post /api/common-reaction-analytes
-function(analyte) {
+function(analytes) {
   analytes_df_ids <- tryCatch({
     analytes_df <- RaMP::rampFastCata(
       db = rampDB,
-      analytes = analyte,
+      analytes = analytes,
       NameOrIds = "ids"
     )
 
@@ -364,7 +364,7 @@ function(analyte) {
     # note below we only reference the HMDB result until the UI can process both dataframes.
     list(
       data = unique(analytes_df_ids$data$HMDB_Analyte_Associations),
-      function_call = makeFunctionCall(analyte,"rampFastCata"),
+      function_call = makeFunctionCall(analytes,"rampFastCata"),
       numFoundIds = analytes_df_ids$idMatchCount
     )
   )

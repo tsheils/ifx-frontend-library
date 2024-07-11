@@ -1,0 +1,55 @@
+
+<mat-sidenav
+        #navigationsidenav
+        [opened]="true"
+        [mode]="'side'"
+        class="main-rail"
+      >
+        <div class="ramp-rail ramp-sub" cdkScrollable>
+          <div class="rail-button">
+            <a
+              [ngClass]="{ 'active-rail': isActive('input') }"
+            >
+              <div class="rail-icon">I</div>
+            </a>
+            <div class="rail-label">Input</div>
+          </div>
+          <div class="rail-button">
+            <a
+              [ngClass]="{ 'active-rail': isActive('results') }"
+            >
+              <div class="rail-icon">R</div>
+            </a>
+            <div class="rail-label">Results</div>
+          </div>
+          <div class="rail-button">
+            <a
+              [ngClass]="{ 'active-rail': isActive('visualizations') }"
+            >
+              <div class="rail-icon">V</div>
+            </a>
+            <div class="rail-label">Visualizations</div>
+          </div>
+          <div class="rail-button">
+            <a
+              [ngClass]="{ 'active-rail': isActive('data') }"
+            >
+              <div class="rail-icon">D</div>
+            </a>
+            <div class="rail-label">Data</div>
+          </div>
+        </div>
+      </mat-sidenav>
+      <mat-sidenav-content class="drawer-container-content">
+        <div class="row centered-row">
+          <div class="width-95">
+            <h1>{{ title | titlecase}}</h1>
+          </div>
+        </div>
+
+            <div class="row centered-row">
+          <div class="width-95">
+            <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+          </div>
+        </div>
+      </mat-sidenav-content>

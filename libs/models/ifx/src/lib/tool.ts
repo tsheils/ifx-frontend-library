@@ -13,7 +13,7 @@ export class Tool {
   component!: string;
   toolUrl!: string;
 
-  constructor (obj: Partial<Tool>) {
+  constructor(obj: Partial<Tool>) {
     if (obj.toolName) {
       this.toolName = obj.toolName;
       this.toolUrl = obj.toolName.toLowerCase().replace(/ /g, '-');
@@ -21,34 +21,34 @@ export class Tool {
     if (obj.category) {
       this.category = obj.category;
     }
-    if (obj.contact){
+    if (obj.contact) {
       this.contact = obj.contact;
     }
-    if (obj.description){
+    if (obj.description) {
       this.description = obj.description.replace(/"/g, '');
     }
-    if (obj.toolType){
+    if (obj.toolType) {
       this.toolType = obj.toolType;
     }
-    if (obj.url){
+    if (obj.url) {
       this.url = obj.url;
     }
-    if (obj.public){
+    if (obj.public) {
       this.public = obj.public as boolean;
     }
-    if (obj.audience){
+    if (obj.audience) {
       this.audience = obj.audience;
     }
-    if (obj.codebase){
+    if (obj.codebase) {
       this.codebase = obj.codebase;
     }
-    if (obj.publicCodebase){
+    if (obj.publicCodebase) {
       this.publicCodebase = obj.publicCodebase;
     }
-    if (obj.image){
+    if (obj.image) {
       this.image = obj.image;
     }
-    if (obj.component){
+    if (obj.component) {
       this.component = obj.component;
     }
   }

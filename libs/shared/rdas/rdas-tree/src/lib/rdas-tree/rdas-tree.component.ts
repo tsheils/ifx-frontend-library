@@ -85,22 +85,25 @@ export class RdasTreeComponent implements OnInit {
     return flatNode;
   };
 
-  constructor(private changeRef: ChangeDetectorRef, private router: Router) {
+  constructor(
+    private changeRef: ChangeDetectorRef,
+    private router: Router,
+  ) {
     this.treeControl = new FlatTreeControl<FlatDiseaseNode>(
       (node) => node.level,
-      (node) => node.expandable
+      (node) => node.expandable,
     );
 
     this.treeFlattener = new MatTreeFlattener(
       this._transformer,
       (node) => node.level,
       (node) => node.expandable,
-      (node) => node.children
+      (node) => node.children,
     );
 
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
-      this.treeFlattener
+      this.treeFlattener,
     );
   }
 
@@ -110,7 +113,7 @@ export class RdasTreeComponent implements OnInit {
         this.dataSource.data = res;
         this.treeControl.expansionModel.selected.forEach((node) => {
           const n = this.treeControl.dataNodes.find(
-            (d) => d.gardId === node.gardId
+            (d) => d.gardId === node.gardId,
           );
           if (n) {
             this.treeControl.expand(n);
@@ -124,48 +127,21 @@ export class RdasTreeComponent implements OnInit {
   }
 
   selectDisease(event: FlatDiseaseNode): void {
-    //  console.log(this.treeControl);
     this.loaded = false;
     this.leafExpand.emit(event);
     this.treeControl.toggle(event);
     if (this.treeControl.isExpanded(event)) {
-      //   console.log("close?")
-      //   console.log(event)
       let r = this.treeControl.expansionModel.selected;
-      //   console.log(r);
       if (r.length) {
         r = r.filter((node) => !(node.gardId === event.gardId));
-        //    console.log(r);
         this.treeControl.expansionModel.clear();
-        //     console.log(this.treeControl.expansionModel.selected);
         this.treeControl.expansionModel.select(...r);
-        //    console.log(this.treeControl.expansionModel.selected);
-        //    console.log(this.treeControl);
       }
     } else {
       this.treeControl.expand(event);
     }
     this.loaded = true;
     this.changeRef.detectChanges();
-
-    /*    if(event.children && event.children.length) {
-          this.treeControl.toggle(event);
-          if(this.treeControl.isExpanded(event)) {
-            let r = this.treeControl.expansionModel.selected;
-            if(r.length){
-              r = r.filter(node => !(node.gardId === event.gardId));
-              this.treeControl.expansionModel.clear();
-              this.treeControl.expansionModel.select(...r);
-            }
-          } else {
-            this.treeControl.expand(event);
-          }
-          this.changeRef.detectChanges()
-        } else {
-          this.loading= true;
-          this.leafExpand.emit(event);
-          this.treeControl.expand(event);
-        }*/
   }
 
   hasChild = (_: number, node: DiseaseNode) => !!node.childrenCount;

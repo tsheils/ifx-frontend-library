@@ -29,9 +29,7 @@
           "includePaths": ["libs/styles/src/styles"]
         },
         "styles": ["apps/ifx-toolbox/src/styles.scss"],
-        "scripts": [
-
-        ],
+        "scripts": [],
         "server": "apps/ifx-toolbox/src/main.server.ts",
         "prerender": true,
         "ssr": {

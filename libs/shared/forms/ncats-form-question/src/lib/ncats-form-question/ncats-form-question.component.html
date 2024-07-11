@@ -1,0 +1,38 @@
+<div [formGroup]="form">
+  <mat-form-field class="full-width" appearance="outline" color="accent">
+    <mat-label [attr.for]="question.key">{{ question.label | titlecase }}</mat-label>
+    @switch (question.controlType) {
+      @case ('textbox') {
+        <input matInput [id]="question.key" [type]="question.type">
+      }
+      @case ('number') {
+        <input
+          matInput
+          [formControlName]="question.key" [id]="question.key" [type]="question.type" [step]= "question.step"
+               [min]="question.min"
+               [max]="question.max">
+      }
+      @case ('textarea') {
+        <textarea matInput [formControlName]="question.key" [id]="question.key" rows="10" cdkTextareaAutosize></textarea>
+      }
+      @case ('dropdown') {
+        <mat-select [id]="question.key" [formControlName]="question.key">
+          @for (opt of question.options; track opt) {
+            <mat-option [value]="opt.key">{{ opt.value }}</mat-option>
+          }
+        </mat-select>
+      }
+
+      @case ('radio') {
+        <mat-radio-group [formControlName]="question.key" [id]="question.key" [value]="question.value">
+          @for (opt of question.options; track opt) {
+            <mat-radio-button [value]=opt.key [color]="'accent'"
+            >{{opt.value}}</mat-radio-button>
+            <br />
+          }
+        </mat-radio-group>
+      }
+    }
+  </mat-form-field>
+  @if (!isValid) {<div class="errorMessage">{{ question.label }} is required</div>}
+</div>

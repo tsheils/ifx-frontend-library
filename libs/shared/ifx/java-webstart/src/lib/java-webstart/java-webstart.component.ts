@@ -1,7 +1,7 @@
-import { Component, input } from "@angular/core";
+import { Component, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatIcon } from "@angular/material/icon";
-import { Tool } from "ifx";
+import { MatIcon } from '@angular/material/icon';
+import { Tool } from 'ifx';
 
 @Component({
   selector: 'lib-java-webstart',

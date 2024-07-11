@@ -1,0 +1,9 @@
+<div>
+  <form [formGroup]="form()">
+    @for (question of questions; track question) {
+      <div class="form-row">
+        <lib-ncats-form-question [question]="question" [form]="form()"></lib-ncats-form-question>
+      </div>
+    }
+  </form>
+</div>

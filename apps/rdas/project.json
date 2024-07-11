@@ -43,7 +43,8 @@
             "input": "libs/features/rdas/epi-api/src/assets",
             "glob": "**/*",
             "output": "assets/epi-api"
-          },{
+          },
+          {
             "input": "libs/features/rdas/history-api/src/assets",
             "glob": "**/*",
             "output": "assets/history-api"
@@ -57,9 +58,7 @@
         "stylePreprocessorOptions": {
           "includePaths": ["libs/styles/src/styles"]
         },
-        "styles": [
-          "apps/rdas/src/styles.scss"
-        ],
+        "styles": ["apps/rdas/src/styles.scss"],
         "scripts": [],
         "server": "apps/rdas/src/main.server.ts",
         "prerender": true,
@@ -133,11 +132,7 @@
         }
       },
       "defaultConfiguration": "production",
-      "allowedCommonJsDependencies": [
-        "swagger-ui",
-        "lodash",
-        "3d-force-graph"
-      ]
+      "allowedCommonJsDependencies": ["swagger-ui", "lodash", "3d-force-graph"]
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",

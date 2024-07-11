@@ -3,8 +3,8 @@ import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
-import { EMPTY, Observable, Subscription } from "rxjs";
-import { LoadArticlesActions } from "./articles.actions";
+import { EMPTY, Observable, Subscription } from 'rxjs';
+import { LoadArticlesActions } from './articles.actions';
 import * as ArticleEffects from './articles.effects';
 
 describe('ArticleStoreEffects', () => {
@@ -29,7 +29,7 @@ describe('ArticleStoreEffects', () => {
         a: LoadArticlesActions.loadArticlesSuccess({ articles: [] }),
       });
 
-      const myDummyServiceMock = {loadArticle$: new Subscription()};
+      const myDummyServiceMock = { loadArticle$: new Subscription() };
 
       expect([]).toEqual([]);
     });

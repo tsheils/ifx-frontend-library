@@ -11,6 +11,6 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class UnsubscribeModalComponent {
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { entity: unknown; label?: string }
+    @Inject(MAT_DIALOG_DATA) public data: { entity: unknown; label?: string },
   ) {}
 }

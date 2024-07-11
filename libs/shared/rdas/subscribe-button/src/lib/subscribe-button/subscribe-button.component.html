@@ -1,42 +1,51 @@
 <div class="centered">
   @if (user) {
-  @if (subscribed) {
-  <button mat-stroked-button [color]=theme [matMenuTriggerFor]="menu" class="subscribed-button">
-    <div class="grid-button">
-      <div>
-        @if (subscriptionSelection.selected.length === 3) {
-        <mat-icon>notifications_active</mat-icon>
-        } @if ( subscriptionSelection.selected.length === 1 ||
-        subscriptionSelection.selected.length === 2 ) {
-        <mat-icon class="material-symbols-outlined">notifications</mat-icon>
-        } @if (subscriptionSelection.selected.length === 0) {
-        <mat-icon>notifications_off</mat-icon>
-        }
-      </div>
-      <div>SUBSCRIBED</div>
-      <div>
-        <mat-icon aria-label="Alert options menu">expand_more</mat-icon>
-      </div>
-    </div>
-  </button>
+    @if (subscribed) {
+      <button
+        mat-stroked-button
+        [color]="theme"
+        [matMenuTriggerFor]="menu"
+        class="subscribed-button"
+      >
+        <div class="grid-button">
+          <div>
+            @if (subscriptionSelection.selected.length === 3) {
+              <mat-icon>notifications_active</mat-icon>
+            }
+            @if (
+              subscriptionSelection.selected.length === 1 ||
+              subscriptionSelection.selected.length === 2
+            ) {
+              <mat-icon class="material-symbols-outlined"
+                >notifications</mat-icon
+              >
+            }
+            @if (subscriptionSelection.selected.length === 0) {
+              <mat-icon>notifications_off</mat-icon>
+            }
+          </div>
+          <div>SUBSCRIBED</div>
+          <div>
+            <mat-icon aria-label="Alert options menu">expand_more</mat-icon>
+          </div>
+        </div>
+      </button>
+    } @else {
+      <button
+        mat-stroked-button
+        class="subscribe-button"
+        (click)="subscribe()"
+        [color]="theme"
+        [disabled]="!user"
+      >
+        SUBSCRIBE
+      </button>
+    }
   } @else {
-  <button
-    mat-stroked-button
-    class="subscribe-button"
-    (click)="subscribe()"
-    [color]= theme
-    [disabled]="!user"
-  >
-    SUBSCRIBE
-  </button>
+    <ncats-frontend-library-social-sign-on-button
+      [theme]="theme"
+    ></ncats-frontend-library-social-sign-on-button>
   }
-} @else {
-  <ncats-frontend-library-social-sign-on-button
-    [theme]= theme
-  ></ncats-frontend-library-social-sign-on-button>
-  }
-
-
 
   <mat-menu #menu="matMenu">
     <div mat-menu-item>

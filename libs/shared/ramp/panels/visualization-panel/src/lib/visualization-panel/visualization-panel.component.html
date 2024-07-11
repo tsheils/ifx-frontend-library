@@ -1,0 +1,29 @@
+
+@switch(data.type) {
+  @case('cluster') {
+    <div class="row">
+      @if (!data.data.tooBig) {
+        <div class="width-10">
+<!--          <button
+            mat-stroked-button
+            class="tool-button list-download"
+            (click)="fetchClusterImageFile()"
+            matTooltip="Download Data"
+            color="accent"
+          >
+              <span class="hide-small">Save Image</span
+              ><mat-icon>download</mat-icon>
+          </button>-->
+        </div>
+      }
+    @if (data.data.image) {
+      <div>
+        This website currently does not support clustering over 100 pathways.
+      </div>
+    }
+    @if (!data.data.tooBig) {
+      <div [innerHTML]="data.data.image"></div>
+  }
+    </div>
+  }
+}

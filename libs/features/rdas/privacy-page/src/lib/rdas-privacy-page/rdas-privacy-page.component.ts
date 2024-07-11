@@ -1,23 +1,24 @@
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { OverlayModule, ScrollDispatcher } from "@angular/cdk/overlay";
-import { ScrollingModule } from "@angular/cdk/scrolling";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { OverlayModule, ScrollDispatcher } from '@angular/cdk/overlay';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import {
   ChangeDetectorRef,
   Component,
   DestroyRef,
   ElementRef,
-  inject, OnInit,
+  inject,
+  OnInit,
   QueryList,
   ViewChildren,
-  ViewEncapsulation
-} from "@angular/core";
-import { CommonModule, ViewportScroller } from "@angular/common";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatListModule } from "@angular/material/list";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatSidenavModule } from "@angular/material/sidenav";
+  ViewEncapsulation,
+} from '@angular/core';
+import { CommonModule, ViewportScroller } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'rdas-privacy-page',
@@ -30,11 +31,11 @@ import { MatSidenavModule } from "@angular/material/sidenav";
     MatMenuModule,
     MatIconModule,
     MatSidenavModule,
-    MatButtonModule
+    MatButtonModule,
   ],
   templateUrl: './rdas-privacy-page.component.html',
   styleUrl: './rdas-privacy-page.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class RdasPrivacyPageComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
@@ -56,10 +57,11 @@ export class RdasPrivacyPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.scrollDispatcher.scrolled()
+    this.scrollDispatcher
+      .scrolled()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        let scrollTop: number = this.scroller.getScrollPosition()[1] + 60
+        let scrollTop: number = this.scroller.getScrollPosition()[1] + 60;
         if (scrollTop === 60) {
           this.activeElement = 'statement';
           this.changeRef.detectChanges();
@@ -70,7 +72,7 @@ export class RdasPrivacyPageComponent implements OnInit {
               this.activeElement = section.nativeElement.nextSibling.id;
               this.changeRef.detectChanges();
             }
-          })
+          });
         }
       });
 

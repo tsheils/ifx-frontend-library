@@ -2,11 +2,11 @@ import { TestBed } from '@angular/core/testing';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
-import { Tool } from "ifx";
+import { Tool } from 'ifx';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-import { TOOLSTATE } from "../../test-setup";
-import { LoadToolsActions } from "./ifx-tools.actions";
+import { TOOLSTATE } from '../../test-setup';
+import { LoadToolsActions } from './ifx-tools.actions';
 import * as IFXToolsEffects from './ifx-tools.effects';
 
 describe('IfxToolsEffects', () => {
@@ -21,7 +21,6 @@ describe('IfxToolsEffects', () => {
         provideMockStore(),
       ],
     });
-
   });
 
   describe('init$', () => {
@@ -32,7 +31,7 @@ describe('IfxToolsEffects', () => {
         a: LoadToolsActions.loadToolsSuccess({
           audienceList: TOOLSTATE.ifxTools.audienceList,
           categoryList: TOOLSTATE.ifxTools.categoryList,
-          tools: [...Object.values(TOOLSTATE.ifxTools.entities)] as Tool[]
+          tools: [...Object.values(TOOLSTATE.ifxTools.entities)] as Tool[],
         }),
       });
 

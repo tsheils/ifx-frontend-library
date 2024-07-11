@@ -3,7 +3,8 @@ export default {
   displayName: 'generic-chart',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/shared/utils/charts/generic-chart',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/utils/charts/generic-chart',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

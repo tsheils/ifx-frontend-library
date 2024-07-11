@@ -1,5 +1,3 @@
-
-
 img.full-width-banner {
   height: 25vh;
   width: 99vw;
@@ -12,8 +10,8 @@ img.full-width-banner {
 
 .tool-name {
   position: absolute;
-  font-size:6rem;
-  background-color: rgba(255,255,255,0.75);
+  font-size: 6rem;
+  background-color: rgba(255, 255, 255, 0.75);
   height: 25vh;
   left: 2vw;
   width: 55vw;
@@ -32,7 +30,7 @@ img.full-width-banner {
 
 @media only screen and (max-width: 1280px) {
   .tool-name {
-    width:75vw;
+    width: 75vw;
     font-size: 5rem;
   }
 }

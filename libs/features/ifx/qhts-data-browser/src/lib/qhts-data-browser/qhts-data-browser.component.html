@@ -1,22 +1,26 @@
 <lib-default-tool>
-  <div class ="additional-content">
+  <div class="additional-content">
     <mat-tab-group>
       <mat-tab [label]="'Software Requirements'">
-        <lib-java-webstart [tool]=tool()></lib-java-webstart>
+        <lib-java-webstart [tool]="tool()"></lib-java-webstart>
       </mat-tab>
       <mat-tab [label]="'Screenshots'">
-        <lib-screenshot-display [images]=images()></lib-screenshot-display>
+        <lib-screenshot-display [images]="images()"></lib-screenshot-display>
       </mat-tab>
       <mat-tab [label]="'About Curve Classes'">
         <div class="row space-around-row">
-          <div class = "width-66">
+          <div class="width-66">
             <h3>About NCATS curve classes</h3>
           </div>
         </div>
 
         <div class="row space-around-row">
-          <mat-card class = "width-45">
-            <img mat-card-image src= '{{imgSrcBase()}}/curve-table.png' alt='Overview of curve classification at the NCGC'>
+          <mat-card class="width-45">
+            <img
+              mat-card-image
+              src="{{ imgSrcBase() }}/curve-table.png"
+              alt="Overview of curve classification at the NCGC"
+            />
             <mat-card-content>
               <p>
                 <span><i>Overview of curve classification at the NCGC</i></span>
@@ -24,7 +28,11 @@
             </mat-card-content>
           </mat-card>
           <mat-card appearance="outlined" class="width-45">
-            <img mat-card-image src= '{{imgSrcBase()}}/curves.png' alt='How we sort responses from qHTS screens'>
+            <img
+              mat-card-image
+              src="{{ imgSrcBase() }}/curves.png"
+              alt="How we sort responses from qHTS screens"
+            />
             <mat-card-content>
               <p>
                 <span><i>How we sort responses from qHTS screens</i></span>
@@ -32,13 +40,16 @@
             </mat-card-content>
           </mat-card>
         </div>
-        <br>
+        <br />
 
         <div class="row space-around-row">
-          <div class = "width-66">
-  <span>Learn More: Southall NT, Jadhav A, Huang R, Nguyen T, Wang Y.
-    19 Enabling the Large-Scale Analysis of Quantitative High-Throughput Screening Data. Handbook of Drug Screening.
-    2009 page 442-464.</span>
+          <div class="width-66">
+            <span
+              >Learn More: Southall NT, Jadhav A, Huang R, Nguyen T, Wang Y. 19
+              Enabling the Large-Scale Analysis of Quantitative High-Throughput
+              Screening Data. Handbook of Drug Screening. 2009 page
+              442-464.</span
+            >
           </div>
         </div>
       </mat-tab>

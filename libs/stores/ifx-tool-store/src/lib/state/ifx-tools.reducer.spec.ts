@@ -1,7 +1,7 @@
 import { Action } from '@ngrx/store';
-import { Tool } from "ifx";
-import { TOOLSTATE } from "../../test-setup";
-import { LoadToolsActions } from "./ifx-tools.actions";
+import { Tool } from 'ifx';
+import { TOOLSTATE } from '../../test-setup';
+import { LoadToolsActions } from './ifx-tools.actions';
 
 import {
   IfxToolsState,
@@ -10,14 +10,12 @@ import {
 } from './ifx-tools.reducer';
 
 describe('IfxTools Reducer', () => {
-
   describe('valid IfxTools actions', () => {
     it('loadIfxToolsSuccess should return the list of known IfxTools', () => {
-
       const action = LoadToolsActions.loadToolsSuccess({
         audienceList: TOOLSTATE.ifxTools.audienceList,
         categoryList: TOOLSTATE.ifxTools.categoryList,
-        tools: [...Object.values(TOOLSTATE.ifxTools.entities)] as Tool[]
+        tools: [...Object.values(TOOLSTATE.ifxTools.entities)] as Tool[],
       });
 
       const result: IfxToolsState = ifxToolsReducer(

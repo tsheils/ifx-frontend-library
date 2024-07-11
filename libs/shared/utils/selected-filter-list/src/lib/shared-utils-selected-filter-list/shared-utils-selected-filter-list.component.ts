@@ -2,11 +2,13 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
-  EventEmitter, input,
-  Input, OnInit,
+  EventEmitter,
+  input,
+  Input,
+  OnInit,
   Output,
-  ViewEncapsulation
-} from "@angular/core";
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
