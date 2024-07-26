@@ -3,7 +3,8 @@ export default {
   displayName: 'shared-utils-scatter-plot',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/shared/utils/charts/scatter-plot',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/utils/charts/scatter-plot',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

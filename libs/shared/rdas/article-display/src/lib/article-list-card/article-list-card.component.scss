@@ -1,8 +1,6 @@
 @use '@angular/material' as mat;
-@import 'rdas-theme2';
 
 ncats-frontend-library-article-list-card {
-
   .rdas-article-title {
     font-size: 1.2rem;
     font-weight: bold;
@@ -14,7 +12,6 @@ ncats-frontend-library-article-list-card {
   padding: 1rem;
   padding-bottom: 2vh;
   margin-bottom: 2vh;
-  border-bottom: 2px solid mat.get-color-from-palette($app-accent);
   //chrome
   ::-webkit-scrollbar {
     display: none;

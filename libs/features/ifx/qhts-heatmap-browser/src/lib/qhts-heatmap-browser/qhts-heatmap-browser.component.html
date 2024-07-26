@@ -1,11 +1,11 @@
 <lib-default-tool>
-  <div class ="additional-content">
+  <div class="additional-content">
     <mat-tab-group>
       <mat-tab [label]="'Software Requirements'">
-        <lib-java-webstart [tool]=tool()></lib-java-webstart>
+        <lib-java-webstart [tool]="tool()"></lib-java-webstart>
       </mat-tab>
       <mat-tab [label]="'Screenshots'">
-        <lib-screenshot-display [images]=images()></lib-screenshot-display>
+        <lib-screenshot-display [images]="images()"></lib-screenshot-display>
       </mat-tab>
     </mat-tab-group>
   </div>

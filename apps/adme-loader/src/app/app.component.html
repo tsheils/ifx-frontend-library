@@ -2,32 +2,31 @@
   <mat-sidenav-container class="mobile-menu-container">
     <header>
       @if (mobile) {
+        <ncats-frontend-library-mobile-header-template
+          [links]="links"
+          #appHeader
+        >
+          <div left-options>
+            <a routerLink="/"> </a>
+          </div>
 
-      <ncats-frontend-library-mobile-header-template [links]="links" #appHeader>
-        <div left-options>
-          <a routerLink="/"> </a>
-        </div>
-
-        <div class="right-options">
-          <ncats-frontend-library-social-sign-on-button
-            [user]="user"
-          ></ncats-frontend-library-social-sign-on-button>
-        </div>
-      </ncats-frontend-library-mobile-header-template>
-
+          <div class="right-options">
+            <ncats-frontend-library-social-sign-on-button
+              [user]="user"
+            ></ncats-frontend-library-social-sign-on-button>
+          </div>
+        </ncats-frontend-library-mobile-header-template>
       } @else {
-
-      <ncats-frontend-library-header-template [links]="links">
-        <div class="left-options">
-          <a routerLink="/"> </a>
-        </div>
-        <div class="right-options">
-          <ncats-frontend-library-social-sign-on-button
-            [user]="user"
-          ></ncats-frontend-library-social-sign-on-button>
-        </div>
-      </ncats-frontend-library-header-template>
-
+        <ncats-frontend-library-header-template [links]="links">
+          <div class="left-options">
+            <a routerLink="/"> </a>
+          </div>
+          <div class="right-options">
+            <ncats-frontend-library-social-sign-on-button
+              [user]="user"
+            ></ncats-frontend-library-social-sign-on-button>
+          </div>
+        </ncats-frontend-library-header-template>
       }
     </header>
     <main role="main">

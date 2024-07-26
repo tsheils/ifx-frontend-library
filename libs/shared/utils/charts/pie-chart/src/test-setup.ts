@@ -6,27 +6,26 @@ globalThis.ngJest = {
   },
 };
 import 'jest-preset-angular/setup-jest';
-import { FilterCategory } from "@ncats-frontend-library/models/utils";
-
+import { FilterCategory } from '@ncats-frontend-library/models/utils';
 
 export const PIEFILTERS: FilterCategory = new FilterCategory({
-  field: "",
+  field: '',
   label: 'Clinical Trials by Type',
-    parent: 'trials',
+  parent: 'trials',
   filterable: true,
   page: 1,
   values: [
-  {
-    term: 'Interventional',
-    label: 'StudyType',
-    count: 45,
-    selected: false
-  },
-  {
-    term: 'Observational',
-    label: 'StudyType',
-    count: 30,
-    selected: false
-  }
-]
-})
+    {
+      term: 'Interventional',
+      label: 'StudyType',
+      count: 45,
+      selected: false,
+    },
+    {
+      term: 'Observational',
+      label: 'StudyType',
+      count: 30,
+      selected: false,
+    },
+  ],
+});

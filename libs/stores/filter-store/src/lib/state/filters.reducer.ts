@@ -1,7 +1,7 @@
 import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { FetchFiltersActions } from "./filters.actions";
+import { FetchFiltersActions } from './filters.actions';
 
 import * as FiltersActions from './filters.actions';
 
@@ -27,24 +27,24 @@ export const initialFiltersState: FiltersState = filtersAdapter.getInitialState(
   {
     // set initial required properties
     loaded: false,
-  }
+  },
 );
 
 const reducer = createReducer(
   initialFiltersState,
 
   on(FetchFiltersActions.fetchFiltersSuccess, (state, { filters }) =>
-    filtersAdapter.upsertMany(filters, { ...state, loaded: true })
+    filtersAdapter.upsertMany(filters, { ...state, loaded: true }),
   ),
   on(FetchFiltersActions.fetchFiltersFailure, (state, { error }) => ({
     ...state,
     error,
-  }))
+  })),
 );
 
 export function filtersReducer(
   state: FiltersState | undefined,
-  action: Action
+  action: Action,
 ) {
   return reducer(state, action);
 }

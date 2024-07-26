@@ -1,7 +1,7 @@
-import { Component, input } from "@angular/core";
-import { CommonModule, NgOptimizedImage } from "@angular/common";
-import { MatToolbar, MatToolbarRow } from "@angular/material/toolbar";
-import { RouterLink } from "@angular/router";
+import { Component, input } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'lib-ncats-header',
@@ -11,7 +11,7 @@ import { RouterLink } from "@angular/router";
     MatToolbar,
     MatToolbarRow,
     RouterLink,
-    NgOptimizedImage
+    NgOptimizedImage,
   ],
   templateUrl: './ncats-header.component.html',
   styleUrl: './ncats-header.component.scss',

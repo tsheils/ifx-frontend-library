@@ -7,10 +7,10 @@ import {
   OnInit,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatRippleModule } from "@angular/material/core";
+import { MatRippleModule } from '@angular/material/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { UserLoginActions } from "@ncats-frontend-library/stores/user-store";
-import { Store } from "@ngrx/store";
+import { UserLoginActions } from '@ncats-frontend-library/stores/user-store';
+import { Store } from '@ngrx/store';
 import { EmailSignOnModalComponent } from '../email-sign-on-modal/email-sign-on-modal.component';
 import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
@@ -33,7 +33,7 @@ export class SocialSignOnModalComponent implements OnInit {
     public dialogRef: MatDialogRef<SocialSignOnModalComponent>,
     public dialog: MatDialog,
     private breakpointObserver: BreakpointObserver,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
   ) {}
 
   ngOnInit() {
@@ -53,11 +53,13 @@ export class SocialSignOnModalComponent implements OnInit {
    * use firebase's email login methods
    */
   loginEmail() {
-    this.dialog.open(EmailSignOnModalComponent, {
-      height: '55vh',
-      width: this.mobile ? '90vw' : '35vw',
-    })
-      .afterClosed().subscribe(() => this.closeModal())
+    this.dialog
+      .open(EmailSignOnModalComponent, {
+        height: '55vh',
+        width: this.mobile ? '90vw' : '35vw',
+      })
+      .afterClosed()
+      .subscribe(() => this.closeModal());
   }
 
   closeModal(): void {

@@ -8,7 +8,9 @@ ncats-frontend-library-disease-header {
     font-size: 3em;
   }
 
-  .subscribed-button, .subscribe-button, .signin-button {
+  .subscribed-button,
+  .subscribe-button,
+  .signin-button {
     color: white !important;
   }
 
@@ -19,12 +21,12 @@ ncats-frontend-library-disease-header {
     //  margin: -2vw;
     background: linear-gradient(
       to bottom,
-      mat.get-color-from-palette($app-primary, 0.1) 0%,
-      mat.get-color-from-palette($app-primary, 0.3) 20%,
-      mat.get-color-from-palette($app-primary, 0.7) 40%,
-      mat.get-color-from-palette($app-primary, 0.6) 60%,
-      mat.get-color-from-palette($app-primary, 0.3) 80%,
-      mat.get-color-from-palette($app-primary, 0.1) 100%
+      mat.m2-get-color-from-palette($app-primary, 0.1) 0%,
+      mat.m2-get-color-from-palette($app-primary, 0.3) 20%,
+      mat.m2-get-color-from-palette($app-primary, 0.7) 40%,
+      mat.m2-get-color-from-palette($app-primary, 0.6) 60%,
+      mat.m2-get-color-from-palette($app-primary, 0.3) 80%,
+      mat.m2-get-color-from-palette($app-primary, 0.1) 100%
     );
   }
 
@@ -33,7 +35,6 @@ ncats-frontend-library-disease-header {
     font-weight: bold;
     cursor: pointer;
   }
-
 
   @media only screen and (max-width: 768px) {
     .disease-title {

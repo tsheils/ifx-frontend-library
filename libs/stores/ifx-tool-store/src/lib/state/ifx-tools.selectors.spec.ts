@@ -1,6 +1,6 @@
-import { Tool } from "ifx";
-import { TOOLSTATE } from "../../test-setup";
-import { IfxToolsState } from "./ifx-tools.reducer";
+import { Tool } from 'ifx';
+import { TOOLSTATE } from '../../test-setup';
+import { IfxToolsState } from './ifx-tools.reducer';
 import * as IfxToolsSelectors from './ifx-tools.selectors';
 
 describe('IfxTools Selectors', () => {
@@ -8,7 +8,7 @@ describe('IfxTools Selectors', () => {
   let state: IfxToolsState;
 
   beforeEach(() => {
-    state = TOOLSTATE as unknown as IfxToolsState
+    state = TOOLSTATE as unknown as IfxToolsState;
   });
 
   describe('IfxTools Selectors', () => {

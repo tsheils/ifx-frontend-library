@@ -114,7 +114,7 @@ export const FETCHPATHDISEASES = gql`
 `;
 
 export const DISEASETYPEAHEAD = gql`
-  query Gards($searchString: String, $limit:Int) {
+  query Gards($searchString: String, $limit: Int) {
     diseaseSearch(searchString: $searchString, limit: $limit) {
       name: GardName
       gardId: GardId
@@ -191,10 +191,10 @@ export const FETCHDISEASEQUERY = gql`
       _phenotypeAssociations: hasPhenotypePhenotypesConnection {
         edges {
           properties {
-              hpoFrequency: HPOFrequency
-              status: ValidationStatus
-              _evidence: Evidence
-              _reference: Reference
+            hpoFrequency: HPOFrequency
+            status: ValidationStatus
+            _evidence: Evidence
+            _reference: Reference
           }
           phenotype: node {
             hpoId: HPOId
@@ -228,7 +228,7 @@ export const DISEASEQUERYPARAMETERS: {
         associatedWithGeneGenes_SOME?: {
           GeneSymbol_IN?: string[];
         };
-      }
+      },
     ];
   };
 } = {

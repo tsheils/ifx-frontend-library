@@ -2,7 +2,7 @@ import 'zone.js/node';
 
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr';
-import {default as express} from 'express';
+import { default as express } from 'express';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
 import bootstrap from './src/main.server';
@@ -27,7 +27,7 @@ export function app(): express.Express {
     '*.*',
     express.static(distFolder, {
       maxAge: '1y',
-    })
+    }),
   );
 
   // All regular routes use the Angular engine

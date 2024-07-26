@@ -8,15 +8,15 @@
           </h2>
         </div>
         @if (trial.NCTId) {
-        <div class="mat-h3">
-          <a
-            href="https://clinicaltrials.gov/ct2/show/{{ trial.NCTId }}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to clinical trial in at Clinicaltrials.gov"
-            >{{ trial.NCTId }}</a
-          >
-        </div>
+          <div class="mat-h3">
+            <a
+              href="https://clinicaltrials.gov/ct2/show/{{ trial.NCTId }}"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Link to clinical trial in at Clinicaltrials.gov"
+              >{{ trial.NCTId }}</a
+            >
+          </div>
         }
       </div>
       <mat-card-content>
@@ -32,9 +32,7 @@
             </div>
             <div class="primary-chip-outlined">Phase</div>
             <div class="list-item-content">
-              {{
-                trial.phase || 'None Listed'
-              }}
+              {{ trial.phase || 'None Listed' }}
             </div>
           </div>
 
@@ -51,23 +49,23 @@
         </div>
         <div>
           @if (trial.briefSummary && trial.briefSummary.length) {
-          <div class="primary-chip-outlined">Summary</div>
+            <div class="primary-chip-outlined">Summary</div>
           }
           <br />
           @if (fullSummary) {
-          <div>
-            <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
-            @if (fullSummary && truncatedSummary) {
-            <a (click)="fullSummary = false" class="expand-link">...less</a>
-            }
-          </div>
+            <div>
+              <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
+              @if (fullSummary && truncatedSummary) {
+                <a (click)="fullSummary = false" class="expand-link">...less</a>
+              }
+            </div>
           } @else {
-          <div #truncated>
-            <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
-            @if (!fullSummary) {
-            <a (click)="fullSummary = false" class="expand-link">...more</a>
-            }
-          </div>
+            <div #truncated>
+              <span class="mat-subtitle-2">{{ getTrialSummary() }}</span>
+              @if (!fullSummary) {
+                <a (click)="fullSummary = false" class="expand-link">...more</a>
+              }
+            </div>
           }
         </div>
         <br />
@@ -85,105 +83,131 @@
             <br />
             <br />
             <div class="project-design-wrapper">
-              @for (studyDesign of trial.studyDesigns; track studyDesign; let i
-              = $index) {
-              <mat-card>
-                <h2>Design {{ i + 1 }}</h2>
-                @if (studyDesign.designPrimaryPurpose) {
-                <div>
-                  <div class="accent-chip-outlined">Primary Purpose</div>
-                  <div class="list-item-content">
-                    {{ studyDesign.designPrimaryPurpose }}
-                  </div>
-                </div>
-                } @if (studyDesign.designInterventionModel ||
-                studyDesign.designInterventionModelDescription) {
-                <div class="accent-chip-outlined">Intervention Model</div>
-                } @if (studyDesign.designInterventionModel) {
-                <div>
-                  <b>Model: &nbsp;</b
-                  ><span>{{ studyDesign.designInterventionModel }}</span>
-                </div>
-                } @if (studyDesign.designInterventionModelDescription) {
-                <div>
-                  <b>Description: &nbsp;</b>
-                  <span>{{
+              @for (
+                studyDesign of trial.studyDesigns;
+                track studyDesign;
+                let i = $index
+              ) {
+                <mat-card>
+                  <h2>Design {{ i + 1 }}</h2>
+                  @if (studyDesign.designPrimaryPurpose) {
+                    <div>
+                      <div class="accent-chip-outlined">Primary Purpose</div>
+                      <div class="list-item-content">
+                        {{ studyDesign.designPrimaryPurpose }}
+                      </div>
+                    </div>
+                  }
+                  @if (
+                    studyDesign.designInterventionModel ||
                     studyDesign.designInterventionModelDescription
-                  }}</span>
-                </div>
-                } @if (studyDesign.designMasking ||
-                studyDesign.designMaskingDescription ) {
-                <div class="accent-chip-outlined">Design Masking</div>
-                } @if (studyDesign.designMasking) {
-                <div>
-                  <b>Masking: &nbsp;</b>
-                  <span>{{ studyDesign.designMasking }}</span>
-                </div>
-                } @if (studyDesign.designMaskingDescription) {
-                <div>
-                  <b>Description: &nbsp;</b>
-                  <span>{{ studyDesign.designMaskingDescription }}</span>
-                </div>
-                } @if (studyDesign.designAllocation) {
-                <div>
-                  <div class="accent-chip-outlined">Design Allocation</div>
-                  <div class="list-item-content">
-                    {{ studyDesign.designAllocation }}
-                  </div>
-                </div>
-                } @if (studyDesign.designObservationalModel) {
-                <div>
-                  <div class="accent-chip-outlined">
-                    Design Observational Model
-                  </div>
-                  <div class="list-item-content">
-                    {{ studyDesign.designObservationalModel }}
-                  </div>
-                </div>
-                } @if (studyDesign.designTimePerspective) {
-                <div>
-                  <div class="accent-chip-outlined">
-                    Design Time Perspective
-                  </div>
-                  <div class="list-item-content">
-                    {{ studyDesign.designTimePerspective }}
-                  </div>
-                </div>
-                } @if (studyDesign.samplingMethod) {
-                <div>
-                  <div class="accent-chip-outlined">Sampling Method</div>
-                  <div class="list-item-content">
-                    {{ studyDesign.samplingMethod }}
-                  </div>
-                </div>
-                } @if ( studyDesign.primaryOutcomeDescription ||
-                studyDesign.primaryOutcomeMeasure ||
-                studyDesign.primaryOutcomeTimeFrame ) {
-                <div class="accent-chip-outlined">Outcome</div>
-                } @if (studyDesign.primaryOutcomeDescription) {
-                <div>
-                  <b>Description: &nbsp;</b>
-                  <span>{{ studyDesign.primaryOutcomeDescription }}</span>
-                </div>
-                } @if (studyDesign.primaryOutcomeMeasure) {
-                <div>
-                  <b>Measure: &nbsp;</b>
-                  <span>{{ studyDesign.primaryOutcomeMeasure }}</span>
-                </div>
-                } @if (studyDesign.primaryOutcomeTimeFrame) {
-                <div>
-                  <b>Timeframe: &nbsp;</b>
-                  <span>{{ studyDesign.primaryOutcomeTimeFrame }}</span>
-                </div>
-                } @if (studyDesign.detailedDescription) {
-                <div>
-                  <div class="accent-chip-outlined">Detailed Description</div>
-                  <div class="list-item-content">
-                    {{ studyDesign.detailedDescription }}
-                  </div>
-                </div>
-                }
-              </mat-card>
+                  ) {
+                    <div class="accent-chip-outlined">Intervention Model</div>
+                  }
+                  @if (studyDesign.designInterventionModel) {
+                    <div>
+                      <b>Model: &nbsp;</b
+                      ><span>{{ studyDesign.designInterventionModel }}</span>
+                    </div>
+                  }
+                  @if (studyDesign.designInterventionModelDescription) {
+                    <div>
+                      <b>Description: &nbsp;</b>
+                      <span>{{
+                        studyDesign.designInterventionModelDescription
+                      }}</span>
+                    </div>
+                  }
+                  @if (
+                    studyDesign.designMasking ||
+                    studyDesign.designMaskingDescription
+                  ) {
+                    <div class="accent-chip-outlined">Design Masking</div>
+                  }
+                  @if (studyDesign.designMasking) {
+                    <div>
+                      <b>Masking: &nbsp;</b>
+                      <span>{{ studyDesign.designMasking }}</span>
+                    </div>
+                  }
+                  @if (studyDesign.designMaskingDescription) {
+                    <div>
+                      <b>Description: &nbsp;</b>
+                      <span>{{ studyDesign.designMaskingDescription }}</span>
+                    </div>
+                  }
+                  @if (studyDesign.designAllocation) {
+                    <div>
+                      <div class="accent-chip-outlined">Design Allocation</div>
+                      <div class="list-item-content">
+                        {{ studyDesign.designAllocation }}
+                      </div>
+                    </div>
+                  }
+                  @if (studyDesign.designObservationalModel) {
+                    <div>
+                      <div class="accent-chip-outlined">
+                        Design Observational Model
+                      </div>
+                      <div class="list-item-content">
+                        {{ studyDesign.designObservationalModel }}
+                      </div>
+                    </div>
+                  }
+                  @if (studyDesign.designTimePerspective) {
+                    <div>
+                      <div class="accent-chip-outlined">
+                        Design Time Perspective
+                      </div>
+                      <div class="list-item-content">
+                        {{ studyDesign.designTimePerspective }}
+                      </div>
+                    </div>
+                  }
+                  @if (studyDesign.samplingMethod) {
+                    <div>
+                      <div class="accent-chip-outlined">Sampling Method</div>
+                      <div class="list-item-content">
+                        {{ studyDesign.samplingMethod }}
+                      </div>
+                    </div>
+                  }
+                  @if (
+                    studyDesign.primaryOutcomeDescription ||
+                    studyDesign.primaryOutcomeMeasure ||
+                    studyDesign.primaryOutcomeTimeFrame
+                  ) {
+                    <div class="accent-chip-outlined">Outcome</div>
+                  }
+                  @if (studyDesign.primaryOutcomeDescription) {
+                    <div>
+                      <b>Description: &nbsp;</b>
+                      <span>{{ studyDesign.primaryOutcomeDescription }}</span>
+                    </div>
+                  }
+                  @if (studyDesign.primaryOutcomeMeasure) {
+                    <div>
+                      <b>Measure: &nbsp;</b>
+                      <span>{{ studyDesign.primaryOutcomeMeasure }}</span>
+                    </div>
+                  }
+                  @if (studyDesign.primaryOutcomeTimeFrame) {
+                    <div>
+                      <b>Timeframe: &nbsp;</b>
+                      <span>{{ studyDesign.primaryOutcomeTimeFrame }}</span>
+                    </div>
+                  }
+                  @if (studyDesign.detailedDescription) {
+                    <div>
+                      <div class="accent-chip-outlined">
+                        Detailed Description
+                      </div>
+                      <div class="list-item-content">
+                        {{ studyDesign.detailedDescription }}
+                      </div>
+                    </div>
+                  }
+                </mat-card>
               }
             </div>
           </mat-tab>
@@ -195,17 +219,19 @@
           >
             <br />
             @for (participant of trial.participantInfo; track participant) {
-            <div>
-              @for (criteria of participant.eligibilityCriteriaList; track
-              criteria) {
-              <div
-                class="eligibility-text"
-                [ngClass]="{ isHeader: isHeader(criteria) }"
-              >
-                {{ criteria }}
+              <div>
+                @for (
+                  criteria of participant.eligibilityCriteriaList;
+                  track criteria
+                ) {
+                  <div
+                    class="eligibility-text"
+                    [ngClass]="{ isHeader: isHeader(criteria) }"
+                  >
+                    {{ criteria }}
+                  </div>
+                }
               </div>
-              }
-            </div>
             }
           </mat-tab>
           <mat-tab
@@ -213,24 +239,24 @@
             [disabled]="!trial.studyDiseases || trial.studyDiseases.length <= 1"
           >
             <mat-list>
-              @for (disease of trial.studyDiseases; track disease) {
-              <mat-list-item>
-                @if (disease.gardId) {
-                <div #link>
-                  <a
-                    href="/disease?id={{ disease.gardId }}"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Link to disease details page"
-                    >{{ disease.name }}</a
-                  >
-                </div>
-                } @else {
-                <div #nolink>
-                  {{ disease.name }}
-                </div>
-                }
-              </mat-list-item>
+              @for (disease of trial.studyDiseases; track disease.gardId) {
+                <mat-list-item>
+                  @if (disease.gardId) {
+                    <div #link>
+                      <a
+                        href="/disease?id={{ disease.gardId }}"
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Link to disease details page"
+                        >{{ disease.name }}</a
+                      >
+                    </div>
+                  } @else {
+                    <div #nolink>
+                      {{ disease.name }}
+                    </div>
+                  }
+                </mat-list-item>
               }
             </mat-list>
           </mat-tab>
@@ -239,10 +265,10 @@
             [disabled]="!trial.conditions || trial.conditions.length === 0"
           >
             <mat-list>
-              @for (condition of trial.conditions; track condition) {
-              <mat-list-item>
-                {{ condition.condition }}
-              </mat-list-item>
+              @for (condition of trial.conditions; track condition.condition) {
+                <mat-list-item>
+                  {{ condition.condition }}
+                </mat-list-item>
               }
             </mat-list>
           </mat-tab>
@@ -251,29 +277,33 @@
             [disabled]="!trial.locations || trial.locations.length === 0"
           >
             @for (location of trial.locations; track location) {
-            <mat-list>
-              <mat-list-item>
-                <div>{{ location.locationFacility }}</div>
-              </mat-list-item>
-              <mat-list-item>
-                @if (location.locationCity) {
-                {{ location.locationCity }}
-                @if (location.locationState || location.locationCountry) {
-                <span>,&nbsp;</span>
-                } } @if (location.locationState) {
-                <span>{{ location.locationState }}&nbsp;</span>
-                } @if (location.locationCountry) {
-                <span>{{ location.locationCountry }}&nbsp;</span>
-                } @if (location.locationZip) {
-                <span>{{ location.locationZip }}&nbsp;</span>
-                }
-              </mat-list-item>
-              <mat-list-item>
-                @if (location.locationStatus) {
-                <span>Status: {{ location.locationStatus }}</span>
-                }
-              </mat-list-item>
-            </mat-list>
+              <mat-list>
+                <mat-list-item>
+                  <div>{{ location.locationFacility }}</div>
+                </mat-list-item>
+                <mat-list-item>
+                  @if (location.locationCity) {
+                    {{ location.locationCity }}
+                    @if (location.locationState || location.locationCountry) {
+                      <span>,&nbsp;</span>
+                    }
+                  }
+                  @if (location.locationState) {
+                    <span>{{ location.locationState }}&nbsp;</span>
+                  }
+                  @if (location.locationCountry) {
+                    <span>{{ location.locationCountry }}&nbsp;</span>
+                  }
+                  @if (location.locationZip) {
+                    <span>{{ location.locationZip }}&nbsp;</span>
+                  }
+                </mat-list-item>
+                <mat-list-item>
+                  @if (location.locationStatus) {
+                    <span>Status: {{ location.locationStatus }}</span>
+                  }
+                </mat-list-item>
+              </mat-list>
             }
           </mat-tab>
           <mat-tab
@@ -281,15 +311,18 @@
             [disabled]="!trial.sponsors || trial.sponsors.length === 0"
           >
             @for (sponsor of trial.sponsors; track sponsor) {
-            <div>
-              @if (sponsor.leadSponsorClass) {
-              <div class="accent-chip-outlined">
-                {{ sponsor.leadSponsorClass }}
+              <div>
+                @if (sponsor.leadSponsorClass) {
+                  <div class="accent-chip-outlined">
+                    {{ sponsor.leadSponsorClass }}
+                  </div>
+                }
+                @if (sponsor.leadSponsorName) {
+                  <div class="list-item-content">
+                    {{ sponsor.leadSponsorName }}
+                  </div>
+                }
               </div>
-              } @if (sponsor.leadSponsorName) {
-              <div class="list-item-content">{{ sponsor.leadSponsorName }}</div>
-              }
-            </div>
             }
           </mat-tab>
           <mat-tab
@@ -298,19 +331,22 @@
               !trial.interventions || trial.interventions.length === 0
             "
           >
-            @for (intervention of trial.interventions; track intervention) {
-            <div>
-              @if (intervention.interventionType) {
-              <div class="accent-chip-outlined">
-                {{ intervention.interventionType }}
+            @for (
+              intervention of trial.interventions;
+              track intervention.interventionName
+            ) {
+              <div>
+                @if (intervention.interventionType) {
+                  <div class="accent-chip-outlined">
+                    {{ intervention.interventionType }}
+                  </div>
+                }
+                @if (intervention.interventionName) {
+                  <div class="list-item-content">
+                    {{ intervention.interventionName }}
+                  </div>
+                }
               </div>
-
-              } @if (intervention.interventionName) {
-              <div class="list-item-content">
-                {{ intervention.interventionName }}
-              </div>
-              }
-            </div>
             }
           </mat-tab>
           <mat-tab
@@ -319,36 +355,39 @@
           >
             <br />
             <br />
-            @for (reference of trial.references; track reference) {
-            <div>
-              @if (reference.referencePMID) {
-              <div #link>
-                <span class="list-item-content">{{
-                  reference.referenceCitation
-                }}</span>
-                <br />
-                <span class="list-item-content"
-                  ><a
-                    href="https://pubmed.ncbi.nlm.nih.gov/{{
-                      reference.referencePMID
-                    }}"
-                    target="_blank"
-                    rel="noreferrer"
-                    aria-label="Link to publication in PubMed"
-                    >View Reference</a
-                  ></span
-                >
+            @for (
+              reference of trial.references;
+              track reference.referencePMID
+            ) {
+              <div>
+                @if (reference.referencePMID) {
+                  <div #link>
+                    <span class="list-item-content">{{
+                      reference.referenceCitation
+                    }}</span>
+                    <br />
+                    <span class="list-item-content"
+                      ><a
+                        href="https://pubmed.ncbi.nlm.nih.gov/{{
+                          reference.referencePMID
+                        }}"
+                        target="_blank"
+                        rel="noreferrer"
+                        aria-label="Link to publication in PubMed"
+                        >View Reference</a
+                      ></span
+                    >
+                    <br />
+                  </div>
+                } @else {
+                  <div #nolink>
+                    <span class="list-item-content">{{
+                      reference.referenceCitation
+                    }}</span>
+                  </div>
+                }
                 <br />
               </div>
-              } @else {
-              <div #nolink>
-                <span class="list-item-content">{{
-                  reference.referenceCitation
-                }}</span>
-              </div>
-              }
-              <br />
-            </div>
             }
           </mat-tab>
         </mat-tab-group>

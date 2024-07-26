@@ -1,13 +1,17 @@
-import { CommonModule } from "@angular/common";
-import { afterNextRender, Component, Input, ViewEncapsulation } from "@angular/core";
-import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
-import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
-import { axisBottom, axisLeft } from "d3";
-import { extent, max } from "d3-array";
-import { scaleLinear } from "d3-scale";
-import { select } from "d3-selection";
-import { line } from "d3-shape";
-
+import { CommonModule } from '@angular/common';
+import {
+  afterNextRender,
+  Component,
+  Input,
+  ViewEncapsulation,
+} from '@angular/core';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { axisBottom, axisLeft } from 'd3';
+import { extent, max } from 'd3-array';
+import { scaleLinear } from 'd3-scale';
+import { select } from 'd3-selection';
+import { line } from 'd3-shape';
 
 @Component({
   selector: 'lib-shared-utils-scatter-plot',
@@ -15,39 +19,45 @@ import { line } from "d3-shape";
   imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './shared-utils-scatter-plot.component.html',
   styleUrls: ['./shared-utils-scatter-plot.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class SharedUtilsScatterPlotComponent {
   @Input() filter!: FilterCategory;
   svg!: unknown;
   width!: number;
   height!: number;
-  margins: {top: number, bottom: number, left: number, right: number} = {top:20, bottom: 30, right: 30, left: 40}
+  margins: { top: number; bottom: number; left: number; right: number } = {
+    top: 20,
+    bottom: 30,
+    right: 30,
+    left: 40,
+  };
 
   constructor() {
-    afterNextRender(
-      () => {
-        const element: HTMLElement | null = document.getElementById('scatter-plot');
-        if (element) {
-          this.width = element.offsetWidth - this.margins.left - this.margins.right;
-          this.height = element.offsetHeight - this.margins.top - this.margins.bottom;
-          select(element).select('svg').remove();
-           this.svg = select(element)
-             .append("svg:svg")
-            .attr("width", this.width)
-            .attr("height", this.height)
-            .attr("viewBox", [0, 0, this.width, this.height])
-            .attr("style", "max-width: 100%; height: auto; height: intrinsic;");
+    afterNextRender(() => {
+      const element: HTMLElement | null =
+        document.getElementById('scatter-plot');
+      if (element) {
+        this.width =
+          element.offsetWidth - this.margins.left - this.margins.right;
+        this.height =
+          element.offsetHeight - this.margins.top - this.margins.bottom;
+        select(element).select('svg').remove();
+        this.svg = select(element)
+          .append('svg:svg')
+          .attr('width', this.width)
+          .attr('height', this.height)
+          .attr('viewBox', [0, 0, this.width, this.height])
+          .attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
 
-          if(this.filter) {
-            this.makeChart();
-          }
+        if (this.filter) {
+          this.makeChart();
         }
       }
-    )
+    });
   }
 
-  makeChart(){
+  makeChart() {
     /*  // Declare the x (horizontal position) scale.
       const x = scaleLinear(extent(this.filter.values.map((d: Filter) => <number>d.term)), [this.margins.left, this.width - this.margins.right]);
 

@@ -1,0 +1,83 @@
+.main-banner {
+  height: 100vh;
+  width: 100vw;
+  background-image: url('/assets/ramp-home/background.svg');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.main-content {
+  padding-left: 10vw;
+  color: #265668;
+  background-color: transparent;
+}
+
+.sub-content {
+  height: 30vh;
+  color: #ffffff;
+  background-color: #265668;
+  margin-top: -22px;
+  //  border-radius: 0 0 65% 0;
+}
+
+.sub-content-white {
+  height: 30vh;
+  background-color: #ffffff;
+  color: #265668;
+}
+
+.feature-text {
+  padding-top: 17vh;
+  font-size: 14rem;
+}
+
+.feature-subtext {
+  font-size: 3rem;
+}
+
+.home-button {
+  height: 56px;
+  width: 80px;
+  padding-bottom: 12px;
+  padding-top: 12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  border: #265668 2px solid;
+  border-radius: 10%;
+  background-color: rgba(255, 255, 255, 0.6);
+}
+
+.rail-label {
+  font-size: 12px;
+  font-weight: 500;
+  padding-top: 4px;
+}
+
+.rail-icon {
+  font-size: 24px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .feature-text {
+    padding-top: 10vh;
+    font-size: 10rem;
+  }
+
+  .feature-subtext {
+    font-size: 2rem;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .feature-text {
+    padding-top: 7vh;
+    font-size: 7rem;
+  }
+
+  .feature-subtext {
+    font-size: 1.5rem;
+  }
+}

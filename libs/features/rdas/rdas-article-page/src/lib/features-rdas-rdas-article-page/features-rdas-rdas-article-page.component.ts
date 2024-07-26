@@ -2,13 +2,15 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, DestroyRef, inject,
-  Input
-} from "@angular/core";
+  Component,
+  DestroyRef,
+  inject,
+  Input,
+} from '@angular/core';
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { ArticleDetailsDisplayComponent } from '@ncats-frontend-library/shared/rdas/article-display';
-import { ArticleSelectors } from "@ncats-frontend-library/stores/article-store";
-import { Store } from "@ngrx/store";
+import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ncats-frontend-library-features-rdas-rdas-article-page',
@@ -23,9 +25,7 @@ export class FeaturesRdasRdasArticlePageComponent {
   destroyRef = inject(DestroyRef);
   @Input() article!: Article;
 
-  constructor(
-    private changeRef: ChangeDetectorRef
-  ) {}
+  constructor(private changeRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.articleStore.select(ArticleSelectors.selectEntity).subscribe((res) => {

@@ -1,8 +1,11 @@
 import { TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
-import { DISEASES_FEATURE_KEY, diseasesReducer } from "@ncats-frontend-library/stores/disease-store";
-import { StoreModule } from "@ngrx/store";
+import {
+  DISEASES_FEATURE_KEY,
+  diseasesReducer,
+} from '@ncats-frontend-library/stores/disease-store';
+import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
@@ -16,8 +19,7 @@ describe('AppComponent', () => {
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
       ],
-      providers: [
-      ],
+      providers: [],
     }).compileComponents();
   });
 

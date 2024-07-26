@@ -5,11 +5,11 @@ Monorepo currently for Rare Disease Alert System
 ####install dependencies
 `npm i`
 ####build API
-` nx build rdas-express --prod `
+`nx build rdas-express --prod`
 ####build UI (prerendered)
-***note - needs environments file
+\*\*\*note - needs environments file
 
-`nx run rdas:prerender:production` 
+`nx run rdas:prerender:production`
 ####move dist/apps/rdas-express to api directory
 `cd {api_dir}`
 

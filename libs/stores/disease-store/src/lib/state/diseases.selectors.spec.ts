@@ -1,6 +1,6 @@
 import { Disease } from '@ncats-frontend-library/models/rdas';
-import { DISEASESTATEMOCK } from "../../test-setup";
-import { State } from "./diseases.reducer";
+import { DISEASESTATEMOCK } from '../../test-setup';
+import { State } from './diseases.reducer';
 import * as DiseasesSelectors from './diseases.selectors';
 
 describe('Diseases Selectors', () => {

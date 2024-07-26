@@ -25,16 +25,21 @@ export const FETCHARTICLESQUERY = gql`
   query Articles(
     $gardWhere: GARDWhere
     $articleWhere: ArticleWhere
+    $articleFilter: ArticleWhere
     $articleOptions: ArticleOptions
   ) {
     articles: gards(where: $gardWhere) {
-      _count: mentionedInArticlesAggregate(where: $articleWhere) {
+      _count: mentionedInArticlesAggregate(where: $articleFilter) {
+        count
+      }
+
+      allCount: mentionedInArticlesAggregate(where: $articleWhere) {
         count
       }
 
       articles: mentionedInArticles(
         options: $articleOptions
-        where: $articleWhere
+        where: $articleFilter
       ) {
         ...articleFields
       }
@@ -47,7 +52,10 @@ class ARTICLEVARIABLES {
   gardWhere!: { GardId: undefined | string };
   articleWhere!: {
     isEpi?: null | string | boolean;
-    publicationYear_IN?: unknown;
+  };
+  articleFilter!: {
+    isEpi?: null | string | boolean;
+    publicationYear_IN?: undefined | string[] | string;
   };
   articleOptions!: {
     limit: number;
@@ -61,7 +69,9 @@ export const EPIARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
   articleWhere: {
     isEpi: true,
-    publicationYear_IN: undefined
+  },
+  articleFilter: {
+    isEpi: true,
   },
   articleOptions: {
     limit: 10,
@@ -76,7 +86,10 @@ export const NONEPIARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
   articleWhere: {
     isEpi: false,
-    publicationYear_IN: undefined
+  },
+  articleFilter: {
+    isEpi: false,
+    publicationYear_IN: undefined,
   },
   articleOptions: {
     limit: 10,
@@ -87,17 +100,6 @@ export const NONEPIARTICLES: ARTICLEVARIABLES = {
     ],
   },
 };
-
-export const FETCHARTICLECOUNTS = gql`
-  query ArticleCount($diseasesWhere: GARDWhere) {
-    diseases(where: $diseasesWhere) {
-      GardId
-      mentionedInArticlesAggregate {
-        count
-      }
-    }
-  }
-`;
 
 export const FETCHARTICLEDETAILS = gql`
   query ArticleDetails($articleWhere: ArticleWhere) {
@@ -170,13 +172,21 @@ export const ARTICLEDETAILSVARIABLES: {
 };
 
 export const ARTICLEFILTERS = gql`
-  query ArticleFilters(
-  $gardId: String
-) {
-  countsByYear(gardId: $gardId) {
-    term
-    count
-    label
+  query ArticleFilters($gardId: String) {
+    countsByYear(gardId: $gardId) {
+      term
+      count
+      label
+    }
   }
-}
+`;
+
+export const ALLARTICLEFILTERS = gql`
+  query AllDiseaseFilters {
+    allCountsByYear {
+      count
+      label
+      term
+    }
+  }
 `;

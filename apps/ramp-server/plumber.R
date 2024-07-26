@@ -4,6 +4,7 @@ library(config)
 library(R.cache)
 library(readr)
 library(ggplot2)
+library(svglite)
 
 #* @apiTitle RaMP_API
 #* @apiDescription REST API for the Relational Database of Metabolomics Pathways (RaMP) Application
@@ -149,7 +150,6 @@ function() {
 #' @param classtype
 #' @get /api/chemical-class-type
 function() {
-  ##todo show these in chemical classes page
   classtypes <- tryCatch({
     getMetabClassTypes(db = rampDB)
   },
@@ -321,14 +321,14 @@ function(metabolites="", property="all") {
 
 ####
 #' Return analytes involved in same reaction as given list of analytes
-#' @param analyte
+#' @param analytes
 #' @post /api/common-reaction-analytes
-function(analyte) {
+function(analytes, namesOrIds = "ids") {
   analytes_df_ids <- tryCatch({
     analytes_df <- RaMP::rampFastCata(
       db = rampDB,
-      analytes = analyte,
-      NameOrIds = "ids"
+      analytes = analytes,
+      NameOrIds = namesOrIds
     )
 
     hmdbMatches <- unlist(unique(analytes_df[[1]]$input_analyte))
@@ -364,7 +364,7 @@ function(analyte) {
     # note below we only reference the HMDB result until the UI can process both dataframes.
     list(
       data = unique(analytes_df_ids$data$HMDB_Analyte_Associations),
-      function_call = makeFunctionCall(analyte,"rampFastCata"),
+      function_call = makeFunctionCall(analytes,"rampFastCata"),
       numFoundIds = analytes_df_ids$idMatchCount
     )
   )
@@ -582,30 +582,30 @@ function(metabolites = '', file = '', biospecimen = '', background = "database")
 
 #' Returns reactions associated with input analytes, metabolites and/or genes/proteins.
 #' @param analytes
-#' @param namesOrIds
 #' @param onlyHumanMets
 #' @param humanProtein
 #' @param includeTransportRxns
 #' @param rxnDirs
+#' @param includeRxnURLs
 #' @post /api/reactions-from-analytes
 #' @serializer json list(digits = 6)
 function(
     analytes,
-    namesOrIds,
-    onlyHumanMets = false,
-    humanProtein = true,
-    includeTransportRxns = true,
-    rxnDirs = 'UN'
+    onlyHumanMets = FALSE,
+    humanProtein = TRUE,
+    includeTransportRxns = TRUE,
+    rxnDirs = 'UN',
+    includeRxnURLs = FALSE
 ) {
 
-  result = getReactionsForAnalytes(
+  result = RaMP::getReactionsForAnalytes(
     db=rampDB,
     analytes=analytes,
-    namesOrIds = 'ids',
     onlyHumanMets = onlyHumanMets,
     humanProtein = humanProtein,
-    includeTransportRxns,
-    rxnDirs = rxnDirs
+    includeTransportRxns = includeTransportRxns,
+    rxnDirs = rxnDirs,
+    includeRxnURLs = includeRxnURLs
   )
 
   analyteStr = RaMP:::listToQueryString(analytes)
@@ -614,7 +614,7 @@ function(
   return(
     list(
       data = result,
-      function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), namesOrIds='ids', onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,")")
+      function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,"), includeRxnURLs=",includeRxnURLs,"")
     )
   )
 }
@@ -631,10 +631,20 @@ function(
 function(
     analytes,
     multiRxnParticipantCount = 1,
-    humanProtein,
-    concatResults = true
+    humanProtein = TRUE,
+    concatResults = TRUE,
+    includeReactionIDs = FALSE,
+    useIdMapping = FALSE
 ) {
-  result = getReactionClassesForAnalytes(db=rampDB, analytes=analytes, multiRxnParticipantCount = multiRxnParticipantCount, humanProtein=humanProtein, concatResults=concatResults)
+  result = getReactionClassesForAnalytes(
+    db=rampDB,
+    analytes=analytes,
+    multiRxnParticipantCount = multiRxnParticipantCount,
+    humanProtein=humanProtein,
+    concatResults=concatResults,
+    includeReactionIDs=includeReactionIDs,
+    useIdMapping = useIdMapping
+  )
 
   analyteStr = RaMP:::listToQueryString(analytes)
 

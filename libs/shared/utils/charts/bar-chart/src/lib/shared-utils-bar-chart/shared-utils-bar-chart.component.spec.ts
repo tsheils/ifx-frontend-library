@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BARDATA } from "../../test-setup";
+import { BARDATA } from '../../test-setup';
 import { SharedUtilsBarChartComponent } from './shared-utils-bar-chart.component';
 
 describe('SharedUtilsBarChartComponent', () => {
@@ -13,7 +13,7 @@ describe('SharedUtilsBarChartComponent', () => {
 
     fixture = TestBed.createComponent(SharedUtilsBarChartComponent);
     component = fixture.componentInstance;
-    component.data = BARDATA
+    component.data = BARDATA;
     fixture.detectChanges();
   });
 

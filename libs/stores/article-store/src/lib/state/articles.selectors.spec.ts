@@ -1,15 +1,18 @@
 import {
   Article,
   Author,
-  Disease, Epidemiology,
+  Disease,
+  Epidemiology,
   JournalVolume,
   MeshTerm,
-  PubtatorAnnotation, Source
-} from "@ncats-frontend-library/models/rdas";
+  PubtatorAnnotation,
+  Source,
+} from '@ncats-frontend-library/models/rdas';
 import {
   articlesAdapter,
-  ArticleStorePartialState, initialState
-} from "./articles.reducer";
+  ArticleStorePartialState,
+  initialState,
+} from './articles.reducer';
 import * as ArticleStoreSelectors from './articles.selectors';
 
 describe('ArticleStore Selectors', () => {
@@ -19,16 +22,16 @@ describe('ArticleStore Selectors', () => {
     ({
       pubmed_id,
       title: name || `name-${pubmed_id}`,
-      DateCreatedRDAS: "string",
-      abstractText: "string",
-      affiliation: "string",
+      DateCreatedRDAS: 'string',
+      abstractText: 'string',
+      affiliation: 'string',
       citedByCount: 0,
-      doi: "string",
-      firstPublicationDate: "string",
+      doi: 'string',
+      firstPublicationDate: 'string',
       diseases: [],
       journals: [],
-      sources: []
-    } as Article);
+      sources: [],
+    }) as Article;
 
   let state: ArticleStorePartialState;
 
@@ -45,7 +48,7 @@ describe('ArticleStore Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });
@@ -60,9 +63,7 @@ describe('ArticleStore Selectors', () => {
     });
 
     it('selectEntity() should return the selected Entity', () => {
-      const result = ArticleStoreSelectors.selectEntity(
-        state
-      ) as Article;
+      const result = ArticleStoreSelectors.selectEntity(state) as Article;
       const selId = getArticleStoreId(result);
 
       expect(selId).toBe('PRODUCT-BBB');

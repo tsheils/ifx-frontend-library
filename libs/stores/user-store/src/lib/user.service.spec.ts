@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Firestore } from "@angular/fire/firestore";
+import { Firestore } from '@angular/fire/firestore';
 import { UserService } from './user.service';
 
 describe('UserService', () => {
@@ -7,7 +7,7 @@ describe('UserService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [{provide: Firestore, useValue: {}}]
+      providers: [{ provide: Firestore, useValue: {} }],
     });
     service = TestBed.inject(UserService);
   });

@@ -1,129 +1,150 @@
-@if(loaded()) {
-<div class="disease-header-section">
-<ncats-frontend-library-disease-header
-[disease]="disease()"
-></ncats-frontend-library-disease-header>
-</div>
-<mat-sidenav-container class="disease-page" >
-  <mat-sidenav
-    #navigationsidenav
-    class="navigation-menu-panel"
-    [opened]="!mobile"
-    [mode]="'side'"
-  >
-    <div class="toc-wrapper" >
-      <div class="toc">
-        <div class="row right-justified-row">
+@if (loaded()) {
+  <div class="disease-header-section">
+    <ncats-frontend-library-disease-header
+      [disease]="disease()"
+    ></ncats-frontend-library-disease-header>
+  </div>
+  <mat-sidenav-container class="disease-page">
+    <mat-sidenav
+      #navigationsidenav
+      class="navigation-menu-panel"
+      [opened]="!mobile"
+      [mode]="'side'"
+    >
+      <div class="toc-wrapper">
+        <div class="toc">
+          <div class="row right-justified-row">
+            <button
+              [color]="'primary'"
+              mat-icon-button
+              class="close-button"
+              aria-label="close filters"
+              (click)="navigationsidenav.toggle()"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+          <mat-nav-list>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('overview')"
+              [ngClass]="{ 'active-sidemenu': isActive('overview') }"
+            >
+              Overview
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('genes')"
+              [ngClass]="{ 'active-sidemenu': isActive('genes') }"
+            >
+              <div class="row space-between-row">
+                <div>Genes</div>
+                <div>{{ disease()?.geneCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('phenotypes')"
+              [ngClass]="{ 'active-sidemenu': isActive('phenotypes') }"
+            >
+              <div class="row space-between-row">
+                <div>Phenotypes</div>
+                <div>{{ disease()?.phenotypeCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('nonEpiArticles')"
+              [ngClass]="{ 'active-sidemenu': isActive('nonEpiArticles') }"
+            >
+              <div class="row space-between-row">
+                <div>Articles</div>
+                <div>{{ disease()?.allNonEpiCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('epiArticles')"
+              [ngClass]="{ 'active-sidemenu': isActive('epiArticles') }"
+            >
+              <div class="row space-between-row">
+                <div>Epidemiology Articles</div>
+                <div>{{ disease()?.allEpiCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('projects')"
+              [ngClass]="{ 'active-sidemenu': isActive('projects') }"
+            >
+              <div class="row space-between-row">
+                <div>NIH funded Projects</div>
+                <div>{{ disease()?.allProjectCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              (click)="scroll('trials')"
+              [ngClass]="{ 'active-sidemenu': isActive('trials') }"
+            >
+              <div class="row space-between-row">
+                <div>Clinical Trials</div>
+                <div>{{ disease()?.allClinicalTrialCount }}</div>
+              </div>
+            </a>
+          </mat-nav-list>
+        </div>
+      </div>
+    </mat-sidenav>
+    <mat-sidenav-content class="drawer-container-content">
+      @if (!navigationsidenav.opened) {
+        <div class="row">
           <button
             [color]="'primary'"
-            mat-icon-button
-            class="close-button"
-            aria-label="close filters"
+            mat-stroked-button
+            class="menu-button"
+            aria-label="menu button"
             (click)="navigationsidenav.toggle()"
           >
-            <mat-icon>close</mat-icon>
+            Filters <mat-icon>bookmark</mat-icon>
           </button>
         </div>
-        <mat-nav-list>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('overview')"
-            [ngClass]="{ 'active-sidemenu': isActive('overview') }"
-          >
-            Overview
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('genes')"
-            [ngClass]="{ 'active-sidemenu': isActive('genes') }"
-          >
-           <div class="row space-between-row"><div> Genes </div><div>{{ disease()?.geneCount || 0 }}</div></div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('phenotypes')"
-            [ngClass]="{ 'active-sidemenu': isActive('phenotypes') }"
-          >
-            <div class="row space-between-row"><div> Phenotypes </div><div>{{ disease()?.phenotypeCount || 0 }}</div></div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('nonEpiArticles')"
-            [ngClass]="{ 'active-sidemenu': isActive('nonEpiArticles') }"
-          >
-<div class="row space-between-row"><div> Articles </div><div>{{ disease()?.nonEpiCount || 0 }}</div></div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('epiArticles')"
-            [ngClass]="{ 'active-sidemenu': isActive('epiArticles') }"
-          >
-<div class="row space-between-row"><div>Epidemiology Articles </div><div>{{ disease()?.epiCount || 0 }}</div></div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('projects')"
-            [ngClass]="{ 'active-sidemenu': isActive('projects') }"
-          >
-<div class="row space-between-row"><div> NIH funded Projects </div><div>{{ disease()?.projectCount || 0 }}</div></div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            (click)="scroll('trials')"
-            [ngClass]="{ 'active-sidemenu': isActive('trials') }"
-          >
-<div class="row space-between-row"><div> Clinical Trials </div><div>{{ disease()?.clinicalTrialCount || 0 }}</div></div>
-          </a>
-        </mat-nav-list>
-      </div>
-    </div>
-  </mat-sidenav>
-  <mat-sidenav-content class="drawer-container-content" >
-    @if (!navigationsidenav.opened) {
-    <div class="row">
-      <button
-        [color]="'primary'"
-        mat-stroked-button
-        class="menu-button"
-        aria-label="menu button"
-        (click)="navigationsidenav.toggle()"
-      >
-        Filters <mat-icon>bookmark</mat-icon>
-      </button>
-    </div>
-    }
-    <div class="row centered-row">
-      <div class = "full-width">
-      @if (!disease.name) {
-      <div>
-        <h1>No disease info found</h1>
-      </div>
-      } @if (disease()) {
-        <ncats-frontend-library-disease-display
-    [disease]="disease()"
-    [filters]="diseaseFilters()"
-    [loaded] = loaded()
-    (optionsChange)="setUrl($event)"
-  (activeElement)="setActiveElement($event)"
-  ></ncats-frontend-library-disease-display>
-        <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
       }
-    </div>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+      <div class="row centered-row">
+        <div class="full-width">
+          @if (!disease.name) {
+            <div>
+              <h1>No disease info found</h1>
+            </div>
+          }
+          @if (disease()) {
+            <ncats-frontend-library-disease-display
+              [disease]="disease()"
+              [filters]="diseaseFilters()"
+              [staticFilters]="staticDiseaseFilters()"
+              [loaded]="loaded()"
+              (optionsChange)="setUrl($event)"
+              (activeElement)="setActiveElement($event)"
+            ></ncats-frontend-library-disease-display>
+            <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+          }
+        </div>
+      </div>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
 } @else {
-<div class="disease-header-section">
-<ncats-frontend-library-disease-header
-></ncats-frontend-library-disease-header>
-</div>
-<mat-sidenav-container class="disease-page" ></mat-sidenav-container>
-<ncats-frontend-library-loading-spinner class="fill-spinner"></ncats-frontend-library-loading-spinner>
+  <div class="disease-header-section">
+    <ncats-frontend-library-disease-header></ncats-frontend-library-disease-header>
+  </div>
+  <mat-sidenav-container class="disease-page"></mat-sidenav-container>
+  <ncats-frontend-library-loading-spinner
+    class="fill-spinner"
+  ></ncats-frontend-library-loading-spinner>
 }

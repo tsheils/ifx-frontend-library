@@ -16,8 +16,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import {
   Event,
@@ -36,11 +36,11 @@ import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/he
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { MobileHeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/mobile-header-template';
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
-import { UserSelectors } from "@ncats-frontend-library/stores/user-store";
+import { UserSelectors } from '@ncats-frontend-library/stores/user-store';
 import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
 import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
-import { select, Store } from "@ngrx/store";
-import { map } from "rxjs";
+import { select, Store } from '@ngrx/store';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-root',
@@ -63,7 +63,7 @@ import { map } from "rxjs";
     LoadingSpinnerComponent,
     MobileHeaderTemplateComponent,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
   ],
 })
 export class AppComponent implements OnInit {
@@ -100,7 +100,8 @@ export class AppComponent implements OnInit {
         {
           link: 'apis/epi',
           label: 'EPIDEMIOLOGY',
-        },{
+        },
+        {
           link: 'apis/history',
           label: 'NATURAL HISTORY',
         },
@@ -131,7 +132,7 @@ export class AppComponent implements OnInit {
     private scrollDispatcher: ScrollDispatcher,
     private router: Router,
     private changeRef: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
   ) {}
 
   ngOnInit() {
@@ -140,20 +141,21 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         this.mobile = result.matches;
-        if(this.mobile) {
-          this.links = this.links.filter(link => !link.hideMobile)
+        if (this.mobile) {
+          this.links = this.links.filter((link) => !link.hideMobile);
         }
         this.changeRef.markForCheck();
       });
 
-    this.userStore.pipe(
-      select(UserSelectors.getUser),
-      takeUntilDestroyed(this.destroyRef),
-      map((res: User) => {
+    this.userStore
+      .pipe(
+        select(UserSelectors.getUser),
+        takeUntilDestroyed(this.destroyRef),
+        map((res: User) => {
           this.user = res;
-      })
-    ).subscribe();
-
+        }),
+      )
+      .subscribe();
 
     /**
      * This shows loading spinner for page navigation - usually navigation is finished before the page is finished loading

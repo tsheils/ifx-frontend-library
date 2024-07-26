@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { FeaturesRdasRdasAboutComponent } from './features-rdas-rdas-about.component';
 
 describe('FeaturesRdasRdasAboutComponent', () => {
@@ -8,10 +8,7 @@ describe('FeaturesRdasRdasAboutComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        FeaturesRdasRdasAboutComponent
-      ],
+      imports: [NoopAnimationsModule, FeaturesRdasRdasAboutComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(FeaturesRdasRdasAboutComponent);

@@ -1,21 +1,27 @@
 import { Routes } from '@angular/router';
 import {
   ARTICLE_STORE_FEATURE_KEY,
-  ArticleEffects, articlesReducer
-} from "@ncats-frontend-library/stores/article-store";
+  ArticleEffects,
+  articlesReducer,
+} from '@ncats-frontend-library/stores/article-store';
 import {
   FILTERS_FEATURE_KEY,
   FilterEffects,
-  filtersReducer
-} from "@ncats-frontend-library/stores/filter-store";
+  filtersReducer,
+} from '@ncats-frontend-library/stores/filter-store';
 import {
   GRANTS_FEATURE_KEY,
-  GrantEffects, grantsReducer
-} from "@ncats-frontend-library/stores/grant-store";
-import { provideEffects } from "@ngrx/effects";
-import { provideState } from "@ngrx/store";
+  GrantEffects,
+  grantsReducer,
+} from '@ncats-frontend-library/stores/grant-store';
+import { provideEffects } from '@ngrx/effects';
+import { provideState } from '@ngrx/store';
 import { environment } from '../environments/environment';
-import { TrialEffects, TRIALS_FEATURE_KEY, trialsReducer } from "@ncats-frontend-library/stores/trial-store";
+import {
+  TrialEffects,
+  TRIALS_FEATURE_KEY,
+  trialsReducer,
+} from '@ncats-frontend-library/stores/trial-store';
 
 export const routes: Routes = [
   {
@@ -23,7 +29,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-home').then(
-        (m) => m.RdasHomeComponent
+        (m) => m.RdasHomeComponent,
       ),
   },
   {
@@ -36,14 +42,14 @@ export const routes: Routes = [
     ],
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-browse').then(
-        (m) => m.RdasBrowseComponent
+        (m) => m.RdasBrowseComponent,
       ),
   },
   {
     path: 'disease',
     pathMatch: 'full',
     runGuardsAndResolvers: 'pathParamsChange',
-   /* providers: [
+    /* providers: [
       importProvidersFrom(
         // register feature reducer
         StoreModule.forFeature('diseaseStore', diseasesReducer),
@@ -53,7 +59,7 @@ export const routes: Routes = [
     ],*/
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-disease-page').then(
-        (m) => m.RdasDiseasePageComponent
+        (m) => m.RdasDiseasePageComponent,
       ),
   },
   {
@@ -62,7 +68,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-about').then(
-        (m) => m.FeaturesRdasRdasAboutComponent
+        (m) => m.FeaturesRdasRdasAboutComponent,
       ),
   },
   {
@@ -71,7 +77,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/privacy-page').then(
-        (m) => m.RdasPrivacyPageComponent
+        (m) => m.RdasPrivacyPageComponent,
       ),
   },
   {
@@ -79,12 +85,12 @@ export const routes: Routes = [
     pathMatch: 'full',
     providers: [
       provideState(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
-      provideEffects(ArticleEffects)
+      provideEffects(ArticleEffects),
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-article-page').then(
-        (m) => m.FeaturesRdasRdasArticlePageComponent
+        (m) => m.FeaturesRdasRdasArticlePageComponent,
       ),
   },
   {
@@ -92,12 +98,12 @@ export const routes: Routes = [
     pathMatch: 'full',
     providers: [
       provideState(GRANTS_FEATURE_KEY, grantsReducer),
-      provideEffects(GrantEffects)
+      provideEffects(GrantEffects),
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-grant-page').then(
-        (m) => m.RdasGrantPageComponent
+        (m) => m.RdasGrantPageComponent,
       ),
   },
   {
@@ -105,12 +111,12 @@ export const routes: Routes = [
     pathMatch: 'full',
     providers: [
       provideState(TRIALS_FEATURE_KEY, trialsReducer),
-      provideEffects(TrialEffects)
+      provideEffects(TrialEffects),
     ],
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-trial-page').then(
-        (m) => m.RdasTrialPageComponent
+        (m) => m.RdasTrialPageComponent,
       ),
   },
   {
@@ -119,7 +125,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-subscriptions').then(
-        (m) => m.RdasSubscriptionsComponent
+        (m) => m.RdasSubscriptionsComponent,
       ),
   },
   {
@@ -134,7 +140,7 @@ export const routes: Routes = [
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent
+        (m) => m.GraphqlSandboxComponent,
       ),
   },
   {
@@ -149,7 +155,7 @@ export const routes: Routes = [
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent
+        (m) => m.GraphqlSandboxComponent,
       ),
   },
   {
@@ -164,7 +170,7 @@ export const routes: Routes = [
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent
+        (m) => m.GraphqlSandboxComponent,
       ),
   },
   {
@@ -179,7 +185,7 @@ export const routes: Routes = [
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent
+        (m) => m.GraphqlSandboxComponent,
       ),
   },
   {
@@ -189,16 +195,17 @@ export const routes: Routes = [
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/epi-api').then(
-        (m) => m.EpiApiComponent
+        (m) => m.EpiApiComponent,
       ),
-  },{
+  },
+  {
     path: 'apis/history',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/history-api').then(
-        (m) => m.HistoryApiComponent
+        (m) => m.HistoryApiComponent,
       ),
   },
   { path: '**', redirectTo: '' },

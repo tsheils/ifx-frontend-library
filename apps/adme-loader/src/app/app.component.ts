@@ -1,7 +1,7 @@
-import { BreakpointObserver, Breakpoints } from "@angular/cdk/layout";
-import { CdkScrollable, ScrollDispatcher } from "@angular/cdk/overlay";
-import { CdkScrollableModule, ScrollingModule } from "@angular/cdk/scrolling";
-import { DOCUMENT, isPlatformBrowser, NgClass } from "@angular/common";
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
+import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
+import { DOCUMENT, isPlatformBrowser, NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -9,27 +9,32 @@ import {
   DestroyRef,
   Inject,
   inject,
-  InjectionToken, OnInit,
+  InjectionToken,
+  OnInit,
   PLATFORM_ID,
-  ViewChild, ViewEncapsulation
-} from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { MatSidenavModule } from "@angular/material/sidenav";
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatSidenavModule } from '@angular/material/sidenav';
 import {
   Event,
   NavigationEnd,
   Router,
   RouterLink,
-  RouterOutlet
-} from "@angular/router";
-import { LinkTemplateProperty, User } from "@ncats-frontend-library/models/utils";
-import { RdasSearchComponent } from "@ncats-frontend-library/shared/rdas/rdas-search";
-import { SharedUtilsFileUploadComponent } from "@ncats-frontend-library/shared/utils/file-upload";
-import { FooterTemplateComponent } from "@ncats-frontend-library/shared/utils/footer-template";
-import { HeaderTemplateComponent } from "@ncats-frontend-library/shared/utils/header-template";
-import { LoadingSpinnerComponent } from "@ncats-frontend-library/shared/utils/loading-spinner";
-import { MobileHeaderTemplateComponent } from "@ncats-frontend-library/shared/utils/mobile-header-template";
-import { SocialSignOnButtonComponent } from "@ncats-frontend-library/shared/utils/social-sign-on";
+  RouterOutlet,
+} from '@angular/router';
+import {
+  LinkTemplateProperty,
+  User,
+} from '@ncats-frontend-library/models/utils';
+import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
+import { SharedUtilsFileUploadComponent } from '@ncats-frontend-library/shared/utils/file-upload';
+import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
+import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/header-template';
+import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { MobileHeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/mobile-header-template';
+import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
 
 @Component({
   encapsulation: ViewEncapsulation.None,
@@ -48,7 +53,7 @@ import { SocialSignOnButtonComponent } from "@ncats-frontend-library/shared/util
     ScrollingModule,
     LoadingSpinnerComponent,
     MobileHeaderTemplateComponent,
-    SharedUtilsFileUploadComponent
+    SharedUtilsFileUploadComponent,
   ],
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -77,7 +82,7 @@ export class AppComponent implements OnInit {
     {
       link: 'about',
       label: 'ABOUT',
-    }
+    },
   ];
 
   constructor(
@@ -87,7 +92,7 @@ export class AppComponent implements OnInit {
     private scrollDispatcher: ScrollDispatcher,
     private router: Router,
     private changeRef: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver
+    private breakpointObserver: BreakpointObserver,
   ) {}
 
   ngOnInit() {
@@ -98,7 +103,6 @@ export class AppComponent implements OnInit {
         this.mobile = result.matches;
         this.changeRef.markForCheck();
       });
-
 
     /**
      * This shows loading spinner for page navigation - usually navigation is finished before the page is finished loading
@@ -118,8 +122,7 @@ export class AppComponent implements OnInit {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         if (isPlatformBrowser(this.platformId) && this.document) {
-      console.log("adme")
-
+          console.log('adme');
         }
         this.changeRef.detectChanges();
       });

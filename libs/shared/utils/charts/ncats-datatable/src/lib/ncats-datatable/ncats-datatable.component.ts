@@ -1,18 +1,22 @@
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
-  Component, ComponentRef, DestroyRef,
-  EventEmitter, inject,
+  Component,
+  ComponentRef,
+  computed,
+  DestroyRef,
+  EventEmitter,
+  inject,
   Injector,
-  Input,
-  OnInit,
+  input,
+  output,
   Output,
   QueryList,
   Type,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
-} from "@angular/core";
+  ViewContainerRef,
+} from '@angular/core';
 import {
   animate,
   state,
@@ -20,8 +24,8 @@ import {
   transition,
   trigger,
 } from '@angular/animations';
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { BehaviorSubject, Observable } from "rxjs";
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Observable } from 'rxjs';
 import {
   MatRow,
   MatTable,
@@ -34,14 +38,17 @@ import {
   MatPaginatorModule,
 } from '@angular/material/paginator';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
-import { CdkPortalOutletAttachedRef, ComponentPortal, PortalModule } from "@angular/cdk/portal";
+import {
+  CdkPortalOutletAttachedRef,
+  ComponentPortal,
+  PortalModule,
+} from '@angular/cdk/portal';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PageData } from './models/page-data';
 import { DataProperty } from './models/data-property';
 import { PropertyDisplayComponent } from './components/property-display/property-display.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgClass } from '@angular/common';
-
 
 const _sortingDataAccessor = (
   data: { [key: string]: DataProperty },
@@ -88,17 +95,17 @@ const _sortingDataAccessor = (
     NgClass,
     MatCheckboxModule,
     PropertyDisplayComponent,
-    PortalModule
+    PortalModule,
   ],
 })
 
 /**
  * Generic table Component that iterates over a list of options to display fields
  */
-export class NcatsDatatableComponent
-  implements OnInit
-{
+export class NcatsDatatableComponent {
   destroyRef = inject(DestroyRef);
+  ref = inject(ChangeDetectorRef);
+  _injector = inject(Injector);
 
   /**
    * Table object
@@ -106,122 +113,88 @@ export class NcatsDatatableComponent
   @ViewChild(MatTable) dataTable!: MatTable<unknown>;
 
   /**
-   * initialize a private variable _data, it's a BehaviorSubject
-   *
+   * Sort object from Angular Material
    */
-  protected _data = new BehaviorSubject<{ [key: string]: DataProperty; }[]>([]);
+  @ViewChild(MatSort, { static: true }) _sort: MatSort = new MatSort();
 
-  /**
-   * pushes changed data to {BehaviorSubject}
-   */
-  @Input()
-  set data(value: { [key: string]: DataProperty; }[]) {
-    this._data.next(value);
-  }
-
-  /**
-   * returns value of {BehaviorSubject}
-   */
-  get data(): { [key: string]: DataProperty; }[] {
-    return this._data.getValue();
-  }
-
-  /**
-   * sets up config fields as a behavior subject
-   * @type {BehaviorSubject<DataProperty[]>}
-   * @private
-   */
-  protected _fieldsConfig: BehaviorSubject<DataProperty[]> =
-    new BehaviorSubject<DataProperty[]>([]);
-
-  /**
-   * pushes changed data to {BehaviorSubject}
-   */
-  @Input()
-  set fieldsConfig(value: DataProperty[]) {
-    this._fieldsConfig.next(value);
-  }
-
-  /**
-   * returns value of {BehaviorSubject}
-   */
-  get fieldsConfig(): DataProperty[] {
-    return this._fieldsConfig.getValue();
-  }
-
-  /**
-   * sets up page data as a behavior subject
-   * @type {BehaviorSubject<PageData>}
-   * @private
-   */
-  protected _rowSelectConfig: BehaviorSubject<boolean> =
-    new BehaviorSubject<boolean>(false);
-
-  /**
-   * pushes changed data to {BehaviorSubject}
-   */
-  @Input()
-  set selectableRows(value: boolean) {
-    this._rowSelectConfig.next(value);
-    this.fetchTableFields();
-  }
-
-  /**
-   * returns value of {BehaviorSubject}
-   */
-  get selectableRows(): boolean {
-    return this._rowSelectConfig.getValue();
-  }
-
-  @Input() pageData?: PageData;
   /**
    * gets placeholder expanded row outlets
    */
   @ViewChildren('expandedRowOutlet', { read: ViewContainerRef })
   rowOutlet!: QueryList<ViewContainerRef>;
 
-  /** boolean to toggle completion of page loading
-   * todo: currently not used
+  /**
+   * event that emits when the sort value or direction is changed. The parent component will be responsible for
+   * fetching and returning the new sorted data
    */
-  loading = false;
+  sortChange = output<Sort>();
 
   /**
-   * show/hide the paginator
+   * event that emits when the page is changed. The parent component will be responsible for
+   * fetching and returning the new data
    */
-  @Input() showPaginator = true;
-
-  @Input() useInternalPaginator = false;
-
-  /**
-   * show/hide the bottom paginator
-   */
-  @Input() showBottomPaginator = false;
+  pageChange = output<PageEvent>();
 
   /**
-   * Sort object from Angular Material
+   * event that emits when the page is changed. The parent component will be responsible for
+   * fetching and returning the new data
    */
-  @ViewChild(MatSort, { static: true }) _sort: MatSort = new MatSort();
+  rowClick = output<MatRow>();
+
+  data = input<{ [key: string]: DataProperty }[]>();
+  fieldsConfig = input<DataProperty[]>();
 
   /**
    * generated string array of fields that are to be displayed in the table
    */
-  displayColumns!: string[];
-
+  displayColumns = computed(() => {
+    let ret: string[] = [];
+    if (this.selectableRows()) {
+      ret = ['select'].concat(
+        this.displayFields()?.map((field) => field.field) as string[],
+      );
+    } else {
+      ret = this.displayFields()?.map((field) => field.field) as string[];
+    }
+    return ret;
+  });
   /**
    * generated  array of DataProperties that are to be displayed in the table
    */
-  displayFields!: DataProperty[];
+  displayFields = computed(() => {
+    let ret: DataProperty[] = [];
+    ret = this.fieldsConfig()?.filter(
+      (field) => !!field.visible,
+    ) as DataProperty[];
+    if (!ret || !ret.length) {
+      ret = this.fieldsConfig() as DataProperty[];
+    }
+    return ret;
+  });
+
+  selectableRows = input(false);
+  pageData = input<PageData>(new PageData({ total: this.data()?.length }));
 
   /**
-   * whether or not to allow the user to change the size of the page/ show dropdown
+   * show/hide the paginator
    */
-  @Input() hidePageSize = false;
+  showPaginator = input(true);
+  useInternalPaginator = input(false);
+  /**
+   * show/hide the bottom paginator
+   */
+  showBottomPaginator = input(false);
+
+  /**
+   * whether to allow the user to change the size of the page/ show dropdown
+   */
+  hidePageSize = input(false);
 
   /**
    * Input to toggle if the table should have expandable rows
    * boolean
    */
-  @Input() expandable = true;
+  expandable = input(true);
 
   /**
    * This compares each row of the table to the "expanded element - if they are equal, the row is expanded
@@ -230,43 +203,29 @@ export class NcatsDatatableComponent
   expandedElement: unknown | null;
 
   /**
-   * event that emits when the sort value or direction is changed. The parent component will be responsible for
-   * fetching and returning the new sorted data
-   */
-  @Output() readonly sortChange: EventEmitter<Sort> = new EventEmitter<Sort>();
-
-  /**
-   * event that emits when the page is changed. The parent component will be responsible for
-   * fetching and returning the new data
-   */
-  @Output() readonly pageChange: EventEmitter<PageEvent> =
-    new EventEmitter<PageEvent>();
-
-  /**
-   * event that emits when the page is changed. The parent component will be responsible for
-   * fetching and returning the new data
-   */
-  @Output() readonly rowClick: EventEmitter<MatRow> =
-    new EventEmitter<MatRow>();
-
-  /**
    * main table datasource
    * @type {MatTableDataSource<any>}
    */
-  dataSource: MatTableDataSource<{[key: string]:DataProperty}> = new MatTableDataSource<{[key: string]: DataProperty}>();
+  dataSource = computed(() => {
+    const ds = new MatTableDataSource<{ [key: string]: DataProperty }>(
+      this.data(),
+    );
+
+    if (this.internalSort()) {
+      ds.sortingDataAccessor = _sortingDataAccessor;
+      ds.sort = this._sort;
+    }
+    return ds;
+  });
 
   /**
    * whether to toggle the condensed class to make a more compact table
    * @type {boolean}
    */
-  @Input() condensed = false;
+  condensed = input(false);
+  internalSort = input(false);
 
-  @Input() asDataSource = false;
-
-  @Input() internalSort = false;
-
-  @Output() rowSelectionChange: EventEmitter<SelectionModel<unknown>> =
-    new EventEmitter<SelectionModel<unknown>>();
+  rowSelectionChange = output<SelectionModel<unknown>>();
 
   selection = new SelectionModel<unknown>(true, []);
 
@@ -275,75 +234,43 @@ export class NcatsDatatableComponent
    *
    */
   @ViewChild(MatPaginator) set paginator(paginator: MatPaginator) {
-    this.dataSource.paginator = paginator;
+    this.dataSource().paginator = paginator;
   }
-  /*
-  @ViewChild('paginatorTop') paginatorTop!: MatPaginator;
-  @ViewChild('paginatorBottom') paginatorBottom!: MatPaginator;
 
-*/
-
-  /**
-   * injector for custom data
-   */
-  constructor(
-    private ref: ChangeDetectorRef,
-    private _injector: Injector,
-  ) {}
   /**
    * Init: get the columns to be displayed.
    * Table data is tracked by the data getter and setter
    */
   ngOnInit() {
-    this._data
-      // listen to data as long as term is undefined or null
-      // Unsubscribe once term has value
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe((res: {[key: string]: DataProperty}[]) => {
-        if (res) {
-          if (this.useInternalPaginator) {
-            this.dataSource = new MatTableDataSource<{[key: string]: DataProperty}>(
-              res
-              //  res.map((val: Partial<DataProperty>) => new DataProperty(val)),
-            );
-            this.pageData = new PageData({ total: res.length });
-          } else {
-            this.dataSource.data = res;
-            this.ref.detectChanges();
-          }
-          if (this.internalSort) {
-            this.dataSource.sortingDataAccessor = _sortingDataAccessor;
-            this.dataSource.sort = this._sort;
-            this._sort.sortChange.subscribe(() => {
-              if (this.dataSource.paginator) {
-                this.dataSource.paginator.firstPage();
-              }
-            });
-          }
-          this.ref.detectChanges();
-        }
+    this._sort.sortChange
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.dataSource()?.paginator?.firstPage();
       });
 
-    this._fieldsConfig
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(() => this.fetchTableFields());
-
     this.selection.changed
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-      )
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.ref.detectChanges();
         this.rowSelectionChange.emit(this.selection);
       });
+
+    const defaultSort: DataProperty[] = this.fieldsConfig()
+      ? (this.fieldsConfig()?.filter((field) => field.sorted) as DataProperty[])
+      : ([] as DataProperty[]);
+
+    if (defaultSort.length > 0 && this.data()) {
+      this._sort.sort({
+        id: defaultSort[0].field,
+        start: defaultSort[0].sorted ? defaultSort[0].sorted : 'asc',
+        disableClear: true,
+      });
+      this.dataTable.renderRows();
+    }
   }
 
   /**
-   * emit sort change events
+   * emit sort change events for external data
    * @param sort
    */
   changeSort(sort: Sort): void {
@@ -357,93 +284,11 @@ export class NcatsDatatableComponent
    * @param $event
    */
   changePage($event: PageEvent): void {
-    /*
-    if(this.dataSource) {
-      const previous: number = $event.previousPageIndex ? $event.previousPageIndex * $event.pageSize : 0;
-      const page: number = $event.pageIndex * $event.pageSize;
-
-      if((previous < page)){
-      this.dataSource.data = this.data.slice(previous, page);
-        this.dataTable.renderRows();
-      } else {
-        this.dataSource.data = this.data.slice(page, previous);
-        this.dataTable.renderRows();
-      }
-      this.ref.markForCheck();
-    }*/
     this.pageChange.emit($event);
   }
 
-  /**
-   * Returns readable label for a data field
-   */
-  getLabel(name: string): string {
-    let ret = '';
-    this.displayFields.forEach((field) => {
-      if (field.field === name) {
-        ret = field.label ? field.label : field.field;
-      }
-    });
-    return ret;
-  }
-
   getColSpan(): number {
-    return this.displayFields ? this.displayFields.length + 2 : 2;
-  }
-  /**
-   * Check to see if a column is designed to be sortable
-   */
-  isSortable(name: string): boolean {
-    let ret = false;
-    this.displayFields.forEach((field) => {
-      if (field.field === name) {
-        ret = !!field.sortable;
-      }
-    });
-    return ret;
-  }
-
-  isArray(data: unknown) {
-    return Array.isArray(data);
-  }
-
-  /**
-   * sets a flat array of the {@link DataProperty} fields
-   */
-  fetchTableFields(): void {
-    this.displayColumns = [];
-    this.displayFields = this.fieldsConfig.filter((field) => !!field.visible);
-    if (!this.displayFields.length) {
-      this.displayFields = this.fieldsConfig;
-    }
-    if (this.selectableRows) {
-      this.displayColumns = ['select'].concat(
-        this.displayFields.map((field) => field.field),
-      );
-      this.ref.detectChanges();
-    } else {
-      this.displayColumns = this.displayFields.map((field) => field.field);
-      this.ref.detectChanges();
-    }
-    const defaultSort: DataProperty[] = this.fieldsConfig.filter(
-      (field) => field.sorted,
-    );
-    if (defaultSort.length > 0 && this.data) {
-      this._sort.sort({
-        id: defaultSort[0].field,
-        start: defaultSort[0].sorted ? defaultSort[0].sorted : 'asc',
-        disableClear: true,
-      });
-      this.dataTable.renderRows();
-    }
-  }
-
-  /**
-   * get display columns
-   * todo - probably unnecessary after the removal of the default buttons column
-   */
-  fetchDisplayColumns(): string[] {
-    return this.displayColumns;
+    return this.displayFields() ? this.displayFields().length + 2 : 2;
   }
 
   /**
@@ -461,9 +306,7 @@ export class NcatsDatatableComponent
    * todo: table injected components need to implement an interface to get the substance or container
    * @param field
    */
-  getCustomComponent(
-    field: DataProperty
-  ): ComponentPortal<unknown> | null {
+  getCustomComponent(field: DataProperty): ComponentPortal<unknown> | null {
     if (this.rowOutlet && field.customComponent) {
       const comp = this._injector.get<Type<unknown>>(field.customComponent);
       return new ComponentPortal(comp);
@@ -480,26 +323,39 @@ export class NcatsDatatableComponent
    * @param index
    * @param field
    */
-  componentAttached(component: CdkPortalOutletAttachedRef, index: number, field: DataProperty) {
-    if(component ) {
-      const compRef: ComponentRef<Record<string, unknown>> = component as ComponentRef<Record<string, unknown>>;
-      if (compRef.instance['data'] === null && this.data[index][field.field]) {
+  componentAttached(
+    component: CdkPortalOutletAttachedRef,
+    index: number,
+    field: DataProperty,
+  ) {
+    if (component) {
+      const dataArr: { [p: string]: DataProperty }[] = this.data() as {
+        [p: string]: DataProperty;
+      }[];
+      const obj: { [p: string]: DataProperty } = dataArr[index] as {
+        [p: string]: DataProperty;
+      };
+
+      const compRef: ComponentRef<Record<string, unknown>> =
+        component as ComponentRef<Record<string, unknown>>;
+      if (compRef.instance['data'] === null && obj[field.field]) {
         const dataField: string = field.field;
-        const dataPoint: {[p: string]: DataProperty} = this.data[index];
-        compRef.instance['data'] = <unknown>dataPoint[dataField];
+        compRef.instance['data'] = <unknown>obj[dataField];
       }
 
-      if (compRef.instance['object']) {
-        compRef.instance['object'] = this.data[index];
+      if (this.data() && compRef.instance['object']) {
+        compRef.instance['object'] = obj;
       }
       if (compRef.instance['container']) {
         compRef.instance['container'] = this.rowOutlet.toArray()[index];
       }
-      if (compRef.instance['parent']) {
-        compRef.instance['parent'] = this.data[index];
+      if (this.data() && compRef.instance['parent']) {
+        compRef.instance['parent'] = obj;
       }
       if (compRef.instance['clickEvent']) {
-        const clickRef: Observable<MatRow> = compRef.instance['clickEvent'] as Observable<MatRow>;
+        const clickRef: Observable<MatRow> = compRef.instance[
+          'clickEvent'
+        ] as Observable<MatRow>;
         clickRef.subscribe((res: MatRow) => {
           this.cellClicked(res);
         });
@@ -530,7 +386,7 @@ export class NcatsDatatableComponent
   /** Whether the number of selected elements matches the total number of rows. */
   isAllSelected() {
     const numSelected = this.selection.selected.length;
-    const numRows = this.dataSource.data.length;
+    const numRows = this.dataSource().data.length;
     return numSelected === numRows;
   }
 
@@ -538,7 +394,9 @@ export class NcatsDatatableComponent
   masterToggle() {
     this.isAllSelected()
       ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+      : this.dataSource().data.forEach((row) => this.selection.select(row));
     this.ref.detectChanges();
   }
+
+  protected readonly Array = Array;
 }

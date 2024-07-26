@@ -1,27 +1,16 @@
 import { Action } from '@ngrx/store';
+import { LoadRampActions } from './ramp.actions';
+import { State, initialState, reducer } from './ramp.reducer';
 
-import * as RampActions from './ramp.actions';
-import { RampEntity } from './ramp.models';
-import { RampState, initialRampState, rampReducer } from './ramp.reducer';
+describe('RampStore Reducer', () => {
+  describe('valid RampStore actions', () => {
+    it('loadRampSuccess should return the list of known RampStore', () => {
+      const action = LoadRampActions.loadRampSuccess({ supportedIds: [] });
 
-describe('Ramp Reducer', () => {
-  const createRampEntity = (id: string, name = ''): RampEntity => ({
-    id,
-    name: name || `name-${id}`,
-  });
+      const result: State = reducer(initialState, action);
 
-  describe('valid Ramp actions', () => {
-    it('loadRampSuccess should return the list of known Ramp', () => {
-      const ramp = [
-        createRampEntity('PRODUCT-AAA'),
-        createRampEntity('PRODUCT-zzz'),
-      ];
-      const action = RampActions.loadRampSuccess({ ramp });
-
-      const result: RampState = rampReducer(initialRampState, action);
-
-      expect(result.loaded).toBe(true);
-      expect(result.ids.length).toBe(2);
+      expect(result.loading).toBe(false);
+      expect(result.ids.length).toBe(0);
     });
   });
 
@@ -29,9 +18,9 @@ describe('Ramp Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = rampReducer(initialRampState, action);
+      const result = reducer(initialState, action);
 
-      expect(result).toBe(initialRampState);
+      expect(result).toBe(initialState);
     });
   });
 });

@@ -1,0 +1,70 @@
+<mat-sidenav
+  #navigationsidenav
+  [opened]="true"
+  [mode]="'side'"
+  class="main-rail"
+>
+  <div class="ramp-rail ramp-sub" cdkScrollable>
+    <button
+      matRipple
+      class="rail-button"
+      [ngClass]="{ 'active-rail': isActive('input') }"
+      (click)="scrollTo('input')"
+    >
+      <div class="rail-icon"><mat-icon>input</mat-icon></div>
+      <div class="rail-label">Input</div>
+    </button>
+    <button
+      matRipple
+      class="rail-button"
+      [ngClass]="{
+        'active-rail': isActive('results'),
+        'disabled-rail': !resultsLoaded,
+      }"
+      (click)="scrollTo('results')"
+      [disabled]="!resultsLoaded"
+    >
+      <div class="rail-icon"><mat-icon>output</mat-icon></div>
+      <div class="rail-label">Results</div>
+    </button>
+    <button
+      matRipple
+      class="rail-button"
+      (click)="scrollTo('visualizations')"
+      [ngClass]="{
+        'active-rail': isActive('visualizations'),
+        'disabled-rail': !visualizationsLoaded,
+      }"
+      [disabled]="!visualizationsLoaded"
+    >
+      <div class="rail-icon"><mat-icon>dashboard</mat-icon></div>
+      <div class="rail-label">Visualizations</div>
+    </button>
+    <button
+      matRipple
+      class="rail-button"
+      [ngClass]="{
+        'active-rail': isActive('data'),
+        'disabled-rail': !dataLoaded,
+      }"
+      (click)="scrollTo('data')"
+      [disabled]="!dataLoaded"
+    >
+      <div class="rail-icon"><mat-icon>data_array</mat-icon></div>
+      <div class="rail-label">Data</div>
+    </button>
+  </div>
+</mat-sidenav>
+<mat-sidenav-content class="drawer-container-content">
+  <div class="row centered-row">
+    <div class="width-95">
+      <h1>{{ title() | titlecase }}</h1>
+    </div>
+  </div>
+
+  <div class="row centered-row">
+    <div class="width-95">
+      <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
+    </div>
+  </div>
+</mat-sidenav-content>

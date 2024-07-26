@@ -60,25 +60,31 @@ fragment trialFields on ClinicalTrial {
 `;
 
 export const FETCHTRIALDETAILS = gql`
-  query ClinicalTrials($ctwhere: ClinicalTrialWhere) {
-    clinicalTrials(where: $ctwhere) {
+  query ClinicalTrials($ctfilters: ClinicalTrialWhere) {
+    clinicalTrials(where: $ctfilters) {
       ...trialFields
     }
   }
   ${TRIALFIELDS}
 `;
 export const FETCHTRIALSQUERY = gql`
-  query ClinicalTrialsList($ctwhere: ClinicalTrialWhere, $ctoptions: ClinicalTrialOptions) {
-     clinicalTrials(where: $ctwhere, options: $ctoptions){
-     ...trialFields
-   }
-    count: clinicalTrialsAggregate(where: $ctwhere) {
-    count
+  query ClinicalTrialsList(
+    $ctwhere: ClinicalTrialWhere
+    $ctfilters: ClinicalTrialWhere
+    $ctoptions: ClinicalTrialOptions
+  ) {
+    clinicalTrials(where: $ctfilters, options: $ctoptions) {
+      ...trialFields
+    }
+    count: clinicalTrialsAggregate(where: $ctfilters) {
+      count
+    }
+    allCount: clinicalTrialsAggregate(where: $ctwhere) {
+      count
     }
   }
   ${TRIALFIELDS}
 `;
-
 
 export const TRIALDETAILSVARIABLES: {
   ctwhere: {
@@ -90,54 +96,101 @@ export const TRIALDETAILSVARIABLES: {
   },
 };
 
-
 export const FETCHTRIALSVARIABLES: {
   ctwhere: {
     investigatesConditionConditions_SOME: {
-      hasAnnotationAnnotations_SOME: {
+      hasAnnotationConditionAnnotations_SOME: {
         mappedToGardGards_SOME: {
-          GardId: string | null | undefined
-        }
-      }
-    },
+          GardId: string | null | undefined;
+        };
+      };
+    };
+  };
+  ctfilters: {
+    investigatesConditionConditions_SOME: {
+      hasAnnotationConditionAnnotations_SOME: {
+        mappedToGardGards_SOME: {
+          GardId: string | null | undefined;
+        };
+      };
+    };
     StudyType_IN?: unknown;
     OverallStatus_IN?: unknown;
     Phase_IN?: unknown;
-  }
+  };
   ctoptions: {
-    limit: number,
-    offset: number
-  }
+    limit: number;
+    offset: number;
+  };
 } = {
   ctoptions: {
     limit: 10,
     offset: 0,
   },
+  ctfilters: {
+    investigatesConditionConditions_SOME: {
+      hasAnnotationConditionAnnotations_SOME: {
+        mappedToGardGards_SOME: {
+          GardId: undefined,
+        },
+      },
+    },
+  },
   ctwhere: {
-    investigatesConditionConditions_SOME : {
-      hasAnnotationAnnotations_SOME : {
-        mappedToGardGards_SOME : {
-          GardId : undefined
-        }
-      }
-    }
-  }
+    investigatesConditionConditions_SOME: {
+      hasAnnotationConditionAnnotations_SOME: {
+        mappedToGardGards_SOME: {
+          GardId: undefined,
+        },
+      },
+    },
+  },
 };
 
+export const TRIALTYPEFILTERS = gql`
+  query TrialFilters($ctfilters: ClinicalTrialWhere) {
+    trialsByType(where: $ctfilters) {
+      count
+      label
+      term
+    }
+  }
+`;
+
+export const TRIALPHASEFILTERS = gql`
+  query TrialFilters($ctfilters: ClinicalTrialWhere) {
+    trialsByPhase(where: $ctfilters) {
+      count
+      label
+      term
+    }
+  }
+`;
+
+export const TRIALSTATUSFILTERS = gql`
+  query TrialFilters($ctfilters: ClinicalTrialWhere) {
+    trialsByStatus(where: $ctfilters) {
+      count
+      label
+      term
+    }
+  }
+`;
+
 export const TRIALFILTERS = gql`
-  query TrialFilters($ctwhere: ClinicalTrialWhere) {
-    allClinicalTrialsFilters(where: $ctwhere){
-      trialsByStatus:statuses {
+  query TrialFilters($ctfilters: ClinicalTrialWhere) {
+    allClinicalTrialsFilters(where: $ctfilters) {
+      trialsByStatus {
         count
         label
         term
       }
-      trialsByType:studyTypes {
+      trialsByType {
         count
         label
         term
       }
-      trialsByPhase:phases {
+      trialsByPhase {
         count
         label
         term
@@ -146,20 +199,24 @@ export const TRIALFILTERS = gql`
   }
 `;
 
-
-/*
-trialsByStatus(where: $ctwhere) {
-  term
-  count
-  label
-}
-trialsByType(where: $ctwhere) {
-  term
-  count
-  label
-}
-trialsByPhase(where: $ctwhere) {
-  term
-  count
-  label
-}*/
+export const ALLTRIALFILTERS = gql`
+  query AllDiseasesClinicalTrialsFilters {
+    allDiseaseClinicalTrialsFilters {
+      trialsByPhase {
+        count
+        label
+        term
+      }
+      trialsByStatus {
+        count
+        label
+        term
+      }
+      trialsByType {
+        count
+        label
+        term
+      }
+    }
+  }
+`;

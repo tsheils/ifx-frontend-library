@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 /**
  * Pipe to highlight search text in results
@@ -9,10 +9,9 @@ import { DomSanitizer, SafeHtml } from "@angular/platform-browser";
   standalone: true,
 })
 export class HighlightPipe implements PipeTransform {
-
   constructor(private sanitizer: DomSanitizer) {}
   transform(text: string, search: unknown): SafeHtml | string {
-    if ((search && text) &&(typeof search =='string')) {
+    if (search && text && typeof search == 'string') {
       let pattern = search.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');
       pattern = pattern
         .split(' ')

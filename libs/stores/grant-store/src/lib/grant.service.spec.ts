@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { Apollo } from "apollo-angular";
+import { Apollo } from 'apollo-angular';
 
 import { GrantService } from './grant.service';
 
@@ -8,7 +8,7 @@ describe('GrantService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      providers: [Apollo]
+      providers: [Apollo],
     });
     service = TestBed.inject(GrantService);
   });

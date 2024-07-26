@@ -1,20 +1,21 @@
-import { Component, inject, OnInit, ViewEncapsulation } from "@angular/core";
+import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
 import {
   AbstractControl,
   FormControl,
   FormGroup,
   ValidatorFn,
   Validators,
-  ReactiveFormsModule, FormsModule
-} from "@angular/forms";
+  ReactiveFormsModule,
+  FormsModule,
+} from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { RegisterEmailUserActions } from "@ncats-frontend-library/stores/user-store";
+import { RegisterEmailUserActions } from '@ncats-frontend-library/stores/user-store';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { Store } from "@ngrx/store";
+import { Store } from '@ngrx/store';
 
 /**
  * Set the regular expression for a secure password
@@ -32,7 +33,7 @@ export function securePassword(): ValidatorFn {
  */
 export function matchPassword(testInput: AbstractControl): ValidatorFn {
   return (
-    control: AbstractControl
+    control: AbstractControl,
   ): { passwordsMatch: { value: string } } | null => {
     const matching = control.value === testInput.value;
     return matching ? null : { passwordsMatch: { value: control.value } };
@@ -54,7 +55,7 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
     MatInputModule,
   ],
 })
-export class RegisterModalComponent implements OnInit{
+export class RegisterModalComponent implements OnInit {
   store = inject(Store);
 
   showPassword = false;
@@ -68,13 +69,13 @@ export class RegisterModalComponent implements OnInit{
 
   constructor(
     public dialogRef: MatDialogRef<RegisterModalComponent>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
   ) {}
 
   ngOnInit(): void {
     //  this.registerForm.controls['pw'].addValidators(matchPassword(this.registerForm.controls['pwVerify']))
     this.registerForm.controls['pwVerify'].addValidators(
-      matchPassword(this.registerForm.controls['pw'])
+      matchPassword(this.registerForm.controls['pw']),
     );
   }
 
@@ -113,7 +114,9 @@ export class RegisterModalComponent implements OnInit{
 
   register() {
     if (this.registerForm.status === 'VALID') {
-      this.store.dispatch(RegisterEmailUserActions.registerEmailUser(this.registerForm.value));
+      this.store.dispatch(
+        RegisterEmailUserActions.registerEmailUser(this.registerForm.value),
+      );
     }
   }
 

@@ -8,7 +8,7 @@ export class Reference {
     if (obj.code) {
       const split = obj.code.split(':');
       this.url = REFERENCELOOKUP.filter(
-        (ref) => ref.origin == split[0]
+        (ref) => ref.origin == split[0],
       )[0].url.concat(split[1]);
     }
   }

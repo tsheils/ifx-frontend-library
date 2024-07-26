@@ -4,11 +4,12 @@ import {
   ChangeDetectorRef,
   Component,
   ElementRef,
-  Inject, InjectionToken,
+  Inject,
+  InjectionToken,
   PLATFORM_ID,
   ViewChild,
-  ViewEncapsulation
-} from "@angular/core";
+  ViewEncapsulation,
+} from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApolloSandbox } from '@apollo/sandbox';
 
@@ -25,10 +26,11 @@ export class GraphqlSandboxComponent {
   url!: string;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
+    @Inject(PLATFORM_ID)
+    private platformId: InjectionToken<NonNullable<unknown>>,
     private router: Router,
     private route: ActivatedRoute,
-    private changeRef: ChangeDetectorRef
+    private changeRef: ChangeDetectorRef,
   ) {
     afterNextRender(() => {
       if (isPlatformBrowser(platformId)) {

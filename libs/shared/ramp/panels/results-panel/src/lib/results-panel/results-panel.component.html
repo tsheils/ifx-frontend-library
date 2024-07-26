@@ -1,0 +1,42 @@
+<mat-tab-group [mat-stretch-tabs]="false">
+  <mat-tab [label]="'Results'">
+    @if (results()) {
+      @if (results()!.count) {
+        <div class="row">
+          <div class="width-95">
+            Found {{ results()!.count }} results <br />
+            @if (!fuzzy()) {
+              <span>
+                Matched {{ results()!.matches?.length }} of
+                {{ results()!.inputLength }} {{ results()!.inputType }}
+              </span>
+            }
+            @if (fuzzy()) {
+              <span>
+                Fuzzy matched {{ results()!.matches!.length }}
+                {{ results()!.inputType }}
+              </span>
+            }
+          </div>
+        </div>
+        @if (results()!.noMatches!.length > 0) {
+          <div class="row">
+            <div class="width-95">
+              There were no matches for the following
+              {{ results()!.inputType }}:
+              {{ results()!.noMatches!.join(', ') }}
+            </div>
+          </div>
+        }
+      }
+    }
+  </mat-tab>
+  <mat-tab [label]="'Function'">
+    @if (results()!.function) {
+      <div>
+        <div>The following R function was called:</div>
+        <pre class="code-block">{{ results()!.function }}</pre>
+      </div>
+    }
+  </mat-tab>
+</mat-tab-group>

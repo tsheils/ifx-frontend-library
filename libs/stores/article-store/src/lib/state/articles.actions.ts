@@ -1,6 +1,6 @@
-import { Article } from "@ncats-frontend-library/models/rdas";
-import { Page } from '@ncats-frontend-library/models/utils';
-import { createActionGroup, props } from "@ngrx/store";
+import { Article } from '@ncats-frontend-library/models/rdas';
+import { Filter, Page } from '@ncats-frontend-library/models/utils';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const FetchArticleActions = createActionGroup({
   source: 'Fetch Article',
@@ -10,9 +10,9 @@ export const FetchArticleActions = createActionGroup({
       options?: { [key: string]: string };
     }>(),
     fetchArticleSuccess: props<{ article: Article }>(),
-    fetchArticleFailure: props<{ error: string }>()
-  }
-})
+    fetchArticleFailure: props<{ error: string }>(),
+  },
+});
 
 export const LoadArticlesActions = createActionGroup({
   source: 'Load Articles',
@@ -21,7 +21,16 @@ export const LoadArticlesActions = createActionGroup({
       top: number;
       skip: number;
     }>(),
-    loadArticlesSuccess: props<{ articles: Article[], page?: Page }>(),
-    loadArticlesFailure: props<{ error: string }>()
-  }
-})
+    loadArticlesSuccess: props<{ articles: Article[]; page?: Page }>(),
+    loadArticlesFailure: props<{ error: string }>(),
+  },
+});
+
+export const FetchAllDiseasesArticleFilterActions = createActionGroup({
+  source: 'Fetch Article Filters',
+  events: {
+    fetchArticleFilters: emptyProps(),
+    fetchArticleFiltersSuccess: props<{ filters: Filter[] }>(),
+    fetchArticleFiltersFailure: props<{ error: string }>(),
+  },
+});

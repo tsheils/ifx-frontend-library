@@ -1,27 +1,35 @@
 <div class="row space-around-row">
-  <div class ="width-95 right-text">
-    <mat-slide-toggle (click) = "showTable = !showTable" [color]="'primary'">Show Table</mat-slide-toggle>
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-  &nbsp;
-    <button mat-flat-button [color]="'primary'" [matMenuTriggerFor]="menu">Download <mat-icon>download</mat-icon></button>
+  <div class="width-95 right-text">
+    <mat-slide-toggle (click)="showTable = !showTable" [color]="'primary'"
+      >Show Table</mat-slide-toggle
+    >
+    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+    <button mat-flat-button [color]="'primary'" [matMenuTriggerFor]="menu">
+      Download <mat-icon>download</mat-icon>
+    </button>
     <mat-menu #menu="matMenu">
-      <button mat-menu-item (click)="downloadData('json')">JSON <mat-icon>code</mat-icon></button>
-      <button mat-menu-item (click)="downloadData('csv')">CSV  <mat-icon>border_all</mat-icon></button>
+      <button mat-menu-item (click)="downloadData('json')">
+        JSON <mat-icon>code</mat-icon>
+      </button>
+      <button mat-menu-item (click)="downloadData('csv')">
+        CSV <mat-icon>border_all</mat-icon>
+      </button>
     </mat-menu>
   </div>
 </div>
-<br>
+<br />
 <div class="row space-around-row data-display">
   <div class="width-95">
-@if(showTable === true) {
-<ncats-datatable [data]="dataAsDataProperty()" [fieldsConfig] = "fields"></ncats-datatable>
-} @else {
-<pre class= "raw-data">
-{{dataAsCSV()}}
-</pre>
-}
-</div>
+    @if (showTable === true) {
+      <ncats-datatable
+        [data]="dataAsDataProperty()"
+        [fieldsConfig]="fields"
+      ></ncats-datatable>
+    } @else {
+      <pre class="raw-data"
+        >{{ dataAsCSV() }}
+</pre
+      >
+    }
+  </div>
 </div>

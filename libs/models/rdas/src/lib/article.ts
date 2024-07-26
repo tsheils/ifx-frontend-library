@@ -43,13 +43,13 @@ export class Article {
 
     if (obj.authorsWrote) {
       this.authorsWrote = obj.authorsWrote.map(
-        (author: Partial<Author> = {}) => new Author(author)
+        (author: Partial<Author> = {}) => new Author(author),
       );
     }
 
     if (obj.journals) {
       this.journals = obj.journals.map(
-        (journal: Partial<JournalVolume> = {}) => new JournalVolume(journal)
+        (journal: Partial<JournalVolume> = {}) => new JournalVolume(journal),
       );
     }
 
@@ -57,7 +57,7 @@ export class Article {
       this.meshTerms = obj.meshTerms
         .map((mesh: Partial<MeshTerm> = {}) => new MeshTerm(mesh))
         .sort((a: MeshTerm, b: MeshTerm) =>
-          a.descriptorName.localeCompare(b.descriptorName)
+          a.descriptorName.localeCompare(b.descriptorName),
         );
     }
 
@@ -65,29 +65,29 @@ export class Article {
       this.annotations = obj.annotations
         .filter(
           (a: Partial<PubtatorAnnotation>) =>
-            !(a.infons_type === 'Species' || a.infons_type === 'Genus')
+            !(a.infons_type === 'Species' || a.infons_type === 'Genus'),
         )
         .map(
           (annotation: Partial<PubtatorAnnotation> = {}) =>
-            new PubtatorAnnotation(annotation)
+            new PubtatorAnnotation(annotation),
         );
     }
 
     if (obj.diseases) {
       this.diseases = obj.diseases
-    .map((disease: Partial<Disease> = {}) => new Disease(disease))
+        .map((disease: Partial<Disease> = {}) => new Disease(disease))
         .sort((a: Disease, b: Disease) => a.name.localeCompare(b.name));
     }
 
     if (obj.sources) {
       this.sources = obj.sources.map(
-        (source: Partial<Source> = {}) => new Source(source)
+        (source: Partial<Source> = {}) => new Source(source),
       );
     }
 
     if (obj.epidemiologies) {
       this.epidemiologies = obj.epidemiologies.map(
-        (epi: Partial<Epidemiology> = {}) => new Epidemiology(epi)
+        (epi: Partial<Epidemiology> = {}) => new Epidemiology(epi),
       );
     }
   }

@@ -1,4 +1,3 @@
-
 lib-shared-utils-bar-chart {
   .bar-chart-container {
     padding-top: 1vh;
@@ -12,12 +11,12 @@ lib-shared-utils-bar-chart {
     /// stroke: black;
   }
 
-  .chart-tab{
+  .chart-tab {
     min-height: 30vh;
   }
 
   .hovered {
-    fill: #278F93
+    fill: #278f93;
   }
 
   .chart-title {
@@ -32,11 +31,11 @@ lib-shared-utils-bar-chart {
 
   @media only screen and (max-width: 960px) {
     .bar-chart-container {
-    //  padding-left: .5vw;
+      //  padding-left: .5vw;
     }
 
     .bar-chart {
       min-height: 50vh;
     }
   }
-  }
+}

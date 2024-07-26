@@ -3,12 +3,11 @@ export class NCATSImage {
   caption!: string;
 
   constructor(obj: Partial<NCATSImage>) {
-    if(obj.url) {
+    if (obj.url) {
       this.url = obj.url;
     }
-    if(obj.caption) {
+    if (obj.caption) {
       this.caption = obj.caption;
     }
   }
 }
-

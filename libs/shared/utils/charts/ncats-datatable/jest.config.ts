@@ -3,7 +3,8 @@ export default {
   displayName: 'ncats-datatable',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/shared/utils/charts/ncats-datatable',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/utils/charts/ncats-datatable',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

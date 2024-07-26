@@ -9,9 +9,9 @@
  * you don't want to deal with this.
  */
 
-const { TextDecoder, TextEncoder } = require('node:util')
+const { TextDecoder, TextEncoder } = require('node:util');
 
 Object.defineProperties(globalThis, {
   TextDecoder: { value: TextDecoder },
   TextEncoder: { value: TextEncoder },
-})
+});

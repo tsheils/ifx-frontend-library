@@ -1,0 +1,39 @@
+.toolbar-template button {
+  color: #ffffff !important;
+  padding: 0 1vw 0 1vw;
+}
+
+.toolbar-template a {
+  color: #ffffff !important;
+}
+
+.ramp-logo {
+  height: 42px;
+  padding: 10px;
+}
+
+.main-content {
+  background-color: #fafafa;
+  padding-top: 60px;
+  min-height: 60vh;
+}
+
+.content-wrapper {
+  min-height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.ramp-logo-footer {
+  max-width: 100%;
+}
+
+.right-options {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-start;
+}

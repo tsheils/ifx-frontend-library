@@ -6,10 +6,10 @@ import {
   InjectionToken,
   PLATFORM_ID,
   ViewChild,
-  ViewEncapsulation
-} from "@angular/core";
-import { CommonModule, isPlatformBrowser } from "@angular/common";
-import SwaggerUI from "swagger-ui";
+  ViewEncapsulation,
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'lib-history-api',
@@ -17,7 +17,7 @@ import SwaggerUI from "swagger-ui";
   imports: [CommonModule],
   templateUrl: './history-api.component.html',
   styleUrl: './history-api.component.scss',
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class HistoryApiComponent {
   /**
@@ -27,7 +27,8 @@ export class HistoryApiComponent {
   isBrowser: boolean;
 
   constructor(
-    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
+    @Inject(PLATFORM_ID)
+    private platformId: InjectionToken<NonNullable<unknown>>,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     /**

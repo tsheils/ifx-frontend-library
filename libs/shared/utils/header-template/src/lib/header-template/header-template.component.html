@@ -5,52 +5,55 @@
   <nav>
     <mat-toolbar class="toolbar-template" [@slideInOut]="animationState">
       <ng-content select=".left-options"></ng-content>
-      @for (link of links; track link) {
-      <div>
-        @if (link.children) {
-        <div #menu>
-          <button mat-button
-                  [color] = "'primary'"
-                  [matMenuTriggerFor]="dynamicMenu">
-            {{ link.label ? link.label : link.link }}
-          </button>
-          <mat-menu #dynamicMenu="matMenu">
-            @for (child of link.children; track child) {
-            <span>
+      @for (link of links; track link.label) {
+        <div>
+          @if (link.children) {
+            <div #menu>
               <button
-              mat-menu-item [routerLink]="child.link">
-                {{ child.label ? child.label : child.link }}
+                mat-button
+                [color]="'primary'"
+                [matMenuTriggerFor]="dynamicMenu"
+              >
+                {{ link.label ? link.label : link.link }}
               </button>
-            </span>
-            }
-          </mat-menu>
-        </div>
-        } @else {
-        <div #menulink>
-          @if (link.external) {
-          <div #external>
-            <a mat-button
-            [color] = "'primary'"
-            href="{{ link.link }}" class="header-link-button"
-              >{{ link.label ? link.label : link.link }}
-              <mat-icon>open_in_new</mat-icon>
-            </a>
-          </div>
+              <mat-menu #dynamicMenu="matMenu">
+                @for (child of link.children; track child.label) {
+                  <span>
+                    <button mat-menu-item [routerLink]="child.link">
+                      {{ child.label ? child.label : child.link }}
+                    </button>
+                  </span>
+                }
+              </mat-menu>
+            </div>
           } @else {
-          <div #internal>
-            <a
-              mat-button
-              [color] = "'primary'"
-              routerLink="/{{ link.link }}"
-              [ngClass]="{ active: isActive(link?.link) }"
-              class="header-link-button"
-              >{{ link.label ? link.label : link.link }}</a
-            >
-          </div>
+            <div #menulink>
+              @if (link.external) {
+                <div #external>
+                  <a
+                    mat-button
+                    [color]="'primary'"
+                    href="{{ link.link }}"
+                    class="header-link-button"
+                    >{{ link.label ? link.label : link.link }}
+                    <mat-icon>open_in_new</mat-icon>
+                  </a>
+                </div>
+              } @else {
+                <div #internal>
+                  <a
+                    mat-button
+                    [color]="'primary'"
+                    routerLink="/{{ link.link }}"
+                    [ngClass]="{ active: isActive(link?.link) }"
+                    class="header-link-button"
+                    >{{ link.label ? link.label : link.link }}</a
+                  >
+                </div>
+              }
+            </div>
           }
         </div>
-        }
-      </div>
       }
       <span class="fill-remaining-space"></span>
       <ng-content select=".right-options"></ng-content>

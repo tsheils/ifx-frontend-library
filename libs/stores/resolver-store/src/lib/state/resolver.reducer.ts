@@ -1,8 +1,11 @@
-import { Filter } from "@ncats-frontend-library/models/utils";
+import { Filter } from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { ResolverResponse } from "ifx";
-import { LoadResolverOptionsActions, ResolveQueryActions } from "./resolver.actions";
+import { ResolverResponse } from 'ifx';
+import {
+  LoadResolverOptionsActions,
+  ResolveQueryActions,
+} from './resolver.actions';
 
 import * as ResolverActions from './resolver.actions';
 
@@ -37,27 +40,36 @@ const reducer = createReducer(
     error: null,
   })),
 
-  on(LoadResolverOptionsActions.loadResolverOptionsSuccess, (state, { options }) =>
-    ({ ...state, options: options, loaded: true, error: null}),
+  on(
+    LoadResolverOptionsActions.loadResolverOptionsSuccess,
+    (state, { options }) => ({
+      ...state,
+      options: options,
+      loaded: true,
+      error: null,
+    }),
   ),
 
-on(LoadResolverOptionsActions.setPreviousFilters, (state, { filters }) => {
-   return ({ ...state, previousOptions: filters, loaded: true, error: null })
-  }
-  ),
+  on(LoadResolverOptionsActions.setPreviousFilters, (state, { filters }) => {
+    return { ...state, previousOptions: filters, loaded: true, error: null };
+  }),
 
-  on(ResolveQueryActions.resolveQuerySuccess, (state, {data}) => {
-      return resolverAdapter.setAll(data, { ...state, loaded: true, error: null })
-    }
-  ),
+  on(ResolveQueryActions.resolveQuerySuccess, (state, { data }) => {
+    return resolverAdapter.setAll(data, {
+      ...state,
+      loaded: true,
+      error: null,
+    });
+  }),
 
   on(
     LoadResolverOptionsActions.loadResolverOptionsFailure,
     ResolveQueryActions.resolveQueryFailure,
     (state, { error }) => ({
-    ...state,
-    error,
-  })),
+      ...state,
+      error,
+    }),
+  ),
 );
 
 export function resolverReducer(

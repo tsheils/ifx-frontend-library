@@ -1,0 +1,76 @@
+<mat-accordion multi>
+  <mat-expansion-panel expanded id="input" #input>
+    <mat-expansion-panel-header>
+      <mat-panel-title>Input</mat-panel-title>
+    </mat-expansion-panel-header>
+    <ng-content select=".custom-input"></ng-content>
+    @if (inputTab && inputTab.size) {
+      <lib-input-panel
+        [paths]="paths"
+        [inputQuestions]="inputTab"
+        (dataSearch)="searchData($event)"
+        (dataDownload)="downloadData($event)"
+      ></lib-input-panel>
+    }
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [expanded]="resultsTabs"
+    [disabled]="!resultsTabs"
+    id="results"
+    #results
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Results</mat-panel-title>
+    </mat-expansion-panel-header>
+    @if (resultsTabs) {
+      <lib-results-panel [results]="resultsTabs"></lib-results-panel>
+    }
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [expanded]="visualizationTabs()?.size"
+    [disabled]="!visualizationTabs()?.size"
+    id="visualizations"
+    #visualizations
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Visualizations</mat-panel-title>
+    </mat-expansion-panel-header>
+    @if (visualizationTabs()?.size) {
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        @for (tab of visualizationTabs() | keyvalue; track tab.key) {
+          <mat-tab [label]="tab.key">
+            <ng-template matTabContent>
+              <lib-visualization-panel
+                [data]="tab.value"
+              ></lib-visualization-panel>
+            </ng-template>
+          </mat-tab>
+        }
+      </mat-tab-group>
+    }
+  </mat-expansion-panel>
+  <mat-expansion-panel
+    [expanded]="dataTabs.size"
+    [disabled]="!dataTabs.size"
+    id="data"
+    #data
+  >
+    <mat-expansion-panel-header>
+      <mat-panel-title>Data</mat-panel-title>
+    </mat-expansion-panel-header>
+    @if (dataTabs.size) {
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        @for (tab of dataTabs | keyvalue: _originalOrder; track tab.key) {
+          <mat-tab [label]="tab.key">
+            <ng-template matTabContent>
+              <lib-data-panel
+                [dataAsDataProperty]="tab.value['data']"
+                [dataColumns]="tab.value['fields']"
+              ></lib-data-panel>
+            </ng-template>
+          </mat-tab>
+        }
+      </mat-tab-group>
+    }
+  </mat-expansion-panel>
+</mat-accordion>

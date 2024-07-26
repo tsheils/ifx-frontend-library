@@ -98,6 +98,9 @@ export const FETCHPROJECTSQUERY = gql`
     count: coreProjectsAggregate(where: $coreProjectsWhere) {
       count
     }
+    allCount: coreProjectsAggregate(where: $coreProjectsWhere) {
+      count
+    }
   }
 `;
 
@@ -112,12 +115,12 @@ export const GRANTDETAILSVARIABLES: {
 };
 
 export const PROJECTVARIABLES: {
-    coreProjectsWhere: {
-      projectsUnderCore_SOME: {
-        gardsresearchedBy_SOME: {
-          GardId?: string | null;
-        }
-      }
+  coreProjectsWhere: {
+    projectsUnderCore_SOME: {
+      gardsresearchedBy_SOME: {
+        GardId?: string | null;
+      };
+    };
   };
   coreProjectsOptions: {
     limit?: number;
@@ -127,17 +130,17 @@ export const PROJECTVARIABLES: {
     sort?: [
       {
         funding_year?: string | null;
-      }
+      },
     ];
   };
 } = {
   coreProjectsWhere: {
-      projectsUnderCore_SOME: {
-        gardsresearchedBy_SOME: {
-          GardId: null
-        }
-      }
+    projectsUnderCore_SOME: {
+      gardsresearchedBy_SOME: {
+        GardId: null,
+      },
     },
+  },
   coreProjectsOptions: {
     limit: 10,
   },
@@ -151,9 +154,7 @@ export const PROJECTVARIABLES: {
 };
 
 export const PROJECTFILTERS = gql`
-  query ProjectFilters(
-    $gardId: String
-  ) {
+  query ProjectFilters($gardId: String) {
     countsByYear(gardId: $gardId) {
       term
       count
@@ -163,6 +164,23 @@ export const PROJECTFILTERS = gql`
       term
       count
       label
+    }
+  }
+`;
+
+export const ALLPROJECTFILTERS = gql`
+  query AllProjectFilters {
+    allProjectFilters {
+      countsByYear {
+        count
+        label
+        term
+      }
+      fundingByYear {
+        count
+        label
+        term
+      }
     }
   }
 `;

@@ -6,8 +6,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { USERS_FEATURE_KEY, usersReducer } from "@ncats-frontend-library/stores/user-store";
-import { StoreModule } from "@ngrx/store";
+import {
+  USERS_FEATURE_KEY,
+  usersReducer,
+} from '@ncats-frontend-library/stores/user-store';
+import { StoreModule } from '@ngrx/store';
 
 import { EmailSignOnModalComponent } from './email-sign-on-modal.component';
 
@@ -26,8 +29,8 @@ describe('EmailSignOnModalComponent', () => {
         MatIconModule,
         MatButtonModule,
         NoopAnimationsModule,
-      StoreModule.forRoot({}),
-      StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
       providers: [
         { provide: MatDialog, useValue: {} },

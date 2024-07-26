@@ -8,25 +8,34 @@ rdas-privacy-page {
   }
 
   .navigation-menu-panel {
-    top: calc(60px + 1vh) !important
+    top: calc(60px + 1vh) !important;
   }
 
   .ramp-list {
     list-style: none;
   }
   .section-content {
-    font: 400 1rem/1.5rem Roboto, 'Helvetica Neue', sans-serif;
+    font:
+      400 1rem/1.5rem Roboto,
+      'Helvetica Neue',
+      sans-serif;
   }
 
   .rdas-title {
-    font: 300 3rem Roboto, 'Helvetica Neue', sans-serif;
+    font:
+      300 3rem Roboto,
+      'Helvetica Neue',
+      sans-serif;
     padding-left: 1vw;
     margin-top: 2vh;
     margin-bottom: 0;
   }
 
   .section-header {
-    font: 300 2.5rem Roboto, 'Helvetica Neue', sans-serif;
+    font:
+      300 2.5rem Roboto,
+      'Helvetica Neue',
+      sans-serif;
     padding-left: 1vw;
     margin-top: 5vh;
     margin-bottom: 2vh;
@@ -41,9 +50,11 @@ rdas-privacy-page {
   }
 
   @media only screen and (max-width: 768px) {
-
     .rdas-title {
-      font: 300 2rem Roboto, 'Helvetica Neue', sans-serif;
+      font:
+        300 2rem Roboto,
+        'Helvetica Neue',
+        sans-serif;
       margin-top: 2vh;
     }
   }

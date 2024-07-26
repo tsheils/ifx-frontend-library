@@ -1,7 +1,10 @@
-import { Article } from "@ncats-frontend-library/models/rdas";
-import { Filter, FilterCategory, Page } from "@ncats-frontend-library/models/utils";
-import { createAction, createActionGroup, props } from "@ngrx/store";
-
+import { Article } from '@ncats-frontend-library/models/rdas';
+import {
+  Filter,
+  FilterCategory,
+  Page,
+} from '@ncats-frontend-library/models/utils';
+import { createAction, createActionGroup, props } from '@ngrx/store';
 
 export const SearchFiltersActions = createActionGroup({
   source: 'Search Filters',
@@ -12,9 +15,9 @@ export const SearchFiltersActions = createActionGroup({
       limit?: number;
     }>(),
     searchFiltersSuccess: props<{ filters: Filter[] }>(),
-    searchFiltersFailure: props<{ error: string }>()
-  }
-})
+    searchFiltersFailure: props<{ error: string }>(),
+  },
+});
 
 export const FetchFiltersActions = createActionGroup({
   source: 'Fetch Filters',
@@ -26,7 +29,7 @@ export const FetchFiltersActions = createActionGroup({
       term?: string;
       terms?: string[];
     }>(),
-    fetchFiltersSuccess:   props<{ filters: FilterCategory[] }>(),
-    fetchFiltersFailure: props<{ error: string }>()
-  }
-})
+    fetchFiltersSuccess: props<{ filters: FilterCategory[] }>(),
+    fetchFiltersFailure: props<{ error: string }>(),
+  },
+});

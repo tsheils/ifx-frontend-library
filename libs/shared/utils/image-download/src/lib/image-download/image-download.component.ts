@@ -1,52 +1,58 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from "@angular/common";
-import { Component, ContentChild, ElementRef, Inject, InjectionToken, input, PLATFORM_ID } from "@angular/core";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { MatMenuModule } from "@angular/material/menu";
-import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
-import { GenericChartComponent } from "generic-chart";
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, inject, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { GenericChartComponent } from 'generic-chart';
 
 @Component({
-  selector: "lib-image-download",
+  selector: 'lib-image-download',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatIconModule
-  ],
-  templateUrl: "./image-download.component.html",
-  styleUrl: "./image-download.component.scss"
+  imports: [CommonModule, MatButtonModule, MatMenuModule, MatIconModule],
+  templateUrl: './image-download.component.html',
+  styleUrl: './image-download.component.scss',
 })
 export class ImageDownloadComponent {
-  isBrowser: boolean;
-  chartComponent = input<GenericChartComponent>()
+  chartComponent = input<GenericChartComponent>();
   svg = input<SVGElement>({} as SVGElement);
-
-  constructor(
-    @Inject(PLATFORM_ID) private platformId: InjectionToken<NonNullable<unknown>>,
-    @Inject(DOCUMENT) private dom: Document
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  showTSV = input(true);
+  dom = inject(DOCUMENT);
 
   downloadSVG() {
-    const svgString = this.getSVGString(this.chartComponent()?.svgExport as SVGElement);
-    this._downloadFile(this._makeBlob(svgString, "image/svg+xml"), "data.svg");
+    let svgString;
+    if (this.svg()) {
+      svgString = this.getSVGString(this.svg());
+    } else {
+      svgString = this.getSVGString(
+        this.chartComponent()?.svgExport as SVGElement,
+      );
+    }
+    this._downloadFile(this._makeBlob(svgString, 'image/svg+xml'), 'data.svg');
   }
 
   downloadPNG() {
-    const svgString: string = this.getSVGString(this.chartComponent()?.svgExport as SVGElement);
+    let svgString;
+    if (this.svg()) {
+      svgString = this.getSVGString(this.svg());
+    } else {
+      svgString = this.getSVGString(
+        this.chartComponent()?.svgExport as SVGElement,
+      );
+    }
     this.svgString2Image(svgString); // passes Blob and filesize String to the callback
   }
 
   downloadTSV() {
     if (this.chartComponent()?.data as FilterCategory) {
-      this._downloadFile(this._makeBlob(this._toTSV(this.chartComponent()?.data)), `${this.chartComponent()?.data?.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`);
+      this._downloadFile(
+        this._makeBlob(this._toTSV(this.chartComponent()?.data)),
+        `${this.chartComponent()?.data?.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
+      );
     }
   }
 
-// Below are the functions that handle actual exporting:
+  // Below are the functions that handle actual exporting:
   getSVGString(svgNode: SVGElement) {
     const cssStyleText = this.getCSSStyles(svgNode);
     this.appendCSS(cssStyleText, svgNode);
@@ -57,26 +63,26 @@ export class ImageDownloadComponent {
   getCSSStyles(parentElement: SVGElement) {
     const selectorTextArr = [];
     // Add Parent element Id and Classes to the list
-    selectorTextArr.push("#" + parentElement.id);
+    selectorTextArr.push('#' + parentElement.id);
     for (let c = 0; c < parentElement.classList.length; c++)
-      if (!this.contains("." + parentElement.classList[c], selectorTextArr))
-        selectorTextArr.push("." + parentElement.classList[c]);
+      if (!this.contains('.' + parentElement.classList[c], selectorTextArr))
+        selectorTextArr.push('.' + parentElement.classList[c]);
 
     // Add Children element Ids and Classes to the list
-    const nodes = parentElement.getElementsByTagName("*");
+    const nodes = parentElement.getElementsByTagName('*');
     for (let i = 0; i < nodes.length; i++) {
       const id = nodes[i].id;
-      if (!this.contains("#" + id, selectorTextArr))
-        selectorTextArr.push("#" + id);
+      if (!this.contains('#' + id, selectorTextArr))
+        selectorTextArr.push('#' + id);
 
       const classes = nodes[i].classList;
       for (let c = 0; c < classes.length; c++)
-        if (!this.contains("." + classes[c], selectorTextArr))
-          selectorTextArr.push("." + classes[c]);
+        if (!this.contains('.' + classes[c], selectorTextArr))
+          selectorTextArr.push('.' + classes[c]);
     }
 
     // Extract CSS Rules
-    let extractedCSSText = "";
+    let extractedCSSText = '';
     for (let i = 0; i < this.dom.styleSheets.length; i++) {
       const s = this.dom.styleSheets[i];
       try {
@@ -100,17 +106,19 @@ export class ImageDownloadComponent {
   }
 
   appendCSS(cssText: string, element: SVGElement) {
-    const styleElement = document.createElement("style");
-    styleElement.setAttribute("type", "text/css");
+    const styleElement = document.createElement('style');
+    styleElement.setAttribute('type', 'text/css');
     styleElement.innerHTML = cssText;
     const refNode = element.hasChildNodes() ? element.children[0] : null;
     element.insertBefore(styleElement, refNode);
   }
 
-  svgString2Image(svgString = "", width = 1000, height = 1000) {
-    const imgsrc = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svgString))); // Convert SVG string to data URL
-    const canvas = this.dom.createElement("canvas");
-    const context = canvas.getContext("2d");
+  svgString2Image(svgString = '', width = 1000, height = 1000) {
+    const imgsrc =
+      'data:image/svg+xml;base64,' +
+      btoa(unescape(encodeURIComponent(svgString))); // Convert SVG string to data URL
+    const canvas = this.dom.createElement('canvas');
+    const context = canvas.getContext('2d');
     if (context) {
       canvas.width = width;
       canvas.height = height;
@@ -121,23 +129,20 @@ export class ImageDownloadComponent {
         context.clearRect(0, 0, width, height);
         context.drawImage(image, 0, 0, width, height);
         canvas.toBlob((blob) => {
-          this._downloadFile(blob as Blob, "image.png");
+          this._downloadFile(blob as Blob, 'image.png');
         });
-
       };
       image.src = imgsrc;
     }
   }
 
-
-  _makeBlob(data: string, type = "text/tsv") {
+  _makeBlob(data: string, type = 'text/tsv') {
     return new Blob([data], { type: type });
   }
 
-
   _toTSV(category: FilterCategory | undefined): string {
     if (category && category.values) {
-      const data = category.values
+      const data = category.values;
       //   grab the column headings (separated by tabs)
       const headings: string = Object.keys(data[0] as Filter).join('\t');
       // iterate over the data
@@ -157,19 +162,18 @@ export class ImageDownloadComponent {
 
   _downloadFile(data: Blob, name: string) {
     if (this.dom) {
-      const link = this.dom.createElement("a");
+      const link = this.dom.createElement('a');
       if (link.download !== undefined) {
         // feature detection
         // Browsers that support HTML5 download attribute
         const url = URL.createObjectURL(data);
-        link.setAttribute("href", url);
-        link.setAttribute("download", `${name}`);
-        link.style.visibility = "hidden";
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${name}`);
+        link.style.visibility = 'hidden';
         this.dom.body.appendChild(link);
         link.click();
         this.dom.body.removeChild(link);
       }
     }
   }
-
 }

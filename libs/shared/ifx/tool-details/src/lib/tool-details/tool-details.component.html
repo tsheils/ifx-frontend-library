@@ -1,59 +1,79 @@
-<div class = "tool-banner">
-
-  <span class = "tool-name">{{tool()?.toolName}}</span>
-  @if(tool()?.image){
-  <div>
-    <img class ="full-width-banner" ngSrc= {{imgSrc()}} width =1117 height = 900 priority>
-  </div>
+<div class="tool-banner">
+  <span class="tool-name">{{ tool()?.toolName }}</span>
+  @if (tool()?.image) {
+    <div>
+      <img
+        class="full-width-banner"
+        ngSrc="{{ imgSrc() }}"
+        width="1117"
+        height="900"
+        priority
+      />
+    </div>
   } @else {
     <div class="placeholder"></div>
-    }
+  }
 </div>
-<br>
-<br>
+<br />
+<br />
 <div class="row space-around-row">
-  <div class = "width-60">
+  <div class="width-60">
     <div class="row">
-    <div class = "mat-headline-5">{{tool()?.description}}</div>
+      <div class="mat-headline-5">{{ tool()?.description }}</div>
     </div>
-    @if(tool()?.contact){
-    <div class="row">
-     <div> NCATS Contact:{{tool()?.contact}}</div>
-       </div>
+    @if (tool()?.contact) {
+      <div class="row">
+        <div>NCATS Contact:{{ tool()?.contact }}</div>
+      </div>
     }
   </div>
   <div class="width-35">
     <div class="row right-justified-row">
-        <div>Designed for: {{tool()?.audience}}</div>
+      <div>Designed for: {{ tool()?.audience }}</div>
     </div>
-      @if(tool()?.toolType){
+    @if (tool()?.toolType) {
       <div class="row right-justified-row">
-         @for(type of tool()?.toolType?.split('|'); track type) {
-        <div class="chip accent-chip"  selected="true"> {{type}}</div>
+        @for (type of tool()?.toolType?.split('|'); track type) {
+          <div class="chip accent-chip" selected="true">{{ type }}</div>
         }
       </div>
-        }
+    }
 
-    @if ((tool()?.publicCodebase === true) && tool()?.codebase) {
-    <div class="row right-justified-row">
-      <div class = "mat-headline-6">
-      See the code: <a href = tool()?.codebase class = "tool-link secondary-color">{{tool()?.codebase}}</a>
+    @if (tool()?.publicCodebase === true && tool()?.codebase) {
+      <div class="row right-justified-row">
+        <div class="mat-headline-6">
+          See the code:
+          <a href="tool()?.codebase" class="tool-link secondary-color">{{
+            tool()?.codebase
+          }}</a>
+        </div>
       </div>
-    </div>
     }
   </div>
 </div>
-<br>
-<br>
+<br />
+<br />
 <div class="link-button">
-    @if(tool()?.toolType === "java webstart app"){
+  @if (tool()?.toolType === 'java webstart app') {
     <div class="">
-    <i><a mat-stroked-button [color]="'primary'" [href] = tool()?.url target="_blank">{{tool()?.toolName}}&nbsp;<mat-icon>download</mat-icon></a></i><br>
-             </div>
-    } @else {
+      <i
+        ><a
+          mat-stroked-button
+          [color]="'primary'"
+          [href]="tool()?.url"
+          target="_blank"
+          >{{ tool()?.toolName }}&nbsp;<mat-icon>download</mat-icon></a
+        ></i
+      ><br />
+    </div>
+  } @else {
     <div>
-    <i><a href = {{tool()?.url}} target="_blank">{{tool()?.toolName}}&nbsp;<mat-icon>open_in_new</mat-icon></a></i><br>
-             </div>
-   }
-  </div>
-<br>
+      <i
+        ><a href="{{ tool()?.url }}" target="_blank"
+          >{{ tool()?.toolName }}&nbsp;<mat-icon>open_in_new</mat-icon></a
+        ></i
+      ><br />
+    </div>
+  }
+</div>
+<br />

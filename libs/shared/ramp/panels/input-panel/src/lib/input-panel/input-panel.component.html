@@ -1,0 +1,30 @@
+<div class="row top-align">
+  @for (tab of inputQuestions | keyvalue: _originalOrder; track tab.key) {
+    <div [ngClass]="tab.key">
+      <h3>{{ cleanLabel(tab.key) | titlecase }} Options</h3>
+      <lib-ncats-form
+        [questions]="tab.value"
+        (formCreated)="setForm($event, tab.key)"
+      ></lib-ncats-form>
+    </div>
+  }
+</div>
+<div class="row centered-row bottom-align">
+  <div>
+    <button mat-flat-button color="accent" (click)="fetchData()">
+      <span class="hide-small">Search</span><mat-icon>search</mat-icon>
+    </button>
+    &nbsp;&nbsp;&nbsp;
+    @if (showDownload) {
+      <button
+        mat-stroked-button
+        class="tool-button list-download"
+        (click)="downloadData()"
+        matTooltip="Download Data"
+        color="accent"
+      >
+        <span class="hide-small">Download </span><mat-icon>download</mat-icon>
+      </button>
+    }
+  </div>
+</div>

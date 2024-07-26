@@ -1,20 +1,27 @@
-import { HttpClient, provideHttpClient, withFetch, withInterceptorsFromDi } from "@angular/common/http";
-import { APP_INITIALIZER, ApplicationConfig, inject } from "@angular/core";
-import { provideAnimations } from "@angular/platform-browser/animations";
-import { provideAnimationsAsync } from "@angular/platform-browser/animations/async";
+import {
+  HttpClient,
+  provideHttpClient,
+  withFetch,
+  withInterceptorsFromDi,
+} from '@angular/common/http';
+import { APP_INITIALIZER, ApplicationConfig, inject } from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   PreloadAllModules,
   provideRouter,
-  withComponentInputBinding, withEnabledBlockingInitialNavigation,
-  withInMemoryScrolling, withPreloading,
-  withViewTransitions
-} from "@angular/router";
-import { provideEffects } from "@ngrx/effects";
-import { provideRouterStore, routerReducer } from "@ngrx/router-store";
-import { provideState, provideStore, Store } from "@ngrx/store";
-import { provideStoreDevtools } from "@ngrx/store-devtools";
-import { provideMarkdown } from "ngx-markdown";
-import { environment } from "../environments/environment";
+  withComponentInputBinding,
+  withEnabledBlockingInitialNavigation,
+  withInMemoryScrolling,
+  withPreloading,
+  withViewTransitions,
+} from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { provideState, provideStore, Store } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideMarkdown } from 'ngx-markdown';
+import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
 import { provideClientHydration } from '@angular/platform-browser';
 import {
@@ -22,8 +29,8 @@ import {
   ifxToolsReducer,
   IFX_TOOLS_FEATURE_KEY,
   IfxToolsService,
-  LoadToolsActions
-} from "ifx-tool-store";
+  LoadToolsActions,
+} from 'ifx-tool-store';
 
 export function fetch_data(ifxToolsService: IfxToolsService) {
   return () => {
@@ -61,18 +68,15 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideStore({
       router: routerReducer,
-      ifxTools: ifxToolsReducer
+      ifxTools: ifxToolsReducer,
     }),
     provideRouterStore(),
     provideStoreDevtools(),
-    provideState(
-    IFX_TOOLS_FEATURE_KEY,
-    ifxToolsReducer
-    ),
+    provideState(IFX_TOOLS_FEATURE_KEY, ifxToolsReducer),
     provideEffects(IFXToolsEffects),
     provideAnimations(),
     provideAnimationsAsync(),

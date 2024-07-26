@@ -1,0 +1,80 @@
+<mat-sidenav-container class="about-page">
+  <mat-sidenav
+    #navigationsidenav
+    [opened]="true"
+    [mode]="'side'"
+    class="main-ramp-rail"
+  >
+    <div class="ramp-rail ramp-main" cdkScrollable>
+      <div
+        matRipple
+        class="rail-button"
+        [ngClass]="{ 'active-rail-button': isActive('biochemical-pathways') }"
+        routerLink="/biochemical-pathways"
+      >
+        <a>
+          <div class="rail-icon">B</div>
+        </a>
+        <div class="rail-label">
+          Biochemical <br />
+          Pathways
+        </div>
+      </div>
+      <div
+        matRipple
+        class="rail-button"
+        [ngClass]="{ 'active-rail-button': isActive('analytes') }"
+        routerLink="/analytes"
+      >
+        <a>
+          <div class="rail-icon">A</div>
+        </a>
+        <div class="rail-label">Analytes</div>
+      </div>
+      <div
+        matRipple
+        class="rail-button"
+        [ngClass]="{ 'active-rail-button': isActive('ontologies') }"
+        routerLink="/ontologies"
+      >
+        <a>
+          <div class="rail-icon">O</div>
+        </a>
+        <div class="rail-label">Ontologies</div>
+      </div>
+      <div
+        matRipple
+        class="rail-button"
+        [ngClass]="{ 'active-rail-button': isActive('reactions') }"
+        routerLink="/reactions"
+      >
+        <a>
+          <div class="rail-icon">R</div>
+        </a>
+        <div class="rail-label">Reactions</div>
+      </div>
+      <div
+        matRipple
+        class="rail-button"
+        [ngClass]="{ 'active-rail-button': isActive('chemical-properties') }"
+        routerLink="/chemical-properties"
+      >
+        <a>
+          <div class="rail-icon">C</div>
+        </a>
+        <div class="rail-label">Chemical Properties</div>
+      </div>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-content class="drawer-container-content">
+    <div class="row">
+      <div class="width-95">
+        <lib-ramp-page
+          [paths]="paths()"
+          [title]="title()"
+          [inputMap]="inputFields()"
+        ></lib-ramp-page>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -1,6 +1,6 @@
 import { Action } from '@ngrx/store';
-import { ResolverResponse } from "ifx";
-import { LoadResolverOptionsActions } from "./resolver.actions";
+import { ResolverResponse } from 'ifx';
+import { LoadResolverOptionsActions } from './resolver.actions';
 
 import * as ResolverActions from './resolver.actions';
 import {
@@ -15,13 +15,12 @@ describe('Resolver Reducer', () => {
     input: name || `name-${id}`,
     response: name || `name-${id}`,
     source: name || `name-${id}`,
-    url: name || `name-${id}`
+    url: name || `name-${id}`,
   });
 
   describe('valid Resolver actions', () => {
     it('loadResolverSuccess should return the list of known Resolver', () => {
-
-      const action =  LoadResolverOptionsActions.loadResolverOptionsSuccess;
+      const action = LoadResolverOptionsActions.loadResolverOptionsSuccess;
 
       const result: ResolverState = resolverReducer(
         initialResolverState,

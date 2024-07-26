@@ -1,35 +1,32 @@
-import { Component, Inject, input } from "@angular/core";
-import { CommonModule, DOCUMENT } from "@angular/common";
-import { MatButtonModule } from "@angular/material/button";
-import { MatIconModule } from "@angular/material/icon";
-import { Filter, FilterCategory } from "@ncats-frontend-library/models/utils";
+import { Component, Inject, input } from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 
 @Component({
   selector: 'lib-filter-download-button',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
+  imports: [CommonModule, MatIconModule, MatButtonModule],
   templateUrl: './filter-download-button.component.html',
   styleUrl: './filter-download-button.component.scss',
 })
 export class FilterDownloadButtonComponent {
-selectedFilter = input<FilterCategory>();
-  constructor(
-    @Inject(DOCUMENT) private dom: Document
-  ) {}
+  selectedFilter = input<FilterCategory>();
+  constructor(@Inject(DOCUMENT) private dom: Document) {}
 
   downloadData() {
     if (this.selectedFilter) {
-      this._downloadFile(this._toTSV(this.selectedFilter()), `${this.selectedFilter()?.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`);
+      this._downloadFile(
+        this._toTSV(this.selectedFilter()),
+        `${this.selectedFilter()?.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
+      );
     }
   }
 
   _toTSV(category: FilterCategory | undefined): string {
     if (category && category.values) {
-      const data = category.values
+      const data = category.values;
       //   grab the column headings (separated by tabs)
       const headings: string = Object.keys(data[0] as Filter).join('\t');
       // iterate over the data
@@ -64,5 +61,4 @@ selectedFilter = input<FilterCategory>();
       }
     }
   }
-
 }

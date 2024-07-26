@@ -1,0 +1,10 @@
+.input-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22%, 4fr));
+  grid-template-rows: auto;
+  grid-gap: 1%;
+}
+
+.span-1 {
+  grid-column: auto / span 1;
+}

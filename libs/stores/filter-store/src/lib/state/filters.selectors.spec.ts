@@ -1,4 +1,4 @@
-import { FilterCategory } from "@ncats-frontend-library/models/utils";
+import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import {
   filtersAdapter,
   FiltersPartialState,
@@ -10,23 +10,22 @@ describe('Filters Selectors', () => {
   const ERROR_MSG = 'No Error Available';
   const getFiltersId = (it: FilterCategory) => it.label;
 
-
   let state: FiltersPartialState;
 
   beforeEach(() => {
     state = {
       filters: filtersAdapter.setAll(
         [
-          new FilterCategory({label: 'PRODUCT-AAA', values: []}),
-          new FilterCategory({label: 'PRODUCT-BBB', values: []}),
-          new FilterCategory({label: 'PRODUCT-CCC', values: []}),
+          new FilterCategory({ label: 'PRODUCT-AAA', values: [] }),
+          new FilterCategory({ label: 'PRODUCT-BBB', values: [] }),
+          new FilterCategory({ label: 'PRODUCT-CCC', values: [] }),
         ],
         {
           ...initialFiltersState,
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });
@@ -42,11 +41,11 @@ describe('Filters Selectors', () => {
 
     it('selectEntity() should return the selected Entity', () => {
       const result = FiltersSelectors.selectEntity(state);
-      let selId
-      if(result) {
+      let selId;
+      if (result) {
         selId = getFiltersId(result);
       } else {
-        selId = undefined
+        selId = undefined;
       }
       expect(selId).toBe('PRODUCT-BBB');
     });

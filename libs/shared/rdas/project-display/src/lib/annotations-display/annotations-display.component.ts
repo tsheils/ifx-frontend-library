@@ -1,4 +1,4 @@
-import { Component, computed, input, ViewEncapsulation } from "@angular/core";
+import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Annotation } from '@ncats-frontend-library/models/rdas';
 
@@ -13,23 +13,23 @@ import { Annotation } from '@ncats-frontend-library/models/rdas';
 export class AnnotationsDisplayComponent {
   annotations = input<Annotation[] | undefined>();
 
-  annotationsMap = computed(()=> {
-      const aMap: Map<string, string[]> = new Map<string, string[]>();
-      this.annotations()?.forEach((annotation: Annotation) => {
-        annotation.semantic_types_names?.forEach((type: string) => {
-          if (aMap.has(type)) {
-            let types = aMap.get(type);
-            if (types) {
-              types.push(<string>annotation.umls_concept);
-            } else {
-              types = [<string>annotation.umls_concept];
-            }
-            aMap.set(type, types);
+  annotationsMap = computed(() => {
+    const aMap: Map<string, string[]> = new Map<string, string[]>();
+    this.annotations()?.forEach((annotation: Annotation) => {
+      annotation.semantic_types_names?.forEach((type: string) => {
+        if (aMap.has(type)) {
+          let types = aMap.get(type);
+          if (types) {
+            types.push(<string>annotation.umls_concept);
           } else {
-            aMap.set(type, [<string>annotation.umls_concept]);
+            types = [<string>annotation.umls_concept];
           }
-        });
+          aMap.set(type, types);
+        } else {
+          aMap.set(type, [<string>annotation.umls_concept]);
+        }
       });
-      return aMap;
-    })
+    });
+    return aMap;
+  });
 }

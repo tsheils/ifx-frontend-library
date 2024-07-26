@@ -1,0 +1,57 @@
+@if (data()!.length > 1) {
+  Chart type:
+  <mat-radio-group [value]="activeChart()!">
+    @for (chart of data(); track chart.type) {
+      <mat-radio-button
+        [value]="chart.type"
+        (click)="writableChart.set(chart.type)"
+        >{{ chart.type }}</mat-radio-button
+      >
+    }
+  </mat-radio-group>
+}
+
+@for (chart of data(); track chart.type) {
+  @if (activeChart() === chart.type) {
+    @switch (chart.type) {
+      @case ('cluster') {
+        <div class="row">
+          @if (chart.data.tooBig) {
+            <div class="width-10">
+              <button
+                mat-stroked-button
+                class="tool-button list-download"
+                (click)="downloadImage()"
+                matTooltip="Download Data"
+                color="accent"
+              >
+                <span class="hide-small">Save Image</span
+                ><mat-icon>download</mat-icon>
+              </button>
+            </div>
+          }
+          @if (chart.data.tooBig) {
+            <div>
+              This website currently does not support clustering over 100
+              pathways.
+            </div>
+          }
+          @if (!chart.data.tooBig) {
+            <div [innerHTML]="chart.data!.image"></div>
+          }
+        </div>
+      }
+      @case ('sunburst') {
+        @if (chart.data!.values) {
+          <lib-sunburst-chart [data]="chart.data!.values"></lib-sunburst-chart>
+        }
+      }
+
+      @case ('tree') {
+        @if (chart.data!.values) {
+          <lib-tree-chart [data]="chart.data!.values"></lib-tree-chart>
+        }
+      }
+    }
+  }
+}

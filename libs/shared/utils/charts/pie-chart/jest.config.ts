@@ -3,7 +3,8 @@ export default {
   displayName: 'shared-utils-pie-chart',
   preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../../coverage/libs/shared/utils/charts/pie-chart',
+  coverageDirectory:
+    '../../../../../coverage/libs/shared/utils/charts/pie-chart',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

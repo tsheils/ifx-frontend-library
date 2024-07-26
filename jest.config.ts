@@ -1,9 +1,6 @@
 import { getJestProjects } from '@nx/jest';
 
-
 export default {
   projects: getJestProjects(),
-  testPathIgnorePatterns: [
-    "<rootDir>/src/environments/"
-  ],
+  testPathIgnorePatterns: ['<rootDir>/src/environments/'],
 };

@@ -1,6 +1,6 @@
 /* eslint-disable */
-global.TextEncoder = require("util").TextEncoder;
-global.TextDecoder = require("util").TextDecoder;
+global.TextEncoder = require('util').TextEncoder;
+global.TextDecoder = require('util').TextDecoder;
 export default {
   displayName: 'rdas',
   preset: '../../jest.preset.js',
@@ -15,10 +15,7 @@ export default {
       },
     ],
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!.*\\.mjs$)',
-    '/environment.*'
-  ],
+  transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)', '/environment.*'],
   snapshotSerializers: [
     'jest-preset-angular/build/serializers/no-ng-attributes',
     'jest-preset-angular/build/serializers/ng-snapshot',

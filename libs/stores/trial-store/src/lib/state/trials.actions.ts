@@ -1,6 +1,5 @@
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
-import { createActionGroup, props } from "@ngrx/store";
-
+import { createActionGroup, props } from '@ngrx/store';
 
 export const FetchTrialActions = createActionGroup({
   source: 'Fetch Trial',
@@ -9,10 +8,10 @@ export const FetchTrialActions = createActionGroup({
       NCTId?: string;
       options?: { [key: string]: string };
     }>(),
-    fetchTrialSuccess:   props<{ trial: ClinicalTrial }>(),
-    fetchTrialFailure:  props<{ error: string }>()
-  }
-})
+    fetchTrialSuccess: props<{ trial: ClinicalTrial }>(),
+    fetchTrialFailure: props<{ error: string }>(),
+  },
+});
 
 export const LoadTrialsActions = createActionGroup({
   source: 'Load Trials',
@@ -21,8 +20,7 @@ export const LoadTrialsActions = createActionGroup({
       top: number;
       skip: number;
     }>(),
-    loadTrialsSuccess:   props<{ trials: ClinicalTrial[] }>(),
-    loadTrialsFailure:  props<{ error: string }>()
-  }
-})
-
+    loadTrialsSuccess: props<{ trials: ClinicalTrial[] }>(),
+    loadTrialsFailure: props<{ error: string }>(),
+  },
+});

@@ -1,5 +1,5 @@
 import { InjectionToken } from '@angular/core';
-import { Params } from "@angular/router";
+import { Params } from '@angular/router';
 
 /**
  * main config object for a table cell, contains column/field data nad value info

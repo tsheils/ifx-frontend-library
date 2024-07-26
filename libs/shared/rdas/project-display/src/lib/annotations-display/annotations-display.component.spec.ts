@@ -13,7 +13,7 @@ describe('AnnotationsDisplayComponent', () => {
 
     fixture = TestBed.createComponent(AnnotationsDisplayComponent);
     component = fixture.componentInstance;
-   // component.annotations = [];
+    // component.annotations = [];
     fixture.detectChanges();
   });
 

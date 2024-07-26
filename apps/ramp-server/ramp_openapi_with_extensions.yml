@@ -448,7 +448,7 @@ paths:
                     'hmdb:HMDB0000094',
                     'hmdb:HMDBP00789',
                     'hmdb:HMDBP00283',
-                    'hmdb:HMDBP00284'
+                    'hmdb:HMDBP00284',
                   ]
 
   /api/reaction-classes-from-analytes:
@@ -496,7 +496,7 @@ paths:
                     'hmdb:HMDB0000094',
                     'hmdb:HMDBP00789',
                     'hmdb:HMDBP00283',
-                    'hmdb:HMDBP00284'
+                    'hmdb:HMDBP00284',
                   ]
   /api/combined-fisher-test:
     post:

@@ -1,14 +1,310 @@
-import { createAction, props } from '@ngrx/store';
-import { RampEntity } from './ramp.models';
+import {
+  FilterCategory,
+  OpenApiPath,
+} from '@ncats-frontend-library/models/utils';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import {
+  Analyte,
+  Classes,
+  CommonAnalyte,
+  FisherResult,
+  FishersDataframe,
+  Metabolite,
+  Ontology,
+  Pathway,
+  Properties,
+  RampChemicalEnrichmentResponse,
+  RampQuery,
+  RampResponse,
+  Reaction,
+  ReactionClass,
+  SourceVersion,
+  Stats,
+} from 'ramp';
 
-export const initRamp = createAction('[Ramp Page] Init');
+export const LoadRampActions = createActionGroup({
+  source: 'Load Ramp',
+  events: {
+    loadRamp: emptyProps(),
+    loadRampSuccess: props<{
+      supportedIds: { analyteType: string; idTypes: string[] }[];
+    }>(),
+    loadRampFailure: props<{ error: string }>(),
+    loadRampApi: props<{ url: string }>(),
+    loadRampApiSuccess: props<{ api: Map<string, OpenApiPath[]> }>(),
+    loadRampApiFailure: props<{ error: string }>(),
+    loadRampStats: emptyProps(),
+    loadRampStatsSuccess: props<{ data: Stats }>(),
+    loadRampStatsFailure: props<{ error: string }>(),
+    loadSourceVersions: emptyProps(),
+    loadSourceVersionsSuccess: props<{ versions: SourceVersion[] }>(),
+    loadSourceVersionsFailure: props<{ error: string }>(),
+  },
+});
 
-export const loadRampSuccess = createAction(
-  '[Ramp/API] Load Ramp Success',
-  props<{ ramp: RampEntity[] }>(),
-);
+export const PathwayFromAnalyteActions = createActionGroup({
+  source: 'Pathways from Analytes',
+  events: {
+    fetchPathwaysFromAnalytes: props<{
+      analytes: string[];
+      biospecimen?: string;
+      background?: File;
+      pval_type?: string;
+      pval_cutoff?: number;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
+    fetchPathwaysFromAnalytesSuccess: props<{
+      data: Pathway[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchPathwaysFromAnalytesFailure: props<{ error: string }>(),
+  },
+});
 
-export const loadRampFailure = createAction(
-  '[Ramp/API] Load Ramp Failure',
-  props<{ error: any }>(),
-);
+export const AnalyteFromPathwayActions = createActionGroup({
+  source: 'Analytes from Pathways',
+  events: {
+    fetchAnalytesFromPathways: props<{ pathways: string[] }>(),
+    fetchAnalytesFromPathwaysSuccess: props<{
+      data: Analyte[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchAnalytesFromPathwaysFailure: props<{ error: string }>(),
+  },
+});
+
+export const OntologyFromMetaboliteActions = createActionGroup({
+  source: 'Ontologies from Metabolites',
+  events: {
+    fetchOntologiesFromMetabolites: props<{ metabolites: string[] }>(),
+    fetchOntologiesFromMetabolitesSuccess: props<{
+      data: Ontology[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchOntologiesFromMetabolitesFailure: props<{ error: string }>(),
+  },
+});
+
+export const MetaboliteFromOntologyActions = createActionGroup({
+  source: 'Metabolite from Ontologies',
+  events: {
+    fetchOntologies: emptyProps(),
+    fetchOntologiesSuccess: props<{
+      data: FilterCategory[];
+    }>(),
+    fetchOntologiesFailure: props<{ error: string }>(),
+    fetchMetabolitesFromOntologies: props<{ ontologies: string[] }>(),
+    fetchMetabolitesFromOntologiesFile: props<{
+      ontologies: string[];
+      format: string;
+    }>(),
+    fetchMetabolitesFromOntologiesSuccess: props<{
+      data: Metabolite[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchMetaboliteFromOntologiesFailure: props<{ error: string }>(),
+  },
+});
+
+export const ClassesFromMetabolitesActions = createActionGroup({
+  source: 'Classes From Metabolites',
+  events: {
+    fetchClassesFromMetabolites: props<{
+      metabolites: string[];
+      biospecimen?: string;
+      background?: File;
+    }>(),
+    fetchClassesFromMetabolitesSuccess: props<{
+      data: Classes[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchClassesFromMetabolitesFailure: props<{ error: string }>(),
+  },
+});
+
+export const PropertiesFromMetaboliteActions = createActionGroup({
+  source: 'Properties from Metabolites',
+  events: {
+    fetchPropertiesFromMetabolites: props<{ metabolites: string[] }>(),
+    fetchPropertiesFromMetabolitesSuccess: props<RampResponse<Properties>>(),
+    fetchPropertiesFromMetabolitesFailure: props<{ error: string }>(),
+  },
+});
+
+export const CommonReactionAnalyteActions = createActionGroup({
+  source: 'Common Reaction Analytes',
+  events: {
+    fetchCommonReactionAnalytes: props<{ analytes: string[] }>(),
+    fetchCommonReactionAnalytesSuccess: props<{
+      data: CommonAnalyte[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchCommonReactionAnalytesFailure: props<{ error: string }>(),
+  },
+});
+
+export const ReactionsFromAnalytesActions = createActionGroup({
+  source: 'Reactions From Analytes',
+  events: {
+    fetchReactionsFromAnalytes: props<{
+      analytes: string[];
+      onlyHumanMets?: boolean;
+      humanProtein?: boolean;
+      includeTransportRxns?: boolean;
+      rxnDirs?: string;
+      includeRxnURLs?: boolean;
+    }>(),
+    fetchReactionsFromAnalytesSuccess: props<{
+      data: Reaction[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchReactionsFromAnalytesFailure: props<{ error: string }>(),
+  },
+});
+
+export const ReactionClassesFromAnalytesActions = createActionGroup({
+  source: 'Reaction Classes from Analytes',
+  events: {
+    fetchReactionClassesFromAnalytes: props<{
+      analytes: string[];
+      multiRxnParticipantCount?: number;
+      humanProtein?: boolean;
+      concatResults?: boolean;
+      includeReactionIDs?: string;
+      useIdMapping?: boolean;
+    }>(),
+    fetchReactionClassesFromAnalyteSuccess: props<{
+      data: ReactionClass[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchReactionClassesFromAnalyteFailure: props<{ error: string }>(),
+  },
+});
+
+export const PathwayEnrichmentsActions = createActionGroup({
+  source: 'Pathway Enrichment',
+  events: {
+    fetchPathwaysFromAnalytes: props<{
+      analytes: string[];
+      biospecimen?: string;
+      background?: File;
+      pval_type?: string;
+      pval_cutoff?: number;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
+    fetchPathwaysFromAnalytesSuccess: props<{
+      data: Pathway[];
+      query: RampQuery;
+      dataframe?: unknown[];
+      biospecimen?: string;
+      background?: File;
+      pval_type?: string;
+      pval_cutoff?: number;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
+    fetchPathwaysFromAnalytesFailure: props<{ error: string }>(),
+    fetchEnrichmentFromPathways: props<{
+      analytes: string[];
+      biospecimen?: string;
+      background?: File;
+      pval_type?: string;
+      pval_cutoff?: number;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
+    fetchEnrichmentFromPathwaysSuccess: props<{
+      data: FisherResult[];
+      query: RampQuery;
+      combinedFishersDataframe?: FishersDataframe;
+      pval_type?: string;
+      pval_cutoff?: number;
+    }>(),
+    fetchEnrichmentFromPathwaysFailure: props<{ error: string }>(),
+    filterEnrichmentFromPathways: props<{
+      pval_type: string;
+      pval_cutoff: number;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
+    filterEnrichmentFromPathwaysSuccess: props<{
+      data: FisherResult[];
+      query: RampQuery;
+      filteredFishersDataframe?: FishersDataframe;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
+    filterEnrichmentFromPathwaysFailure: props<{ error: string }>(),
+    fetchClusterFromEnrichment: props<{
+      perc_analyte_overlap: number;
+      min_pathway_tocluster: number;
+      perc_pathway_overlap: number;
+    }>(),
+    fetchClusterFromEnrichmentSuccess: props<{
+      data: FisherResult[];
+      plot: string;
+      query: RampQuery;
+      dataframe?: FishersDataframe;
+      openModal?: boolean;
+    }>(),
+    fetchClusterFromEnrichmentFailure: props<{ error: string }>(),
+    fetchClusterImageFile: props<{
+      perc_analyte_overlap: number;
+      min_pathway_tocluster: number;
+      perc_pathway_overlap: number;
+    }>(),
+  },
+});
+
+export const MetaboliteEnrichmentsActions = createActionGroup({
+  source: 'Metabolite Enrichment',
+  events: {
+    fetchClassesFromMetabolites: props<{
+      metabolites: string[];
+      biospecimen?: string;
+      background?: File;
+    }>(),
+    fetchClassesFromMetabolitesSuccess: props<{
+      data: Classes[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchClassesFromMetabolitesFailure: props<{ error: string }>(),
+    fetchEnrichmentFromMetabolites: props<{
+      metabolites: string[];
+      biospecimen?: string;
+      background?: File;
+    }>(),
+    fetchEnrichmentFromMetabolitesFile: emptyProps(),
+    fetchEnrichmentFromMetabolitesSuccess: props<{
+      data: RampChemicalEnrichmentResponse;
+      pval_type?: string;
+      pval_cutoff?: number;
+    }>(),
+    fetchEnrichmentFromMetabolitesFailure: props<{ error: string }>(),
+    filterEnrichmentFromMetabolites: props<{
+      pval_type: string;
+      pval_cutoff: number;
+    }>(),
+    filterEnrichmentFromMetabolitesSuccess: props<{
+      data: RampChemicalEnrichmentResponse;
+    }>(),
+    filterEnrichmentFromMetabolitesFailure: props<{ error: string }>(),
+  },
+});
