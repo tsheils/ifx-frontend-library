@@ -1,9 +1,9 @@
-import { Reaction } from './reaction';
+import { CommonAnalyte } from './reaction';
 
-describe('Reaction', () => {
+describe('CommonAnalyte', () => {
   it('should create an instance', () => {
     expect(
-      new Reaction({
+      new CommonAnalyte({
         Input_Analyte: 'L-Glutamic acid',
         Input_CatalyzedBy_CommonName: 'BCAT1',
         Input_CatalyzedBy_SourceIds:

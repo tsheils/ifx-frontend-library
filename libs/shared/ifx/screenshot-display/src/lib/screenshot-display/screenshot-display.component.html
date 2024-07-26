@@ -1,5 +1,5 @@
 <div class="grid-list">
-  @for (imageRef of images(); track imageRef) {
+  @for (imageRef of images(); track imageRef.url) {
     <mat-card appearance="outlined">
       <img
         mat-card-image

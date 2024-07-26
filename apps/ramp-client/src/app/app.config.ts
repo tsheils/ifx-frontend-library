@@ -43,7 +43,11 @@ export function set_url(rampService: RampService) {
 export function rampInit(store = inject(Store)) {
   return () => {
     store.dispatch(LoadRampActions.loadRamp());
-    store.dispatch(LoadRampActions.loadRampApi({url:'/assets/ramp-api/data/ramp-api.json'}));
+    store.dispatch(
+      LoadRampActions.loadRampApi({
+        url: '/assets/ramp-api/data/ramp-api.json',
+      }),
+    );
     store.dispatch(LoadRampActions.loadRampStats());
   };
 }

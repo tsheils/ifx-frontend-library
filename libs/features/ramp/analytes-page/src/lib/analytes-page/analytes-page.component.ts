@@ -1,13 +1,18 @@
-import { CommonModule } from "@angular/common";
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { select } from "@ngrx/store";
-import { DataProperty } from "ncats-datatable";
-import { PanelAccordionComponent } from "panel-accordion";
-import { Analyte, RampResponse } from "ramp";
-import { RampCorePageComponent } from "ramp-core-page";
-import { AnalyteFromPathwayActions, RampSelectors } from "ramp-store";
-import { map } from "rxjs";
+import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { select } from '@ngrx/store';
+import { DataProperty } from 'ncats-datatable';
+import { PanelAccordionComponent } from 'panel-accordion';
+import { Analyte, RampResponse } from 'ramp';
+import { RampCorePageComponent } from 'ramp-core-page';
+import { AnalyteFromPathwayActions, RampSelectors } from 'ramp-store';
+import { map } from 'rxjs';
 
 @Component({
   selector: 'lib-analytes-page',
@@ -16,9 +21,12 @@ import { map } from "rxjs";
   templateUrl: './analytes-page.component.html',
   styleUrl: './analytes-page.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AnalytesPageComponent extends RampCorePageComponent implements OnInit {
+export class AnalytesPageComponent
+  extends RampCorePageComponent
+  implements OnInit
+{
   override dataColumns: DataProperty[] = [
     new DataProperty({
       label: 'Pathway Name',
@@ -52,29 +60,40 @@ export class AnalytesPageComponent extends RampCorePageComponent implements OnIn
     }),
   ];
 
-  constructor(
-  ) {
-    super()
+  constructor() {
+    super();
   }
 
   ngOnInit() {
-    console.log(this);
     this.store
       .pipe(
         select(RampSelectors.getAnalytes),
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<Analyte> | undefined) => {
           if (res && res.data) {
-            this.dataMap.set('Analytes', {data: this._mapData(res.data), fields: this.dataColumns})
+            this.dataMap.set('Analytes', {
+              data: this._mapData(res.data),
+              fields: this.dataColumns,
+            });
             const matches = Array.from(
               new Set(
-                res.data.map((analyte) => analyte.pathwayName.toLocaleLowerCase()),
+                res.data.map((analyte) =>
+                  analyte.pathwayName.toLocaleLowerCase(),
+                ),
               ),
             );
             const noMatches = this.inputList.filter(
               (p: string) => !matches.includes(p.toLocaleLowerCase()),
             );
-            this.resultsMap = {matches: matches, noMatches: noMatches, count: res.data.length, inputLength: this.inputList.length, fuzzy: true, inputType: 'pathways'};
+            this.resultsMap = {
+              matches: matches,
+              noMatches: noMatches,
+              count: res.data.length,
+              inputLength: this.inputList.length,
+              fuzzy: true,
+              inputType: 'pathways',
+            };
+            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
           if (res && res.dataframe) {
             this.dataframe = res.dataframe;
@@ -91,21 +110,21 @@ export class AnalytesPageComponent extends RampCorePageComponent implements OnIn
           }
           //   this.pathwaysLoading = false;
           this.changeRef.markForCheck();
-          console.log(this)
         }),
       )
       .subscribe();
   }
 
   override fetchData(event: { [key: string]: unknown }): void {
-    console.log(event);
-    this.inputList = this._parseInput(event['pathway'] as string | string[])
+    this.inputList = this._parseInput(event['pathway'] as string | string[]);
     this.store.dispatch(
-      AnalyteFromPathwayActions.fetchAnalytesFromPathways({ pathways: this.inputList }),
+      AnalyteFromPathwayActions.fetchAnalytesFromPathways({
+        pathways: this.inputList,
+      }),
     );
   }
 
-   override downloadData(event: {[key:string]: unknown}) {
+  override downloadData(event: { [key: string]: unknown }) {
     super.downloadData(event, 'fetchAnalytesFromPathways-download.tsv');
   }
 }

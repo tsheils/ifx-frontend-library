@@ -1,13 +1,17 @@
-<div class="row space-between-row top-align">
+<div class="row space-between-row top-align article-list-card">
   <div class="width-sm-100 width-75">
     <div class="rdas-article-title">{{ article()?.title }}</div>
-    @for (journal of article()?.journals; track journal) {
+    @for (journal of article()?.journals; track journal.title) {
       <div>
         <i>{{ journal.title }}</i>
       </div>
     }
     <div>
-      @for (author of article()?.authorsWrote; track author; let last = $last) {
+      @for (
+        author of article()?.authorsWrote;
+        track author.fullName;
+        let last = $last
+      ) {
         <span>
           <i>{{ author.fullName }}</i>
           @if (!last) {

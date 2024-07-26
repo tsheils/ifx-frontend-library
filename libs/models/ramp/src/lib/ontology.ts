@@ -1,18 +1,3 @@
-export class OntologyList {
-  ontologyType!: string;
-  values!: Ontology[];
-  constructor(obj: Partial<OntologyList>) {
-    if (obj.ontologyType) {
-      this.ontologyType = obj.ontologyType;
-    }
-    if (obj.values) {
-      this.values = obj.values
-        // .map((ont:Partial<Ontology>) => new Ontology({...ont, source: obj.ontologyType}))
-        .sort((a, b) => b.count - a.count);
-    }
-  }
-}
-
 export class Ontology {
   HMDBOntologyType!: string;
   idType?: string;
@@ -21,7 +6,7 @@ export class Ontology {
   sourceId!: string;
   commonName?: string;
   rampOntologyId?: string;
-  count!: number;
+  metCount!: number;
   value?: string;
   source?: string;
 
@@ -52,7 +37,7 @@ export class Ontology {
     }
 
     if (obj['metCount']) {
-      this.count = <number>obj['metCount'];
+      this.metCount = <number>obj['metCount'];
     }
   }
 }

@@ -1,19 +1,23 @@
-import { OpenApiPath } from "@ncats-frontend-library/models/utils";
+import {
+  FilterCategory,
+  OpenApiPath,
+} from '@ncats-frontend-library/models/utils';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import {
   Analyte,
   Classes,
+  CommonAnalyte,
   FisherResult,
   FishersDataframe,
   Metabolite,
   Ontology,
-  OntologyList,
   Pathway,
   Properties,
   RampChemicalEnrichmentResponse,
   RampQuery,
   RampResponse,
   Reaction,
+  ReactionClass,
   SourceVersion,
   Stats,
 } from 'ramp';
@@ -27,7 +31,7 @@ export const LoadRampActions = createActionGroup({
     }>(),
     loadRampFailure: props<{ error: string }>(),
     loadRampApi: props<{ url: string }>(),
-    loadRampApiSuccess: props<{ api: Map<string, OpenApiPath[]>}>(),
+    loadRampApiSuccess: props<{ api: Map<string, OpenApiPath[]> }>(),
     loadRampApiFailure: props<{ error: string }>(),
     loadRampStats: emptyProps(),
     loadRampStatsSuccess: props<{ data: Stats }>(),
@@ -41,7 +45,16 @@ export const LoadRampActions = createActionGroup({
 export const PathwayFromAnalyteActions = createActionGroup({
   source: 'Pathways from Analytes',
   events: {
-    fetchPathwaysFromAnalytes: props<{ analytes: string[] }>(),
+    fetchPathwaysFromAnalytes: props<{
+      analytes: string[];
+      biospecimen?: string;
+      background?: File;
+      pval_type?: string;
+      pval_cutoff?: number;
+      perc_analyte_overlap?: number;
+      min_pathway_tocluster?: number;
+      perc_pathway_overlap?: number;
+    }>(),
     fetchPathwaysFromAnalytesSuccess: props<{
       data: Pathway[];
       query: RampQuery;
@@ -82,7 +95,7 @@ export const MetaboliteFromOntologyActions = createActionGroup({
   events: {
     fetchOntologies: emptyProps(),
     fetchOntologiesSuccess: props<{
-      data: OntologyList[];
+      data: FilterCategory[];
     }>(),
     fetchOntologiesFailure: props<{ error: string }>(),
     fetchMetabolitesFromOntologies: props<{ ontologies: string[] }>(),
@@ -130,7 +143,7 @@ export const CommonReactionAnalyteActions = createActionGroup({
   events: {
     fetchCommonReactionAnalytes: props<{ analytes: string[] }>(),
     fetchCommonReactionAnalytesSuccess: props<{
-      data: Reaction[];
+      data: CommonAnalyte[];
       query: RampQuery;
       dataframe?: unknown[];
     }>(),
@@ -138,23 +151,17 @@ export const CommonReactionAnalyteActions = createActionGroup({
   },
 });
 
-export const ReactionClassesFromAnalytesActions = createActionGroup({
-  source: 'Reaction Classes from Analytes',
-  events: {
-    fetchReactionClassesFromAnalytes: props<{ analytes: string[] }>(),
-    fetchReactionClassesFromAnalyteSuccess: props<{
-      data: Reaction[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
-    fetchReactionClassesFromAnalyteFailure: props<{ error: string }>(),
-  },
-});
-
 export const ReactionsFromAnalytesActions = createActionGroup({
   source: 'Reactions From Analytes',
   events: {
-    fetchReactionsFromAnalytesAnalytes: props<{ analytes: string[] }>(),
+    fetchReactionsFromAnalytes: props<{
+      analytes: string[];
+      onlyHumanMets?: boolean;
+      humanProtein?: boolean;
+      includeTransportRxns?: boolean;
+      rxnDirs?: string;
+      includeRxnURLs?: boolean;
+    }>(),
     fetchReactionsFromAnalytesSuccess: props<{
       data: Reaction[];
       query: RampQuery;
@@ -164,11 +171,31 @@ export const ReactionsFromAnalytesActions = createActionGroup({
   },
 });
 
+export const ReactionClassesFromAnalytesActions = createActionGroup({
+  source: 'Reaction Classes from Analytes',
+  events: {
+    fetchReactionClassesFromAnalytes: props<{
+      analytes: string[];
+      multiRxnParticipantCount?: number;
+      humanProtein?: boolean;
+      concatResults?: boolean;
+      includeReactionIDs?: string;
+      useIdMapping?: boolean;
+    }>(),
+    fetchReactionClassesFromAnalyteSuccess: props<{
+      data: ReactionClass[];
+      query: RampQuery;
+      dataframe?: unknown[];
+    }>(),
+    fetchReactionClassesFromAnalyteFailure: props<{ error: string }>(),
+  },
+});
+
 export const PathwayEnrichmentsActions = createActionGroup({
   source: 'Pathway Enrichment',
   events: {
     fetchPathwaysFromAnalytes: props<{
-      analytes: string[],
+      analytes: string[];
       biospecimen?: string;
       background?: File;
       pval_type?: string;

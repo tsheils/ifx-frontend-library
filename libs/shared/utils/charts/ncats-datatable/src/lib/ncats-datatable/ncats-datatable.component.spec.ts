@@ -1,4 +1,6 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { signal } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { DataProperty } from 'ncats-datatable';
 
 import { NcatsDatatableComponent } from './ncats-datatable.component';
 
@@ -6,7 +8,7 @@ describe('NcatsDatatableComponent', () => {
   let component: NcatsDatatableComponent;
   let fixture: ComponentFixture<NcatsDatatableComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [],
       imports: [NcatsDatatableComponent],
@@ -16,8 +18,8 @@ describe('NcatsDatatableComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(NcatsDatatableComponent);
     component = fixture.componentInstance;
-    component.data = [];
-    component.fieldsConfig = [];
+    // component.data = [];
+    //  component.fieldsConfig = [] as DataProperty[];
     fixture.detectChanges();
   });
 

@@ -75,7 +75,7 @@
           <div>
             <div class="primary-chip-outlined">Substances</div>
             <br />
-            @for (substance of article()?.substances; track substance) {
+            @for (substance of article()?.substances; track substance.name) {
               <span>
                 {{ substance.name }}
               </span>
@@ -90,7 +90,7 @@
             <br />
             @for (
               keyword of article()?.keywords;
-              track keyword;
+              track keyword.keyword;
               let last = $last
             ) {
               <span>
@@ -111,7 +111,7 @@
               {{ article()?.diseases ? article()?.diseases?.length : 0 }}
             </div>
             <br />
-            @for (disease of article()?.diseases; track disease) {
+            @for (disease of article()?.diseases; track disease.gardId) {
               <div>
                 @if (disease.gardId) {
                   <div #link>
@@ -140,7 +140,7 @@
             @if (article()?.annotations && article()?.annotations?.length) {
               @for (
                 annotation of annotationsMap() | keyvalue;
-                track annotation
+                track annotation.key
               ) {
                 <div>
                   <div class="primary-chip-outlined">{{ annotation.key }}</div>

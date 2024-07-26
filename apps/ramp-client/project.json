@@ -28,6 +28,11 @@
             "input": "libs/features/ramp/ramp-about/src/assets",
             "glob": "**/*",
             "output": "assets/ramp-about"
+          },
+          {
+            "input": "libs/features/ramp/ramp-home/src/assets",
+            "glob": "**/*",
+            "output": "assets/ramp-home"
           }
         ],
         "stylePreprocessorOptions": {

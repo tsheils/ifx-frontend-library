@@ -8,7 +8,7 @@
       [fixedInViewport]="true"
     >
       <ng-content select="[left-options]"></ng-content>
-      @for (link of links; track link) {
+      @for (link of links; track link.label) {
         <div>
           @if (link.children) {
             <div #menu>
@@ -16,7 +16,7 @@
                 {{ link.label ? link.label : link.link }}
               </button>
               <mat-menu #dynamicMenu="matMenu">
-                @for (child of link.children; track child) {
+                @for (child of link.children; track child.link) {
                   <span>
                     <button mat-menu-item [routerLink]="child.link">
                       {{ child.label ? child.label : child.link }}

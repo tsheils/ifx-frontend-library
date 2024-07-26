@@ -30,8 +30,11 @@ import {
   TRIALFILTERS,
   ALLARTICLEFILTERS,
   ALLPROJECTFILTERS,
-  ALLTRIALFILTERS, TRIALTYPEFILTERS, TRIALSTATUSFILTERS, TRIALPHASEFILTERS
-} from "@ncats-frontend-library/models/rdas";
+  ALLTRIALFILTERS,
+  TRIALTYPEFILTERS,
+  TRIALSTATUSFILTERS,
+  TRIALPHASEFILTERS,
+} from '@ncats-frontend-library/models/rdas';
 import {
   Filter,
   FilterCategory,
@@ -39,7 +42,8 @@ import {
 } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
 import { DiseaseService } from '../disease.service';
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects';
+import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { combineLatest, filter, map, mergeMap, switchMap, take } from 'rxjs';
 import {
@@ -143,9 +147,11 @@ export const loadStaticDiseaseFilters$ = createEffect(
 );
 
 export const loadDiseaseFilters$ = createEffect(
-  (actions$ = inject(Actions),
-   store = inject(Store),
-   diseaseService = inject(DiseaseService)) => {
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    diseaseService = inject(DiseaseService),
+  ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
@@ -154,12 +160,12 @@ export const loadDiseaseFilters$ = createEffect(
           r.payload.routerState.url.startsWith('/disease'),
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
-      concatLatestFrom(() => store.select(DiseaseSelectors.getStaticDiseaseFilters)),
+      concatLatestFrom(() =>
+        store.select(DiseaseSelectors.getStaticDiseaseFilters),
+      ),
       mergeMap(([root, staticFilters]) => {
         const params: Params = root.queryParams;
         const gardid: string = params['id'];
-        console.log(staticFilters)
-        console.log(params)
         return combineLatest(
           diseaseService
             .fetchArticles(ARTICLEFILTERS, { gardId: gardid })
@@ -171,37 +177,54 @@ export const loadDiseaseFilters$ = createEffect(
             .fetchTrials(TRIALTYPEFILTERS, _setTrialVariables(params, 'type'))
             .pipe(take(1)),
           diseaseService
-            .fetchTrials(TRIALSTATUSFILTERS, _setTrialVariables(params, 'status'))
+            .fetchTrials(
+              TRIALSTATUSFILTERS,
+              _setTrialVariables(params, 'status'),
+            )
             .pipe(take(1)),
           diseaseService
             .fetchTrials(TRIALPHASEFILTERS, _setTrialVariables(params, 'phase'))
             .pipe(take(1)),
         ).pipe(
           map(
-            ([articleFilterData, projectFilterData, trialTypeFilterData, trialStatusFilterData, trialPhaseFilterData ]: [
+            ([
+              articleFilterData,
+              projectFilterData,
+              trialTypeFilterData,
+              trialStatusFilterData,
+              trialPhaseFilterData,
+            ]: [
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
             ]) => {
-              if (articleFilterData || projectFilterData || trialTypeFilterData || trialStatusFilterData || trialPhaseFilterData) {
-                console.log(trialTypeFilterData)
-                const typeData = trialTypeFilterData as {data: {trialsByType: Filter[]}}
-                const statusData = trialStatusFilterData as {data: {trialsByStatus: Filter[]}}
-                const phaseData = trialPhaseFilterData as {data: {trialsByPhase: Filter[]}}
-                console.log(trialStatusFilterData)
-                console.log(trialPhaseFilterData)
+              if (
+                articleFilterData ||
+                projectFilterData ||
+                trialTypeFilterData ||
+                trialStatusFilterData ||
+                trialPhaseFilterData
+              ) {
+                const typeData = trialTypeFilterData as {
+                  data: { trialsByType: Filter[] };
+                };
+                const statusData = trialStatusFilterData as {
+                  data: { trialsByStatus: Filter[] };
+                };
+                const phaseData = trialPhaseFilterData as {
+                  data: { trialsByPhase: Filter[] };
+                };
                 const trialFilterData = {
                   data: {
                     allClinicalTrialsFilters: {
-                      trialsByStatus:  statusData.data.trialsByStatus,
-                      trialsByType:  typeData.data.trialsByType,
-                      trialsByPhase: phaseData.data.trialsByPhase
-                    }
-                  }
-                } as ApolloQueryResult<unknown>
-                console.log(trialFilterData)
+                      trialsByStatus: statusData.data.trialsByStatus,
+                      trialsByType: typeData.data.trialsByType,
+                      trialsByPhase: phaseData.data.trialsByPhase,
+                    },
+                  },
+                } as ApolloQueryResult<unknown>;
                 const filters = _parseFilterResponse(
                   articleFilterData,
                   projectFilterData,
@@ -245,88 +268,6 @@ export const loadDiseaseFilters$ = createEffect(
   },
   { functional: true },
 );
-
-
-/*export const loadDiseaseFilters2$ = createEffect(
-  (actions$ = inject(Actions),
-   store = inject(Store),
-   diseaseService = inject(DiseaseService)) => {
-    return actions$.pipe(
-      ofType(ROUTER_NAVIGATION),
-      filter(
-        (r: RouterNavigationAction) =>
-          !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease'),
-      ),
-      map((r: RouterNavigationAction) => r.payload.routerState.root),
-      concatLatestFrom(() => store.select(DiseaseSelectors.getStaticDiseaseFilters)),
-      mergeMap(([root, staticFilters]) => {
-        const params: Params = root.queryParams;
-        const gardid: string = params['id'];
-        console.log(staticFilters)
-        console.log(params)
-        return combineLatest(
-          diseaseService
-            .fetchArticles(ARTICLEFILTERS, { gardId: gardid })
-            .pipe(take(1)),
-          diseaseService
-            .fetchProjects(PROJECTFILTERS, { gardId: gardid })
-            .pipe(take(1)),
-          diseaseService
-            .fetchTrials(TRIALFILTERS, _setTrialVariables(params, 'sgfsd'))
-            .pipe(take(1)),
-        ).pipe(
-          map(
-            ([articleFilterData, projectFilterData, trialFilterData]: [
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-            ]) => {
-              if (articleFilterData || projectFilterData || trialFilterData) {
-                const filters = _parseFilterResponse(
-                  articleFilterData,
-                  projectFilterData,
-                  trialFilterData,
-                  params,
-                );
-                console.log(filters)
-                if (root.fragment) {
-                  filters.forEach((filter) => {
-                    if (filter.parent === root.fragment) {
-                      if (filter.field) {
-                        filter.values.map((val) => {
-                          if (Array.isArray(params[filter.field])) {
-                            params[filter.field].forEach((filter: string) => {
-                              if (val.term === filter) {
-                                val.selected = true;
-                              }
-                            });
-                          } else {
-                            if (val.term === params[filter.field]) {
-                              val.selected = true;
-                            }
-                          }
-                          return val;
-                        });
-                      }
-                    }
-                  });
-                }
-                return FetchDiseaseActions.fetchDiseaseFiltersSuccess({
-                  filters: filters,
-                });
-              } else
-                return FetchDiseaseActions.fetchDiseaseFiltersFailure({
-                  error: 'No Disease found',
-                });
-            },
-          ),
-        );
-      }),
-    );
-  },
-  { functional: true },
-);*/
 
 export const loadDisease$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
@@ -735,7 +676,7 @@ export const loadAllDiseaseFilters$ = createEffect(
                       new FilterCategory({
                         parent: 'articles',
                         label: 'All Articles by Year',
-                       // filterable: false,
+                        // filterable: false,
                         field: 'year',
                         values: articleFilterDataList.allCountsByYear
                           .filter((fil) => fil.term != '')
@@ -1144,23 +1085,25 @@ function _setGardId(gardid: string) {
 }
 
 function _setTrialVariables(params: Params, origin: string) {
-  console.log(origin)
-  if (origin !== 'type' && (params['StudyType'] && params['StudyType'].length)) {
+  if (origin !== 'type' && params['StudyType'] && params['StudyType'].length) {
     FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = params['StudyType'];
   } else {
     FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
   }
-  if (origin !== 'phase' && (params['Phase'] && params['Phase'].length) ){
+  if (origin !== 'phase' && params['Phase'] && params['Phase'].length) {
     FETCHTRIALSVARIABLES.ctfilters.Phase_IN = params['Phase'];
   } else {
     FETCHTRIALSVARIABLES.ctfilters.Phase_IN = null;
   }
-  if (origin !== 'status' && (params['OverallStatus'] && params['OverallStatus'].length)) {
+  if (
+    origin !== 'status' &&
+    params['OverallStatus'] &&
+    params['OverallStatus'].length
+  ) {
     FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = params['OverallStatus'];
   } else {
     FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = null;
   }
-  console.log(FETCHTRIALSVARIABLES)
   return FETCHTRIALSVARIABLES;
 }
 

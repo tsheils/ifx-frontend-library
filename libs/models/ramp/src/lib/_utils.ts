@@ -31,7 +31,6 @@ export interface RampResponse<T extends RampDataGeneric> {
   perc_analyte_overlap?: number;
   min_pathway_tocluster?: number;
   perc_pathway_overlap?: number;
-
 }
 
 export interface RampPathwayEnrichmentAPIResponse {

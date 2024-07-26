@@ -1,19 +1,19 @@
 .main-ramp-rail {
- position: fixed;
-  padding-top:64px;
+  position: fixed;
+  padding-top: 64px;
+  width: 80px;
 }
 
 .ramp-rail {
   width: 80px;
   display: grid;
   justify-items: center;
-
 }
 
 .rail-button {
   height: 56px;
-  padding-bottom:12px;
-  padding-top:12px;
+  padding-bottom: 12px;
+  padding-top: 12px;
   display: grid;
   justify-content: center;
   justify-items: center;
@@ -23,7 +23,7 @@
 .rail-label {
   font-size: 12px;
   font-weight: 500;
-  padding-top:4px;
+  padding-top: 4px;
   color: white;
 }
 
@@ -32,11 +32,7 @@
   color: white;
 }
 
-.rail-icon :hover {
-  background-color: red;
-}
-
 .drawer-container-content {
   min-height: 100vh;
-  width:100%;
+  width: 100%;
 }

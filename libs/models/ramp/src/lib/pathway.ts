@@ -1,4 +1,4 @@
-import { RampDataGeneric } from "./_utils";
+import { RampDataGeneric } from './_utils';
 
 export class Pathway extends RampDataGeneric {
   pathwayName!: string;

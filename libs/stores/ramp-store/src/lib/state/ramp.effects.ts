@@ -1,20 +1,24 @@
-// @ts-nocheck
 import { inject } from '@angular/core';
-import { OpenApiPath } from "@ncats-frontend-library/models/utils";
-import { Actions, concatLatestFrom, createEffect, ofType } from '@ngrx/effects';
-import { props, Store } from "@ngrx/store";
+import {
+  FilterCategory,
+  OpenApiPath,
+} from '@ncats-frontend-library/models/utils';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
+import { Store } from '@ngrx/store';
 import {
   Analyte,
   Classes,
+  CommonAnalyte,
   Metabolite,
   Ontology,
-  OntologyList,
   Pathway,
   Properties,
   RampChemicalEnrichmentResponse,
   RampPathwayEnrichmentResponse,
   RampResponse,
   Reaction,
+  ReactionClass,
   Stats,
 } from 'ramp';
 import {
@@ -28,6 +32,8 @@ import {
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
+  ReactionClassesFromAnalytesActions,
+  ReactionsFromAnalytesActions,
 } from './ramp.actions';
 import { RampService } from '../ramp.service';
 import { exhaustMap, mergeMap, of, tap } from 'rxjs';
@@ -68,26 +74,33 @@ export const loadApi$ = createEffect(
       exhaustMap((action) => {
         return rampService.fetchApi(action.url).pipe(
           map(
-            (ret: {paths: {[key: string]: {post? : {[key: string]: unknown} } }}) => {
-              console.log(action.url)
-              console.log(ret)
-              const tempMap: Map<string, OpenApiPath[]> = new Map<string, OpenApiPath[]>();
+            (ret: {
+              paths: { [key: string]: { post?: { [key: string]: unknown } } };
+            }) => {
+              const tempMap: Map<string, OpenApiPath[]> = new Map<
+                string,
+                OpenApiPath[]
+              >();
               Object.entries(ret.paths).forEach(([key, value]) => {
-                if(value.post && value.post.tags) {
+                if (value.post && value.post['tags']) {
                   const parent = key.split('/api/')[1];
-                  const tags: string[] = value.post.tags
-                  tags.forEach(tag => {
-                    let tempArr:OpenApiPath[] = [];
-                    if(tempMap.has(tag)) {
-                     tempArr =  tempMap.get(tag)
-                      tempArr.push(new OpenApiPath({...value.post, parent: parent}))
-                      tempMap.set(tag, tempArr)
+                  const tags: string[] = value.post['tags'] as string[];
+                  tags.forEach((tag) => {
+                    let tempArr: OpenApiPath[] = [];
+                    if (tempMap.has(tag)) {
+                      tempArr = tempMap.get(tag) as OpenApiPath[];
+                      tempArr.push(
+                        new OpenApiPath({ ...value.post, parent: parent }),
+                      );
+                      tempMap.set(tag, tempArr);
                     } else {
-                      tempMap.set(tag, [new OpenApiPath({...value.post, parent: parent})])
+                      tempMap.set(tag, [
+                        new OpenApiPath({ ...value.post, parent: parent }),
+                      ]);
                     }
-                  })
+                  });
                 }
-              })
+              });
               return LoadRampActions.loadRampApiSuccess({ api: tempMap });
             },
             catchError((error: ErrorEvent) =>
@@ -231,7 +244,7 @@ export const fetchOntologies = createEffect(
       exhaustMap(() => {
         return rampService.fetchOntologies().pipe(
           map(
-            (ret: RampResponse<OntologyList>) => {
+            (ret: { data: FilterCategory[] }) => {
               return MetaboliteFromOntologyActions.fetchOntologiesSuccess(ret);
             },
             catchError((error: ErrorEvent) =>
@@ -362,7 +375,7 @@ export const fetchCommonReactionAnalytes = createEffect(
       exhaustMap((action) => {
         return rampService.fetchCommonReactionAnalytes(action.analytes).pipe(
           map(
-            (ret: RampResponse<Reaction>) =>
+            (ret: RampResponse<CommonAnalyte>) =>
               CommonReactionAnalyteActions.fetchCommonReactionAnalytesSuccess({
                 ...ret,
               }),
@@ -375,6 +388,84 @@ export const fetchCommonReactionAnalytes = createEffect(
             ),
           ),
         );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+export const fetchReactionsFromAnalytes = createEffect(
+  (actions$ = inject(Actions), rampService = inject(RampService)) => {
+    return actions$.pipe(
+      ofType(ReactionsFromAnalytesActions.fetchReactionsFromAnalytes),
+      exhaustMap((action) => {
+        return rampService
+          .fetchReactionsFromAnalytes(
+            action.analytes,
+            action.onlyHumanMets,
+            action.humanProtein,
+            action.includeTransportRxns,
+            action.rxnDirs,
+            action.includeRxnURLs,
+          )
+          .pipe(
+            map(
+              (ret: RampResponse<Reaction>) => {
+                return ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess(
+                  {
+                    ...ret,
+                  },
+                );
+              },
+              catchError((error: ErrorEvent) =>
+                of(
+                  ReactionsFromAnalytesActions.fetchReactionsFromAnalytesFailure(
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+export const fetchReactionClassesFromAnalytes = createEffect(
+  (actions$ = inject(Actions), rampService = inject(RampService)) => {
+    return actions$.pipe(
+      ofType(
+        ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes,
+      ),
+      exhaustMap((action) => {
+        return rampService
+          .fetchReactionClassesFromAnalytes(
+            action.analytes,
+            action.multiRxnParticipantCount,
+            action.humanProtein,
+            action.concatResults,
+            action.includeReactionIDs,
+            action.useIdMapping,
+          )
+          .pipe(
+            map(
+              (ret: RampResponse<ReactionClass>) => {
+                return ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteSuccess(
+                  {
+                    ...ret,
+                  },
+                );
+              },
+              catchError((error: ErrorEvent) =>
+                of(
+                  ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteFailure(
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
+          );
       }),
     );
   },
@@ -399,12 +490,13 @@ export const fetchPathwayAnalysis = createEffect(
                 ret.background = action.background;
                 ret.pval_type = action.pval_type;
                 ret.pval_cutoff = Number(action.pval_cutoff);
-                  ret.perc_analyte_overlap = Number(action.perc_analyte_overlap);
-                  ret.min_pathway_tocluster = Number(action.min_pathway_tocluster);
-                  ret.perc_pathway_overlap = Number(action.perc_pathway_overlap);
-                  console.log(ret)
+                ret.perc_analyte_overlap = Number(action.perc_analyte_overlap);
+                ret.min_pathway_tocluster = Number(
+                  action.min_pathway_tocluster,
+                );
+                ret.perc_pathway_overlap = Number(action.perc_pathway_overlap);
                 return PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess(
-                   ret
+                  ret,
                 );
               },
               catchError((error: ErrorEvent) =>

@@ -118,7 +118,7 @@
       <div
         [ngClass]="{
           'full-width': navigationsidenav.opened,
-          'width-70': !navigationsidenav.opened
+          'width-70': !navigationsidenav.opened,
         }"
       >
         <div class="row">
@@ -165,7 +165,7 @@
               }
             </p>
             <ul class="ramp-list">
-              @for (version of sourceVersions; track version) {
+              @for (version of sourceVersions; track version.data_source_name) {
                 <li>
                   <a
                     href="{{ version.data_source_url }}"

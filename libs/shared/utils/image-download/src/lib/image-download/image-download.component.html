@@ -4,5 +4,7 @@
 <mat-menu #dynamicMenu="matMenu">
   <button mat-menu-item (click)="downloadPNG()">PNG</button>
   <button mat-menu-item (click)="downloadSVG()">SVG</button>
-  <button mat-menu-item (click)="downloadTSV()">TSV</button>
+  @if (showTSV()) {
+    <button mat-menu-item (click)="downloadTSV()">TSV</button>
+  }
 </mat-menu>

@@ -1,7 +1,7 @@
 @if (filters() && filterFormControls()) {
   <div [formGroup]="filterFormControls()">
     <div class="filter-grid">
-      @for (filter of filters(); track filter) {
+      @for (filter of filters(); track filter.field) {
         @if (filter.values && filter.field) {
           <div>
             <mat-form-field appearance="outline" class="full-width">
@@ -29,7 +29,7 @@
                     </span>
                   }
                 </mat-select-trigger>
-                @for (value of filter?.values; track value) {
+                @for (value of filter?.values; track value.term) {
                   <mat-option [value]="value"
                     ><div class="row space-between-row option-row">
                       <div class="text-left">{{ value.term }}</div>
@@ -49,7 +49,7 @@
             @if (showSelected()) {
               @for (
                 selected of filterFormControls().controls[filter.field].value;
-                track selected
+                track selected.term
               ) {
                 <div class="primary-chip full-width">{{ selected.term }}</div>
               }

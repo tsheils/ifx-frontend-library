@@ -1,17 +1,25 @@
-import { ChangeDetectionStrategy, Component, OnInit, ViewEncapsulation } from "@angular/core";
-import { CommonModule } from "@angular/common";
-import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
-import { MatDialogRef } from "@angular/material/dialog";
-import { select } from "@ngrx/store";
-import { CompleteDialogComponent } from "complete-dialog";
-import { DataProperty } from "ncats-datatable";
-import { PanelAccordionComponent } from "panel-accordion";
-import { FisherResult, FishersDataframe, Pathway, RampQuery, RampResponse } from "ramp";
-import { RampCorePageComponent } from "ramp-core-page";
 import {
-  PathwayEnrichmentsActions,
-  RampSelectors,
-} from 'ramp-store';
+  ChangeDetectionStrategy,
+  Component,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialogRef } from '@angular/material/dialog';
+import { select } from '@ngrx/store';
+import { CompleteDialogComponent } from 'complete-dialog';
+import { DataProperty } from 'ncats-datatable';
+import { PanelAccordionComponent } from 'panel-accordion';
+import {
+  FisherResult,
+  FishersDataframe,
+  Pathway,
+  RampQuery,
+  RampResponse,
+} from 'ramp';
+import { RampCorePageComponent } from 'ramp-core-page';
+import { PathwayEnrichmentsActions, RampSelectors } from 'ramp-store';
 import { map } from 'rxjs';
 
 @Component({
@@ -21,12 +29,12 @@ import { map } from 'rxjs';
   templateUrl: './biochemical-pathways-page.component.html',
   styleUrl: './biochemical-pathways-page.component.scss',
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BiochemicalPathwaysPageComponent extends RampCorePageComponent implements OnInit {
-
-
-
+export class BiochemicalPathwaysPageComponent
+  extends RampCorePageComponent
+  implements OnInit
+{
   pathwayColumns: DataProperty[] = [
     new DataProperty({
       label: 'Input ID',
@@ -219,20 +227,21 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
 
   private analyteType!: string;
 
-  constructor(
-  ) {
-    super()
+  constructor() {
+    super();
   }
 
   ngOnInit() {
-    console.log(this);
     this.store
       .pipe(
         select(RampSelectors.getPathways),
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<Pathway> | undefined) => {
           if (res && res.data) {
-            this.dataMap.set('Pathways', {data: this._mapData(res.data), fields: this.pathwayColumns})
+            this.dataMap.set('Pathways', {
+              data: this._mapData(res.data),
+              fields: this.pathwayColumns,
+            });
             const matches = Array.from(
               new Set(
                 res.data.map((pathway) => pathway.inputId.toLocaleLowerCase()),
@@ -241,7 +250,14 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
             const noMatches = this.inputList.filter(
               (p: string) => !matches.includes(p.toLocaleLowerCase()),
             );
-            this.resultsMap = {matches: matches, noMatches: noMatches, count: res.data.length, inputLength: this.inputList.length,  inputType: 'analytes'};
+            this.resultsMap = {
+              matches: matches,
+              noMatches: noMatches,
+              count: res.data.length,
+              inputLength: this.inputList.length,
+              inputType: 'analytes',
+            };
+            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
           if (res && res.dataframe) {
             this.dataframe = res.dataframe;
@@ -249,9 +265,8 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
-       //   this.pathwaysLoading = false;
+          //   this.pathwaysLoading = false;
           this.changeRef.markForCheck();
-          console.log(this)
         }),
       )
       .subscribe();
@@ -264,41 +279,37 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
           (
             res:
               | {
-              data: FisherResult[];
-              plot?: string[];
-              query?: RampQuery;
-              dataframe?: unknown;
-              openModal?: boolean;
-            }
+                  data: FisherResult[];
+                  plot?: string[];
+                  query?: RampQuery;
+                  dataframe?: unknown;
+                  openModal?: boolean;
+                }
               | undefined,
           ) => {
             if (res && res.data) {
               if (res.data.length) {
-              /*  this.dataAsDataProperty = this._mapData(res.data);
-
-             //   this.enrichmentLoading = false;
-                this.allDataAsDataProperty = this.dataAsDataProperty;*/
-                this.dataMap.set('Enriched Pathways', {data: this._mapData(res.data), fields: this.dataColumns})
-
-                //  this.imageLoading = false;
-             //   this.ref.markForCheck();
+                this.dataMap.set('Enriched Pathways', {
+                  data: this._mapData(res.data),
+                  fields: this.dataColumns,
+                });
               } else {
                 const ref: MatDialogRef<CompleteDialogComponent> =
                   this.dialog.open(CompleteDialogComponent, {
                     data: {
                       title: 'Pathway',
-                      message: 'No enriched pathways found.'
+                      message: 'No enriched pathways found.',
                     },
                   });
-               // this.pathwaysLoading = false;
-              //  this.enrichmentLoading = false;
-               // this.imageLoading = false;
               }
             }
             if (res && res.dataframe) {
               this.enrichedDataframe = res.dataframe as FishersDataframe;
               if (this.enrichedDataframe.analyte_type) {
-                this.dataColumns = this.enrichmentColumns[this.enrichedDataframe.analyte_type[0]];
+                this.dataColumns =
+                  this.enrichmentColumns[
+                    this.enrichedDataframe.analyte_type[0]
+                  ];
                 this.analyteType = this.enrichedDataframe.analyte_type[0];
               }
               this.changeRef.markForCheck();
@@ -314,25 +325,39 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
         takeUntilDestroyed(this.destroyRef),
         map((res: string | undefined) => {
           if (res) {
-            this.visualizationMap.set('Cluster Plot', {type: 'cluster', data: {tooBig: !(res.length > 0), image: this.sanitizer.bypassSecurityTrustHtml(res)}})
+            this.visualizationMap.set('Cluster Plot', [
+              {
+                type: 'cluster',
+                data: {
+                  tooBig: !(res.length > 0),
+                  image: this.sanitizer.bypassSecurityTrustHtml(res),
+                },
+              },
+            ]);
+            this.loadedEvent.emit({
+              dataLoaded: true,
+              resultsLoaded: true,
+              visualizationsLoaded: true,
+            });
           }
-        //  this.imageLoading = false;
           this.changeRef.markForCheck();
         }),
       )
       .subscribe();
   }
 
-  override fetchData(event: {[key:string]: unknown}): void {
-    super.fetchData()
-    this.inputList = this._parseInput(event['analytes'] as string | string[])
+  override fetchData(event: { [key: string]: unknown }): void {
+    super.fetchData();
+    this.inputList = this._parseInput(event['analytes'] as string | string[]);
     event['analytes'] = this.inputList;
     this.store.dispatch(
-      PathwayEnrichmentsActions.fetchPathwaysFromAnalytes({ analytes: this.inputList}),
+      PathwayEnrichmentsActions.fetchPathwaysFromAnalytes({
+        analytes: this.inputList,
+      }),
     );
- //   this.pathwaysLoading = true;
- //   this.enrichmentLoading = true;
- //   this.imageLoading = true;
+    //   this.pathwaysLoading = true;
+    //   this.enrichmentLoading = true;
+    //   this.imageLoading = true;
     if (this.file) {
       this.store.dispatch(
         PathwayEnrichmentsActions.fetchEnrichmentFromPathways({
@@ -341,9 +366,12 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
           background: this.file,
           pval_type: <string>event['pval_type'] || undefined,
           pval_cutoff: Number(<number>event['pval_cutoff']) || undefined,
-          perc_analyte_overlap: <number>event['perc_analyte_overlap'] || undefined,
-          min_pathway_tocluster: <number>event['min_pathway_tocluster'] || undefined,
-          perc_pathway_overlap: <number>event['perc_pathway_overlap'] || undefined
+          perc_analyte_overlap:
+            <number>event['perc_analyte_overlap'] || undefined,
+          min_pathway_tocluster:
+            <number>event['min_pathway_tocluster'] || undefined,
+          perc_pathway_overlap:
+            <number>event['perc_pathway_overlap'] || undefined,
         }),
       );
     } else {
@@ -353,15 +381,18 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent impl
           biospecimen: <string>event['biospecimen'],
           pval_type: <string>event['pval_type'] || undefined,
           pval_cutoff: Number(<number>event['pval_cutoff']) || undefined,
-          perc_analyte_overlap: <number>event['perc_analyte_overlap'] || undefined,
-          min_pathway_tocluster: <number>event['min_pathway_tocluster'] || undefined,
-          perc_pathway_overlap: <number>event['perc_pathway_overlap'] || undefined
+          perc_analyte_overlap:
+            <number>event['perc_analyte_overlap'] || undefined,
+          min_pathway_tocluster:
+            <number>event['min_pathway_tocluster'] || undefined,
+          perc_pathway_overlap:
+            <number>event['perc_pathway_overlap'] || undefined,
         }),
       );
     }
   }
 
- /* override downloadData($event: { [p: string]: unknown }) {
+  /* override downloadData($event: { [p: string]: unknown }) {
 
   }*/
 }

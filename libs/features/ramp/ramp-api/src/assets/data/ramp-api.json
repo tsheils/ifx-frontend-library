@@ -5,6 +5,9 @@
     },
     {
       "url": "https://ramp-api-alpha.ncats.io"
+    },
+    {
+      "url": "http://127.0.0.1:5762"
     }
   ],
   "openapi": "3.1.0",
@@ -261,8 +264,23 @@
         "summary": "Return pathways from given list of analytes",
         "x-title": "Retrieve Pathways From Input Analyte(s)",
         "x-allowedTypes": {
-          "metabolites":  ["CAS", "chebi", "chemspider", "hmdb", "kegg", "kegg_glycan", "lipidbank", "LIPIDMAPS", "plantfa", "polymer", "pubchem", "rhea-comp", "swisslipids", "wikidata"],
-          "genes/proteins":  []
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
         },
         "responses": {
           "200": {
@@ -348,27 +366,17 @@
                   },
                   "analyte_type": {
                     "type": "string",
-                    "enum": [
-                      "gene",
-                      "metabolite",
-                      "both"
-                    ],
+                    "enum": ["gene", "metabolite", "both"],
                     "required": false
                   },
                   "match": {
                     "type": "string",
-                    "enum": [
-                      "exact",
-                      "fuzzy"
-                    ],
+                    "enum": ["exact", "fuzzy"],
                     "required": false
                   },
                   "names_or_ids": {
                     "type": "string",
-                    "enum": [
-                      "names",
-                      "ids"
-                    ],
+                    "enum": ["names", "ids"],
                     "required": false
                   }
                 },
@@ -414,10 +422,7 @@
                   },
                   "namesOrIds": {
                     "type": "string",
-                    "enum": [
-                      "name",
-                      "ids"
-                    ],
+                    "enum": ["name", "ids"],
                     "required": false
                   }
                 },
@@ -464,19 +469,12 @@
                   },
                   "format": {
                     "type": "string",
-                    "enum": [
-                      "json",
-                      "tsv"
-                    ],
+                    "enum": ["json", "tsv"],
                     "required": false
                   }
                 },
                 "example": {
-                  "ontology": [
-                    "Colon",
-                    "Liver",
-                    "Lung"
-                  ],
+                  "ontology": ["Colon", "Liver", "Lung"],
                   "format": "json"
                 }
               }
@@ -624,15 +622,15 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "a vector of analytes that need to be searched"
                   },
-                  "namesOrIds": {
+                  "nameOrIds": {
                     "type": "string",
-                    "enum": [
-                      "name",
-                      "ids"
-                    ],
-                    "required": ["false"]
+                    "enum": ["names", "ids"],
+                    "required": false,
+                    "description": "whether input is \"names\" or \"ids\" (default is \"ids\")",
+                    "hidden": true
                   }
                 },
                 "example": {
@@ -640,9 +638,24 @@
                     "ensembl:ENSG00000135679",
                     "hmdb:HMDB0000064",
                     "hmdb:HMDB0000148",
-                    "ensembl:ENSG00000141510"
-                  ],
-                  "namesOrIds": ["ids"]
+                    "ensembl:ENSG00000141510",
+                    "chebi:58115",
+                    "chebi:456215",
+                    "chebi:58245",
+                    "chebi:58450",
+                    "chebi:17596",
+                    "chebi:16335",
+                    "chebi:16750",
+                    "chebi:172878",
+                    "chebi:62286",
+                    "chebi:77897",
+                    "uniprot:P30566",
+                    "uniprot:P30520",
+                    "uniprot:P00568",
+                    "uniprot:P23109",
+                    "uniprot:P22102",
+                    "uniprot:P15531"
+                  ]
                 }
               }
             }
@@ -674,39 +687,60 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "list of analytes. Only CHEBI and Uniprot IDs are supported"
                   },
-                  "namesOrIds": {
-                    "type": "string",
-                    "enum": [
-                      "name",
-                      "ids"
-                    ],
-                    "required": false
-                  },
-                  "multiRxnParticipantCount": {
+                  "onlyHumanMets": {
                     "type": "number",
-                    "required": false
+                    "required": false,
+                    "description": "boolean to only return pathways containing only human metabolites (ChEBI ontology)"
                   },
                   "humanProtein": {
                     "type": "boolean",
-                    "required": false
+                    "required": false,
+                    "description": "boolean to only control pathways catalyzed by a human proteins (having human Uniprot)"
                   },
-                  "concatResults": {
-                    "type": "boolean",
-                    "required": false
+                  "includeTransportRxns": {
+                    "type": "number",
+                    "required": false,
+                    "description": "if TRUE, returns metabolic and transport reactions"
+                  },
+                  "rxnDirs": {
+                    "type": "string",
+                    "enum": ["UN", "LR", "RL", "BD", "ALL"],
+                    "required": false,
+                    "description": "character vector of length > 1, specifying reaction directions to return."
+                  },
+                  "includeRxnURLs": {
+                    "type": "number",
+                    "required": false,
+                    "description": "if TRUE, urls to Rhea.org will be delivered in the result dataframe for each reaction"
                   }
                 },
                 "example": {
                   "analytes": [
-                    "hmdb:HMDB0000033",
-                    "hmdb:HMDB0000052",
-                    "hmdb:HMDB0000094",
-                    "hmdb:HMDBP00789",
-                    "hmdb:HMDBP00283",
-                    "hmdb:HMDBP00284"
+                    "chebi:58115",
+                    "chebi:456215",
+                    "chebi:58245",
+                    "chebi:58450",
+                    "chebi:17596",
+                    "chebi:16335",
+                    "chebi:16750",
+                    "chebi:172878",
+                    "chebi:62286",
+                    "chebi:77897",
+                    "uniprot:P30566",
+                    "uniprot:P30520",
+                    "uniprot:P00568",
+                    "uniprot:P23109",
+                    "uniprot:P22102",
+                    "uniprot:P15531"
                   ],
-                  "humanProtein": false
+                  "onlyHumanMets": false,
+                  "humanProtein": true,
+                  "includeTransportRxns": true,
+                  "rxnDirs": "UN",
+                  "includeRxnURLs": false
                 }
               }
             }
@@ -738,34 +772,34 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "list of analyte ids"
                   },
-                  "namesOrIds": {
-                    "type": "string",
-                    "enum": [
-                      "name",
-                      "ids"
-                    ],
-                    "required": false
-                  },
-                  "onlyHumanMets": {
-                    "type": "boolean",
-                    "required": false
+                  "multiRxnParticipantCount": {
+                    "type": "number",
+                    "required": false,
+                    "description": "minimum number of analytes to report a reaction class, default = 1"
                   },
                   "humanProtein": {
                     "type": "boolean",
-                    "required": false
+                    "required": false,
+                    "description": "require reactions to have a human protein (enzyme or transporter), default True"
                   },
-                  "includeTransportRxns": {
+                  "concatResults": {
                     "type": "boolean",
-                    "required": false
+                    "required": false,
+                    "description": "returns all reaction class levels in one dataframe rather than a list of 3 dataframes"
                   },
-                  "rxnDirs": {
-                    "type": "string",
-                    "enum": [
-                      "UN"
-                    ],
-                    "required": false
+                  "includeReactionIDs": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "adds the list of reaction ids for each reaction class"
+                  },
+                  "useIdMapping": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "allows one to fuzzy match input ids to chebi and uniprot to support reaction queries.",
+                    "hidden": true
                   }
                 },
                 "example": {
@@ -775,8 +809,28 @@
                     "hmdb:HMDB0000094",
                     "hmdb:HMDBP00789",
                     "hmdb:HMDBP00283",
-                    "hmdb:HMDBP00284"
-                  ]
+                    "hmdb:HMDBP00284",
+                    "chebi:58115",
+                    "chebi:456215",
+                    "chebi:58245",
+                    "chebi:58450",
+                    "chebi:17596",
+                    "chebi:16335",
+                    "chebi:16750",
+                    "chebi:172878",
+                    "chebi:62286",
+                    "chebi:77897",
+                    "uniprot:P30566",
+                    "uniprot:P30520",
+                    "uniprot:P00568",
+                    "uniprot:P23109",
+                    "uniprot:P22102",
+                    "uniprot:P15531"
+                  ],
+                  "multiRxnParticipantCount": 1,
+                  "humanProtein": true,
+                  "concatResults": true,
+                  "includeReactionIDs": false
                 }
               }
             }
@@ -901,11 +955,7 @@
                   },
                   "pval_type": {
                     "type": "string",
-                    "enum": [
-                      "fdr",
-                      "holm",
-                      "pval"
-                    ],
+                    "enum": ["fdr", "holm", "pval"],
                     "required": false
                   },
                   "pval_cutoff": {
@@ -919,12 +969,8 @@
                   "fishers_results": {
                     "pval_cutoff": 0.02,
                     "pval_type": "fdr",
-                    "analyte_type": [
-                      "both"
-                    ],
-                    "result_type": [
-                      "pathway_enrichment"
-                    ],
+                    "analyte_type": ["both"],
+                    "result_type": ["pathway_enrichment"],
                     "fishresults": [
                       {
                         "pathwayName": "beta-Alanine metabolism",
@@ -1360,11 +1406,7 @@
                   },
                   "pval_type": {
                     "type": "string",
-                    "enum": [
-                      "fdr",
-                      "holm",
-                      "pval"
-                    ],
+                    "enum": ["fdr", "holm", "pval"],
                     "required": false
                   },
                   "pval_cutoff": {
@@ -1377,12 +1419,8 @@
                   "perc_analyte_overlap": 0.2,
                   "perc_pathway_overlap": 0.2,
                   "fishers_results": {
-                    "analyte_type": [
-                      "both"
-                    ],
-                    "result_type": [
-                      "pathway_enrichment"
-                    ],
+                    "analyte_type": ["both"],
+                    "result_type": ["pathway_enrichment"],
                     "fishresults": [
                       {
                         "pathwayName": "beta-Alanine metabolism",

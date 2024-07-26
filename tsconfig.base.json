@@ -208,6 +208,7 @@
       ],
       "ncats-header": ["libs/shared/utils/ncats-header/src/index.ts"],
       "ontologies-page": ["libs/features/ramp/ontologies-page/src/index.ts"],
+      "ontology-panel": ["libs/shared/ramp/panels/ontology-panel/src/index.ts"],
       "options-panel": ["libs/shared/ifx/options-panel/src/index.ts"],
       "panel-accordion": [
         "libs/shared/ramp/panels/panel-accordion/src/index.ts"
@@ -237,10 +238,14 @@
       "scaffold-hopper": ["libs/features/ifx/scaffold-hopper/src/index.ts"],
       "screenshot-display": ["libs/shared/ifx/screenshot-display/src/index.ts"],
       "structure-viewer": ["libs/shared/utils/structure-viewer/src/index.ts"],
+      "sunburst-chart": [
+        "libs/shared/utils/charts/sunburst-chart/src/index.ts"
+      ],
       "tool-browse": ["libs/features/ifx/tool-browse/src/index.ts"],
       "tool-card": ["libs/shared/ifx/tool-card/src/index.ts"],
       "tool-details": ["libs/shared/ifx/tool-details/src/index.ts"],
       "tool-list": ["libs/shared/ifx/tool-list/src/index.ts"],
+      "tree-chart": ["libs/shared/utils/charts/tree-chart/src/index.ts"],
       "upset-chart": ["libs/shared/utils/charts/upset-chart/src/index.ts"],
       "utils-animated-force-directed-graph": [
         "libs/shared/utils/charts/animated-force-directed-graph/src/index.ts"

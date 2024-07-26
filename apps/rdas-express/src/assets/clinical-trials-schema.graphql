@@ -326,14 +326,14 @@ type Query {
   trialsByStatus(where: ClinicalTrialWhere): [FilterCount]
     @cypher(
       statement: """
-MATCH (n:GARD)
-      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-      MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
-                 WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
-                 AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
-                 AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
-                           WITH cl.OverallStatus as status, count(distinct(cl)) as ct
-           return {term: status, count:ct, label: 'OverallStatus'} as data order by ct DESC
+      MATCH (n:GARD)
+            WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
+            MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+                       WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
+                       AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
+                       AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
+                                 WITH cl.OverallStatus as status, count(distinct(cl)) as ct
+                 return {term: status, count:ct, label: 'OverallStatus'} as data order by ct DESC
       """
       columnName: "data"
     )
@@ -343,14 +343,14 @@ type Query {
   trialsByType(where: ClinicalTrialWhere): [FilterCount]
     @cypher(
       statement: """
-     MATCH (n:GARD)
-           WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-           MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
-                      WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
-                      AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
-                      AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
-             WITH cl.StudyType as studyType, count(distinct(cl)) as ct
-           return {term: studyType, count:ct, label: 'StudyType'} as data order by ct DESC
+      MATCH (n:GARD)
+            WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
+            MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+                       WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
+                       AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
+                       AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
+              WITH cl.StudyType as studyType, count(distinct(cl)) as ct
+            return {term: studyType, count:ct, label: 'StudyType'} as data order by ct DESC
       """
       columnName: "data"
     )
@@ -360,14 +360,14 @@ type Query {
   trialsByPhase(where: ClinicalTrialWhere): [FilterCount]
     @cypher(
       statement: """
-     MATCH (n:GARD)
-           WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-           MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
-                      WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
-                      AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
-                      AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
-       WITH cl.Phase AS phase, count(distinct(cl)) as ct
-      return {term: phase, count:ct, label: 'Phase'} as data order by phase ASC
+      MATCH (n:GARD)
+            WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
+            MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+                       WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
+                       AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
+                       AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
+        WITH cl.Phase AS phase, count(distinct(cl)) as ct
+       return {term: phase, count:ct, label: 'Phase'} as data order by phase ASC
       """
       columnName: "data"
     )

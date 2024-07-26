@@ -239,7 +239,7 @@
             [disabled]="!trial.studyDiseases || trial.studyDiseases.length <= 1"
           >
             <mat-list>
-              @for (disease of trial.studyDiseases; track disease) {
+              @for (disease of trial.studyDiseases; track disease.gardId) {
                 <mat-list-item>
                   @if (disease.gardId) {
                     <div #link>
@@ -265,7 +265,7 @@
             [disabled]="!trial.conditions || trial.conditions.length === 0"
           >
             <mat-list>
-              @for (condition of trial.conditions; track condition) {
+              @for (condition of trial.conditions; track condition.condition) {
                 <mat-list-item>
                   {{ condition.condition }}
                 </mat-list-item>
@@ -331,7 +331,10 @@
               !trial.interventions || trial.interventions.length === 0
             "
           >
-            @for (intervention of trial.interventions; track intervention) {
+            @for (
+              intervention of trial.interventions;
+              track intervention.interventionName
+            ) {
               <div>
                 @if (intervention.interventionType) {
                   <div class="accent-chip-outlined">
@@ -352,7 +355,10 @@
           >
             <br />
             <br />
-            @for (reference of trial.references; track reference) {
+            @for (
+              reference of trial.references;
+              track reference.referencePMID
+            ) {
               <div>
                 @if (reference.referencePMID) {
                   <div #link>

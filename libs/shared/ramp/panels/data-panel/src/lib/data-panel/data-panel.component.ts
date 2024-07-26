@@ -1,6 +1,6 @@
-import { Component, Input, OnChanges, SimpleChange } from "@angular/core";
+import { Component, Input, OnChanges, SimpleChange } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataProperty, NcatsDatatableComponent } from "ncats-datatable";
+import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
 
 @Component({
   selector: 'lib-data-panel',

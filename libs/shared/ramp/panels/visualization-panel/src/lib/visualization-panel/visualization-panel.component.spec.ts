@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { VisualizationPanelComponent } from './visualization-panel.component';
 
 describe('VisualizationPanelComponent', () => {
@@ -7,11 +8,12 @@ describe('VisualizationPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [VisualizationPanelComponent],
+      imports: [VisualizationPanelComponent, NoopAnimationsModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VisualizationPanelComponent);
     component = fixture.componentInstance;
+    component.data = { type: 'cluster', data: {} };
     fixture.detectChanges();
   });
 

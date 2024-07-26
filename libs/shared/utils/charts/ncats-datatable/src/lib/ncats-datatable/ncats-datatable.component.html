@@ -1,16 +1,18 @@
-@if (showPaginator && pageData) {
+@if (showPaginator() && pageData()) {
   <div class="row right-justified-row body-row paginator-row">
     <div class="width-55">
-      <mat-paginator
-        #paginatorTop
-        [pageSizeOptions]="[10, 20, 50]"
-        [pageSize]="pageData.skip > 0 ? pageData.skip : 10"
-        [length]="pageData.total ? pageData.total : 10"
-        [showFirstLastButtons]="true"
-        (page)="changePage($event)"
-        [hidePageSize]="hidePageSize"
-      >
-      </mat-paginator>
+      @if (pageData()) {
+        <mat-paginator
+          #paginatorTop
+          [pageSizeOptions]="[10, 20, 50]"
+          [pageSize]="pageData().skip || 10"
+          [length]="pageData().total || 10"
+          [showFirstLastButtons]="true"
+          (page)="changePage($event)"
+          [hidePageSize]="hidePageSize()"
+        >
+        </mat-paginator>
+      }
     </div>
   </div>
 }
@@ -18,10 +20,10 @@
   mat-table
   matSort
   #dataTable
-  [dataSource]="dataSource"
-  [multiTemplateDataRows]="expandable"
+  [dataSource]="dataSource()"
+  [multiTemplateDataRows]="expandable()"
   (matSortChange)="changeSort($event)"
-  [ngClass]="{ condensed: condensed }"
+  [ngClass]="{ condensed: condensed() }"
 >
   <ng-container matColumnDef="select">
     <th mat-header-cell *matHeaderCellDef>
@@ -41,7 +43,7 @@
       </mat-checkbox>
     </td>
   </ng-container>
-  @for (field of displayFields; track field) {
+  @for (field of displayFields(); track field.field) {
     <ng-container matColumnDef="{{ field.field }}">
       <th
         mat-header-cell
@@ -64,7 +66,7 @@
             (attached)="componentAttached($event, i, field)"
           ></div>
         } @else {
-          @if (row[field.field] && isArray(row[field.field])) {
+          @if (row[field.field] && Array.isArray(row[field.field])) {
             <div>
               @for (value of row[field.field]; track value) {
                 <span>
@@ -98,10 +100,10 @@
     </td>
   </ng-container>
 
-  <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+  <tr mat-header-row *matHeaderRowDef="displayColumns()"></tr>
   <tr
     mat-row
-    *matRowDef="let row; columns: displayColumns"
+    *matRowDef="let row; columns: displayColumns()"
     (click)="rowClicked(row)"
     class="element-row"
   ></tr>

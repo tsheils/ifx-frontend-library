@@ -11,6 +11,7 @@ import {
   DestroyRef,
   EventEmitter,
   inject,
+  input,
   Input,
   OnChanges,
   OnInit,
@@ -59,10 +60,6 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   })
   cdkViewport!: CdkVirtualScrollViewport;
 
-  /**
-   * initialize a private variable _data, it's a BehaviorSubject
-   *
-   */
   @Input() filter!: FilterCategory;
 
   @Output() filterSelectionChange: EventEmitter<
@@ -83,8 +80,6 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
    */
   filterSelection = new SelectionModel<string>(true, []);
 
-  displayColumns = ['select', 'term', 'count'];
-
   /**
    * flag to show or hide the spinner for loading all facet options
    */
@@ -92,12 +87,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
 
   range!: ListRange;
 
-  /**
-   * add route and change tracking dependencies
-   * @param changeRef
-   */
-  constructor(private changeRef: ChangeDetectorRef) {}
-
+  fullList = input(false);
   /**
    * retrieve and set facet values, subscribe to changes
    */

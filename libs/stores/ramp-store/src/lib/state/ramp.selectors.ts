@@ -89,9 +89,18 @@ export const getMetabolites = createSelector(
   (state: State) => state.metabolites,
 );
 
-export const getCommonReactions = createSelector(
+export const getReactions = createSelector(
   getRampState,
   (state: State) => state.reactions,
+);
+
+export const getReactionClasses = createSelector(
+  getRampState,
+  (state: State) => state.reactionClasses,
+);
+export const getCommonReactions = createSelector(
+  getRampState,
+  (state: State) => state.commonReactions,
 );
 
 export const getClasses = createSelector(

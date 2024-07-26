@@ -19,7 +19,7 @@
     </div>
     <mat-tab-group>
       <mat-tab label="Filters">
-        @for (filter of filters; track filter) {
+        @for (filter of filters; track filter.label) {
           <ncats-frontend-library-shared-utils-filter-panel
             [filter]="filter"
             (filterSelectionChange)="filterSelectionChange($event)"

@@ -1,3 +1,7 @@
+import {
+  FilterCategory,
+  OpenApiPath,
+} from '@ncats-frontend-library/models/utils';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
@@ -8,7 +12,6 @@ import {
   FishersDataframe,
   Metabolite,
   Ontology,
-  OntologyList,
   Pathway,
   Properties,
   RampResponse,
@@ -16,8 +19,10 @@ import {
   Reaction,
   SourceVersion,
   RampChemicalEnrichmentResponse,
+  CommonAnalyte,
+  ReactionClass,
 } from 'ramp';
-import { OpenApiPath } from "../../../../../models/utils/src/lib/open-api-path";
+
 import {
   AnalyteFromPathwayActions,
   ClassesFromMetabolitesActions,
@@ -29,6 +34,8 @@ import {
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
+  ReactionClassesFromAnalytesActions,
+  ReactionsFromAnalytesActions,
 } from './ramp.actions';
 
 export const RAMP_STORE_FEATURE_KEY = 'rampStore';
@@ -50,9 +57,11 @@ export interface State extends EntityState<RampEntity> {
   ontologies?: RampResponse<Ontology>;
   analytes?: RampResponse<Analyte>;
   pathways?: RampResponse<Pathway>;
+  commonReactions?: RampResponse<CommonAnalyte>;
   reactions?: RampResponse<Reaction>;
+  reactionClasses?: RampResponse<ReactionClass>;
   metabolites?: RampResponse<Metabolite>;
-  ontologiesList?: OntologyList[];
+  ontologiesList?: FilterCategory[];
 
   metClasses?: RampResponse<Classes>;
 
@@ -74,7 +83,7 @@ export interface State extends EntityState<RampEntity> {
 
   clusterPlot?: string;
   openModal?: boolean;
-  api?: Map<string, OpenApiPath[]>
+  api?: Map<string, OpenApiPath[]>;
 }
 
 export interface RampPartialState {
@@ -193,7 +202,25 @@ export const rampReducer = createReducer(
     (state, { data, query, dataframe }) => ({
       ...state,
       loading: false,
+      commonReactions: { data, query, dataframe },
+    }),
+  ),
+
+  on(
+    ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess,
+    (state, { data, query, dataframe }) => ({
+      ...state,
+      loading: false,
       reactions: { data, query, dataframe },
+    }),
+  ),
+
+  on(
+    ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteSuccess,
+    (state, { data, query, dataframe }) => ({
+      ...state,
+      loading: false,
+      reactionClasses: { data, query, dataframe },
     }),
   ),
 
@@ -302,6 +329,8 @@ export const rampReducer = createReducer(
     MetaboliteFromOntologyActions.fetchMetaboliteFromOntologiesFailure,
     MetaboliteFromOntologyActions.fetchOntologiesFailure,
     CommonReactionAnalyteActions.fetchCommonReactionAnalytesFailure,
+    ReactionsFromAnalytesActions.fetchReactionsFromAnalytesFailure,
+    ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteFailure,
     ClassesFromMetabolitesActions.fetchClassesFromMetabolitesFailure,
     PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolitesFailure,
     MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolitesFailure,

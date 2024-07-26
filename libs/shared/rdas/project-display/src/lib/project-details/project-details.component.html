@@ -3,7 +3,7 @@
     <mat-card>
       <div class="row space-between-row">
         <div class="width-75">
-          <span class="mat-card-title"> {{ latestGrant()?.title }}</span>
+          <span class="mat-card-title"> {{ latestGrant()!.title }}</span>
         </div>
         @if (grant()?.core_project_num) {
           <div class="mat-h3">
@@ -20,7 +20,7 @@
         }
       </div>
       <mat-card-content>
-        @if (latestGrant()?.abstract && latestGrant()?.abstract?.length) {
+        @if (latestGrant()!.abstract!.length) {
           <div class="primary-chip-outlined">Abstract</div>
         }
         <br />
@@ -65,7 +65,7 @@
             </div>
             @if (grant()?.patents && grant()?.patents?.length) {
               <div>
-                @for (patent of grant()?.patents; track patent) {
+                @for (patent of grant()?.patents; track patent.title) {
                   <div>
                     <div class="list-item-title">{{ patent.title }}</div>
                     <div class="list-item-content">{{ patent.org_name }}</div>
@@ -83,7 +83,7 @@
             </div>
             @if (grant()?.clinicalStudies && grant()?.clinicalStudies?.length) {
               <div>
-                @for (study of grant()?.clinicalStudies; track study) {
+                @for (study of grant()?.clinicalStudies; track study.title) {
                   <div>
                     <div class="list-item-title">{{ study.title }}</div>
                     <div class="list-item-content">{{ study.status }}</div>
@@ -105,7 +105,11 @@
               </div>
             </ng-template>
             <mat-accordion [displayMode]="'flat'" multi>
-              @for (grantPr of grant()?.projects; track grant; let i = $index) {
+              @for (
+                grantPr of grant()?.projects;
+                track grantPr.title;
+                let i = $index
+              ) {
                 <mat-expansion-panel [expanded]="i === 0">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
@@ -128,7 +132,7 @@
                       </div>
                       @for (
                         disease of grantPr?.researchedDiseases;
-                        track disease
+                        track disease.gardId
                       ) {
                         <div>
                           @if (disease.gardId) {

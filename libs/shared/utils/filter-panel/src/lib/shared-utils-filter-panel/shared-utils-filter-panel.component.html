@@ -1,10 +1,10 @@
-<mat-card class="filter-card">
+<mat-card class="filter-card" [appearance]="'outlined'">
   <mat-card-title>{{ filter.label | titlecase }}</mat-card-title>
   <mat-form-field class="table-search">
     <input
       matInput
       #searchInput
-      placeholder="Search {{ filter.label }}"
+      placeholder="Search {{ filter.label | titlecase }}"
       [formControl]="searchCtl"
       [value]="filter.query"
     />
@@ -59,7 +59,7 @@
         @if (last) {
           <br />
         }
-        @if (last && filter.values.length >= 200) {
+        @if (!fullList() && last && filter.values.length >= 200) {
           <button
             matButton
             mat-stroked-button

@@ -1,9 +1,46 @@
+@use 'libs/styles/src/styles/ramp-theme.scss' as theme;
 @use '@angular/material' as mat;
 @use '_utils' as utils;
-@import 'ncats-theme';
+@use 'libs/shared/utils/footer-template/src/lib/footer-template/_footer-theme.scss'
+  as footer;
+@include mat.core();
+
+@include utils.width-sm(50);
+@include utils.width-sm(90);
+@include utils.width-sm(95);
+@include utils.width-sm(100);
+
+@include utils.width-md(80);
+@include utils.width-md(90);
+@include utils.width-sm(75);
+@include utils.width-md(100);
+
+@include utils.width(95);
+@include utils.width(90);
+@include utils.width(80);
+@include utils.width(75);
+@include utils.width(70);
+@include utils.width(66);
+@include utils.width(60);
+@include utils.width(55);
+@include utils.width(50);
+@include utils.width(45);
+@include utils.width(40);
+@include utils.width(33);
+@include utils.width(30);
+@include utils.width(25);
+@include utils.width(20);
+@include utils.width(10);
+@include utils.width(5);
+@include utils.horizontalpadding(2vw);
+@include utils.text-align(center);
+@include utils.text-align(left);
+@include utils.text-align(right);
 
 html,
 body {
+  @include mat.all-component-themes(theme.$light-theme);
+  @include footer.theme(theme.$light-theme);
   height: 100%;
   margin: 0 !important;
   font-family:
@@ -17,7 +54,7 @@ body {
 }
 
 a {
-  color: mat.get-color-from-palette($app-accent);
+  color: mat.get-theme-color(theme.$light-theme, primary);
   font-weight: bold;
 }
 
@@ -73,51 +110,46 @@ a {
 }
 
 .main-ramp-rail {
-  background-color: mat.get-color-from-palette($app-accent) !important;
+  background-color: mat.get-theme-color(theme.$light-theme, primary) !important;
   border: none !important;
 }
 
 .active-rail-button {
   background-color: white;
-  width:103%;
+  width: 103%;
 }
 
 .active-rail-button .rail-label,
 .active-rail-button .rail-icon {
-  color: mat.get-color-from-palette($app-accent) !important;
+  color: mat.get-theme-color(theme.$light-theme, primary) !important;
 }
 
 .active-sidemenu {
-  border-left: 8px solid mat.get-color-from-palette($app-accent);
+  border-left: 8px solid mat.get-theme-color(theme.$light-theme, primary);
 }
 
 .primary-color-font {
-  color: mat.get-color-from-palette($app-primary);
+  color: mat.get-theme-color(theme.$light-theme, primary);
 }
 
 .accent-color-font {
-  color: mat.get-color-from-palette($app-accent);
+  color: mat.get-theme-color(theme.$light-theme, secondary);
 }
 
 .toolbar-template {
-  background-color: mat.get-color-from-palette($app-accent) !important;
+  background-color: mat.get-theme-color(theme.$light-theme, primary) !important;
   z-index: 666;
-  color: #ffffff;
-}
-
-.footer-template {
-  background-color: mat.get-color-from-palette($app-accent);
   color: #ffffff;
 }
 
 .ramp-tile {
   border: 1px solid;
-  border-color: mat.get-color-from-palette($app-accent) !important;
+  border-color: mat.get-theme-color(theme.$light-theme, primary) !important;
   padding: 0;
 }
 
 .ramp-card-header {
-  background-color: mat.get-color-from-palette($app-accent);
+  background-color: mat.get-theme-color(theme.$light-theme, primary);
   color: #ffffff;
   padding: 20px;
 }
@@ -177,38 +209,6 @@ a {
   padding: 0;
 }
 
-@include utils.width-sm(50);
-@include utils.width-sm(90);
-@include utils.width-sm(95);
-@include utils.width-sm(100);
-
-@include utils.width-md(80);
-@include utils.width-md(90);
-@include utils.width-sm(75);
-@include utils.width-md(100);
-
-@include utils.width(95);
-@include utils.width(90);
-@include utils.width(80);
-@include utils.width(75);
-@include utils.width(70);
-@include utils.width(66);
-@include utils.width(60);
-@include utils.width(55);
-@include utils.width(50);
-@include utils.width(45);
-@include utils.width(40);
-@include utils.width(33);
-@include utils.width(30);
-@include utils.width(25);
-@include utils.width(20);
-@include utils.width(10);
-@include utils.width(5);
-@include utils.horizontalpadding(2vw);
-@include utils.text-align(center);
-@include utils.text-align(left);
-@include utils.text-align(right);
-
 .fill-container {
   width: 100%;
 }
@@ -222,6 +222,16 @@ a {
 .banner-title {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+ncats-frontend-library-loading-spinner {
+  .progress-bar-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    right: -20vw;
+    left: 0;
+  }
 }
 
 @media only screen and (max-width: 1024px) {

@@ -1,13 +1,5 @@
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
-import {
-  Component,
-  ContentChild,
-  ElementRef,
-  Inject,
-  InjectionToken,
-  input,
-  PLATFORM_ID,
-} from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { Component, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -22,29 +14,32 @@ import { GenericChartComponent } from 'generic-chart';
   styleUrl: './image-download.component.scss',
 })
 export class ImageDownloadComponent {
-  isBrowser: boolean;
   chartComponent = input<GenericChartComponent>();
   svg = input<SVGElement>({} as SVGElement);
-
-  constructor(
-    @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
-    @Inject(DOCUMENT) private dom: Document,
-  ) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
+  showTSV = input(true);
+  dom = inject(DOCUMENT);
 
   downloadSVG() {
-    const svgString = this.getSVGString(
-      this.chartComponent()?.svgExport as SVGElement,
-    );
+    let svgString;
+    if (this.svg()) {
+      svgString = this.getSVGString(this.svg());
+    } else {
+      svgString = this.getSVGString(
+        this.chartComponent()?.svgExport as SVGElement,
+      );
+    }
     this._downloadFile(this._makeBlob(svgString, 'image/svg+xml'), 'data.svg');
   }
 
   downloadPNG() {
-    const svgString: string = this.getSVGString(
-      this.chartComponent()?.svgExport as SVGElement,
-    );
+    let svgString;
+    if (this.svg()) {
+      svgString = this.getSVGString(this.svg());
+    } else {
+      svgString = this.getSVGString(
+        this.chartComponent()?.svgExport as SVGElement,
+      );
+    }
     this.svgString2Image(svgString); // passes Blob and filesize String to the callback
   }
 

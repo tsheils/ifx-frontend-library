@@ -7,7 +7,7 @@ export class QuestionBase<T> {
   order: number;
   controlType: string;
   type: string;
-  options: {key: string; value: string}[];
+  options: { key: string; value: string | boolean }[];
   step?: string;
   min?: number;
   max?: number;
@@ -21,7 +21,7 @@ export class QuestionBase<T> {
       order?: number;
       controlType?: string;
       type?: string;
-      options?: {key: string; value: string}[];
+      options?: { key: string; value: string }[];
       min?: number;
       max?: number;
     } = {},
@@ -37,7 +37,6 @@ export class QuestionBase<T> {
     this.controlType = options.controlType || '';
     this.type = options.type || '';
     this.options = options.options || [];
-
   }
 }
 
@@ -47,8 +46,8 @@ export class TextboxQuestion extends QuestionBase<string> {
 
 export class NumberQuestion extends QuestionBase<string> {
   override controlType = 'number';
- // type="number"
- /* step?: string;
+  // type="number"
+  /* step?: string;
   min?: string;
   max?: string;*/
 }

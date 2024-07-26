@@ -149,38 +149,36 @@ export const FETCHTRIALSVARIABLES: {
 
 export const TRIALTYPEFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
-      trialsByType(where: $ctfilters) {
-        count
-        label
-        term
-      }
+    trialsByType(where: $ctfilters) {
+      count
+      label
+      term
+    }
   }
 `;
 
 export const TRIALPHASEFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
-      trialsByPhase(where: $ctfilters) {
-        count
-        label
-        term
-      }
+    trialsByPhase(where: $ctfilters) {
+      count
+      label
+      term
+    }
   }
 `;
 
 export const TRIALSTATUSFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
-      trialsByStatus(where: $ctfilters) {
-        count
-        label
-        term
-      }
+    trialsByStatus(where: $ctfilters) {
+      count
+      label
+      term
+    }
   }
 `;
 
-
 export const TRIALFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
-
     allClinicalTrialsFilters(where: $ctfilters) {
       trialsByStatus {
         count

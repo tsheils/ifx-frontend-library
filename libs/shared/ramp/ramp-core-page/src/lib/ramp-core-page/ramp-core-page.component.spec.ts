@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { StoreModule } from '@ngrx/store';
+import { RAMP_STORE_FEATURE_KEY, rampReducer } from 'ramp-store';
 import { RampCorePageComponent } from './ramp-core-page.component';
 
 describe('RampCorePageComponent', () => {
@@ -7,7 +9,11 @@ describe('RampCorePageComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RampCorePageComponent],
+      imports: [
+        RampCorePageComponent,
+        StoreModule.forRoot({}),
+        StoreModule.forFeature(RAMP_STORE_FEATURE_KEY, rampReducer),
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(RampCorePageComponent);

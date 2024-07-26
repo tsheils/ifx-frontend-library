@@ -1,15 +1,16 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
+import { FilterCategory, Filter } from '@ncats-frontend-library/models/utils';
 import {
   Analyte,
   ChemicalEnrichment,
   Classes,
+  CommonAnalyte,
   EntityCount,
   FisherResult,
   FishersDataframe,
   Metabolite,
   Ontology,
-  OntologyList,
   Pathway,
   Properties,
   RampAPIResponse,
@@ -20,6 +21,7 @@ import {
   RampPathwayEnrichmentResponse,
   RampResponse,
   Reaction,
+  ReactionClass,
   SourceVersion,
 } from 'ramp';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
@@ -58,14 +60,28 @@ export class RampService {
     });
   }
 
-  fetchApi(url: string): Observable<{paths: {[key: string]: unknown}}> {
+  fetchApi(
+    url: string,
+  ): Observable<{
+    paths: { [key: string]: { post?: { [key: string]: unknown } | undefined } };
+  }> {
     return this.http
-      .get<{paths: {[key: string]: unknown}}>(url) // ,{responseType: 'text'})
+      .get<{
+        paths: {
+          [key: string]: { post?: { [key: string]: unknown } | undefined };
+        };
+      }>(url) // ,{responseType: 'text'})
       .pipe(
-        map((response: {paths: {[key: string]: unknown}}) => {
-          return response
-        }),
-      //  catchError(this.handleError('fetchApi', [])),
+        map(
+          (response: {
+            paths: {
+              [key: string]: { post?: { [key: string]: unknown } | undefined };
+            };
+          }) => {
+            return response;
+          },
+        ),
+        //  catchError(this.handleError('fetchApi', [])),
       );
   }
 
@@ -74,7 +90,7 @@ export class RampService {
       .get<{ data: SourceVersion[] }>(`${this.url}source-versions`) // ,{responseType: 'text'})
       .pipe(
         map((response) => response.data),
-      //  catchError(this.handleError('fetchSourceVersions', [])),
+        //  catchError(this.handleError('fetchSourceVersions', [])),
       );
   }
 
@@ -246,43 +262,50 @@ export class RampService {
       );
   }
 
-  fetchOntologies(): Observable<RampResponse<OntologyList>> {
+  fetchOntologies(): Observable<{ data: FilterCategory[] }> {
     return this.http
       .get<{ uniq_ontology_types: string[]; data: Ontology[] }>(
         `${this.url}ontology-types`,
       ) // ,{responseType: 'text'})
       .pipe(
         map((response: { uniq_ontology_types: string[]; data: Ontology[] }) => {
-          const ontoMap: Map<string, OntologyList> = new Map<
+          const ontoMap: Map<string, FilterCategory> = new Map<
             string,
-            OntologyList
+            FilterCategory
           >();
           response.uniq_ontology_types.forEach((onto: string) =>
-            ontoMap.set(onto, { ontologyType: onto, values: [] }),
+            ontoMap.set(onto, new FilterCategory({ label: onto, values: [] })),
           );
           response.data.forEach((ontoType: Ontology) => {
-            let cl: OntologyList | undefined = ontoMap.get(
+            let cl: FilterCategory | undefined = ontoMap.get(
               ontoType.HMDBOntologyType,
             );
             if (cl) {
               cl.values.push(
-                new Ontology((<unknown>ontoType) as { [key: string]: unknown }),
+                new Filter({
+                  label: ontoType.commonName,
+                  term: ontoType.commonName,
+                  value: ontoType.commonName,
+                  count: ontoType.metCount,
+                }),
               );
             } else {
-              cl = new OntologyList({
-                ontologyType: ontoType.HMDBOntologyType,
+              cl = new FilterCategory({
+                label: ontoType.HMDBOntologyType,
                 values: [
-                  new Ontology(
-                    (<unknown>ontoType) as { [key: string]: unknown },
-                  ),
+                  new Filter({
+                    label: ontoType.commonName,
+                    term: ontoType.commonName,
+                    value: ontoType.commonName,
+                    count: ontoType.metCount,
+                  }),
                 ],
               });
             }
             ontoMap.set(ontoType.HMDBOntologyType, cl);
           });
           return {
-            data: [...ontoMap.values()],
-            query: {},
+            data: [...ontoMap.values()].map((fc) => new FilterCategory(fc)),
           };
         }),
         //  catchError(this.handleError('pathways from analytes', []))
@@ -390,19 +413,20 @@ export class RampService {
 
   fetchCommonReactionAnalytes(
     analytes: string[],
-  ): Observable<RampResponse<Reaction>> {
+  ): Observable<RampResponse<CommonAnalyte>> {
     const options = {
       analytes: analytes,
     };
     return this.http
       .post<
-        RampAPIResponse<Reaction>
+        RampAPIResponse<CommonAnalyte>
       >(`${this.url}common-reaction-analytes`, options)
       .pipe(
-        map((response: RampAPIResponse<Reaction>) => {
+        map((response: RampAPIResponse<CommonAnalyte>) => {
           return {
             data: response.data.map(
-              (obj: unknown) => new Reaction(obj as { [key: string]: unknown }),
+              (obj: unknown) =>
+                new CommonAnalyte(obj as { [key: string]: unknown }),
             ),
             query: {
               functionCall: response.function_call[0],
@@ -410,6 +434,92 @@ export class RampService {
             },
             dataframe: response.data,
           };
+        }),
+      );
+  }
+
+  fetchReactionsFromAnalytes(
+    analytes: string[],
+    onlyHumanMets?: boolean,
+    humanProtein?: boolean,
+    includeTransportRxns?: boolean,
+    rxnDirs?: string,
+    includeRxnURLs?: boolean,
+  ): Observable<RampResponse<Reaction>> {
+    const options = {
+      analytes: analytes,
+      onlyHumanMets: onlyHumanMets,
+      humanProtein: humanProtein,
+      includeTransportRxns: includeTransportRxns,
+      rxnDirs: rxnDirs,
+      includeRxnURLs: includeRxnURLs,
+    };
+    return this.http
+      .post<{
+        data: {
+          met2rxn: Reaction[];
+          prot2rxn: Reaction[];
+          metProteinCommonReactions: Reaction[];
+        };
+        function_call: string[];
+      }>(`${this.url}reactions-from-analytes`, options)
+      .pipe(
+        map(
+          (response: {
+            data: {
+              met2rxn: Reaction[];
+              prot2rxn: Reaction[];
+              metProteinCommonReactions: Reaction[];
+            };
+            function_call: string[];
+          }) => {
+            return {
+              data: response.data.met2rxn.map(
+                (obj: unknown) => new Reaction(obj as Partial<Reaction>),
+              ),
+              query: {
+                functionCall: response.function_call[0],
+              },
+              //dataframe: response.data as string[],
+            } as RampResponse<Reaction>;
+          },
+        ),
+      );
+  }
+
+  fetchReactionClassesFromAnalytes(
+    analytes: string[],
+    multiRxnParticipantCount?: number,
+    humanProtein?: boolean,
+    concatResults?: boolean,
+    includeReactionIDs?: string,
+    useIdMapping?: boolean,
+  ): Observable<RampResponse<ReactionClass>> {
+    const options = {
+      analytes: analytes,
+      multiRxnParticipantCount: multiRxnParticipantCount,
+      humanProtein: humanProtein,
+      concatResults: concatResults,
+      includeReactionIDs: includeReactionIDs,
+      useIdMapping: useIdMapping,
+    };
+    return this.http
+      .post<{
+        data: ReactionClass[];
+        function_call: string[];
+      }>(`${this.url}reaction-classes-from-analytes`, options)
+      .pipe(
+        map((response: { data: ReactionClass[]; function_call: string[] }) => {
+          return {
+            data: response.data.map(
+              (obj: unknown) =>
+                new ReactionClass(obj as Partial<ReactionClass>),
+            ),
+            query: {
+              functionCall: response.function_call[0],
+            },
+            //dataframe: response.data as string[],
+          } as RampResponse<ReactionClass>;
         }),
       );
   }

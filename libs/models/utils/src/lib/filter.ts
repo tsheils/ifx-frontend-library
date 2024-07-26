@@ -26,7 +26,9 @@ export class FilterCategory {
     Object.assign(this, obj);
 
     if (obj.values && obj.values.length) {
-      this.values = obj.values.map((val) => new Filter(val));
+      this.values = obj.values
+        .map((val) => new Filter(val))
+        .sort((a, b) => b.count - a.count);
     }
 
     if (!obj.label) {

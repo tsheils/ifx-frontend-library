@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { UpsetComponent } from './upset.component';
+import { UpsetComponent } from './upset-chart.component';
 
 describe('UpsetComponent', () => {
   let component: UpsetComponent;

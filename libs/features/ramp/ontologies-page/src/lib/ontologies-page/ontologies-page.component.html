@@ -1,1 +1,16 @@
-<p>ontologies-page works!</p>
+<lib-panel-accordion
+  [paths]="paths"
+  [resultsTabs]="resultsMap"
+  [visualizationTabs]="visualizationMap"
+  [dataTabs]="dataMap"
+  (dataSearch)="fetchData($event)"
+  (dataDownload)="downloadData($event)"
+>
+  <div class="custom-input">
+    <lib-ontology-panel
+      [ontologies]="ontologies"
+      (downloadMetabolitesSearch)="downloadData($event)"
+      (fetchMetabolitesSearch)="fetchData($event)"
+    ></lib-ontology-panel>
+  </div>
+</lib-panel-accordion>

@@ -19,7 +19,7 @@
       (optionSelected)="selectTool($event)"
       class="custom-autocomplete-panel"
     >
-      @for (option of typeAheadValues; track option) {
+      @for (option of typeAheadValues; track option.toolName) {
         <mat-option [value]="option.toolName" class="dynamic-height">
           <span
             class="main-value"
@@ -40,7 +40,7 @@
 </div>
 
 <div class="grid-list">
-  @for (tool of displayedTools(); track tool) {
+  @for (tool of displayedTools(); track tool.toolName) {
     @if (tool.toolName) {
       <lib-tool-card [tool]="tool"></lib-tool-card>
     }

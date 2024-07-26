@@ -1,6 +1,14 @@
+@use 'libs/styles/src/styles/ncats-theme.scss' as theme;
 @use '@angular/material' as mat;
 @use '_utils' as utils;
-@import 'ncats-theme';
+
+html {
+  // Emit styles for MatButton based on `$my-theme`. Because the configuration
+  // passed to `define-theme` omits typography, `button-theme` will not
+  // emit any typography styles.
+  @include mat.system-level-colors(theme.$light-theme);
+  @include mat.all-component-themes(theme.$light-theme);
+}
 
 html,
 body {
@@ -17,12 +25,16 @@ body {
 }
 
 a {
-  color: mat.get-color-from-palette($app-accent);
+  color: mat.get-theme-color(theme.$light-theme, secondary);
   text-decoration: none;
 }
 
 a:visited {
-  color: mat.get-color-from-palette($app-accent, 900);
+  color: mat.get-theme-color(theme.$light-theme, secondary, 60);
+}
+
+#ncats-banner {
+  background-color: mat.get-theme-color(theme.$light-theme, primary);
 }
 
 header {
@@ -52,21 +64,21 @@ header {
 }
 
 .primary-color-font {
-  color: mat.get-color-from-palette($app-primary);
+  color: mat.get-theme-color(theme.$light-theme, primary);
 }
 
 .accent-color-font {
-  color: mat.get-color-from-palette($app-accent);
+  color: mat.get-theme-color(theme.$light-theme, secondary);
 }
 
 .toolbar-template {
-  color: mat.get-color-from-palette($app-primary);
+  color: mat.get-theme-color(theme.$light-theme, primary);
   padding-bottom: 10px;
-  border-bottom: 10px solid mat.get-color-from-palette($app-accent);
+  border-bottom: 10px solid mat.get-theme-color(theme.$light-theme, primary);
 }
 
 .footer-template {
-  color: mat.get-color-from-palette($app-primary);
+  color: mat.get-theme-color(theme.$light-theme, primary);
 }
 
 .centered {
@@ -177,20 +189,20 @@ span.list-item-content {
 }
 
 .active-sidemenu {
-  border-left: 8px solid mat.get-color-from-palette($app-accent);
+  border-left: 8px solid mat.get-theme-color(theme.$light-theme, secondary);
 }
 
 .bottom-border-accent {
-  border-bottom: 5px solid mat.get-color-from-palette($app-accent);
+  border-bottom: 5px solid mat.get-theme-color(theme.$light-theme, secondary);
 }
 
 .bottom-border-primary {
-  border-bottom: 5px solid mat.get-color-from-palette($app-primary);
+  border-bottom: 5px solid mat.get-theme-color(theme.$light-theme, primary);
 }
 .headline {
   font-size: 28px;
   font-weight: bold;
-  color: mat.get-color-from-palette($app-accent);
+  color: mat.get-theme-color(theme.$light-theme, secondary);
   padding-left: 1vw;
 }
 
@@ -199,10 +211,13 @@ span.list-item-content {
 }
 
 .primary-background {
-  background-color: mat.get-color-from-palette($app-primary) !important;
+  background-color: mat.get-theme-color(theme.$light-theme, primary) !important;
 }
 .accent-background {
-  background-color: mat.get-color-from-palette($app-accent) !important;
+  background-color: mat.get-theme-color(
+    theme.$light-theme,
+    secondary
+  ) !important;
 }
 
 .chip {
@@ -216,25 +231,25 @@ span.list-item-content {
 }
 
 .primary-chip {
-  background-color: mat.get-color-from-palette($app-primary);
+  background-color: mat.get-theme-color(theme.$light-theme, primary);
   color: #ffffff;
 }
 
 .primary-chip-outlined {
-  color: mat.get-color-from-palette($app-primary);
+  color: mat.get-theme-color(theme.$light-theme, primary);
   background-color: #ffffff;
-  border: mat.get-color-from-palette($app-primary) solid 2px;
+  border: mat.get-theme-color(theme.$light-theme, primary) solid 2px;
 }
 
 .accent-chip {
-  background-color: mat.get-color-from-palette($app-accent);
+  background-color: mat.get-theme-color(theme.$light-theme, secondary);
   color: #ffffff;
 }
 
 .accent-chip-outlined {
-  color: mat.get-color-from-palette($app-accent);
+  color: mat.get-theme-color(theme.$light-theme, secondary);
   background-color: #ffffff;
-  border: mat.get-color-from-palette($app-accent) solid 2px;
+  border: mat.get-theme-color(theme.$light-theme, secondary) solid 2px;
 }
 
 .clickable-area:hover {

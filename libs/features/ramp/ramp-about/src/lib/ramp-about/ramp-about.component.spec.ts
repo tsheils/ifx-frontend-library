@@ -3,8 +3,8 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { RampEffects, rampReducer } from '@ramp/stores/ramp-store';
-import { AboutComponent } from './about.component';
+import { AboutComponent } from './ramp-about.component';
+import { rampReducer, RampEffects } from 'ramp-store';
 
 describe('AboutComponent', () => {
   let component: AboutComponent;

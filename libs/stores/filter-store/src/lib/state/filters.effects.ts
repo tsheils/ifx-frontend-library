@@ -8,7 +8,8 @@ import {
   PHENOTYPEFILTERS,
 } from '@ncats-frontend-library/models/rdas';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
-import { createEffect, Actions, ofType, concatLatestFrom } from '@ngrx/effects';
+import { createEffect, Actions, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import {
