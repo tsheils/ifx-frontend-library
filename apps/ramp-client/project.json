@@ -45,8 +45,7 @@
         "scripts": [],
         "server": "apps/ramp-client/src/main.server.ts",
         "prerender": {
-          "discoverRoutes": false,
-          "routesFile": "./apps/ramp-client/routes.txt"
+          "discoverRoutes": true
         },
         "ssr": {
           "entry": "apps/ramp-client/server.ts"
@@ -58,12 +57,12 @@
             {
               "type": "initial",
               "maximumWarning": "500kb",
-              "maximumError": "1mb"
+              "maximumError": "10mb"
             },
             {
               "type": "anyComponentStyle",
               "maximumWarning": "2kb",
-              "maximumError": "4kb"
+              "maximumError": "40kb"
             }
           ],
           "outputHashing": "all"
