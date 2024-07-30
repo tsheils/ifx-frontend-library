@@ -3,7 +3,7 @@
     @case ('textbox') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
         <mat-label [attr.for]="question.key">{{
-          question.label | titlecase
+          question.label
         }}</mat-label>
         <input matInput [id]="question.key" [type]="question.type" />
       </mat-form-field>
@@ -11,7 +11,7 @@
     @case ('number') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
         <mat-label [attr.for]="question.key">{{
-          question.label | titlecase
+          question.label
         }}</mat-label>
         <input
           matInput
@@ -27,7 +27,7 @@
     @case ('textarea') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
         <mat-label [attr.for]="question.key">{{
-          question.label | titlecase
+          question.label
         }}</mat-label>
         <textarea
           matInput
@@ -41,7 +41,7 @@
     @case ('dropdown') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
         <mat-label [attr.for]="question.key">{{
-          question.label | titlecase
+          question.label
         }}</mat-label>
         <mat-select [id]="question.key" [formControlName]="question.key">
           @for (opt of question.options; track opt.key) {
@@ -53,7 +53,7 @@
 
     @case ('radio') {
       <mat-label [attr.for]="question.key">{{
-        question.label | titlecase
+        question.label
       }}</mat-label
       ><br />
       <mat-radio-group

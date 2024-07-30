@@ -206,9 +206,13 @@ export class RampMainComponent {
         break;
       }
     }
-    const label = (<string>prop['field']) as string;
-    q.key = label;
-    q.label = label.replace(/_/g, ' ');
+    if(<string>prop['label']) {
+      q.label = <string>prop['label']
+    } else {
+      const label = (<string>prop['field']) as string;
+      q.key = label;
+      q.label = label.replace(/_/g, ' ');
+    }
 
     if (prop['required']) {
       q.required = <boolean>prop['required'];

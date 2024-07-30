@@ -1,6 +1,6 @@
 <div>
   <form [formGroup]="form()">
-    @for (question of questions; track question.key) {
+    @for (question of questions; track question.label) {
       <div class="form-row">
         <lib-ncats-form-question
           [question]="question"

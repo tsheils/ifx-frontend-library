@@ -26,7 +26,7 @@
   "paths": {
     "/api/source-versions": {
       "get": {
-        "summary": "Return source version information",
+        "summary": "Return source version information. Includes RaMP version number, source database versions, and other metadata",
         "responses": {
           "200": {
             "description": "OK",
@@ -64,7 +64,7 @@
     },
     "/api/id-types": {
       "get": {
-        "summary": "Return analyte ID types",
+        "summary": "Return valid RaMP-DB database prefixes for genes and metabolites (e.g. 'hmdb:', 'kegg:')",
         "responses": {
           "200": {
             "description": "OK",
@@ -102,7 +102,7 @@
     },
     "/api/entity-counts": {
       "get": {
-        "summary": "Return counts on entities and their associations",
+        "summary": "Return association counts for different RaMP-DB data types, broken down by source database (chemical properties, pathway associations, gene/metabolite/pathway counts)",
         "responses": {
           "200": {
             "description": "OK",
@@ -140,7 +140,7 @@
     },
     "/api/analyte-intersects": {
       "get": {
-        "summary": "Return analyte source intersects",
+        "summary": "Return redundancy of source databases. Lists counts of identical analytes pulled from source databases.",
         "responses": {
           "200": {
             "description": "OK"
@@ -188,7 +188,7 @@
     "/api/ontology-types": {
       "get": {
         "tags": ["ontologies"],
-        "summary": "Return all types of ontologies present in RaMP-DB",
+        "summary": "Return all metabolite ontologies present in RaMP-DB, including ontology category (e.g. 'Health condition', 'Biofluid and excreta', etc.)",
         "responses": {
           "200": {
             "description": "OK",
@@ -227,7 +227,7 @@
     "/api/chemical-class-type": {
       "get": {
         "tags": ["chemical-properties"],
-        "summary": "Return available high level chemical class types (from ClassyFire)",
+        "summary": "Return chemical class levels present in RaMP-DB (e.g. sub-class, super-class)",
         "responses": {
           "200": {
             "description": "OK"
@@ -261,7 +261,7 @@
     "/api/pathways-from-analytes": {
       "post": {
         "tags": ["biochemical-pathways"],
-        "summary": "Return pathways from given list of analytes",
+        "summary": "Return chemical class levels present in RaMP-DB (e.g. sub-class, super-class)",
         "x-title": "Retrieve Pathways From Input Analyte(s)",
         "x-allowedTypes": {
           "metabolites": [
@@ -341,7 +341,7 @@
     "/api/analytes-from-pathways": {
       "post": {
         "tags": ["analytes"],
-        "summary": "Retrieve analytes (genes/proteins, metabolites) by pathway.",
+        "summary": "Return analytes from given list of pathways as either json or a tsv",
         "responses": {
           "200": {
             "description": "OK"
@@ -362,22 +362,33 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "label": "a string or a vector of strings that contains pathways of interest"
                   },
                   "analyte_type": {
                     "type": "string",
                     "enum": ["gene", "metabolite", "both"],
-                    "required": false
+                    "required": false,
+                    "description": "a string denoting the type of analyte to return (\"gene\", \"metabolite\", \"both\")"
                   },
                   "match": {
                     "type": "string",
                     "enum": ["exact", "fuzzy"],
-                    "required": false
+                    "required": false,
+                    "description": "type of matching to use, options are \"exact\" or \"fuzzy\". The default is \"fuzzy\"."
                   },
                   "names_or_ids": {
                     "type": "string",
                     "enum": ["names", "ids"],
-                    "required": false
+                    "required": false,
+                    "label": "Names or IDs",
+                    "description": "are the input pathways input as pathway names or as pathway ids of genes and metabolites"
+                  },
+                  "max_pathway_size": {
+                    "type": "number",
+                    "required": false,
+                    "label": "Max Pathway Size",
+                    "description": "(default Inf), trims returned results to pathways that have fewer than this number"
                   }
                 },
                 "example": {
@@ -397,7 +408,7 @@
     "/api/ontologies-from-metabolites": {
       "post": {
         "tags": ["ontologies"],
-        "summary": "Return ontologies from list of metabolites",
+        "summary": "Return ontology mappings from list of metabolites",
         "responses": {
           "200": {
             "description": "OK"
@@ -418,12 +429,15 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "a vector of analytes or a analytes delimited by new line character"
                   },
                   "namesOrIds": {
                     "type": "string",
                     "enum": ["name", "ids"],
-                    "required": false
+                    "required": false,
+                    "label": "Names or IDs",
+                    "description": "specify the type of given data"
                   }
                 },
                 "example": {
@@ -444,7 +458,7 @@
     "/api/metabolites-from-ontologies": {
       "post": {
         "tags": ["ontologies"],
-        "summary": "Return metabolites from ontology",
+        "summary": "Return metabolites associated with input ontology",
         "responses": {
           "200": {
             "description": "OK"
@@ -465,7 +479,8 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "a vector of ontology or ontologies delimited by new line character"
                   },
                   "format": {
                     "type": "string",
@@ -507,7 +522,8 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
                   },
                   "biospecimen": {
                     "type": "string",
@@ -551,7 +567,7 @@
     "/api/chemical-properties": {
       "post": {
         "tags": ["chemical-properties"],
-        "summary": "Return chemical properties of given metabolites",
+        "summary": "Return chemical properties of given metabolites regarding structure",
         "responses": {
           "200": {
             "description": "OK"
@@ -572,7 +588,15 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
+                  },
+                  "propertyList": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "an optional list of specific properties to extract. Options include 'all' (default), 'smiles', 'inchi_key', 'inchi_key_prefix', 'inchi', 'mw', 'monoisotop_mass', 'formula', 'common_name'. If a props list is not supplied, all property fields will be returned."
                   }
                 },
                 "example": {
@@ -630,6 +654,7 @@
                     "enum": ["names", "ids"],
                     "required": false,
                     "description": "whether input is \"names\" or \"ids\" (default is \"ids\")",
+                    "label": "Names or IDs",
                     "hidden": true
                   }
                 },
@@ -691,30 +716,35 @@
                     "description": "list of analytes. Only CHEBI and Uniprot IDs are supported"
                   },
                   "onlyHumanMets": {
-                    "type": "number",
+                    "type": "boolean",
                     "required": false,
-                    "description": "boolean to only return pathways containing only human metabolites (ChEBI ontology)"
+                    "description": "boolean to only return pathways containing only human metabolites (ChEBI ontology)",
+                    "label": "Human Metabolites Only"
                   },
                   "humanProtein": {
                     "type": "boolean",
                     "required": false,
-                    "description": "boolean to only control pathways catalyzed by a human proteins (having human Uniprot)"
+                    "description": "boolean to only control pathways catalyzed by a human proteins (having human Uniprot)",
+                    "label": " Human Protein Pathways Only"
                   },
                   "includeTransportRxns": {
                     "type": "number",
                     "required": false,
-                    "description": "if TRUE, returns metabolic and transport reactions"
+                    "description": "if TRUE, returns metabolic and transport reactions",
+                    "label": "Include Transport Reactions"
                   },
                   "rxnDirs": {
                     "type": "string",
                     "enum": ["UN", "LR", "RL", "BD", "ALL"],
                     "required": false,
-                    "description": "character vector of length > 1, specifying reaction directions to return."
+                    "description": "character vector of length > 1, specifying reaction directions to return.",
+                    "label": "Reaction Directions"
                   },
                   "includeRxnURLs": {
                     "type": "number",
                     "required": false,
-                    "description": "if TRUE, urls to Rhea.org will be delivered in the result dataframe for each reaction"
+                    "description": "if TRUE, urls to Rhea.org will be delivered in the result dataframe for each reaction",
+                    "label": "Include Reaction URLs"
                   }
                 },
                 "example": {
@@ -778,28 +808,33 @@
                   "multiRxnParticipantCount": {
                     "type": "number",
                     "required": false,
-                    "description": "minimum number of analytes to report a reaction class, default = 1"
+                    "description": "minimum number of analytes to report a reaction class, default = 1",
+                    "label": "Reaction Analyte Counts"
                   },
                   "humanProtein": {
                     "type": "boolean",
                     "required": false,
-                    "description": "require reactions to have a human protein (enzyme or transporter), default True"
+                    "description": "require reactions to have a human protein (enzyme or transporter), default True",
+                    "label": "Human Protein in Reaction"
                   },
                   "concatResults": {
                     "type": "boolean",
                     "required": false,
-                    "description": "returns all reaction class levels in one dataframe rather than a list of 3 dataframes"
+                    "description": "returns all reaction class levels in one dataframe rather than a list of 3 dataframes",
+                    "label": "Concatenate Results"
                   },
                   "includeReactionIDs": {
                     "type": "boolean",
                     "required": false,
-                    "description": "adds the list of reaction ids for each reaction class"
+                    "description": "adds the list of reaction ids for each reaction class",
+                    "label": "Include Reaction IDs"
                   },
                   "useIdMapping": {
                     "type": "boolean",
                     "required": false,
                     "description": "allows one to fuzzy match input ids to chebi and uniprot to support reaction queries.",
-                    "hidden": true
+                    "hidden": true,
+                    "label": "Use ID Mapping"
                   }
                 },
                 "example": {
@@ -956,13 +991,17 @@
                   "pval_type": {
                     "type": "string",
                     "enum": ["fdr", "holm", "pval"],
-                    "required": false
+                    "required": false,
+                    "label": "P-Value Type",
+                    "description": "Specifies which p-value to use as the filter threshold. Permitted values are 'pval' and 'fdr' for chemical class and pathway enrichment. Pathway enrichment also includes an optional 'holm' value for holm p-value corrections. Default is 'fdr'."
                   },
                   "pval_cutoff": {
                     "type": "number",
                     "minimum": 0,
                     "maximum": 1,
-                    "required": false
+                    "required": false,
+                    "label": "P-Value Cutoff",
+                    "description": "return pathways where pval_type p-values are < pval_cutoff"
                   }
                 },
                 "example": {
@@ -1379,7 +1418,7 @@
           }
         },
         "requestBody": {
-          "description": "Cluster Pathway Enrichment. This is primarily used after running `combined-fisher-test` or `filter-fisher-test` as the required input is the output from that call.",
+          "description": "Cluster Pathway Enrichment. This is primarily used after running `combined-fisher-test` or `filter-fisher-test` as the required input is the output from that call. Uses the findCluster agglomerative clustering method from the R package (see documentation for more details).",
           "required": true,
           "content": {
             "application/json": {
@@ -1388,30 +1427,28 @@
                 "properties": {
                   "min_pathway_tocluster": {
                     "type": "number",
-                    "required": false
+                    "required": false,
+                    "label": "Minimum Pathways in Cluster",
+                    "description": "Minimum number of 'similar' pathways required to start a cluster (medoid) (Default = 3)"
                   },
                   "perc_analyte_overlap": {
                     "type": "number",
-                    "required": false
+                    "required": false,
+                    "label": "Analyte Overlap Percentage",
+                    "description": "Minimum overlap for pathways to be considered similar (Default = 0.5)"
                   },
                   "perc_pathway_overlap": {
                     "type": "number",
-                    "required": false
+                    "required": false,
+                    "label": "Pathway Overlap Percentage",
+                    "description": "Minimum overlap for clusters to merge (Default = 0.5)"
                   },
                   "fishers_results": {
                     "type": "array",
                     "items": {
                       "type": "object"
-                    }
-                  },
-                  "pval_type": {
-                    "type": "string",
-                    "enum": ["fdr", "holm", "pval"],
-                    "required": false
-                  },
-                  "pval_cutoff": {
-                    "type": "number",
-                    "required": false
+                    },
+                    "label": "The full result object generated by runCombinedFisherTest"
                   }
                 },
                 "example": {
@@ -1812,7 +1849,7 @@
     "/api/chemical-enrichment": {
       "post": {
         "tags": ["chemical-properties"],
-        "summary": "Perform chemical enrichment on given metabolites",
+        "summary": "Perform chemical class enrichment on given metabolites",
         "responses": {
           "200": {
             "description": "OK"
@@ -1833,7 +1870,8 @@
                     "type": "array",
                     "items": {
                       "type": "string"
-                    }
+                    },
+                    "description": "a vector of source prepended metabolite ids"
                   },
                   "biospecimen": {
                     "type": "string",
@@ -1876,3 +1914,4 @@
     }
   }
 }
+
