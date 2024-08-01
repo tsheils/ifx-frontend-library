@@ -363,7 +363,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "label": "a string or a vector of strings that contains pathways of interest"
+                    "description": "a string or a vector of strings that contains pathways of interest"
                   },
                   "analyte_type": {
                     "type": "string",
@@ -896,7 +896,7 @@
           "description": "Perform Pathway Enrichment. IDs should be prepended by ID source (e.g. **hmdb**:C00412). Input analyte IDs can be a mix of genes/proteins or metabolites.",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -906,7 +906,7 @@
                       "type": "string"
                     }
                   },
-                  "biospecimen": {
+                  "background": {
                     "type": "string",
                     "enum": [
                       "Blood",
@@ -920,6 +920,10 @@
                       "Feces"
                     ],
                     "required": false
+                  },
+                  "backgroundFile": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 },
                 "example": {

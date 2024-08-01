@@ -378,10 +378,10 @@ function(analytes, namesOrIds = "ids") {
 #' @parser json
 #' @post /api/combined-fisher-test
 #' @serializer json list(digits = 6)
-function(analytes = '', biospecimen = '', file = '', background_type= "database") {
+function(analytes = '', background = '', file = '', background_type= "database") {
   fishers_results_df <- ''
   if(file == "") {
-    if(biospecimen == "") {
+    if(background == "") {
       print("run with database background")
       fishers_results_df <- RaMP::runCombinedFisherTest(
         db = rampDB,
@@ -394,7 +394,7 @@ function(analytes = '', biospecimen = '', file = '', background_type= "database"
       fishers_results_df <- RaMP::runCombinedFisherTest(
         db = rampDB,
         analytes = analytes,
-        background = biospecimen,
+        background = background,
         background_type= "biospecimen"
       )
     }
@@ -402,12 +402,12 @@ function(analytes = '', biospecimen = '', file = '', background_type= "database"
    else {
     print("run with background file")
     bg <- gsub("\r\n", ",", file)
-       background <- unlist(strsplit(bg, ','))
-       if(length(background) > length(analytes)) {
+       backgroundFile <- unlist(strsplit(bg, ','))
+       if(length(backgroundFile) > length(analytes)) {
       fishers_results_df <- RaMP::runCombinedFisherTest(
         db = rampDB,
         analytes = analytes,
-        background = background,
+        background = backgroundFile,
         background_type= "list"
       )
     } else {

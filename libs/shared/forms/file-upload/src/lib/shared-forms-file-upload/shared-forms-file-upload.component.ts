@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'lib-shared-utils-file-upload',
+  selector: 'lib-shared-forms-file-upload',
   standalone: true,
   imports: [
     CommonModule,
@@ -22,8 +22,8 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatIconModule,
   ],
-  templateUrl: './shared-utils-file-upload.component.html',
-  styleUrls: ['./shared-utils-file-upload.component.scss'],
+  templateUrl: './shared-forms-file-upload.component.html',
+  styleUrls: ['./shared-forms-file-upload.component.scss'],
 })
 export class SharedUtilsFileUploadComponent {
   @ViewChild('fileUpload') fileUpload!: ElementRef;

@@ -532,7 +532,7 @@ export class RampService {
     const formData = new FormData();
     formData.set('metabolites', JSON.stringify(metabolites));
     if (biospecimen) {
-      formData.set('biospecimen', JSON.stringify([biospecimen]));
+      formData.set('background', JSON.stringify([biospecimen]));
     }
     if (background) {
       formData.set('file', background, background.name);

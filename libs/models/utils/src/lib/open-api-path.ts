@@ -36,66 +36,70 @@ export class OpenApiPath {
     }
 
     if (obj['requestBody'] && obj['requestBody']['content']) {
-      Object.entries(
-        <{ [key: string]: unknown }[]>(
-          obj['requestBody']['content']['application/json']['schema'][
-            'properties'
-          ]
-        ),
-      ).forEach(([key, value]) => {
-        if (key != 'fishers_results' && !(<boolean>value['hidden'])) {
+      let properties:{ [key: string]: unknown } = {} as { [key: string]: unknown };
+      let examples:{ [key: string]: unknown } = {} as { [key: string]: unknown };
+      if(obj['requestBody']['content']['application/json']) {
+       properties = obj['requestBody']['content']['application/json']['schema']['properties'];
+        examples = obj['requestBody']['content']['application/json']['schema']['example'];
+      } else if(obj['requestBody']['content']['multipart/form-data']) {
+        properties = obj['requestBody']['content']['multipart/form-data']['schema']['properties']
+        examples = obj['requestBody']['content']['multipart/form-data']['schema']['example']
+      }
+      Object.entries(properties).forEach(([key, value]) => {
+        const tempVal = value as {[key: string]: unknown};
+        if (key != 'fishers_results' && !(tempVal['hidden'])) {
           this.properties.push({
-            ...value,
+            ...tempVal,
             field: key,
             parent: this.parent || '',
           });
         }
       });
 
-      Object.entries(
-        obj['requestBody']['content']['application/json']['schema']['example'],
-      ).forEach(([key, value]) => {
-        if (key != 'fishers_results') {
-          this.example.push({
-            value: value,
-            field: key,
-            parent: this.parent || '',
-          });
-        } else {
-          if (value instanceof Object) {
-            Object.keys(value as { [key: string]: unknown }).forEach((key) => {
-              switch (key) {
-                case 'fishresults': {
-                  break;
-                }
-                case 'result_type': {
-                  const val = value as { [key: string]: unknown };
-                  const valArr = val[key] as unknown[];
-                  //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
-                  break;
-                }
-                case 'analyte_type': {
-                  const val = value as { [key: string]: unknown };
-                  const valArr = val[key] as unknown[];
-                  //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
-                  break;
-                }
-                default: {
-                  const val = value as { [key: string]: unknown };
-                  if (!val['hidden']) {
-                    this.example.push({
-                      value: val[key],
-                      field: key,
-                      parent: this.parent || '',
-                    });
-                  }
-                  break;
-                }
-              }
+      if(examples) {
+        Object.entries(examples).forEach(([key, value]) => {
+          if (key != 'fishers_results') {
+            this.example.push({
+              value: value,
+              field: key,
+              parent: this.parent || '',
             });
+          } else {
+            if (value instanceof Object) {
+              Object.keys(value as { [key: string]: unknown }).forEach((key) => {
+                switch (key) {
+                  case 'fishresults': {
+                    break;
+                  }
+                  case 'result_type': {
+                    const val = value as { [key: string]: unknown };
+                    const valArr = val[key] as unknown[];
+                    //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
+                    break;
+                  }
+                  case 'analyte_type': {
+                    const val = value as { [key: string]: unknown };
+                    const valArr = val[key] as unknown[];
+                    //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
+                    break;
+                  }
+                  default: {
+                    const val = value as { [key: string]: unknown };
+                    if (!val['hidden']) {
+                      this.example.push({
+                        value: val[key],
+                        field: key,
+                        parent: this.parent || '',
+                      });
+                    }
+                    break;
+                  }
+                }
+              });
+            }
           }
-        }
-      });
+        });
+      }
       delete this['content'];
     }
   }

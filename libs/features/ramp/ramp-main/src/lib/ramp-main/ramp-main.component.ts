@@ -18,12 +18,12 @@ import { RouterLink, Router } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
 import {
-  DropdownQuestion,
+  DropdownQuestion, FileInputQuestion,
   NumberQuestion,
   QuestionBase,
   RadioQuestion,
   TextareaQuestion,
-  TextboxQuestion,
+  TextboxQuestion
 } from 'ncats-form-question';
 import { RampPageComponent } from 'ramp-page';
 import { RampSelectors } from 'ramp-store';
@@ -189,7 +189,10 @@ export class RampMainComponent {
           q = new DropdownQuestion({
             options: opts,
           });
-        } else {
+        } else if(prop['format']) {
+          q = new FileInputQuestion();
+        }
+        else {
           q = new TextboxQuestion({});
         }
         if (prop['required']) {
