@@ -12,6 +12,4 @@ import { RampResults } from 'ramp';
 })
 export class ResultsPanelComponent {
   results = input<RampResults>();
-  matchesLength = input<number>(0);
-  fuzzy = input<boolean>(false);
 }

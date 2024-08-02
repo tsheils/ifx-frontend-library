@@ -47,8 +47,8 @@ export const PathwayFromAnalyteActions = createActionGroup({
   events: {
     fetchPathwaysFromAnalytes: props<{
       analytes: string[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
       pval_type?: string;
       pval_cutoff?: number;
       perc_analyte_overlap?: number;
@@ -117,8 +117,8 @@ export const ClassesFromMetabolitesActions = createActionGroup({
   events: {
     fetchClassesFromMetabolites: props<{
       metabolites: string[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
     }>(),
     fetchClassesFromMetabolitesSuccess: props<{
       data: Classes[];
@@ -196,8 +196,8 @@ export const PathwayEnrichmentsActions = createActionGroup({
   events: {
     fetchPathwaysFromAnalytes: props<{
       analytes: string[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
       pval_type?: string;
       pval_cutoff?: number;
       perc_analyte_overlap?: number;
@@ -208,8 +208,8 @@ export const PathwayEnrichmentsActions = createActionGroup({
       data: Pathway[];
       query: RampQuery;
       dataframe?: unknown[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
       pval_type?: string;
       pval_cutoff?: number;
       perc_analyte_overlap?: number;
@@ -219,8 +219,8 @@ export const PathwayEnrichmentsActions = createActionGroup({
     fetchPathwaysFromAnalytesFailure: props<{ error: string }>(),
     fetchEnrichmentFromPathways: props<{
       analytes: string[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
       pval_type?: string;
       pval_cutoff?: number;
       perc_analyte_overlap?: number;
@@ -277,8 +277,8 @@ export const MetaboliteEnrichmentsActions = createActionGroup({
   events: {
     fetchClassesFromMetabolites: props<{
       metabolites: string[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
     }>(),
     fetchClassesFromMetabolitesSuccess: props<{
       data: Classes[];
@@ -288,8 +288,8 @@ export const MetaboliteEnrichmentsActions = createActionGroup({
     fetchClassesFromMetabolitesFailure: props<{ error: string }>(),
     fetchEnrichmentFromMetabolites: props<{
       metabolites: string[];
-      biospecimen?: string;
-      background?: File;
+      background?: string;
+      backgroundFile?: File;
     }>(),
     fetchEnrichmentFromMetabolitesFile: emptyProps(),
     fetchEnrichmentFromMetabolitesSuccess: props<{

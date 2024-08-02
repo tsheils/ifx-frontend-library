@@ -150,7 +150,7 @@ export class SunburstChartComponent implements OnInit, OnChanges {
           label = label.slice(0, this.radius() / characterSize - 3) + '...';
         }
         return label;
-      });
+      })
   });
 
   path = computed(() =>
@@ -169,7 +169,16 @@ export class SunburstChartComponent implements OnInit, OnChanges {
       .attr('pointer-events', (d) =>
         this._arcVisible(d['current']) ? 'auto' : 'none',
       )
-      .attr('d', (d) => this.arc()(d['current'])),
+      .attr('d', (d) => this.arc()(d['current']))
+      .on('mouseover', (event: Event, d) => {
+        this.sunburstChartService.nodeHovered.emit({
+          event: event,
+          node: d.data as HierarchyNode,
+        });
+      })
+      .on('mouseout', (event: Event, d) => {
+        this.sunburstChartService.nodeHovered.emit(undefined);
+      })
   );
   svgExport = computed(
     () =>
@@ -199,15 +208,6 @@ export class SunburstChartComponent implements OnInit, OnChanges {
           event: event,
           node: d.data as HierarchyNode,
         });
-      })
-      .on('mouseover', (event: Event, d) => {
-        this.sunburstChartService.nodeHovered.emit({
-          event: event,
-          node: d.data as HierarchyNode,
-        });
-      })
-      .on('mouseout', (event: Event, d) => {
-        this.sunburstChartService.nodeHovered.emit(undefined);
       });
 
     this.path()

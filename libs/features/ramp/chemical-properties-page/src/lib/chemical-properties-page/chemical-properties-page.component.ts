@@ -199,6 +199,9 @@ export class ChemicalPropertiesPageComponent
             this.dataMap.set('Chemical Properties', {
               data: retData,
               fields: this.propertiesColumns,
+              dataframe: res.dataframe,
+              fileName: 'fetchPropertiesFromMetabolites-download.tsv'
+
             });
             const matches = Array.from(
               new Set(
@@ -218,21 +221,9 @@ export class ChemicalPropertiesPageComponent
               inputType: 'metabolites',
             };
           }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchPropertiesFromMetabolites-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
-          }
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
         }),
       )
       .subscribe();
@@ -246,6 +237,8 @@ export class ChemicalPropertiesPageComponent
             this.dataMap.set('Chemical Classes', {
               data: this._mapData(res.data),
               fields: this.classesColumns,
+              dataframe: res.dataframe,
+              fileName: 'fetchChemicalClass-download.tsv'
             });
             const matches = Array.from(
               new Set(
@@ -266,21 +259,9 @@ export class ChemicalPropertiesPageComponent
             };
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchChemicalClass-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
-          }
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
         }),
       )
       .subscribe();
@@ -294,6 +275,8 @@ export class ChemicalPropertiesPageComponent
             this.dataMap.set('Enriched Chemical Classes', {
               data: this._mapData(res.enriched_chemical_class_list),
               fields: this.enrichmentColumns,
+              dataframe: res.enriched_chemical_class_list,
+              fileName: 'fetchEnrichedChemicalClasses-download.tsv'
             });
           }
           //   this.pathwaysLoading = false;
@@ -312,38 +295,20 @@ export class ChemicalPropertiesPageComponent
         metabolites: this.inputList,
       }),
     );
-    if (this.file) {
       this.store.dispatch(
         MetaboliteEnrichmentsActions.fetchClassesFromMetabolites({
           metabolites: this.inputList,
-          biospecimen: <string>event['biospecimen'],
-          background: this.file,
+          background: <string>event['background'],
+          backgroundFile: event['backgroundFile'] as File,
         }),
       );
       this.store.dispatch(
         MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites({
           metabolites: this.inputList,
-          biospecimen: <string>event['biospecimen'],
-          background: this.file,
+          background: <string>event['background'],
+          backgroundFile: event['backgroundFile'] as File,
         }),
       );
-    } else {
-      this.store.dispatch(
-        MetaboliteEnrichmentsActions.fetchClassesFromMetabolites({
-          metabolites: this.inputList,
-          biospecimen: <string>event['biospecimen'],
-        }),
-      );
-      this.store.dispatch(
-        MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites({
-          metabolites: this.inputList,
-          biospecimen: <string>event['biospecimen'],
-        }),
-      );
-    }
   }
 
-  override downloadData(event: { [key: string]: unknown }) {
-    super.downloadData(event, 'fetchPropertiesFromMetabolites-download.tsv');
-  }
 }

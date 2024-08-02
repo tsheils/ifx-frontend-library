@@ -68,12 +68,9 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   dataLoaded = false;
 
   onOutletLoaded(component: T) {
-    component['paths'] = this.paths() as OpenApiPath[];
-    component['title'] = this.title() as string;
-    component['inputMap'] = this.inputMap() as Map<
-      string,
-      QuestionBase<string>[]
-    >;
+    component['paths'] = this.paths;
+    component['title'] = this.title;
+    component['inputMap'] = this.inputMap;
 
     component.loadedEvent.subscribe((event) => {
       this.resultsLoaded = event.resultsLoaded || false;

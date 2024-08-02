@@ -15,7 +15,6 @@ import { PanelAccordionComponent } from 'panel-accordion';
 import { Metabolite, RampResponse } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import {
-  AnalyteFromPathwayActions,
   MetaboliteFromOntologyActions,
   RampSelectors,
 } from 'ramp-store';
@@ -64,9 +63,6 @@ export class OntologiesPageComponent
 
   ontologies!: FilterCategory[];
   allOntologies!: FilterCategory[];
-  selectedOntologies: Filter[] = [];
-  globalFilter?: string;
-  disableSearch = false;
   loading = false;
 
   constructor() {
@@ -99,6 +95,8 @@ export class OntologiesPageComponent
             this.dataMap.set('Metabolites', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
+              dataframe: res.dataframe,
+              fileName: 'fetchMetabolitesFromOntologies-download.tsv'
             });
             const matches = Array.from(
               new Set(
@@ -118,35 +116,27 @@ export class OntologiesPageComponent
             };
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchMetabolitesFromOntologies-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
-          }
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
         }),
       )
       .subscribe();
   }
 
+  downloadOntologyData(event: { [key: string]: unknown }){
+    this.store.dispatch(
+      MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesFile({
+        format: 'tsv',
+        ontologies: event['ontologies'] as string[]
+      }),
+    );
+  }
   override fetchData(event: { [key: string]: unknown }): void {
     this.store.dispatch(
       MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies({
         ontologies: event['ontologies'] as string[],
       }),
     );
-  }
-
-  override downloadData(event: { [key: string]: unknown }) {
-    super.downloadData(event, 'fetchMetabolitesFromOntologies-download.tsv');
   }
 }

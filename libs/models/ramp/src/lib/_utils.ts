@@ -24,8 +24,8 @@ export interface RampResponse<T extends RampDataGeneric> {
   data: Array<T>;
   query: RampQuery;
   dataframe?: unknown[];
-  biospecimen?: string;
-  background?: File;
+  background?: string;
+  backgroundFile?: File;
   pval_type?: string;
   pval_cutoff?: number;
   perc_analyte_overlap?: number;
@@ -49,8 +49,8 @@ export interface RampPathwayEnrichmentResponse {
   query: RampQuery;
   filteredFishersDataframe?: FishersDataframe;
   combinedFishersDataframe?: FishersDataframe;
-  biospecimen?: string;
-  background?: File;
+  background?: string;
+  backgroundFile?: File;
   pval_type?: string;
   pval_cutoff?: number;
   perc_analyte_overlap?: number;

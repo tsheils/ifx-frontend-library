@@ -58,6 +58,9 @@
       "@ncats-frontend-library/models/utils": [
         "libs/models/utils/src/index.ts"
       ],
+      "@ncats-frontend-library/shared/forms/file-upload": [
+        "libs/shared/forms/file-upload/src/index.ts"
+      ],
       "@ncats-frontend-library/shared/rdas/article-display": [
         "libs/shared/rdas/article-display/src/index.ts"
       ],
@@ -102,9 +105,6 @@
       ],
       "@ncats-frontend-library/shared/utils/external-link": [
         "libs/shared/utils/external-link/src/index.ts"
-      ],
-      "@ncats-frontend-library/shared/utils/file-upload": [
-        "libs/shared/utils/file-upload/src/index.ts"
       ],
       "@ncats-frontend-library/shared/utils/filter-panel": [
         "libs/shared/utils/filter-panel/src/index.ts"
@@ -182,6 +182,9 @@
       ],
       "chemkit": ["libs/features/ifx/chemkit/src/index.ts"],
       "complete-dialog": ["libs/shared/utils/complete-dialog/src/index.ts"],
+      "data-download-button": [
+        "libs/shared/utils/data-download-button/src/index.ts"
+      ],
       "data-panel": ["libs/shared/ramp/panels/data-panel/src/index.ts"],
       "default-tool": ["libs/features/ifx/default-tool/src/index.ts"],
       "filter-chip-list": ["libs/shared/utils/filter-chip-list/src/index.ts"],

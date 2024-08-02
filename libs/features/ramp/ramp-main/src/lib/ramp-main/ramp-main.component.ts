@@ -4,8 +4,6 @@ import {
   Component,
   computed,
   inject,
-  OnInit,
-  signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatRipple } from '@angular/material/core';
@@ -18,12 +16,12 @@ import { RouterLink, Router } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
 import {
-  DropdownQuestion,
+  DropdownQuestion, FileUploadQuestion, MultiSelectQuestion,
   NumberQuestion,
   QuestionBase,
   RadioQuestion,
   TextareaQuestion,
-  TextboxQuestion,
+  TextboxQuestion
 } from 'ncats-form-question';
 import { RampPageComponent } from 'ramp-page';
 import { RampSelectors } from 'ramp-store';
@@ -161,9 +159,17 @@ export class RampMainComponent {
     let q = {} as QuestionBase<string>;
     switch (prop['type']) {
       case 'array': {
-        q = new TextareaQuestion({
-          required: true,
-        });
+        if(prop['enum']) {
+          q = new MultiSelectQuestion()
+          const enu = <string[]>prop['enum'];
+          const opts: { key: string; value: boolean | string }[] = [];
+          enu.forEach((val) => opts.push({ key: val, value: val }));
+          q.options = opts;
+        } else {
+          q = new TextareaQuestion({
+            required: true,
+          });
+        }
         break;
       }
       case 'boolean': {
@@ -189,7 +195,10 @@ export class RampMainComponent {
           q = new DropdownQuestion({
             options: opts,
           });
-        } else {
+        } else if(prop['format']) {
+          q = new FileUploadQuestion();
+        }
+        else {
           q = new TextboxQuestion({});
         }
         if (prop['required']) {
@@ -207,7 +216,8 @@ export class RampMainComponent {
       }
     }
     if(<string>prop['label']) {
-      q.label = <string>prop['label']
+      q.label = <string>prop['label'];
+      q.key = <string>prop['field'];
     } else {
       const label = (<string>prop['field']) as string;
       q.key = label;

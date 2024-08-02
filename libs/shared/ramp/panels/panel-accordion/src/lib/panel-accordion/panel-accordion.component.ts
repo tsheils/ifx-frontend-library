@@ -1,10 +1,8 @@
 import {
   Component,
-  EventEmitter,
   input,
-  Input,
-  Output,
-  ViewEncapsulation,
+  output,
+  ViewEncapsulation
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -51,15 +49,11 @@ import { VisualizationPanelComponent } from 'visualization-panel';
   encapsulation: ViewEncapsulation.None,
 })
 export class PanelAccordionComponent {
-  @Output() dataSearch: EventEmitter<{ [key: string]: unknown }> =
-    new EventEmitter<{ [key: string]: unknown }>();
-  @Output() dataDownload: EventEmitter<{ [key: string]: unknown }> =
-    new EventEmitter<{ [key: string]: unknown }>();
-  @Input() paths?: OpenApiPath[];
-  @Input() inputTab!: Map<string, QuestionBase<string>[]>;
-  @Input() resultsTabs!: RampResults;
-
-  visualizationTabs = input<
+  dataSearch=output<{ [key: string]: unknown }>();
+ paths = input<OpenApiPath[]>();
+ inputTab = input<Map<string, QuestionBase<string>[]>>();
+ resultsTabs = input<RampResults>();
+ visualizationTabs = input<
     Map<
       string,
       {
@@ -68,16 +62,14 @@ export class PanelAccordionComponent {
       }[]
     >
   >();
-  @Input() dataTabs!: Map<
+  dataTabs = input<Map<
     string,
-    { data: { [key: string]: DataProperty }[]; fields: DataProperty[] }
-  >;
+    { data: { [key: string]: DataProperty }[]; fields: DataProperty[], dataframe?: unknown[], fileName?: string }
+  >
+  >();
 
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event);
-  }
-  downloadData(event: { [key: string]: unknown }) {
-    this.dataDownload.emit(event);
   }
 
   _originalOrder = () => 0;

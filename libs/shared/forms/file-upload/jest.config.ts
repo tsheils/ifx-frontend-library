@@ -1,9 +1,9 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-utils-file-upload',
+  displayName: 'shared-forms-file-upload',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/utils/file-upload',
+  coverageDirectory: '../../../../coverage/libs/shared/forms/file-upload',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

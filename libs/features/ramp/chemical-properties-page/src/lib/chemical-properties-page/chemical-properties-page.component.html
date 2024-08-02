@@ -1,9 +1,8 @@
 <lib-panel-accordion
-  [paths]="paths"
-  [inputTab]="inputMap"
+  [paths]="paths()"
+  [inputTab]="inputMap()"
   [resultsTabs]="resultsMap"
   [visualizationTabs]="visualizationMap"
   [dataTabs]="dataMap"
   (dataSearch)="fetchData($event)"
-  (dataDownload)="downloadData($event)"
 ></lib-panel-accordion>

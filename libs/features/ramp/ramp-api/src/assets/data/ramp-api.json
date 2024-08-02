@@ -363,7 +363,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "label": "a string or a vector of strings that contains pathways of interest"
+                    "description": "a string or a vector of strings that contains pathways of interest"
                   },
                   "analyte_type": {
                     "type": "string",
@@ -514,7 +514,7 @@
           "description": "Retrieve chemical class information (from ClassyFire and LIPID MAPS) for input metabolite IDs. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -525,7 +525,7 @@
                     },
                     "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
                   },
-                  "biospecimen": {
+                  "background": {
                     "type": "string",
                     "enum": [
                       "Blood",
@@ -538,7 +538,12 @@
                       "Saliva",
                       "Feces"
                     ],
+                    "label": "Background Biospecimen",
                     "required": false
+                  },
+                  "backgroundFile": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 },
                 "example": {
@@ -596,6 +601,8 @@
                     "items": {
                       "type": "string"
                     },
+                    "enum": ["all", "smiles", "inchi_key", "inchi_key_prefix", "inchi", "mw", "monoisotop_mass", "formula", "common_name" ],
+                    "label": "Property List",
                     "description": "an optional list of specific properties to extract. Options include 'all' (default), 'smiles', 'inchi_key', 'inchi_key_prefix', 'inchi', 'mw', 'monoisotop_mass', 'formula', 'common_name'. If a props list is not supplied, all property fields will be returned."
                   }
                 },
@@ -896,7 +903,7 @@
           "description": "Perform Pathway Enrichment. IDs should be prepended by ID source (e.g. **hmdb**:C00412). Input analyte IDs can be a mix of genes/proteins or metabolites.",
           "required": true,
           "content": {
-            "application/json": {
+            "multipart/form-data": {
               "schema": {
                 "type": "object",
                 "properties": {
@@ -906,7 +913,7 @@
                       "type": "string"
                     }
                   },
-                  "biospecimen": {
+                  "background": {
                     "type": "string",
                     "enum": [
                       "Blood",
@@ -919,7 +926,12 @@
                       "Saliva",
                       "Feces"
                     ],
+                    "label": "Background Biospecimen",
                     "required": false
+                  },
+                  "backgroundFile": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 },
                 "example": {
@@ -1429,7 +1441,7 @@
                     "type": "number",
                     "required": false,
                     "label": "Minimum Pathways in Cluster",
-                    "description": "Minimum number of 'similar' pathways required to start a cluster (medoid) (Default = 3)"
+                    "description": "Minimum number of 'similar' pathways required to start a cluster (medoid) (Default = 2)"
                   },
                   "perc_analyte_overlap": {
                     "type": "number",
@@ -1452,9 +1464,9 @@
                   }
                 },
                 "example": {
-                  "min_pathway_tocluster": 2,
-                  "perc_analyte_overlap": 0.2,
-                  "perc_pathway_overlap": 0.2,
+                  "min_pathway_tocluster": 2.0,
+                  "perc_analyte_overlap": 0.5,
+                  "perc_pathway_overlap": 0.5,
                   "fishers_results": {
                     "analyte_type": ["both"],
                     "result_type": ["pathway_enrichment"],
@@ -1873,7 +1885,7 @@
                     },
                     "description": "a vector of source prepended metabolite ids"
                   },
-                  "biospecimen": {
+                  "background": {
                     "type": "string",
                     "enum": [
                       "Blood",
@@ -1886,7 +1898,12 @@
                       "Saliva",
                       "Feces"
                     ],
+                    "label": "Background Biospecimen",
                     "required": false
+                  },
+                  "backgroundFile": {
+                    "type": "string",
+                    "format": "binary"
                   }
                 },
                 "example": {
