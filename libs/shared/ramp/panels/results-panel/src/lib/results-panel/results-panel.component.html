@@ -5,13 +5,13 @@
         <div class="row">
           <div class="width-95">
             Found {{ results()!.count }} results <br />
-            @if (!fuzzy()) {
+            @if (!results()!.fuzzy) {
               <span>
                 Matched {{ results()!.matches?.length }} of
                 {{ results()!.inputLength }} {{ results()!.inputType }}
               </span>
             }
-            @if (fuzzy()) {
+            @if (results()!.fuzzy) {
               <span>
                 Fuzzy matched {{ results()!.matches!.length }}
                 {{ results()!.inputType }}

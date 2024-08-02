@@ -51,6 +51,19 @@
       </mat-form-field>
     }
 
+    @case ('multiselect') {
+      <mat-form-field class="full-width" appearance="outline" color="accent">
+        <mat-label [attr.for]="question.key">{{
+          question.label
+        }}</mat-label>
+        <mat-select [id]="question.key" [formControlName]="question.key" multiple>
+          @for (opt of question.options; track opt.key) {
+            <mat-option [value]="opt.key">{{ opt.value }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    }
+
     @case ('radio') {
       <mat-label [attr.for]="question.key">{{
         question.label
@@ -69,6 +82,9 @@
           <br />
         }
       </mat-radio-group>
+    }
+    @case ('file') {
+      <lib-shared-forms-file-upload [formControlName]="question.key"></lib-shared-forms-file-upload>
     }
   }
   @if (question.description) {

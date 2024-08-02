@@ -1,16 +1,15 @@
 <lib-panel-accordion
   class="cdk-boundary"
-  cdkScrollable
-  [paths]="paths"
-  [inputTab]="inputMap"
+  [paths]="paths()"
+  [inputTab]="inputMap()"
   [resultsTabs]="resultsMap"
   [visualizationTabs]="visualizationMap"
   [dataTabs]="dataMap"
   (dataSearch)="fetchData($event)"
-  (dataDownload)="downloadData($event)"
-></lib-panel-accordion>
+>
+  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin"></div>
+</lib-panel-accordion>
 
-<div cdkOverlayOrigin #trigger="cdkOverlayOrigin"></div>
 
 <!-- This template displays the overlay content and is connected to the button -->
 <ng-template

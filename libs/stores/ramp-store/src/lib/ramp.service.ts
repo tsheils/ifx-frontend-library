@@ -331,16 +331,16 @@ export class RampService {
 
   fetchChemicalClass(
     metabolites: string[],
-    biospecimen?: string,
-    background?: File,
+    background?: string,
+    backgroundFile?: File,
   ): Observable<RampResponse<Classes>> {
     const formData = new FormData();
     formData.set('metabolites', JSON.stringify(metabolites));
-    if (biospecimen) {
-      formData.set('biospecimen', JSON.stringify([biospecimen]));
-    }
     if (background) {
-      formData.set('file', background, background.name);
+      formData.set('background', JSON.stringify([background]));
+    }
+    if (backgroundFile) {
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampAPIResponse<Classes>>(`${this.url}chemical-classes`, formData)
@@ -526,16 +526,16 @@ export class RampService {
 
   fetchEnrichmentFromMetabolites(
     metabolites: string[],
-    biospecimen?: string,
-    background?: File,
+    background?: string,
+    backgroundFile?: File,
   ): Observable<RampChemicalEnrichmentResponse> {
     const formData = new FormData();
     formData.set('metabolites', JSON.stringify(metabolites));
-    if (biospecimen) {
-      formData.set('background', JSON.stringify([biospecimen]));
-    }
     if (background) {
-      formData.set('file', background, background.name);
+      formData.set('background', JSON.stringify([background]));
+    }
+    if (backgroundFile) {
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampChemicalEnrichmentAPIResponse>(
@@ -612,16 +612,16 @@ export class RampService {
 
   fetchEnrichmentFromPathways(
     analytes: string[],
-    biospecimen?: string,
-    background?: File,
+    background?: string,
+    backgroundFile?: File,
   ): Observable<RampPathwayEnrichmentResponse> {
     const formData = new FormData();
     formData.set('analytes', JSON.stringify(analytes));
-    if (biospecimen) {
-      formData.set('biospecimen', JSON.stringify([biospecimen]));
-    }
     if (background) {
-      formData.set('file', background, background.name);
+      formData.set('background', JSON.stringify([background]));
+    }
+    if (backgroundFile) {
+      formData.set('file', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampPathwayEnrichmentAPIResponse>(

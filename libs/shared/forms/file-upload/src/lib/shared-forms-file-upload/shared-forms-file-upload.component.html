@@ -2,12 +2,12 @@
   type="file"
   class="file-input"
   accept="text/tab-separated-values, .xlsx"
-  (change)="onFileSelected($event)"
+  (change)="writeValue($event)"
   #fileUpload
 />
 <div class="file-upload">
-  <div *ngIf="fileName">
-    <span>{{ fileName }}</span
+    @if(fileName()){
+    <span>{{ fileName() }}</span
     >&nbsp;
     <button
       mat-mini-fab
@@ -17,11 +17,9 @@
     >
       <mat-icon>cancel</mat-icon>
     </button>
-  </div>
-  <div *ngIf="!fileName">
+    } @else {
     <span class="mat-h4">Upload File</span> &nbsp;
     <button
-      *ngIf="!fileName"
       mat-mini-fab
       color="accent"
       class="upload-btn"
@@ -29,5 +27,5 @@
     >
       <mat-icon>attach_file</mat-icon>
     </button>
-  </div>
+    }
 </div>

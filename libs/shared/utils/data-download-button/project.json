@@ -1,21 +1,20 @@
 {
-  "name": "shared-forms-file-upload",
+  "name": "data-download-button",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shared/forms/file-upload/src",
+  "sourceRoot": "libs/shared/utils/data-download-button/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/forms/file-upload/jest.config.ts"
+        "jestConfig": "libs/shared/utils/data-download-button/jest.config.ts"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

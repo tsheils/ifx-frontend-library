@@ -74,6 +74,8 @@ export class AnalytesPageComponent
             this.dataMap.set('Analytes', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
+              dataframe: res.dataframe,
+              fileName: 'fetchAnalytesFromPathways-download.tsv'
             });
             const matches = Array.from(
               new Set(
@@ -95,21 +97,9 @@ export class AnalytesPageComponent
             };
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchAnalytesFromPathways-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
-          }
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
         }),
       )
       .subscribe();
@@ -124,7 +114,4 @@ export class AnalytesPageComponent
     );
   }
 
-  override downloadData(event: { [key: string]: unknown }) {
-    super.downloadData(event, 'fetchAnalytesFromPathways-download.tsv');
-  }
 }

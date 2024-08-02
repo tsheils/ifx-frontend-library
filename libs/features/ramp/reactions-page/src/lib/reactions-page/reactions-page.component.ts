@@ -194,6 +194,8 @@ export class ReactionsPageComponent
             this.dataMap.set('Common Analytes', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
+              dataframe: res['dataframe'],
+              fileName: 'fetchCommonReactionAnalytes-download.tsv'
             });
             const matches = Array.from(
               new Set(
@@ -212,16 +214,6 @@ export class ReactionsPageComponent
               inputType: 'analytes',
             };
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-          }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchCommonReactionAnalytes-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
           }
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
@@ -242,6 +234,8 @@ export class ReactionsPageComponent
             this.dataMap.set('Reactions', {
               data: this._mapData(res.data),
               fields: this.reactionColumns,
+              dataframe: res.data,
+              fileName: 'fetchReactionFromAnalytes-download.tsv'
             });
             const matches = Array.from(
               new Set(
@@ -261,21 +255,9 @@ export class ReactionsPageComponent
             };
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchReactionFromAnalytes-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
-          }
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
         }),
       )
       .subscribe();
@@ -295,23 +277,10 @@ export class ReactionsPageComponent
             this.dataMap.set('Reaction Classes', {
               data: this._mapData(res.data),
               fields: this.reactionClassColumns,
+              dataframe: res.data,
+              fileName: 'fetchReactionClassesFromAnalytes-download.tsv'
             });
-            /* const matches = Array.from(
-              new Set(
-                res.data.map((data) => data.rxnClass.toLocaleLowerCase()),
-              ),
-            );
-            const noMatches = this.inputList.filter(
-              (p: string) => !matches.includes(p.toLocaleLowerCase()),
-            );*/
-            /*  this.resultsMap = {
-            //  matches: matches,
-            //  noMatches: noMatches,
-              count: res.data.length,
-              inputLength: this.inputList.length,
-            //  fuzzy: true,
-              inputType: 'analytes',
-            };*/
+
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
             this.sunburstChartService.nodeHovered.subscribe((value) => {
               if (value) {
@@ -325,22 +294,9 @@ export class ReactionsPageComponent
               }
             });
           }
-          if (res && res.dataframe) {
-            this.dataframe = res.dataframe;
-            if (this.downloadQueued) {
-              this._downloadFile(
-                this._toTSV(this.dataframe),
-                'fetchReactionClassesFromAnalytes-download.tsv',
-              );
-              this.downloadQueued = false;
-            }
-          }
           if (res && res.query) {
             // this.resultsMap.function = <string>res.query.functionCall;
           }
-          //   this.pathwaysLoading = false;
-
-          this.changeRef.markForCheck();
         }),
       )
       .subscribe();
@@ -363,10 +319,6 @@ export class ReactionsPageComponent
         analytes: this.inputList,
       }),
     );
-  }
-
-  override downloadData(event: { [key: string]: unknown }) {
-    super.downloadData(event, 'fetchCommonReactionAnalytes-download.tsv');
   }
 
   private _mapToHierarchy(classes: ReactionClass[]): HierarchyNode[] {

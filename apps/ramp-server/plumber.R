@@ -371,16 +371,16 @@ function(analytes, namesOrIds = "ids") {
 #' Return combined Fisher's test results
 #' from given list of analytes query results
 #' @param analytes list of analytes of interest for pathway analysis
-#' @param biospecimen biospecimen background for Fisher's test
-#' @param file: File
+#' @param background biospecimen background for Fisher's test
+#' @param backgroundFile: File
 #' @parser multi
 #' @parser text
 #' @parser json
 #' @post /api/combined-fisher-test
 #' @serializer json list(digits = 6)
-function(analytes = '', background = '', file = '', background_type= "database") {
+function(analytes = '', background = '', backgroundFile = '', background_type= "database") {
   fishers_results_df <- ''
-  if(file == "") {
+  if(backgroundFile == "") {
     if(background == "") {
       print("run with database background")
       fishers_results_df <- RaMP::runCombinedFisherTest(
@@ -401,13 +401,13 @@ function(analytes = '', background = '', file = '', background_type= "database")
   }
    else {
     print("run with background file")
-    bg <- gsub("\r\n", ",", file)
-       backgroundFile <- unlist(strsplit(bg, ','))
-       if(length(backgroundFile) > length(analytes)) {
+    bg <- gsub("\r\n", ",", backgroundFile)
+       file <- unlist(strsplit(bg, ','))
+       if(length(file) > length(analytes)) {
       fishers_results_df <- RaMP::runCombinedFisherTest(
         db = rampDB,
         analytes = analytes,
-        background = backgroundFile,
+        background = file,
         background_type= "list"
       )
     } else {
@@ -518,16 +518,16 @@ function(
 #####
 #' Perform chemical enrichment on given metabolites
 #' @param metabolites Input for chemical enrichment
-#' @param biospecimen Restrict background to particular biospecimen
-#' @param file: File
+#' @param background Restrict background to particular biospecimen
+#' @param backgroundFile: File
 #' @parser multi
 #' @parser text
 #' @parser json
 #' @post /api/chemical-enrichment
-function(metabolites = '', file = '', biospecimen = '', background = "database") {
+function(metabolites = '', backgroundFile = '', background = '', background_type = "database") {
   chemical_enrichment_df <- ''
-  if(file == "") {
-    if(biospecimen == "") {
+  if(backgroundFile == "") {
+    if(background == "") {
       print("run with database background")
       chemical_enrichment_df <- RaMP::chemicalClassEnrichment(
         db = rampDB,
@@ -540,14 +540,14 @@ function(metabolites = '', file = '', biospecimen = '', background = "database")
       chemical_enrichment_df <- RaMP::chemicalClassEnrichment(
         db = rampDB,
         metabolites,
-        background = biospecimen,
+        background = background,
         background_type= "biospecimen"
       )
     }
   }
   else {
     print("run with background file")
-    bg <- gsub("\r\n", ",", file)
+    bg <- gsub("\r\n", ",", backgroundFile)
     background <- unlist(strsplit(bg, ','))
     if(length(background) > length(metabolites)) {
       chemical_enrichment_df <- RaMP::chemicalClassEnrichment(

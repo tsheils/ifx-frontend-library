@@ -56,8 +56,16 @@ export class TextareaQuestion extends QuestionBase<string> {
   override controlType = 'textarea';
 }
 
+export class FileUploadQuestion extends QuestionBase<string> {
+  override controlType = 'file';
+}
+
 export class DropdownQuestion extends QuestionBase<string> {
   override controlType = 'dropdown';
+}
+
+export class MultiSelectQuestion extends QuestionBase<string> {
+  override controlType = 'multiselect';
 }
 
 export class RadioQuestion extends QuestionBase<string> {

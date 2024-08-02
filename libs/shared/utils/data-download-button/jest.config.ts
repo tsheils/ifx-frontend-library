@@ -1,9 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'shared-forms-file-upload',
+  displayName: 'data-download-button',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/forms/file-upload',
+  coverageDirectory:
+    '../../../../coverage/libs/shared/utils/data-download-button',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

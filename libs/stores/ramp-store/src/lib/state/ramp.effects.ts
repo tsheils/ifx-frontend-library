@@ -155,8 +155,8 @@ export const fetchPathwaysFromAnalytes = createEffect(
         return rampService.fetchPathwaysFromAnalytes(action.analytes).pipe(
           map(
             (ret: RampResponse<Pathway>) => {
-              ret.biospecimen = action.biospecimen;
               ret.background = action.background;
+              ret.backgroundFile = action.backgroundFile;
               ret.pval_type = action.pval_type;
               ret.pval_cutoff = action.pval_cutoff;
               ret.perc_analyte_overlap = action.perc_analyte_overlap;
@@ -316,8 +316,8 @@ export const fetchClassesFromMetabolites = createEffect(
         return rampService
           .fetchChemicalClass(
             action.metabolites,
-            action.biospecimen,
             action.background,
+            action.backgroundFile,
           )
           .pipe(
             map(
@@ -480,14 +480,14 @@ export const fetchPathwayAnalysis = createEffect(
         return rampService
           .fetchEnrichmentFromPathways(
             action.analytes,
-            action.biospecimen,
             action.background,
+            action.backgroundFile,
           )
           .pipe(
             map(
               (ret: RampPathwayEnrichmentResponse) => {
-                ret.biospecimen = action.biospecimen;
                 ret.background = action.background;
+                ret.backgroundFile = action.backgroundFile;
                 ret.pval_type = action.pval_type;
                 ret.pval_cutoff = Number(action.pval_cutoff);
                 ret.perc_analyte_overlap = Number(action.perc_analyte_overlap);
@@ -649,8 +649,8 @@ export const fetchChemicalAnalysis = createEffect(
         return rampService
           .fetchEnrichmentFromMetabolites(
             action.metabolites,
-            action.biospecimen,
             action.background,
+            action.backgroundFile,
           )
           .pipe(
             map(
