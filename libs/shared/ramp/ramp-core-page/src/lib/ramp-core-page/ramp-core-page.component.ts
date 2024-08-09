@@ -1,9 +1,11 @@
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   DestroyRef,
-  inject, input,
-  output
+  inject,
+  input,
+  output,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -36,11 +38,12 @@ export class RampCorePageComponent {
     resultsLoaded?: boolean;
     visualizationsLoaded?: boolean;
     dataLoaded?: boolean;
-  }>()
+  }>();
 
   title = input<string>();
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, QuestionBase<string>[]>>();
+  filtersMap = input<Map<string, QuestionBase<string>[]>>();
 
   inputList: string[] = [];
   resultsMap!: RampResults;
@@ -61,7 +64,13 @@ export class RampCorePageComponent {
   >();
   dataMap: Map<
     string,
-    { data: { [key: string]: DataProperty }[]; fields: DataProperty[], dataframe?: unknown[], fileName?: string }
+    {
+      data: { [key: string]: DataProperty }[];
+      fields: DataProperty[];
+      dataframe?: unknown[];
+      fileName?: string;
+      filters?: Map<string, QuestionBase<string>[]>;
+    }
   > = new Map<
     string,
     { data: { [key: string]: DataProperty }[]; fields: DataProperty[] }

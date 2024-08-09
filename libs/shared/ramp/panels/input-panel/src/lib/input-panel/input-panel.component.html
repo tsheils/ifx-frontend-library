@@ -1,5 +1,5 @@
 <div class="row top-align">
-  @for (tab of inputQuestions | keyvalue: _originalOrder; track tab.key) {
+  @for (tab of inputQuestions() | keyvalue: _originalOrder; track tab.key) {
     <div [ngClass]="tab.key">
       <h3>{{ cleanLabel(tab.key) | titlecase }} Options</h3>
       <lib-ncats-form

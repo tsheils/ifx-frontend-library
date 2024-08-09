@@ -1,15 +1,25 @@
-import { Component, computed, input } from '@angular/core';
+import { Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
 import { DataDownloadButtonComponent } from 'data-download-button';
+import { InputPanelComponent } from 'input-panel';
 import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
+import { QuestionBase } from 'ncats-form-question';
 
 @Component({
   selector: 'lib-data-panel',
   standalone: true,
-  imports: [CommonModule, NcatsDatatableComponent, MatButton, MatIcon, MatTooltip, DataDownloadButtonComponent],
+  imports: [
+    CommonModule,
+    NcatsDatatableComponent,
+    MatButton,
+    MatIcon,
+    MatTooltip,
+    DataDownloadButtonComponent,
+    InputPanelComponent,
+  ],
   templateUrl: './data-panel.component.html',
   styleUrl: './data-panel.component.scss',
 })
@@ -17,6 +27,17 @@ export class DataPanelComponent {
   dataframe = input<unknown[]>();
   dataColumns = input<DataProperty[]>();
   dataAsDataProperty = input<{ [key: string]: DataProperty }[]>();
-  noDataArr = computed(() =>  !this.dataAsDataProperty()?.length || this.dataAsDataProperty()?.length === 0);
+  noDataArr = computed(
+    () =>
+      !this.dataAsDataProperty()?.length ||
+      this.dataAsDataProperty()?.length === 0,
+  );
   fileName = input<string>();
+  filters = input<Map<string, QuestionBase<string>[]>>();
+  dataSearch = output<{ [key: string]: unknown }>();
+  showFilters = signal<boolean>(false);
+
+  searchData(event: { [key: string]: unknown }) {
+    this.dataSearch.emit(event);
+  }
 }

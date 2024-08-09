@@ -1,40 +1,18 @@
-import { CdkCopyToClipboard, Clipboard } from '@angular/cdk/clipboard';
-import { CdkDrag } from '@angular/cdk/drag-drop';
-import {
-  CdkConnectedOverlay,
-  CdkOverlayOrigin,
-  CdkScrollable,
-  OverlayModule,
-  ScrollDispatcher,
-} from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
-  contentChild,
-  ElementRef,
   inject,
   OnInit,
   signal,
-  Signal,
-  ViewChild,
-  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { select } from '@ngrx/store';
 import { DataProperty } from 'ncats-datatable';
 import { PanelAccordionComponent } from 'panel-accordion';
-import {
-  Analyte,
-  RampResponse,
-  CommonAnalyte,
-  Reaction,
-  ReactionClass,
-} from 'ramp';
+import { CommonAnalyte, RampResponse, Reaction, ReactionClass } from 'ramp';
 import { HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { RampCorePageComponent } from 'ramp-core-page';
 import {
@@ -43,22 +21,22 @@ import {
   ReactionClassesFromAnalytesActions,
   ReactionsFromAnalytesActions,
 } from 'ramp-store';
+import {
+  RampSunburstTooltipComponent,
+  SUNBURST_TOOLTIP,
+} from 'ramp-sunburst-tooltip';
 import { map } from 'rxjs';
-import { SunburstChartComponent, SunburstChartService } from 'sunburst-chart';
+import { SunburstChartService } from 'sunburst-chart';
 
 @Component({
   selector: 'lib-reactions-page',
   standalone: true,
-  imports: [
-    CommonModule,
-    PanelAccordionComponent,
-    CdkOverlayOrigin,
-    CdkConnectedOverlay,
-    OverlayModule,
-    CdkDrag,
-    MatIcon,
-    MatIconButton,
-    CdkCopyToClipboard,
+  imports: [CommonModule, PanelAccordionComponent],
+  providers: [
+    {
+      provide: SUNBURST_TOOLTIP,
+      useValue: RampSunburstTooltipComponent,
+    },
   ],
   templateUrl: './reactions-page.component.html',
   styleUrl: './reactions-page.component.scss',
@@ -69,12 +47,8 @@ export class ReactionsPageComponent
   extends RampCorePageComponent
   implements OnInit
 {
-  scrollable = viewChild(CdkScrollable);
   sunburstChartService = inject(SunburstChartService);
   _snackBar = inject(MatSnackBar);
-  _clipboard = inject(Clipboard);
-  scrollDispatcher = inject(ScrollDispatcher);
-  // Signal<MyHeader|undefined>
 
   override dataColumns: DataProperty[] = [
     new DataProperty({
@@ -184,6 +158,7 @@ export class ReactionsPageComponent
   }
 
   ngOnInit() {
+    this.sunburstChartService.customComponent = SUNBURST_TOOLTIP;
     this.store
       .pipe(
         select(RampSelectors.getCommonReactions),
@@ -195,7 +170,7 @@ export class ReactionsPageComponent
               data: this._mapData(res.data),
               fields: this.dataColumns,
               dataframe: res['dataframe'],
-              fileName: 'fetchCommonReactionAnalytes-download.tsv'
+              fileName: 'fetchCommonReactionAnalytes-download.tsv',
             });
             const matches = Array.from(
               new Set(
@@ -235,7 +210,7 @@ export class ReactionsPageComponent
               data: this._mapData(res.data),
               fields: this.reactionColumns,
               dataframe: res.data,
-              fileName: 'fetchReactionFromAnalytes-download.tsv'
+              fileName: 'fetchReactionFromAnalytes-download.tsv',
             });
             const matches = Array.from(
               new Set(
@@ -278,7 +253,7 @@ export class ReactionsPageComponent
               data: this._mapData(res.data),
               fields: this.reactionClassColumns,
               dataframe: res.data,
-              fileName: 'fetchReactionClassesFromAnalytes-download.tsv'
+              fileName: 'fetchReactionClassesFromAnalytes-download.tsv',
             });
 
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
@@ -289,6 +264,7 @@ export class ReactionsPageComponent
                   (prop) => prop.rxnClass === term,
                 )[0];
                 this.hoveredNode.set(node);
+                this.sunburstChartService.reactionNode.set(node);
               } else {
                 //  this.hoveredNode.set(value);
               }
@@ -395,42 +371,5 @@ export class ReactionsPageComponent
     ];
 
     return colors[index][0];
-  }
-
-  copyData() {
-    let retString = `
-    ${this.hoveredNode()?.rxnClass}
-    EC Number: ${this.hoveredNode()?.ecNumber}
-    `;
-    if (this.hoveredNode()?.metCount) {
-      retString =
-        retString +
-        `${this.hoveredNode()?.metCount} input metabolites out of ${this.hoveredNode()?.totalMetsInRxnClass} total\r\n`;
-    }
-    if (this.hoveredNode()?.proteinCount) {
-      retString =
-        retString +
-        `${this.hoveredNode()?.proteinCount} input proteins out of ${this.hoveredNode()?.totalProteinsInRxnClass} total\r\n`;
-    }
-    if (this.hoveredNode()?.reactionCount) {
-      retString =
-        retString +
-        `${this.hoveredNode()?.reactionCount} reactions hit out of ${this.hoveredNode()?.totalRxnsInClass} total\r\n`;
-    }
-
-    const pending = this._clipboard.beginCopy(retString);
-    let remainingAttempts = 3;
-    const attempt = () => {
-      const result = pending.copy();
-      if (!result && --remainingAttempts) {
-        setTimeout(attempt);
-      } else {
-        this._snackBar.open('Data copied', '', {
-          duration: 3000,
-        });
-        pending.destroy();
-      }
-    };
-    attempt();
   }
 }

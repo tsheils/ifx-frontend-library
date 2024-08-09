@@ -1,18 +1,25 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-
 import { CdkScrollable } from '@angular/cdk/overlay';
+import {
+  CdkPortal,
+  CdkPortalOutlet,
+  ComponentPortal,
+} from '@angular/cdk/portal';
+import { isNull } from '@angular/compiler';
 import {
   Component,
   computed,
   ElementRef,
   inject,
   InjectionToken,
+  Injector,
   input,
   OnChanges,
   OnInit,
   PLATFORM_ID,
   Signal,
+  Type,
   viewChild,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
@@ -21,22 +28,25 @@ import {
   hierarchy,
   partition,
   quantize,
-  format,
   interpolateRainbow,
-  HierarchyRectangularNode,
 } from 'd3';
 import { scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
 import { arc } from 'd3-shape';
 import { HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { ImageDownloadComponent } from 'image-download';
-import { FlatHierarchyNode } from 'tree-chart';
 import { SunburstChartService } from './sunburst-chart.service';
 
 @Component({
   selector: 'lib-sunburst-chart',
   standalone: true,
-  imports: [CommonModule, ImageDownloadComponent, CdkScrollable],
+  imports: [
+    CommonModule,
+    ImageDownloadComponent,
+    CdkScrollable,
+    CdkPortal,
+    CdkPortalOutlet,
+  ],
   templateUrl: './sunburst-chart.component.html',
   styleUrl: './sunburst-chart.component.scss',
 })
@@ -45,13 +55,24 @@ export class SunburstChartComponent implements OnInit, OnChanges {
     PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
 
+  isBrowser = computed(() => isPlatformBrowser(this.platformId));
+
   sunburstChartService = inject(SunburstChartService);
   chartElement: Signal<ElementRef | undefined> = viewChild(
     'sunburstChartElement',
   );
+  _injector = inject(Injector);
+  componentPortal?: ComponentPortal<unknown>;
 
-  canvas = document.createElement('canvas');
-  context = this.canvas.getContext('2d');
+
+  context = computed(() => {
+   if(this.isBrowser()) {
+    const canvas = document.createElement('canvas');
+    return canvas.getContext('2d');
+   }
+  }
+  )
+
   margins = { top: 20, bottom: 20, right: 30, left: 30 };
 
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
@@ -150,7 +171,7 @@ export class SunburstChartComponent implements OnInit, OnChanges {
           label = label.slice(0, this.radius() / characterSize - 3) + '...';
         }
         return label;
-      })
+      });
   });
 
   path = computed(() =>
@@ -171,14 +192,27 @@ export class SunburstChartComponent implements OnInit, OnChanges {
       )
       .attr('d', (d) => this.arc()(d['current']))
       .on('mouseover', (event: Event, d) => {
+        /* select((<unknown>event.currentTarget) as string)
+          .transition()
+          .duration(300)
+          .attr('fill-opacity', (d) =>
+            this._arcVisible(d['current']) ? 1 / d.depth + 0.5 : 0,
+          )*/
+
         this.sunburstChartService.nodeHovered.emit({
           event: event,
           node: d.data as HierarchyNode,
         });
       })
       .on('mouseout', (event: Event, d) => {
-        this.sunburstChartService.nodeHovered.emit(undefined);
-      })
+        //this.sunburstChartService.nodeHovered.emit(undefined);
+        /* select((<unknown>event.currentTarget) as string)
+          .transition()
+          .duration(100)
+          .attr('fill-opacity', (d) =>
+            this._arcVisible(d['current']) ? 1 / d.depth + 0.25 : 0,
+          )*/
+      }),
   );
   svgExport = computed(
     () =>
@@ -188,12 +222,23 @@ export class SunburstChartComponent implements OnInit, OnChanges {
   );
 
   ngOnInit() {
-    this.context.font = '16px Roboto';
     if (this.chartElement() && this.isBrowser()) {
+      if(this.context()) {
+        this.context().font = '16px Roboto';
+      }
       const element = this.chartElement()?.nativeElement;
       select(element).select('svg').remove();
       this.makeChart();
       this.label();
+    }
+    if (
+      this.sunburstChartService &&
+      this.sunburstChartService.customComponent
+    ) {
+      const comp = this._injector.get<Type<unknown>>(
+        this.sunburstChartService.customComponent,
+      );
+      this.componentPortal = new ComponentPortal(comp);
     }
   }
 
@@ -210,10 +255,13 @@ export class SunburstChartComponent implements OnInit, OnChanges {
         });
       });
 
-    this.path()
-      .append('title')
-      .html((d) => (d.data.label ? d.data.label : d.data.term))
-      .classed('title-text');
+     const t = this.path()
+        .append('title')
+        .html((d) => (d.data.label ? d.data.label : d.data.term))
+
+       if(t !== null && t['classList']) {
+       t.classed('.title-text');
+       }
   }
 
   // Handle zoom on click.
@@ -314,6 +362,6 @@ export class SunburstChartComponent implements OnInit, OnChanges {
    * @returns {number} The width of the text
    **/
   _getWidth(text: string) {
-    return this.context?.measureText(text).width;
+    return this.context()?.measureText(text).width;
   }
 }

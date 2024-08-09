@@ -231,6 +231,9 @@
       "ramp-main": ["libs/features/ramp/ramp-main/src/index.ts"],
       "ramp-page": ["libs/shared/ramp/ramp-page/src/index.ts"],
       "ramp-store": ["libs/stores/ramp-store/src/index.ts"],
+      "ramp-sunburst-tooltip": [
+        "libs/shared/ramp/ramp-sunburst-tooltip/src/index.ts"
+      ],
       "reactions-page": ["libs/features/ramp/reactions-page/src/index.ts"],
       "resolver-data-viewer": [
         "libs/shared/ifx/resolver-data-viewer/src/index.ts"

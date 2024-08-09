@@ -77,6 +77,6 @@ export class TreeChartComponent {
   hasChild = (_: number, node: HierarchyNode) => !!node.children?.length;
 
   selectNode(node: FlatHierarchyNode) {
-    console.log(node);
+    //  console.log(node);
   }
 }

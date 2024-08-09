@@ -1,9 +1,13 @@
 import { CdkScrollable } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { NgOptimizedImage } from '@angular/common';
+import { isPlatformBrowser, NgOptimizedImage } from '@angular/common';
 import {
   Component,
+  computed,
   ElementRef,
+  inject,
+  InjectionToken,
+  PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';

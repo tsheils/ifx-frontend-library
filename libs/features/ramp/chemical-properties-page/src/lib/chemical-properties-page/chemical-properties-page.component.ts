@@ -200,8 +200,7 @@ export class ChemicalPropertiesPageComponent
               data: retData,
               fields: this.propertiesColumns,
               dataframe: res.dataframe,
-              fileName: 'fetchPropertiesFromMetabolites-download.tsv'
-
+              fileName: 'fetchPropertiesFromMetabolites-download.tsv',
             });
             const matches = Array.from(
               new Set(
@@ -238,7 +237,7 @@ export class ChemicalPropertiesPageComponent
               data: this._mapData(res.data),
               fields: this.classesColumns,
               dataframe: res.dataframe,
-              fileName: 'fetchChemicalClass-download.tsv'
+              fileName: 'fetchChemicalClass-download.tsv',
             });
             const matches = Array.from(
               new Set(
@@ -276,7 +275,7 @@ export class ChemicalPropertiesPageComponent
               data: this._mapData(res.enriched_chemical_class_list),
               fields: this.enrichmentColumns,
               dataframe: res.enriched_chemical_class_list,
-              fileName: 'fetchEnrichedChemicalClasses-download.tsv'
+              fileName: 'fetchEnrichedChemicalClasses-download.tsv',
             });
           }
           //   this.pathwaysLoading = false;
@@ -295,20 +294,19 @@ export class ChemicalPropertiesPageComponent
         metabolites: this.inputList,
       }),
     );
-      this.store.dispatch(
-        MetaboliteEnrichmentsActions.fetchClassesFromMetabolites({
-          metabolites: this.inputList,
-          background: <string>event['background'],
-          backgroundFile: event['backgroundFile'] as File,
-        }),
-      );
-      this.store.dispatch(
-        MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites({
-          metabolites: this.inputList,
-          background: <string>event['background'],
-          backgroundFile: event['backgroundFile'] as File,
-        }),
-      );
+    this.store.dispatch(
+      MetaboliteEnrichmentsActions.fetchClassesFromMetabolites({
+        metabolites: this.inputList,
+        background: <string>event['background'],
+        backgroundFile: event['backgroundFile'] as File,
+      }),
+    );
+    this.store.dispatch(
+      MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites({
+        metabolites: this.inputList,
+        background: <string>event['background'],
+        backgroundFile: event['backgroundFile'] as File,
+      }),
+    );
   }
-
 }

@@ -1,5 +1,13 @@
-import { EventEmitter, Injectable, Output, output } from '@angular/core';
+import {
+  EventEmitter,
+  Injectable,
+  InjectionToken,
+  Output,
+  output,
+  signal,
+} from '@angular/core';
 import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { ReactionClass } from 'ramp';
 
 @Injectable({
   providedIn: 'root',
@@ -13,6 +21,9 @@ export class SunburstChartService {
     event: Event;
     node: HierarchyNode;
   }>();
+
+  customComponent?: InjectionToken<string>;
+  reactionNode = signal<ReactionClass | undefined>(undefined);
 
   hoverNode(data: { event: Event; node: HierarchyNode }) {
     this.nodeHovered.emit(data);

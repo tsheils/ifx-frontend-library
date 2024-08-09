@@ -1,9 +1,4 @@
-import {
-  Component,
-  input,
-  output,
-  ViewEncapsulation
-} from '@angular/core';
+import { Component, input, output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   MatAccordion,
@@ -49,11 +44,11 @@ import { VisualizationPanelComponent } from 'visualization-panel';
   encapsulation: ViewEncapsulation.None,
 })
 export class PanelAccordionComponent {
-  dataSearch=output<{ [key: string]: unknown }>();
- paths = input<OpenApiPath[]>();
- inputTab = input<Map<string, QuestionBase<string>[]>>();
- resultsTabs = input<RampResults>();
- visualizationTabs = input<
+  dataSearch = output<{ [key: string]: unknown }>();
+  paths = input<OpenApiPath[]>();
+  inputTab = input<Map<string, QuestionBase<string>[]>>();
+  resultsTabs = input<RampResults>();
+  visualizationTabs = input<
     Map<
       string,
       {
@@ -62,10 +57,17 @@ export class PanelAccordionComponent {
       }[]
     >
   >();
-  dataTabs = input<Map<
-    string,
-    { data: { [key: string]: DataProperty }[]; fields: DataProperty[], dataframe?: unknown[], fileName?: string }
-  >
+  dataTabs = input<
+    Map<
+      string,
+      {
+        data: { [key: string]: DataProperty }[];
+        fields: DataProperty[];
+        dataframe?: unknown[];
+        fileName?: string;
+        filters?: Map<string, QuestionBase<string>[]>;
+      }
+    >
   >();
 
   searchData(event: { [key: string]: unknown }) {

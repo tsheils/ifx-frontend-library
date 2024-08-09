@@ -41,7 +41,7 @@ cors <- function(req, res) {
 ######
 #' Return source version information. Includes RaMP version number, source database versions, and other metadata
 #' @serializer unboxedJSON
-#' @get /api/source_versions
+#' @get /api/source-versions
 function() {
   version_info <- RaMP::getCurrentRaMPSourceDBVersions(db = rampDB)
 
@@ -54,7 +54,7 @@ function() {
 ######
 #' Return RaMP database version number
 #' @serializer unboxedJSON
-#' @get /api/ramp_db_version
+#' @get /api/ramp-db-version
 function() {
   version <- RaMP::getCurrentRaMPVersion(db = rampDB)
 
@@ -66,7 +66,7 @@ function() {
 
 ######
 #' Return RaMP database version number along with current version notes
-#' @get /api/current_db_file_url
+#' @get /api/current-db-file-url
 function() {
   versionInfo <- RaMP::getCurrentRaMPVersion(db = rampDB, justVersion = FALSE)
   dbURL <- unlist(versionInfo$db_sql_url)
@@ -95,7 +95,7 @@ function() {
 ####
 #' Return association counts for different RaMP-DB data types, broken down by source database (chemical properties, pathway associations, gene/metabolite/pathway counts)
 #' @serializer unboxedJSON
-#' @get /api/entity_counts
+#' @get /api/entity-counts
 function() {
   entity_counts <- RaMP::getEntityCountsFromSourceDBs(db = rampDB)
 
@@ -109,7 +109,7 @@ function() {
 #' Return redundancy of source databases. Lists counts of identical analytes pulled from source databases.
 #' @param analytetype specifies type of analyte intersects to return, 'metabolites' or 'genes'
 #' @param query_scope specifies 'global' or 'mapped-to-pathway'
-#' @get /api/analyte_intersects
+#' @get /api/analyte-intersects
 function(analytetype, query_scope = 'global') {
   response <- ""
   if(!missing(analytetype)) {

@@ -1,4 +1,4 @@
-<div class="row right-justified-row" cdkScrollable>
+<div class="row right-justified-row">
   <div class="width-10">
     <lib-image-download
       [showTSV]="false"
@@ -9,4 +9,5 @@
 
 <div class="sunburst-chart-container">
   <div id="sunburst-chart" class="sunburst-chart" #sunburstChartElement></div>
+  <ng-template #customOutlet [cdkPortalOutlet]="componentPortal"></ng-template>
 </div>

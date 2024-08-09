@@ -60,6 +60,7 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   title = input<string>();
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, QuestionBase<string>[]>>();
+  filterMap = input<Map<string, QuestionBase<string>[]>>();
 
   scroller = inject(ViewportScroller);
 
@@ -71,6 +72,7 @@ export class RampPageComponent<T extends RampCorePageComponent> {
     component['paths'] = this.paths;
     component['title'] = this.title;
     component['inputMap'] = this.inputMap;
+    component['filtersMap'] = this.filterMap;
 
     component.loadedEvent.subscribe((event) => {
       this.resultsLoaded = event.resultsLoaded || false;

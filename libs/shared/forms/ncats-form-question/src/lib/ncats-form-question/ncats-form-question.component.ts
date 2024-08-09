@@ -6,9 +6,7 @@ import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { MatOption, MatSelect } from '@angular/material/select';
-import {
-  SharedFormsFileUploadComponent
-} from '@ncats-frontend-library/shared/forms/file-upload';
+import { SharedFormsFileUploadComponent } from '@ncats-frontend-library/shared/forms/file-upload';
 import { QuestionBase } from './question-base';
 
 @Component({
@@ -26,7 +24,7 @@ import { QuestionBase } from './question-base';
     MatSelect,
     MatOption,
     MatIconButton,
-    SharedFormsFileUploadComponent
+    SharedFormsFileUploadComponent,
   ],
   templateUrl: './ncats-form-question.component.html',
   styleUrl: './ncats-form-question.component.scss',

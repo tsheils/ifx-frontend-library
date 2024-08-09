@@ -14,7 +14,6 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import {
-  BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -56,7 +55,6 @@ export function rdasInit(store = inject(Store)) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    BrowserModule,
     {
       provide: APP_INITIALIZER,
       useFactory: rdasInit,

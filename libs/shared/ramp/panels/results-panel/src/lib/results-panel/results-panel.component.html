@@ -32,10 +32,10 @@
     }
   </mat-tab>
   <mat-tab [label]="'Function'">
-    @if (results()!.function) {
+    @if (results()?.function) {
       <div>
         <div>The following R function was called:</div>
-        <pre class="code-block">{{ results()!.function }}</pre>
+        <pre class="code-block">{{ results()?.function }}</pre>
       </div>
     }
   </mat-tab>
