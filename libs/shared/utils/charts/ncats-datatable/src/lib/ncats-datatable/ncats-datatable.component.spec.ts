@@ -1,6 +1,5 @@
-import { signal } from '@angular/core';
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
-import { DataProperty } from 'ncats-datatable';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { NcatsDatatableComponent } from './ncats-datatable.component';
 
@@ -11,7 +10,10 @@ describe('NcatsDatatableComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      imports: [NcatsDatatableComponent],
+      imports: [
+        NoopAnimationsModule,
+        NcatsDatatableComponent
+      ],
     }).compileComponents();
   }));
 

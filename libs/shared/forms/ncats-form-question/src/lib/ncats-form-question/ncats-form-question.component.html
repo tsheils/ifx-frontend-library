@@ -2,17 +2,13 @@
   @switch (question.controlType) {
     @case ('textbox') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
-        <mat-label [attr.for]="question.key">{{
-          question.label
-        }}</mat-label>
+        <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
         <input matInput [id]="question.key" [type]="question.type" />
       </mat-form-field>
     }
     @case ('number') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
-        <mat-label [attr.for]="question.key">{{
-          question.label
-        }}</mat-label>
+        <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
         <input
           matInput
           [formControlName]="question.key"
@@ -26,9 +22,7 @@
     }
     @case ('textarea') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
-        <mat-label [attr.for]="question.key">{{
-          question.label
-        }}</mat-label>
+        <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
         <textarea
           matInput
           [formControlName]="question.key"
@@ -40,9 +34,7 @@
     }
     @case ('dropdown') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
-        <mat-label [attr.for]="question.key">{{
-          question.label
-        }}</mat-label>
+        <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
         <mat-select [id]="question.key" [formControlName]="question.key">
           @for (opt of question.options; track opt.key) {
             <mat-option [value]="opt.key">{{ opt.value }}</mat-option>
@@ -53,10 +45,12 @@
 
     @case ('multiselect') {
       <mat-form-field class="full-width" appearance="outline" color="accent">
-        <mat-label [attr.for]="question.key">{{
-          question.label
-        }}</mat-label>
-        <mat-select [id]="question.key" [formControlName]="question.key" multiple>
+        <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
+        <mat-select
+          [id]="question.key"
+          [formControlName]="question.key"
+          multiple
+        >
           @for (opt of question.options; track opt.key) {
             <mat-option [value]="opt.key">{{ opt.value }}</mat-option>
           }
@@ -65,9 +59,7 @@
     }
 
     @case ('radio') {
-      <mat-label [attr.for]="question.key">{{
-        question.label
-      }}</mat-label
+      <mat-label [attr.for]="question.key">{{ question.label }}</mat-label
       ><br />
       <mat-radio-group
         [formControlName]="question.key"
@@ -84,7 +76,9 @@
       </mat-radio-group>
     }
     @case ('file') {
-      <lib-shared-forms-file-upload [formControlName]="question.key"></lib-shared-forms-file-upload>
+      <lib-shared-forms-file-upload
+        [formControlName]="question.key"
+      ></lib-shared-forms-file-upload>
     }
   }
   @if (question.description) {

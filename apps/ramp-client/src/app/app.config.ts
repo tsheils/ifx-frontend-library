@@ -4,7 +4,7 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { APP_INITIALIZER, ApplicationConfig, inject } from '@angular/core';
-import { provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -26,10 +26,6 @@ import {
   rampReducer,
   RAMP_STORE_FEATURE_KEY,
 } from 'ramp-store';
-import {
-  STRUCTURE_VIEWER_COMPONENT,
-  StructureViewerComponent,
-} from 'structure-viewer';
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
@@ -54,6 +50,7 @@ export function rampInit(store = inject(Store)) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    BrowserModule,
     {
       provide: APP_INITIALIZER,
       useFactory: set_url,

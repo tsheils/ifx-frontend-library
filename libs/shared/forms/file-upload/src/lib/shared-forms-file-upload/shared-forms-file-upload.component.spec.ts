@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SharedUtilsFileUploadComponent } from './shared-utils-file-upload.component';
+import { SharedFormsFileUploadComponent } from './shared-forms-file-upload.component';
 
 describe('SharedUtilsFileUploadComponent', () => {
-  let component: SharedUtilsFileUploadComponent;
-  let fixture: ComponentFixture<SharedUtilsFileUploadComponent>;
+  let component: SharedFormsFileUploadComponent;
+  let fixture: ComponentFixture<SharedFormsFileUploadComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SharedUtilsFileUploadComponent],
+      imports: [SharedFormsFileUploadComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SharedUtilsFileUploadComponent);
+    fixture = TestBed.createComponent(SharedFormsFileUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

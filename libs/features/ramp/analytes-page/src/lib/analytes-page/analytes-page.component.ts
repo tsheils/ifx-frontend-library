@@ -75,7 +75,7 @@ export class AnalytesPageComponent
               data: this._mapData(res.data),
               fields: this.dataColumns,
               dataframe: res.dataframe,
-              fileName: 'fetchAnalytesFromPathways-download.tsv'
+              fileName: 'fetchAnalytesFromPathways-download.tsv',
             });
             const matches = Array.from(
               new Set(
@@ -113,5 +113,4 @@ export class AnalytesPageComponent
       }),
     );
   }
-
 }

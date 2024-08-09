@@ -5,12 +5,11 @@ import {
   ComponentRef,
   computed,
   DestroyRef,
-  EventEmitter,
   inject,
   Injector,
   input,
+  OnInit,
   output,
-  Output,
   QueryList,
   Type,
   ViewChild,
@@ -102,7 +101,7 @@ const _sortingDataAccessor = (
 /**
  * Generic table Component that iterates over a list of options to display fields
  */
-export class NcatsDatatableComponent {
+export class NcatsDatatableComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   ref = inject(ChangeDetectorRef);
   _injector = inject(Injector);

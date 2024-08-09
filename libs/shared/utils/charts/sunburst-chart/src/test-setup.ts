@@ -5,4 +5,6 @@ globalThis.ngJest = {
     errorOnUnknownProperties: true,
   },
 };
+HTMLCanvasElement.prototype.getContext = jest.fn();
+
 import 'jest-preset-angular/setup-jest';

@@ -14,10 +14,7 @@ import { OntologyPanelComponent } from 'ontology-panel';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { Metabolite, RampResponse } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
-import {
-  MetaboliteFromOntologyActions,
-  RampSelectors,
-} from 'ramp-store';
+import { MetaboliteFromOntologyActions, RampSelectors } from 'ramp-store';
 import { map } from 'rxjs';
 
 @Component({
@@ -96,7 +93,7 @@ export class OntologiesPageComponent
               data: this._mapData(res.data),
               fields: this.dataColumns,
               dataframe: res.dataframe,
-              fileName: 'fetchMetabolitesFromOntologies-download.tsv'
+              fileName: 'fetchMetabolitesFromOntologies-download.tsv',
             });
             const matches = Array.from(
               new Set(
@@ -124,11 +121,11 @@ export class OntologiesPageComponent
       .subscribe();
   }
 
-  downloadOntologyData(event: { [key: string]: unknown }){
+  downloadOntologyData(event: { [key: string]: unknown }) {
     this.store.dispatch(
       MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesFile({
         format: 'tsv',
-        ontologies: event['ontologies'] as string[]
+        ontologies: event['ontologies'] as string[],
       }),
     );
   }

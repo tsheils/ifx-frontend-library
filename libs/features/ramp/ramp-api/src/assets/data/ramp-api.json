@@ -601,7 +601,17 @@
                     "items": {
                       "type": "string"
                     },
-                    "enum": ["all", "smiles", "inchi_key", "inchi_key_prefix", "inchi", "mw", "monoisotop_mass", "formula", "common_name" ],
+                    "enum": [
+                      "all",
+                      "smiles",
+                      "inchi_key",
+                      "inchi_key_prefix",
+                      "inchi",
+                      "mw",
+                      "monoisotop_mass",
+                      "formula",
+                      "common_name"
+                    ],
                     "label": "Property List",
                     "description": "an optional list of specific properties to extract. Options include 'all' (default), 'smiles', 'inchi_key', 'inchi_key_prefix', 'inchi', 'mw', 'monoisotop_mass', 'formula', 'common_name'. If a props list is not supplied, all property fields will be returned."
                   }
@@ -927,7 +937,8 @@
                       "Feces"
                     ],
                     "label": "Background Biospecimen",
-                    "required": false
+                    "required": false,
+                    "filter": true
                   },
                   "backgroundFile": {
                     "type": "string",
@@ -1005,7 +1016,8 @@
                     "enum": ["fdr", "holm", "pval"],
                     "required": false,
                     "label": "P-Value Type",
-                    "description": "Specifies which p-value to use as the filter threshold. Permitted values are 'pval' and 'fdr' for chemical class and pathway enrichment. Pathway enrichment also includes an optional 'holm' value for holm p-value corrections. Default is 'fdr'."
+                    "description": "Specifies which p-value to use as the filter threshold. Permitted values are 'pval' and 'fdr' for chemical class and pathway enrichment. Pathway enrichment also includes an optional 'holm' value for holm p-value corrections. Default is 'fdr'.",
+                    "filter": true
                   },
                   "pval_cutoff": {
                     "type": "number",
@@ -1013,7 +1025,8 @@
                     "maximum": 1,
                     "required": false,
                     "label": "P-Value Cutoff",
-                    "description": "return pathways where pval_type p-values are < pval_cutoff"
+                    "description": "return pathways where pval_type p-values are < pval_cutoff",
+                    "filter": true
                   }
                 },
                 "example": {
@@ -1441,19 +1454,22 @@
                     "type": "number",
                     "required": false,
                     "label": "Minimum Pathways in Cluster",
-                    "description": "Minimum number of 'similar' pathways required to start a cluster (medoid) (Default = 2)"
+                    "description": "Minimum number of 'similar' pathways required to start a cluster (medoid) (Default = 2)",
+                    "filter": true
                   },
                   "perc_analyte_overlap": {
                     "type": "number",
                     "required": false,
                     "label": "Analyte Overlap Percentage",
-                    "description": "Minimum overlap for pathways to be considered similar (Default = 0.5)"
+                    "description": "Minimum overlap for pathways to be considered similar (Default = 0.5)",
+                    "filter": true
                   },
                   "perc_pathway_overlap": {
                     "type": "number",
                     "required": false,
                     "label": "Pathway Overlap Percentage",
-                    "description": "Minimum overlap for clusters to merge (Default = 0.5)"
+                    "description": "Minimum overlap for clusters to merge (Default = 0.5)",
+                    "filter": true
                   },
                   "fishers_results": {
                     "type": "array",
@@ -1931,4 +1947,3 @@
     }
   }
 }
-

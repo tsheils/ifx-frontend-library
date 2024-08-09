@@ -1,7 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   OnInit,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -225,8 +227,10 @@ export class BiochemicalPathwaysPageComponent
     ],
   };
 
-  private analyteType!: string;
+  previousValues!: { [key: string]: unknown };
 
+  private analyteType!: string;
+  syncedFields = signal(this.inputMap());
   constructor() {
     super();
   }
@@ -238,12 +242,12 @@ export class BiochemicalPathwaysPageComponent
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<Pathway> | undefined) => {
           if (res && res.data) {
-              this.dataMap.set('Pathway Lookups', {
-                data: this._mapData(res.data),
-                fields: this.pathwayColumns,
-                dataframe: res.dataframe,
-                fileName: "fetchPathwaysFromAnalytes-download.tsv"
-              });
+            this.dataMap.set('Pathway Lookups', {
+              data: this._mapData(res.data),
+              fields: this.pathwayColumns,
+              dataframe: res.dataframe,
+              fileName: 'fetchPathwaysFromAnalytes-download.tsv',
+            });
             const matches = Array.from(
               new Set(
                 res.data.map((pathway) => pathway.inputId.toLocaleLowerCase()),
@@ -295,27 +299,27 @@ export class BiochemicalPathwaysPageComponent
                       message: 'No enriched pathways found.',
                     },
                   });
-            }
-            if (res && res.dataframe) {
-              const enrichedDataframe = res.dataframe as FishersDataframe;
-              if (enrichedDataframe.analyte_type) {
-                this.dataColumns =
-                  this.enrichmentColumns[
-                    enrichedDataframe.analyte_type[0]
-                  ];
-                this.analyteType = enrichedDataframe.analyte_type[0];
               }
-              this.dataMap.set('Enriched Pathways', {
-                data: this._mapData(res.data),
-                fields: this.dataColumns,
-                dataframe: enrichedDataframe.fishresults as unknown[],
-                fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv'
-              });
-            } else {
-              this.dataMap.set('Enriched Pathways', {
-                data: this._mapData(res.data),
-                fields: this.dataColumns,
-              });}
+              if (res && res.dataframe) {
+                const enrichedDataframe = res.dataframe as FishersDataframe;
+                if (enrichedDataframe.analyte_type) {
+                  this.dataColumns =
+                    this.enrichmentColumns[enrichedDataframe.analyte_type[0]];
+                  this.analyteType = enrichedDataframe.analyte_type[0];
+                }
+                this.dataMap.set('Enriched Pathways', {
+                  data: this._mapData(res.data),
+                  fields: this.dataColumns,
+                  dataframe: enrichedDataframe.fishresults as unknown[],
+                  fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
+                  filters: this.filtersMap(),
+                });
+              } else {
+                this.dataMap.set('Enriched Pathways', {
+                  data: this._mapData(res.data),
+                  fields: this.dataColumns,
+                });
+              }
             }
           },
         ),
@@ -349,32 +353,40 @@ export class BiochemicalPathwaysPageComponent
       .subscribe();
   }
 
-  override fetchData(event: { [key: string]: unknown }): void {
-    super.fetchData();
-    this.inputList = this._parseInput(event['analytes'] as string | string[]);
-    event['analytes'] = this.inputList;
+  override fetchData(formData: { [key: string]: unknown }): void {
+    //super.fetchData();
+    if (formData['analytes']) {
+      this.inputList = this._parseInput(
+        formData['analytes'] as string | string[],
+      );
+    }
+    formData['analytes'] = this.inputList;
 
     this.store.dispatch(
       PathwayEnrichmentsActions.fetchPathwaysFromAnalytes({
         analytes: this.inputList,
       }),
     );
-
+    const event = { ...this.previousValues, ...formData };
     this.store.dispatch(
-        PathwayEnrichmentsActions.fetchEnrichmentFromPathways({
-          analytes: this.inputList,
-          background: <string>event['background'],
-          backgroundFile: event['backgroundFile'] as File,
-          pval_type: <string>event['pval_type'] || undefined,
-          pval_cutoff: Number(<number>event['pval_cutoff']) || undefined,
-          perc_analyte_overlap:
-            <number>event['perc_analyte_overlap'] || undefined,
-          min_pathway_tocluster:
-            <number>event['min_pathway_tocluster'] || undefined,
-          perc_pathway_overlap:
-            <number>event['perc_pathway_overlap'] || undefined,
-        }),
-      );
+      PathwayEnrichmentsActions.fetchEnrichmentFromPathways({
+        analytes: this.inputList,
+        background: <string>event['background'],
+        backgroundFile: event['backgroundFile'] as File,
+        pval_type: <string>event['pval_type'] || undefined,
+        pval_cutoff: Number(<number>event['pval_cutoff']) || undefined,
+        perc_analyte_overlap:
+          <number>event['perc_analyte_overlap'] || undefined,
+        min_pathway_tocluster:
+          <number>event['min_pathway_tocluster'] || undefined,
+        perc_pathway_overlap:
+          <number>event['perc_pathway_overlap'] || undefined,
+      }),
+    );
+    console.log(this.inputMap());
+    console.log(this.filtersMap());
+    console.log(event);
+    this.previousValues = event;
   }
 
   /* override downloadData($event: { [p: string]: unknown }) {

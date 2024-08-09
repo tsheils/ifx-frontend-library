@@ -4,9 +4,8 @@
       <mat-panel-title>Input</mat-panel-title>
     </mat-expansion-panel-header>
     <ng-content select=".custom-input"></ng-content>
-    @if (inputTab() && inputTab()!.size) {
+    @if (inputTab() && inputTab()?.size) {
       <lib-input-panel
-        [paths]="paths()"
         [inputQuestions]="inputTab()!"
         (dataSearch)="searchData($event)"
       ></lib-input-panel>
@@ -26,15 +25,15 @@
     }
   </mat-expansion-panel>
   <mat-expansion-panel
-    [expanded]="visualizationTabs()?.size"
-    [disabled]="!visualizationTabs()?.size"
+    [expanded]="visualizationTabs() && visualizationTabs()?.size"
+    [disabled]="!visualizationTabs() || !visualizationTabs()?.size"
     id="visualizations"
     #visualizations
   >
     <mat-expansion-panel-header>
       <mat-panel-title>Visualizations</mat-panel-title>
     </mat-expansion-panel-header>
-    @if (visualizationTabs()?.size) {
+    @if (visualizationTabs() && visualizationTabs()?.size) {
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
         @for (tab of visualizationTabs() | keyvalue; track tab.key) {
           <mat-tab [label]="tab.key">
@@ -49,15 +48,15 @@
     }
   </mat-expansion-panel>
   <mat-expansion-panel
-    [expanded]="dataTabs()!.size"
-    [disabled]="!dataTabs()!.size"
+    [expanded]="dataTabs() && dataTabs()?.size"
+    [disabled]="!dataTabs() || !dataTabs()?.size"
     id="data"
     #data
   >
     <mat-expansion-panel-header>
       <mat-panel-title>Data</mat-panel-title>
     </mat-expansion-panel-header>
-    @if (dataTabs()!.size) {
+    @if (dataTabs() && dataTabs()?.size) {
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
         @for (tab of dataTabs() | keyvalue: _originalOrder; track tab.key) {
           <mat-tab [label]="tab.key">
@@ -65,8 +64,10 @@
               <lib-data-panel
                 [dataAsDataProperty]="tab.value['data']"
                 [dataColumns]="tab.value['fields']"
-                [dataframe] = "tab.value['dataframe']"
-                [fileName] = "tab.value['fileName']!"
+                [dataframe]="tab.value['dataframe']"
+                [fileName]="tab.value['fileName']!"
+                [filters]="tab.value['filters']"
+                (dataSearch)="searchData($event)"
               ></lib-data-panel>
             </ng-template>
           </mat-tab>

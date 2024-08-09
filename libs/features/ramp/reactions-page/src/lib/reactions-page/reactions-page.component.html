@@ -7,42 +7,4 @@
   [dataTabs]="dataMap"
   (dataSearch)="fetchData($event)"
 >
-  <div cdkOverlayOrigin #trigger="cdkOverlayOrigin"></div>
 </lib-panel-accordion>
-
-
-<!-- This template displays the overlay content and is connected to the button -->
-<ng-template
-  cdkConnectedOverlay
-  [cdkConnectedOverlayOrigin]="trigger"
-  [cdkConnectedOverlayOpen]="!!hoveredNode()"
->
-  <div class="hovered-node-tooltip" cdkDragBoundary=".cdk-boundary" cdkDrag>
-    <div class="row right-justified-row">
-      <div class="width-10">
-        <mat-icon class="right-text">drag_indicator</mat-icon>
-      </div>
-    </div>
-    <div class="row centered-row">
-      <div class="width-95">
-        {{ hoveredNode()?.rxnClass }}<br />
-        EC Number: {{ hoveredNode()?.ecNumber }}<br />
-        @if (hoveredNode()?.metCount) {
-          {{ hoveredNode()?.metCount }} input metabolites out of
-          {{ hoveredNode()?.totalMetsInRxnClass }} total<br />
-        }
-        @if (hoveredNode()?.proteinCount) {
-          {{ hoveredNode()?.proteinCount }} input proteins out of
-          {{ hoveredNode()?.totalProteinsInRxnClass }} total<br />
-        }
-        @if (hoveredNode()?.reactionCount) {
-          {{ hoveredNode()?.reactionCount }} reactions hit out of
-          {{ hoveredNode()?.totalRxnsInClass }} total<br />
-        }
-      </div>
-      <button mat-icon-button (click)="copyData()">
-        <mat-icon>content_copy</mat-icon>
-      </button>
-    </div>
-  </div>
-</ng-template>

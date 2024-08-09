@@ -20,7 +20,7 @@
         }
       </div>
       <mat-card-content>
-        @if (latestGrant()!.abstract!.length) {
+        @if (latestGrant() && latestGrant()?.abstract?.length) {
           <div class="primary-chip-outlined">Abstract</div>
         }
         <br />
@@ -65,7 +65,7 @@
             </div>
             @if (grant()?.patents && grant()?.patents?.length) {
               <div>
-                @for (patent of grant()?.patents; track patent.title) {
+                @for (patent of grant().patents; track patent.title) {
                   <div>
                     <div class="list-item-title">{{ patent.title }}</div>
                     <div class="list-item-content">{{ patent.org_name }}</div>
@@ -83,7 +83,7 @@
             </div>
             @if (grant()?.clinicalStudies && grant()?.clinicalStudies?.length) {
               <div>
-                @for (study of grant()?.clinicalStudies; track study.title) {
+                @for (study of grant().clinicalStudies; track study.title) {
                   <div>
                     <div class="list-item-title">{{ study.title }}</div>
                     <div class="list-item-content">{{ study.status }}</div>

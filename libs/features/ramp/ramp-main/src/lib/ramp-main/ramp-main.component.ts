@@ -16,12 +16,14 @@ import { RouterLink, Router } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
 import {
-  DropdownQuestion, FileUploadQuestion, MultiSelectQuestion,
+  DropdownQuestion,
+  FileUploadQuestion,
+  MultiSelectQuestion,
   NumberQuestion,
   QuestionBase,
   RadioQuestion,
   TextareaQuestion,
-  TextboxQuestion
+  TextboxQuestion,
 } from 'ncats-form-question';
 import { RampPageComponent } from 'ramp-page';
 import { RampSelectors } from 'ramp-store';
@@ -56,11 +58,60 @@ export class RampMainComponent {
   paths = computed(() => this.api()?.get(this.router.url.split('/')[1]));
   fragment = computed(() => this.router.url.split('/')[1]);
   title = computed(() => this.fragment()?.replace(/-/g, ' '));
+
+  filtersMap = computed(() => {
+    const questionMap: Map<string, QuestionBase<string>[]> = new Map<
+      string,
+      QuestionBase<string>[]
+    >();
+    Array.from(this.inputMap().entries()).forEach(([key, value]) => {
+      const prop = value.properties.filter((prop) => (prop['field'] = key))[0];
+      if (prop['filter']) {
+        if (this.inputFields().has(<string>prop['parent'])) {
+          const form: QuestionBase<string>[] = this.inputFields().get(
+            <string>prop['parent'],
+          ) as QuestionBase<string>[];
+          const filters = form.filter(
+            (question) => question.key === <string>prop['field'],
+          )[0];
+          if (filters) {
+            const filterList = questionMap.get(<string>prop['parent']);
+            if (filterList) {
+              filterList.push(filters);
+              questionMap.set(<string>prop['parent'], filterList);
+            } else {
+              questionMap.set(<string>prop['parent'], [filters]);
+            }
+          }
+        }
+      }
+    });
+    return questionMap;
+  });
+
   inputFields = computed(() => {
     const questionMap: Map<string, QuestionBase<string>[]> = new Map<
       string,
       QuestionBase<string>[]
     >();
+    Array.from(this.inputMap().entries()).forEach(([key, value]) => {
+      const prop = value.properties.filter((prop) => (prop['field'] = key))[0];
+      const example = value.examples.filter((exam) => (exam['field'] = key))[0];
+      const question = this._mapPathToQuestion(key, prop, example);
+      if (questionMap.has(<string>prop['parent'])) {
+        const form: QuestionBase<string>[] = questionMap.get(
+          <string>prop['parent'],
+        ) as QuestionBase<string>[];
+        form.push(question);
+        questionMap.set(<string>prop['parent'], form);
+      } else {
+        questionMap.set(<string>prop['parent'], [question]);
+      }
+    });
+    return questionMap;
+  });
+
+  inputMap = computed(() => {
     const inputMap: Map<
       string,
       {
@@ -126,21 +177,7 @@ export class RampMainComponent {
         }
       });
     });
-    Array.from(inputMap.entries()).forEach(([key, value]) => {
-      const prop = value.properties.filter((prop) => (prop['field'] = key))[0];
-      const example = value.examples.filter((exam) => (exam['field'] = key))[0];
-      const question = this._mapPathToQuestion(key, prop, example);
-      if (questionMap.has(<string>prop['parent'])) {
-        const form: QuestionBase<string>[] = questionMap.get(
-          <string>prop['parent'],
-        ) as QuestionBase<string>[];
-        form.push(question);
-        questionMap.set(<string>prop['parent'], form);
-      } else {
-        questionMap.set(<string>prop['parent'], [question]);
-      }
-    });
-    return questionMap;
+    return inputMap;
   });
 
   /**
@@ -159,8 +196,8 @@ export class RampMainComponent {
     let q = {} as QuestionBase<string>;
     switch (prop['type']) {
       case 'array': {
-        if(prop['enum']) {
-          q = new MultiSelectQuestion()
+        if (prop['enum']) {
+          q = new MultiSelectQuestion();
           const enu = <string[]>prop['enum'];
           const opts: { key: string; value: boolean | string }[] = [];
           enu.forEach((val) => opts.push({ key: val, value: val }));
@@ -195,10 +232,9 @@ export class RampMainComponent {
           q = new DropdownQuestion({
             options: opts,
           });
-        } else if(prop['format']) {
+        } else if (prop['format']) {
           q = new FileUploadQuestion();
-        }
-        else {
+        } else {
           q = new TextboxQuestion({});
         }
         if (prop['required']) {
@@ -215,7 +251,7 @@ export class RampMainComponent {
         break;
       }
     }
-    if(<string>prop['label']) {
+    if (<string>prop['label']) {
       q.label = <string>prop['label'];
       q.key = <string>prop['field'];
     } else {

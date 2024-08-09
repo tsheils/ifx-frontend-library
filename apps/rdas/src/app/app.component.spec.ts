@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import {
   DISEASES_FEATURE_KEY,
@@ -15,7 +14,6 @@ describe('AppComponent', () => {
       imports: [
         AppComponent,
         RouterModule,
-        NoopAnimationsModule,
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
       ],

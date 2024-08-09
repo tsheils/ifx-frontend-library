@@ -60,9 +60,7 @@ export class RampService {
     });
   }
 
-  fetchApi(
-    url: string,
-  ): Observable<{
+  fetchApi(url: string): Observable<{
     paths: { [key: string]: { post?: { [key: string]: unknown } | undefined } };
   }> {
     return this.http

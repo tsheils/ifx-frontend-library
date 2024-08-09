@@ -1,4 +1,4 @@
-@if (data()!.length > 1) {
+@if (data() && data().length > 1) {
   Chart type:
   <mat-radio-group [value]="activeChart()!">
     @for (chart of data(); track chart.type) {

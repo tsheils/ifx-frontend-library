@@ -13,22 +13,67 @@
   background-color: transparent;
 }
 
-.sub-content {
-  height: 30vh;
+.learn-more {
+  padding-bottom: 5vh;
+  margin-top: -22vh;
   color: #ffffff;
+}
+
+.learn-more-text {
+  height: 12vh;
+  font-size: 20px;
+  align-content: end;
+  cursor: pointer;
+}
+
+.learn-more-background {
+  background-color: #265668;
+  // padding: .5vh 1vw;
+  color: #ffffff;
+  // border-radius: 9999px;
+}
+
+.more-arrow {
+  margin-top: -2vh;
+}
+
+.sub-content {
+  height: 50vh;
+  color: #265668;
   background-color: #265668;
   margin-top: -22px;
+  background-image: url('/assets/ramp-home/graph-background.png');
+  background-size: cover;
+  background-repeat: no-repeat;
   //  border-radius: 0 0 65% 0;
 }
 
-.sub-content-white {
+.stats-card {
+  text-align: center;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+  padding: 1vh 1vw;
   height: 30vh;
+}
+
+.number-count {
+  font-size: 2rem;
+}
+
+.stat-box-spacer {
+  border-left: #265668 2px solid;
+  height: 100%;
+}
+
+.sub-content-white {
+  //  height: 30vh;
   background-color: #ffffff;
   color: #265668;
+  padding-bottom: 5vh;
 }
 
 .feature-text {
-  padding-top: 17vh;
+  padding-top: 10vh;
   font-size: 14rem;
 }
 
@@ -54,6 +99,12 @@
 
 .hovered-home-button :hover {
   background-color: rgba(255, 255, 255);
+}
+
+.chebi-text {
+  font-size: 4rem !important;
+  color: #3572a2 !important;
+  text-decoration: none !important;
 }
 
 .rail-label {
