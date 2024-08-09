@@ -49,7 +49,7 @@ pipeline {
                         return !params.BUILD_VERSION
                     }
                     anyOf {
-                        changeset "apps/ramp-server/*"
+                        changeset "apps/ramp-server/**"
                         triggeredBy 'UserIdCause'
                     }
                 }
@@ -73,7 +73,7 @@ pipeline {
                         return !params.BUILD_VERSION
                     }
                     anyOf {
-                        changeset "apps/ramp-server/*"
+                        changeset "apps/ramp-server/**"
                         triggeredBy 'UserIdCause'
                     }
                 }
@@ -97,7 +97,7 @@ pipeline {
         stage('Deploy Application') {
             when {
                 anyOf {
-                    changeset "apps/ramp-server/*"
+                    changeset "apps/ramp-server/**"
                     triggeredBy 'UserIdCause'
                 }
             }

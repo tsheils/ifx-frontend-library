@@ -34,7 +34,7 @@ pipeline {
                         return !params.BUILD_VERSION
                     }
                     anyOf {
-                        changeset "apps/ramp-client/*"
+                        changeset "apps/ramp-client/**"
                         triggeredBy 'UserIdCause'
                     }
                 }
@@ -72,7 +72,7 @@ pipeline {
                         return !params.BUILD_VERSION
                     }
                     anyOf {
-                        changeset "apps/ramp-client/*"
+                        changeset "apps/ramp-client/**"
                         triggeredBy 'UserIdCause'
                     }
                 }
