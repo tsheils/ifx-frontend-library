@@ -60,8 +60,8 @@ fragment trialFields on ClinicalTrial {
 `;
 
 export const FETCHTRIALDETAILS = gql`
-  query ClinicalTrials($ctfilters: ClinicalTrialWhere) {
-    clinicalTrials(where: $ctfilters) {
+  query ClinicalTrials($ctwhere: ClinicalTrialWhere) {
+    clinicalTrials(where: $ctwhere) {
       ...trialFields
     }
   }

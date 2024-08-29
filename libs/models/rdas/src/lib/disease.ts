@@ -80,7 +80,7 @@ export class Disease {
               properties: Partial<GeneAssociation>;
             },
           ),
-      );
+      ).sort((a,b) => b.associationType.localeCompare(a.associationType));
       delete this._geneAssociations;
     }
 
@@ -93,7 +93,7 @@ export class Disease {
               properties: Partial<PhenotypeAssociation>;
             },
           ),
-      );
+      ).sort((a,b) => b.frequencyRank - a.frequencyRank);
 
       delete this._phenotypeAssociations;
     }

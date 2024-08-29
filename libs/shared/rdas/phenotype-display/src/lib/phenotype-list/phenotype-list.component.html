@@ -1,33 +1,32 @@
-@if (showTab) {
+@if (showTab()) {
   <div class="rounded-tab accent-color-font">
-    <span class="bottom-border-accent">Phenotypes ({{ count }})</span>
+    <span class="bottom-border-accent">Phenotypes ({{ count() }})</span>
   </div>
 }
-@if (!phenotypes?.length) {
+@if (!phenotypes()?.length) {
   <div>
     <ncats-frontend-library-shared-utils-data-not-found
       [message]="'No Phenotype Data Available'"
     ></ncats-frontend-library-shared-utils-data-not-found>
   </div>
 }
-@if (phenotypes?.length) {
+@if (phenotypes()?.length) {
   <div>
     <div class="row space-between-row">
       <div>
         <button
-          mat-stroked-button
+          mat-button
           class="tool-button list-download"
           (click)="downloadData()"
           matTooltip="Download Data"
-          color="accent"
         >
-          <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+          <span>Download </span><mat-icon>download</mat-icon>
         </button>
       </div>
       <div>
         <mat-paginator
           #paginator
-          [length]="count"
+          [length]="count()"
           [pageIndex]="0"
           [pageSize]="5"
           [hidePageSize]="true"
@@ -37,7 +36,7 @@
 
     <table
       mat-table
-      [dataSource]="dataSource"
+      [dataSource]="dataSource()"
       matSort
       (matSortChange)="sortData($event)"
       matSortActive="Frequency"

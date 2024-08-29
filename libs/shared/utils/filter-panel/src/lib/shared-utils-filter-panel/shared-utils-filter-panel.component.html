@@ -1,12 +1,12 @@
 <mat-card class="filter-card" [appearance]="'outlined'">
-  <mat-card-title>{{ filter.label | titlecase }}</mat-card-title>
+  <mat-card-title>{{ filter().label | titlecase }}</mat-card-title>
   <mat-form-field class="table-search">
     <input
       matInput
       #searchInput
-      placeholder="Search {{ filter.label | titlecase }}"
+      placeholder="Search {{ filter().label | titlecase }}"
       [formControl]="searchCtl"
-      [value]="filter.query"
+      [value]="filter().query"
     />
     @if (searchCtl.value) {
       <button
@@ -30,7 +30,7 @@
       (scrolledIndexChange)="scrollDetected()"
     >
       <div
-        *cdkVirtualFor="let field of filter.values; let last = last"
+        *cdkVirtualFor="let field of filter()!.values; let last = last; trackBy:_filterField"
         class="filter-grid"
       >
         <div class="filter-cell checkbox">
@@ -46,7 +46,7 @@
           <span class="field-text">
             <span
               [innerHTML]="
-                field['term'] | highlight: (filter.query ? filter.query : '')
+                field['term'] | highlight: (filter().query ? filter().query : '')
               "
             ></span>
           </span>
@@ -59,12 +59,10 @@
         @if (last) {
           <br />
         }
-        @if (!fullList() && last && filter.values.length >= 200) {
+        @if (!fullList() && last && filter().values.length >= 200) {
           <button
-            matButton
             mat-stroked-button
             (click)="loadMore()"
-            [color]="'primary'"
             class="full-width"
           >
             see more

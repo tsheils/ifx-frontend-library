@@ -1,25 +1,14 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import {
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  inject,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
-import { User } from '@ncats-frontend-library/models/utils';
-import {
-  UserLoginActions,
-  UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
+import { UserLoginActions, UserSelectors } from '@ncats-frontend-library/stores/user-store';
 import { Store } from '@ngrx/store';
-import { map } from 'rxjs';
 import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-on-modal.component';
 
 @Component({
@@ -34,26 +23,19 @@ import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-
     RouterLink,
     MatDialogModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 //, OnChanges
 export class SocialSignOnButtonComponent implements OnInit {
+  private readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
-  store = inject(Store);
+  public dialog = inject(MatDialog);
+  private _snackBar = inject(MatSnackBar);
+  private changeRef = inject(ChangeDetectorRef);
+  private breakpointObserver = inject(BreakpointObserver);
+  user = this.store.selectSignal(UserSelectors.getUser);
+
   mobile = false;
-
-  /**
-   * profile object
-   */
-  user!: User;
-
-  @Input() theme = 'primary';
-
-  constructor(
-    public dialog: MatDialog,
-    public ref: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver,
-    private changeRef: ChangeDetectorRef,
-  ) {}
 
   ngOnInit() {
     this.breakpointObserver
@@ -64,7 +46,7 @@ export class SocialSignOnButtonComponent implements OnInit {
         this.changeRef.markForCheck();
       });
 
-    this.store
+    /*this.store
       .select(UserSelectors.getUser)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -76,7 +58,7 @@ export class SocialSignOnButtonComponent implements OnInit {
           }
         }),
       )
-      .subscribe();
+      .subscribe();*/
   }
 
   /**

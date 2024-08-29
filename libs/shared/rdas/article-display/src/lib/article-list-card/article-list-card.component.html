@@ -24,8 +24,8 @@
   <div class="width-sm-100 width-25 right-text">
     <span class="mat-h3">Published: </span>
     {{ article()?.firstPublicationDate | date }}<br />
+    <div class="mat-h3 right-text">
     @if (article()?.pubmed_id) {
-      <div class="mat-h3 right-text">
         PMID:
         <a
           href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmed_id }}"
@@ -34,16 +34,18 @@
           aria-label="Link to publication in PubMed"
           >{{ article()?.pubmed_id }}</a
         >
+        }
         <br />
-        <a
+    @if (article()?.doi) {
+      <a
           href="https://doi.org/{{ article()?.doi }}"
           target="_blank"
           rel="noreferrer"
           aria-label="Link to publication via DOI"
           >DOI: {{ article()?.doi }}</a
         >
-      </div>
     }
+      </div>
     @if (article()?.pubType) {
       <span class="mat-h3">Publication Type: </span>
     }

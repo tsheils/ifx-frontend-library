@@ -13,9 +13,8 @@ $_palettes: (
     25: #6e006d,
     30: #7e0e7c,
     35: #8d2089,
-    40: #9b2f96,
-    50: #93278f,
-    //#b94ab2,
+    40: #9b2f96, //#93278f,
+    50: #b94ab2,
     60: #d765cd,
     70: #f57fea,
     80: #ffabf2,
@@ -33,8 +32,7 @@ $_palettes: (
     30: #5b3383,
     35: #683f90,
     40: #754b9d,
-    50: #6e4c8f,
-    //#8f64b8,
+    50:  #8f64b8, //#6e4c8f,
     60: #aa7ed3,
     70: #c598f0,
     80: #ddb7ff,
@@ -142,8 +140,7 @@ $light-theme: mat.define-theme(
     color: (
       theme-type: light,
       primary: $_primary,
-      tertiary: $_tertiary,
-      use-system-variables: true,
+      tertiary: $_tertiary
     ),
     typography: (
       use-system-variables: true,
@@ -155,8 +152,7 @@ $dark-theme: mat.define-theme(
     color: (
       theme-type: dark,
       primary: $_primary,
-      tertiary: $_tertiary,
-      use-system-variables: true,
+      tertiary: $_tertiary
     ),
     typography: (
       use-system-variables: true,

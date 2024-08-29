@@ -19,20 +19,7 @@ import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
   templateUrl: './rdas-trial-page.component.html',
   styleUrls: ['./rdas-trial-page.component.scss'],
 })
-export class RdasTrialPageComponent implements OnInit {
+export class RdasTrialPageComponent {
   private readonly trialStore = inject(Store);
-  destroyRef = inject(DestroyRef);
-
-  @Input() trial!: ClinicalTrial;
-
-  constructor(private changeRef: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this.trialStore.select(TrialSelectors.selectEntity).subscribe((res) => {
-      if (res) {
-        this.trial = res;
-        this.changeRef.markForCheck();
-      }
-    });
-  }
+  trial = this.trialStore.selectSignal(TrialSelectors.selectEntity);
 }

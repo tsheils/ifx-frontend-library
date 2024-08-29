@@ -4,37 +4,36 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   DestroyRef,
-  EventEmitter,
   inject,
-  Input,
-  OnDestroy,
+  input,
   OnInit,
-  Output,
+  output,
+  signal,
+  ViewEncapsulation
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription, User } from '@ncats-frontend-library/models/utils';
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
+import { UpdateUserActions, UserSelectors } from '@ncats-frontend-library/stores/user-store';
 import { Store } from '@ngrx/store';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
 import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-modal.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import {
-  UpdateUserActions,
-  UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
 
 @Component({
   selector: 'ncats-frontend-library-subscribe-button',
   templateUrl: './subscribe-button.component.html',
   styleUrls: ['./subscribe-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   standalone: true,
   imports: [
     MatButtonModule,
@@ -46,61 +45,55 @@ import {
     SocialSignOnButtonComponent,
   ],
 })
-export class SubscribeButtonComponent implements OnInit, OnDestroy {
+export class SubscribeButtonComponent implements OnInit {
   private readonly userStore = inject(Store);
   destroyRef = inject(DestroyRef);
+  public dialog = inject(MatDialog);
+  private _snackBar = inject(MatSnackBar);
+  private changeRef = inject(ChangeDetectorRef);
+  private breakpointObserver = inject(BreakpointObserver);
+  user = this.userStore.selectSignal(UserSelectors.getUser);
 
-  @Input() subscriptionName!: string | undefined;
-  @Input() subscriptionId!: string | undefined;
-  @Input() subscribed = false;
-  @Input() theme = 'primary';
-  @Output() userChange: EventEmitter<User | null> =
-    new EventEmitter<User | null>();
-  @Output() isSubscribed: EventEmitter<boolean> = new EventEmitter<boolean>();
-  mobile = false;
-  user!: User;
+  subscriptionName = input<string | undefined>();
+  subscriptionId = input<string | undefined>();
+  subscribed =computed<boolean>(() => {
+    return !!this.user() || this.user()!.subscriptions.filter(
+      (sub: Subscription) => sub.gardID == this.subscriptionId(),
+    ).length > 0
+  });
+  mobile = signal(false);
+
+  userChange = output< User | null>();
+  isSubscribed = output<boolean>();
+
+  /*user!: User;
   subscription?: Subscription;
-  userExists = false;
-
+*/
   all = ['articles', 'grants', 'trials'];
 
-  subscriptionSelection = new SelectionModel<string>(true, this.all);
+  subscriptionSelection = computed(() => {
+    const ret = new SelectionModel<string>(true, this.all);
+    const subscription = this.user()?.subscriptions?.filter(
+      (sub: Subscription) => sub.gardID == this.subscriptionId(),
+    )[0];
+    if (subscription?.alerts) {
+      ret.setSelection(...subscription.alerts);
+    }
+    return ret;
+})
 
-  constructor(
-    public dialog: MatDialog,
-    private _snackBar: MatSnackBar,
-    private changeRef: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver,
-  ) {}
+
+
 
   ngOnInit(): void {
-    this.breakpointObserver
+     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        this.mobile = result.matches;
-        this.changeRef.markForCheck();
+        this.mobile.set(result.matches);
       });
 
-    this.userStore
-      .select(UserSelectors.getUser)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map((user: User) => {
-          this.user = user;
-          this.setSubscriptions();
-          this.changeRef.markForCheck();
-          if (user) {
-            //  this.userExists = true;
-            //  this.changeRef.markForCheck();
-            this.userChange.emit(this.user);
-            this.isSubscribed.emit(this.subscribed);
-          }
-        }),
-      )
-      .subscribe();
-
-    this.subscriptionSelection.changed
+    this.subscriptionSelection().changed
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(1000),
@@ -108,22 +101,22 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         const subscriptionClone: Subscription[] = [];
-        if (this.user && this.user.subscriptions) {
-          this.user?.subscriptions.forEach((sub) =>
+        if (this.user() && this.user()!.subscriptions) {
+          this.user()?.subscriptions.forEach((sub) =>
             subscriptionClone.push(sub),
           );
           subscriptionClone.splice(
-            this.user.subscriptions.findIndex(
-              (obj) => obj.gardID === this.subscriptionId,
+            this.user()!.subscriptions.findIndex(
+              (obj) => obj.gardID === this.subscriptionId(),
             ),
             1,
           );
-          this.subscription = new Subscription({
-            diseaseName: this.subscriptionName,
-            gardID: this.subscriptionId,
-            alerts: this.subscriptionSelection.selected,
+           const subscription = new Subscription({
+            diseaseName: this.subscriptionName(),
+            gardID: this.subscriptionId(),
+            alerts: this.subscriptionSelection().selected,
           });
-          subscriptionClone.push(this.subscription);
+          subscriptionClone.push(subscription);
           this.userStore.dispatch(
             UpdateUserActions.updateUserSubscriptions({
               subscriptions: subscriptionClone,
@@ -133,32 +126,33 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
       });
   }
 
+/*
+
   setSubscriptions() {
     if (this.user) {
       this.subscription = this.user?.subscriptions?.filter(
-        (sub: Subscription) => sub.gardID == this.subscriptionId,
+        (sub: Subscription) => sub.gardID == this.subscriptionId(),
       )[0];
-      this.subscribed = !!this.subscription;
+      this.subscribed.set(!!this.subscription);
       if (this.subscription?.alerts) {
         this.subscriptionSelection.setSelection(...this.subscription.alerts);
       }
     } else {
-      //  this.user = undefined;
-      //   this.userExists = false;
       this.subscription = undefined;
-      this.subscribed = false;
+      this.subscribed.set(false);
     }
   }
+*/
 
   subscribe() {
     if (this.user) {
-      this.subscription = new Subscription({
-        diseaseName: this.subscriptionName,
-        gardID: this.subscriptionId,
+      const subscription = new Subscription({
+        diseaseName: this.subscriptionName(),
+        gardID: this.subscriptionId(),
         alerts: this.all,
       });
-      const subscriptionClone: Subscription[] = [{ ...this.subscription }];
-      this.user.subscriptions.forEach((sub) => subscriptionClone.push(sub));
+      const subscriptionClone: Subscription[] = [{ ...subscription }];
+      this.user()?.subscriptions.forEach((sub) => subscriptionClone.push(sub));
       this.userStore.dispatch(
         UpdateUserActions.updateUserSubscriptions({
           subscriptions: subscriptionClone,
@@ -176,16 +170,16 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
     this.dialog
       .open(UnsubscribeModalComponent, {
         data: {
-          entity: this.subscriptionId,
-          label: this.subscriptionName,
+          entity: this.subscriptionId(),
+          label: this.subscriptionName(),
         },
       })
       .afterClosed()
       .subscribe((res: { [key: string]: string }) => {
         if (res) {
           const subscriptionClone: Subscription[] = [];
-          this.user?.subscriptions.forEach((sub) => {
-            if (sub.gardID !== this.subscriptionId) {
+          this.user()?.subscriptions.forEach((sub) => {
+            if (sub.gardID !== this.subscriptionId()) {
               subscriptionClone.push(Object.assign({}, { ...sub }));
             }
           });
@@ -203,19 +197,18 @@ export class SubscribeButtonComponent implements OnInit, OnDestroy {
 
   aboutSubscribe() {
     this.dialog.open(AboutSubscribeModalComponent, {
-      width: this.mobile ? '90vw' : '35vw',
+      width: this.mobile() ? '90vw' : '35vw',
+      data: {
+        user: !!this.user()
+      }
     });
   }
 
   toggleAll() {
-    if (this.subscriptionSelection.selected.length === 3) {
-      this.subscriptionSelection.clear();
+    if (this.subscriptionSelection()?.selected.length === 3) {
+      this.subscriptionSelection()?.clear();
     } else {
-      this.subscriptionSelection.select(...this.all);
+      this.subscriptionSelection()?.select(...this.all);
     }
-  }
-
-  ngOnDestroy() {
-    this.userExists = false;
   }
 }

@@ -1,0 +1,18 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin theme($theme) {
+  .count-card {
+    border-right: 1px solid mat.get-theme-color($theme, primary);
+  }
+
+  .last {
+    border: none;
+  }
+}
+
+@mixin secondary-theme($theme) {
+  .count-card {
+    border-right: 1px solid mat.get-theme-color($theme, primary);
+  }
+}

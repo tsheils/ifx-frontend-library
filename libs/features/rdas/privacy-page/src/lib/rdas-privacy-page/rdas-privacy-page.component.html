@@ -23,7 +23,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(statement)"
-            [ngClass]="{ 'active-sidemenu': isActive('statement') }"
+            [activated] = "isActive('statement')"
           >
             Privacy Statement
           </a>
@@ -31,7 +31,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(infoCollected)"
-            [ngClass]="{ 'active-sidemenu': isActive('infoCollected') }"
+            [activated] = "isActive('infoCollected')"
           >
             Types of Information Collected
           </a>
@@ -39,7 +39,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(collection)"
-            [ngClass]="{ 'active-sidemenu': isActive('collection') }"
+            [activated] = "isActive('collection')"
           >
             How information is collected by NCATS
           </a>
@@ -47,7 +47,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(cookies)"
-            [ngClass]="{ 'active-sidemenu': isActive('cookies') }"
+            [activated] = "isActive('cookies')"
           >
             How NCATS Uses Cookies
           </a>
@@ -55,7 +55,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(consent)"
-            [ngClass]="{ 'active-sidemenu': isActive('consent') }"
+            [activated] = "isActive('consent')"
           >
             Consent
           </a>
@@ -63,7 +63,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(protection)"
-            [ngClass]="{ 'active-sidemenu': isActive('protection') }"
+            [activated] = "isActive('protection')"
           >
             How Is Information Protected
           </a>
@@ -71,7 +71,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(disclosure)"
-            [ngClass]="{ 'active-sidemenu': isActive('disclosure') }"
+            [activated] = "isActive('disclosure')"
           >
             Disclosure
           </a>
@@ -79,7 +79,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(security)"
-            [ngClass]="{ 'active-sidemenu': isActive('security') }"
+            [activated] = "isActive('security')"
           >
             Security/Site Security
           </a>
@@ -87,7 +87,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(nonFederal)"
-            [ngClass]="{ 'active-sidemenu': isActive('nonFederal') }"
+            [activated] = "isActive('nonFederal')"
           >
             Use of Third-Party Website and Applications & non-Federal sites
           </a>
@@ -95,7 +95,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(endorsement)"
-            [ngClass]="{ 'active-sidemenu': isActive('endorsement') }"
+            [activated] = "isActive('endorsement')"
           >
             Endorsement Disclaimer
           </a>
@@ -103,7 +103,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(information)"
-            [ngClass]="{ 'active-sidemenu': isActive('information') }"
+            [activated] = "isActive('information')"
           >
             Information Disclaimer
           </a>
@@ -111,7 +111,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(advertisements)"
-            [ngClass]="{ 'active-sidemenu': isActive('advertisements') }"
+            [activated] = "isActive('advertisements')"
           >
             Pop-Up Advertisement Disclaimer
           </a>
@@ -119,7 +119,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(contact)"
-            [ngClass]="{ 'active-sidemenu': isActive('contact') }"
+            [activated] = "isActive('contact')"
           >
             Contact the Rare Disease Alerting System (RDAS)
           </a>
@@ -158,7 +158,7 @@
         <div class="row" id="statement" #statement #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('statement') }"
+            [ngClass]="{ 'active-header': isActive('statement') }"
           >
             Privacy Statement
           </div>
@@ -185,7 +185,7 @@
         <div class="row" id="infoCollected" #infoCollected #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('infoCollected') }"
+            [ngClass]="{ 'active-header': isActive('infoCollected') }"
           >
             Types of Information Collected
           </div>
@@ -223,7 +223,7 @@
         <div class="row" id="collection" #collection #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('collection') }"
+            [ngClass]="{ 'active-header': isActive('collection') }"
           >
             How information is collected by NCATS
           </div>
@@ -244,7 +244,7 @@
         <div class="row" id="cookies" #cookies #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('cookies') }"
+            [ngClass]="{ 'active-header': isActive('cookies') }"
           >
             How NCATS Uses Cookies
           </div>
@@ -322,7 +322,7 @@
         <div class="row" id="consent" #consent #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('consent') }"
+            [ngClass]="{ 'active-header': isActive('consent') }"
           >
             Consent
           </div>
@@ -341,7 +341,7 @@
         <div class="row" id="protection" #protection #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('protection') }"
+            [ngClass]="{ 'active-header': isActive('protection') }"
           >
             How Is Information Protected
           </div>
@@ -358,7 +358,7 @@
         <div class="row" id="disclosure" #disclosure #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('disclosure') }"
+            [ngClass]="{ 'active-header': isActive('disclosure') }"
           >
             Disclosure
           </div>
@@ -389,7 +389,7 @@
         <div class="row" id="security" #security #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('security') }"
+            [ngClass]="{ 'active-header': isActive('security') }"
           >
             Security/Site Security
           </div>
@@ -413,7 +413,7 @@
         <div class="row" id="nonFederal" #nonFederal #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('nonFederal') }"
+            [ngClass]="{ 'active-header': isActive('nonFederal') }"
           >
             Use of Third-Party Website and Applications & non-Federal sites
           </div>
@@ -441,7 +441,7 @@
         <div class="row" id="endorsement" #endorsement #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('endorsement') }"
+            [ngClass]="{ 'active-header': isActive('endorsement') }"
           >
             Endorsement Disclaimer
           </div>
@@ -463,7 +463,7 @@
         <div class="row" id="information" #information #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('information') }"
+            [ngClass]="{ 'active-header': isActive('information') }"
           >
             Information Disclaimer
           </div>
@@ -487,7 +487,7 @@
         <div class="row" id="advertisements" #advertisements #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('advertisements') }"
+            [ngClass]="{ 'active-header': isActive('advertisements') }"
           >
             Pop-Up Advertisement Disclaimer
           </div>
@@ -505,7 +505,7 @@
         <div class="row" id="contact" #contact #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('contact') }"
+            [ngClass]="{ 'active-header': isActive('contact') }"
           >
             Contact the Rare Disease Alerting System (RDAS)
           </div>

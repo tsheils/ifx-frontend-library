@@ -1,12 +1,12 @@
 import {
   AfterViewInit,
-  Component,
-  Inject,
+  Component, computed, inject,
+  Inject, input,
   Input,
   OnChanges,
-  SimpleChanges,
+  SimpleChanges, viewChild,
   ViewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,6 +16,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltip } from '@angular/material/tooltip';
 import { GeneAssociation } from '@ncats-frontend-library/models/rdas';
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
@@ -35,42 +36,41 @@ import { GeneListCardComponent } from '../gene-list-card/gene-list-card.componen
     MatSortModule,
     ExternalLinkComponent,
     SharedUtilsDataNotFoundComponent,
+    MatTooltip
   ],
   templateUrl: './gene-list.component.html',
   styleUrls: ['./gene-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class GeneListComponent implements AfterViewInit, OnChanges {
-  @Input() genes: GeneAssociation[] | undefined = [];
-  count = 0;
-  dataSource: MatTableDataSource<GeneAssociation> =
-    new MatTableDataSource<GeneAssociation>([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @Input() showTab = true;
+export class GeneListComponent {
+  paginator = viewChild<MatPaginator>(MatPaginator);
+  sort= viewChild<MatSort>(MatSort);
+
+  genes = input<GeneAssociation[] | undefined>([] as GeneAssociation[]);
+  showTab = input<boolean>(true);
+  protected dom=  inject(DOCUMENT)
+
+  count = computed(() => this.genes()?.length);
+
+  dataSource = computed(() => {
+    const ds = new MatTableDataSource<GeneAssociation>(this.genes())
+    ds.paginator = this.paginator() as MatPaginator;
+    ds.sort = this.sort() as MatSort;
+    return ds
+  })
+
   displayColumns = ['Gene', 'Gene Name', 'Association Type', 'Reference'];
 
-  constructor(@Inject(DOCUMENT) protected dom?: Document) {}
-
-  ngAfterViewInit() {
-    if (this.genes) {
-      this.count = this.genes.length;
-      this.dataSource.data = this.genes;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.sortData({ active: 'Association Type', direction: 'asc' });
-    }
-  }
-
   sortData(sort: Sort) {
-    if (this.genes) {
-      const data = this.genes.slice();
+    if (this.genes()) {
+      this.dataSource()!.paginator!.firstPage()
+      const data = this.genes()!.slice();
       if (!sort.active || sort.direction === '') {
-        this.dataSource.data = data;
+        this.dataSource().data = data;
         return;
       }
 
-      this.dataSource.data = data.sort((a, b) => {
+      this.dataSource().data = data.sort((a, b) => {
         const isAsc = sort.direction === 'asc';
         switch (sort.active) {
           case 'Gene Symbol':
@@ -89,17 +89,9 @@ export class GeneListComponent implements AfterViewInit, OnChanges {
     }
   }
 
-  ngOnChanges(change: SimpleChanges) {
-    if (change['genes'] && this.genes) {
-      this.count = this.genes.length;
-      this.dataSource.data = this.genes;
-      this.sortData({ active: 'Association Type', direction: 'asc' });
-    }
-  }
-
   downloadData() {
-    if (this.genes) {
-      this._downloadFile(this._toTSV(this.genes), 'rdas-genes-download.tsv');
+    if (this.genes()) {
+      this._downloadFile(this._toTSV(this.genes()!), 'rdas-genes-download.tsv');
     }
   }
 

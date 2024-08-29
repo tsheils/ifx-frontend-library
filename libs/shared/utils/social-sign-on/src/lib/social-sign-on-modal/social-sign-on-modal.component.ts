@@ -26,15 +26,12 @@ import { MatButtonModule } from '@angular/material/button';
 export class SocialSignOnModalComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   store = inject(Store);
+   dialogRef = inject(MatDialogRef<SocialSignOnModalComponent>);
+  public dialog = inject(MatDialog);
+  private breakpointObserver  = inject(BreakpointObserver);
+  private changeRef = inject(ChangeDetectorRef);
 
   mobile = false;
-
-  constructor(
-    public dialogRef: MatDialogRef<SocialSignOnModalComponent>,
-    public dialog: MatDialog,
-    private breakpointObserver: BreakpointObserver,
-    private changeRef: ChangeDetectorRef,
-  ) {}
 
   ngOnInit() {
     this.breakpointObserver

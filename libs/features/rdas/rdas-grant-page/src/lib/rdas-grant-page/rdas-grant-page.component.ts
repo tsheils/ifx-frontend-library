@@ -19,19 +19,7 @@ import { GrantSelectors } from '@ncats-frontend-library/stores/grant-store';
   templateUrl: './rdas-grant-page.component.html',
   styleUrls: ['./rdas-grant-page.component.scss'],
 })
-export class RdasGrantPageComponent implements OnInit {
+export class RdasGrantPageComponent {
   private readonly grantStore = inject(Store);
-  destroyRef = inject(DestroyRef);
-  @Input() grant!: CoreProject;
-
-  constructor(private changeRef: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this.grantStore.select(GrantSelectors.selectEntity).subscribe((res) => {
-      if (res) {
-        this.grant = res;
-        this.changeRef.markForCheck();
-      }
-    });
-  }
+  grant= this.grantStore.selectSignal(GrantSelectors.selectEntity);
 }

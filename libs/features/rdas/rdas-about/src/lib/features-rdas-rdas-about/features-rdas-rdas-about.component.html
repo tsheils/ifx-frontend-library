@@ -23,7 +23,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(about)"
-            [ngClass]="{ 'active-sidemenu': isActive('about') }"
+            [activated] = "isActive('about')"
           >
             About
           </a>
@@ -31,7 +31,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(citation)"
-            [ngClass]="{ 'active-sidemenu': isActive('citation') }"
+            [activated] = "isActive('citation')"
           >
             Citation
           </a>
@@ -39,7 +39,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(publications)"
-            [ngClass]="{ 'active-sidemenu': isActive('publications') }"
+            [activated] = "isActive('publications')"
           >
             Additional Publications
           </a>
@@ -47,7 +47,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(contact)"
-            [ngClass]="{ 'active-sidemenu': isActive('contact') }"
+            [activated] = "isActive('contact')"
           >
             RDAS Team and Contact
           </a>
@@ -55,7 +55,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(code)"
-            [ngClass]="{ 'active-sidemenu': isActive('code') }"
+            [activated] = "isActive('code')"
           >
             Code
           </a>
@@ -75,7 +75,6 @@
     @if (!navigationsidenav.opened) {
       <div class="row">
         <button
-          [color]="'primary'"
           mat-stroked-button
           class="menu-button"
           aria-label="menu button"
@@ -100,7 +99,7 @@
         <div class="row" id="about" #about #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('about') }"
+            [ngClass]="{ 'active-header': isActive('about') }"
           >
             About RDAS
           </div>
@@ -146,7 +145,7 @@
         <div class="row" id="citation" #citation #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('citation') }"
+            [ngClass]="{ 'active-header': isActive('citation') }"
           >
             Citation
           </div>
@@ -170,7 +169,7 @@
         <div class="row" id="publications" #publications #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('publications') }"
+            [ngClass]="{ 'active-header': isActive('publications') }"
           >
             Additional Publications
           </div>
@@ -231,7 +230,7 @@
         <div class="" id="contact" #contact #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('contact') }"
+            [ngClass]="{ 'active-header': isActive('contact') }"
           >
             RDAS Team and Contact
           </div>
@@ -365,7 +364,7 @@
         <div class="" id="code" #code #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('code') }"
+            [ngClass]="{ 'active-header': isActive('code') }"
           >
             Code
           </div>
@@ -390,7 +389,7 @@
         <!--
     <div class="row" id="license" #license #scrollSection>
       <div class="width-75" >
-        <div class="section-header" [ngClass]="{ 'active-sidemenu': isActive('license') }">
+        <div class="section-header" [ngClass]="{ 'active-header': isActive('license') }">
           License
         </div>
         <div class="section-content">

@@ -1,20 +1,17 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
-  Component,
-  Inject,
-  Input,
-  OnChanges,
-  SimpleChanges,
-  ViewChild,
-  ViewEncapsulation,
+  Component, computed, inject,
+  input,
+  viewChild,
+  ViewEncapsulation
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
 import { PhenotypeAssociation } from '@ncats-frontend-library/models/rdas';
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
@@ -33,43 +30,41 @@ import { PhenotypeListCardComponent } from '../phenotype-list-card/phenotype-lis
     MatTableModule,
     SharedUtilsDataNotFoundComponent,
     ExternalLinkComponent,
+    MatTooltip
   ],
   templateUrl: './phenotype-list.component.html',
   styleUrls: ['./phenotype-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
-export class PhenotypeListComponent implements AfterViewInit, OnChanges {
-  @Input() phenotypes!: PhenotypeAssociation[] | undefined;
-  count = 0;
-  dataSource: MatTableDataSource<PhenotypeAssociation> =
-    new MatTableDataSource<PhenotypeAssociation>([]);
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
-  @Input() showTab = true;
+export class PhenotypeListComponent {
+  paginator = viewChild<MatPaginator>(MatPaginator);
+  sort= viewChild<MatSort>(MatSort);
+
+  phenotypes = input<PhenotypeAssociation[] | undefined>([] as PhenotypeAssociation[]);
+  showTab = input<boolean>(true);
+  protected dom=  inject(DOCUMENT)
+
+  count = computed(() => this.phenotypes()?.length);
+
+  dataSource = computed(() => {
+    const ds = new MatTableDataSource<PhenotypeAssociation>(this.phenotypes())
+    ds.paginator = this.paginator() as MatPaginator;
+    ds.sort = this.sort() as MatSort;
+    return ds
+  })
+
   displayColumns = ['Phenotype', 'Frequency', 'Evidence', 'Reference'];
 
-  constructor(@Inject(DOCUMENT) protected dom?: Document) {}
-
-  ngAfterViewInit() {
-    if (this.phenotypes) {
-      this.count = this.phenotypes.length;
-      this.dataSource.data = this.phenotypes;
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.sortData({ active: 'Frequency', direction: 'desc' });
-    }
-  }
-
   sortData(sort: Sort) {
-    if (this.phenotypes) {
-      const data = this.phenotypes.slice();
+    if (this.phenotypes()) {
+      const data = this.phenotypes()!.slice();
       if (!sort.active || sort.direction === '') {
-        this.dataSource.data = data;
+        this.dataSource().data = data;
         return;
       }
 
-      this.dataSource.data = data.sort((a, b) => {
+      this.dataSource().data = data.sort((a, b) => {
         const isAsc = sort.direction === 'asc';
         switch (sort.active) {
           case 'Phenotype':
@@ -84,21 +79,15 @@ export class PhenotypeListComponent implements AfterViewInit, OnChanges {
             return 0;
         }
       });
+      this.dataSource()!.paginator!.firstPage();
     }
   }
 
-  ngOnChanges(change: SimpleChanges) {
-    if (change['phenotypes'] && this.phenotypes) {
-      this.count = this.phenotypes.length;
-      this.dataSource.data = this.phenotypes;
-      this.sortData({ active: 'Frequency', direction: 'desc' });
-    }
-  }
 
   downloadData() {
-    if (this.phenotypes) {
+    if (this.phenotypes()) {
       this._downloadFile(
-        this._toTSV(this.phenotypes),
+        this._toTSV(this.phenotypes()!),
         'rdas-phenotypes-download.tsv',
       );
     }

@@ -1,13 +1,21 @@
-<div>
+<div class ='disease-header-section' [@shrinkOnScroll]="animationState()">
+  @defer (when disease()){
+
+  <div class="header-background">
+    <img
+      ngSrc="/assets/disease-display/graph-background-crop.webp"
+      alt="disease header image"
+      fill
+      priority
+    />
   <div class="disease-header">
-    @if (disease()) {
       <div class="row space-between-row link-row">
         <div class="width-sm-95 width-75">
           <a
             class="mat-h1 disease-link"
             href="https://rarediseases.info.nih.gov/diseases/{{
               parsedId()
-            }}/from_rdas"
+            }}/{{this.disease()?.name | lowercase}}"
             target="_blank"
             rel="noreferrer"
             aria-label="Link to GARD website"
@@ -18,11 +26,12 @@
           >
         </div>
         <ncats-frontend-library-subscribe-button
+          class = "subscribed-button"
           [subscriptionName]="disease()?.name"
           [subscriptionId]="disease()?.gardId"
         ></ncats-frontend-library-subscribe-button>
       </div>
-    }
+    @if(animationState() === 'in'){
     <div class="width-75">
       @if (disease()?.classificationLevel) {
         <div class="primary-chip-outlined">
@@ -43,6 +52,17 @@
         </div>
       }
     </div>
-    <br />
+    }
   </div>
+</div>
+  } @placeholder {
+  <div class="header-background">
+    <img
+      ngSrc="/assets/disease-display/graph-background-crop.webp"
+      alt="disease header image"
+      fill
+      priority
+    />
+  </div>
+}
 </div>

@@ -383,9 +383,6 @@ export class BiochemicalPathwaysPageComponent
           <number>event['perc_pathway_overlap'] || undefined,
       }),
     );
-    console.log(this.inputMap());
-    console.log(this.filtersMap());
-    console.log(event);
     this.previousValues = event;
   }
 

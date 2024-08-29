@@ -6,7 +6,6 @@ import {
   CdkPortalOutlet,
   ComponentPortal,
 } from '@angular/cdk/portal';
-import { isNull } from '@angular/compiler';
 import {
   Component,
   computed,
@@ -75,13 +74,13 @@ export class SunburstChartComponent implements OnInit, OnChanges {
 
   margins = { top: 20, bottom: 20, right: 30, left: 30 };
 
-  isBrowser = computed(() => isPlatformBrowser(this.platformId));
   width = computed(
     () =>
       this.chartElement()?.nativeElement.offsetWidth -
       this.margins.left -
       this.margins.right,
   );
+
   height = computed(
     () =>
       this.chartElement()?.nativeElement.offsetHeight -

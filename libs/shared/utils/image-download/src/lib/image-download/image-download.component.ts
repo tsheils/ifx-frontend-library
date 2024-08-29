@@ -25,7 +25,7 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        this.chartComponent()?.svgExport as SVGElement,
+        <unknown>this.chartComponent()?.svgExport as SVGElement,
       );
     }
     this._downloadFile(this._makeBlob(svgString, 'image/svg+xml'), 'data.svg');
@@ -37,7 +37,7 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        this.chartComponent()?.svgExport as SVGElement,
+        <unknown>this.chartComponent()?.svgExport as SVGElement,
       );
     }
     this.svgString2Image(svgString); // passes Blob and filesize String to the callback
