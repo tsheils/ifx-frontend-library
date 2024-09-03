@@ -1,73 +1,70 @@
-  <mat-card [appearance]="'outlined'">
-    <mat-card-content class="row centered-row">
-      <div class="row space-between-row link-row">
-        <div (click)="navigate(disease()?.gardId)" class="width-75 clickable-area">
-          <h3 class="disease-name">
-            {{ disease()?.name }}: {{ disease()?.gardId }}
-          </h3>
-        </div>
-        <div>
-          <ncats-frontend-library-subscribe-button
-            [subscriptionName]="disease()?.name"
-            [subscriptionId]="disease()?.gardId"
-          ></ncats-frontend-library-subscribe-button>
-        </div>
+<mat-card [appearance]="'outlined'">
+  <mat-card-content class="row centered-row">
+    <div class="row space-between-row link-row">
+      <div
+        (click)="navigate(disease()?.gardId)"
+        class="width-75 clickable-area"
+      >
+        <h3 class="disease-name">
+          {{ disease()?.name }}: {{ disease()?.gardId }}
+        </h3>
       </div>
-      <div class="width-75">
-        @if (disease()?.classificationLevel) {
-          <div class="primary-chip-outlined">
-            {{ disease()?.classificationLevel }}
-          </div>
-        }
-        &nbsp;&nbsp;&nbsp;
-        @if (disease()?.disorderType && disease()?.disorderType?.length) {
-          <div class="accent-chip-outlined">
-            {{ disease()?.disorderType?.join(', ') }}
-          </div>
-        }
+      <div>
+        <ncats-frontend-library-subscribe-button
+          [subscriptionName]="disease()?.name"
+          [subscriptionId]="disease()?.gardId"
+        ></ncats-frontend-library-subscribe-button>
       </div>
-      @if (disease()?.synonyms && disease()?.synonyms?.length) {
-        <div class="width-75"><i>{{ disease()?.synonyms?.join(', ') }}</i></div>
+    </div>
+    <div class="width-75">
+      @if (disease()?.classificationLevel) {
+        <div class="primary-chip-outlined">
+          {{ disease()?.classificationLevel }}
+        </div>
       }
-      <div class="count-grid">
-        <div class="count-card">
-          <div class="bottom-border-primary count-title"
-            >Published Articles</div
-          >
-          <span class="card-count">
-            {{ disease()?.articleCount }}
-          </span>
+      &nbsp;&nbsp;&nbsp;
+      @if (disease()?.disorderType && disease()?.disorderType?.length) {
+        <div class="accent-chip-outlined">
+          {{ disease()?.disorderType?.join(', ') }}
         </div>
-        <div class="count-card">
-          <div class="bottom-border-primary"
-            >Funded Projects</div
-          >
-          <span class="card-count">
-            {{ disease()?.projectCount }}
-          </span>
-        </div>
-        <div  class="count-card">
-          <div class="bottom-border-primary">Clinical Trials</div>
-          <span class="card-count">
-            {{ disease()?.clinicalTrialCount }}
-          </span>
-        </div>
-        <div class="count-card">
-          <div class="bottom-border-primary"
-            >Associated Genes</div
-          >
-          <span class="card-count">
-            {{ disease()?.geneCount }}
-          </span>
-        </div>
-        <div class="count-card last">
-          <div class="bottom-border-primary"
-            >Phenotypes</div
-          >
-          <span class="card-count">
-            {{ disease()?.phenotypeCount }}
-          </span>
-        </div>
+      }
+    </div>
+    @if (disease()?.synonyms && disease()?.synonyms?.length) {
+      <div class="width-75">
+        <i>{{ disease()?.synonyms?.join(', ') }}</i>
       </div>
-    </mat-card-content>
-  </mat-card>
+    }
+    <div class="count-grid">
+      <div class="count-card">
+        <div class="bottom-border-primary count-title">Published Articles</div>
+        <span class="card-count">
+          {{ disease()?.articleCount }}
+        </span>
+      </div>
+      <div class="count-card">
+        <div class="bottom-border-primary">Funded Projects</div>
+        <span class="card-count">
+          {{ disease()?.projectCount }}
+        </span>
+      </div>
+      <div class="count-card">
+        <div class="bottom-border-primary">Clinical Trials</div>
+        <span class="card-count">
+          {{ disease()?.clinicalTrialCount }}
+        </span>
+      </div>
+      <div class="count-card">
+        <div class="bottom-border-primary">Associated Genes</div>
+        <span class="card-count">
+          {{ disease()?.geneCount }}
+        </span>
+      </div>
+      <div class="count-card last">
+        <div class="bottom-border-primary">Phenotypes</div>
+        <span class="card-count">
+          {{ disease()?.phenotypeCount }}
+        </span>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

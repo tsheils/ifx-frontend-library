@@ -34,7 +34,6 @@ describe('DiseaseListCardComponent', () => {
 
     fixture = TestBed.createComponent(DiseaseListCardComponent);
     component = fixture.componentInstance;
-    component.disease = new Disease({ name: 'tim', gardId: 'GARD:1234' });
     fixture.detectChanges();
   });
 

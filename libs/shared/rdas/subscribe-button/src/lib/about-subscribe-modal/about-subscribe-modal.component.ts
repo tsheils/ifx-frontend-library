@@ -20,8 +20,8 @@ import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/util
     MatButtonModule,
     SocialSignOnButtonComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutSubscribeModalComponent {
-  userExists = input<boolean>(false)
+  userExists = input<boolean>(false);
 }

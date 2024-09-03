@@ -25,17 +25,17 @@
             (filterSelectionChange)="filterSelectionChange($event)"
             (filterChange)="filterChange($event)"
           ></ncats-frontend-library-shared-utils-filter-panel>
-          <br>
+          <br />
         }
       </mat-tab>
       <mat-tab label="Hierarchy">
         <ng-template matTabContent>
-        @if (diseaseTree()) {
-          <ncats-frontend-library-rdas-tree
-            (leafExpand)="treeExpand($event)"
-            [data]="diseaseTree()!"
-          ></ncats-frontend-library-rdas-tree>
-        }
+          @if (diseaseTree()) {
+            <ncats-frontend-library-rdas-tree
+              (leafExpand)="treeExpand($event)"
+              [data]="diseaseTree()!"
+            ></ncats-frontend-library-rdas-tree>
+          }
         </ng-template>
       </mat-tab>
     </mat-tab-group>
@@ -144,29 +144,31 @@
         }
       </div>
     </div>
-    <br>
-    @defer(when diseases()){
-    <ncats-frontend-library-disease-list
-      [diseases]="diseases()"
-      class="fill-container"
-    ></ncats-frontend-library-disease-list>
-    <div class="row right-justified-row">
-      @if (page()) {
-        <mat-paginator
-          [pageSize]="page()?.pageSize"
-          [pageIndex]="page()?.pageIndex"
-          [hidePageSize]="true"
-          (page)="paginationChanges($event)"
-          [length]="page()?.total"
-          class="browse-paginator"
-        ></mat-paginator>
-      }
-      <ncats-frontend-library-scroll-to-top
-        [color]="'accent'"
-      ></ncats-frontend-library-scroll-to-top>
-    </div>
-    } @placeholder{
-      <ncats-frontend-library-loading-spinner [isLoaded]="false"></ncats-frontend-library-loading-spinner>
+    <br />
+    @defer (when diseases()) {
+      <ncats-frontend-library-disease-list
+        [diseases]="diseases()"
+        class="fill-container"
+      ></ncats-frontend-library-disease-list>
+      <div class="row right-justified-row">
+        @if (page()) {
+          <mat-paginator
+            [pageSize]="page()?.pageSize"
+            [pageIndex]="page()?.pageIndex"
+            [hidePageSize]="true"
+            (page)="paginationChanges($event)"
+            [length]="page()?.total"
+            class="browse-paginator"
+          ></mat-paginator>
+        }
+        <ncats-frontend-library-scroll-to-top
+          [color]="'accent'"
+        ></ncats-frontend-library-scroll-to-top>
+      </div>
+    } @placeholder {
+      <ncats-frontend-library-loading-spinner
+        [isLoaded]="false"
+      ></ncats-frontend-library-loading-spinner>
     }
   </mat-sidenav-content>
 </mat-sidenav-container>

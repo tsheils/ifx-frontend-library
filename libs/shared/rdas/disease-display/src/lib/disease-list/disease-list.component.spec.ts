@@ -34,9 +34,6 @@ describe('DiseaseListComponent', () => {
 
     fixture = TestBed.createComponent(DiseaseListComponent);
     component = fixture.componentInstance;
-    component.diseases = signal([
-      new Disease({ name: 'sdgsg', gardId: 'bddfdf' }),
-    ]);
     fixture.detectChanges();
   });
 

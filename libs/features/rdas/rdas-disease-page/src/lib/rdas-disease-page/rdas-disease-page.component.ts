@@ -1,20 +1,37 @@
-import { animate, group, state, style, transition, trigger } from '@angular/animations';
+import {
+  animate,
+  group,
+  state,
+  style,
+  transition,
+  trigger,
+} from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScrollDispatcher, ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule, NgOptimizedImage, ViewportScroller } from '@angular/common';
+import {
+  CommonModule,
+  NgOptimizedImage,
+  ViewportScroller,
+} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   DestroyRef,
-  inject, OnDestroy,
-  OnInit, signal,
+  inject,
+  OnDestroy,
+  OnInit,
+  signal,
   Signal,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
-import { MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle } from '@angular/material/expansion';
+import {
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle,
+} from '@angular/material/expansion';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
@@ -31,7 +48,10 @@ import {
 import { GeneListComponent } from '@ncats-frontend-library/shared/rdas/gene-display';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
-import { DiseaseSelectors, FetchDiseaseActions } from '@ncats-frontend-library/stores/disease-store';
+import {
+  DiseaseSelectors,
+  FetchDiseaseActions,
+} from '@ncats-frontend-library/stores/disease-store';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -41,10 +61,7 @@ import { Store } from '@ngrx/store';
   standalone: true,
   animations: [
     trigger('followOnScroll', [
-      state(
-        'in',
-        style({ top: '30vh'}),
-      ),
+      state('in', style({ top: '30vh' })),
       state(
         'out',
         style({
@@ -53,7 +70,7 @@ import { Store } from '@ngrx/store';
       ),
       transition('in => out', [group([animate('200ms ease-out')])]),
       transition('out => in', [group([animate('200ms ease-in')])]),
-    ])
+    ]),
   ],
   encapsulation: ViewEncapsulation.None,
   imports: [
@@ -74,12 +91,10 @@ import { Store } from '@ngrx/store';
     GeneListComponent,
     MatExpansionPanel,
     MatExpansionPanelHeader,
-    MatExpansionPanelTitle
+    MatExpansionPanelTitle,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-
-
 export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
   private readonly route = inject(ActivatedRoute);
@@ -90,17 +105,18 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   destroyRef = inject(DestroyRef);
 
-
-  disease: Signal<Disease | undefined> = this.store.selectSignal(DiseaseSelectors.getSelected);
+  disease: Signal<Disease | undefined> = this.store.selectSignal(
+    DiseaseSelectors.getSelected,
+  );
   loaded: Signal<boolean | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getDiseasesLoaded
+    DiseaseSelectors.getDiseasesLoaded,
   );
   diseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
   staticDiseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getStaticDiseaseFilters);
 
-  animationState= signal('in')
+  animationState = signal('in');
 
   /**
    * default active element for menu highlighting, will be replaced on scroll
@@ -110,10 +126,11 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   mobile = false;
 
   ngOnInit(): void {
-
-     this.scrollDispatcher.scrolled().subscribe(res => {
-        this.animationState.set(this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in')
-      })
+    this.scrollDispatcher.scrolled().subscribe((res) => {
+      this.animationState.set(
+        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
+      );
+    });
 
     if (this.route.snapshot && this.route.snapshot.fragment) {
       this.activeElement = this.route.snapshot.fragment;
@@ -173,7 +190,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters())
-    this.store.dispatch(FetchDiseaseActions.clearDisease())
+    this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
+    this.store.dispatch(FetchDiseaseActions.clearDisease());
   }
 }

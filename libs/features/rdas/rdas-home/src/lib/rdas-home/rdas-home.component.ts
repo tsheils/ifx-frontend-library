@@ -28,7 +28,7 @@ import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/lo
     CdkScrollableModule,
     NgOptimizedImage,
     LoadingSpinnerComponent,
-    MatAnchor
+    MatAnchor,
   ],
   encapsulation: ViewEncapsulation.None,
 })

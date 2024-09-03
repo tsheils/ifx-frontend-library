@@ -1,11 +1,13 @@
 <div class="pie-chart-container">
   <div id="pie-chart" class="pie-chart" #chartElement>
     @defer (when svgExport) {
-    } @placeholder (){
-      <img ngSrc = '/assets/charts/placeholders/chart-placeholder.webp'
-           width="387"
-           height="347"
-           alt="chart placeholder" priority
+    } @placeholder {
+      <img
+        ngSrc="/assets/charts/placeholders/chart-placeholder.webp"
+        width="387"
+        height="347"
+        alt="chart placeholder"
+        priority
       />
     }
   </div>

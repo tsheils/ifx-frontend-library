@@ -63,14 +63,12 @@ export class SunburstChartComponent implements OnInit, OnChanges {
   _injector = inject(Injector);
   componentPortal?: ComponentPortal<unknown>;
 
-
   context = computed(() => {
-   if(this.isBrowser()) {
-    const canvas = document.createElement('canvas');
-    return canvas.getContext('2d');
-   }
-  }
-  )
+    if (this.isBrowser()) {
+      const canvas = document.createElement('canvas');
+      return canvas.getContext('2d');
+    }
+  });
 
   margins = { top: 20, bottom: 20, right: 30, left: 30 };
 
@@ -222,7 +220,7 @@ export class SunburstChartComponent implements OnInit, OnChanges {
 
   ngOnInit() {
     if (this.chartElement() && this.isBrowser()) {
-      if(this.context()) {
+      if (this.context()) {
         this.context().font = '16px Roboto';
       }
       const element = this.chartElement()?.nativeElement;
@@ -254,13 +252,13 @@ export class SunburstChartComponent implements OnInit, OnChanges {
         });
       });
 
-     const t = this.path()
-        .append('title')
-        .html((d) => (d.data.label ? d.data.label : d.data.term))
+    const t = this.path()
+      .append('title')
+      .html((d) => (d.data.label ? d.data.label : d.data.term));
 
-       if(t !== null && t['classList']) {
-       t.classed('.title-text');
-       }
+    if (t !== null && t['classList']) {
+      t.classed('.title-text');
+    }
   }
 
   // Handle zoom on click.

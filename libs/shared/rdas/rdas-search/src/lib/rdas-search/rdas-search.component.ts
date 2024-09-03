@@ -6,14 +6,14 @@ import {
   inject,
   OnInit,
   output,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import {
   MatAutocompleteModule,
   MatAutocompleteSelectedEvent,
-  MatAutocompleteTrigger
+  MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +24,7 @@ import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pi
 import {
   DiseaseSelectors,
   FetchDiseaseActions,
-  SearchDiseasesActions
+  SearchDiseasesActions,
 } from '@ncats-frontend-library/stores/disease-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
@@ -44,19 +44,19 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
   ],
   styleUrls: ['./rdas-search.component.scss'],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdasSearchComponent implements OnInit {
   private readonly diseaseStore = inject(Store);
   destroyRef = inject(DestroyRef);
   autocomplete = viewChild(MatAutocompleteTrigger);
-  options = this.diseaseStore.selectSignal(DiseaseSelectors.searchDiseasesEntities)
+  options = this.diseaseStore.selectSignal(
+    DiseaseSelectors.searchDiseasesEntities,
+  );
   searchFormCtl: FormControl = new FormControl();
 
   diseaseSelect = output<Disease>();
   diseaseSearch = output<string>();
-
-
 
   ngOnInit(): void {
     this.searchFormCtl.valueChanges
@@ -76,9 +76,9 @@ export class RdasSearchComponent implements OnInit {
 
   selectDisease(event: MatAutocompleteSelectedEvent) {
     this.diseaseSelect.emit(event.option.value as Disease);
-    this.searchFormCtl.reset()
-    this.diseaseStore.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters())
-    this.diseaseStore.dispatch(FetchDiseaseActions.clearDisease())
+    this.searchFormCtl.reset();
+    this.diseaseStore.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
+    this.diseaseStore.dispatch(FetchDiseaseActions.clearDisease());
   }
 
   searchString() {

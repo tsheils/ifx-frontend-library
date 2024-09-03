@@ -12,15 +12,12 @@ describe('PanelAccordionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        PanelAccordionComponent
-      ],
+      imports: [NoopAnimationsModule, PanelAccordionComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PanelAccordionComponent);
     component = fixture.componentInstance;
-/*    component.inputTab = new Map<string, QuestionBase<string>[]>([]);
+    /*    component.inputTab = new Map<string, QuestionBase<string>[]>([]);
     component.resultsTabs = {};
     component.dataTabs = input<
       Map<

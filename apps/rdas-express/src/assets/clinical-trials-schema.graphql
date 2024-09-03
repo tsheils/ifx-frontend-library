@@ -3,17 +3,17 @@ scalar JSON
 
 type ClinicalTrial {
   Acronym: String
-  BriefSummary: String!
-  BriefTitle: String!
+  BriefSummary: String
+  BriefTitle: String
   CompletionDate: String
   CompletionDateType: String
-  DateCreatedRDAS: String!
+  DateCreatedRDAS: String
   LastKnownStatus: String
-  LastUpdatePostDate: String!
-  LastUpdatePostDateType: String!
-  LastUpdateSubmitDate: String!
-  LastUpdatedRDAS: String!
-  NCTId: String!
+  LastUpdatePostDate: String
+  LastUpdatePostDateType: String
+  LastUpdateSubmitDate: String
+  LastUpdatedRDAS: String
+  NCTId: String
   NCTIdAlias: [String]
   OfficialTitle: String
   OverallStatus: String
@@ -26,8 +26,8 @@ type ClinicalTrial {
   ResultsFirstPostedQCCommentsDateType: String
   StartDate: String
   StartDateType: String
-  StudyFirstPostDate: String!
-  StudyFirstPostDateType: String!
+  StudyFirstPostDate: String
+  StudyFirstPostDateType: String
   StudyType: String
   collaboratedWithCollaborators: [Collaborator!]!
     @relationship(type: "collaborated_with", direction: OUT)
@@ -66,14 +66,14 @@ type ClinicalTrial {
 }
 
 type Collaborator {
-  CollaboratorClass: String!
-  CollaboratorName: String!
+  CollaboratorClass: String
+  CollaboratorName: String
   clinicalTrialscollaboratedWith: [ClinicalTrial!]!
     @relationship(type: "collaborated_with", direction: IN)
 }
 
 type Condition {
-  Condition: String!
+  Condition: String
   clinicalTrialsinvestigatesCondition: [ClinicalTrial!]!
     @relationship(type: "investigates_condition", direction: IN)
   hasAnnotationConditionAnnotations: [ConditionAnnotation!]!
@@ -85,9 +85,9 @@ type Condition {
 }
 
 type ConditionAnnotation {
-  MATCH_TYPE: String!
+  MATCH_TYPE: String
   SEMANTIC_TYPE: [String]
-  UMLSPreferredName: String!
+  UMLSPreferredName: String
   UMLS_CUI: String
   conditionshasAnnotation: [Condition!]!
     @relationship(
@@ -108,7 +108,7 @@ type Drug {
   BN_CARDINALITY: [String]
   CVX: [String]
   DRUGBANK: [String]
-  GENERAL_CARDINALITY: [String]!
+  GENERAL_CARDINALITY: [String]
   HUMAN_DRUG: [String]
   IN_EXPRESSED_FLAG: [String]
   MESH: [String]
@@ -122,18 +122,18 @@ type Drug {
   QUALITATIVE_DISTINCTION: [String]
   QUANTITY: [String]
   RXNAV_HUMAN_DRUG: [String]
-  RXNAV_STR: [String]!
+  RXNAV_STR: [String]
   RXNAV_VET_DRUG: [String]
-  RxCUI: [String]!
-  RxNormID: BigInt!
-  RxNormName: [String]!
+  RxCUI: [String]
+  RxNormID: BigInt
+  RxNormName: [String]
   RxNormSynonym: [String]
   SCHEDULE: [String]
   SNOMEDCT: [String]
   SPL_SET_ID: [String]
   STRENGTH: [String]
   Source: [String]
-  TTY: [String]!
+  TTY: [String]
   TallmanSynonym: [String]
   UNII_CODE: [String]
   USP: [String]
@@ -159,11 +159,11 @@ type ExpandedAccess {
 }
 
 type GARD {
-  GardId: String!
-  GardName: String!
-  Synonyms: [String]!
+  GardId: String
+  GardName: String
+  Synonyms: [String]
   UMLS: [String]
-  UMLS_Source: String!
+  UMLS_Source: String
   conditionAnnotationsmappedToGard: [ConditionAnnotation!]!
     @relationship(type: "mapped_to_gard", direction: IN)
 }
@@ -174,11 +174,11 @@ type HasAnnotationProperties @relationshipProperties {
 }
 
 type HasMetamapAnnotationProperties @relationshipProperties {
-  umls_score: BigInt!
+  umls_score: BigInt
 }
 
 type IndividualPatientData {
-  IPDSharing: String!
+  IPDSharing: String
   IPDSharingAccessCriteria: String
   IPDSharingDescription: String
   IPDSharingInfoType: [String]
@@ -191,7 +191,7 @@ type IndividualPatientData {
 type Intervention {
   InterventionDescription: String
   InterventionName: String
-  InterventionType: String!
+  InterventionType: String
   clinicalTrialshasIntervention: [ClinicalTrial!]!
     @relationship(type: "has_intervention", direction: IN)
   mappedToRxnormDrugs: [Drug!]!
@@ -206,7 +206,7 @@ type Investigator {
   ContactEmail: String
   ContactPhone: String
   OfficialAffiliation: String
-  OfficialName: String!
+  OfficialName: String
   OfficialRole: String
   investigatesClinicalTrials: [ClinicalTrial!]!
     @relationship(type: "investigates", direction: OUT)
@@ -224,13 +224,13 @@ type Location {
 }
 
 type MappedToRxnormProperties @relationshipProperties {
-  WITH_SPACY: Boolean!
+  WITH_SPACY: Boolean
 }
 
 type Organization {
-  OrgClass: String!
-  OrgName: String!
-  OrgType: String!
+  OrgClass: String
+  OrgName: String
+  OrgType: String
   clinicalTrialsconductedBy: [ClinicalTrial!]!
     @relationship(type: "conducted_by", direction: IN)
 }
@@ -244,37 +244,37 @@ type Participant {
   GenderDescription: String
   HealthyVolunteers: String
   MinimumAge: String
-  StdAge: [String]!
+  StdAge: [String]
   StudyPopulation: String
   clinicalTrialshasParticipantInfo: [ClinicalTrial!]!
     @relationship(type: "has_participant_info", direction: IN)
 }
 
 type PatientRegistry {
-  PatientRegistry: String!
+  PatientRegistry: String
   clinicalTrialspatientRegistryInfo: [ClinicalTrial!]!
     @relationship(type: "patient_registry_info", direction: IN)
 }
 
 type PrimaryOutcome {
-  PrimaryOutcomeDescription: String!
-  PrimaryOutcomeMeasure: String!
-  PrimaryOutcomeTimeFrame: String!
+  PrimaryOutcomeDescription: String
+  PrimaryOutcomeMeasure: String
+  PrimaryOutcomeTimeFrame: String
   clinicalTrialshasOutcome: [ClinicalTrial!]!
     @relationship(type: "has_outcome", direction: IN)
 }
 
 type Reference {
-  ReferenceCitation: String!
+  ReferenceCitation: String
   ReferencePMID: String
-  ReferenceType: String!
+  ReferenceType: String
   isAboutClinicalTrials: [ClinicalTrial!]!
     @relationship(type: "is_about", direction: OUT)
 }
 
 type Sponsor {
-  LeadSponsorClass: String!
-  LeadSponsorName: String!
+  LeadSponsorClass: String
+  LeadSponsorName: String
   clinicalTrialssponsoredBy: [ClinicalTrial!]!
     @relationship(type: "sponsored_by", direction: IN)
 }
@@ -301,13 +301,13 @@ type TrialAnnotation {
       direction: IN
       properties: "HasMetamapAnnotationProperties"
     )
-  umls_concept: String!
-  umls_cui: String!
-  umls_types: [String]!
+  umls_concept: String
+  umls_cui: String
+  umls_types: [String]
 }
 
 type UserTesting {
-  Approved: String!
+  Approved: String
 }
 
 type CTFilters {

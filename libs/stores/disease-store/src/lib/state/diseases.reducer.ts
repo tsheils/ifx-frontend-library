@@ -72,11 +72,11 @@ export const reducer = createReducer(
     FetchDiseaseActions.fetchDiseaseSuccess,
     BrowseDiseaseListActions.setDisease,
     (state, { disease }) =>
-    diseasesAdapter.setOne(disease, {
-      ...state,
-      selectedId: disease.gardId,
-      loaded: true,
-    }),
+      diseasesAdapter.setOne(disease, {
+        ...state,
+        selectedId: disease.gardId,
+        loaded: true,
+      }),
   ),
 
   on(
@@ -117,10 +117,10 @@ export const reducer = createReducer(
   on(FetchDiseaseActions.clearDisease, (state) => ({
     ...state,
     selectedId: undefined,
-    disease: undefined
+    disease: undefined,
   })),
 
-  on(SearchDiseasesActions.searchDiseasesSuccess, (state, {typeahead}) => ({
+  on(SearchDiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => ({
     ...state,
     typeahead: typeahead,
   })),

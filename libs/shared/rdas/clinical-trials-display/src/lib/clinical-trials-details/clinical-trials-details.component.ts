@@ -1,6 +1,14 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -21,19 +29,19 @@ import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/cl
   templateUrl: './clinical-trials-details.component.html',
   styleUrls: ['./clinical-trials-details.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClinicalTrialsDetailsComponent {
   breakpointObserver = inject(BreakpointObserver);
 
-  trial= input<ClinicalTrial>();
+  trial = input<ClinicalTrial>();
   /**
    * truncated summary text
    */
   truncatedSummary = computed(() => {
     const t = this.trial();
     let ret = t?.briefSummary ? t?.briefSummary : '';
-    if(t) {
+    if (t) {
       if (t.briefSummary && t.briefSummary?.length > 800) {
         ret = t.briefSummary.slice(0, 800);
       }
@@ -51,18 +59,16 @@ export class ClinicalTrialsDetailsComponent {
    */
   fullSummary = computed<boolean>(() => {
     const t = this.trial();
-    if(t) {
+    if (t) {
       if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
         return false;
       } else return !(t.briefSummary && t.briefSummary?.length > 800);
-    } else return false
+    } else return false;
   });
 
-  constructor(
-    private sanitizer: DomSanitizer,
-  ) {}
+  constructor(private sanitizer: DomSanitizer) {}
 
-/*  getTrialSummary(): string {
+  /*  getTrialSummary(): string {
   /!*  const ret = this.trial()?.briefSummary && this.fullSummary
       ? this.trial()!.briefSummary
       : this.truncatedSummary;
@@ -72,7 +78,7 @@ export class ClinicalTrialsDetailsComponent {
   getLabel(objType: string, plural = true): string {
     let ret: string = objType;
     const t = this.trial();
-    if(t) {
+    if (t) {
       const arr = t[objType] as Array<unknown>;
       if (arr) {
         if (arr && arr.length > 1) {

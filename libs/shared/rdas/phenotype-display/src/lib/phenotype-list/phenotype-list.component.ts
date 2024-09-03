@@ -1,10 +1,12 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component, computed, inject,
+  Component,
+  computed,
+  inject,
   input,
   viewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -30,7 +32,7 @@ import { PhenotypeListCardComponent } from '../phenotype-list-card/phenotype-lis
     MatTableModule,
     SharedUtilsDataNotFoundComponent,
     ExternalLinkComponent,
-    MatTooltip
+    MatTooltip,
   ],
   templateUrl: './phenotype-list.component.html',
   styleUrls: ['./phenotype-list.component.scss'],
@@ -39,20 +41,22 @@ import { PhenotypeListCardComponent } from '../phenotype-list-card/phenotype-lis
 })
 export class PhenotypeListComponent {
   paginator = viewChild<MatPaginator>(MatPaginator);
-  sort= viewChild<MatSort>(MatSort);
+  sort = viewChild<MatSort>(MatSort);
 
-  phenotypes = input<PhenotypeAssociation[] | undefined>([] as PhenotypeAssociation[]);
+  phenotypes = input<PhenotypeAssociation[] | undefined>(
+    [] as PhenotypeAssociation[],
+  );
   showTab = input<boolean>(true);
-  protected dom=  inject(DOCUMENT)
+  protected dom = inject(DOCUMENT);
 
   count = computed(() => this.phenotypes()?.length);
 
   dataSource = computed(() => {
-    const ds = new MatTableDataSource<PhenotypeAssociation>(this.phenotypes())
+    const ds = new MatTableDataSource<PhenotypeAssociation>(this.phenotypes());
     ds.paginator = this.paginator() as MatPaginator;
     ds.sort = this.sort() as MatSort;
-    return ds
-  })
+    return ds;
+  });
 
   displayColumns = ['Phenotype', 'Frequency', 'Evidence', 'Reference'];
 
@@ -82,7 +86,6 @@ export class PhenotypeListComponent {
       this.dataSource()!.paginator!.firstPage();
     }
   }
-
 
   downloadData() {
     if (this.phenotypes()) {

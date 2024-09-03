@@ -1,12 +1,16 @@
 import {
   AfterViewInit,
-  Component, computed, inject,
-  Inject, input,
+  Component,
+  computed,
+  inject,
+  Inject,
+  input,
   Input,
   OnChanges,
-  SimpleChanges, viewChild,
+  SimpleChanges,
+  viewChild,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -36,7 +40,7 @@ import { GeneListCardComponent } from '../gene-list-card/gene-list-card.componen
     MatSortModule,
     ExternalLinkComponent,
     SharedUtilsDataNotFoundComponent,
-    MatTooltip
+    MatTooltip,
   ],
   templateUrl: './gene-list.component.html',
   styleUrls: ['./gene-list.component.scss'],
@@ -44,26 +48,26 @@ import { GeneListCardComponent } from '../gene-list-card/gene-list-card.componen
 })
 export class GeneListComponent {
   paginator = viewChild<MatPaginator>(MatPaginator);
-  sort= viewChild<MatSort>(MatSort);
+  sort = viewChild<MatSort>(MatSort);
 
   genes = input<GeneAssociation[] | undefined>([] as GeneAssociation[]);
   showTab = input<boolean>(true);
-  protected dom=  inject(DOCUMENT)
+  protected dom = inject(DOCUMENT);
 
   count = computed(() => this.genes()?.length);
 
   dataSource = computed(() => {
-    const ds = new MatTableDataSource<GeneAssociation>(this.genes())
+    const ds = new MatTableDataSource<GeneAssociation>(this.genes());
     ds.paginator = this.paginator() as MatPaginator;
     ds.sort = this.sort() as MatSort;
-    return ds
-  })
+    return ds;
+  });
 
   displayColumns = ['Gene', 'Gene Name', 'Association Type', 'Reference'];
 
   sortData(sort: Sort) {
     if (this.genes()) {
-      this.dataSource()!.paginator!.firstPage()
+      this.dataSource()!.paginator!.firstPage();
       const data = this.genes()!.slice();
       if (!sort.active || sort.direction === '') {
         this.dataSource().data = data;

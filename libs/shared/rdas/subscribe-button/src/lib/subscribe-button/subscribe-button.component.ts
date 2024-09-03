@@ -11,7 +11,7 @@ import {
   OnInit,
   output,
   signal,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription, User } from '@ncats-frontend-library/models/utils';
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
-import { UpdateUserActions, UserSelectors } from '@ncats-frontend-library/stores/user-store';
+import {
+  UpdateUserActions,
+  UserSelectors,
+} from '@ncats-frontend-library/stores/user-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
@@ -56,14 +59,17 @@ export class SubscribeButtonComponent implements OnInit {
 
   subscriptionName = input<string | undefined>();
   subscriptionId = input<string | undefined>();
-  subscribed =computed<boolean>(() => {
-    return !!this.user() || this.user()!.subscriptions.filter(
-      (sub: Subscription) => sub.gardID == this.subscriptionId(),
-    ).length > 0
+  subscribed = computed<boolean>(() => {
+    return (
+      !!this.user() ||
+      this.user()!.subscriptions.filter(
+        (sub: Subscription) => sub.gardID == this.subscriptionId(),
+      ).length > 0
+    );
   });
   mobile = signal(false);
 
-  userChange = output< User | null>();
+  userChange = output<User | null>();
   isSubscribed = output<boolean>();
 
   /*user!: User;
@@ -80,21 +86,18 @@ export class SubscribeButtonComponent implements OnInit {
       ret.setSelection(...subscription.alerts);
     }
     return ret;
-})
-
-
-
+  });
 
   ngOnInit(): void {
-     this.breakpointObserver
+    this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
         this.mobile.set(result.matches);
       });
 
-    this.subscriptionSelection().changed
-      .pipe(
+    this.subscriptionSelection()
+      .changed.pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(1000),
         distinctUntilChanged(),
@@ -111,7 +114,7 @@ export class SubscribeButtonComponent implements OnInit {
             ),
             1,
           );
-           const subscription = new Subscription({
+          const subscription = new Subscription({
             diseaseName: this.subscriptionName(),
             gardID: this.subscriptionId(),
             alerts: this.subscriptionSelection().selected,
@@ -126,7 +129,7 @@ export class SubscribeButtonComponent implements OnInit {
       });
   }
 
-/*
+  /*
 
   setSubscriptions() {
     if (this.user) {
@@ -199,8 +202,8 @@ export class SubscribeButtonComponent implements OnInit {
     this.dialog.open(AboutSubscribeModalComponent, {
       width: this.mobile() ? '90vw' : '35vw',
       data: {
-        user: !!this.user()
-      }
+        user: !!this.user(),
+      },
     });
   }
 

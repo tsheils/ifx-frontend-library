@@ -3,6 +3,16 @@
 @use '_utils' as utils;
 @use 'libs/shared/utils/footer-template/src/lib/footer-template/_footer-theme.scss'
   as footer;
+@use 'libs/shared/rdas/disease-display/src/lib/disease-header/_disease-header-theme.scss'
+  as disease-header;
+@use 'libs/shared/utils/social-sign-on/src/lib/social-sign-on-button/_social-sign-on-button-theme.scss'
+  as social-sign-on;
+@use 'libs/features/rdas/rdas-about/src/lib/features-rdas-rdas-about/_rdas-about-theme.scss'
+  as rdas-about;
+@use 'libs/shared/rdas/disease-display/src/lib/disease-list-card/_disease-list-card-theme.scss'
+  as disease-list-card;
+
+@include mat.core();
 
 @include utils.width-sm(50);
 @include utils.width-sm(90);
@@ -40,6 +50,14 @@ html {
   @include mat.system-level-colors(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
   @include footer.theme(theme.$light-theme);
+  @include disease-header.theme(theme.$light-theme);
+  @include social-sign-on.theme(theme.$light-theme);
+  @include rdas-about.theme(theme.$light-theme);
+  @include disease-list-card.theme(theme.$light-theme);
+}
+
+.inverse-button {
+  @include mat.button-color(theme.$light-theme, $color-variant: tertiary);
 }
 
 html,
@@ -61,6 +79,10 @@ header {
   position: fixed;
   top: 0;
   width: 100%;
+}
+
+mat-icon {
+  color: mat.get-theme-color(theme.$light-theme, primary);
 }
 
 .main {
@@ -96,23 +118,20 @@ a:visited {
 
 .toolbar-template {
   background-color: #ffffff;
-  color: mat.get-theme-color(theme.$light-theme, primary) !important;
+  color: mat.get-theme-color(theme.$light-theme, on-primary) !important;
   height: 75px;
 }
 .footer-template {
   background-color: mat.get-theme-color(theme.$light-theme, primary);
-  color: #ffffff;
 }
 
 .primary-background {
   background-color: mat.get-theme-color(theme.$light-theme, primary);
-  color: #ffffff;
   scroll-margin: 10vh;
 }
 
 .accent-background {
   background-color: mat.get-theme-color(theme.$light-theme, secondary);
-  color: #ffffff;
 }
 
 .primary-color-font {
@@ -135,7 +154,7 @@ a:visited {
 
 .primary-chip {
   background-color: mat.get-theme-color(theme.$light-theme, primary);
-  color: #ffffff;
+  color: mat.get-theme-color(theme.$light-theme, on-primary);
   border-radius: 50px;
   padding: 6px 12px 6px;
   margin-top: 0.5em;
@@ -147,7 +166,7 @@ a:visited {
 
 .primary-chip-outlined {
   color: mat.get-theme-color(theme.$light-theme, primary);
-  background-color: #ffffff;
+  background-color: mat.get-theme-color(theme.$light-theme, surface);
   border-radius: 50px;
   border: mat.get-theme-color(theme.$light-theme, primary) solid 2px;
   padding: 6px 12px 6px;
@@ -160,7 +179,6 @@ a:visited {
 
 .accent-chip {
   background-color: mat.get-theme-color(theme.$light-theme, secondary);
-  color: #ffffff;
   border-radius: 50px;
   padding: 6px 12px 6px;
   margin-top: 0.5em;
@@ -172,7 +190,7 @@ a:visited {
 
 .accent-chip-outlined {
   color: mat.get-theme-color(theme.$light-theme, secondary);
-  background-color: #ffffff;
+  background-color: mat.get-theme-color(theme.$light-theme, surface);
   border-radius: 50px;
   border: mat.get-theme-color(theme.$light-theme, secondary) solid 2px;
   padding: 6px 12px 6px;
@@ -263,8 +281,12 @@ span.list-item-content {
   padding-bottom: 1rem;
 }
 
-.active-sidemenu {
-  border-left: 8px solid mat.get-theme-color(theme.$light-theme, secondary);
+.hovered {
+  fill: mat.get-theme-color(theme.$light-theme, primary-fixed-dim) !important;
+}
+
+.clickedSlice {
+  fill: mat.get-theme-color(theme.$light-theme, primary-fixed-dim) !important;
 }
 
 .bottom-border-accent {

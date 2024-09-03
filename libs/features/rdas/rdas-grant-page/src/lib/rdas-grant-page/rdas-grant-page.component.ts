@@ -21,5 +21,5 @@ import { GrantSelectors } from '@ncats-frontend-library/stores/grant-store';
 })
 export class RdasGrantPageComponent {
   private readonly grantStore = inject(Store);
-  grant= this.grantStore.selectSignal(GrantSelectors.selectEntity);
+  grant = this.grantStore.selectSignal(GrantSelectors.selectEntity);
 }

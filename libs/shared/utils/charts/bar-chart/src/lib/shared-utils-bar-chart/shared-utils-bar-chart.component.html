@@ -1,13 +1,14 @@
 <div class="bar-chart-container">
   <div id="bar-chart" class="bar-chart" #chartElement>
     @defer (when data && svg) {
-    } @placeholder (){
-      <img ngSrc = {{placeholderUrl()}}
-           width="387"
-           height="347"
-           alt="chart placeholder" priority
+    } @placeholder {
+      <img
+        ngSrc="{{ placeholderUrl() }}"
+        width="387"
+        height="347"
+        alt="chart placeholder"
+        priority
       />
     }
   </div>
-
 </div>

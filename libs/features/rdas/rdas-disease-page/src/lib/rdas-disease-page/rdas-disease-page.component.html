@@ -1,10 +1,9 @@
-    <ncats-frontend-library-disease-header
-      [disease]="disease()"
-    ></ncats-frontend-library-disease-header>
-  <div class="disease-page row right-justified-row">
-    @defer(when !mobile){
-    <div #navigationsidenav
-      class="width-25 navigation-sidenav">
+<ncats-frontend-library-disease-header
+  [disease]="disease()"
+></ncats-frontend-library-disease-header>
+<div class="disease-page row right-justified-row">
+  @defer (when !mobile) {
+    <div #navigationsidenav class="width-25 navigation-sidenav">
       <div class="toc-wrapper" [@followOnScroll]="animationState()">
         <div class="toc">
           <mat-nav-list>
@@ -12,7 +11,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('overview')"
-              [activated] = "isActive('overview')"
+              [activated]="isActive('overview')"
             >
               Overview
             </a>
@@ -20,7 +19,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('genes')"
-              [activated] = "isActive('genes')"
+              [activated]="isActive('genes')"
             >
               <div class="row space-between-row">
                 <div>Genes</div>
@@ -31,7 +30,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('phenotypes')"
-              [activated] = "isActive('phenotypes')"
+              [activated]="isActive('phenotypes')"
             >
               <div class="row space-between-row">
                 <div>Phenotypes</div>
@@ -42,7 +41,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('nonEpiArticles')"
-              [activated] = "isActive('nonEpiArticles')"
+              [activated]="isActive('nonEpiArticles')"
             >
               <div class="row space-between-row">
                 <div>Articles</div>
@@ -53,7 +52,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('epiArticles')"
-              [activated] = "isActive('epiArticles')"
+              [activated]="isActive('epiArticles')"
             >
               <div class="row space-between-row">
                 <div>Epidemiology Articles</div>
@@ -64,7 +63,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('projects')"
-              [activated] = "isActive('projects')"
+              [activated]="isActive('projects')"
             >
               <div class="row space-between-row">
                 <div>NIH funded Projects</div>
@@ -75,7 +74,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll('trials')"
-              [activated] = "isActive('trials')"
+              [activated]="isActive('trials')"
             >
               <div class="row space-between-row">
                 <div>Clinical Trials</div>
@@ -86,119 +85,119 @@
         </div>
       </div>
     </div>
-    } @placeholder {
-      <div class="drawer-container-content width-75 width-sm-95">
-          <div class="row centered-row">
-            <div class="full-width">
-              <mat-expansion-panel [expanded]="true">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-            <span class="disease-accordion-title bottom-border-primary"
-            >Shortcuts</span
-            >
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="toc">
-                  <mat-nav-list>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('overview')"
-                      [activated] = "isActive('overview')"
-                    >
-                      Overview
-                    </a>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('genes')"
-                      [activated] = "isActive('genes')"
-                    >
-                      <div class="row space-between-row">
-                        <div>Genes</div>
-                        <div>{{ disease()?.geneCount }}</div>
-                      </div>
-                    </a>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('phenotypes')"
-                      [activated] = "isActive('phenotypes')"
-                    >
-                      <div class="row space-between-row">
-                        <div>Phenotypes</div>
-                        <div>{{ disease()?.phenotypeCount }}</div>
-                      </div>
-                    </a>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('nonEpiArticles')"
-                      [activated] = "isActive('nonEpiArticles')"
-                    >
-                      <div class="row space-between-row">
-                        <div>Articles</div>
-                        <div>{{ disease()?.allNonEpiCount }}</div>
-                      </div>
-                    </a>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('epiArticles')"
-                      [activated] = "isActive('epiArticles')"
-                    >
-                      <div class="row space-between-row">
-                        <div>Epidemiology Articles</div>
-                        <div>{{ disease()?.allEpiCount }}</div>
-                      </div>
-                    </a>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('projects')"
-                      [activated] = "isActive('projects')"
-                    >
-                      <div class="row space-between-row">
-                        <div>NIH funded Projects</div>
-                        <div>{{ disease()?.allProjectCount }}</div>
-                      </div>
-                    </a>
-                    <a
-                      mat-list-item
-                      class="list-button"
-                      (click)="scroll('trials')"
-                      [activated] = "isActive('trials')"
-                    >
-                      <div class="row space-between-row">
-                        <div>Clinical Trials</div>
-                        <div>{{ disease()?.allClinicalTrialCount }}</div>
-                      </div>
-                    </a>
-                  </mat-nav-list>
-                </div>
-              </mat-expansion-panel>
-            </div>
-          </div>
-      </div>
-    }
+  } @placeholder {
     <div class="drawer-container-content width-75 width-sm-95">
-    <div class="row centered-row">
+      <div class="row centered-row">
         <div class="full-width">
-          @if (!disease.name) {
-            <div>
-              <h1>No disease info found</h1>
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="disease-accordion-title bottom-border-primary"
+                  >Shortcuts</span
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="toc">
+              <mat-nav-list>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('overview')"
+                  [activated]="isActive('overview')"
+                >
+                  Overview
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('genes')"
+                  [activated]="isActive('genes')"
+                >
+                  <div class="row space-between-row">
+                    <div>Genes</div>
+                    <div>{{ disease()?.geneCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('phenotypes')"
+                  [activated]="isActive('phenotypes')"
+                >
+                  <div class="row space-between-row">
+                    <div>Phenotypes</div>
+                    <div>{{ disease()?.phenotypeCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('nonEpiArticles')"
+                  [activated]="isActive('nonEpiArticles')"
+                >
+                  <div class="row space-between-row">
+                    <div>Articles</div>
+                    <div>{{ disease()?.allNonEpiCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('epiArticles')"
+                  [activated]="isActive('epiArticles')"
+                >
+                  <div class="row space-between-row">
+                    <div>Epidemiology Articles</div>
+                    <div>{{ disease()?.allEpiCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('projects')"
+                  [activated]="isActive('projects')"
+                >
+                  <div class="row space-between-row">
+                    <div>NIH funded Projects</div>
+                    <div>{{ disease()?.allProjectCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  (click)="scroll('trials')"
+                  [activated]="isActive('trials')"
+                >
+                  <div class="row space-between-row">
+                    <div>Clinical Trials</div>
+                    <div>{{ disease()?.allClinicalTrialCount }}</div>
+                  </div>
+                </a>
+              </mat-nav-list>
             </div>
-          }
-            <ncats-frontend-library-disease-display
-              [disease]="disease()"
-              [filters]="diseaseFilters()"
-              [staticFilters]="staticDiseaseFilters()"
-              [loaded]="loaded()"
-              (optionsChange)="setUrl($event)"
-              (activeElement)="setActiveElement($event)"
-            ></ncats-frontend-library-disease-display>
-            <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+          </mat-expansion-panel>
         </div>
       </div>
     </div>
+  }
+  <div class="drawer-container-content width-75 width-sm-95">
+    <div class="row centered-row">
+      <div class="full-width">
+        @if (!disease.name) {
+          <div>
+            <h1>No disease info found</h1>
+          </div>
+        }
+        <ncats-frontend-library-disease-display
+          [disease]="disease()"
+          [filters]="diseaseFilters()"
+          [staticFilters]="staticDiseaseFilters()"
+          [loaded]="loaded()"
+          (optionsChange)="setUrl($event)"
+          (activeElement)="setActiveElement($event)"
+        ></ncats-frontend-library-disease-display>
+        <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+      </div>
+    </div>
   </div>
+</div>

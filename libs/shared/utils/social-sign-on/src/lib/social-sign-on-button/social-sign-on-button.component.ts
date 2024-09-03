@@ -1,5 +1,12 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, DestroyRef, inject, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  DestroyRef,
+  inject,
+  OnInit,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -7,7 +14,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
-import { UserLoginActions, UserSelectors } from '@ncats-frontend-library/stores/user-store';
+import {
+  UserLoginActions,
+  UserSelectors,
+} from '@ncats-frontend-library/stores/user-store';
 import { Store } from '@ngrx/store';
 import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-on-modal.component';
 
@@ -23,7 +33,7 @@ import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-
     RouterLink,
     MatDialogModule,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 //, OnChanges
 export class SocialSignOnButtonComponent implements OnInit {

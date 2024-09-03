@@ -11,10 +11,10 @@ import {
   OnInit,
   output,
   QueryList,
-  Type,
+  Type, viewChild,
   ViewChild,
   ViewChildren,
-  ViewContainerRef,
+  ViewContainerRef
 } from '@angular/core';
 import {
   animate,
@@ -109,12 +109,12 @@ export class NcatsDatatableComponent implements OnInit {
   /**
    * Table object
    */
-  @ViewChild(MatTable) dataTable!: MatTable<unknown>;
+   dataTable= viewChild(MatTable);
 
   /**
    * Sort object from Angular Material
    */
-  @ViewChild(MatSort, { static: true }) _sort: MatSort = new MatSort();
+   _sort = viewChild(MatSort);
 
   /**
    * gets placeholder expanded row outlets
@@ -210,9 +210,9 @@ export class NcatsDatatableComponent implements OnInit {
       this.data(),
     );
 
-    if (this.internalSort()) {
+    if (this.internalSort() && this._sort()) {
       ds.sortingDataAccessor = _sortingDataAccessor;
-      ds.sort = this._sort;
+      ds.sort = this._sort()!;
     }
     return ds;
   });
@@ -241,7 +241,7 @@ export class NcatsDatatableComponent implements OnInit {
    * Table data is tracked by the data getter and setter
    */
   ngOnInit() {
-    this._sort.sortChange
+    this._sort()?.sortChange
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.dataSource()?.paginator?.firstPage();
@@ -259,12 +259,12 @@ export class NcatsDatatableComponent implements OnInit {
       : ([] as DataProperty[]);
 
     if (defaultSort.length > 0 && this.data()) {
-      this._sort.sort({
+      this._sort()?.sort({
         id: defaultSort[0].field,
         start: defaultSort[0].sorted ? defaultSort[0].sorted : 'asc',
         disableClear: true,
       });
-      this.dataTable.renderRows();
+      this.dataTable()?.renderRows();
     }
   }
 
@@ -275,7 +275,7 @@ export class NcatsDatatableComponent implements OnInit {
   changeSort(sort: Sort): void {
     this.sortChange.emit(sort);
     this.ref.detectChanges();
-    this.dataTable.renderRows();
+    this.dataTable()?.renderRows();
   }
 
   /**

@@ -3,7 +3,7 @@
 
 @mixin theme($theme) {
   .profile-section {
-   color: mat.get-theme-color($theme, primary);
+    color: mat.get-theme-color($theme, primary);
   }
 }
 

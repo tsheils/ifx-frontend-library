@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
 
@@ -10,7 +15,7 @@ import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/su
   templateUrl: './shared-utils-data-not-found.component.html',
   styleUrls: ['./shared-utils-data-not-found.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class SharedUtilsDataNotFoundComponent {
   message = input<string>();

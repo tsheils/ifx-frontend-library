@@ -12,12 +12,13 @@ import {
   inject,
   input,
   OnChanges,
-  OnInit, output,
+  OnInit,
+  output,
   QueryList,
   Signal,
   SimpleChange,
   ViewChildren,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
@@ -59,8 +60,8 @@ import { DiseaseHeaderComponent } from '../disease-header/disease-header.compone
     ScrollingModule,
     RdasPanelTemplateComponent,
     ChartWrapperComponent,
-    MatProgressSpinner
-  ]
+    MatProgressSpinner,
+  ],
 })
 export class DiseaseDisplayComponent
   implements OnInit, AfterViewInit, OnChanges
@@ -71,8 +72,8 @@ export class DiseaseDisplayComponent
   private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
   private changeRef = inject(ChangeDetectorRef);
-  private router= inject(Router);
-  public scroller= inject(ViewportScroller);
+  private router = inject(Router);
+  public scroller = inject(ViewportScroller);
   private scrollDispatcher = inject(ScrollDispatcher);
   private breakpointObserver = inject(BreakpointObserver);
 
@@ -91,14 +92,13 @@ export class DiseaseDisplayComponent
     return this.setFilterMap(this.filters());
   });
 
-  activeElement= output<string>();
-  optionsChange= output<{
+  activeElement = output<string>();
+  optionsChange = output<{
     params: { [key: string]: unknown };
     fragment: string;
   }>();
 
   mobile = false;
-
 
   ngOnInit() {
     this.scroller.setOffset([0, 250]);

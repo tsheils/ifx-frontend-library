@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, inject, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  Inject,
+} from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
@@ -8,8 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
   styleUrls: ['./unsubscribe-modal.component.scss'],
   standalone: true,
   imports: [MatDialogModule, MatButtonModule],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UnsubscribeModalComponent {
-  public data = inject<{ entity: unknown; label?: string }>(MAT_DIALOG_DATA)
+  public data = inject<{ entity: unknown; label?: string }>(MAT_DIALOG_DATA);
 }

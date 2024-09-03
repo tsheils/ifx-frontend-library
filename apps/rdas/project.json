@@ -53,6 +53,16 @@
             "input": "libs/shared/rdas/disease-display/src/assets",
             "glob": "**/*",
             "output": "assets/disease-display"
+          },
+          {
+            "input": "libs/shared/utils/charts/bar-chart/src/assets/placeholders",
+            "glob": "**/*",
+            "output": "assets/charts/placeholders"
+          },
+          {
+            "input": "libs/shared/utils/charts/pie-chart/src/assets/placeholders",
+            "glob": "**/*",
+            "output": "assets/charts/placeholders"
           }
         ],
         "stylePreprocessorOptions": {
@@ -131,8 +141,7 @@
           "sourceMap": true
         }
       },
-      "defaultConfiguration": "production",
-      "allowedCommonJsDependencies": ["swagger-ui", "lodash", "3d-force-graph"]
+      "defaultConfiguration": "production"
     },
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",

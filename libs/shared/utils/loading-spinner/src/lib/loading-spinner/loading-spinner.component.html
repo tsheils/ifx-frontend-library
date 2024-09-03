@@ -1,8 +1,5 @@
 @if (!isLoaded) {
   <div class="progress-bar-container" [ngClass]="positions[position]">
-    <mat-spinner
-      [diameter]="sizes[size]"
-      class="spinner-svg"
-    ></mat-spinner>
+    <mat-spinner [diameter]="sizes[size]" class="spinner-svg"></mat-spinner>
   </div>
 }

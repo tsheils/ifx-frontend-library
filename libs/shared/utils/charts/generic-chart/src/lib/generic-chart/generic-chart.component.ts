@@ -4,11 +4,16 @@ import {
   ElementRef,
   EventEmitter,
   inject,
-  InjectionToken, input,
-  Input, output,
+  InjectionToken,
+  input,
+  Input,
+  output,
   Output,
-  PLATFORM_ID, signal, Signal, viewChild,
-  ViewChild
+  PLATFORM_ID,
+  signal,
+  Signal,
+  viewChild,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
@@ -37,7 +42,6 @@ export class GenericChartComponent {
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   @Output() readonly clickElement: EventEmitter<Filter> =
     new EventEmitter<Filter>();
-
 
   /*platformId: InjectionToken<NonNullable<unknown>> = inject(
     PLATFORM_ID,

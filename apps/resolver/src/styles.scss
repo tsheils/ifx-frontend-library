@@ -1,6 +1,7 @@
 @use 'libs/styles/src/styles/ncats-theme.scss' as theme;
 @use '@angular/material' as mat;
 @use '_utils' as utils;
+@include mat.core();
 
 html {
   // Emit styles for MatButton based on `$my-theme`. Because the configuration
@@ -189,7 +190,7 @@ span.list-item-content {
 }
 
 .active-sidemenu {
-  border-left: 8px solid mat.get-theme-color(theme.$light-theme, secondary);
+  @include mat.elevation(2, mat.get-theme-color(theme.$light-theme, secondary));
 }
 
 .bottom-border-accent {

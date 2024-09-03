@@ -2,17 +2,17 @@ scalar JSON
 extend schema @mutation(operations: [])
 
 type Article {
-  DateCreatedRDAS: String!
+  DateCreatedRDAS: String
   LastUpdatedRDAS: String
-  ReferenceOrigin: [String]!
+  ReferenceOrigin: [String]
   abstractText: String
   affiliation: String
   appearsInJournalVolumes: [JournalVolume!]!
     @relationship(type: "APPEARS_IN", direction: OUT)
   authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
   citedByCount: BigInt
-  doi: String!
-  epi_processed: Boolean!
+  doi: String
+  epi_processed: Boolean
   epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]!
     @relationship(
       type: "EPIDEMIOLOGY_ANNOTATION_FOR"
@@ -30,46 +30,46 @@ type Article {
     )
   hasOmimRefomimRefs: [OMIMRef!]!
     @relationship(type: "HAS_OMIM_REF", direction: OUT)
-  hasPubtatorAnnotation: Boolean!
-  isEpi: Boolean!
+  hasPubtatorAnnotation: Boolean
+  isEpi: Boolean
   keywordsKeywordFor: [Keyword!]!
     @relationship(type: "KEYWORD_FOR", direction: IN)
   meshTermsMeshTermFor: [MeshTerm!]!
     @relationship(type: "MESH_TERM_FOR", direction: IN)
   pubType: [String]
-  publicationYear: String!
+  publicationYear: String
   pubmed_id: String
   pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]!
     @relationship(type: "ANNOTATION_FOR", direction: IN)
   source: String
   substancesSubstanceAnnotatedByPubmed: [Substance!]!
     @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
-  title: String!
+  title: String
 }
 
 type Author {
-  firstName: String!
-  fullName: String!
-  lastName: String!
+  firstName: String
+  fullName: String
+  lastName: String
   wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
 }
 
 type EpidemiologyAnnotation {
   DateCreatedRDAS: String
   LastUpdatedRDAS: String
-  date: [String]!
+  date: [String]
   epidemiologyAnnotationForArticles: [Article!]!
     @relationship(
       type: "EPIDEMIOLOGY_ANNOTATION_FOR"
       direction: OUT
       properties: "EpidemiologyAnnotationForProperties"
     )
-  epidemiology_rate: [String]!
-  epidemiology_type: [String]!
-  ethnicity: [String]!
-  isEpi: Boolean!
-  location: [String]!
-  sex: [String]!
+  epidemiology_rate: [String]
+  epidemiology_type: [String]
+  ethnicity: [String]
+  isEpi: Boolean
+  location: [String]
+  sex: [String]
 }
 
 type EpidemiologyAnnotationForProperties @relationshipProperties {
@@ -77,21 +77,21 @@ type EpidemiologyAnnotationForProperties @relationshipProperties {
 }
 
 type FullTextUrl {
-  availability: String!
-  availabilityCode: String!
+  availability: String
+  availabilityCode: String
   contentForArticles: [Article!]!
     @relationship(type: "CONTENT_FOR", direction: OUT)
-  documentStyle: String!
-  site: String!
-  url: String!
+  documentStyle: String
+  site: String
+  url: String
 }
 
 type GARD {
-  Classification: String!
-  GardId: String!
-  GardName: String!
-  Synonyms: [String]!
-  Type: [String]!
+  Classification: String
+  GardId: String
+  GardName: String
+  Synonyms: [String]
+  Type: [String]
   mentionedInArticles: [Article!]!
     @relationship(
       type: "MENTIONED_IN"
@@ -101,13 +101,13 @@ type GARD {
 }
 
 type Journal {
-  essn: String!
-  issn: String!
+  essn: String
+  issn: String
   journalVolumesContentOf: [JournalVolume!]!
     @relationship(type: "CONTENT_OF", direction: IN)
-  medlineAbbreviation: String!
-  nlmid: String!
-  title: String!
+  medlineAbbreviation: String
+  nlmid: String
+  title: String
 }
 
 type JournalVolume {
@@ -115,17 +115,17 @@ type JournalVolume {
     @relationship(type: "APPEARS_IN", direction: IN)
   contentOfJournals: [Journal!]!
     @relationship(type: "CONTENT_OF", direction: OUT)
-  dateOfPublication: String!
-  issue: String!
-  journalIssueId: BigInt!
-  monthOfPublication: BigInt!
-  printPublicationDate: String!
-  volume: String!
-  yearOfPublication: BigInt!
+  dateOfPublication: String
+  issue: String
+  journalIssueId: BigInt
+  monthOfPublication: BigInt
+  printPublicationDate: String
+  volume: String
+  yearOfPublication: BigInt
 }
 
 type Keyword {
-  keyword: String!
+  keyword: String
   keywordForArticles: [Article!]!
     @relationship(type: "KEYWORD_FOR", direction: OUT)
 }
@@ -135,16 +135,16 @@ type MentionedInProperties @relationshipProperties {
 }
 
 type MeshQualifier {
-  abbreviation: String!
+  abbreviation: String
   isMajorTopic: Boolean
   majorTopic_YN: String
   meshQualifierForMeshTerms: [MeshTerm!]!
     @relationship(type: "MESH_QUALIFIER_FOR", direction: OUT)
-  qualifierName: String!
+  qualifierName: String
 }
 
 type MeshTerm {
-  descriptorName: String!
+  descriptorName: String
   isMajorTopic: Boolean
   majorTopic_YN: String
   meshQualifiersMeshQualifierFor: [MeshQualifier!]!
@@ -154,29 +154,29 @@ type MeshTerm {
 }
 
 type OMIMRef {
-  DateCreatedRDAS: String!
-  LastUpdatedRDAS: String!
+  DateCreatedRDAS: String
+  LastUpdatedRDAS: String
   articlesHasOmimRef: [Article!]!
     @relationship(type: "HAS_OMIM_REF", direction: IN)
-  omimId: BigInt!
-  omimName: String!
-  omimSections: [String]!
+  omimId: BigInt
+  omimName: String
+  omimSections: [String]
 }
 
 type PubtatorAnnotation {
-  DateCreatedRDAS: String!
-  LastUpdatedRDAS: String!
+  DateCreatedRDAS: String
+  LastUpdatedRDAS: String
   annotationForArticles: [Article!]!
     @relationship(type: "ANNOTATION_FOR", direction: OUT)
-  infons_identifier: String!
-  infons_type: String!
-  text: [String]!
-  type: String!
+  infons_identifier: String
+  infons_type: String
+  text: [String]
+  type: String
 }
 
 type Substance {
-  name: String!
-  registryNumber: String!
+  name: String
+  registryNumber: String
   substanceAnnotatedByPubmedArticles: [Article!]!
     @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: OUT)
 }

@@ -10,5 +10,5 @@ import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card
   imports: [DiseaseListCardComponent],
 })
 export class DiseaseListComponent {
-   diseases = input<Disease[]>();
+  diseases = input<Disease[]>();
 }

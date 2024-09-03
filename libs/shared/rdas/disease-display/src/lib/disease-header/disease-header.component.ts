@@ -1,18 +1,24 @@
 import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
-import { LowerCasePipe, NgOptimizedImage, ViewportScroller } from '@angular/common';
+import {
+  LowerCasePipe,
+  NgOptimizedImage,
+  ViewportScroller,
+} from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed, inject,
-  input, OnInit, signal,
-  ViewEncapsulation
+  computed,
+  inject,
+  input,
+  OnInit,
+  signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
 import { shrinkOnScroll } from './disease-header-animation';
-
 
 @Component({
   selector: 'ncats-frontend-library-disease-header',
@@ -21,14 +27,20 @@ import { shrinkOnScroll } from './disease-header-animation';
   animations: [shrinkOnScroll],
   encapsulation: ViewEncapsulation.None,
   standalone: true,
-  imports: [MatIconModule, SubscribeButtonComponent, NgOptimizedImage, CdkScrollable, LowerCasePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  imports: [
+    MatIconModule,
+    SubscribeButtonComponent,
+    NgOptimizedImage,
+    CdkScrollable,
+    LowerCasePipe,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DiseaseHeaderComponent implements OnInit {
-  scroller = inject(ViewportScroller)
-  scrollDispatcher = inject(ScrollDispatcher)
+  scroller = inject(ViewportScroller);
+  scrollDispatcher = inject(ScrollDispatcher);
 
-  animationState= signal('in')
+  animationState = signal('in');
 
   disease = input<Disease>();
   parsedId = computed(() => {
@@ -39,11 +51,13 @@ export class DiseaseHeaderComponent implements OnInit {
       ret = parseInt(split);
     }
     return ret;
-  })
+  });
 
-  ngOnInit(){
-    this.scrollDispatcher.scrolled().subscribe(res => {
-       this.animationState.set(this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in')
-    })
+  ngOnInit() {
+    this.scrollDispatcher.scrolled().subscribe((res) => {
+      this.animationState.set(
+        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
+      );
+    });
   }
 }

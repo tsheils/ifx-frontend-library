@@ -2,4 +2,3 @@
 /diseases
 /about
 /api
-/disease?id=GARD:0006105

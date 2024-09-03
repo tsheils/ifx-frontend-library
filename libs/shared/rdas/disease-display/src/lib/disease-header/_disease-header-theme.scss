@@ -10,13 +10,17 @@
   .disease-header {
     height: 100%;
     background: linear-gradient(
-        to right,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 80%) 50%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 60%) 60%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 40%) 75%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 20%) 90%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 10%)
-        )
+      to right,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 80%)
+        50%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 60%)
+        60%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 40%)
+        75%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 20%)
+        90%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 10%)
+    );
   }
 
   .subscribed-button {
@@ -28,24 +32,28 @@
   .disease-header {
     color: mat.get-theme-color($theme, primary, 100);
     background: linear-gradient(
-        to bottom,
-        mat.get-theme-color($theme, 0.1) 0%,
-        mat.get-theme-color($theme, 0.3) 20%,
-        mat.get-theme-color($theme, 0.7) 40%,
-        mat.get-theme-color($theme, 0.6) 60%,
-        mat.get-theme-color($theme, 0.3) 80%,
-        mat.get-theme-color($theme, 0.1) 100%
+      to bottom,
+      mat.get-theme-color($theme, 0.1) 0%,
+      mat.get-theme-color($theme, 0.3) 20%,
+      mat.get-theme-color($theme, 0.7) 40%,
+      mat.get-theme-color($theme, 0.6) 60%,
+      mat.get-theme-color($theme, 0.3) 80%,
+      mat.get-theme-color($theme, 0.1) 100%
     );
   }
   .disease-title {
     background: linear-gradient(
-        to right,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 80%) 50%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 60%) 60%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 40%) 75%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 20%) 90%,
-        color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 10%)
-    )
+      to right,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 80%)
+        50%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 60%)
+        60%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 40%)
+        75%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 20%)
+        90%,
+      color.mix(mat.get-theme-color($theme, primary), transparent, $weight: 10%)
+    );
   }
 
   .subscribed-button,

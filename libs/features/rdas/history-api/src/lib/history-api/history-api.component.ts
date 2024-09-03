@@ -11,7 +11,6 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
-
 @Component({
   selector: 'lib-history-api',
   standalone: true,

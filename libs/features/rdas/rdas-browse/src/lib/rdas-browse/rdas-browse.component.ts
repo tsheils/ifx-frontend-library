@@ -1,16 +1,23 @@
-import { BreakpointObserver, Breakpoints, MediaMatcher } from '@angular/cdk/layout';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  MediaMatcher,
+} from '@angular/cdk/layout';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
   inject,
   OnDestroy,
-  OnInit, signal,
-  Signal, viewChild,
-  ViewEncapsulation
+  OnInit,
+  signal,
+  Signal,
+  viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -86,13 +93,12 @@ const navigationExtras: NavigationExtras = {
     SharedUtilsFilterPanelComponent,
     SharedUtilsSelectedFilterListComponent,
     ChartWrapperComponent,
-    NgOptimizedImage
+    NgOptimizedImage,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasBrowseComponent implements OnInit, OnDestroy {
-
   private readonly store = inject(Store);
   paginator = viewChild<MatPaginator>(MatPaginator);
   destroyRef = inject(DestroyRef);
@@ -121,11 +127,11 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
     return map;
   });
-  page= this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
-  loaded= this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
+  page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
+  loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
   diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
   diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
-  filters = this.store.selectSignal(FilterSelectors.selectAllFilters)
+  filters = this.store.selectSignal(FilterSelectors.selectAllFilters);
 
   mobileQuery!: MediaQueryList;
 

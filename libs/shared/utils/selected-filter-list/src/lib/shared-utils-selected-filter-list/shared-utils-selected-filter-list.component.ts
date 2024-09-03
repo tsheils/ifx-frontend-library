@@ -5,9 +5,10 @@ import {
   EventEmitter,
   input,
   Input,
-  OnInit, output,
+  OnInit,
+  output,
   Output,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatChipsModule } from '@angular/material/chips';
@@ -25,8 +26,8 @@ export class SharedUtilsSelectedFilterListComponent {
   /**
    * list of selected facets
    */
- filters = input<Map<string, string[]>>();
- filterChange = output<{ label: string; values: string[] }[]>()
+  filters = input<Map<string, string[]>>();
+  filterChange = output<{ label: string; values: string[] }[]>();
 
   /**
    * remove a specific facet and all selected fields
@@ -43,7 +44,9 @@ export class SharedUtilsSelectedFilterListComponent {
    * @param value
    */
   removeField(label: string, value: string): void {
-    const vals = this.filters()?.get(label)?.filter((val) => val !== value);
+    const vals = this.filters()
+      ?.get(label)
+      ?.filter((val) => val !== value);
     if (vals && vals.length) {
       this.filters()?.set(label, vals);
     } else {

@@ -14,6 +14,7 @@ import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import {
+  BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -23,6 +24,7 @@ import {
   provideRouter,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
+  withHashLocation,
   withInMemoryScrolling,
   withPreloading,
   withViewTransitions,
@@ -32,6 +34,11 @@ import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
 } from '@ncats-frontend-library/stores/disease-store';
+import {
+  FILTERS_FEATURE_KEY,
+  filtersReducer,
+  FilterEffects,
+} from '@ncats-frontend-library/stores/filter-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
@@ -55,6 +62,7 @@ export function rdasInit(store = inject(Store)) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    BrowserModule,
     {
       provide: APP_INITIALIZER,
       useFactory: rdasInit,
@@ -79,12 +87,13 @@ export const appConfig: ApplicationConfig = {
       //  articles: articlesReducer,
       //  trials: trialsReducer,
       //  grants: grantsReducer,
-      //   filters: filtersReducer,
+      filters: filtersReducer,
       diseases: diseasesReducer,
     }),
-    provideEffects([UserEffects, DiseaseEffects]),
+    provideEffects([UserEffects, DiseaseEffects, FilterEffects]),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),
     provideState(USERS_FEATURE_KEY, usersReducer),
+    provideState(FILTERS_FEATURE_KEY, filtersReducer),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),

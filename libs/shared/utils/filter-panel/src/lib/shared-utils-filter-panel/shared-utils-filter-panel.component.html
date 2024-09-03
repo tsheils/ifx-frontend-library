@@ -30,7 +30,11 @@
       (scrolledIndexChange)="scrollDetected()"
     >
       <div
-        *cdkVirtualFor="let field of filter()!.values; let last = last; trackBy:_filterField"
+        *cdkVirtualFor="
+          let field of filter()!.values;
+          let last = last;
+          trackBy: _filterField
+        "
         class="filter-grid"
       >
         <div class="filter-cell checkbox">
@@ -46,7 +50,8 @@
           <span class="field-text">
             <span
               [innerHTML]="
-                field['term'] | highlight: (filter().query ? filter().query : '')
+                field['term']
+                  | highlight: (filter().query ? filter().query : '')
               "
             ></span>
           </span>
@@ -60,11 +65,7 @@
           <br />
         }
         @if (!fullList() && last && filter().values.length >= 200) {
-          <button
-            mat-stroked-button
-            (click)="loadMore()"
-            class="full-width"
-          >
+          <button mat-stroked-button (click)="loadMore()" class="full-width">
             see more
           </button>
         }

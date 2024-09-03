@@ -18,7 +18,7 @@ export const BrowseDiseaseListActions = createActionGroup({
   events: {
     setLoading: emptyProps(),
     fetchDiseaseList: props<{ top: number; skip: number }>(),
-    setDisease: props<{ disease: Disease}>(),
+    setDisease: props<{ disease: Disease }>(),
     fetchDiseaseListSuccess: props<{ diseases: Disease[]; page?: Page }>(),
     fetchDiseaseListFailure: props<{ error: string }>(),
     fetchDiseaseTree: props<{ gardId: string }>(),
@@ -55,7 +55,6 @@ export const FetchDiseaseActions = createActionGroup({
     fetchStaticDiseaseFiltersFailure: props<{ error: string }>(),
     clearStaticDiseaseFilters: emptyProps(),
     clearDisease: emptyProps(),
-
   },
 });
 

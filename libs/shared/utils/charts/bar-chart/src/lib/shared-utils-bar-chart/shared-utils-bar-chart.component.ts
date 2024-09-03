@@ -1,7 +1,13 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, computed, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  computed,
+  OnChanges,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Filter } from '@ncats-frontend-library/models/utils';
 import {
   axisBottom,
@@ -41,8 +47,8 @@ export class SharedUtilsBarChartComponent
   implements OnInit, OnChanges
 {
   placeholderUrl = computed(() => {
-    return `assets/charts/placeholders/chart${Math.floor(Math.random()*2)}.webp`
-  })
+    return `assets/charts/placeholders/chart${Math.floor(Math.random() * 2)}.webp`;
+  });
 
   bars!: unknown;
   series!: Stack<never, { [key: string]: number }, string>;
@@ -109,9 +115,9 @@ export class SharedUtilsBarChartComponent
           return dKey.count;
         } else return 0;
       })(
-        // get value for each series key and stack
-        seriesIndex as Iterable<{ [key: string]: number }>,
-      )) as Stack<never, { [key: string]: number }, string>; // group by stack then series key
+      // get value for each series key and stack
+      seriesIndex as Iterable<{ [key: string]: number }>,
+    )) as Stack<never, { [key: string]: number }, string>; // group by stack then series key
     // Prepare the scales for positional and color encodings.
     this.xScale = scaleBand()
       .domain(this.keys)

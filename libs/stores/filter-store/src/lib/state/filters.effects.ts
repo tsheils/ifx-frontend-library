@@ -120,7 +120,7 @@ function parseFilterResponse(
       }
       const filterCategory: FilterCategory = new FilterCategory({
         label: key,
-      //  values: [...retMap.values()],
+        //  values: [...retMap.values()],
         page: currentFilter?.page,
         query: currentFilter?.query,
       });

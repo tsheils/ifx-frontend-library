@@ -1,4 +1,4 @@
-@defer(when user()) {
+@defer (when user()) {
   <div class="signon-spacer"></div>
   <div class="profile-section signin-button" [matMenuTriggerFor]="profileMenu">
     <mat-icon class="missing-url" fontIcon="account_circle"></mat-icon>
@@ -8,7 +8,7 @@
     <button mat-menu-item routerLink="/subscriptions">My Subscriptions</button>
     <button mat-menu-item (click)="signOut()">Sign Out</button>
   </mat-menu>
-} @placeholder() {
+} @placeholder {
   <button
     mat-flat-button
     class="signin-button"

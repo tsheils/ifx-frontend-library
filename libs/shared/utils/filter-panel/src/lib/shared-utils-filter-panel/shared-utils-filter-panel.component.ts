@@ -11,8 +11,11 @@ import {
   inject,
   input,
   OnChanges,
-  OnInit, output, SimpleChange, SimpleChanges,
-  viewChild
+  OnInit,
+  output,
+  SimpleChange,
+  SimpleChanges,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -43,7 +46,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
     HighlightPipe,
     MatButtonModule,
     MatIconModule,
-    MatDivider
+    MatDivider,
   ],
   templateUrl: './shared-utils-filter-panel.component.html',
   styleUrls: ['./shared-utils-filter-panel.component.scss'],
@@ -55,7 +58,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   cdkViewport = viewChild<CdkVirtualScrollViewport>(CdkVirtualScrollViewport);
   filter = input<FilterCategory>({} as FilterCategory);
   filterSelectionChange = output<{ label: string; values: string[] }[]>();
- filterChange = output<{
+  filterChange = output<{
     label: string;
     term?: string;
     page?: number;
@@ -97,7 +100,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
             label: this.filter().label,
             term: term ? term : ' ',
           });
-       //   this.loading = true;
+          //   this.loading = true;
         }),
       )
       .subscribe();
@@ -108,8 +111,8 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
       this.searchInput()!.focus();
     }
 
-    this.cdkViewport()!.renderedRangeStream
-      .pipe(
+    this.cdkViewport()!
+      .renderedRangeStream.pipe(
         takeUntilDestroyed(this.destroyRef),
         map((range: ListRange) => {
           this.range = range;
@@ -120,8 +123,8 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.filterSelection.select(
-      ...this.filter().values
-        .filter((val) => val.selected)
+      ...this.filter()
+        .values.filter((val) => val.selected)
         .map((val) => val.term),
     );
   }
@@ -146,6 +149,6 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   }
 
   _filterField(index: number, filter: Filter) {
-    return filter.value
-}
+    return filter.value;
+  }
 }
