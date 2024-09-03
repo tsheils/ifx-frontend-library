@@ -4,7 +4,10 @@ import {
   withInterceptorsFromDi,
 } from '@angular/common/http';
 import { APP_INITIALIZER, ApplicationConfig, inject } from '@angular/core';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {

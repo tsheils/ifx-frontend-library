@@ -3,7 +3,6 @@
     class="typeahead-field search"
     appearance="outline"
     subscriptSizing="dynamic"
-    [color]="'primary'"
   >
     <input
       matInput
@@ -20,7 +19,7 @@
       (optionSelected)="selectDisease($event)"
       class="custom-autocomplete-panel"
     >
-      @for (option of options; track option.name) {
+      @for (option of options(); track option.name) {
         <mat-option [value]="option" class="dynamic-height">
           <span
             class="main-value"
@@ -39,7 +38,7 @@
       }
     </mat-autocomplete>
     <button matSuffix mat-icon-button aria-label="search">
-      <mat-icon [color]="'primary'">search</mat-icon>
+      <mat-icon>search</mat-icon>
     </button>
   </mat-form-field>
 </div>

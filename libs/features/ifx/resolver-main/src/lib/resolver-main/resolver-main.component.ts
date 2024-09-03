@@ -9,7 +9,6 @@ import {
   OnInit,
   signal,
   Signal,
-  ViewChild,
   ViewEncapsulation,
   WritableSignal,
 } from '@angular/core';
@@ -28,6 +27,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
 import { SharedUtilsListFilterRowComponent } from '@ncats-frontend-library/shared/utils/list-filter-row';
+import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { Store } from '@ngrx/store';
 import { ResolverForm } from 'ifx';
 import { ResolverDataViewerComponent } from 'resolver-data-viewer';
@@ -57,6 +57,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     MatButtonModule,
     ResolverDataViewerComponent,
     HighlightPipe,
+    LoadingSpinnerComponent
   ],
   templateUrl: './resolver-main.component.html',
   styleUrl: './resolver-main.component.scss',
@@ -71,13 +72,22 @@ export class ResolverMainComponent implements OnInit {
 
   optsList = this.store.selectSignal(ResolverSelectors.selectResolverOptions);
   resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver);
+  filteredResolvedData = computed(()=> {
+    return this.resolvedData().filter(obj => obj.response)
+  });
+
+  badData = computed(()=> {
+    return this.resolvedData().filter(obj => !obj.response)
+  });
 
   optionCategories: Signal<FilterCategory[]> = computed(() =>
     this._mapFilterCategoriesFromArray(this.optsList()),
   );
+
   filteredSearchOptions: WritableSignal<FilterCategory[]> = signal(
     this.optionCategories(),
   );
+
   selectedFilters: WritableSignal<{ [key: string]: Filter[] }> = signal(
     this._mapFilterArrayToObject(
       this.optsList()?.filter((opt: Filter) => opt.selected),
@@ -87,10 +97,16 @@ export class ResolverMainComponent implements OnInit {
   resolveCtrl = new FormControl<string>('LARGEST');
   inputCtrl = new FormControl();
   filterSearchCtrl = new FormControl();
-  subscriptionSelection = new SelectionModel<Filter>(
-    true,
-    this.optsList()?.filter((opt: Filter) => opt.selected),
-  );
+  loading = computed(()=> !!(this.resolvedData().length || this.badData().length));
+  clicked = signal(false);
+
+  subscriptionSelection = computed(() => {
+    return new SelectionModel<Filter>(
+      true,
+      this.optsList()?.filter((opt: Filter) => opt.selected),
+    );
+  }
+  )
 
   ngOnInit() {
     if (this.route.snapshot && this.route.snapshot.queryParams) {
@@ -105,10 +121,9 @@ export class ResolverMainComponent implements OnInit {
       this.resolveCtrl.setValue(params.get('standardize'));
       this.inputCtrl.setValue(params.get('params'));
     }
-
     this.filterSearchCtrl.valueChanges.subscribe(() => this.searchFilters());
 
-    this.subscriptionSelection.changed
+    this.subscriptionSelection().changed
       .pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(100),
@@ -116,12 +131,13 @@ export class ResolverMainComponent implements OnInit {
       )
       .subscribe(() => {
         this.selectedFilters.set(
-          this._mapFilterArrayToObject(this.subscriptionSelection.selected),
+          this._mapFilterArrayToObject(this.subscriptionSelection().selected),
         );
       });
   }
 
   resolve() {
+    this.clicked.set(true)
     const formData: ResolverForm = new ResolverForm({
       structure: this.inputCtrl.value,
       format: 'json',
@@ -129,7 +145,7 @@ export class ResolverMainComponent implements OnInit {
     });
     let URL = '';
 
-    this.subscriptionSelection.selected.forEach((filter: Filter) => {
+    this.subscriptionSelection().selected.forEach((filter: Filter) => {
       if (filter.value) {
         URL = URL + '/' + filter.value;
       }
@@ -139,7 +155,7 @@ export class ResolverMainComponent implements OnInit {
     localStorage.setItem(
       'previouslyUsedOptions',
       JSON.stringify(
-        this.subscriptionSelection.selected.map((fil) => fil.value),
+        this.subscriptionSelection().selected.map((fil) => fil.value),
       ),
     );
     this.store.dispatch(
@@ -149,13 +165,17 @@ export class ResolverMainComponent implements OnInit {
     this.router.navigate([], {
       queryParams: {
         params: this.inputCtrl.value,
-        options: this.subscriptionSelection.selected
+        options: this.subscriptionSelection().selected
           .map((fil) => fil.value)
           .join(';'),
         standardize: this.resolveCtrl.value,
       },
       queryParamsHandling: 'merge',
     });
+  }
+
+  selectValue(value: Filter){
+    this.subscriptionSelection()?.toggle(value);
   }
 
   searchFilters() {
@@ -167,7 +187,7 @@ export class ResolverMainComponent implements OnInit {
       const retArr = searchCategories.filter((filter) => {
         const search: string = this.filterSearchCtrl.value.toLowerCase();
         if (
-          filter.term.toLowerCase().includes(search) ||
+          filter.term?.toLowerCase().includes(search) ||
           filter.description?.toLowerCase().includes(search)
         ) {
           return filter;
@@ -184,15 +204,15 @@ export class ResolverMainComponent implements OnInit {
   }
 
   removeChip(filter: Filter) {
-    this.subscriptionSelection.deselect(filter);
+    this.subscriptionSelection().deselect(filter);
   }
 
   clearParams() {
-    this.subscriptionSelection.clear();
+    this.subscriptionSelection().clear();
   }
 
   searchDisabled() {
-    return !this.inputCtrl.value || this.subscriptionSelection.isEmpty(); // || this.filterOptionsList())
+    return !this.inputCtrl.value || this.subscriptionSelection().isEmpty(); // || this.filterOptionsList())
   }
 
   _mapFilterCategoriesFromArray(

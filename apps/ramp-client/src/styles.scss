@@ -125,7 +125,7 @@ a {
 }
 
 .active-sidemenu {
-  border-left: 8px solid mat.get-theme-color(theme.$light-theme, primary);
+  @include mat.elevation(2, mat.get-theme-color(theme.$light-theme, secondary));
 }
 
 .primary-color-font {

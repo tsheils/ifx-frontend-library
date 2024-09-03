@@ -86,11 +86,11 @@ export class AppComponent implements OnInit {
   links: LinkTemplateProperty[] = [
     {
       link: 'diseases',
-      label: 'DISEASES',
+      label: 'Diseases',
     },
     {
       link: 'about',
-      label: 'ABOUT',
+      label: 'About',
     },
     {
       link: 'apis',
@@ -99,27 +99,27 @@ export class AppComponent implements OnInit {
       children: [
         {
           link: 'apis/epi',
-          label: 'EPIDEMIOLOGY',
+          label: 'Epidemiology',
         },
         {
           link: 'apis/history',
-          label: 'NATURAL HISTORY',
+          label: 'Natural History',
         },
         {
           link: 'apis/diseases',
-          label: 'DISEASES',
+          label: 'Diseases',
         },
         {
           link: 'apis/publications',
-          label: 'PUBLICATIONS',
+          label: 'Publications',
         },
         {
           link: 'apis/projects',
-          label: 'PROJECTS',
+          label: 'Projects',
         },
         {
           link: 'apis/trials',
-          label: 'TRIALS',
+          label: 'Clinical Trials',
         },
       ],
     },

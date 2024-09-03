@@ -1,9 +1,9 @@
-<mat-drawer-container class="browse-page">
-  <mat-drawer
+<mat-sidenav-container class="browse-page">
+  <mat-sidenav
     #filtersidenav
     class="filters-menu-panel"
     [position]="'start'"
-    [opened]="!mobile"
+    [opened]="!mobileQuery.matches"
     [mode]="'side'"
   >
     <div class="row right-justified-row">
@@ -19,25 +19,28 @@
     </div>
     <mat-tab-group>
       <mat-tab label="Filters">
-        @for (filter of filters; track filter.label) {
+        @for (filter of filters(); track filter.label) {
           <ncats-frontend-library-shared-utils-filter-panel
             [filter]="filter"
             (filterSelectionChange)="filterSelectionChange($event)"
             (filterChange)="filterChange($event)"
           ></ncats-frontend-library-shared-utils-filter-panel>
+          <br />
         }
       </mat-tab>
       <mat-tab label="Hierarchy">
-        @if (diseaseTree) {
-          <ncats-frontend-library-rdas-tree
-            (leafExpand)="treeExpand($event)"
-            [data]="diseaseTree"
-          ></ncats-frontend-library-rdas-tree>
-        }
+        <ng-template matTabContent>
+          @if (diseaseTree()) {
+            <ncats-frontend-library-rdas-tree
+              (leafExpand)="treeExpand($event)"
+              [data]="diseaseTree()!"
+            ></ncats-frontend-library-rdas-tree>
+          }
+        </ng-template>
       </mat-tab>
     </mat-tab-group>
-  </mat-drawer>
-  <mat-drawer-content class="drawer-container-content">
+  </mat-sidenav>
+  <mat-sidenav-content class="drawer-container-content">
     @if (!filtersidenav.opened) {
       <div class="row">
         <button
@@ -52,7 +55,7 @@
       </div>
     }
     <div class="row space-around-row top-align">
-      @if (!mobile) {
+      @if (!mobileQuery.matches) {
         @if (filterMap() && filterMap().has('articles')) {
           <div class="width-30">
             <lib-chart-wrapper
@@ -141,29 +144,31 @@
         }
       </div>
     </div>
-    <div class="row spinner-holder width-70">
+    <br />
+    @defer (when diseases()) {
+      <ncats-frontend-library-disease-list
+        [diseases]="diseases()"
+        class="fill-container"
+      ></ncats-frontend-library-disease-list>
+      <div class="row right-justified-row">
+        @if (page()) {
+          <mat-paginator
+            [pageSize]="page()?.pageSize"
+            [pageIndex]="page()?.pageIndex"
+            [hidePageSize]="true"
+            (page)="paginationChanges($event)"
+            [length]="page()?.total"
+            class="browse-paginator"
+          ></mat-paginator>
+        }
+        <ncats-frontend-library-scroll-to-top
+          [color]="'accent'"
+        ></ncats-frontend-library-scroll-to-top>
+      </div>
+    } @placeholder {
       <ncats-frontend-library-loading-spinner
-        [isLoaded]="loaded()"
+        [isLoaded]="false"
       ></ncats-frontend-library-loading-spinner>
-    </div>
-    <ncats-frontend-library-disease-list
-      [diseases]="diseases"
-      class="fill-container"
-    ></ncats-frontend-library-disease-list>
-    <div class="row right-justified-row">
-      @if (page()) {
-        <mat-paginator
-          [pageSize]="page()?.pageSize"
-          [pageIndex]="page()?.pageIndex"
-          [hidePageSize]="true"
-          (page)="paginationChanges($event)"
-          [length]="page()?.total"
-          class="browse-paginator"
-        ></mat-paginator>
-      }
-      <ncats-frontend-library-scroll-to-top
-        [color]="'accent'"
-      ></ncats-frontend-library-scroll-to-top>
-    </div>
-  </mat-drawer-content>
-</mat-drawer-container>
+    }
+  </mat-sidenav-content>
+</mat-sidenav-container>

@@ -34,7 +34,7 @@ import {
 } from 'resolver-store';
 import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
-import { provideClientHydration } from '@angular/platform-browser';
+import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
 
 export function load_resolver(
   resolverService: ResolverService,
@@ -60,11 +60,13 @@ export function load_from_local_storage(
         );
         if (temp) {
           const filterOptionsList = JSON.parse(temp);
-          store.dispatch(
-            LoadResolverOptionsActions.setPreviousFilters({
-              filters: filterOptionsList,
-            }),
-          );
+          if(filterOptionsList && filterOptionsList.length) {
+            store.dispatch(
+              LoadResolverOptionsActions.setPreviousFilters({
+                filters: filterOptionsList,
+              }),
+            );
+          }
         }
       }
     }
@@ -73,6 +75,7 @@ export function load_from_local_storage(
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    BrowserModule,
     {
       provide: APP_INITIALIZER,
       useFactory: load_from_local_storage,

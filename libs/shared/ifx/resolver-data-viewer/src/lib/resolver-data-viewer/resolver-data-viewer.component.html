@@ -1,8 +1,6 @@
 <div class="row space-around-row">
   <div class="width-95 right-text">
-    <mat-slide-toggle (click)="showTable = !showTable" [color]="'primary'"
-      >Show Table</mat-slide-toggle
-    >
+    <mat-slide-toggle (click)="showTable = !showTable" checked="true" >Show Table</mat-slide-toggle>
     &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
     <button mat-flat-button [color]="'primary'" [matMenuTriggerFor]="menu">
       Download <mat-icon>download</mat-icon>
@@ -18,18 +16,20 @@
   </div>
 </div>
 <br />
+@defer(when data()){
 <div class="row space-around-row data-display">
   <div class="width-95">
-    @if (showTable === true) {
+    @if (!showTable) {
+      <pre class="raw-data"
+      >{{ dataAsCSV() }}
+</pre
+>
+    } @else {
       <ncats-datatable
         [data]="dataAsDataProperty()"
-        [fieldsConfig]="fields"
+        [fieldsConfig]="fields()"
       ></ncats-datatable>
-    } @else {
-      <pre class="raw-data"
-        >{{ dataAsCSV() }}
-</pre
-      >
     }
   </div>
 </div>
+} @placeholder{}

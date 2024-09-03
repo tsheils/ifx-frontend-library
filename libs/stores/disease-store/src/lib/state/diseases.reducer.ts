@@ -68,12 +68,15 @@ export const reducer = createReducer(
       diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true }),
   ),
 
-  on(FetchDiseaseActions.fetchDiseaseSuccess, (state, { disease }) =>
-    diseasesAdapter.setOne(disease, {
-      ...state,
-      selectedId: disease.gardId,
-      loaded: true,
-    }),
+  on(
+    FetchDiseaseActions.fetchDiseaseSuccess,
+    BrowseDiseaseListActions.setDisease,
+    (state, { disease }) =>
+      diseasesAdapter.setOne(disease, {
+        ...state,
+        selectedId: disease.gardId,
+        loaded: true,
+      }),
   ),
 
   on(
@@ -105,6 +108,22 @@ export const reducer = createReducer(
       allDiseaseFilters: filters,
     }),
   ),
+
+  on(FetchDiseaseActions.clearStaticDiseaseFilters, (state) => ({
+    ...state,
+    staticDiseaseFilters: [],
+  })),
+
+  on(FetchDiseaseActions.clearDisease, (state) => ({
+    ...state,
+    selectedId: undefined,
+    disease: undefined,
+  })),
+
+  on(SearchDiseasesActions.searchDiseasesSuccess, (state, { typeahead }) => ({
+    ...state,
+    typeahead: typeahead,
+  })),
 
   on(SearchDiseasesActions.clearTypeahead, (state) => ({
     ...state,

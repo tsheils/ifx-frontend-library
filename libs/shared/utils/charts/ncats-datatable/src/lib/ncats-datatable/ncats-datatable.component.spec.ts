@@ -10,10 +10,7 @@ describe('NcatsDatatableComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [],
-      imports: [
-        NoopAnimationsModule,
-        NcatsDatatableComponent
-      ],
+      imports: [NoopAnimationsModule, NcatsDatatableComponent],
     }).compileComponents();
   }));
 

@@ -120,11 +120,12 @@ function parseFilterResponse(
       }
       const filterCategory: FilterCategory = new FilterCategory({
         label: key,
-        values: [...retMap.values()],
+        //  values: [...retMap.values()],
         page: currentFilter?.page,
         query: currentFilter?.query,
       });
-      filters.push(filterCategory);
+      filterCategory.values = [...retMap.values()];
+      filters.push(filterCategory as FilterCategory);
     });
   }
   return filters;
@@ -261,7 +262,6 @@ export const searchFilters$ = createEffect(
                 page: nextPage,
                 query: action.term,
               });
-
               const filter = parseFilterResponse(
                 res as FilterResponse,
                 tempFilter,

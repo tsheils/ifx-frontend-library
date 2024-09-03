@@ -1,6 +1,10 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import {
+  BreakpointObserver,
+  Breakpoints,
+  MediaMatcher,
+} from '@angular/cdk/layout';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -8,13 +12,12 @@ import {
   computed,
   DestroyRef,
   inject,
-  Inject,
   OnDestroy,
   OnInit,
+  signal,
   Signal,
-  ViewChild,
+  viewChild,
   ViewEncapsulation,
-  WritableSignal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -59,6 +62,7 @@ import {
 } from '@ncats-frontend-library/stores/disease-store';
 import { Store } from '@ngrx/store';
 import { map, Subject } from 'rxjs';
+import { temp } from 'three/examples/jsm/nodes/core/VarNode';
 
 /**
  * navigation options to merge query parameters that are added on in navigation/query/facets/pagination
@@ -89,19 +93,17 @@ const navigationExtras: NavigationExtras = {
     SharedUtilsFilterPanelComponent,
     SharedUtilsSelectedFilterListComponent,
     ChartWrapperComponent,
+    NgOptimizedImage,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasBrowseComponent implements OnInit, OnDestroy {
-  /**
-   * Behaviour subject to allow extending class to unsubscribe on destroy
-   * @type {Subject<any>}
-   */
-  protected ngUnsubscribe: Subject<boolean> = new Subject();
   private readonly store = inject(Store);
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
+  paginator = viewChild<MatPaginator>(MatPaginator);
   destroyRef = inject(DestroyRef);
+  private router = inject(Router);
+  protected dom = inject(DOCUMENT);
 
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
     const map = new Map<string, FilterCategory[]>();
@@ -125,40 +127,36 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
     return map;
   });
+  page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
+  loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
+  diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
+  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
+  filters = this.store.selectSignal(FilterSelectors.selectAllFilters);
 
-  page!: Signal<Page | undefined>;
-  loaded!: Signal<boolean | undefined>;
-  diseases!: Signal<Disease[] | undefined>;
-  diseaseTree!: DiseaseNode[] | undefined;
-  filters: FilterCategory[] = [];
+  mobileQuery!: MediaQueryList;
+
   sort = 'COUNT_ARTICLES';
   selectedValues: Map<string, string[]> = new Map<string, string[]>();
   showDownload = false;
-  mobile = false;
 
-  constructor(
-    private router: Router,
-    private changeRef: ChangeDetectorRef,
-    private breakpointObserver: BreakpointObserver,
-    private scroll: ScrollDispatcher,
-    @Inject(DOCUMENT) protected dom?: Document,
-  ) {}
+  private _mobileQueryListener: () => void;
+
+  constructor() {
+    const changeDetectorRef = inject(ChangeDetectorRef);
+    const media = inject(MediaMatcher);
+
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+  }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
 
   ngOnInit(): void {
     this.selectedValues.clear();
     this.fetchParameters();
-
-    this.breakpointObserver
-      .observe([Breakpoints.XSmall, Breakpoints.Small])
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((result) => {
-        this.mobile = result.matches;
-        this.changeRef.markForCheck();
-      });
-
-    this.diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
-    this.loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
-    this.page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
 
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -172,16 +170,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store
-      .select(DiseaseSelectors.getDiseaseTree)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res) => {
-        if (res) {
-          this.diseaseTree = res;
-          this.changeRef.markForCheck();
-        }
-      });
-
     if (this.router.routerState.root.snapshot.queryParamMap.has('sort')) {
       const sort =
         this.router.routerState.root.snapshot.queryParamMap.get('sort');
@@ -189,24 +177,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         this.sort = sort;
       }
     }
-
-    this.store
-      .select(FilterSelectors.selectAllFilters)
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map((res) => {
-          if (res && res.length) {
-            const tempMap: Map<string, FilterCategory> = new Map<
-              string,
-              FilterCategory
-            >();
-            res.forEach((filter) => tempMap.set(filter.label, filter));
-            this.filters = [...tempMap.values()];
-            this.changeRef.markForCheck();
-          }
-        }),
-      )
-      .subscribe();
   }
 
   /**
@@ -314,11 +284,8 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           this.router.routerState.root.snapshot.queryParamMap.get(param);
         if (selectedValues) {
           this.selectedValues.set(param, selectedValues.split('&'));
-          this.changeRef.markForCheck();
         }
       });
-    } else {
-      this.changeRef.markForCheck();
     }
   }
 
@@ -380,15 +347,5 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
    */
   private _navigate(navExtras: NavigationExtras): void {
     this.router.navigate([], navExtras);
-  }
-
-  /**
-   * clean up on leaving component
-   */
-  ngOnDestroy(): void {
-    this.diseaseTree = undefined;
-    this.changeRef.markForCheck();
-    this.ngUnsubscribe.next(true);
-    this.ngUnsubscribe.complete();
   }
 }

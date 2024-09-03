@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { Component, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
 import { Filter } from '@ncats-frontend-library/models/utils';
 import {
@@ -18,7 +18,7 @@ import { ImageDownloadComponent } from 'image-download';
 @Component({
   selector: 'lib-shared-utils-pie-chart',
   standalone: true,
-  imports: [CommonModule, ImageDownloadComponent],
+  imports: [CommonModule, ImageDownloadComponent, NgOptimizedImage],
   templateUrl: './shared-utils-pie-chart.component.html',
   styleUrl: './shared-utils-pie-chart.component.scss',
   encapsulation: ViewEncapsulation.None,
@@ -41,8 +41,7 @@ export class SharedUtilsPieChartComponent
     if (this.chartElement && this.isBrowser()) {
       const element = this.chartElement.nativeElement;
       this.width = element.offsetWidth - this.margins.left - this.margins.right;
-      this.height =
-        element.offsetHeight - this.margins.top - this.margins.bottom;
+      this.height = element.offsetHeight; // + this.margins.top //+ this.margins.bottom;
 
       this.radius = Math.min(this.width, this.height) / 2;
 
@@ -73,8 +72,13 @@ export class SharedUtilsPieChartComponent
         .attr('xmlns', 'http://www.w3.org/2000/svg')
         .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
         .attr('class', 'chart-id')
-        .attr('viewBox', [-150, -150, 300, 300])
-        //.attr("viewBox", [-this.width / 2, -this.height / 2, this.width, this.height])
+        // .attr('viewBox', [-150, -180, 300, 360])
+        .attr('viewBox', [
+          -this.width / 2,
+          -this.height / 2,
+          this.width,
+          this.height,
+        ])
         .attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
       this.makeChart();
     }
@@ -102,18 +106,21 @@ export class SharedUtilsPieChartComponent
       .attr('d', this.arcShape)
       .on('mouseover', (event: Event, d: { data: Filter }) => {
         select((<unknown>event.currentTarget) as string)
+          .classed('hovered', true)
           .transition()
-          .duration(300)
-          .style('fill', '#278F93');
+          .duration(300);
+
+        // .style('fill', '#278F93');
         this.svg.selectAll('.toolCircle').remove();
         this.addTooltip(d.data);
       })
       .on('mouseout', (event: Event, d: { data: Filter }) => {
-        const color = this._getColor(d.data.term);
+        //  const color = this._getColor(d.data.term);
         select((<unknown>event.currentTarget) as string)
+          .classed('hovered', false)
           .transition()
-          .duration(300)
-          .style('fill', color);
+          .duration(300);
+        //  .style('fill', color);
       })
       .on('click', (event: Event, d: { data: Filter }) => {
         this.clickElement.emit(d.data);
@@ -136,8 +143,7 @@ export class SharedUtilsPieChartComponent
       .append('text')
       .attr('class', 'chart-title')
       .attr('x', 0)
-      .attr('y', -120)
-      // .attr('y', this.margins.top/2)
+      .attr('y', -this.height / 2 + this.margins.top)
       .attr('text-anchor', 'middle')
       .text(this.data.label);
 

@@ -1,4 +1,4 @@
-import { Component, Input, Signal } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card.component';
 
@@ -10,5 +10,5 @@ import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card
   imports: [DiseaseListCardComponent],
 })
 export class DiseaseListComponent {
-  @Input() diseases!: Signal<Disease[] | undefined>;
+  diseases = input<Disease[]>();
 }

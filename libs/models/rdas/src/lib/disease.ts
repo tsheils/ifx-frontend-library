@@ -72,28 +72,32 @@ export class Disease {
     }
 
     if (obj._geneAssociations && obj._geneAssociations.edges) {
-      this.geneAssociations = obj._geneAssociations.edges.map(
-        (data: unknown) =>
-          new GeneAssociation(
-            data as {
-              gene: Partial<Gene>;
-              properties: Partial<GeneAssociation>;
-            },
-          ),
-      );
+      this.geneAssociations = obj._geneAssociations.edges
+        .map(
+          (data: unknown) =>
+            new GeneAssociation(
+              data as {
+                gene: Partial<Gene>;
+                properties: Partial<GeneAssociation>;
+              },
+            ),
+        )
+        .sort((a, b) => b.associationType.localeCompare(a.associationType));
       delete this._geneAssociations;
     }
 
     if (obj._phenotypeAssociations && obj._phenotypeAssociations.edges) {
-      this.phenotypeAssociations = obj._phenotypeAssociations.edges.map(
-        (data: unknown) =>
-          new PhenotypeAssociation(
-            data as {
-              phenotype: Partial<Phenotype>;
-              properties: Partial<PhenotypeAssociation>;
-            },
-          ),
-      );
+      this.phenotypeAssociations = obj._phenotypeAssociations.edges
+        .map(
+          (data: unknown) =>
+            new PhenotypeAssociation(
+              data as {
+                phenotype: Partial<Phenotype>;
+                properties: Partial<PhenotypeAssociation>;
+              },
+            ),
+        )
+        .sort((a, b) => b.frequencyRank - a.frequencyRank);
 
       delete this._phenotypeAssociations;
     }

@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin theme($theme) {
+  .profile-section {
+    color: mat.get-theme-color($theme, primary);
+  }
+}
+
+@mixin secondary-theme($theme) {
+  .profile-section {
+    color: mat.get-theme-color($theme, secondary);
+  }
+}

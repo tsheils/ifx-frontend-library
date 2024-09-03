@@ -1,28 +1,27 @@
-@if (!genes?.length) {
+@if (!genes()?.length) {
   <div>
     <ncats-frontend-library-shared-utils-data-not-found
       [message]="'No Gene Data Available'"
     ></ncats-frontend-library-shared-utils-data-not-found>
   </div>
 }
-@if (genes?.length) {
+@if (genes()?.length) {
   <div>
     <div class="row space-between-row">
       <div>
         <button
-          mat-stroked-button
+          mat-button
           class="tool-button list-download"
           (click)="downloadData()"
           matTooltip="Download Data"
-          color="primary"
         >
-          <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+          <span>Download </span><mat-icon>download</mat-icon>
         </button>
       </div>
       <div>
         <mat-paginator
           #paginator
-          [length]="count"
+          [length]="count()"
           [pageIndex]="0"
           [pageSize]="5"
           [hidePageSize]="true"
@@ -32,7 +31,7 @@
     <div class="full-width">
       <table
         mat-table
-        [dataSource]="dataSource"
+        [dataSource]="dataSource()"
         matSort
         (matSortChange)="sortData($event)"
       >

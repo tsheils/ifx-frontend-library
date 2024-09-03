@@ -11,12 +11,14 @@
   },
   "servers": [
     {
-      "url": "/api/history"
+      "url": "https://rdas.ncats.nih.gov/api/article_prediction"
     }
   ],
   "paths": {
-    "/article_prediction_api/v1/predict": {
+    "/v1/predict": {
       "post": {
+        "summary": "Predict",
+        "operationId": "predict_v1_predict_post",
         "requestBody": {
           "content": {
             "application/json": {
@@ -29,12 +31,88 @@
         },
         "responses": {
           "200": {
-            "description": "Success"
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
           }
         },
-        "operationId": "post_predict",
-        "parameters": [],
-        "tags": ["article_prediction_api/v1"]
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "TextInput": {
+        "required": ["texts"],
+        "properties": {
+          "texts": {
+            "type": "array",
+            "description": "List of texts to predict",
+            "example": [
+              "This is an example text!",
+              "The natural history, prognostication and optimal treatment of Richter transformation developed from chronic \nlymphocytic leukemia (CLL) are not well defined. We report the clinical characteristics and outcomes of a large series of \nbiopsy-confirmed Richter transformation (diffuse large B-cell lymphoma or high grade B-cell lymphoma, n=204) cases diagnosed \nfrom 1993 to 2018. After a median follow up of 67.0 months, the median overall survival (OS) was 12.0 months. Patients who \nreceived no prior treatment for CLL had significantly better OS (median 46.3 vs. 7.8 months; P<0.001). Patients with elevated \nlactate dehydrogenase (median 6.2 vs. 39.9 months; P<0.0001) or TP53 disruption (median 8.3 vs. 12.8 months; P=0.046) had worse\n OS than those without. Immunoglobulin heavy chain variable region gene mutation, cell of origin, Myc/Bcl-2 double expression and\n  MYC/BCL2/BCL6 double-/triple-hit status were not associated with OS. In multivariable Cox regression, elevated lactate dehydrogenase\n   [Hazard ratio (HR) 2.3, 95% Confidence Interval (CI): 1.3-4.1; P=0.01], prior CLL treatment (HR 2.0, 95%CI: 1.2-3.5; P=0.01), \n   and older age (HR 1.03, 95%CI: 1.01-1.05; P=0.01) were associated with worse OS. Twenty-four (12%) patients underwent stem cell \n   transplant (20 autologous and 4 allogeneic), and had a median post-transplant survival of 55.4 months. In conclusion, the overall \n   outcome of Richter transformation is poor. Richter transformation developed in patients with untreated CLL has significantly better \n   survival. Stem cell transplant may benefit select patients.\n"
+            ],
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "type": "object",
+        "title": "TextInput"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
       }
     }
   },
@@ -43,34 +121,5 @@
       "name": "article_prediction_api/v1",
       "description": "Prediction operations"
     }
-  ],
-  "components": {
-    "schemas": {
-      "TextInput": {
-        "required": ["texts"],
-        "properties": {
-          "texts": {
-            "type": "array",
-            "description": "List of texts to predict",
-            "example": [
-              "This is am example text!",
-              "The natural history, prognostication and optimal treatment of Richter transformation developed from chronic \nlymphocytic leukemia (CLL) are not well defined. We report the clinical characteristics and outcomes of a large series of \nbiopsy-confirmed Richter transformation (diffuse large B-cell lymphoma or high grade B-cell lymphoma, n=204) cases diagnosed \nfrom 1993 to 2018. After a median follow up of 67.0 months, the median overall survival (OS) was 12.0 months. Patients who \nreceived no prior treatment for CLL had significantly better OS (median 46.3 vs. 7.8 months; P<0.001). Patients with elevated \nlactate dehydrogenase (median 6.2 vs. 39.9 months; P<0.0001) or TP53 disruption (median 8.3 vs. 12.8 months; P=0.046) had worse\n OS than those without. Immunoglobulin heavy chain variable region gene mutation, cell of origin, Myc/Bcl-2 double expression and\n  MYC/BCL2/BCL6 double-/triple-hit status were not associated with OS. In multivariable Cox regression, elevated lactate dehydrogenase\n   [Hazard ratio (HR) 2.3, 95% Confidence Interval (CI): 1.3-4.1; P=0.01], prior CLL treatment (HR 2.0, 95%CI: 1.2-3.5; P=0.01), \n   and older age (HR 1.03, 95%CI: 1.01-1.05; P=0.01) were associated with worse OS. Twenty-four (12%) patients underwent stem cell \n   transplant (20 autologous and 4 allogeneic), and had a median post-transplant survival of 55.4 months. In conclusion, the overall \n   outcome of Richter transformation is poor. Richter transformation developed in patients with untreated CLL has significantly better \n   survival. Stem cell transplant may benefit select patients.\n"
-            ],
-            "items": {
-              "type": "string"
-            }
-          }
-        },
-        "type": "object"
-      }
-    },
-    "responses": {
-      "ParseError": {
-        "description": "When a mask can't be parsed"
-      },
-      "MaskError": {
-        "description": "When any error occurs on mask"
-      }
-    }
-  }
+  ]
 }

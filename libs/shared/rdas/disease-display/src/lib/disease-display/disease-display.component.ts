@@ -9,12 +9,11 @@ import {
   computed,
   DestroyRef,
   ElementRef,
-  EventEmitter,
   inject,
   input,
   OnChanges,
   OnInit,
-  Output,
+  output,
   QueryList,
   Signal,
   SimpleChange,
@@ -24,6 +23,7 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Disease } from '@ncats-frontend-library/models/rdas';
@@ -60,6 +60,7 @@ import { DiseaseHeaderComponent } from '../disease-header/disease-header.compone
     ScrollingModule,
     RdasPanelTemplateComponent,
     ChartWrapperComponent,
+    MatProgressSpinner,
   ],
 })
 export class DiseaseDisplayComponent
@@ -70,6 +71,12 @@ export class DiseaseDisplayComponent
   templates!: QueryList<RdasPanelTemplateComponent>;
   private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
+  private changeRef = inject(ChangeDetectorRef);
+  private router = inject(Router);
+  public scroller = inject(ViewportScroller);
+  private scrollDispatcher = inject(ScrollDispatcher);
+  private breakpointObserver = inject(BreakpointObserver);
+
   disease = input<Disease>();
   loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();
@@ -85,24 +92,13 @@ export class DiseaseDisplayComponent
     return this.setFilterMap(this.filters());
   });
 
-  @Output() activeElement: EventEmitter<string> = new EventEmitter<string>();
-  @Output() optionsChange: EventEmitter<{
-    params: { [key: string]: unknown };
-    fragment: string;
-  }> = new EventEmitter<{
+  activeElement = output<string>();
+  optionsChange = output<{
     params: { [key: string]: unknown };
     fragment: string;
   }>();
 
   mobile = false;
-
-  constructor(
-    private changeRef: ChangeDetectorRef,
-    private router: Router,
-    public scroller: ViewportScroller,
-    private scrollDispatcher: ScrollDispatcher,
-    private breakpointObserver: BreakpointObserver,
-  ) {}
 
   ngOnInit() {
     this.scroller.setOffset([0, 250]);

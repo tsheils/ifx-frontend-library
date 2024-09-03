@@ -36,10 +36,6 @@ export const routes: Routes = [
     path: 'diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    providers: [
-      provideState(FILTERS_FEATURE_KEY, filtersReducer),
-      provideEffects([FilterEffects]),
-    ],
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-browse').then(
         (m) => m.RdasBrowseComponent,

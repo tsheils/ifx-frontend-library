@@ -12,34 +12,39 @@
       </div>
     </div>
     <div id="3d-graph" class="graph">
-      <video
+      <img
+        ngSrc="/assets/rdas-home/graph-placeholder.webp"
+        alt="graph image"
+        fill
+        priority
+      />
+      <!--  <video
         playsinline
         autoplay
         muted
         loop
         poster="/assets/rdas-home/graph-placeholder.png"
       >
-        <!--
+        &lt;!&ndash;
         <source src="my-video-url.webm" type="video/webm">
--->
+&ndash;&gt;
         <source src="/assets/rdas-home/graph-video.mp4" type="video/mp4" />
         Your browser does not support the video tag.
-      </video>
+      </video>-->
     </div>
   </div>
-  <a (click)="goToDetails()">
-    <div class="primary-background learn-more">
-      <div class="row centered-row no-padding learn-more-text">
+  <div class="primary-background learn-more">
+    <div class="row centered-row no-padding learn-more-text">
+      <a mat-flat-button (click)="goToDetails()">
         <p>Learn More</p>
-      </div>
-      <div class="row centered-row top-align no-padding more-arrow">
         <mat-icon>expand_more</mat-icon>
-      </div>
+      </a>
     </div>
-  </a>
-  <div #details class="primary-background">
+  </div>
+
+  <div #details class="">
     @defer (on viewport) {
-      <div class="grid-wrapper">
+      <div class="grid-wrapper primary-background">
         <mat-card class="white-background rdas-card centered">
           <div class="bottom-border-primary heading-text">
             Browse comprehensive disease data

@@ -21,7 +21,7 @@ import { MatInputModule } from '@angular/material/input';
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
-    MatIconModule
+    MatIconModule,
   ],
   providers: [
     {
@@ -48,7 +48,7 @@ export class SharedFormsFileUploadComponent implements ControlValueAccessor {
   onTouched = () => {};
 
   cancelUpload() {
-    if(this.fileUpload()) {
+    if (this.fileUpload()) {
       const nativeElement = this.fileUpload()?.nativeElement;
       nativeElement.value = '';
       this.file.set(null);

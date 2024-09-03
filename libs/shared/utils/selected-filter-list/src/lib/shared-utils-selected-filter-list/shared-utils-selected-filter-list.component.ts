@@ -6,6 +6,7 @@ import {
   input,
   Input,
   OnInit,
+  output,
   Output,
   ViewEncapsulation,
 } from '@angular/core';
@@ -21,30 +22,20 @@ import { MatIconModule } from '@angular/material/icon';
   styleUrls: ['./shared-utils-selected-filter-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
 })
-export class SharedUtilsSelectedFilterListComponent implements OnInit {
+export class SharedUtilsSelectedFilterListComponent {
   /**
    * list of selected facets
    */
-  @Input() filters: Map<string, string[]> = new Map<string, string[]>();
-  @Output() filterChange: EventEmitter<{ label: string; values: string[] }[]> =
-    new EventEmitter<{ label: string; values: string[] }[]>();
-  /**
-   * set up route watching
-   * @param changeRef
-   */
-  constructor(private changeRef: ChangeDetectorRef) {}
-
-  ngOnInit() {
-    this.changeRef.markForCheck();
-  }
+  filters = input<Map<string, string[]>>();
+  filterChange = output<{ label: string; values: string[] }[]>();
 
   /**
    * remove a specific facet and all selected fields
    * @param family
    */
   removeFilterFamily(family: string): void {
-    this.filters.set(family, []);
-    this.filterChange.next(this._flattenMap());
+    this.filters()?.set(family, []);
+    this.filterChange.emit(this._flattenMap());
   }
 
   /**
@@ -53,27 +44,29 @@ export class SharedUtilsSelectedFilterListComponent implements OnInit {
    * @param value
    */
   removeField(label: string, value: string): void {
-    const vals = this.filters.get(label)?.filter((val) => val !== value);
+    const vals = this.filters()
+      ?.get(label)
+      ?.filter((val) => val !== value);
     if (vals && vals.length) {
-      this.filters.set(label, vals);
+      this.filters()?.set(label, vals);
     } else {
       this.removeFilterFamily(label);
     }
-    this.filterChange.next(this._flattenMap());
+    this.filterChange.emit(this._flattenMap());
   }
 
   /**
    * clear all queries/facets
    */
   removeAll(): void {
-    this.filters.clear();
-    this.filterChange.next(this._flattenMap());
+    this.filters()?.clear();
+    this.filterChange.emit(this._flattenMap());
   }
 
   _flattenMap(): { label: string; values: string[] }[] {
     const ret: { label: string; values: string[] }[] = [];
-    [...this.filters.keys()].forEach((key) => {
-      let valuesArr = this.filters.get(key);
+    [...this.filters()!.keys()].forEach((key) => {
+      let valuesArr = this.filters()?.get(key);
       if (!valuesArr) {
         valuesArr = [];
       }

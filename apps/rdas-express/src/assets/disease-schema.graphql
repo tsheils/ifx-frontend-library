@@ -2,24 +2,24 @@ scalar JSON
 extend schema @mutation(operations: [])
 
 type AssociatedWithGeneProperties @relationshipProperties {
-  AssociationStatus: String!
-  AssociationType: String!
+  AssociationStatus: String
+  AssociationType: String
   Reference: [String]
 }
 
 type GARD {
-  COUNT_ARTICLES: BigInt!
-  COUNT_GENES: BigInt!
-  COUNT_PHENOTYPES: BigInt!
-  COUNT_PROJECTS: BigInt!
-  COUNT_TRIALS: BigInt!
-  ClassificationLevel: String!
-  DataSource: String!
-  DataSourceId: String!
+  COUNT_ARTICLES: BigInt
+  COUNT_GENES: BigInt
+  COUNT_PHENOTYPES: BigInt
+  COUNT_PROJECTS: BigInt
+  COUNT_TRIALS: BigInt
+  ClassificationLevel: String
+  DataSource: String
+  DataSourceId: String
   DiseaseOntology: [String]
-  DisorderType: [String]!
-  GardId: String!
-  GardName: String!
+  DisorderType: [String]
+  GardId: String
+  GardName: String
   GeneticAlliance: [String]
   GeneticsHomeReference: [String]
   ICD10: [String]
@@ -30,7 +30,7 @@ type GARD {
   OMIM: [String]
   Orphanet: [String]
   SNOMEDCT: [String]
-  Synonyms: [String]!
+  Synonyms: [String]
   UMLS: [String]
   UMLS_Source: String
   associatedWithGeneGenes: [Gene!]!
@@ -51,12 +51,12 @@ type GARD {
 
 type Gene {
   Ensembl: String
-  GeneIdentifier: String!
-  GeneSymbol: String!
+  GeneIdentifier: String
+  GeneSymbol: String
   GeneSynonyms: [String]
-  GeneTitle: String!
+  GeneTitle: String
   IUPHAR: String
-  Locus: String!
+  Locus: String
   OMIM: String
   Reactome: String
   Swissprot: String
@@ -69,17 +69,17 @@ type Gene {
 }
 
 type HasPhenotypeProperties @relationshipProperties {
-  Evidence: String!
+  Evidence: String
   HPOFrequency: String
-  Reference: [String]!
-  ValidationStatus: Boolean!
+  Reference: [String]
+  ValidationStatus: Boolean
 }
 
 type Phenotype {
-  HPOId: String!
-  HPOTerm: String!
+  HPOId: String
+  HPOTerm: String
   Modifier: [String]
-  Online: Boolean!
+  Online: Boolean
   Onset: String
   Sex: String
   gardShasPhenotype: [GARD!]!

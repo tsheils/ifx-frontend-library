@@ -6,27 +6,27 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   DestroyRef,
-  EventEmitter,
   inject,
   input,
-  Input,
   OnChanges,
   OnInit,
-  Output,
-  ViewChild,
+  output,
+  SimpleChange,
+  SimpleChanges,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDivider } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
@@ -46,6 +46,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
     HighlightPipe,
     MatButtonModule,
     MatIconModule,
+    MatDivider,
   ],
   templateUrl: './shared-utils-filter-panel.component.html',
   styleUrls: ['./shared-utils-filter-panel.component.scss'],
@@ -53,24 +54,15 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 })
 export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   destroyRef = inject(DestroyRef);
-  @ViewChild(MatInput, { read: MatInput, static: true }) searchInput!: MatInput;
-  @ViewChild(CdkVirtualScrollViewport, {
-    read: CdkVirtualScrollViewport,
-    static: true,
-  })
-  cdkViewport!: CdkVirtualScrollViewport;
-
-  @Input() filter!: FilterCategory;
-
-  @Output() filterSelectionChange: EventEmitter<
-    { label: string; values: string[] }[]
-  > = new EventEmitter<{ label: string; values: string[] }[]>();
-
-  @Output() filterChange: EventEmitter<{
+  searchInput = viewChild<MatInput>(MatInput);
+  cdkViewport = viewChild<CdkVirtualScrollViewport>(CdkVirtualScrollViewport);
+  filter = input<FilterCategory>({} as FilterCategory);
+  filterSelectionChange = output<{ label: string; values: string[] }[]>();
+  filterChange = output<{
     label: string;
     term?: string;
     page?: number;
-  }> = new EventEmitter<{ label: string; term?: string; page?: number }>();
+  }>();
 
   searchCtl: FormControl = new FormControl<string>('');
 
@@ -93,8 +85,8 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
    */
   ngOnInit() {
     this.filterSelection.changed.subscribe(() => {
-      this.filterSelectionChange.next([
-        { label: this.filter.label, values: this.filterSelection.selected },
+      this.filterSelectionChange.emit([
+        { label: this.filter().label, values: this.filterSelection.selected },
       ]);
     });
 
@@ -104,23 +96,23 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         debounceTime(400),
         distinctUntilChanged(),
         map((term: string) => {
-          this.filterChange.next({
-            label: this.filter.label,
+          this.filterChange.emit({
+            label: this.filter().label,
             term: term ? term : ' ',
           });
-          this.loading = true;
+          //   this.loading = true;
         }),
       )
       .subscribe();
 
-    this.searchCtl.setValue(this.filter.query, { emitEvent: false });
+    this.searchCtl.setValue(this.filter()?.query, { emitEvent: false });
 
-    if (this.searchInput && this.filter.query) {
-      this.searchInput.focus();
+    if (this.searchInput && this.filter().query) {
+      this.searchInput()!.focus();
     }
 
-    this.cdkViewport.renderedRangeStream
-      .pipe(
+    this.cdkViewport()!
+      .renderedRangeStream.pipe(
         takeUntilDestroyed(this.destroyRef),
         map((range: ListRange) => {
           this.range = range;
@@ -131,28 +123,32 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
 
   ngOnChanges() {
     this.filterSelection.select(
-      ...this.filter.values
-        .filter((val) => val.selected)
+      ...this.filter()
+        .values.filter((val) => val.selected)
         .map((val) => val.term),
     );
   }
 
   scrollDetected() {
-    if (this.filter.page != 1) {
-      if (this.range.end < this.filter.values.length / this.filter.page) {
-        this.cdkViewport.scrollToIndex((this.filter.page - 1) * 200);
+    if (this.filter().page != 1) {
+      if (this.range.end < this.filter().values.length / this.filter()!.page) {
+        this.cdkViewport()!.scrollToIndex((this.filter()!.page - 1) * 200);
       }
     }
   }
 
   loadMore() {
     this.loading = true;
-    this.filterChange.next({
-      label: this.filter.label,
-      page: this.filter.page,
+    this.filterChange.emit({
+      label: this.filter()!.label,
+      page: this.filter()!.page,
     });
   }
   clearSearch() {
     this.searchCtl.reset();
+  }
+
+  _filterField(index: number, filter: Filter) {
+    return filter.value;
   }
 }

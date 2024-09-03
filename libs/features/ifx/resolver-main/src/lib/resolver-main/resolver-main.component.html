@@ -40,11 +40,11 @@
       <mat-autocomplete #auto="matAutocomplete">
         @for (filter of filteredSearchOptions(); track filter.label) {
           <mat-optgroup [label]="filter.label" multiple>
-            @for (value of filter.values; track value) {
-              <mat-option (click)="subscriptionSelection.toggle(value)">
+            @for (value of filter.values; track value.value) {
+              <mat-option (click)="selectValue(value)">
                 <mat-checkbox
-                  (change)="$event ? subscriptionSelection.toggle(value) : null"
-                  [checked]="subscriptionSelection.isSelected(value)"
+                  (change)="$event ? subscriptionSelection()?.toggle(value) : null"
+                  [checked]="subscriptionSelection().isSelected(value) || value.selected"
                   (click)="$event.stopPropagation()"
                 >
                   <span
@@ -81,9 +81,8 @@
         </div>
       </div>
     </div>
-
     <div class="width-30">
-      @if (subscriptionSelection.hasValue()) {
+      @if (subscriptionSelection()?.hasValue() || selectedFilters() ) {
         <h2>Selected Filters</h2>
         <div class="row space-around-row">
           <div class="width-90 right-text">
@@ -116,12 +115,30 @@
       }
     </div>
   </div>
+  <div class="row space-around-row top-align">
+    <div class="width-90">
+      <h2>Results</h2>
+    </div>
+  </div>
+  @if(clicked() && !loading()){
+    <ncats-frontend-library-loading-spinner [isLoaded]="false"></ncats-frontend-library-loading-spinner>
+  }
 
+  <div class="row space-around-row top-align">
+    <div class="width-90">
+      @if (badData() && badData().length) {
+       <h2>Failed to Resolve</h2>
+          @for(inputStr of badData(); track inputStr.input){
+            {{inputStr.input}}<br>
+          }
+      }
+    </div>
+  </div>
   <div class="row space-around-row top-align">
     <div class="width-90">
       @if (resolvedData() && resolvedData().length) {
         <lib-resolver-data-viewer
-          [data]="resolvedData()"
+          [data]="filteredResolvedData()"
           [params]="selectedFilters()"
         ></lib-resolver-data-viewer>
       }

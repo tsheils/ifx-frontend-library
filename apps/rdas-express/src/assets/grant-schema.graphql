@@ -3,11 +3,11 @@ extend schema @mutation(operations: [])
 type Agent {
   coreProjectsFundedBy: [CoreProject!]!
     @relationship(type: "FUNDED_BY", direction: IN)
-  name: String!
+  name: String
 }
 
 type AnnotatedProperties @relationshipProperties {
-  source: String!
+  source: String
 }
 
 type Annotation {
@@ -17,22 +17,22 @@ type Annotation {
       direction: IN
       properties: "AnnotatedProperties"
     )
-  semantic_types: [String]!
-  semantic_types_names: [String]!
-  umls_concept: String!
-  umls_cui: String!
+  semantic_types: [String]
+  semantic_types_names: [String]
+  umls_concept: String
+  umls_cui: String
 }
 
 type ClinicalStudies {
   coreProjectsStudied: [CoreProject!]!
     @relationship(type: "STUDIED", direction: IN)
-  gov_id: String!
-  status: String!
-  title: String!
+  gov_id: String
+  status: String
+  title: String
 }
 
 type CoreProject {
-  core_project_num: String!
+  core_project_num: String
   fundedByAgents: [Agent!]! @relationship(type: "FUNDED_BY", direction: OUT)
   patentedPatents: [Patent!]! @relationship(type: "PATENTED", direction: OUT)
   projectsUnderCore: [Project!]!
@@ -45,9 +45,9 @@ type CoreProject {
 }
 
 type GARD {
-  GardId: String!
-  GardName: String!
-  Synonyms: [String]!
+  GardId: String
+  GardName: String
+  Synonyms: [String]
   researchedByProjects: [Project!]!
     @relationship(type: "RESEARCHED_BY", direction: OUT)
 }
@@ -59,28 +59,28 @@ type Journal {
       direction: IN
       properties: "PublishedInProperties"
     )
-  title: String!
+  title: String
 }
 
 type Patent {
   coreProjectsPatented: [CoreProject!]!
     @relationship(type: "PATENTED", direction: IN)
-  id: String!
-  org_name: String!
-  title: String!
+  id: String
+  org_name: String
+  title: String
 }
 
 type PrincipalInvestigator {
   investigatedProjects: [Project!]!
     @relationship(type: "INVESTIGATED", direction: OUT)
-  org_name: String!
-  org_state: String!
-  pi_id: String!
-  pi_name: String!
+  org_name: String
+  org_state: String
+  pi_id: String
+  pi_name: String
 }
 
 type Project {
-  DateCreatedRDAS: String!
+  DateCreatedRDAS: String
   abstract: String
   annotatedAnnotations: [Annotation!]!
     @relationship(
@@ -88,9 +88,9 @@ type Project {
       direction: OUT
       properties: "AnnotatedProperties"
     )
-  application_id: BigInt!
+  application_id: BigInt
   application_type: BigInt
-  funding_year: BigInt!
+  funding_year: BigInt
   gardsresearchedBy: [GARD!]!
     @relationship(type: "RESEARCHED_BY", direction: IN)
   phr: String
@@ -98,7 +98,7 @@ type Project {
     @relationship(type: "INVESTIGATED", direction: IN)
   subproject_id: BigInt
   terms: [String]
-  title: String!
+  title: String
   total_cost: BigInt
   underCoreCoreProjects: [CoreProject!]!
     @relationship(type: "UNDER_CORE", direction: OUT)
@@ -109,10 +109,10 @@ type Publication {
   authors: [String]
   coreProjectsPublished: [CoreProject!]!
     @relationship(type: "PUBLISHED", direction: IN)
-  date: String!
-  language: String!
+  date: String
+  language: String
   pmc_id: BigInt
-  pmid: BigInt!
+  pmid: BigInt
   publishedInJournals: [Journal!]!
     @relationship(
       type: "PUBLISHED_IN"

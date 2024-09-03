@@ -40,7 +40,7 @@ const reducer = createReducer(
     LoginEmailUserActions.loginEmailUserSuccess,
     RegisterEmailUserActions.registerEmailUserSuccess,
     UserLoginActions.loginUserSuccess,
-    //  UserLoginActions.fetchUserProfileSuccess,
+    UserLoginActions.fetchUserProfileSuccess,
     UpdateUserActions.updateUserSubscriptionsSuccess,
     (state, { user }) =>
       usersAdapter.setOne(user, {

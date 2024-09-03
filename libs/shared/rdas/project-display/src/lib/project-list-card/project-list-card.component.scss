@@ -1,11 +1,8 @@
-@use '@angular/material' as mat;
-@import 'rdas-theme2';
-
 ncats-frontend-library-project-list-card {
   width: 98%;
   -ms-overflow-style: none; //windows
   scrollbar-width: none; //firefox
-  color: mat.m2-get-color-from-palette($app-primary);
+  // color: mat.m2-get-color-from-palette($app-primary);
   padding: 1rem;
   padding-bottom: 2vh;
   margin-bottom: 2vh;

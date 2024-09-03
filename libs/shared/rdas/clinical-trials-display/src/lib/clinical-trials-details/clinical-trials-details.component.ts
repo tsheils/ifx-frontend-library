@@ -1,6 +1,14 @@
 import { BreakpointObserver } from '@angular/cdk/layout';
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
@@ -21,58 +29,69 @@ import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/cl
   templateUrl: './clinical-trials-details.component.html',
   styleUrls: ['./clinical-trials-details.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClinicalTrialsDetailsComponent implements OnInit {
-  @Input() trial!: ClinicalTrial;
+export class ClinicalTrialsDetailsComponent {
+  breakpointObserver = inject(BreakpointObserver);
+
+  trial = input<ClinicalTrial>();
   /**
    * truncated summary text
    */
-  truncatedSummary = '';
+  truncatedSummary = computed(() => {
+    const t = this.trial();
+    let ret = t?.briefSummary ? t?.briefSummary : '';
+    if (t) {
+      if (t.briefSummary && t.briefSummary?.length > 800) {
+        ret = t.briefSummary.slice(0, 800);
+      }
+      if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
+        if (t.briefSummary && t.briefSummary?.length > 400) {
+          ret = t.briefSummary.slice(0, 400);
+        }
+      }
+    }
+    return ret;
+  });
 
   /**
    * boolean to show full or truncated summary
    */
-  fullSummary = true;
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer,
-  ) {}
+  fullSummary = computed<boolean>(() => {
+    const t = this.trial();
+    if (t) {
+      if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
+        return false;
+      } else return !(t.briefSummary && t.briefSummary?.length > 800);
+    } else return false;
+  });
 
-  ngOnInit(): void {
-    this.fullSummary = true;
-    this.truncatedSummary = '';
-    if (this.trial.briefSummary && this.trial.briefSummary.length > 800) {
-      this.fullSummary = false;
-      this.truncatedSummary = this.trial.briefSummary.slice(0, 800);
-    }
-    if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
-      this.fullSummary = false;
-      if (this.trial.briefSummary && this.trial.briefSummary.length > 400) {
-        this.truncatedSummary = this.trial.briefSummary.slice(0, 400);
-      }
-    }
-  }
+  constructor(private sanitizer: DomSanitizer) {}
 
-  getTrialSummary(): string {
-    return this.trial.briefSummary && this.fullSummary
-      ? this.trial.briefSummary
+  /*  getTrialSummary(): string {
+  /!*  const ret = this.trial()?.briefSummary && this.fullSummary
+      ? this.trial()!.briefSummary
       : this.truncatedSummary;
-  }
+    return ret;*!/
+  }*/
 
   getLabel(objType: string, plural = true): string {
     let ret: string = objType;
-    const arr = this.trial[objType] as Array<unknown>;
-    if (arr) {
-      if (arr && arr.length > 1) {
-        ret = ret + ' (' + arr.length + ')';
-      } else if (arr && arr.length == 1 && plural) {
-        ret = ret.slice(0, arr.length - 2);
+    const t = this.trial();
+    if (t) {
+      const arr = t[objType] as Array<unknown>;
+      if (arr) {
+        if (arr && arr.length > 1) {
+          ret = ret + ' (' + arr.length + ')';
+        } else if (arr && arr.length == 1 && plural) {
+          ret = ret.slice(0, arr.length - 2);
+        }
       }
+      ret = ret
+        .replace(/([A-Z])/g, (match) => ` ${match}`)
+        .replace(/^./, (match) => match.toUpperCase())
+        .trim();
     }
-    ret = ret
-      .replace(/([A-Z])/g, (match) => ` ${match}`)
-      .replace(/^./, (match) => match.toUpperCase())
-      .trim();
     return ret;
   }
 

@@ -15,7 +15,7 @@ describe('ResultsPanelComponent', () => {
 
     fixture = TestBed.createComponent(ResultsPanelComponent);
     component = fixture.componentInstance;
-  /*  component.results = input<RampResults | undefined>(
+    /*  component.results = input<RampResults | undefined>(
       {
         function: 'string',
         matches: ['string[]'],

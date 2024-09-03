@@ -1,10 +1,10 @@
-@if (filters && filters.size) {
+@if (filters() && filters()?.size) {
   <div class="row space-between-row">
     <div class="width-70">
       <span class="filter-row-title">Selected Filters:</span>
     </div>
     <div class="width-30 right-text" (click)="removeAll()">
-      <mat-chip [color]="'white'" (click)="removeAll()">
+      <mat-chip (click)="removeAll()">
         <span
           >Clear All
           <mat-icon matChipRemove class="removeIcon" (click)="removeAll()"
@@ -17,25 +17,25 @@
 }
 
 <div class="selected-filter-grid">
-  @for (filter of filters.entries(); track filter) {
+  @for (filter of filters() | keyvalue; track filter.key) {
     <div>
       <div class="row space-between-row">
         <div class="facetHeader">
           <span class="mat-subheader">{{
-            filter[0] === 'q' ? 'Search String' : filter[0]
+            filter.key === 'q' ? 'Search String' : filter.key
           }}</span>
         </div>
         <div class="width-10">
-          <button mat-icon-button (click)="removeFilterFamily(filter[0])">
+          <button mat-icon-button (click)="removeFilterFamily(filter.key)">
             <mat-icon>clear</mat-icon>
           </button>
         </div>
       </div>
-      @for (value of filter[1]; track value) {
+      @for (value of filter.value; track value) {
         <div>
           <div
             class="primary-chip full-width space-between-row"
-            (click)="removeField(filter[0], value)"
+            (click)="removeField(filter.key, value)"
           >
             {{ value }}<mat-icon class="removeIcon right-text">cancel</mat-icon>
           </div>

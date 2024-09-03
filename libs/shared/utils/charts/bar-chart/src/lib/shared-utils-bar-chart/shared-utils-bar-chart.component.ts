@@ -1,7 +1,13 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CommonModule } from '@angular/common';
-import { Component, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import {
+  Component,
+  computed,
+  OnChanges,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import { Filter } from '@ncats-frontend-library/models/utils';
 import {
   axisBottom,
@@ -31,7 +37,7 @@ interface ChartPoint extends SeriesPoint<{ [key: string]: number }> {
 @Component({
   selector: 'lib-shared-utils-bar-chart',
   standalone: true,
-  imports: [CommonModule, ImageDownloadComponent],
+  imports: [CommonModule, ImageDownloadComponent, NgOptimizedImage],
   templateUrl: './shared-utils-bar-chart.component.html',
   styleUrls: ['./shared-utils-bar-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -40,6 +46,10 @@ export class SharedUtilsBarChartComponent
   extends GenericChartComponent
   implements OnInit, OnChanges
 {
+  placeholderUrl = computed(() => {
+    return `assets/charts/placeholders/chart${Math.floor(Math.random() * 2)}.webp`;
+  });
+
   bars!: unknown;
   series!: Stack<never, { [key: string]: number }, string>;
   xScale!: ScaleBand<string>;

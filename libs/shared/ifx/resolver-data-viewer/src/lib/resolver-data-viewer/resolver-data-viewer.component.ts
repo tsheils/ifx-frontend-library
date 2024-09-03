@@ -1,9 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
+  computed, inject,
   Inject,
-  input,
+  input
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -11,6 +11,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { Filter } from '@ncats-frontend-library/models/utils';
+import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { ResolverResponse } from 'ifx';
 import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
 
@@ -24,15 +25,16 @@ import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
     MatSlideToggleModule,
     MatMenuModule,
     NcatsDatatableComponent,
+    LoadingSpinnerComponent
   ],
   templateUrl: './resolver-data-viewer.component.html',
   styleUrl: './resolver-data-viewer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResolverDataViewerComponent {
+  private dom: Document = inject(DOCUMENT)
   data = input<ResolverResponse[]>();
   dataAsObject = computed(() => {
-    this.fields = [];
     const objArr: { [key: string]: string }[] = [];
     this.data()?.forEach((inputValue) => {
       const retObj = {
@@ -46,6 +48,7 @@ export class ResolverDataViewerComponent {
     });
     return objArr;
   });
+
   dataAsCSV = computed<string>(() => {
     if (this.dataAsObject()) {
       return this._toCSV(this.dataAsObject());
@@ -63,11 +66,36 @@ export class ResolverDataViewerComponent {
   });
 
   params = input<{ [key: string]: Filter[] }>();
-  fields: DataProperty[] = [];
 
-  showTable = false;
+  headers = computed(() => {
+    const headers: string[] = ['input', 'source', 'url'];
+    if (this.params()) {
+      Object.values(this.params() as { [key: string]: Filter[] }).forEach(
+        (category: Filter[]) => {
+          category.forEach((filter: Filter) => {
+            headers.push(<string>filter.value);
+          });
+        })
+    }
+    return [...new Set(headers)];
+  })
 
-  constructor(@Inject(DOCUMENT) private dom: Document) {}
+  fields = computed(() => {
+    const fieldsArr= [] as DataProperty[];
+    this.headers()?.forEach((field: string) => {
+      fieldsArr.push(
+        new DataProperty({
+          label: field,
+          field: field,
+          sortable: true,
+        }),
+      );
+    });
+    return fieldsArr;
+  })
+
+  showTable = true;
+
 
   downloadData(format: string) {
     switch (format) {
@@ -87,44 +115,18 @@ export class ResolverDataViewerComponent {
   }
 
   _toCSV(data: { [key: string]: string }[]): string {
-    const headers: string[] = ['input', 'source', 'url'];
-    headers.forEach((field: string) => {
-      this.fields.push(
-        new DataProperty({
-          label: field,
-          field: field,
-          sortable: true,
-        }),
-      );
-    });
-    let ret = '';
-    if (this.params() && data) {
-      Object.values(this.params() as { [key: string]: Filter[] }).forEach(
-        (category: Filter[]) => {
-          category.forEach((filter: Filter) => {
-            headers.push(<string>filter.value);
-            this.fields.push(
-              new DataProperty({
-                label: filter.term,
-                field: filter.value,
-                sortable: true,
-              }),
-            );
-          });
-        },
-      );
-      const lines: string[] = [];
+      let ret = ''
+    const lines: string[] = [];
       data.forEach((input) => {
         const inputLine: string[] = [];
-        headers.forEach((field) => {
+        this.headers()?.forEach((field) => {
           inputLine.push(
             input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' ',
           );
         });
         lines.push(inputLine.join(','));
       });
-      ret = headers.join(',') + ' \n ' + lines.join('\n');
-    }
+      ret = this.headers().join(',') + ' \n ' + lines.join('\n');
     return ret;
   }
 

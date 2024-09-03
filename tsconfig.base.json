@@ -234,6 +234,9 @@
       "ramp-sunburst-tooltip": [
         "libs/shared/ramp/ramp-sunburst-tooltip/src/index.ts"
       ],
+      "rdas-filters": [
+        "libs/shared/rdas/side-panels/rdas-filters/src/index.ts"
+      ],
       "reactions-page": ["libs/features/ramp/reactions-page/src/index.ts"],
       "resolver-data-viewer": [
         "libs/shared/ifx/resolver-data-viewer/src/index.ts"

@@ -16,6 +16,7 @@
     </div>
   </div>
 }
+@defer(when dataSource()){
 <table
   mat-table
   matSort
@@ -132,3 +133,6 @@
   </div>
 </div>
 -->
+} @placeholder () {
+  <h1>Loading</h1>
+}
