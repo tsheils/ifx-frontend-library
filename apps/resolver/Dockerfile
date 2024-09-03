@@ -1,4 +1,4 @@
-FROM node:18.16-alpine3.17 AS build
+FROM node:22-alpine3.19 AS build
 
 ENV npm_config_unsafe_perm=true
 
