@@ -1,5 +1,4 @@
-FROM node:20.11-alpine3.18 AS build
-
+FROM node:22-alpine3.19 AS build
 ENV npm_config_unsafe_perm=true
 
 # Set the source folder
