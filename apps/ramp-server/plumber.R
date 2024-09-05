@@ -6,6 +6,8 @@ library(readr)
 library(ggplot2)
 library(svglite)
 
+rampDB <<- RaMP:::RaMP() # pre-load sqlite database to the container
+
 #* @apiTitle RaMP_API
 #* @apiDescription REST API for the Relational Database of Metabolomics Pathways (RaMP) Application
 #* @apiVersion 1.0.1
