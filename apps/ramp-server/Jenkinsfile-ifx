@@ -16,7 +16,7 @@ pipeline {
     environment {
         PROJECT_NAME     = "rampdb"
         DOCKER_REPO_NAME = "853771734544.dkr.ecr.us-east-1.amazonaws.com/rampdb-api"
-        APP_TYPE         = "api" 
+        APP_TYPE         = "api"
         INIT_TOKEN       = credentials('Vault-Access')
         SPHINX_TOKEN     = credentials('ncatssvcdvops-sphinx')
         ROLE_NAME        = "$ENVIRONMENT-$PROJECT_NAME"
@@ -34,7 +34,7 @@ pipeline {
                     sh '''
                     ### Cloning the repo from DevOps Artifacts Repository Repo ###
                     git clone https://$SPHINX_TOKEN@github.com/Sphinx-Automation/devops-pipeline-artifacts.git
-                    
+
                     ###  Running the script with Env specific to Authenticate Vault & Get Application Secrets for Docker Token###
                     cd devops-pipeline-artifacts/application
                     /bin/bash getAppSecretsByRole.sh
@@ -103,14 +103,11 @@ pipeline {
             }
             steps {
                 configFileProvider([
-                    configFile(fileId: 'ramp-api-config.yml', targetLocation: 'config.yml'),
                     configFile(fileId: 'docker-compose-api.yaml', targetLocation: 'docker-compose.yml'),
                     configFile(fileId: 'runRampServer.R', targetLocation: 'runRamp.R'),
-                    configFile(fileId: 'ramp-api-deploy.sh', targetLocation: 'deploy.sh') 
                 ]) {
                     sh  """#!/bin/bash
-                        chmod 755 config.yml runRamp.R  
-                        /bin/bash deploy.sh
+                        chmod 755 runRamp.R
                         docker-compose -p $PROJECT_NAME-$APP_TYPE down -v --rmi all | xargs echo
                         docker pull $DOCKER_REPO_NAME:$BUILD_VERSION
                         docker rmi $DOCKER_REPO_NAME:current | xargs echo
@@ -120,6 +117,6 @@ pipeline {
                     """
                 }
             }
-        } 
+        }
     }
 }
