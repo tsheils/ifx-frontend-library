@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatRippleModule } from '@angular/material/core';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogActions, MatDialogContent, MatDialogRef } from '@angular/material/dialog';
 import { UserLoginActions } from '@ncats-frontend-library/stores/user-store';
 import { Store } from '@ngrx/store';
 import { EmailSignOnModalComponent } from '../email-sign-on-modal/email-sign-on-modal.component';
@@ -21,7 +21,7 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './social-sign-on-modal.component.html',
   styleUrls: ['./social-sign-on-modal.component.scss'],
   standalone: true,
-  imports: [MatButtonModule, MatIconModule, MatListModule, MatRippleModule],
+  imports: [MatButtonModule, MatIconModule, MatListModule, MatRippleModule, MatDialogActions, MatDialogContent]
 })
 export class SocialSignOnModalComponent implements OnInit {
   destroyRef = inject(DestroyRef);

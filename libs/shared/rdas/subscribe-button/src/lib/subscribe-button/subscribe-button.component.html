@@ -1,7 +1,5 @@
-@defer (when user()) {
-  <div class="centered">
     @if (subscribed()) {
-      <button mat-flat-button [matMenuTriggerFor]="menu">
+      <button mat-flat-button [matMenuTriggerFor]="menu" class="subscription-button">
         Subscribed
         <mat-icon aria-label="Alert options menu">expand_more</mat-icon>
         @if (subscriptionSelection().selected.length === 3) {
@@ -97,7 +95,4 @@
     >
       <mat-icon>question_mark</mat-icon>
     </button>
-  </div>
-} @placeholder {
-  <ncats-frontend-library-social-sign-on-button></ncats-frontend-library-social-sign-on-button>
-}
+

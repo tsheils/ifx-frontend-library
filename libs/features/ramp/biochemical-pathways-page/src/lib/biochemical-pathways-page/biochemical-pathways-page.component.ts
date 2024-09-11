@@ -235,7 +235,32 @@ export class BiochemicalPathwaysPageComponent
     super();
   }
 
+ /// pathways: RampResponse<Pathway> | undefined,
+  //pathwayEnrichment:  {
+  //                   data: FisherResult[];
+  //                   plot?: string[];
+  //                   query?: RampQuery;
+  //                   dataframe?: unknown;
+  //                   openModal?: boolean;
+  //                 } | undefined,
+  //  ontologies: RampResponse<Ontology> | undefined,
+  //  clusterPlot: string | undefined
+
+
   ngOnInit() {
+    this.store
+      .pipe(
+        select(RampSelectors.getPathways),
+        takeUntilDestroyed(this.destroyRef),
+        map((res: unknown
+        ) => {
+          console.log(res)
+        }
+      )
+      )
+      .subscribe();
+
+
     this.store
       .pipe(
         select(RampSelectors.getPathways),

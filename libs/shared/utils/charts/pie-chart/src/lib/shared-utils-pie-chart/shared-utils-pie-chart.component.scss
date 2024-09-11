@@ -1,10 +1,15 @@
 lib-shared-utils-pie-chart {
+  .placeholder-image {
+    object-fit: contain
+  }
+
   .pie-chart-container {
     padding-left: 2vw;
   }
 
   .pie-chart {
     min-height: 30vh;
+    position: relative;
   }
 
   .chart-title {
