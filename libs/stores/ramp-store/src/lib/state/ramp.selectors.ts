@@ -142,3 +142,23 @@ export const getClusterPlot = createSelector(
   getRampState,
   (state: State) => state.clusterPlot,
 );
+
+
+export const getBiochemicalPathwaysResults = createSelector(
+  getPathways,
+  getOntologies,
+  getPathwayEnrichment,
+  getClusterPlot,
+  (getPathways,
+    getOntologies,
+    getPathwayEnrichment,
+    getClusterPlot) => {
+    return {
+      pathways: getPathways,
+      ontologies: getOntologies,
+      pathwayEnrichment: getPathwayEnrichment,
+      clusterPlot: getClusterPlot
+    }
+  }
+);
+

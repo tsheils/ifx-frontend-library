@@ -3,10 +3,10 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
-  computed,
+  computed, HostListener,
   OnChanges,
   OnInit,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { Filter } from '@ncats-frontend-library/models/utils';
 import {
@@ -57,15 +57,22 @@ export class SharedUtilsBarChartComponent
 
   constructor() {
     super();
-    this.margins = { top: 20, bottom: 50, right: 30, left: 70 };
+    this.margins.set({ top: 20, bottom: 50, right: 30, left: 70 });
+  }
+
+  /**
+   * function to redraw/scale the graph on window resize
+   */
+  @HostListener('window:resize', [])
+  onResize() {
+    this.makeChart();
   }
 
   ngOnInit() {
-    if (this.chartElement && this.isBrowser()) {
-      const element = this.chartElement.nativeElement;
-      this.width = element.offsetWidth; //+ this.margins.left + this.margins.right;
-      this.height =
-        element.offsetHeight + this.margins.top + this.margins.bottom;
+    if (this.chartElement() && this.isBrowser()) {
+
+      const element = this.chartElement().nativeElement;
+
       select(element).select('svg').remove();
 
       this.svg = select(element)
@@ -73,9 +80,9 @@ export class SharedUtilsBarChartComponent
         .attr('xmlns', 'http://www.w3.org/2000/svg')
         .attr('xmlns:xlink', 'http://www.w3.org/1999/xlink')
         .attr('id', 'chart-id')
-        .attr('width', this.width)
-        .attr('height', this.height)
-        .attr('viewBox', [0, 0, this.width, this.height])
+        .attr('width', this.width())
+        .attr('height', this.height())
+        .attr('viewBox', [0, 0, this.width(), this.height()])
         .attr(
           'style',
           'max-width: 100%; height: auto; height: intrinsic; overflow: visible;',
@@ -121,7 +128,7 @@ export class SharedUtilsBarChartComponent
     // Prepare the scales for positional and color encodings.
     this.xScale = scaleBand()
       .domain(this.keys)
-      .range([this.margins.left, this.width - this.margins.right])
+      .range([this.margins().left, this.width() - this.margins().right])
       .padding(0.1);
 
     const yMax: unknown = max(this.series, (d) =>
@@ -129,15 +136,15 @@ export class SharedUtilsBarChartComponent
     );
     this.yScale = scaleLinear()
       .domain([0, <number>yMax])
-      .rangeRound([this.height - this.margins.bottom, this.margins.top]);
+      .rangeRound([this.height() - this.margins().bottom, this.margins().top]);
 
-    this.svg
+   /* this.svg
       .append('text')
       .attr('class', 'chart-title')
-      .attr('x', this.width / 2)
-      .attr('y', this.margins.top / 2)
+      .attr('x', this.width() / 2)
+      .attr('y', this.margins().top / 2)
       .attr('text-anchor', 'middle')
-      .text(this.data.label);
+      .text(this.data.label);*/
 
     // Append a group for each series, and a rect for each element in the series.
     this.bars = this.svg
@@ -168,7 +175,7 @@ export class SharedUtilsBarChartComponent
     // Append the horizontal axis.
     this.svg
       .append('g')
-      .attr('transform', `translate(0,${this.height - this.margins.bottom})`)
+      .attr('transform', `translate(0,${this.height() - this.margins().bottom})`)
       .call(
         axisBottom(this.xScale).tickValues(
           this.xScale.domain().filter(function (d, i) {
@@ -185,7 +192,7 @@ export class SharedUtilsBarChartComponent
     // Append the vertical axis.
     this.svg
       .append('g')
-      .attr('transform', `translate(${this.margins.left},0)`)
+      .attr('transform', `translate(${this.margins().left},0)`)
       .call(axisLeft(this.yScale)); //.ticks(null, "s"))
 
     // add tooltip last
@@ -193,10 +200,6 @@ export class SharedUtilsBarChartComponent
       .append('g')
       .attr('class', 'tooltip')
       .style('pointer-events', 'none');
-
-    this.svgExport = select(this.chartElement.nativeElement)
-      .select('svg')
-      .node() as SVGElement;
   }
 
   pointerLeft(event: Event) {

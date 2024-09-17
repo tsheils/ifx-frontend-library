@@ -323,7 +323,7 @@ function(metabolites="", property="all") {
 #' Return analytes involved in same reaction as given list of analytes from the 'catalyzed' table
 #' @param analyte list of analytes to be queried
 #' @post /api/common-reaction-analytes
-function(analytes, namesOrIds = "ids") {
+function(analytes, namesOrIds = "ids", format="frames") {
   analytes_df_ids <- tryCatch({
     analytes_df <- RaMP::rampFastCata(
       db = rampDB,
@@ -357,6 +357,15 @@ function(analytes, namesOrIds = "ids") {
   #    )
   #    analytes_df <- rbind(analytes_df_ids, analytes_df_names)
 
+  if(format == "merge") {
+    return(
+      list(
+        data = rbind(unique(analytes_df_ids$data$Rhea_Analyte_Associations), unique(analytes_df_ids$data$HMDB_Analyte_Associations)),
+        function_call = makeFunctionCall(analytes,"rampFastCata"),
+        numFoundIds = analytes_df_ids$idMatchCount
+      )
+    )
+  } else {
   return(
     # note... currently we're just returning the HMDB results.
     # RaMP v3 also has Rhea results that can be displayed
@@ -364,10 +373,12 @@ function(analytes, namesOrIds = "ids") {
     # note below we only reference the HMDB result until the UI can process both dataframes.
     list(
       data = unique(analytes_df_ids$data$HMDB_Analyte_Associations),
+      data2 = rbind(unique(analytes_df_ids$data$Rhea_Analyte_Associations), unique(analytes_df_ids$data$HMDB_Analyte_Associations)),
       function_call = makeFunctionCall(analytes,"rampFastCata"),
       numFoundIds = analytes_df_ids$idMatchCount
     )
   )
+}
 }
 #####
 #' Return combined Fisher's test results
@@ -635,7 +646,7 @@ function(
     includeReactionIDs = FALSE,
     useIdMapping = FALSE
 ) {
-  result = getReactionClassesForAnalytes(
+  result <- RaMP::getReactionClassesForAnalytes(
     db=rampDB,
     analytes=analytes,
     multiRxnParticipantCount = multiRxnParticipantCount,

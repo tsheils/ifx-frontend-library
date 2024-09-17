@@ -7,8 +7,8 @@
   </mat-select>
 </mat-form-field>
 <div class="row right-justified-row">
-  @if (chartComponent) {
-    <lib-image-download [chartComponent]="chartComponent"></lib-image-download>
+  @if (chartComponent()) {
+    <lib-image-download [chartComponent]="chartComponent()" [svg]="chartComponent()!.svgExport()"></lib-image-download>
   }
 </div>
 

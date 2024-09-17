@@ -1,5 +1,5 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { Component, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, computed, ElementRef, HostListener, OnChanges, OnInit, ViewEncapsulation } from '@angular/core';
 import { Filter } from '@ncats-frontend-library/models/utils';
 import {
   Arc,
@@ -27,32 +27,36 @@ export class SharedUtilsPieChartComponent
   extends GenericChartComponent
   implements OnInit, OnChanges
 {
-  arcShape!: Arc<never, DefaultArcObject>;
+  radius = computed(()=> Math.min(this.width(), this.height()) / 2);
+
+  arcShape = computed(() => arc()
+    .innerRadius(this.radius() * 0.67)
+    .outerRadius(this.radius() - 1)
+    .cornerRadius(3)
+    .padAngle(0.015)
+)
   pieChart!: unknown;
-  radius!: number;
   color!: ScaleOrdinal<string, unknown>;
+
+  /**
+   * function to redraw/scale the graph on window resize
+   */
+  @HostListener('window:resize', [])
+  onResize() {
+    this.makeChart();
+  }
 
   constructor() {
     super();
-    this.margins = { top: 20, bottom: 30, right: 30, left: 30 };
   }
 
   ngOnInit() {
-    if (this.chartElement && this.isBrowser()) {
-      const element = this.chartElement.nativeElement;
-      this.width = element.offsetWidth - this.margins.left - this.margins.right;
-      this.height = element.offsetHeight; // + this.margins.top //+ this.margins.bottom;
-
-      this.radius = Math.min(this.width, this.height) / 2;
-
-      this.arcShape = arc()
-        .innerRadius(this.radius * 0.67)
-        .outerRadius(this.radius - 1)
-        .cornerRadius(3)
-        .padAngle(0.015);
+    if (this.chartElement() && this.isBrowser()) {
+      this.margins.set({ top: 10, bottom: 0, right: 30, left: 30 });
+      const element = this.chartElement()!.nativeElement;
 
       this.pieChart = pie()
-        .padAngle(1 / this.radius)
+        .padAngle(1 / this.radius())
         .sort(null)
         //@ts-expect-error dumb
         .value((d) => d.count);
@@ -74,10 +78,10 @@ export class SharedUtilsPieChartComponent
         .attr('class', 'chart-id')
         // .attr('viewBox', [-150, -180, 300, 360])
         .attr('viewBox', [
-          -this.width / 2,
-          -this.height / 2,
-          this.width,
-          this.height,
+          -this.width() / 2,
+          -(this.height() / 2),
+          this.width(),
+          this.height(),
         ])
         .attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
       this.makeChart();
@@ -103,7 +107,7 @@ export class SharedUtilsPieChartComponent
       .join('path')
       .attr('fill', (d: { data: Filter }) => this.color(d.data.term))
       .attr('class', 'slice')
-      .attr('d', this.arcShape)
+      .attr('d', this.arcShape())
       .on('mouseover', (event: Event, d: { data: Filter }) => {
         select((<unknown>event.currentTarget) as string)
           .classed('hovered', true)
@@ -139,17 +143,14 @@ export class SharedUtilsPieChartComponent
       this.addTooltip(firstSlice[firstSliceIndex].data);
     }
 
-    this.svg
+   /* this.svg
       .append('text')
       .attr('class', 'chart-title')
       .attr('x', 0)
-      .attr('y', -this.height / 2 + this.margins.top)
+      .attr('y', -this.height() / 2 + this.margins().top)
       .attr('text-anchor', 'middle')
       .text(this.data.label);
-
-    this.svgExport = <SVGElement>(
-      select(this.chartElement.nativeElement).select('svg').node()
-    );
+*/
   }
 
   /**
@@ -163,7 +164,7 @@ export class SharedUtilsPieChartComponent
     this.svg
       .append('circle')
       .attr('class', 'toolCircle')
-      .attr('r', this.radius * 0.65) // radius of tooltip circle
+      .attr('r', this.radius() * 0.65) // radius of tooltip circle
       .style('fill', this.color(d.term)) // colour based on category mouse is over
       .style('fill-opacity', 0.35);
     this.svg

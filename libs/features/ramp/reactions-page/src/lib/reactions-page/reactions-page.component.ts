@@ -243,7 +243,8 @@ export class ReactionsPageComponent
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<ReactionClass> | undefined) => {
           if (res && res.data) {
-            const ret = this._mapToHierarchy(res.data);
+            const ret = this._mapToHierarchy(res.data.filter(c=> c.reactionCount > 0));
+          //  console.log(JSON.stringify(ret))
             this.visualizationMap.set('Reaction Classes', [
               { type: 'sunburst', data: { values: ret } },
               { type: 'tree', data: { values: ret } },
@@ -269,6 +270,7 @@ export class ReactionsPageComponent
                 //  this.hoveredNode.set(value);
               }
             });
+            this.changeRef.markForCheck();
           }
           if (res && res.query) {
             // this.resultsMap.function = <string>res.query.functionCall;
@@ -298,6 +300,8 @@ export class ReactionsPageComponent
   }
 
   private _mapToHierarchy(classes: ReactionClass[]): HierarchyNode[] {
+  //  console.log(JSON.stringify(classes))
+
     let hierarchyArr: HierarchyNode[] = [];
     const sortedClasses: Map<number, HierarchyNode[]> = new Map<
       number,

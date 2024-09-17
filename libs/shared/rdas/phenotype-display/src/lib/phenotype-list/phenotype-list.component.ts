@@ -17,14 +17,12 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { PhenotypeAssociation } from '@ncats-frontend-library/models/rdas';
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
-import { PhenotypeListCardComponent } from '../phenotype-list-card/phenotype-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-phenotype-list',
   standalone: true,
   imports: [
     CommonModule,
-    PhenotypeListCardComponent,
     MatPaginatorModule,
     MatButtonModule,
     MatIconModule,

@@ -1,8 +1,4 @@
-<div class="row right-justified-row no-padding">
-  <button mat-icon-button (click)="closeModal()">
-    <mat-icon>close</mat-icon>
-  </button>
-</div>
+<mat-dialog-content>
 <div class="row centered-row">
   <mat-list class="buttons-list">
     <mat-list-item>
@@ -66,3 +62,9 @@
   </p>
   <br />
 </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="closeModal()">
+    Cancel
+  </button>
+</mat-dialog-actions>

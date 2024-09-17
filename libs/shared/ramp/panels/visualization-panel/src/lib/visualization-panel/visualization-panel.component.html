@@ -43,7 +43,12 @@
       }
       @case ('sunburst') {
         @if (chart.data!.values) {
-          <lib-sunburst-chart [data]="chart.data!.values"></lib-sunburst-chart>
+          <lib-sunburst-chart
+            [data]="chart.data!.values"
+          ></lib-sunburst-chart>
+
+      <!--    <lib-sunburst-chart
+          ></lib-sunburst-chart>-->
         }
       }
 

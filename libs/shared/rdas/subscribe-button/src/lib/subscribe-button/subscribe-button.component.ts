@@ -61,7 +61,7 @@ export class SubscribeButtonComponent implements OnInit {
   subscriptionId = input<string | undefined>();
   subscribed = computed<boolean>(() => {
     return (
-      !!this.user() ||
+      !!this.user() &&
       this.user()!.subscriptions.filter(
         (sub: Subscription) => sub.gardID == this.subscriptionId(),
       ).length > 0
@@ -69,7 +69,6 @@ export class SubscribeButtonComponent implements OnInit {
   });
   mobile = signal(false);
 
-  userChange = output<User | null>();
   isSubscribed = output<boolean>();
 
   /*user!: User;

@@ -8,7 +8,7 @@
         priority
       />
       <div class="disease-header">
-        <div class="row space-between-row link-row">
+        <div class="row space-around-row link-row">
           <div class="width-sm-95 width-75">
             <a
               class="mat-h1 disease-link"
@@ -24,11 +24,13 @@
               </div></a
             >
           </div>
+          <div class="width-sm-5 width-15">
           <ncats-frontend-library-subscribe-button
             class="subscribed-button"
             [subscriptionName]="disease()?.name"
             [subscriptionId]="disease()?.gardId"
           ></ncats-frontend-library-subscribe-button>
+        </div>
         </div>
         @if (animationState() === 'in') {
           <div class="width-75">

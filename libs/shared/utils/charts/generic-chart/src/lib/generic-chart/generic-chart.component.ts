@@ -30,39 +30,26 @@ export class GenericChartComponent {
     PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
 
-  @ViewChild('chartElement', { static: true }) chartElement!: ElementRef;
-  @Input() data!: FilterCategory;
-  svg!: any; // Selection<BaseType, unknown, null, undefined>;
-  svgExport!: SVGElement;
-  tooltip!: Selection<null, undefined, null, undefined>;
-  width!: number;
-  height!: number;
-  margins!: { top: number; bottom: number; left: number; right: number };
-  keys!: string[];
-  isBrowser = computed(() => isPlatformBrowser(this.platformId));
-  @Output() readonly clickElement: EventEmitter<Filter> =
-    new EventEmitter<Filter>();
-
-  /*platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID,
-  ) as InjectionToken<NonNullable<unknown>>;
+  readonly clickElement = output<Filter>();
 
   chartElement = viewChild<ElementRef>('chartElement');
-
-  data = input<FilterCategory>();
+  width =computed(()=> this.chartElement()?.nativeElement.offsetWidth - this.margins().left - this.margins().right);
+  height =computed(()=> this.chartElement()?.nativeElement.offsetHeight + this.margins().top + this.margins().bottom);
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
-  readonly clickElement = output<Filter>();
+  margins = signal({ top: 10, bottom: 10, left: 10, right: 10 });
+  svgExport = computed(() => <SVGElement>(
+      select(this.chartElement()?.nativeElement).select('svg').node()
+    )
+  )
+
+  @Input() data!: FilterCategory;
+  svg!: any; // Selection<BaseType, unknown, null, undefined>;
+  tooltip!: Selection<null, undefined, null, undefined>;
+  keys!: string[];
+
+  /*
+  data = input<FilterCategory>();
   margins = {top: 10, bottom: 10, left: 10, right: 10};
-  width = computed(
-    () =>
-      this.chartElement()?.nativeElement.offsetWidth - this.margins.left - this.margins.right,
-  );
-  height = computed(
-    () =>
-      this.chartElement()?.nativeElement.offsetHeight -
-      this.margins.top -
-      this.margins.bottom,
-  );
 
   svgExport = computed(() => {
     <SVGElement>(

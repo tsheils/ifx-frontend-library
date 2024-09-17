@@ -3,9 +3,9 @@ import {
   computed,
   input,
   OnInit,
-  signal,
+  signal, viewChild,
   ViewChild,
-  WritableSignal,
+  WritableSignal
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -37,7 +37,7 @@ import { ImageDownloadComponent } from 'image-download';
   styleUrl: './chart-wrapper.component.scss',
 })
 export class ChartWrapperComponent implements OnInit {
-  @ViewChild('chart', { static: false }) chartComponent!: GenericChartComponent;
+  chartComponent = viewChild<GenericChartComponent>('chart');
   chartType = input<string>();
   filters = input<FilterCategory[]>();
   filterTypes = computed(() => this.filters()?.map((filter) => filter.label));

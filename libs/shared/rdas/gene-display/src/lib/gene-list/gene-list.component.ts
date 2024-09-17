@@ -1,15 +1,9 @@
 import {
-  AfterViewInit,
   Component,
   computed,
   inject,
-  Inject,
   input,
-  Input,
-  OnChanges,
-  SimpleChanges,
   viewChild,
-  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
@@ -24,14 +18,12 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { GeneAssociation } from '@ncats-frontend-library/models/rdas';
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
-import { GeneListCardComponent } from '../gene-list-card/gene-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-gene-list',
   standalone: true,
   imports: [
     MatPaginatorModule,
-    GeneListCardComponent,
     MatCardModule,
     MatButtonModule,
     MatIconModule,
