@@ -414,6 +414,7 @@ export class RampService {
   ): Observable<RampResponse<CommonAnalyte>> {
     const options = {
       analytes: analytes,
+      format: "merge"
     };
     return this.http
       .post<

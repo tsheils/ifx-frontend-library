@@ -1,4 +1,3 @@
-import { DataProperty } from 'ncats-datatable';
 
 export class Reaction {
   reactionId!: string;
