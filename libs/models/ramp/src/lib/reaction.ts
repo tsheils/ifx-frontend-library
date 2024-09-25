@@ -70,11 +70,12 @@ export class ReactionClass {
 
 export class CommonAnalyte {
   inputAnalyte!: string;
-  inputCommonNames!: string;
+  inputCommonName!: string;
   rxnPartnerCommonName!: string;
   rxnPartnerIds!: string[];
   rxnPartnerIdsString!: string;
   queryRelation!: string;
+  source!: string;
 
   constructor(obj: { [key: string]: unknown }) {
     if (obj['input_analyte']) {
@@ -85,8 +86,12 @@ export class CommonAnalyte {
       this.queryRelation = <string>obj['query_relation'];
     }
 
-    if (obj['input_common_names']) {
-      this.inputCommonNames = <string>obj['input_common_names'];
+    if (obj['Source']) {
+      this.source = <string>obj['Source'];
+    }
+
+    if (obj['input_common_name']) {
+      this.inputCommonName = <string>obj['input_common_name'];
     }
 
     if (obj['rxn_partner_common_name']) {

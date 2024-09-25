@@ -1,0 +1,20 @@
+.force-directed-graph {
+  min-height: 75vh;
+}
+
+.label-text {
+  display: none
+}
+
+.hovered {
+  fill: red;
+}
+
+
+line.edgeLinks.hoveredEdge {
+  opacity: 1;
+}
+
+.hoveredNode {
+  opacity: 1;
+}

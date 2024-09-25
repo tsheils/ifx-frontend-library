@@ -13,8 +13,9 @@ import { select } from '@ngrx/store';
 import { DataProperty } from 'ncats-datatable';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { CommonAnalyte, RampResponse, Reaction, ReactionClass } from 'ramp';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { GraphData, GraphLink, GraphNode, HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { RampCorePageComponent } from 'ramp-core-page';
+import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend';
 import {
   CommonReactionAnalyteActions,
   RampSelectors,
@@ -27,6 +28,7 @@ import {
 } from 'ramp-sunburst-tooltip';
 import { map } from 'rxjs';
 import { SunburstChartService } from 'sunburst-chart';
+import { ForceDirectedGraphService } from 'utils-force-directed-graph';
 
 @Component({
   selector: 'lib-reactions-page',
@@ -37,6 +39,10 @@ import { SunburstChartService } from 'sunburst-chart';
       provide: SUNBURST_TOOLTIP,
       useValue: RampSunburstTooltipComponent,
     },
+  {
+    provide: GRAPH_LEGEND,
+    useValue: RampGraphLegendComponent,
+  },
   ],
   templateUrl: './reactions-page.component.html',
   styleUrl: './reactions-page.component.scss',
@@ -48,6 +54,7 @@ export class ReactionsPageComponent
   implements OnInit
 {
   sunburstChartService = inject(SunburstChartService);
+  forceDirectedGraphService = inject(ForceDirectedGraphService);
   _snackBar = inject(MatSnackBar);
 
   override dataColumns: DataProperty[] = [
@@ -58,7 +65,7 @@ export class ReactionsPageComponent
     }),
     new DataProperty({
       label: 'Analyte',
-      field: 'inputCommonNames',
+      field: 'inputCommonName',
       sortable: true,
     }),
     new DataProperty({
@@ -153,12 +160,32 @@ export class ReactionsPageComponent
   hoveredNode = signal<ReactionClass | undefined>(undefined);
   textLabel = signal<string | undefined>(undefined);
 
+  nodeShapes = {
+    met : 'circle',
+    protein: 'rect',
+    gene: 'rect'
+  }
+
+  edgeColors = {
+    hmdb: '#ca1f7c',
+    rhea: '#cc5501',
+    both: '#0e8080'
+  }
+
+edgeTypes = {
+    met2gene: 'Metabolite to Gene',
+  gene2met: 'Gene to Metabolite',
+  met2protein: 'Metabolite to Protein',
+  protein2met: 'Protein to Metabolite'
+  }
+
   constructor() {
     super();
   }
 
   ngOnInit() {
     this.sunburstChartService.customComponent = SUNBURST_TOOLTIP;
+    this.forceDirectedGraphService.customComponent = GRAPH_LEGEND;
     this.store
       .pipe(
         select(RampSelectors.getCommonReactions),
@@ -166,6 +193,10 @@ export class ReactionsPageComponent
         map((res: RampResponse<CommonAnalyte> | undefined) => {
           if (res && res.data) {
             // map hmdb and rhea reactions
+            const graphData = {graph: this._mapToGraph(res.data)} as GraphData;
+            this.visualizationMap.set('Common Analyte Network', [
+              { type: 'graph', data: graphData},
+            ])
             this.dataMap.set('Common Analytes', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
@@ -245,9 +276,10 @@ export class ReactionsPageComponent
           if (res && res.data) {
             const ret = this._mapToHierarchy(res.data.filter(c=> c.reactionCount > 0));
           //  console.log(JSON.stringify(ret))
+            const graphData: GraphData = { values: ret } as GraphData
             this.visualizationMap.set('Reaction Classes', [
-              { type: 'sunburst', data: { values: ret } },
-              { type: 'tree', data: { values: ret } },
+              { type: 'sunburst', data: graphData },
+              { type: 'tree', data: graphData },
             ]);
             // map hmdb and rhea reactions
             this.dataMap.set('Reaction Classes', {
@@ -348,7 +380,7 @@ export class ReactionsPageComponent
     return hierarchyArr;
   }
 
-  _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
+ private _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
     nodes.forEach((node) => {
       const parent = map.get(node.parent as string) as HierarchyNode;
       if (parent.children) {
@@ -361,7 +393,7 @@ export class ReactionsPageComponent
     return map;
   }
 
-  _mapColor(node: ReactionClass) {
+ private _mapColor(node: ReactionClass) {
     const index = ((<unknown>node.ecNumber[0]) as number) - 1;
     const level = node.classLevel;
     const colors = [
@@ -376,4 +408,31 @@ export class ReactionsPageComponent
 
     return colors[index][0];
   }
+
+private _mapToGraph(data: CommonAnalyte[]) {
+const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+let nodes: GraphNode[] = [];
+const links: GraphLink[] = [];
+    data.forEach(analyte => {
+      let sourceNode = sourceNodeMap.get(analyte.inputAnalyte);
+      let targetNode = targetNodeMap.get(analyte.rxnPartnerCommonName);
+      const types = analyte.queryRelation.split(`2`);
+      if(!sourceNode) {
+        sourceNode = new GraphNode({id: analyte.inputAnalyte, label: analyte.inputCommonName, color: "#000000", shape: this.nodeShapes[types[0] as keyof typeof this.nodeShapes] })
+        sourceNodeMap.set(analyte.inputAnalyte, sourceNode)
+      }
+      if(!targetNode) {
+        targetNode = new GraphNode({id: analyte.rxnPartnerCommonName, label: analyte.rxnPartnerCommonName, color: "#d2e5f6", shape: this.nodeShapes[types[1] as keyof typeof this.nodeShapes] })
+        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode)
+      }
+      links.push(new GraphLink({source: sourceNode.id, target: targetNode.id, label: analyte.source, id: analyte.source,
+        color: this.edgeColors[analyte.source.toLocaleLowerCase() as keyof typeof this.edgeColors],
+        type: this.edgeTypes[analyte.queryRelation as keyof typeof this.edgeTypes]}))
+    })
+  nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()]
+  return {nodes: nodes, links: links}
 }
+
+}
+

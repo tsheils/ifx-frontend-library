@@ -228,6 +228,7 @@
       ],
       "ramp": ["libs/models/ramp/src/index.ts"],
       "ramp-core-page": ["libs/shared/ramp/ramp-core-page/src/index.ts"],
+      "ramp-graph-legend": ["libs/shared/ramp/ramp-graph-legend/src/index.ts"],
       "ramp-main": ["libs/features/ramp/ramp-main/src/index.ts"],
       "ramp-page": ["libs/shared/ramp/ramp-page/src/index.ts"],
       "ramp-store": ["libs/stores/ramp-store/src/index.ts"],

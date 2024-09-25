@@ -11,8 +11,9 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
+  GraphData,
   HierarchyNode,
-  OpenApiPath,
+  OpenApiPath
 } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
 import { DataProperty } from 'ncats-datatable';
@@ -53,13 +54,13 @@ export class RampCorePageComponent {
     string,
     {
       type: string;
-      data: { tooBig?: boolean; image?: SafeHtml; values?: HierarchyNode[] };
+      data: GraphData;
     }[]
   > = new Map<
     string,
     {
       type: string;
-      data: { tooBig?: boolean; image?: SafeHtml; values?: HierarchyNode[] };
+      data: GraphData;
     }[]
   >();
   dataMap: Map<

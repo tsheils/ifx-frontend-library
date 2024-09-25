@@ -6,7 +6,7 @@ library(readr)
 library(ggplot2)
 library(svglite)
 
-rampDB <<- RaMP:::RaMP() # pre-load sqlite database to the container
+rampDB <<- RaMP:::RaMP(branch='ramp3.0') # pre-load sqlite database to the container
 
 #* @apiTitle RaMP_API
 #* @apiDescription REST API for the Relational Database of Metabolomics Pathways (RaMP) Application
@@ -182,15 +182,15 @@ function(analytes) {
 ##########
 #' Return analytes from given list of pathways as either json or a tsv
 #' @param pathway pathway identifier
-#' @param analyte_type genes, metabolites, or both
-#' @param names_or_ids Pathway common name or database identifier
+#' @param analyteType genes, metabolites, or both
+#' @param namesOrIds Pathway common name or database identifier
 #' @param match fuzzy or exact match
-#' @param max_pathway_size Upper limit for size of returned pathways
+#' @param maxPathwaySize Upper limit for size of returned pathways
 #' @post /api/analytes-from-pathways
-function(pathway, analyte_type="both", names_or_ids="names", match="fuzzy", max_pathway_size=1000) {
+function(pathway, analyteType="both", namesOrIds="names", match="fuzzy", maxPathwaySize=1000) {
   analyte <- analyte_type
   analytes_df <- tryCatch({
-    RaMP::getAnalyteFromPathway(db = rampDB, pathway = pathway, analyte_type=analyte, match=match, names_or_ids=names_or_ids, max_pathway_size=max_pathway_size)
+    RaMP::getAnalyteFromPathway(db = rampDB, pathway = pathway, analyteType=analyte, match=match, namesOrIds=namesOrIds, maxPathwaySize=max_pathway_size)
   },
     error = function(cond) {
       print(cond)
@@ -209,11 +209,10 @@ function(pathway, analyte_type="both", names_or_ids="names", match="fuzzy", max_
 #####
 #' Return ontology mappings from list of metabolites
 #' @param metabolite
-#' @param namesOrIds one of “name” or “ids”, default “ids"
 #' @post /api/ontologies-from-metabolites
-function(metabolite, namesOrIds= "ids") {
+function(metabolite) {
     ontologies_df <-
-        RaMP::getOntoFromMeta(db = rampDB, analytes = metabolite, NameOrIds = namesOrIds)
+        RaMP::getOntoFromMeta(db = rampDB, analytes = metabolite)
     if(is.null(ontologies_df)){
         ontologies_df<-data.frame()
     }
@@ -323,26 +322,26 @@ function(metabolites="", property="all") {
 #' Return analytes involved in same reaction as given list of analytes from the 'catalyzed' table
 #' @param analyte list of analytes to be queried
 #' @post /api/common-reaction-analytes
-function(analytes, namesOrIds = "ids", format="frames") {
-  analytes_df_ids <- tryCatch({
-    analytes_df <- RaMP::rampFastCata(
+function(analytes, namesOrIds = "ids") {
+  analytes_df <-
+    tryCatch({
+     RaMP::rampFastCata(
       db = rampDB,
-      analytes = analytes,
-      NameOrIds = namesOrIds
+      analytes = analytes
     )
-
-    hmdbMatches <- unlist(unique(analytes_df[[1]]$input_analyte))
-    rheaMatches <- unlist(unique(analytes_df[[2]]$input_analyte))
-    idMatches = length(union(hmdbMatches, rheaMatches))
+   # hmdbMatches <- unlist(unique(analytes_df[[1]]$input_analyte))
+  #  rheaMatches <- unlist(unique(analytes_df[[2]]$input_analyte))
+    # idMatches = length(union(hmdbMatches, rheaMatches))
+   # idMatches = length(analytes_df)
 
     # this is the return object from the try/catch
     # with ramp v3.0, the result is a dataframe of HMDB results and a second dataframe of Rhea results
-    list(data=analytes_df, idMatchCount=idMatches)
+  #  list(data=analytes_df, idMatchCount=idMatches)
   },
     error = function(cond) {
       idMatches = 0
       return(data.frame(stringsAsFactors = FALSE))
-    })
+  })
 
   # Removing Capacity to search by name for now - EM 12/13/2021
   #    analytes_df_names <- tryCatch({
@@ -357,29 +356,19 @@ function(analytes, namesOrIds = "ids", format="frames") {
   #    )
   #    analytes_df <- rbind(analytes_df_ids, analytes_df_names)
 
-  if(format == "merge") {
-    return(
-      list(
-        data = rbind(unique(analytes_df_ids$data$Rhea_Analyte_Associations), unique(analytes_df_ids$data$HMDB_Analyte_Associations)),
-        function_call = makeFunctionCall(analytes,"rampFastCata"),
-        numFoundIds = analytes_df_ids$idMatchCount
-      )
-    )
-  } else {
   return(
     # note... currently we're just returning the HMDB results.
     # RaMP v3 also has Rhea results that can be displayed
     # It would be referenced like this in this method:  analytes_df_ids$data$Rhea_Analyte_Associations
     # note below we only reference the HMDB result until the UI can process both dataframes.
     list(
-      data = unique(analytes_df_ids$data$HMDB_Analyte_Associations),
-      data2 = rbind(unique(analytes_df_ids$data$Rhea_Analyte_Associations), unique(analytes_df_ids$data$HMDB_Analyte_Associations)),
+      data = unique(analytes_df),
       function_call = makeFunctionCall(analytes,"rampFastCata"),
-      numFoundIds = analytes_df_ids$idMatchCount
+      numFoundIds = length(analytes_df)
     )
   )
 }
-}
+
 #####
 #' Return combined Fisher's test results
 #' from given list of analytes query results
