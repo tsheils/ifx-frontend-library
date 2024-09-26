@@ -50,8 +50,8 @@ export class SharedUtilsBarChartComponent
     return `assets/charts/placeholders/chart${Math.floor(Math.random() * 2)}.webp`;
   });
 
-  data =  input<FilterCategory>();
-  readonly clickElement = output<Filter>();
+  //data =  input<FilterCategory>();
+ // readonly clickElement = output<Filter>();
   bars!: unknown;
   series!: Stack<never, { [key: string]: number }, string>;
   xScale!: ScaleBand<string>;
@@ -59,7 +59,7 @@ export class SharedUtilsBarChartComponent
 
   constructor() {
     super();
-    this.margins.set({ top: 20, bottom: 50, right: 30, left: 70 });
+    this.margins.set({ top: 20, bottom: 50, right: 30, left: 10 });
   }
 
   /**

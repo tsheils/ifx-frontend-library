@@ -125,11 +125,12 @@ gZoom = computed(() => this.svg().append('g'))
         .selectAll()
         .data(this.nodes().filter(n => n.shape ==='rect'))
         .join('rect')
+        .attr('class', (d) => d.extraClass ? d.extraClass : '')
         .classed('dataNode', true)
+        .classed('squareNode', true)
         .attr('width', 10)
         .attr('height', 10)
         .attr('fill', d => d.color ? d.color: 'black')
-        .attr('opacity', .5)
         .attr('stroke-width', .5)
         .attr('stroke', '#000000')
         .join("text")
@@ -151,10 +152,11 @@ circleNode = computed(() =>
         .selectAll()
         .data(this.nodes().filter(n => n.shape ==='circle'))
         .join('circle')
+        .attr('class', (d) => d.extraClass ? d.extraClass : '')
         .classed('dataNode', true)
+        .classed('circleNode', true)
         .attr('r', 5)
         .attr('fill', d => d.color ? d.color: 'black')
-        .attr('opacity', .5)
         .attr('stroke-width', .5)
         .attr('stroke', '#000000')
         .join("text")
@@ -201,21 +203,24 @@ ngOnInit(): void {
   }
 
   clicked(event, d) {
-     selectAll(this.link())
-      .classed('hoveredEdge', (l) => l.target['id'] === d.id || l.source['id'] === d.id )
+    const filterList =  this.links().filter((l) => l.target['id'] === d.id || l.source['id'] === d.id )
+    const nodes = Array.from(new Set([...filterList.map(l => l.target['id']), ...filterList.map(l => l.source['id'])]));
+    selectAll(this.link())
+      .classed('clickedEdge', (l) => l.target['id'] === d.id || l.source['id'] === d.id )
       .transition()
       .duration(100)
 
-    d.color= 'purple';
-    select(event.target).attr('fill', 'purple')
-      .attr('opacity', 1)
+    selectAll(this.allNodes())
+      .classed('clickedNode', (n) => nodes.includes(n.id))
+      .transition()
+      .duration(100)
+
     this.graphChartService.nodeClicked.emit(d as GraphNode);
   }
 
 hovered(event, d) {
-    const filterList =  this.links().filter((l) => l.target['id'] === d.id || l.source['id'] === d.id )
-  const nodes = Array.from(new Set([...filterList.map(l => l.target['id']), ...filterList.map(l => l.source['id'])]));
-
+     const filterList =  this.links().filter((l) => l.target['id'] === d.id || l.source['id'] === d.id )
+    const nodes = Array.from(new Set([...filterList.map(l => l.target['id']), ...filterList.map(l => l.source['id'])]));
     selectAll(this.link())
     .classed('hoveredEdge', (l) => l.target['id'] === d.id || l.source['id'] === d.id )
     .transition()
@@ -225,16 +230,12 @@ hovered(event, d) {
     .classed('hoveredNode', (n) => nodes.includes(n.id))
     .transition()
     .duration(100)
-
-     select(event.target).attr('fill', 'green')
-     .attr('opacity', 1)
   this.graphChartService.nodeHovered.emit(d as GraphNode);
   }
 
   hoveredOff(event, d) {
-     select(event.target)
-       .attr('fill', d.color)
-     .attr('opacity', .7)
+   /*  select(event.target)
+       .attr('fill', d.color)*/
     this.graphChartService.nodeHovered.emit(null);
   }
 

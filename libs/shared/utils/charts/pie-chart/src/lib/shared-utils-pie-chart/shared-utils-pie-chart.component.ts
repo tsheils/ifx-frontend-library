@@ -45,8 +45,8 @@ export class SharedUtilsPieChartComponent
     .padAngle(0.015)
 )
 
-  readonly clickElement = output<Filter>();
-  data =  input<FilterCategory>();
+ // readonly clickElement = output<Filter>();
+  //data =  input<FilterCategory>();
   pieChart!: unknown;
   color!: ScaleOrdinal<string, unknown>;
 
@@ -74,11 +74,11 @@ export class SharedUtilsPieChartComponent
         .value((d) => d.count);
 
       this.color = scaleOrdinal()
-        .domain(this.data().values.map((d) => d.term))
+        .domain(this.data()!.values.map((d) => d.term))
         .range(
           quantize(
             interpolate('#93278f', '#6e4c8f'),
-            this.data().values.length,
+            this.data()!.values.length,
           ).reverse(),
         );
 

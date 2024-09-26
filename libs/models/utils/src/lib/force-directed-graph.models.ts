@@ -10,6 +10,7 @@ export class GraphNode implements SimulationNodeDatum {
   shape?: string;
   hovered?: boolean;
   clicked?: boolean;
+  extraClass?: string;
   x?: number | undefined;
   y?: number | undefined;
   vx?: number | undefined;

@@ -13,7 +13,12 @@ import { select } from '@ngrx/store';
 import { DataProperty } from 'ncats-datatable';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { CommonAnalyte, RampResponse, Reaction, ReactionClass } from 'ramp';
-import { GraphData, GraphLink, GraphNode, HierarchyNode } from '@ncats-frontend-library/models/utils';
+import {
+  GraphData,
+  GraphLink,
+  GraphNode,
+  HierarchyNode,
+} from '@ncats-frontend-library/models/utils';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend';
 import {
@@ -39,10 +44,10 @@ import { ForceDirectedGraphService } from 'utils-force-directed-graph';
       provide: SUNBURST_TOOLTIP,
       useValue: RampSunburstTooltipComponent,
     },
-  {
-    provide: GRAPH_LEGEND,
-    useValue: RampGraphLegendComponent,
-  },
+    {
+      provide: GRAPH_LEGEND,
+      useValue: RampGraphLegendComponent,
+    },
   ],
   templateUrl: './reactions-page.component.html',
   styleUrl: './reactions-page.component.scss',
@@ -78,9 +83,13 @@ export class ReactionsPageComponent
       field: 'rxnPartnerCommonName',
       sortable: true,
     }),
-    new DataProperty({
+    /* new DataProperty({
       label: 'Catalyst IDs',
       field: 'rxnPartnerIdsString',
+    }),*/
+    new DataProperty({
+      label: 'Source',
+      field: 'source',
     }),
   ];
   reactionColumns: DataProperty[] = [
@@ -161,23 +170,23 @@ export class ReactionsPageComponent
   textLabel = signal<string | undefined>(undefined);
 
   nodeShapes = {
-    met : 'circle',
+    met: 'circle',
     protein: 'rect',
-    gene: 'rect'
-  }
+    gene: 'rect',
+  };
 
   edgeColors = {
     hmdb: '#ca1f7c',
     rhea: '#cc5501',
-    both: '#0e8080'
-  }
+    both: '#0e8080',
+  };
 
-edgeTypes = {
+  edgeTypes = {
     met2gene: 'Metabolite to Gene',
-  gene2met: 'Gene to Metabolite',
-  met2protein: 'Metabolite to Protein',
-  protein2met: 'Protein to Metabolite'
-  }
+    gene2met: 'Gene to Metabolite',
+    met2protein: 'Metabolite to Protein',
+    protein2met: 'Protein to Metabolite',
+  };
 
   constructor() {
     super();
@@ -186,6 +195,25 @@ edgeTypes = {
   ngOnInit() {
     this.sunburstChartService.customComponent = SUNBURST_TOOLTIP;
     this.forceDirectedGraphService.customComponent = GRAPH_LEGEND;
+
+    this.store.pipe(
+      select(RampSelectors.getReactionResults),
+      takeUntilDestroyed(this.destroyRef),
+      map(
+        (
+          res:
+            | {
+                reactions: RampResponse<Reaction> | undefined;
+                reactionClasses: RampResponse<ReactionClass> | undefined;
+                commonReactions: RampResponse<CommonAnalyte> | undefined;
+              }
+            | undefined,
+        ) => {
+          console.log(res);
+        },
+      ),
+    );
+
     this.store
       .pipe(
         select(RampSelectors.getCommonReactions),
@@ -193,10 +221,12 @@ edgeTypes = {
         map((res: RampResponse<CommonAnalyte> | undefined) => {
           if (res && res.data) {
             // map hmdb and rhea reactions
-            const graphData = {graph: this._mapToGraph(res.data)} as GraphData;
+            const graphData = {
+              graph: this._mapToGraph(res.data),
+            } as GraphData;
             this.visualizationMap.set('Common Analyte Network', [
-              { type: 'graph', data: graphData},
-            ])
+              { type: 'graph', data: graphData },
+            ]);
             this.dataMap.set('Common Analytes', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
@@ -274,9 +304,11 @@ edgeTypes = {
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<ReactionClass> | undefined) => {
           if (res && res.data) {
-            const ret = this._mapToHierarchy(res.data.filter(c=> c.reactionCount > 0));
-          //  console.log(JSON.stringify(ret))
-            const graphData: GraphData = { values: ret } as GraphData
+            const ret = this._mapToHierarchy(
+              res.data.filter((c) => c.reactionCount > 0),
+            );
+            //  console.log(JSON.stringify(ret))
+            const graphData: GraphData = { values: ret } as GraphData;
             this.visualizationMap.set('Reaction Classes', [
               { type: 'sunburst', data: graphData },
               { type: 'tree', data: graphData },
@@ -310,6 +342,23 @@ edgeTypes = {
         }),
       )
       .subscribe();
+
+    this.forceDirectedGraphService.nodeClicked.subscribe((res) => {
+      const allData = this.dataMap.get('Common Analytes')?.data;
+      console.log(allData);
+      if (allData && res) {
+        const filteredData = allData?.filter(
+          (ca) =>
+            ca['inputAnalyte'].value === res?.id ||
+            ca['rxnPartnerCommonName'].value === res?.id,
+        );
+        console.log(filteredData);
+        this.forceDirectedGraphService.analyteData.set({
+          data: filteredData,
+          fields: this.dataColumns,
+        });
+      }
+    });
   }
 
   override fetchData(event: { [key: string]: unknown }): void {
@@ -332,7 +381,7 @@ edgeTypes = {
   }
 
   private _mapToHierarchy(classes: ReactionClass[]): HierarchyNode[] {
-  //  console.log(JSON.stringify(classes))
+    //  console.log(JSON.stringify(classes))
 
     let hierarchyArr: HierarchyNode[] = [];
     const sortedClasses: Map<number, HierarchyNode[]> = new Map<
@@ -380,7 +429,7 @@ edgeTypes = {
     return hierarchyArr;
   }
 
- private _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
+  private _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
     nodes.forEach((node) => {
       const parent = map.get(node.parent as string) as HierarchyNode;
       if (parent.children) {
@@ -393,7 +442,7 @@ edgeTypes = {
     return map;
   }
 
- private _mapColor(node: ReactionClass) {
+  private _mapColor(node: ReactionClass) {
     const index = ((<unknown>node.ecNumber[0]) as number) - 1;
     const level = node.classLevel;
     const colors = [
@@ -409,30 +458,51 @@ edgeTypes = {
     return colors[index][0];
   }
 
-private _mapToGraph(data: CommonAnalyte[]) {
-const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
-const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
-let nodes: GraphNode[] = [];
-const links: GraphLink[] = [];
-    data.forEach(analyte => {
+  private _mapToGraph(data: CommonAnalyte[]) {
+    const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+    const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+    let nodes: GraphNode[] = [];
+    const links: GraphLink[] = [];
+    data.forEach((analyte) => {
       let sourceNode = sourceNodeMap.get(analyte.inputAnalyte);
       let targetNode = targetNodeMap.get(analyte.rxnPartnerCommonName);
       const types = analyte.queryRelation.split(`2`);
-      if(!sourceNode) {
-        sourceNode = new GraphNode({id: analyte.inputAnalyte, label: analyte.inputCommonName, color: "#000000", shape: this.nodeShapes[types[0] as keyof typeof this.nodeShapes] })
-        sourceNodeMap.set(analyte.inputAnalyte, sourceNode)
+      if (!sourceNode) {
+        sourceNode = new GraphNode({
+          id: analyte.inputAnalyte,
+          label: analyte.inputCommonName,
+          color: '#000000',
+          extraClass: 'inputNode',
+          shape: this.nodeShapes[types[0] as keyof typeof this.nodeShapes],
+        });
+        sourceNodeMap.set(analyte.inputAnalyte, sourceNode);
       }
-      if(!targetNode) {
-        targetNode = new GraphNode({id: analyte.rxnPartnerCommonName, label: analyte.rxnPartnerCommonName, color: "#d2e5f6", shape: this.nodeShapes[types[1] as keyof typeof this.nodeShapes] })
-        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode)
+      if (!targetNode) {
+        targetNode = new GraphNode({
+          id: analyte.rxnPartnerCommonName,
+          label: analyte.rxnPartnerCommonName,
+          color: '#e6f1f9',
+          shape: this.nodeShapes[types[1] as keyof typeof this.nodeShapes],
+        });
+        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode);
       }
-      links.push(new GraphLink({source: sourceNode.id, target: targetNode.id, label: analyte.source, id: analyte.source,
-        color: this.edgeColors[analyte.source.toLocaleLowerCase() as keyof typeof this.edgeColors],
-        type: this.edgeTypes[analyte.queryRelation as keyof typeof this.edgeTypes]}))
-    })
-  nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()]
-  return {nodes: nodes, links: links}
+      links.push(
+        new GraphLink({
+          source: sourceNode.id,
+          target: targetNode.id,
+          label: analyte.source,
+          id: analyte.source,
+          color:
+            this.edgeColors[
+              analyte.source.toLocaleLowerCase() as keyof typeof this.edgeColors
+            ],
+          type: this.edgeTypes[
+            analyte.queryRelation as keyof typeof this.edgeTypes
+          ],
+        }),
+      );
+    });
+    nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()];
+    return { nodes: nodes, links: links };
+  }
 }
-
-}
-

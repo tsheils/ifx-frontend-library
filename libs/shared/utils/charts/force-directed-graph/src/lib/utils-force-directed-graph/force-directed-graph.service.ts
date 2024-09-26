@@ -7,6 +7,8 @@ import {
   signal,
 } from '@angular/core';
 import { GraphNode } from '@ncats-frontend-library/models/utils';
+import { DataProperty } from 'ncats-datatable';
+import { CommonAnalyte } from 'ramp';
 
 @Injectable({
   providedIn: 'root',
@@ -19,7 +21,7 @@ export class ForceDirectedGraphService {
 
 
   customComponent?: InjectionToken<string>;
-  reactionNode = signal<GraphNode | undefined>(undefined);
+  analyteData = signal<  {data: { [key: string]: DataProperty }[], fields: DataProperty[]} | undefined>(undefined);
 
   hoverNode(data: { event: Event; node: GraphNode }) {
     this.nodeHovered.emit(data.node);

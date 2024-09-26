@@ -12,7 +12,7 @@
   }
 
   .subscribed-button {
-    color: mat.get-theme-color($theme, primary, 100);
+    color: mat.get-theme-color($theme, primary, 10) !important;
   }
 
   .subscribed-button > button {
@@ -21,6 +21,10 @@
   }
 
   .subscribed-button > .subscription-button {
+    color: mat.get-theme-color($theme, primary) !important;
+  }
+
+  .subscribed-button > .subscribe-button {
     color: mat.get-theme-color($theme, primary) !important;
   }
 }

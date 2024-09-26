@@ -1,7 +1,7 @@
 <div class="pie-chart-container">
-  <h2>{{data.label}}</h2>
+  <h2>{{data()?.label}}</h2>
   <div id="pie-chart" class="pie-chart" #chartElement>
-    @defer (when data && svg) {
+    @defer (when data() && svg) {
     } @placeholder {
       <img
         class="placeholder-image"

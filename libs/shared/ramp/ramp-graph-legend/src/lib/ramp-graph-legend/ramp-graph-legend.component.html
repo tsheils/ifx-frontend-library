@@ -1,1 +1,24 @@
-<h1>{{hoveredNode()?.label}}</h1>
+<div class="ramp-graph-legend">
+@if(hoveredNode() && !forceDirectedGraphService.analyteData()){
+  <div class="small-legend">
+    <h1>{{hoveredNode()?.label}}</h1>
+  </div>
+  }
+
+@if(forceDirectedGraphService.analyteData()){
+  <div class="table-legend">
+      <h1>{{hoveredNode()?.label || forceDirectedGraphService.analyteData()!.data[0]['analyteId']['value']}}</h1>
+  <div class="row space-around-row">
+    <div class="width-95">
+      <ncats-datatable
+        [fieldsConfig]="forceDirectedGraphService.analyteData()?.fields"
+        [data]="forceDirectedGraphService.analyteData()?.data"
+        [internalSort]="true"
+        [useInternalPaginator]="true"
+        [hidePageSize]=" true"
+      ></ncats-datatable>
+    </div>
+  </div>
+  </div>
+}
+</div>
