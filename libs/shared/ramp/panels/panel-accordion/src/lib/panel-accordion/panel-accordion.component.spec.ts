@@ -1,9 +1,5 @@
-import { input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SafeHtml } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { DataProperty } from 'ncats-datatable';
-import { QuestionBase } from 'ncats-form-question';
 import { PanelAccordionComponent } from './panel-accordion.component';
 
 describe('PanelAccordionComponent', () => {

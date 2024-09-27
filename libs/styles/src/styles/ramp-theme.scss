@@ -25,7 +25,7 @@ $_palettes: (
     99: #fafcff,
     100: #ffffff,
   ),
-  secondary: (
+ /* secondary: (
     0: #000000,
     10: #350040,
     20: #50145b,
@@ -42,7 +42,7 @@ $_palettes: (
     98: #fff7fa,
     99: #fffbff,
     100: #ffffff,
-  ),
+  ),*/
   tertiary: (
     0: #000000,
     10: #181837,
@@ -128,7 +128,7 @@ $_palettes: (
 );
 
 $_rest: (
-  secondary: map.get($_palettes, secondary),
+  secondary: map.get($_palettes, primary),
   neutral: map.get($_palettes, neutral),
   neutral-variant: map.get($_palettes, neutral-variant),
   error: map.get($_palettes, error),

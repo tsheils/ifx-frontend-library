@@ -13,7 +13,6 @@ describe('SharedUtilsPieChartComponent', () => {
 
     fixture = TestBed.createComponent(SharedUtilsPieChartComponent);
     component = fixture.componentInstance;
-    component.data = PIEFILTERS;
     fixture.detectChanges();
   });
 

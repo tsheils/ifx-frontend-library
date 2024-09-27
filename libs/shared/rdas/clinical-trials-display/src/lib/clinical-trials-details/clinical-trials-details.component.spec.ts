@@ -13,7 +13,6 @@ describe('ClinicalTrialsDetailsComponent', () => {
     });
     fixture = TestBed.createComponent(ClinicalTrialsDetailsComponent);
     component = fixture.componentInstance;
-    component.trial = { NCTId: 'h', briefSummary: 'yo' };
     fixture.detectChanges();
   });
 

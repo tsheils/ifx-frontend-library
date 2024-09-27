@@ -8,9 +8,7 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
-import {
-  OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
+import { GraphData, OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { DataPanelComponent } from 'data-panel';
 import { InputPanelComponent } from 'input-panel';
 import { DataProperty } from 'ncats-datatable';
@@ -18,7 +16,6 @@ import { QuestionBase } from 'ncats-form-question';
 import { RampResults } from 'ramp';
 import { ResultsPanelComponent } from 'results-panel';
 import { VisualizationPanelComponent } from 'visualization-panel';
-import { GraphData } from '../../../../../../../models/utils/src/lib/graph-data';
 
 @Component({
   selector: 'lib-panel-accordion',

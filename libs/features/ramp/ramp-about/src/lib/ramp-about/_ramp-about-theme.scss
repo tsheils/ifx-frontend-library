@@ -1,0 +1,14 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin theme($theme) {
+  .active-header {
+    border-left: 8px solid mat.get-theme-color($theme, primary);
+  }
+}
+
+@mixin secondary-theme($theme) {
+  .active-header {
+    border-left: 8px solid mat.get-theme-color($theme, primary);
+  }
+}

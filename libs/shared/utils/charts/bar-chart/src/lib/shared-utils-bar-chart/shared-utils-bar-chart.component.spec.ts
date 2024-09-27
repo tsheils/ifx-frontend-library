@@ -13,7 +13,6 @@ describe('SharedUtilsBarChartComponent', () => {
 
     fixture = TestBed.createComponent(SharedUtilsBarChartComponent);
     component = fixture.componentInstance;
-    component.data = BARDATA;
     fixture.detectChanges();
   });
 

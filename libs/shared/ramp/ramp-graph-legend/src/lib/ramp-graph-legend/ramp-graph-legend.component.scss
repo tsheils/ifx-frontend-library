@@ -1,6 +1,6 @@
 .ramp-graph-legend {
   position: absolute;
-  top: 10vh;
+  top: 5vh;
   right: 2vw;
   min-width: 20vw;
   background-color: #ffffff;
@@ -20,5 +20,34 @@
 
 .table-legend {
   width: 40vw;
-  height: 100%;
+  height: 95%;
+}
+
+.legend-circle {
+    width: 25px;
+    height: 25px;
+    border-radius: 25px;
+    margin: 10px;
+    border: 1px solid black;
+}
+
+.legend-square {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    margin: 10px;
+}
+
+.legend-edge {
+    width: 40px;
+    height: 0px;
+    margin: 10px;
+}
+
+.legend-input {
+  background-color: #000000;
+}
+
+.legend-heading {
+  margin-bottom: -6px;
 }

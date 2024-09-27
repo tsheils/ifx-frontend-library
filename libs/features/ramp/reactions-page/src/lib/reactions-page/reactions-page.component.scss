@@ -47,3 +47,28 @@
 line.edgeLinks.clickedEdge {
   opacity: 1;
 }
+
+.graph-label-text.hoveredLabel {
+  display: block;
+}
+
+.legend-input {
+  background-color: #000000;
+
+}
+
+.legend-output {
+  background-color: #d2e5f6;
+}
+
+.legend-hmdb {
+  border: 3px solid #ca1f7c;
+}
+
+.legend-rhea {
+  border: 3px solid #cc5501;
+}
+
+.legend-both {
+  border: 3px solid #0e8080;
+}
