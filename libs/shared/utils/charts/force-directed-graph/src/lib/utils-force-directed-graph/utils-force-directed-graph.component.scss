@@ -1,0 +1,13 @@
+.force-directed-graph {
+  min-height: 75vh;
+}
+
+.graph-label-text {
+  display: none;
+  font-size: .25em;
+}
+
+line.edgeLinks.hoveredEdge {
+  opacity: 1;
+}
+

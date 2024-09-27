@@ -23,7 +23,8 @@
             mat-list-item
             class="list-button"
             (click)="scroll(about)"
-            [ngClass]="{ 'active-sidemenu': isActive('about') }"
+            [activated]="isActive('about')"
+
           >
             About
           </a>
@@ -31,14 +32,14 @@
             mat-list-item
             class="list-button"
             (click)="scroll(interactRaMP)"
-            [ngClass]="{ 'active-sidemenu': isActive('interactRaMP') }"
+            [activated]="isActive('interactRaMP')"
             >Interacting With RaMP
           </a>
           <a
             mat-list-item
             class="list-button"
             (click)="scroll(capabilities)"
-            [ngClass]="{ 'active-sidemenu': isActive('capabilities') }"
+            [activated]="isActive('capabilities')"
             >Capabilities
           </a>
           @if (entityCounts) {
@@ -46,7 +47,7 @@
               mat-list-item
               class="list-button"
               (click)="scroll(dataSources)"
-              [ngClass]="{ 'active-sidemenu': isActive('dataSources') }"
+              [activated]="isActive('dataSources')"
               >Data Sources
             </a>
           }
@@ -54,21 +55,21 @@
             mat-list-item
             class="list-button"
             (click)="scroll(dataDownload)"
-            [ngClass]="{ 'active-sidemenu': isActive('dataDownload') }"
+            [activated]="isActive('dataDownload')"
             >Data Download
           </a>
           <a
             mat-list-item
             class="list-button"
             (click)="scroll(summaryStatistics)"
-            [ngClass]="{ 'active-sidemenu': isActive('summaryStatistics') }"
+            [activated]="isActive('summaryStatistics')"
             >Summary Statistics
           </a>
           <a
             mat-list-item
             class="list-button"
             (click)="scroll(citation)"
-            [ngClass]="{ 'active-sidemenu': isActive('citation') }"
+            [activated]="isActive('citation')"
           >
             Citation
           </a>
@@ -76,7 +77,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(contact)"
-            [ngClass]="{ 'active-sidemenu': isActive('contact') }"
+            [activated]="isActive('contact')"
           >
             RaMP Team and Contact
           </a>
@@ -84,7 +85,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(code)"
-            [ngClass]="{ 'active-sidemenu': isActive('code') }"
+            [activated]="isActive('code')"
           >
             Code
           </a>
@@ -92,7 +93,7 @@
             mat-list-item
             class="list-button"
             (click)="scroll(license)"
-            [ngClass]="{ 'active-sidemenu': isActive('license') }"
+            [activated]="isActive('license')"
           >
             License
           </a>
@@ -131,7 +132,7 @@
         <div class="row" id="about" #about #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('about') }"
+            [ngClass]="{ 'active-header': isActive('about') }"
           >
             About RaMP
           </div>
@@ -224,7 +225,7 @@
         <div class="row" id="interactRaMP" #interactRaMP #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('interactRaMP') }"
+            [ngClass]="{ 'active-header': isActive('interactRaMP') }"
           >
             Interacting with RaMP-DB
           </div>
@@ -275,7 +276,7 @@
         <div class="row" id="capabilities" #capabilities #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('capabilities') }"
+            [ngClass]="{ 'active-header': isActive('capabilities') }"
           >
             Capabilities
           </div>
@@ -374,7 +375,7 @@
         <div class="" id="dataSources" #dataSources #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('dataSources') }"
+            [ngClass]="{ 'active-header': isActive('dataSources') }"
           >
             Data Sources
           </div>
@@ -389,7 +390,7 @@
         <div class="row" id="dataDownload" #dataDownload #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('dataDownload') }"
+            [ngClass]="{ 'active-header': isActive('dataDownload') }"
           >
             Data Download
           </div>
@@ -414,7 +415,7 @@
         >
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('summaryStatistics') }"
+            [ngClass]="{ 'active-header': isActive('summaryStatistics') }"
           >
             Summary Statistics
           </div>
@@ -456,7 +457,7 @@
         <div class="row" id="citation" #citation #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('citation') }"
+            [ngClass]="{ 'active-header': isActive('citation') }"
           >
             Citation
           </div>
@@ -510,7 +511,7 @@
         <div class="" id="contact" #contact #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('contact') }"
+            [ngClass]="{ 'active-header': isActive('contact') }"
           >
             RaMP Team and Contact
           </div>
@@ -726,7 +727,7 @@
         <div class="" id="code" #code #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('code') }"
+            [ngClass]="{ 'active-header': isActive('code') }"
           >
             Code
           </div>
@@ -771,7 +772,7 @@
         <div class="" id="license" #license #scrollSection>
           <div
             class="section-header"
-            [ngClass]="{ 'active-sidemenu': isActive('license') }"
+            [ngClass]="{ 'active-header': isActive('license') }"
           >
             License
           </div>

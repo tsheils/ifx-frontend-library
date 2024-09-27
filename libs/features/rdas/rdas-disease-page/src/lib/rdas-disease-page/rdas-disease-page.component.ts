@@ -190,7 +190,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
-    this.store.dispatch(FetchDiseaseActions.clearDisease());
+   // this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
+   // this.store.dispatch(FetchDiseaseActions.clearDisease());
   }
 }

@@ -363,7 +363,7 @@ export class BiochemicalPathwaysPageComponent
   }
 
   mapOntologies(res: RampResponse<Ontology>){
-    this.dataMap.set('Ontologies', {
+    this.dataMap.set('Ontology Lookups', {
       data: this._mapData(res.data),
       fields: this.ontologyColumns,
       dataframe: res.dataframe,
@@ -376,7 +376,7 @@ export class BiochemicalPathwaysPageComponent
       {
         type: 'cluster',
         data: {
-          tooBig: !(res.length > 0),
+          message: !(res.length > 0) ? 'This website currently does not support clustering over 100 pathways.' : undefined,
           image: this.sanitizer.bypassSecurityTrustHtml(res),
         },
       },

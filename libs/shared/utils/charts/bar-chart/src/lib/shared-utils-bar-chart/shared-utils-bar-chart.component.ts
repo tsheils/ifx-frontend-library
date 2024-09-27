@@ -3,12 +3,12 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
-  computed, HostListener,
+  computed, HostListener, input, Input,
   OnChanges,
-  OnInit,
+  OnInit, output,
   ViewEncapsulation
 } from '@angular/core';
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import {
   axisBottom,
   axisLeft,
@@ -50,6 +50,8 @@ export class SharedUtilsBarChartComponent
     return `assets/charts/placeholders/chart${Math.floor(Math.random() * 2)}.webp`;
   });
 
+  //data =  input<FilterCategory>();
+ // readonly clickElement = output<Filter>();
   bars!: unknown;
   series!: Stack<never, { [key: string]: number }, string>;
   xScale!: ScaleBand<string>;
@@ -57,7 +59,7 @@ export class SharedUtilsBarChartComponent
 
   constructor() {
     super();
-    this.margins.set({ top: 20, bottom: 50, right: 30, left: 70 });
+    this.margins.set({ top: 20, bottom: 50, right: 30, left: 10 });
   }
 
   /**
@@ -89,16 +91,16 @@ export class SharedUtilsBarChartComponent
         )
         .on('touchstart', (event) => event.preventDefault());
 
-      if (this.data) {
+      if (this.data()) {
         this.makeChart();
       }
     }
   }
 
   ngOnChanges() {
-    if (this.data && this.svg) {
+    if (this.data() && this.svg) {
       this.svg.selectAll('*').remove();
-      if (this.data) {
+      if (this.data()) {
         this.makeChart();
       }
     }
@@ -106,16 +108,16 @@ export class SharedUtilsBarChartComponent
 
   makeChart() {
     // Determine the series that need to be stacked.
-    this.keys = [...new Set(this.data.values.map((d) => d.term))].sort(
+    this.keys = [...new Set(this.data().values.map((d) => d.term))].sort(
       (a: string, b: string) => a?.localeCompare(b),
     );
     const seriesIndex: InternMap = index(
-      this.data.values,
+      this.data().values,
       (d: Filter) => d.term,
       (d: Filter) => d.label,
     ) as InternMap;
     this.series = (<unknown>stack()
-      .keys(union(this.data.values.map((d) => d.label))) // distinct series keys, in input order
+      .keys(union(this.data().values.map((d) => d.label))) // distinct series keys, in input order
       .value((D: [string, InternMap<string, Filter>], key: string) => {
         const dKey = D[1].get(key);
         if (dKey) {

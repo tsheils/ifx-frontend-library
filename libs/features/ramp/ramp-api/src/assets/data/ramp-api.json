@@ -365,7 +365,7 @@
                     },
                     "description": "a string or a vector of strings that contains pathways of interest"
                   },
-                  "analyte_type": {
+                  "analyteType": {
                     "type": "string",
                     "enum": ["gene", "metabolite", "both"],
                     "required": false,
@@ -377,14 +377,14 @@
                     "required": false,
                     "description": "type of matching to use, options are \"exact\" or \"fuzzy\". The default is \"fuzzy\"."
                   },
-                  "names_or_ids": {
+                  "namesOrIds": {
                     "type": "string",
                     "enum": ["names", "ids"],
                     "required": false,
                     "label": "Names or IDs",
                     "description": "are the input pathways input as pathway names or as pathway ids of genes and metabolites"
                   },
-                  "max_pathway_size": {
+                  "maxPathwaySize": {
                     "type": "number",
                     "required": false,
                     "label": "Max Pathway Size",
@@ -396,8 +396,9 @@
                     "De Novo Triacylglycerol Biosynthesis",
                     "sphingolipid metabolism"
                   ],
-                  "analyte_type": "both",
-                  "match": "exact"
+                  "analyteType": "both",
+                  "match": "exact",
+                  "namesOrIds": "names"
                 }
               }
             }
@@ -431,13 +432,6 @@
                       "type": "string"
                     },
                     "description": "a vector of analytes or a analytes delimited by new line character"
-                  },
-                  "namesOrIds": {
-                    "type": "string",
-                    "enum": ["name", "ids"],
-                    "required": false,
-                    "label": "Names or IDs",
-                    "description": "specify the type of given data"
                   }
                 },
                 "example": {
@@ -446,8 +440,7 @@
                     "hmdb:HMDB0000064",
                     "hmdb:HMDB0000148",
                     "ensembl:ENSG00000141510"
-                  ],
-                  "namesOrIds": "ids"
+                  ]
                 }
               }
             }

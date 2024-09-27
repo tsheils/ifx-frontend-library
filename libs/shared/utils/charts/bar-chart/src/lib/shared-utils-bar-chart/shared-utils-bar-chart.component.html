@@ -1,7 +1,7 @@
 <div class="bar-chart-container">
-  <h2>{{data.label}}</h2>
+  <h2>{{data()?.label}}</h2>
   <div id="bar-chart" class="bar-chart" #chartElement>
-    @defer (when data && svg) {
+    @defer (when data() && svg) {
     } @placeholder {
       <img
         class="placeholder-image"

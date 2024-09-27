@@ -1,8 +1,11 @@
 @if (!genes()?.length) {
-  <div>
+  <!--<div>
     <ncats-frontend-library-shared-utils-data-not-found
       [message]="'No Gene Data Available'"
     ></ncats-frontend-library-shared-utils-data-not-found>
+  </div>-->
+  <div class="text-align-center">
+      <h2>No Gene Data Available</h2>
   </div>
 }
 @if (genes()?.length) {

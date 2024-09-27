@@ -16,7 +16,7 @@
     @switch (chart.type) {
       @case ('cluster') {
         <div class="row">
-          @if (chart.data.tooBig) {
+          @if (!chart.data.message) {
             <div class="width-10">
               <button
                 mat-stroked-button
@@ -30,13 +30,12 @@
               </button>
             </div>
           }
-          @if (chart.data.tooBig) {
+          @if (chart.data.message) {
             <div>
-              This website currently does not support clustering over 100
-              pathways.
+              {{chart.data.message }}
             </div>
           }
-          @if (!chart.data.tooBig) {
+          @if (!chart.data.message) {
             <div [innerHTML]="chart.data!.image"></div>
           }
         </div>
@@ -51,11 +50,18 @@
           ></lib-sunburst-chart>-->
         }
       }
-
       @case ('tree') {
         @if (chart.data!.values) {
           <lib-tree-chart [data]="chart.data!.values"></lib-tree-chart>
         }
+      }
+      @case ('graph') {
+        @if (chart.data!.graph) {
+          <lib-utils-force-directed-graph [data]="chart.data!"></lib-utils-force-directed-graph>
+        }
+      }
+      @case ('upset') {
+
       }
     }
   }

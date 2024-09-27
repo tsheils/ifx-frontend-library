@@ -162,3 +162,20 @@ export const getBiochemicalPathwaysResults = createSelector(
   }
 );
 
+
+export const getReactionResults = createSelector(
+  getReactions,
+  getReactionClasses,
+  getCommonReactions,
+  (getReactions,
+   getReactionClasses,
+   getCommonReactions
+    ) => {
+    return {
+      reactions: getReactions,
+      reactionClasses: getReactionClasses,
+      commonReactions: getCommonReactions,
+    }
+  }
+);
+

@@ -42,7 +42,7 @@ export class GenericChartComponent {
     )
   )
 
-  @Input() data!: FilterCategory;
+  data =  input<FilterCategory>();
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];

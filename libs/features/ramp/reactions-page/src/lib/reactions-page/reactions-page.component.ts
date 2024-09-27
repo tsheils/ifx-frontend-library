@@ -13,8 +13,14 @@ import { select } from '@ngrx/store';
 import { DataProperty } from 'ncats-datatable';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { CommonAnalyte, RampResponse, Reaction, ReactionClass } from 'ramp';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import {
+  GraphData,
+  GraphLink,
+  GraphNode,
+  HierarchyNode,
+} from '@ncats-frontend-library/models/utils';
 import { RampCorePageComponent } from 'ramp-core-page';
+import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend';
 import {
   CommonReactionAnalyteActions,
   RampSelectors,
@@ -27,6 +33,7 @@ import {
 } from 'ramp-sunburst-tooltip';
 import { map } from 'rxjs';
 import { SunburstChartService } from 'sunburst-chart';
+import { ForceDirectedGraphService } from 'utils-force-directed-graph';
 
 @Component({
   selector: 'lib-reactions-page',
@@ -36,6 +43,10 @@ import { SunburstChartService } from 'sunburst-chart';
     {
       provide: SUNBURST_TOOLTIP,
       useValue: RampSunburstTooltipComponent,
+    },
+    {
+      provide: GRAPH_LEGEND,
+      useValue: RampGraphLegendComponent,
     },
   ],
   templateUrl: './reactions-page.component.html',
@@ -48,6 +59,7 @@ export class ReactionsPageComponent
   implements OnInit
 {
   sunburstChartService = inject(SunburstChartService);
+  forceDirectedGraphService = inject(ForceDirectedGraphService);
   _snackBar = inject(MatSnackBar);
 
   override dataColumns: DataProperty[] = [
@@ -58,7 +70,7 @@ export class ReactionsPageComponent
     }),
     new DataProperty({
       label: 'Analyte',
-      field: 'inputCommonNames',
+      field: 'inputCommonName',
       sortable: true,
     }),
     new DataProperty({
@@ -71,9 +83,13 @@ export class ReactionsPageComponent
       field: 'rxnPartnerCommonName',
       sortable: true,
     }),
-    new DataProperty({
+    /* new DataProperty({
       label: 'Catalyst IDs',
       field: 'rxnPartnerIdsString',
+    }),*/
+    new DataProperty({
+      label: 'Source',
+      field: 'source',
     }),
   ];
   reactionColumns: DataProperty[] = [
@@ -153,129 +169,59 @@ export class ReactionsPageComponent
   hoveredNode = signal<ReactionClass | undefined>(undefined);
   textLabel = signal<string | undefined>(undefined);
 
+  nodeShapes = {
+    met: 'circle',
+    protein: 'rect',
+    gene: 'rect',
+  };
+
+  edgeColors = {
+    hmdb: '#ca1f7c',
+    rhea: '#cc5501',
+    both: '#0e8080',
+  };
+
+  edgeTypes = {
+    met2gene: 'Metabolite to Gene',
+    gene2met: 'Gene to Metabolite',
+    met2protein: 'Metabolite to Protein',
+    protein2met: 'Protein to Metabolite',
+  };
+
   constructor() {
     super();
   }
 
   ngOnInit() {
     this.sunburstChartService.customComponent = SUNBURST_TOOLTIP;
-    this.store
-      .pipe(
-        select(RampSelectors.getCommonReactions),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: RampResponse<CommonAnalyte> | undefined) => {
-          if (res && res.data) {
-            // map hmdb and rhea reactions
-            this.dataMap.set('Common Analytes', {
-              data: this._mapData(res.data),
-              fields: this.dataColumns,
-              dataframe: res['dataframe'],
-              fileName: 'fetchCommonReactionAnalytes-download.tsv',
-            });
-            const matches = Array.from(
-              new Set(
-                res.data.map((data) => data.inputAnalyte.toLocaleLowerCase()),
-              ),
-            );
-            const noMatches = this.inputList.filter(
-              (p: string) => !matches.includes(p.toLocaleLowerCase()),
-            );
-            this.resultsMap = {
-              matches: matches,
-              noMatches: noMatches,
-              count: res.data.length,
-              inputLength: this.inputList.length,
-              fuzzy: true,
-              inputType: 'analytes',
-            };
-            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-          }
-          if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
-          }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
-        }),
-      )
-      .subscribe();
+    this.forceDirectedGraphService.customComponent = GRAPH_LEGEND;
 
     this.store
       .pipe(
-        select(RampSelectors.getReactions),
+        select(RampSelectors.getReactionResults),
         takeUntilDestroyed(this.destroyRef),
-        map((res: RampResponse<Reaction> | undefined) => {
-          if (res && res.data) {
-            // map hmdb and rhea reactions
-            this.dataMap.set('Reactions', {
-              data: this._mapData(res.data),
-              fields: this.reactionColumns,
-              dataframe: res.data,
-              fileName: 'fetchReactionFromAnalytes-download.tsv',
-            });
-            const matches = Array.from(
-              new Set(
-                res.data.map((data) => data.metSourceId.toLocaleLowerCase()),
-              ),
-            );
-            const noMatches = this.inputList.filter(
-              (p: string) => !matches.includes(p.toLocaleLowerCase()),
-            );
-            this.resultsMap = {
-              matches: matches,
-              noMatches: noMatches,
-              count: res.data.length,
-              inputLength: this.inputList.length,
-              fuzzy: true,
-              inputType: 'analytes',
-            };
-            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-          }
-          if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
-          }
-        }),
-      )
-      .subscribe();
+        map(
+          (
+            res:
+              | {
+                  reactions: RampResponse<Reaction> | undefined;
+                  reactionClasses: RampResponse<ReactionClass> | undefined;
+                  commonReactions: RampResponse<CommonAnalyte> | undefined;
+                }
+              | undefined,
+          ) => {
+            if (res?.reactions) {
+              this._mapReactions(res.reactions);
+            }
+            if (res?.reactionClasses) {
+              this._mapReactionClasses(res.reactionClasses);
+            }
 
-    this.store
-      .pipe(
-        select(RampSelectors.getReactionClasses),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: RampResponse<ReactionClass> | undefined) => {
-          if (res && res.data) {
-            const ret = this._mapToHierarchy(res.data.filter(c=> c.reactionCount > 0));
-          //  console.log(JSON.stringify(ret))
-            this.visualizationMap.set('Reaction Classes', [
-              { type: 'sunburst', data: { values: ret } },
-              { type: 'tree', data: { values: ret } },
-            ]);
-            // map hmdb and rhea reactions
-            this.dataMap.set('Reaction Classes', {
-              data: this._mapData(res.data),
-              fields: this.reactionClassColumns,
-              dataframe: res.data,
-              fileName: 'fetchReactionClassesFromAnalytes-download.tsv',
-            });
-
-            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-            this.sunburstChartService.nodeHovered.subscribe((value) => {
-              if (value) {
-                const term = value.node.term;
-                const node = res!.data.filter(
-                  (prop) => prop.rxnClass === term,
-                )[0];
-                this.hoveredNode.set(node);
-                this.sunburstChartService.reactionNode.set(node);
-              } else {
-                //  this.hoveredNode.set(value);
-              }
-            });
-            this.changeRef.markForCheck();
-          }
-          if (res && res.query) {
-            // this.resultsMap.function = <string>res.query.functionCall;
-          }
-        }),
+            if (res?.commonReactions && res?.commonReactions.data) {
+              this._mapCommonAnalytes(res.commonReactions);
+            }
+          },
+        ),
       )
       .subscribe();
   }
@@ -299,9 +245,121 @@ export class ReactionsPageComponent
     );
   }
 
-  private _mapToHierarchy(classes: ReactionClass[]): HierarchyNode[] {
-  //  console.log(JSON.stringify(classes))
+  private _mapReactions(res: RampResponse<Reaction>) {
+    this.dataMap.set('Reactions', {
+      data: this._mapData(res.data),
+      fields: this.reactionColumns,
+      dataframe: res.data,
+      fileName: 'fetchReactionFromAnalytes-download.tsv',
+    });
+    const matches = Array.from(
+      new Set(res.data.map((data) => data.metSourceId.toLocaleLowerCase())),
+    );
+    const noMatches = this.inputList.filter(
+      (p: string) => !matches.includes(p.toLocaleLowerCase()),
+    );
+    this.resultsMap = {
+      matches: matches,
+      noMatches: noMatches,
+      count: res.data.length,
+      inputLength: this.inputList.length,
+      fuzzy: true,
+      inputType: 'analytes',
+    };
+    this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
 
+    if (res && res.query) {
+      this.resultsMap.function = <string>res.query.functionCall;
+    }
+  }
+
+  private _mapReactionClasses(res: RampResponse<ReactionClass>) {
+    const ret = this._mapToHierarchy(
+      res.data.filter((c) => c.reactionCount > 0),
+    );
+    //  console.log(JSON.stringify(ret))
+    const graphData: GraphData = { values: ret } as GraphData;
+    this.visualizationMap.set('Reaction Classes', [
+      { type: 'sunburst', data: graphData },
+      { type: 'tree', data: graphData },
+    ]);
+    // map hmdb and rhea reactions
+    this.dataMap.set('Reaction Classes', {
+      data: this._mapData(res.data),
+      fields: this.reactionClassColumns,
+      dataframe: res.data,
+      fileName: 'fetchReactionClassesFromAnalytes-download.tsv',
+    });
+
+    this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
+    this.sunburstChartService.nodeHovered.subscribe((value) => {
+      if (value) {
+        const term = value.node.term;
+        const node = res!.data.filter((prop) => prop.rxnClass === term)[0];
+        this.hoveredNode.set(node);
+        this.sunburstChartService.reactionNode.set(node);
+      } else {
+        //  this.hoveredNode.set(value);
+      }
+    });
+    this.changeRef.markForCheck();
+
+    if (res && res.query) {
+      // this.resultsMap.function = <string>res.query.functionCall;
+    }
+  }
+
+  private _mapCommonAnalytes(res: RampResponse<CommonAnalyte>) {
+    // map hmdb and rhea reactions
+    const graphData = {
+      graph: this._mapToGraph(res.data),
+    } as GraphData;
+    this.visualizationMap.set('Common Analyte Network', [
+      { type: 'graph', data: graphData },
+    ]);
+    this.dataMap.set('Common Analytes', {
+      data: this._mapData(res.data),
+      fields: this.dataColumns,
+      dataframe: res['dataframe'],
+      fileName: 'fetchCommonReactionAnalytes-download.tsv',
+    });
+    const matches = Array.from(
+      new Set(res.data.map((data) => data.inputAnalyte.toLocaleLowerCase())),
+    );
+    const noMatches = this.inputList.filter(
+      (p: string) => !matches.includes(p.toLocaleLowerCase()),
+    );
+    this.resultsMap = {
+      matches: matches,
+      noMatches: noMatches,
+      count: res.data.length,
+      inputLength: this.inputList.length,
+      fuzzy: true,
+      inputType: 'analytes',
+    };
+    this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
+
+    if (res.query) {
+      this.resultsMap.function = <string>res.query.functionCall;
+    }
+
+    this.forceDirectedGraphService.nodeClicked.subscribe((res) => {
+      const allData = this.dataMap.get('Common Analytes')?.data;
+      if (allData && res) {
+        const filteredData = allData?.filter(
+          (ca) =>
+            ca['inputAnalyte'].value === res?.id ||
+            ca['rxnPartnerCommonName'].value === res?.id,
+        );
+        this.forceDirectedGraphService.analyteData.set({
+          data: filteredData,
+          fields: this.dataColumns,
+        });
+      }
+    });
+  }
+
+  private _mapToHierarchy(classes: ReactionClass[]): HierarchyNode[] {
     let hierarchyArr: HierarchyNode[] = [];
     const sortedClasses: Map<number, HierarchyNode[]> = new Map<
       number,
@@ -348,7 +406,7 @@ export class ReactionsPageComponent
     return hierarchyArr;
   }
 
-  _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
+  private _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
     nodes.forEach((node) => {
       const parent = map.get(node.parent as string) as HierarchyNode;
       if (parent.children) {
@@ -361,7 +419,7 @@ export class ReactionsPageComponent
     return map;
   }
 
-  _mapColor(node: ReactionClass) {
+  private _mapColor(node: ReactionClass) {
     const index = ((<unknown>node.ecNumber[0]) as number) - 1;
     const level = node.classLevel;
     const colors = [
@@ -375,5 +433,53 @@ export class ReactionsPageComponent
     ];
 
     return colors[index][0];
+  }
+
+  private _mapToGraph(data: CommonAnalyte[]) {
+    const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+    const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
+    let nodes: GraphNode[] = [];
+    const links: GraphLink[] = [];
+    data.forEach((analyte) => {
+      let sourceNode = sourceNodeMap.get(analyte.inputAnalyte);
+      let targetNode = targetNodeMap.get(analyte.rxnPartnerCommonName);
+      const types = analyte.queryRelation.split(`2`);
+      if (!sourceNode) {
+        sourceNode = new GraphNode({
+          id: analyte.inputAnalyte,
+          label: analyte.inputCommonName,
+          color: '#000000',
+          extraClass: 'inputNode',
+          shape: this.nodeShapes[types[0] as keyof typeof this.nodeShapes],
+        });
+        sourceNodeMap.set(analyte.inputAnalyte, sourceNode);
+      }
+      if (!targetNode) {
+        targetNode = new GraphNode({
+          id: analyte.rxnPartnerCommonName,
+          label: analyte.rxnPartnerCommonName,
+          color: '#e6f1f9',
+          shape: this.nodeShapes[types[1] as keyof typeof this.nodeShapes],
+        });
+        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode);
+      }
+      links.push(
+        new GraphLink({
+          source: sourceNode.id,
+          target: targetNode.id,
+          label: analyte.source,
+          id: analyte.source,
+          color:
+            this.edgeColors[
+              analyte.source.toLocaleLowerCase() as keyof typeof this.edgeColors
+            ],
+          type: this.edgeTypes[
+            analyte.queryRelation as keyof typeof this.edgeTypes
+          ],
+        }),
+      );
+    });
+    nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()];
+    return { nodes: nodes, links: links };
   }
 }

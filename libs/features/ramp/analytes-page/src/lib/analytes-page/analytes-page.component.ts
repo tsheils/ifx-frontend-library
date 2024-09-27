@@ -100,6 +100,7 @@ export class AnalytesPageComponent
           if (res && res.query) {
             this.resultsMap.function = <string>res.query.functionCall;
           }
+          this.changeRef.markForCheck()
         }),
       )
       .subscribe();

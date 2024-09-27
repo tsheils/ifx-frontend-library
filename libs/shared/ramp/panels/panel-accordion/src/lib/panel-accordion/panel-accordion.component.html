@@ -1,7 +1,7 @@
 <mat-accordion multi>
   <mat-expansion-panel expanded id="input" #input>
     <mat-expansion-panel-header>
-      <mat-panel-title>Input</mat-panel-title>
+      <mat-panel-title><h2>Input</h2></mat-panel-title>
     </mat-expansion-panel-header>
     <ng-content select=".custom-input"></ng-content>
     @if (inputTab() && inputTab()?.size) {
@@ -18,7 +18,7 @@
     #results
   >
     <mat-expansion-panel-header>
-      <mat-panel-title>Results</mat-panel-title>
+      <mat-panel-title><h2>Overview</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (resultsTabs()) {
       <lib-results-panel [results]="resultsTabs()"></lib-results-panel>
@@ -31,7 +31,7 @@
     #visualizations
   >
     <mat-expansion-panel-header>
-      <mat-panel-title>Visualizations</mat-panel-title>
+      <mat-panel-title><h2>Visualizations</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (visualizationTabs() && visualizationTabs()?.size) {
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
@@ -54,7 +54,7 @@
     #data
   >
     <mat-expansion-panel-header>
-      <mat-panel-title>Data</mat-panel-title>
+      <mat-panel-title><h2>Results</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (dataTabs() && dataTabs()?.size) {
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">

@@ -10,3 +10,65 @@
   padding-left: 5vw;
   width: 25%;
 }
+
+
+.dataNode {
+  fill: #e6f1f9;
+  stroke: #88898a;
+}
+
+.dataNode.hoveredNode {
+  fill: #d2e5f6;
+  stroke: #000000;
+  stroke-width: 1.5;
+}
+
+.dataNode.clickedNode {
+  fill: #d2e5f6;
+  stroke: #000000;
+  stroke-width: 1.5;
+}
+
+.inputNode {
+  fill: #88898a;
+  stroke: #88898a;
+}
+
+.inputNode.hoveredNode {
+  fill: #000000;
+  stroke: #000000;
+}
+
+.inputNode.clickedNode {
+  fill: #000000;
+  stroke: #000000;
+}
+
+line.edgeLinks.clickedEdge {
+  opacity: 1;
+}
+
+.graph-label-text.hoveredLabel {
+  display: block;
+}
+
+.legend-input {
+  background-color: #000000;
+
+}
+
+.legend-output {
+  background-color: #d2e5f6;
+}
+
+.legend-hmdb {
+  border: 3px solid #ca1f7c;
+}
+
+.legend-rhea {
+  border: 3px solid #cc5501;
+}
+
+.legend-both {
+  border: 3px solid #0e8080;
+}

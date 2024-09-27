@@ -44,10 +44,11 @@ export class ImageDownloadComponent {
   }
 
   downloadTSV() {
-    if (this.chartComponent()?.data as FilterCategory) {
+    const data = this.chartComponent()?.data() as FilterCategory;
+    if (data) {
       this._downloadFile(
-        this._makeBlob(this._toTSV(this.chartComponent()?.data)),
-        `${this.chartComponent()?.data?.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
+        this._makeBlob(this._toTSV(data)),
+        `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
       );
     }
   }

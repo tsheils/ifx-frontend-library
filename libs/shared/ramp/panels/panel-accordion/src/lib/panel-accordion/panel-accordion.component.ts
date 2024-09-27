@@ -8,11 +8,7 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
-import { SafeHtml } from '@angular/platform-browser';
-import {
-  HierarchyNode,
-  OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
+import { GraphData, OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { DataPanelComponent } from 'data-panel';
 import { InputPanelComponent } from 'input-panel';
 import { DataProperty } from 'ncats-datatable';
@@ -53,7 +49,7 @@ export class PanelAccordionComponent {
       string,
       {
         type: string;
-        data: { tooBig?: boolean; image?: SafeHtml; values?: HierarchyNode[] };
+        data: GraphData;
       }[]
     >
   >();
