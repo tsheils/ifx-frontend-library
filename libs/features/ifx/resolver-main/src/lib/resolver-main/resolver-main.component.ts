@@ -2,6 +2,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
@@ -57,7 +58,7 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
     MatButtonModule,
     ResolverDataViewerComponent,
     HighlightPipe,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
   ],
   templateUrl: './resolver-main.component.html',
   styleUrl: './resolver-main.component.scss',
@@ -69,44 +70,66 @@ export class ResolverMainComponent implements OnInit {
   private router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
+  changeRef = inject(ChangeDetectorRef);
 
-  optsList = this.store.selectSignal(ResolverSelectors.selectResolverOptions);
-  resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver);
-  filteredResolvedData = computed(()=> {
-    return this.resolvedData().filter(obj => obj.response)
-  });
-
-  badData = computed(()=> {
-    return this.resolvedData().filter(obj => !obj.response)
-  });
+  optsList = computed(() =>
+    this.store.selectSignal(ResolverSelectors.selectResolverOptions)(),
+  );
 
   optionCategories: Signal<FilterCategory[]> = computed(() =>
-    this._mapFilterCategoriesFromArray(this.optsList()),
+    this._mapFilterCategoriesFromArray(
+      this.store.selectSignal(ResolverSelectors.selectResolverOptions)(),
+    ),
   );
 
   filteredSearchOptions: WritableSignal<FilterCategory[]> = signal(
     this.optionCategories(),
   );
 
-  selectedFilters: WritableSignal<{ [key: string]: Filter[] }> = signal(
+  selectedFilters: Signal<{ [key: string]: Filter[] }> = computed(() =>
     this._mapFilterArrayToObject(
-      this.optsList()?.filter((opt: Filter) => opt.selected),
+      this.store.selectSignal(ResolverSelectors.fetchSelectedOptions)(),
     ),
   );
+
+  selectedFiltersSignal = signal(this.selectedFilters());
+
+  resolvedData = this.store.selectSignal(ResolverSelectors.selectAllResolver);
+
+  filteredResolvedData = computed(() => {
+    return this.resolvedData().filter((obj) => obj.response);
+  });
+
+  badData = computed(() => {
+    return this.resolvedData().filter((obj) => !obj.response);
+  });
 
   resolveCtrl = new FormControl<string>('LARGEST');
   inputCtrl = new FormControl();
   filterSearchCtrl = new FormControl();
-  loading = computed(()=> !!(this.resolvedData().length || this.badData().length));
+  loading = computed(
+    () => !!(this.resolvedData().length || this.badData().length),
+  );
   clicked = signal(false);
 
-  subscriptionSelection = computed(() => {
-    return new SelectionModel<Filter>(
+  /*  subscriptionSelection = new SelectionModel<Filter>(
+    true,
+    this.store.selectSignal(ResolverSelectors.fetchSelectedOptions)(),
+  );*/
+
+  subscriptionSelectionSignal = computed(() => {
+    return new SelectionModel<string>(
       true,
-      this.optsList()?.filter((opt: Filter) => opt.selected),
+      this.store.selectSignal(ResolverSelectors.fetchPreviousFilters)(),
     );
-  }
-  )
+  });
+
+  sortedSelection = computed(() => {
+    //  return this.subscriptionSelectionSignal()
+    return this.subscriptionSelectionSignal()
+      .selected // .map((filter) => filter.value)
+      .sort((a, b) => a.localeCompare(b));
+  });
 
   ngOnInit() {
     if (this.route.snapshot && this.route.snapshot.queryParams) {
@@ -121,61 +144,78 @@ export class ResolverMainComponent implements OnInit {
       this.resolveCtrl.setValue(params.get('standardize'));
       this.inputCtrl.setValue(params.get('params'));
     }
+
     this.filterSearchCtrl.valueChanges.subscribe(() => this.searchFilters());
 
-    this.subscriptionSelection().changed
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        debounceTime(100),
-        distinctUntilChanged(),
-      )
-      .subscribe(() => {
-        this.selectedFilters.set(
-          this._mapFilterArrayToObject(this.subscriptionSelection().selected),
+    /*    this.subscriptionSelectionSignal()
+      .changed.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        this.selectedFiltersSignal.set(
+          this._mapFilterArrayToObject(
+            this.subscriptionSelectionSignal().selected,
+          ),
         );
       });
+    */
+    this.subscriptionSelectionSignal()
+      .changed.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((res) => {
+        const selected: string[] = this.subscriptionSelectionSignal().selected;
+        const filters = this.optsList().filter((opt) =>
+          selected.includes(opt.value),
+        );
+        this.selectedFiltersSignal.set(this._mapFilterArrayToObject(filters));
+      });
+    this.selectedFiltersSignal.set(this.selectedFilters());
+    this.filteredSearchOptions.set(this.optionCategories());
   }
 
   resolve() {
-    this.clicked.set(true)
+    this.clicked.set(true);
+
+    /*   const params = this.inputCtrl.value.sort((a: string, b: string) =>
+      a.localeCompare(b),
+    );*/
     const formData: ResolverForm = new ResolverForm({
       structure: this.inputCtrl.value,
       format: 'json',
       standardize: this.resolveCtrl.value || 'LARGEST',
     });
-    let URL = '';
+    //   let URL = '';
 
-    this.subscriptionSelection().selected.forEach((filter: Filter) => {
+    /*this.subscriptionSelection().selected.forEach((filter: Filter) => {
       if (filter.value) {
         URL = URL + '/' + filter.value;
       }
     });
-
+*/
     localStorage.removeItem('previouslyUsedOptions');
-    localStorage.setItem(
+    /* localStorage.setItem(
       'previouslyUsedOptions',
       JSON.stringify(
         this.subscriptionSelection().selected.map((fil) => fil.value),
       ),
-    );
+    );*/
     this.store.dispatch(
-      ResolveQueryActions.resolveQuery({ urlStub: URL, form: formData }),
+      ResolveQueryActions.resolveQuery({
+        urlStub: '/' + this.sortedSelection().join('/'),
+        form: formData,
+      }),
     );
     // ?params=aspirin&options=inchikey;molExactMass;lychi1;lychi3;molExactMassParent;molFormParent;img&standardize=CHARGE_NORMALIZE
+
     this.router.navigate([], {
       queryParams: {
         params: this.inputCtrl.value,
-        options: this.subscriptionSelection().selected
-          .map((fil) => fil.value)
-          .join(';'),
+        options: this.sortedSelection().join(';'),
         standardize: this.resolveCtrl.value,
       },
       queryParamsHandling: 'merge',
     });
   }
 
-  selectValue(value: Filter){
-    this.subscriptionSelection()?.toggle(value);
+  selectValue(value: Filter) {
+    this.subscriptionSelectionSignal().toggle(value.value);
   }
 
   searchFilters() {
@@ -204,15 +244,17 @@ export class ResolverMainComponent implements OnInit {
   }
 
   removeChip(filter: Filter) {
-    this.subscriptionSelection().deselect(filter);
+    this.subscriptionSelectionSignal().deselect(filter.value);
   }
 
   clearParams() {
-    this.subscriptionSelection().clear();
+    this.subscriptionSelectionSignal().clear();
   }
 
   searchDisabled() {
-    return !this.inputCtrl.value || this.subscriptionSelection().isEmpty(); // || this.filterOptionsList())
+    return (
+      !this.inputCtrl.value || this.subscriptionSelectionSignal().isEmpty()
+    ); // || this.filterOptionsList())
   }
 
   _mapFilterCategoriesFromArray(

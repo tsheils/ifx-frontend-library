@@ -109,7 +109,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
             .fetchTrials(TRIALFILTERS, {
               ctfilters: {
                 investigatesConditionConditions_SOME: {
-                  hasAnnotationConditionAnnotations_SOME: {
+                  hasAnnotationAnnotations_SOME: {
                     mappedToGardGards_SOME: { GardId: gardid },
                   },
                 },
@@ -286,6 +286,7 @@ export const loadDisease$ = createEffect(
         if (root.fragment) {
           _setFragment(root.fragment, params);
         }
+
         return combineLatest(
           diseaseService
             .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
@@ -997,6 +998,7 @@ function _setFragment(
     Phase?: string[];
   },
 ) {
+
   switch (origin) {
     case 'epiArticles': {
       EPIARTICLES.articleOptions.limit = <number>options['limit']
@@ -1026,7 +1028,7 @@ function _setFragment(
       }
       break;
     }
-    case 'project': {
+    case 'projects': {
       PROJECTVARIABLES.coreProjectsOptions.limit = <number>options['limit']
         ? <number>options['limit']
         : 10;
@@ -1036,6 +1038,14 @@ function _setFragment(
       }
       break;
     }
+    /*
+       if (options['GardId']) {
+         FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
+           <string>options['GardId'];
+         FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
+           <string>options['GardId'];
+     }
+     */
     case 'trials': {
       FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit']
         ? <number>options['limit']
@@ -1046,10 +1056,7 @@ function _setFragment(
         FETCHTRIALSVARIABLES.ctoptions.offset = 0;
       }
       if (options['GardId']) {
-        FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
-          <string>options['GardId'];
-        FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
-          <string>options['GardId'];
+        FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId = <string>options['GardId']
       }
       if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
         FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN =
@@ -1072,207 +1079,207 @@ function _setFragment(
   }
 }
 
-function _setGardId(gardid: string) {
-  DISEASEQUERYPARAMETERS.where = { GardId: gardid };
-  EPIARTICLES.gardWhere.GardId = gardid;
-  NONEPIARTICLES.gardWhere.GardId = gardid;
-  PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
-    gardid;
-  FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
-    gardid;
-  FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
-    gardid;
-}
+    function _setGardId(gardid: string) {
+      DISEASEQUERYPARAMETERS.where = { GardId: gardid };
+      EPIARTICLES.gardWhere.GardId = gardid;
+      NONEPIARTICLES.gardWhere.GardId = gardid;
+      PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
+        gardid;
+      FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId =
+        gardid;
+      FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId =
+        gardid;
+    }
 
-function _setTrialVariables(params: Params, origin: string) {
-  if (origin !== 'type' && params['StudyType'] && params['StudyType'].length) {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = params['StudyType'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
-  }
-  if (origin !== 'phase' && params['Phase'] && params['Phase'].length) {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = params['Phase'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = null;
-  }
-  if (
-    origin !== 'status' &&
-    params['OverallStatus'] &&
-    params['OverallStatus'].length
-  ) {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = params['OverallStatus'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = null;
-  }
-  return FETCHTRIALSVARIABLES;
-}
+    function _setTrialVariables(params: Params, origin: string) {
+      if (origin !== 'type' && params['StudyType'] && params['StudyType'].length) {
+        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = params['StudyType'];
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
+      }
+      if (origin !== 'phase' && params['Phase'] && params['Phase'].length) {
+        FETCHTRIALSVARIABLES.ctfilters.Phase_IN = params['Phase'];
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.Phase_IN = null;
+      }
+      if (
+        origin !== 'status' &&
+        params['OverallStatus'] &&
+        params['OverallStatus'].length
+      ) {
+        FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = params['OverallStatus'];
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = null;
+      }
+      return FETCHTRIALSVARIABLES;
+    }
 
-function _setArticleVariables(params: Params) {
-  if (params['year'] && params['year'].length) {
-    // FETCHART.ctfilters.StudyType_IN = params['StudyType']
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
-  }
+    function _setArticleVariables(params: Params) {
+      if (params['year'] && params['year'].length) {
+        // FETCHART.ctfilters.StudyType_IN = params['StudyType']
+      } else {
+        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
+      }
 
-  return FETCHTRIALSVARIABLES;
-}
+      return FETCHTRIALSVARIABLES;
+    }
 
-function _parseFilterResponse(
-  articleFilterData: ApolloQueryResult<unknown>,
-  projectFilterData: ApolloQueryResult<unknown>,
-  trialFilterData: ApolloQueryResult<unknown>,
-  params: Params,
-): FilterCategory[] {
-  const filters: FilterCategory[] = [];
-  if (articleFilterData) {
-    const articleFilterDataList: { countsByYear: Filter[] } =
-      articleFilterData.data as { countsByYear: Filter[] };
-    if (articleFilterDataList.countsByYear.length) {
-      filters.push(
-        new FilterCategory({
-          parent: 'articles',
-          label: 'Articles by Year',
-          filterable: false,
-          values: articleFilterDataList.countsByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-      const fc = new FilterCategory({
-        parent: 'epiArticles',
-        label: 'Epidemiology Articles by Year',
-        field: 'year',
-        values: articleFilterDataList.countsByYear
-          .filter(
-            (year: Partial<Filter>) => year.label == 'Epidemiology Articles',
-          )
-          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' })),
-      });
-      filters.push(fc);
-      filters.push(
-        new FilterCategory({
-          parent: 'nonEpiArticles',
-          label: 'Articles by Year',
-          field: 'year',
-          values: articleFilterDataList.countsByYear
-            .filter(
-              (year: Partial<Filter>) =>
-                year.label == 'Non Epidemiology Articles',
-            )
-            .map(
-              (fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }),
-            ),
-        }),
-      );
+    function _parseFilterResponse(
+      articleFilterData: ApolloQueryResult<unknown>,
+      projectFilterData: ApolloQueryResult<unknown>,
+      trialFilterData: ApolloQueryResult<unknown>,
+      params: Params,
+    ): FilterCategory[] {
+      const filters: FilterCategory[] = [];
+      if (articleFilterData) {
+        const articleFilterDataList: { countsByYear: Filter[] } =
+          articleFilterData.data as { countsByYear: Filter[] };
+        if (articleFilterDataList.countsByYear.length) {
+          filters.push(
+            new FilterCategory({
+              parent: 'articles',
+              label: 'Articles by Year',
+              filterable: false,
+              values: articleFilterDataList.countsByYear.map(
+                (fil: Partial<Filter>) => new Filter(fil),
+              ),
+            }),
+          );
+          const fc = new FilterCategory({
+            parent: 'epiArticles',
+            label: 'Epidemiology Articles by Year',
+            field: 'year',
+            values: articleFilterDataList.countsByYear
+              .filter(
+                (year: Partial<Filter>) => year.label == 'Epidemiology Articles',
+              )
+              .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' })),
+          });
+          filters.push(fc);
+          filters.push(
+            new FilterCategory({
+              parent: 'nonEpiArticles',
+              label: 'Articles by Year',
+              field: 'year',
+              values: articleFilterDataList.countsByYear
+                .filter(
+                  (year: Partial<Filter>) =>
+                    year.label == 'Non Epidemiology Articles',
+                )
+                .map(
+                  (fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }),
+                ),
+            }),
+          );
+        }
+      }
+      if (projectFilterData) {
+        const projectFilterDataList: {
+          countsByYear: Filter[];
+          costByYear: Filter[];
+        } = projectFilterData.data as {
+          countsByYear: Filter[];
+          costByYear: Filter[];
+        };
+        if (projectFilterDataList.countsByYear.length) {
+          filters.push(
+            new FilterCategory({
+              parent: 'projects',
+              label: 'Projects Count by Year',
+              filterable: false,
+              values: projectFilterDataList.countsByYear.map(
+                (fil: Partial<Filter>) => new Filter(fil),
+              ),
+            }),
+          );
+        }
+        if (projectFilterDataList.costByYear.length) {
+          filters.push(
+            new FilterCategory({
+              parent: 'projects',
+              label: 'Projects Funding by Year',
+              filterable: false,
+              values: projectFilterDataList.costByYear.map(
+                (fil: Partial<Filter>) => new Filter(fil),
+              ),
+            }),
+          );
+        }
+      }
+      if (trialFilterData) {
+        const dataObj: {
+          allClinicalTrialsFilters: {
+            trialsByStatus: Filter[];
+            trialsByType: Filter[];
+            trialsByPhase: Filter[];
+          };
+        } = trialFilterData.data as {
+          allClinicalTrialsFilters: {
+            trialsByStatus: Filter[];
+            trialsByType: Filter[];
+            trialsByPhase: Filter[];
+          };
+        };
+        const trialFilterDataList: {
+          trialsByStatus: Filter[];
+          trialsByType: Filter[];
+          trialsByPhase: Filter[];
+        } = dataObj.allClinicalTrialsFilters as {
+          trialsByStatus: Filter[];
+          trialsByType: Filter[];
+          trialsByPhase: Filter[];
+        };
+        if (
+          trialFilterDataList.trialsByStatus &&
+          trialFilterDataList.trialsByStatus.length
+        ) {
+          filters.push(
+            new FilterCategory({
+              parent: 'trials',
+              label: 'Clinical Trials by Status',
+              field: 'OverallStatus',
+              values: trialFilterDataList.trialsByStatus.map(
+                (fil: Partial<Filter>) =>
+                  new Filter({
+                    ...fil,
+                    selected:
+                      params['OverallStatus'] === fil.term ||
+                      params['OverallStatus']?.includes(fil.term),
+                  }),
+              ),
+            }),
+          );
+        }
+        if (
+          trialFilterDataList.trialsByType &&
+          trialFilterDataList.trialsByType.length
+        ) {
+          filters.push(
+            new FilterCategory({
+              parent: 'trials',
+              label: 'Clinical Trials by Type',
+              field: 'StudyType',
+              values: trialFilterDataList.trialsByType.map(
+                (fil: Partial<Filter>) => new Filter(fil),
+              ),
+            }),
+          );
+        }
+        if (
+          trialFilterDataList.trialsByPhase &&
+          trialFilterDataList.trialsByPhase.length
+        ) {
+          filters.push(
+            new FilterCategory({
+              parent: 'trials',
+              label: 'Clinical Trials by Phase',
+              field: 'Phase',
+              values: trialFilterDataList.trialsByPhase.map(
+                (fil: Partial<Filter>) => new Filter(fil),
+              ),
+            }),
+          );
+        }
+      }
+      return filters;
     }
-  }
-  if (projectFilterData) {
-    const projectFilterDataList: {
-      countsByYear: Filter[];
-      costByYear: Filter[];
-    } = projectFilterData.data as {
-      countsByYear: Filter[];
-      costByYear: Filter[];
-    };
-    if (projectFilterDataList.countsByYear.length) {
-      filters.push(
-        new FilterCategory({
-          parent: 'projects',
-          label: 'Projects Count by Year',
-          filterable: false,
-          values: projectFilterDataList.countsByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-    if (projectFilterDataList.costByYear.length) {
-      filters.push(
-        new FilterCategory({
-          parent: 'projects',
-          label: 'Projects Funding by Year',
-          filterable: false,
-          values: projectFilterDataList.costByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-  }
-  if (trialFilterData) {
-    const dataObj: {
-      allClinicalTrialsFilters: {
-        trialsByStatus: Filter[];
-        trialsByType: Filter[];
-        trialsByPhase: Filter[];
-      };
-    } = trialFilterData.data as {
-      allClinicalTrialsFilters: {
-        trialsByStatus: Filter[];
-        trialsByType: Filter[];
-        trialsByPhase: Filter[];
-      };
-    };
-    const trialFilterDataList: {
-      trialsByStatus: Filter[];
-      trialsByType: Filter[];
-      trialsByPhase: Filter[];
-    } = dataObj.allClinicalTrialsFilters as {
-      trialsByStatus: Filter[];
-      trialsByType: Filter[];
-      trialsByPhase: Filter[];
-    };
-    if (
-      trialFilterDataList.trialsByStatus &&
-      trialFilterDataList.trialsByStatus.length
-    ) {
-      filters.push(
-        new FilterCategory({
-          parent: 'trials',
-          label: 'Clinical Trials by Status',
-          field: 'OverallStatus',
-          values: trialFilterDataList.trialsByStatus.map(
-            (fil: Partial<Filter>) =>
-              new Filter({
-                ...fil,
-                selected:
-                  params['OverallStatus'] === fil.term ||
-                  params['OverallStatus']?.includes(fil.term),
-              }),
-          ),
-        }),
-      );
-    }
-    if (
-      trialFilterDataList.trialsByType &&
-      trialFilterDataList.trialsByType.length
-    ) {
-      filters.push(
-        new FilterCategory({
-          parent: 'trials',
-          label: 'Clinical Trials by Type',
-          field: 'StudyType',
-          values: trialFilterDataList.trialsByType.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-    if (
-      trialFilterDataList.trialsByPhase &&
-      trialFilterDataList.trialsByPhase.length
-    ) {
-      filters.push(
-        new FilterCategory({
-          parent: 'trials',
-          label: 'Clinical Trials by Phase',
-          field: 'Phase',
-          values: trialFilterDataList.trialsByPhase.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-  }
-  return filters;
-}

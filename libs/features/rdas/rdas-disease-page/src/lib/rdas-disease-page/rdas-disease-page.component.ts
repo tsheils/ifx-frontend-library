@@ -126,7 +126,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   mobile = false;
 
   ngOnInit(): void {
-    this.scrollDispatcher.scrolled().subscribe((res) => {
+    this.scrollDispatcher.scrolled().subscribe(() => {
       this.animationState.set(
         this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
       );
@@ -190,7 +190,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-   // this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
-   // this.store.dispatch(FetchDiseaseActions.clearDisease());
+    this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
+    // this.store.dispatch(FetchDiseaseActions.clearDisease());
   }
 }

@@ -38,6 +38,11 @@ a:visited {
   background-color: mat.get-theme-color(theme.$light-theme, primary);
 }
 
+.remove-button {
+  @include mat.button-color(theme.$light-theme, $color-variant: error);
+}
+
+
 header {
   z-index: 2;
   position: fixed;

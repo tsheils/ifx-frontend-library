@@ -1,9 +1,10 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  computed, inject,
+  computed,
+  inject,
   Inject,
-  input
+  input,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,14 +26,14 @@ import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
     MatSlideToggleModule,
     MatMenuModule,
     NcatsDatatableComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
   ],
   templateUrl: './resolver-data-viewer.component.html',
   styleUrl: './resolver-data-viewer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResolverDataViewerComponent {
-  private dom: Document = inject(DOCUMENT)
+  private dom: Document = inject(DOCUMENT);
   data = input<ResolverResponse[]>();
   dataAsObject = computed(() => {
     const objArr: { [key: string]: string }[] = [];
@@ -65,23 +66,11 @@ export class ResolverDataViewerComponent {
     }
   });
 
-  params = input<{ [key: string]: Filter[] }>();
-
-  headers = computed(() => {
-    const headers: string[] = ['input', 'source', 'url'];
-    if (this.params()) {
-      Object.values(this.params() as { [key: string]: Filter[] }).forEach(
-        (category: Filter[]) => {
-          category.forEach((filter: Filter) => {
-            headers.push(<string>filter.value);
-          });
-        })
-    }
-    return [...new Set(headers)];
-  })
+  params = input<string[]>([]);
+  headers = computed(() => ['input', 'source', 'url'].concat(this.params()));
 
   fields = computed(() => {
-    const fieldsArr= [] as DataProperty[];
+    const fieldsArr = [] as DataProperty[];
     this.headers()?.forEach((field: string) => {
       fieldsArr.push(
         new DataProperty({
@@ -92,10 +81,9 @@ export class ResolverDataViewerComponent {
       );
     });
     return fieldsArr;
-  })
+  });
 
   showTable = true;
-
 
   downloadData(format: string) {
     switch (format) {
@@ -115,33 +103,29 @@ export class ResolverDataViewerComponent {
   }
 
   _toCSV(data: { [key: string]: string }[]): string {
-      let ret = ''
+    let ret = '';
     const lines: string[] = [];
-      data.forEach((input) => {
-        const inputLine: string[] = [];
-        this.headers()?.forEach((field) => {
-          inputLine.push(
-            input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' ',
-          );
-        });
-        lines.push(inputLine.join(','));
+    data.forEach((input) => {
+      const inputLine: string[] = [];
+      this.headers()?.forEach((field) => {
+        inputLine.push(
+          input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' ',
+        );
       });
-      ret = this.headers().join(',') + ' \n ' + lines.join('\n');
+      lines.push(inputLine.join(','));
+    });
+    ret = this.headers().join(',') + ' \n ' + lines.join('\n');
     return ret;
   }
 
   _toJSON(data: string): { [key: string]: string } {
     const split = data.split('\t');
     const retObj: { [key: string]: string } = {};
-
-    Object.values(this.params() as { [key: string]: Filter[] }).forEach(
-      (category: Filter[]) => {
-        category.forEach(
-          (filter: Filter, index: number) =>
-            (retObj[filter.value as keyof typeof retObj] = split[index]),
-        );
-      },
-    );
+    this.params()?.forEach((field: string, index: number) => {
+      const r = (retObj[field as keyof typeof retObj] =
+        split[index] || 'undefined');
+      return r;
+    });
     return retObj;
   }
 

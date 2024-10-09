@@ -15,7 +15,8 @@ export interface ResolverState extends EntityState<ResolverResponse> {
   selectedId?: string | number; // which Resolver record has been selected
   loaded: boolean; // has the Resolver list been loaded
   error?: string | null; // last known error (if any)
-  options?: Filter[];
+  options: Filter[];
+  selectedOptions?: Filter[];
   previousOptions?: string[];
 }
 
@@ -30,6 +31,8 @@ export const initialResolverState: ResolverState =
   resolverAdapter.getInitialState({
     // set initial required properties
     loaded: false,
+    options: [],
+    selectedOptions: [],
   });
 
 const reducer = createReducer(
@@ -42,12 +45,15 @@ const reducer = createReducer(
 
   on(
     LoadResolverOptionsActions.loadResolverOptionsSuccess,
-    (state, { options }) => ({
-      ...state,
-      options: options,
-      loaded: true,
-      error: null,
-    }),
+    (state, { options }) => {
+      return {
+        ...state,
+        options: options,
+        selectedOptions: options.filter((opt: Filter) => opt.selected),
+        loaded: true,
+        error: null,
+      };
+    },
   ),
 
   on(LoadResolverOptionsActions.setPreviousFilters, (state, { filters }) => {

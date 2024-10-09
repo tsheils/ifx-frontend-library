@@ -96,19 +96,57 @@ export const TRIALDETAILSVARIABLES: {
   },
 };
 
+
+/*export const FETCHTRIALSVARIABLES: {
+  ctwhere: {
+    investigatesConditionConditions_SOME: {
+      hasAnnotationAnnotations_SOME: {
+        mappedToGardGards_SOME: {
+          GardId: string | null | undefined
+        }
+      }
+    },
+    StudyType_IN?: unknown;
+    OverallStatus_IN?: unknown;
+    Phase_IN?: unknown;
+  }
+  ctoptions: {
+    limit: number,
+    offset: number
+  }
+} = {
+  ctoptions: {
+    limit: 10,
+    offset: 0,
+  },
+  ctwhere: {
+    investigatesConditionConditions_SOME : {
+      hasAnnotationAnnotations_SOME : {
+        mappedToGardGards_SOME : {
+          GardId : undefined
+        }
+      }
+    }
+  }
+};*/
+
+
 export const FETCHTRIALSVARIABLES: {
   ctwhere: {
     investigatesConditionConditions_SOME: {
-      hasAnnotationConditionAnnotations_SOME: {
+      hasAnnotationAnnotations_SOME: {
         mappedToGardGards_SOME: {
           GardId: string | null | undefined;
         };
       };
     };
+    StudyType_IN?: unknown;
+    OverallStatus_IN?: unknown;
+    Phase_IN?: unknown;
   };
   ctfilters: {
     investigatesConditionConditions_SOME: {
-      hasAnnotationConditionAnnotations_SOME: {
+      hasAnnotationAnnotations_SOME: {
         mappedToGardGards_SOME: {
           GardId: string | null | undefined;
         };
@@ -123,29 +161,30 @@ export const FETCHTRIALSVARIABLES: {
     offset: number;
   };
 } = {
+  ctwhere: {
+    investigatesConditionConditions_SOME: {
+      hasAnnotationAnnotations_SOME: {
+        mappedToGardGards_SOME: {
+          GardId: undefined,
+        },
+      },
+    },
+  },
   ctoptions: {
     limit: 10,
     offset: 0,
   },
   ctfilters: {
     investigatesConditionConditions_SOME: {
-      hasAnnotationConditionAnnotations_SOME: {
+      hasAnnotationAnnotations_SOME: {
         mappedToGardGards_SOME: {
           GardId: undefined,
         },
       },
     },
   },
-  ctwhere: {
-    investigatesConditionConditions_SOME: {
-      hasAnnotationConditionAnnotations_SOME: {
-        mappedToGardGards_SOME: {
-          GardId: undefined,
-        },
-      },
-    },
-  },
-};
+
+}
 
 export const TRIALTYPEFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
