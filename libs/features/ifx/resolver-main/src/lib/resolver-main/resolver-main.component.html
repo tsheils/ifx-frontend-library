@@ -2,7 +2,7 @@
   <div class="row space-around-row top-align">
     <div class="width-20">
       <h2>Input</h2>
-      Enter a drug name or structure, one per line and click the 'Resolve'
+      Enter a drug name or structure (e.g., glycine), one per line and click the 'Resolve'
       button
       <br />
       <mat-form-field [appearance]="'outline'">
@@ -31,7 +31,7 @@
         <input
           matInput
           type="text"
-          [placeholder]="'Search Filters'"
+          [placeholder]="'Search Options'"
           [matAutocomplete]="auto"
           [formControl]="filterSearchCtrl"
         />

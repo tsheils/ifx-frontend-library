@@ -37,7 +37,6 @@ import {
   ResolveQueryActions,
   ResolverSelectors,
 } from 'resolver-store';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'lib-resolver-main',
@@ -147,16 +146,6 @@ export class ResolverMainComponent implements OnInit {
 
     this.filterSearchCtrl.valueChanges.subscribe(() => this.searchFilters());
 
-    /*    this.subscriptionSelectionSignal()
-      .changed.pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe((res) => {
-        this.selectedFiltersSignal.set(
-          this._mapFilterArrayToObject(
-            this.subscriptionSelectionSignal().selected,
-          ),
-        );
-      });
-    */
     this.subscriptionSelectionSignal()
       .changed.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((res) => {
@@ -173,23 +162,13 @@ export class ResolverMainComponent implements OnInit {
   resolve() {
     this.clicked.set(true);
 
-    /*   const params = this.inputCtrl.value.sort((a: string, b: string) =>
-      a.localeCompare(b),
-    );*/
     const formData: ResolverForm = new ResolverForm({
       structure: this.inputCtrl.value,
       format: 'json',
       standardize: this.resolveCtrl.value || 'LARGEST',
     });
-    //   let URL = '';
 
-    /*this.subscriptionSelection().selected.forEach((filter: Filter) => {
-      if (filter.value) {
-        URL = URL + '/' + filter.value;
-      }
-    });
-*/
-    localStorage.removeItem('previouslyUsedOptions');
+    // localStorage.removeItem('previouslyUsedOptions');
     /* localStorage.setItem(
       'previouslyUsedOptions',
       JSON.stringify(
@@ -202,7 +181,6 @@ export class ResolverMainComponent implements OnInit {
         form: formData,
       }),
     );
-    // ?params=aspirin&options=inchikey;molExactMass;lychi1;lychi3;molExactMassParent;molFormParent;img&standardize=CHARGE_NORMALIZE
 
     this.router.navigate([], {
       queryParams: {
@@ -254,7 +232,7 @@ export class ResolverMainComponent implements OnInit {
   searchDisabled() {
     return (
       !this.inputCtrl.value || this.subscriptionSelectionSignal().isEmpty()
-    ); // || this.filterOptionsList())
+    );
   }
 
   _mapFilterCategoriesFromArray(
