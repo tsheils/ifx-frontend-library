@@ -18,7 +18,9 @@ export const selectResolverLoaded = createSelector(
 
 export const selectResolverOptions = createSelector(
   selectResolverState,
-  (state: ResolverState) => state.options,
+  (state: ResolverState) => {
+    return state.options;
+  },
 );
 
 export const selectResolverError = createSelector(
@@ -44,6 +46,13 @@ export const selectSelectedId = createSelector(
 export const fetchPreviousFilters = createSelector(
   selectResolverState,
   (state: ResolverState) => state.previousOptions,
+);
+
+export const fetchSelectedOptions = createSelector(
+  selectResolverState,
+  (state: ResolverState) => {
+    return state.selectedOptions;
+  },
 );
 
 export const selectEntity = createSelector(

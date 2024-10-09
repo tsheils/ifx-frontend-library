@@ -1,7 +1,7 @@
 export class Filter {
   term!: string;
   label!: string;
-  value?: string;
+  value!: string;
   count = 0;
   selected = false;
   description?: string;
