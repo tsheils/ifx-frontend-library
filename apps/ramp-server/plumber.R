@@ -607,12 +607,14 @@ function(
     includeRxnURLs = includeRxnURLs
   )
 
+plot<- RaMP:::buildAnalyteOverlapPerRxnLevelUpsetDataframe(result)
   analyteStr = RaMP:::listToQueryString(analytes)
   rxnDirs = RaMP:::listToQueryString(rxnDirs)
 
   return(
     list(
       data = result,
+      plot = plot,
       function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,"), includeRxnURLs=",includeRxnURLs,"")
     )
   )
