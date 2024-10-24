@@ -49,10 +49,10 @@ export interface State extends EntityState<RampEntity> {
   loading: boolean; // has the RampStore list been loaded
   error?: string | null; // last known error (if any)
   supportedIds?: { analyteType: string; idTypes: string[] }[];
-  sourceVersions?: SourceVersion[];
-  entityCounts?: EntityCount[];
-  metaboliteIntersects?: { id: string; sets: string[]; size: number }[];
-  geneIntersects?: { id: string; sets: string[]; size: number }[];
+  sourceVersions: SourceVersion[];
+  entityCounts: EntityCount[];
+  metaboliteIntersects: { id: string; sets: string[]; size: number }[];
+  geneIntersects: { id: string; sets: string[]; size: number }[];
   databaseUrl?: string;
   ontologies?: RampResponse<Ontology>;
   analytes?: RampResponse<Analyte>;
@@ -96,6 +96,10 @@ export const rampAdapter: EntityAdapter<RampEntity> =
 export const initialState: State = rampAdapter.getInitialState({
   // set initial required properties
   loading: false,
+  entityCounts: [],
+  sourceVersions: [],
+  geneIntersects: [] as { id: string; sets: string[]; size: number }[],
+  metaboliteIntersects: [] as { id: string; sets: string[]; size: number }[],
 });
 
 export const rampReducer = createReducer(
@@ -208,10 +212,10 @@ export const rampReducer = createReducer(
 
   on(
     ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataframe, plot }) => ({
       ...state,
       loading: false,
-      reactions: { data, query, dataframe },
+      reactions: { data, query, dataframe, plot },
     }),
   ),
 

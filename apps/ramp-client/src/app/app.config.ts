@@ -44,7 +44,7 @@ export function rampInit(store = inject(Store)) {
     store.dispatch(LoadRampActions.loadRamp());
     store.dispatch(
       LoadRampActions.loadRampApi({
-        url: '/assets/ramp-api/data/ramp-api.json',
+        url: '/assets/data/ramp-api.json',
       }),
     );
     store.dispatch(LoadRampActions.loadRampStats());

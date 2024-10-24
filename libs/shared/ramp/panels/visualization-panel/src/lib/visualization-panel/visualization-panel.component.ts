@@ -12,6 +12,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { GraphData } from '@ncats-frontend-library/models/utils';
 import { SunburstChartComponent } from 'sunburst-chart';
 import { TreeChartComponent } from 'tree-chart';
+import { UpsetComponent } from 'upset-chart';
 import { UtilsForceDirectedGraphComponent } from 'utils-force-directed-graph';
 
 @Component({
@@ -25,7 +26,8 @@ import { UtilsForceDirectedGraphComponent } from 'utils-force-directed-graph';
     TreeChartComponent,
     MatRadioButton,
     MatRadioGroup,
-    UtilsForceDirectedGraphComponent
+    UtilsForceDirectedGraphComponent,
+    UpsetComponent,
   ],
   templateUrl: './visualization-panel.component.html',
   styleUrl: './visualization-panel.component.scss',

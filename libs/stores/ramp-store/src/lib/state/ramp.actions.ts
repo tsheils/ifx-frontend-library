@@ -166,6 +166,7 @@ export const ReactionsFromAnalytesActions = createActionGroup({
       data: Reaction[];
       query: RampQuery;
       dataframe?: unknown[];
+      plot?: { id: string; sets: string[]; size: number }[];
     }>(),
     fetchReactionsFromAnalytesFailure: props<{ error: string }>(),
   },

@@ -1,0 +1,64 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin theme($theme) {
+  .bar {
+    fill: mat.get-theme-color($theme, primary);
+  }
+
+  .hover-column {
+    fill: transparent;
+  }
+
+  .hover-row {
+    fill: transparent;
+  }
+
+  .hovered > .hover-column {
+    fill: transparent;
+    stroke: mat.get-theme-color($theme, primary);
+    stroke-width: 1px;
+  }
+
+  .hovered > .hover-row {
+    fill: transparent;
+    stroke: mat.get-theme-color($theme, primary);
+    stroke-width: 1px;
+  }
+
+  .hovered > .bar {
+    fill: mat.get-theme-color($theme, primary, 90);
+  }
+
+
+  .non-set-circle {
+    fill: #e0e0e0;
+  }
+
+
+  .set-circle {
+    fill: mat.get-theme-color($theme, primary);
+  }
+
+  .hovered > .set-circle {
+    fill: mat.get-theme-color($theme, primary, 90);
+  }
+
+  .hovered-circle {
+    fill: mat.get-theme-color($theme, primary, 90);
+  }
+
+  .hovered-row > .set-circle {
+    fill: mat.get-theme-color($theme, primary, 90);
+  }
+
+  .combination > line.connector {
+    stroke: mat.get-theme-color($theme, primary);
+    stroke-width: 3px;
+  }
+
+  .hovered > line.connector {
+    stroke: mat.get-theme-color($theme, primary, 90);
+  }
+
+}

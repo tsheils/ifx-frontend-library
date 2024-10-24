@@ -22,22 +22,6 @@ export class Article {
   sources!: Source[];
   substances?: { name: string }[];
 
-  //  inPMC!: string;
-  //  fullTextUrlsContentFor?: any[]; //[FullTextUrl!]!
-  // hasOmimRefomimRefs?: any[]; //[OMIMRef!]!
-  /* hasPDF!: string;
-  inEPMC!: string;
-
-
-  isOpenAccess!: string;*/
-  //
-  // omim_evidence?: boolean;
-  // pubmed_evidence?: boolean;
-  // pubtatorAnnotationsAnnotationFor?: any[]; // [PubtatorAnnotation!]
-  //  refInOMIM?: boolean;
-  //  source!: string;
-  //  substancesSubstanceAnnotatedByPubmed?: unknown[]; //[Substance!]!
-
   constructor(obj: Partial<Article> = {}) {
     Object.assign(this, obj);
 

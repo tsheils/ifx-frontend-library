@@ -258,10 +258,79 @@
         ]
       }
     },
+    "/api/analytes-from-pathways": {
+      "post": {
+        "tags": ["analytes"],
+        "summary": "Retrieve Analytes From Input Pathways",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Enter exact pathway name(s). `analyte_type` should be `\"gene\"`, `\"metabolite\"`, or `\"both\"` *(default)*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pathway": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a string or a vector of strings that contains pathways of interest"
+                  },
+                  "analyteType": {
+                    "type": "string",
+                    "enum": ["gene", "metabolite", "both"],
+                    "required": false,
+                    "description": "a string denoting the type of analyte to return (\"gene\", \"metabolite\", \"both\")"
+                  },
+                  "match": {
+                    "type": "string",
+                    "enum": ["exact", "fuzzy"],
+                    "required": false,
+                    "description": "type of matching to use, options are \"exact\" or \"fuzzy\". The default is \"fuzzy\".",
+                    "hidden": true
+                  },
+                  "namesOrIds": {
+                    "type": "string",
+                    "enum": ["names", "ids"],
+                    "required": false,
+                    "label": "Names or IDs",
+                    "description": "are the input pathways input as pathway names or as pathway ids of genes and metabolites",
+                    "hidden": true
+                  },
+                  "maxPathwaySize": {
+                    "type": "number",
+                    "required": false,
+                    "label": "Max Pathway Size",
+                    "description": "(default Inf), trims returned results to pathways that have fewer than this number",
+                    "hidden": true
+                  }
+                },
+                "example": {
+                  "pathway": [
+                    "De Novo Triacylglycerol Biosynthesis",
+                    "sphingolipid metabolism"
+                  ],
+                  "analyteType": "both"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/pathways-from-analytes": {
       "post": {
         "tags": ["biochemical-pathways"],
-        "summary": "Return chemical class levels present in RaMP-DB (e.g. sub-class, super-class)",
+        "summary": "Get Pathways From Input Analytes",
         "x-title": "Retrieve Pathways From Input Analyte(s)",
         "x-allowedTypes": {
           "metabolites": [
@@ -338,555 +407,10 @@
         }
       }
     },
-    "/api/analytes-from-pathways": {
-      "post": {
-        "tags": ["analytes"],
-        "summary": "Return analytes from given list of pathways as either json or a tsv",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Enter exact pathway name(s). `analyte_type` should be `\"gene\"`, `\"metabolite\"`, or `\"both\"` *(default)*",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "pathway": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a string or a vector of strings that contains pathways of interest"
-                  },
-                  "analyteType": {
-                    "type": "string",
-                    "enum": ["gene", "metabolite", "both"],
-                    "required": false,
-                    "description": "a string denoting the type of analyte to return (\"gene\", \"metabolite\", \"both\")"
-                  },
-                  "match": {
-                    "type": "string",
-                    "enum": ["exact", "fuzzy"],
-                    "required": false,
-                    "description": "type of matching to use, options are \"exact\" or \"fuzzy\". The default is \"fuzzy\"."
-                  },
-                  "namesOrIds": {
-                    "type": "string",
-                    "enum": ["names", "ids"],
-                    "required": false,
-                    "label": "Names or IDs",
-                    "description": "are the input pathways input as pathway names or as pathway ids of genes and metabolites"
-                  },
-                  "maxPathwaySize": {
-                    "type": "number",
-                    "required": false,
-                    "label": "Max Pathway Size",
-                    "description": "(default Inf), trims returned results to pathways that have fewer than this number"
-                  }
-                },
-                "example": {
-                  "pathway": [
-                    "De Novo Triacylglycerol Biosynthesis",
-                    "sphingolipid metabolism"
-                  ],
-                  "analyteType": "both",
-                  "match": "exact",
-                  "namesOrIds": "names"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/ontologies-from-metabolites": {
-      "post": {
-        "tags": ["ontologies"],
-        "summary": "Return ontology mappings from list of metabolites",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Enter a list of metabolites. IDs should be prepended by ID source (e.g. **kegg**:C00412).",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "metabolite": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a vector of analytes or a analytes delimited by new line character"
-                  }
-                },
-                "example": {
-                  "metabolite": [
-                    "ensembl:ENSG00000135679",
-                    "hmdb:HMDB0000064",
-                    "hmdb:HMDB0000148",
-                    "ensembl:ENSG00000141510"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/metabolites-from-ontologies": {
-      "post": {
-        "tags": ["ontologies"],
-        "summary": "Return metabolites associated with input ontology",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Enter ontology(ies) and retrieve corresponding analytes (metabolites).",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "ontology": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a vector of ontology or ontologies delimited by new line character"
-                  },
-                  "format": {
-                    "type": "string",
-                    "enum": ["json", "tsv"],
-                    "required": false
-                  }
-                },
-                "example": {
-                  "ontology": ["Colon", "Liver", "Lung"],
-                  "format": "json"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/chemical-classes": {
-      "post": {
-        "tags": ["chemical-properties"],
-        "summary": "Return available chemical classes of given metabolites in RaMP-DB",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Retrieve chemical class information (from ClassyFire and LIPID MAPS) for input metabolite IDs. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
-          "required": true,
-          "content": {
-            "multipart/form-data": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "metabolites": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
-                  },
-                  "background": {
-                    "type": "string",
-                    "enum": [
-                      "Blood",
-                      "Adipose",
-                      "Heart",
-                      "Urine",
-                      "Brain",
-                      "Liver",
-                      "Kidney",
-                      "Saliva",
-                      "Feces"
-                    ],
-                    "label": "Background Biospecimen",
-                    "required": false
-                  },
-                  "backgroundFile": {
-                    "type": "string",
-                    "format": "binary"
-                  }
-                },
-                "example": {
-                  "metabolites": [
-                    "hmdb:HMDB0000056",
-                    "hmdb:HMDB0000439",
-                    "hmdb:HMDB0000479",
-                    "hmdb:HMDB0000532",
-                    "hmdb:HMDB0001015",
-                    "hmdb:HMDB0001138",
-                    "hmdb:HMDB0029159",
-                    "hmdb:HMDB0029412",
-                    "hmdb:HMDB0034365",
-                    "hmdb:HMDB0035227",
-                    "hmdb:HMDB0007973",
-                    "hmdb:HMDB0008057",
-                    "hmdb:HMDB0011211"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/chemical-properties": {
-      "post": {
-        "tags": ["chemical-properties"],
-        "summary": "Return chemical properties of given metabolites regarding structure",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Retrieve chemical properties (smiles, inchi_key, inchi_key_prefix, inchi, mw, monoisotop_mass, formula, common_name) from input metabolites. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "metabolites": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
-                  },
-                  "propertyList": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "enum": [
-                      "all",
-                      "smiles",
-                      "inchi_key",
-                      "inchi_key_prefix",
-                      "inchi",
-                      "mw",
-                      "monoisotop_mass",
-                      "formula",
-                      "common_name"
-                    ],
-                    "label": "Property List",
-                    "description": "an optional list of specific properties to extract. Options include 'all' (default), 'smiles', 'inchi_key', 'inchi_key_prefix', 'inchi', 'mw', 'monoisotop_mass', 'formula', 'common_name'. If a props list is not supplied, all property fields will be returned."
-                  }
-                },
-                "example": {
-                  "metabolites": [
-                    "hmdb:HMDB0000056",
-                    "hmdb:HMDB0000439",
-                    "hmdb:HMDB0000479",
-                    "hmdb:HMDB0000532",
-                    "hmdb:HMDB0001015",
-                    "hmdb:HMDB0001138",
-                    "hmdb:HMDB0029159",
-                    "hmdb:HMDB0029412",
-                    "hmdb:HMDB0034365",
-                    "hmdb:HMDB0035227",
-                    "hmdb:HMDB0007973",
-                    "hmdb:HMDB0008057",
-                    "hmdb:HMDB0011211"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/common-reaction-analytes": {
-      "post": {
-        "tags": ["reactions"],
-        "summary": "Return analytes involved in same reaction as given list of analytes",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Retrieve Analytes Involved in the Same Reaction. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "analytes": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a vector of analytes that need to be searched"
-                  },
-                  "nameOrIds": {
-                    "type": "string",
-                    "enum": ["names", "ids"],
-                    "required": false,
-                    "description": "whether input is \"names\" or \"ids\" (default is \"ids\")",
-                    "label": "Names or IDs",
-                    "hidden": true
-                  }
-                },
-                "example": {
-                  "analytes": [
-                    "ensembl:ENSG00000135679",
-                    "hmdb:HMDB0000064",
-                    "hmdb:HMDB0000148",
-                    "ensembl:ENSG00000141510",
-                    "chebi:58115",
-                    "chebi:456215",
-                    "chebi:58245",
-                    "chebi:58450",
-                    "chebi:17596",
-                    "chebi:16335",
-                    "chebi:16750",
-                    "chebi:172878",
-                    "chebi:62286",
-                    "chebi:77897",
-                    "uniprot:P30566",
-                    "uniprot:P30520",
-                    "uniprot:P00568",
-                    "uniprot:P23109",
-                    "uniprot:P22102",
-                    "uniprot:P15531"
-                  ]
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/reactions-from-analytes": {
-      "post": {
-        "tags": ["reactions"],
-        "summary": "Return reactions from a given list of analytes",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Retrieve reactions from a list of analytes. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "analytes": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "list of analytes. Only CHEBI and Uniprot IDs are supported"
-                  },
-                  "onlyHumanMets": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "boolean to only return pathways containing only human metabolites (ChEBI ontology)",
-                    "label": "Human Metabolites Only"
-                  },
-                  "humanProtein": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "boolean to only control pathways catalyzed by a human proteins (having human Uniprot)",
-                    "label": " Human Protein Pathways Only"
-                  },
-                  "includeTransportRxns": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "if TRUE, returns metabolic and transport reactions",
-                    "label": "Include Transport Reactions"
-                  },
-                  "rxnDirs": {
-                    "type": "string",
-                    "enum": ["UN", "LR", "RL", "BD", "ALL"],
-                    "required": false,
-                    "description": "character vector of length > 1, specifying reaction directions to return.",
-                    "label": "Reaction Directions"
-                  },
-                  "includeRxnURLs": {
-                    "type": "number",
-                    "required": false,
-                    "description": "if TRUE, urls to Rhea.org will be delivered in the result dataframe for each reaction",
-                    "label": "Include Reaction URLs"
-                  }
-                },
-                "example": {
-                  "analytes": [
-                    "chebi:58115",
-                    "chebi:456215",
-                    "chebi:58245",
-                    "chebi:58450",
-                    "chebi:17596",
-                    "chebi:16335",
-                    "chebi:16750",
-                    "chebi:172878",
-                    "chebi:62286",
-                    "chebi:77897",
-                    "uniprot:P30566",
-                    "uniprot:P30520",
-                    "uniprot:P00568",
-                    "uniprot:P23109",
-                    "uniprot:P22102",
-                    "uniprot:P15531"
-                  ],
-                  "onlyHumanMets": false,
-                  "humanProtein": true,
-                  "includeTransportRxns": false,
-                  "rxnDirs": "UN",
-                  "includeRxnURLs": false
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/reaction-classes-from-analytes": {
-      "post": {
-        "tags": ["reactions"],
-        "summary": "Return reaction classes from a given list of analytes",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Retrieve reaction classes from a list of analytes. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "analytes": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "list of analyte ids"
-                  },
-                  "multiRxnParticipantCount": {
-                    "type": "number",
-                    "required": false,
-                    "description": "minimum number of analytes to report a reaction class, default = 1",
-                    "label": "Reaction Analyte Counts"
-                  },
-                  "humanProtein": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "require reactions to have a human protein (enzyme or transporter), default True",
-                    "label": "Human Protein in Reaction"
-                  },
-                  "concatResults": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "returns all reaction class levels in one dataframe rather than a list of 3 dataframes",
-                    "label": "Concatenate Results"
-                  },
-                  "includeReactionIDs": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "adds the list of reaction ids for each reaction class",
-                    "label": "Include Reaction IDs"
-                  },
-                  "useIdMapping": {
-                    "type": "boolean",
-                    "required": false,
-                    "description": "allows one to fuzzy match input ids to chebi and uniprot to support reaction queries.",
-                    "hidden": true,
-                    "label": "Use ID Mapping"
-                  }
-                },
-                "example": {
-                  "analytes": [
-                    "hmdb:HMDB0000033",
-                    "hmdb:HMDB0000052",
-                    "hmdb:HMDB0000094",
-                    "hmdb:HMDBP00789",
-                    "hmdb:HMDBP00283",
-                    "hmdb:HMDBP00284",
-                    "chebi:58115",
-                    "chebi:456215",
-                    "chebi:58245",
-                    "chebi:58450",
-                    "chebi:17596",
-                    "chebi:16335",
-                    "chebi:16750",
-                    "chebi:172878",
-                    "chebi:62286",
-                    "chebi:77897",
-                    "uniprot:P30566",
-                    "uniprot:P30520",
-                    "uniprot:P00568",
-                    "uniprot:P23109",
-                    "uniprot:P22102",
-                    "uniprot:P15531"
-                  ],
-                  "multiRxnParticipantCount": 1,
-                  "humanProtein": true,
-                  "concatResults": true,
-                  "includeReactionIDs": false
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/combined-fisher-test": {
       "post": {
         "tags": ["biochemical-pathways"],
-        "summary": "Return combined Fisher's test results from given list of analytes query results",
+        "summary": "Run Pathway Enrichment Analysis",
         "responses": {
           "200": {
             "description": "OK",
@@ -974,7 +498,7 @@
     "/api/filter-fisher-test-results": {
       "post": {
         "tags": ["biochemical-pathways"],
-        "summary": "Return filtered Fisher's test results from given list of Fisher's test results",
+        "summary": "Filter the Results of the Enrichment Tests",
         "responses": {
           "200": {
             "description": "OK",
@@ -1867,10 +1391,152 @@
         }
       }
     },
+    "/api/chemical-classes": {
+      "post": {
+        "tags": ["chemical-properties"],
+        "summary": "Retrieve Chemical Classes from Input Metabolites",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Retrieve chemical class information (from ClassyFire and LIPID MAPS) for input metabolite IDs. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metabolites": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
+                  },
+                  "background": {
+                    "type": "string",
+                    "enum": [
+                      "Blood",
+                      "Adipose",
+                      "Heart",
+                      "Urine",
+                      "Brain",
+                      "Liver",
+                      "Kidney",
+                      "Saliva",
+                      "Feces"
+                    ],
+                    "label": "Background Biospecimen",
+                    "required": false
+                  },
+                  "backgroundFile": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "example": {
+                  "metabolites": [
+                    "hmdb:HMDB0000056",
+                    "hmdb:HMDB0000439",
+                    "hmdb:HMDB0000479",
+                    "hmdb:HMDB0000532",
+                    "hmdb:HMDB0001015",
+                    "hmdb:HMDB0001138",
+                    "hmdb:HMDB0029159",
+                    "hmdb:HMDB0029412",
+                    "hmdb:HMDB0034365",
+                    "hmdb:HMDB0035227",
+                    "hmdb:HMDB0007973",
+                    "hmdb:HMDB0008057",
+                    "hmdb:HMDB0011211"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/chemical-properties": {
+      "post": {
+        "tags": ["chemical-properties"],
+        "summary": "Retrieve Chemical Properties from Input Metabolites",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Retrieve chemical properties (smiles, inchi_key, inchi_key_prefix, inchi, mw, monoisotop_mass, formula, common_name) from input metabolites. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metabolites": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a list object of source prepended metaboite ids, representing a metabolite set of interest"
+                  },
+                  "propertyList": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "enum": [
+                      "all",
+                      "smiles",
+                      "inchi_key",
+                      "inchi_key_prefix",
+                      "inchi",
+                      "mw",
+                      "monoisotop_mass",
+                      "formula",
+                      "common_name"
+                    ],
+                    "label": "Property List",
+                    "description": "an optional list of specific properties to extract. Options include 'all' (default), 'smiles', 'inchi_key', 'inchi_key_prefix', 'inchi', 'mw', 'monoisotop_mass', 'formula', 'common_name'. If a props list is not supplied, all property fields will be returned.",
+                    "hidden": true
+                  }
+                },
+                "example": {
+                  "metabolites": [
+                    "hmdb:HMDB0000056",
+                    "hmdb:HMDB0000439",
+                    "hmdb:HMDB0000479",
+                    "hmdb:HMDB0000532",
+                    "hmdb:HMDB0001015",
+                    "hmdb:HMDB0001138",
+                    "hmdb:HMDB0029159",
+                    "hmdb:HMDB0029412",
+                    "hmdb:HMDB0034365",
+                    "hmdb:HMDB0035227",
+                    "hmdb:HMDB0007973",
+                    "hmdb:HMDB0008057",
+                    "hmdb:HMDB0011211"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/chemical-enrichment": {
       "post": {
         "tags": ["chemical-properties"],
-        "summary": "Perform chemical class enrichment on given metabolites",
+        "summary": "Run Chemical Class Enrichment",
         "responses": {
           "200": {
             "description": "OK"
@@ -1930,6 +1596,316 @@
                     "hmdb:HMDB0007973",
                     "hmdb:HMDB0008057",
                     "hmdb:HMDB0011211"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/ontologies-from-metabolites": {
+      "post": {
+        "tags": ["ontologies"],
+        "summary": "Retrieve Ontologies from Input Metabolites ",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Enter a list of metabolites. IDs should be prepended by ID source (e.g. **kegg**:C00412).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "metabolite": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a vector of analytes or a analytes delimited by new line character"
+                  }
+                },
+                "example": {
+                  "metabolite": [
+                    "ensembl:ENSG00000135679",
+                    "hmdb:HMDB0000064",
+                    "hmdb:HMDB0000148",
+                    "ensembl:ENSG00000141510"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metabolites-from-ontologies": {
+      "post": {
+        "tags": ["ontologies"],
+        "summary": "Retrieve Metabolites From Input Ontology names.  The ontologies are derived from HMDB.",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Enter ontology(ies) and retrieve corresponding analytes (metabolites).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "ontology": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a vector of ontology or ontologies delimited by new line character"
+                  },
+                  "format": {
+                    "type": "string",
+                    "enum": ["json", "tsv"],
+                    "required": false
+                  }
+                },
+                "example": {
+                  "ontology": ["Colon", "Liver", "Lung"],
+                  "format": "json"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/api/common-reaction-analytes": {
+      "post": {
+        "tags": ["reactions"],
+        "summary": "Retrieve Analytes Involved in the Same Reaction",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Retrieve Analytes Involved in the Same Reaction. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "analytes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a vector of analytes that need to be searched"
+                  },
+                  "nameOrIds": {
+                    "type": "string",
+                    "enum": ["names", "ids"],
+                    "required": false,
+                    "description": "whether input is \"names\" or \"ids\" (default is \"ids\")",
+                    "label": "Names or IDs",
+                    "hidden": true
+                  }
+                },
+                "example": {
+                  "analytes": [
+                    "chebi:58115", "chebi:456215", "chebi:58245", "chebi:58450",
+                    "chebi:17596", "chebi:16335", "chebi:16750", "chebi:172878",
+                    "chebi:62286", "chebi:77897", "uniprot:P30566","uniprot:P30520",
+                    "uniprot:P00568", "uniprot:P23109", "uniprot:P22102", "uniprot:P15531"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reactions-from-analytes": {
+      "post": {
+        "tags": ["reactions"],
+        "summary": "Return reactions from a given list of analytes",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Retrieve reactions from Input Analytes",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "analytes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "list of analytes. Only CHEBI and Uniprot IDs are supported"
+                  },
+                  "onlyHumanMets": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "boolean to only return pathways containing only human metabolites (ChEBI ontology)",
+                    "label": "Human Metabolites Only",
+                    "hidden": true
+                  },
+                  "humanProtein": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "boolean to only control pathways catalyzed by a human proteins (having human Uniprot)",
+                    "label": " Human Protein Pathways Only",
+                    "hidden": true
+                  },
+                  "includeTransportRxns": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "if TRUE, returns metabolic and transport reactions",
+                    "label": "Include Transport Reactions",
+                    "hidden": true
+                  },
+                  "rxnDirs": {
+                    "type": "string",
+                    "enum": ["UN", "LR", "RL", "BD", "ALL"],
+                    "required": false,
+                    "description": "character vector of length > 1, specifying reaction directions to return.",
+                    "label": "Reaction Directions",
+                    "hidden": true
+                  },
+                  "includeRxnURLs": {
+                    "type": "number",
+                    "required": false,
+                    "description": "if TRUE, urls to Rhea.org will be delivered in the result dataframe for each reaction",
+                    "label": "Include Reaction URLs",
+                    "hidden": true
+                  }
+                },
+                "example": {
+                  "analytes": [
+                    "chebi:58115", "chebi:456215", "chebi:58245", "chebi:58450",
+                    "chebi:17596", "chebi:16335", "chebi:16750", "chebi:172878",
+                    "chebi:62286", "chebi:77897", "uniprot:P30566","uniprot:P30520",
+                    "uniprot:P00568", "uniprot:P23109", "uniprot:P22102", "uniprot:P15531"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/reaction-classes-from-analytes": {
+      "post": {
+        "tags": ["reactions"],
+        "summary": "Retrieve Reaction Classes from Input Analytes",
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Retrieve reaction classes from a list of analytes. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "analytes": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "list of analyte ids"
+                  },
+                  "multiRxnParticipantCount": {
+                    "type": "number",
+                    "required": false,
+                    "description": "minimum number of analytes to report a reaction class, default = 1",
+                    "label": "Reaction Analyte Counts",
+                    "hidden": true
+                  },
+                  "humanProtein": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "require reactions to have a human protein (enzyme or transporter), default True",
+                    "label": "Human Protein in Reaction",
+                    "hidden": true
+                  },
+                  "concatResults": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "returns all reaction class levels in one dataframe rather than a list of 3 dataframes",
+                    "label": "Concatenate Results",
+                    "hidden": true
+                  },
+                  "includeReactionIDs": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "adds the list of reaction ids for each reaction class",
+                    "label": "Include Reaction IDs",
+                    "hidden": true
+                  },
+                  "useIdMapping": {
+                    "type": "boolean",
+                    "required": false,
+                    "description": "allows one to fuzzy match input ids to chebi and uniprot to support reaction queries.",
+                    "label": "Use ID Mapping",
+                    "hidden": true
+                  }
+                },
+                "example": {
+                  "analytes": [
+                    "hmdb:HMDB0000033",
+                    "hmdb:HMDB0000052",
+                    "hmdb:HMDB0000094",
+                    "hmdb:HMDBP00789",
+                    "hmdb:HMDBP00283",
+                    "hmdb:HMDBP00284",
+                    "chebi:58115",
+                    "chebi:456215",
+                    "chebi:58245",
+                    "chebi:58450",
+                    "chebi:17596",
+                    "chebi:16335",
+                    "chebi:16750",
+                    "chebi:172878",
+                    "chebi:62286",
+                    "chebi:77897",
+                    "uniprot:P30566",
+                    "uniprot:P30520",
+                    "uniprot:P00568",
+                    "uniprot:P23109",
+                    "uniprot:P22102",
+                    "uniprot:P15531"
                   ]
                 }
               }

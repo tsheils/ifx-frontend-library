@@ -25,7 +25,7 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        (<SVGElement>this.chartComponent()?.svgExport())
+        <SVGElement>this.chartComponent()?.svgExport(),
       );
     }
     this._downloadFile(this._makeBlob(svgString, 'image/svg+xml'), 'data.svg');
@@ -37,14 +37,14 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        (<SVGElement>this.chartComponent()?.svgExport())
+        <SVGElement>this.chartComponent()?.svgExport(),
       );
     }
     this.svgString2Image(svgString); // passes Blob and filesize String to the callback
   }
 
   downloadTSV() {
-    const data = this.chartComponent()?.data() as FilterCategory;
+    const data = this.chartComponent()?.dataSignal() as FilterCategory;
     if (data) {
       this._downloadFile(
         this._makeBlob(this._toTSV(data)),

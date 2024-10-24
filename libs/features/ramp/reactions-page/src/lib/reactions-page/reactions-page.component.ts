@@ -18,6 +18,8 @@ import {
   GraphLink,
   GraphNode,
   HierarchyNode,
+  UpsetData,
+  UpsetPlot,
 } from '@ncats-frontend-library/models/utils';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend';
@@ -210,6 +212,7 @@ export class ReactionsPageComponent
                 }
               | undefined,
           ) => {
+            console.log(res);
             if (res?.reactions) {
               this._mapReactions(res.reactions);
             }
@@ -266,6 +269,18 @@ export class ReactionsPageComponent
       fuzzy: true,
       inputType: 'analytes',
     };
+
+    if (res.plot) {
+      console.log(JSON.stringify(res.plot));
+      const upsetData = new UpsetPlot(this._mapToUpset(res.plot));
+      console.log(upsetData);
+      this.visualizationMap.set('Reaction Type Overlap', [
+        {
+          type: 'upset',
+          data: { plot: upsetData } as GraphData,
+        },
+      ]);
+    }
     this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
 
     if (res && res.query) {
@@ -481,5 +496,70 @@ export class ReactionsPageComponent
     });
     nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()];
     return { nodes: nodes, links: links };
+  }
+
+  private _mapToUpset(
+    data: { id: string; sets: string[]; size: number }[],
+  ): UpsetData[] {
+    const upsetMap = this._ArrayToUpsetMap(data);
+    const upsetData = this._mapToUpsetData(upsetMap);
+    const distinctUpsetData = this._upsetArrayToDistictSetData(upsetData);
+    console.log(distinctUpsetData);
+    return distinctUpsetData;
+  }
+
+  private _ArrayToUpsetMap(
+    data: { id: string; sets: string[]; size: number }[],
+  ) {
+    const setsMap: Map<string, string[]> = new Map<string, string[]>();
+    data.forEach((level) => {
+      level.sets.forEach((set) => {
+        const levelSet = setsMap.get(set);
+        if (!levelSet) {
+          setsMap.set(set, [level.id]);
+        } else {
+          levelSet.push(level.id);
+          setsMap.set(set, [...new Set(levelSet)]);
+        }
+      });
+    });
+    console.log(setsMap);
+    return setsMap;
+  }
+
+  private _mapToUpsetData(upsetMap: Map<string, string[]>) {
+    const retData: { id: string; sets: string[]; size: number }[] = [];
+
+    [...upsetMap.entries()].forEach(([key, value]) => {
+      retData.push({ id: key, sets: value, size: value.length });
+    });
+    return retData.sort((a, b) => b.size - a.size);
+  }
+
+  private _upsetArrayToDistictSetData(
+    upsetArray: { id: string; sets: string[]; size: number }[],
+  ) {
+    const distinctMap: Map<string, string[]> = new Map<string, string[]>();
+    upsetArray.forEach((set) => {
+      const setString = set.sets.join(', ');
+      const levelSet = distinctMap.get(setString);
+      if (!levelSet) {
+        distinctMap.set(setString, [set.id]);
+      } else {
+        levelSet.push(set.id);
+        distinctMap.set(setString, [...new Set(levelSet)]);
+      }
+    });
+    console.log(distinctMap);
+
+    const retData: UpsetData[] = [];
+
+    [...distinctMap.entries()].forEach(([key, value]) => {
+      retData.push(
+        new UpsetData({ id: key, sets: key.split(', '), size: value.length }),
+      );
+    });
+    return retData.sort((a, b) => b.size - a.size);
+    //  return this._mapToUpsetData(distinctMap);
   }
 }

@@ -2,22 +2,13 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
   computed,
-  ElementRef,
-  HostListener, input,
-  Input,
+  HostListener,
   OnChanges,
-  OnInit, output,
-  ViewEncapsulation
+  OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
-import {
-  Arc,
-  DefaultArcObject,
-  interpolate,
-  Pie,
-  quantize,
-  ScaleOrdinal,
-} from 'd3';
+import { Filter } from '@ncats-frontend-library/models/utils';
+import { interpolate, quantize, ScaleOrdinal } from 'd3';
 import { scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
 import { arc, pie } from 'd3-shape';
@@ -36,16 +27,17 @@ export class SharedUtilsPieChartComponent
   extends GenericChartComponent
   implements OnInit, OnChanges
 {
-  radius = computed(()=> Math.min(this.width(), this.height()) / 2);
+  radius = computed(() => Math.min(this.width(), this.height()) / 2);
 
-  arcShape = computed(() => arc()
-    .innerRadius(this.radius() * 0.67)
-    .outerRadius(this.radius() - 1)
-    .cornerRadius(3)
-    .padAngle(0.015)
-)
+  arcShape = computed(() =>
+    arc()
+      .innerRadius(this.radius() * 0.67)
+      .outerRadius(this.radius() - 1)
+      .cornerRadius(3)
+      .padAngle(0.015),
+  );
 
- // readonly clickElement = output<Filter>();
+  // readonly clickElement = output<Filter>();
   //data =  input<FilterCategory>();
   pieChart!: unknown;
   color!: ScaleOrdinal<string, unknown>;
@@ -74,11 +66,11 @@ export class SharedUtilsPieChartComponent
         .value((d) => d.count);
 
       this.color = scaleOrdinal()
-        .domain(this.data()!.values.map((d) => d.term))
+        .domain(this.dataSignal()!.values.map((d) => d.term))
         .range(
           quantize(
             interpolate('#93278f', '#6e4c8f'),
-            this.data()!.values.length,
+            this.dataSignal()!.values.length,
           ).reverse(),
         );
 
@@ -101,7 +93,7 @@ export class SharedUtilsPieChartComponent
   }
 
   ngOnChanges() {
-    if (this.data() && this.svg) {
+    if (this.dataSignal() && this.svg) {
       this.svg.selectAll('*').remove();
       this.makeChart();
     }
@@ -115,7 +107,7 @@ export class SharedUtilsPieChartComponent
       .attr('class', 'slices')
       .selectAll()
       //@ts-expect-error dumb
-      .data(() => this.pieChart(this.data().values))
+      .data(() => this.pieChart(this.dataSignal().values))
       .join('path')
       .attr('fill', (d: { data: Filter }) => this.color(d.data.term))
       .attr('class', 'slice')
@@ -155,7 +147,7 @@ export class SharedUtilsPieChartComponent
       this.addTooltip(firstSlice[firstSliceIndex].data);
     }
 
-   /* this.svg
+    /* this.svg
       .append('text')
       .attr('class', 'chart-title')
       .attr('x', 0)

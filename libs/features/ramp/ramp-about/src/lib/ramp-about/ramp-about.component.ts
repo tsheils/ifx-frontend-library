@@ -4,11 +4,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   DestroyRef,
   ElementRef,
   inject,
   OnInit,
   QueryList,
+  signal,
   ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
@@ -17,6 +19,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
 import { select, Store } from '@ngrx/store';
 import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
 import { EntityCount, SourceVersion } from 'ramp';
@@ -54,19 +57,46 @@ export class AboutComponent implements OnInit {
   destroyRef = inject(DestroyRef);
 
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
-  mobile = false;
+  mobile = signal(false);
 
   /**
    * default active element for menu highlighting, will be replaced on scroll
    * @type {string}
    */
-  activeElement = 'about';
+  activeElement = signal('about');
 
-  genesData!: { id: string; sets: string[]; size: number }[];
-  compoundsData!: { id: string; sets: string[]; size: number }[];
-  sourceVersions!: Array<SourceVersion>;
-  entityCounts!: { [key: string]: DataProperty }[];
-  databaseUrl!: string;
+  allRamp = this.store.selectSignal(RampSelectors.getAllRamp);
+
+  genesData = computed(() => {
+    if (this.allRamp() && this.allRamp().geneIntersects) {
+      return new UpsetPlot(
+        this.allRamp()!.geneIntersects!.map((g) => new UpsetData(g)),
+      );
+    } else return {} as UpsetPlot;
+  });
+  compoundsData = computed(() => {
+    if (this.allRamp() && this.allRamp().metaboliteIntersects) {
+      return new UpsetPlot(
+        this.allRamp()!.metaboliteIntersects!.map((g) => new UpsetData(g)),
+      );
+    } else return {} as UpsetPlot;
+  });
+
+  sourceVersions = computed(() => this.allRamp().sourceVersions);
+  entityCounts = computed(() =>
+    this.allRamp()!.entityCounts!.map((count: EntityCount) => {
+      const newObj: { [key: string]: DataProperty } = {};
+      Object.entries(count).map((value: string[]) => {
+        newObj[<string>value[0]] = new DataProperty({
+          // name: value[0],
+          label: <string>value[0],
+          value: <string>value[1],
+        });
+      });
+      return newObj;
+    }),
+  );
+
   entityCountsColumns: DataProperty[] = [
     new DataProperty({
       label: 'Category',
@@ -105,8 +135,9 @@ export class AboutComponent implements OnInit {
       sortable: true,
     }),
   ];
-  dbVersion!: string;
-  dbUpdated!: string;
+  dbVersion = computed(() => this.sourceVersions()![0]?.ramp_db_version);
+
+  dbUpdated = computed(() => this.sourceVersions()![0]?.db_mod_date);
 
   constructor(
     private changeRef: ChangeDetectorRef,
@@ -120,59 +151,8 @@ export class AboutComponent implements OnInit {
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        this.mobile = result.matches;
-        this.changeRef.markForCheck();
+        this.mobile.set(result.matches);
       });
-
-    this.store.dispatch(LoadRampActions.loadRampStats());
-
-    this.store
-      .pipe(
-        select(RampSelectors.getAllRamp),
-        takeUntilDestroyed(this.destroyRef),
-        tap((data) => {
-          if (data.sourceVersions) {
-            this.sourceVersions = data.sourceVersions;
-            if (this.sourceVersions.length > 0) {
-              const first = this.sourceVersions[0];
-              if (first.ramp_db_version) {
-                this.dbVersion = first.ramp_db_version;
-              }
-              if (first.db_mod_date) {
-                this.dbUpdated = first.db_mod_date;
-              }
-            }
-
-            this.changeRef.markForCheck();
-          }
-          if (data.entityCounts) {
-            this.entityCounts = data.entityCounts.map((count: EntityCount) => {
-              const newObj: { [key: string]: DataProperty } = {};
-              Object.entries(count).map((value: string[]) => {
-                newObj[<string>value[0]] = new DataProperty({
-                  // name: value[0],
-                  label: <string>value[0],
-                  value: <string>value[1],
-                });
-              });
-              return newObj;
-            });
-            this.changeRef.markForCheck();
-          }
-          if (data.geneIntersects) {
-            this.genesData = data.geneIntersects;
-            this.changeRef.markForCheck();
-          }
-          if (data.metaboliteIntersects) {
-            this.compoundsData = data.metaboliteIntersects;
-            this.changeRef.markForCheck();
-          }
-          if (data.databaseUrl) {
-            this.databaseUrl = data.databaseUrl;
-          }
-        }),
-      )
-      .subscribe();
 
     this.scrollDispatcher
       .scrolled()
@@ -180,14 +160,12 @@ export class AboutComponent implements OnInit {
       .subscribe(() => {
         let scrollTop: number = this.scroller.getScrollPosition()[1];
         if (scrollTop === 0) {
-          this.activeElement = 'about';
-          this.changeRef.detectChanges();
+          this.activeElement.set('about');
         } else {
           this.scrollSections.forEach((section) => {
             scrollTop = scrollTop - section.nativeElement?.scrollHeight;
             if (scrollTop >= 0) {
-              this.activeElement = section.nativeElement.nextSibling.id;
-              this.changeRef.detectChanges();
+              this.activeElement.set(section.nativeElement.nextSibling.id);
             }
           });
         }
@@ -205,7 +183,7 @@ export class AboutComponent implements OnInit {
       block: 'start',
       inline: 'nearest',
     });
-    this.activeElement = el.id;
+    this.activeElement.set(el.id);
   }
 
   /**
@@ -214,6 +192,6 @@ export class AboutComponent implements OnInit {
    * @returns {boolean}
    */
   isActive(check: string): boolean {
-    return this.activeElement === check;
+    return this.activeElement() === check;
   }
 }

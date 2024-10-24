@@ -11,10 +11,10 @@ export interface SourceVersion {
 }
 
 export interface Stats {
-  entityCounts?: EntityCount[];
+  entityCounts: EntityCount[];
   supportedIds?: { analyteType: string; idTypes: string[] }[];
-  metaboliteIntersects?: { id: string; sets: string[]; size: number }[];
-  geneIntersects?: { id: string; sets: string[]; size: number }[];
-  sourceVersions?: SourceVersion[];
+  metaboliteIntersects: { id: string; sets: string[]; size: number }[];
+  geneIntersects: { id: string; sets: string[]; size: number }[];
+  sourceVersions: SourceVersion[];
   databaseUrl?: string;
 }

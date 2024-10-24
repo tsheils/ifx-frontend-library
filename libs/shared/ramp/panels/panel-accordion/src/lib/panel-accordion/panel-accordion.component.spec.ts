@@ -13,27 +13,6 @@ describe('PanelAccordionComponent', () => {
 
     fixture = TestBed.createComponent(PanelAccordionComponent);
     component = fixture.componentInstance;
-    /*    component.inputTab = new Map<string, QuestionBase<string>[]>([]);
-    component.resultsTabs = {};
-    component.dataTabs = input<
-      Map<
-        string,
-        {
-          data: { [key: string]: DataProperty }[];
-          fields: DataProperty[];
-          dataframe?: unknown[];
-          fileName?: string;
-          filters?: Map<string, QuestionBase<string>[]>;
-        }
-      >
-    >();
-    component.visualizationTabs = new Map<
-      string,
-      {
-        type: string;
-        data: { tooBig?: boolean; image?: SafeHtml; values?: unknown };
-      }
-    >([]);*/
     fixture.detectChanges();
   });
 

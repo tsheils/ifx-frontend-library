@@ -26,11 +26,6 @@ export class Disease {
   snomed?: string[];
   synonyms?: string[];
   umls?: string[];
-
-  /* all_ids?:  string[];
-  all_names?: string[];
-  categories?: string[];
-  is_rare?: boolean;*/
   epiArticles?: Article[];
   nonEpiArticles?: Article[];
   allEpiCount = 0;
