@@ -37,7 +37,7 @@ export class RampApiComponent implements AfterViewInit {
     if (this.isBrowser) {
       SwaggerUI({
         //url: '/assets/ramp-api/data/ramp_openapi_with_extensions.yml',
-        url: '/assets/ramp-api/data/ramp-api.json',
+        url: '/assets/data/ramp-api.json',
         domNode: this.el.nativeElement,
       });
     }

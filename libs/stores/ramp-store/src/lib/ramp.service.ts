@@ -413,7 +413,7 @@ export class RampService {
     analytes: string[],
   ): Observable<RampResponse<CommonAnalyte>> {
     const options = {
-      analytes: analytes
+      analytes: analytes,
     };
     return this.http
       .post<
@@ -460,6 +460,7 @@ export class RampService {
           metProteinCommonReactions: Reaction[];
         };
         function_call: string[];
+        plot: { [key: string]: string[] | {} };
       }>(`${this.url}reactions-from-analytes`, options)
       .pipe(
         map(
@@ -470,6 +471,7 @@ export class RampService {
               metProteinCommonReactions: Reaction[];
             };
             function_call: string[];
+            plot: { [key: string]: string[] | {} };
           }) => {
             return {
               data: response.data.met2rxn.map(
@@ -478,6 +480,20 @@ export class RampService {
               query: {
                 functionCall: response.function_call[0],
               },
+              plot: Object.keys(response.plot).map((level: string) => {
+                const t = response.plot[level as keyof typeof response.plot];
+                let r = [];
+                if (Object.is(t, {})) {
+                  r = Array.from([]);
+                } else {
+                  r = Array.from(t as []);
+                }
+                return {
+                  id: level,
+                  sets: [...new Set(r)],
+                  size: [...r].length,
+                };
+              }),
               //dataframe: response.data as string[],
             } as RampResponse<Reaction>;
           },

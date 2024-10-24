@@ -68,13 +68,6 @@ export class ClinicalTrialsDetailsComponent {
 
   constructor(private sanitizer: DomSanitizer) {}
 
-  /*  getTrialSummary(): string {
-  /!*  const ret = this.trial()?.briefSummary && this.fullSummary
-      ? this.trial()!.briefSummary
-      : this.truncatedSummary;
-    return ret;*!/
-  }*/
-
   getLabel(objType: string, plural = true): string {
     let ret: string = objType;
     const t = this.trial();

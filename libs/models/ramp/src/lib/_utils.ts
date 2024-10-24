@@ -24,6 +24,7 @@ export interface RampResponse<T extends RampDataGeneric> {
   data: Array<T>;
   query: RampQuery;
   dataframe?: unknown[];
+  plot?: { id: string; sets: string[]; size: number }[];
   background?: string;
   backgroundFile?: File;
   pval_type?: string;

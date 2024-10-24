@@ -411,6 +411,7 @@ export const fetchReactionsFromAnalytes = createEffect(
           .pipe(
             map(
               (ret: RampResponse<Reaction>) => {
+                console.log(ret);
                 return ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess(
                   {
                     ...ret,
@@ -745,21 +746,3 @@ export const fetchEnrichmentFromMetabolitesFile = createEffect(
   },
   { functional: true, dispatch: false },
 );
-
-/*setSourceVersions = createEffect(() =>
-   this.actions$.pipe(
-     ofType(LoadRampActions.loadSourceVersions),
-     mergeMap((action) =>
-       this.rampService.fetchSourceVersions().pipe(
-         map(
-           (ret: SourceVersion[]) =>
-             LoadRampActions.loadSourceVersionsSuccess({ versions: ret }),
-           catchError((error: ErrorEvent) =>
-             of(LoadRampActions.loadSourceVersionsFailure({ error })),
-           ),
-         ),
-       ),
-     ),
-   ),
- );
-*/

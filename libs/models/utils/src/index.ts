@@ -2,8 +2,9 @@ export * from './lib/filter';
 export * from './lib/graph-data';
 export * from './lib/page';
 export * from './lib/user';
+export * from './lib/upset-data';
 export * from './lib/hierarchy-node';
 export * from './lib/link-template';
 export * from './lib/header-animation';
 export * from './lib/open-api-path';
-export * from './lib/force-directed-graph.models'
+export * from './lib/force-directed-graph.models';

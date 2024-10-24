@@ -1,18 +1,7 @@
 .upset-plot {
   margin: 0 auto;
-  min-height: 300px;
-  min-width: 300px;
+  min-height: 35vh;
+  min-width: 50vw;
 }
 
-.combination circle {
-  fill: #e0e0e0;
-}
 
-.combination circle.member {
-  fill: #265668;
-}
-
-.combination .connector {
-  stroke: #265668;
-  stroke-width: 3px;
-}

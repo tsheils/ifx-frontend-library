@@ -3,6 +3,8 @@
 @use '_utils' as utils;
 @use 'libs/shared/utils/footer-template/src/lib/footer-template/_footer-theme.scss'
   as footer;
+@use 'libs/shared/utils/charts/upset-chart/src/lib/upset-chart/_upset-chart.theme.scss'
+  as upset;
 @use 'libs/features/ramp/ramp-about/src/lib/ramp-about/_ramp-about-theme.scss'
   as ramp-about;
 @include mat.core();
@@ -43,6 +45,7 @@ html,
 body {
   @include mat.all-component-themes(theme.$light-theme);
   @include footer.theme(theme.$light-theme);
+  @include upset.theme(theme.$light-theme);
   @include ramp-about.theme(theme.$light-theme);
 
   height: 100%;

@@ -61,7 +61,13 @@
         }
       }
       @case ('upset') {
-
+        @if (chart.data!.plot) {
+          <div class="row space-around-row">
+            <div class=" width-80">
+              <lib-shared-utils-upset-chart [chartData]="chart.data!.plot" [scale]="'linear'"></lib-shared-utils-upset-chart>
+            </div>
+          </div>
+        }
       }
     }
   }

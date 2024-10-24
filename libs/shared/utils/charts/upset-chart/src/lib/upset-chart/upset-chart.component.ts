@@ -1,34 +1,20 @@
 import {
   Component,
-  DestroyRef,
-  ElementRef,
-  EventEmitter,
+  computed,
   HostListener,
-  inject,
-  Inject,
-  Input,
+  input,
   OnInit,
-  Output,
-  PLATFORM_ID,
-  ViewChild,
+  output,
   ViewEncapsulation,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs/operators';
-import { BehaviorSubject } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
-import { select } from 'd3-selection';
-import { axisLeft, AxisScale } from 'd3-axis';
-import {
-  scaleBand,
-  ScaleBand,
-  scaleLinear,
-  ScaleLinear,
-  scaleLog,
-} from 'd3-scale';
+import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
+import { axisBottom } from 'd3';
+import { GenericChartComponent } from 'generic-chart';
+import { select, selectAll } from 'd3-selection';
+import { axisLeft } from 'd3-axis';
+import { scaleBand, scaleLinear, scaleLog } from 'd3-scale';
 import { format } from 'd3-format';
-import { extent, max } from 'd3-array';
-import { UpsetData } from '../upset-data';
+import { max } from 'd3-array';
 
 @Component({
   selector: 'lib-shared-utils-upset-chart',
@@ -37,227 +23,464 @@ import { UpsetData } from '../upset-data';
   encapsulation: ViewEncapsulation.None,
   standalone: true,
 })
-export class UpsetComponent implements OnInit {
-  @Input() scale: 'linear' | 'log' = 'linear';
-  @Output() upSetBarClicked = new EventEmitter();
-  @Input() title!: string;
-  @ViewChild('upsetPlotBox', { static: true }) upsetPlotElement!: ElementRef;
-  destroyRef = inject(DestroyRef);
+export class UpsetComponent extends GenericChartComponent implements OnInit {
+  upSetBarClicked = output();
+  scale = input<'linear' | 'log'>('linear');
+  title = input<string>();
+  chartData = input<UpsetPlot>();
 
-  svg: unknown;
-  width = 300;
-  height = 300;
-  margin = { top: 5, bottom: 5, left: 5, right: 5 };
-  allSetIds: string[] = [];
+  innerMargin = 10;
 
-  /**
-   * initialize a private variable _data, it's a BehaviorSubject
-   * @type {BehaviorSubject<UpsetData[]>}
-   * @private
-   */
-  protected _data = new BehaviorSubject<UpsetData[]>([]);
+  radius = computed(() => {
+    let rad = this.yCombinationScale().bandwidth() / 4 + 1;
+    if (rad < 5) {
+      rad = 5;
+    }
+    return rad;
+  });
 
-  /**
-   * pushes changed data to {BehaviorSubject}
-   * @param value
-   */
-  @Input()
-  set data(value: Partial<UpsetData>[]) {
-    this._data.next(value.map((val) => new UpsetData(val)));
-  }
+  leftColWidth = computed(() => this.width() * 0.33);
+  rightColWidth = computed(
+    () => this.width() - this.leftColWidth() - this.innerMargin,
+  );
 
-  /**
-   * returns value of {BehaviorSubject}
-   * @returns UpsetData[]
-   */
-  get data(): UpsetData[] {
-    return this._data.getValue();
-  }
+  topRowHeight = computed(() => this.height() * 0.7 - this.margins().bottom);
+  bottomRowHeight = computed(
+    () =>
+      this.height() -
+      this.topRowHeight() -
+      this.innerMargin -
+      this.margins().bottom * 2,
+  );
 
-  isBrowser = true;
+  // scale for intersection bar height
+  intersectionSizeScale = computed(() => {
+    let intersectionScale;
+    if (this.scale() === 'log') {
+      intersectionScale = scaleLog()
+        .domain([1, this._getMax()])
+        .range([this.topRowHeight(), 0]);
+    } else {
+      intersectionScale = scaleLinear()
+        .domain([0, this._getMax()])
+        .range([this.topRowHeight(), 0]);
+    }
+    return intersectionScale;
+  });
 
-  intersectionSizeScale!:
-    | AxisScale<number>
-    | (number[] & ScaleLinear<number, number>);
+  //scale for set size bar chart
+  setSizeScale = computed(() => {
+    let setScale;
+    if (this.scale() === 'log') {
+      setScale = scaleLog()
+        .domain([
+          <number>(
+            max(
+              this.chartData()!.allSetIds,
+              (d: { id: string; count: number }) => {
+                return d.count;
+              },
+            )
+          ),
+          1,
+        ])
+        .range([0, this.leftColWidth() * 0.6]);
+    } else {
+      setScale = scaleLinear()
+        .domain([
+          0,
+          <number>(
+            max(
+              this.chartData()!.allSetIds,
+              (d: { id: string; count: number }) => {
+                return d.count;
+              },
+            )
+          ),
+        ])
+        .range([this.leftColWidth() * 0.6, 0]);
+    }
+    return setScale;
+  });
+
+  // scale for intersection bar width
+  xScale = computed(() =>
+    scaleBand()
+      .domain(this.chartData()!.data.map((d) => d.id))
+      .range([0, this.rightColWidth()])
+      .paddingInner(0.2),
+  );
+
+  // scale for set row height
+  yCombinationScale = computed(() =>
+    scaleBand()
+      .domain(this.chartData()!.allSetIds.map((set) => set.id))
+      .range([0, this.bottomRowHeight()])
+      .paddingInner(0.2),
+  );
+
+  // Prepare the overall layout
+
+  override svg = computed(() =>
+    select(this.chartElement()?.nativeElement)
+      .append('svg:svg')
+      .attr('width', this.width())
+      .attr('height', this.height())
+      .attr('viewBox', [0, 0, this.width(), this.height()])
+      .attr('style', 'max-width: 100%; height: auto;'),
+  );
+
+  topRow = computed(() => this.svg().append('g').classed('top-row', true));
+  bottomRow = computed(() =>
+    this.svg()
+      .append('g')
+      .classed('bottom-row', true)
+      .attr(
+        'transform',
+        `translate(0, ${this.innerMargin + this.margins().bottom * 2})`,
+      ),
+  );
+
+  bottomLeftColumn = computed(
+    () => this.bottomRow().append('g').classed('bottom-left-column', true),
+    /*.attr(
+        'transform',
+        `translate(0, ${this.innerMargin + this.margins().bottom * 2})`,
+      ),*/
+  );
+
+  setSizeChart = computed(() =>
+    this.bottomLeftColumn()
+      .append('svg:g')
+      .classed('set-size-chart', true)
+      .attr(
+        'transform',
+        `translate(0, ${this.topRowHeight() - this.margins().bottom})`,
+      ),
+  );
+
+  setSizeChartScale = computed(() =>
+    this.setSizeChart()
+      .append('g')
+      .classed('set-size-scale', true)
+      .attr(
+        'transform',
+        () => `translate(${this.innerMargin}, ${this.bottomRowHeight()})`,
+      )
+      .call(
+        axisBottom(this.setSizeScale())
+          .scale(this.setSizeScale())
+          .tickFormat((d, i) => {
+            return (i % 5 === 0 && format(',d')(Number(d))) || '';
+          })
+          .tickSize(5)
+          .ticks(4),
+      ),
+  );
+
+  setCountBarChart = computed(() =>
+    this.setSizeChart()
+      .append('svg:g')
+      .classed('set-name-bar-chart', true)
+      .selectAll('.set-bar')
+      .data(this.chartData()!.allSetIds)
+      .join((enter) => {
+        const group = enter.append('g').classed('set-bar-group', true);
+        group
+          .append('text')
+          .classed('set-bar-labels', true)
+          .attr('text-anchor', (d) => (d.count < 0 ? 'end' : 'start'))
+          .attr('font-size', 11)
+          .attr(
+            'x',
+            (d: { count: number; id: string }) =>
+              this.leftColWidth() / 2 - <number>this.setSizeScale()(d.count),
+          )
+          .attr('y', (d) => {
+            let ret = this.yCombinationScale()(d.id);
+            if (!ret) {
+              ret = 0;
+            }
+            return ret + this.innerMargin;
+          })
+          .text((d) => format(',d')(Number(d.count)));
+        group
+          .append('rect')
+          .attr('class', 'bar')
+          .attr('width', (d) => {
+            let ret = this.setSizeScale()(<number>d.count);
+            if (!ret) {
+              ret = this.leftColWidth() * 0.6;
+            }
+            return ret;
+          })
+          .attr(
+            'height',
+            this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1),
+          )
+          .attr('x', (d) => {
+            let ret = this.setSizeScale()(<number>d.count);
+            if (!ret) {
+              ret = this.leftColWidth() * 0.6;
+            }
+
+            return this.leftColWidth() * 0.6 - ret + this.innerMargin + 2;
+          })
+          .attr('y', (d) => {
+            let ret = this.yCombinationScale()(d.id);
+            if (!ret) {
+              ret = 0;
+            }
+            return ret;
+          });
+
+        group
+          .append('text')
+          .attr('class', 'set-name')
+          .attr('text-anchor', 'end')
+          .attr('font-size', '.8em')
+          .attr('x', this.leftColWidth() - this.innerMargin / 2)
+          .attr(
+            'y',
+            (d: { id: string; count: number }) =>
+              <number>this.yCombinationScale()(d.id) +
+              <number>this.yCombinationScale().bandwidth() / 2,
+          )
+          .attr('dy', '0.35em')
+          .text((d) => d.id);
+
+        group
+          .append('rect')
+          .attr('class', 'hover-row')
+          .attr(
+            'width',
+            this.width() - this.margins().left - this.margins().right,
+          )
+          .attr(
+            'height',
+            this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1),
+          )
+          .attr('x', 0)
+          .attr('y', (d) => {
+            let ret = this.yCombinationScale()(d.id);
+            if (!ret) {
+              ret = 0;
+            }
+            return ret;
+          });
+
+        group.on('mouseover', (event: Event, d) => {
+          select((<unknown>event.currentTarget) as string)
+            .classed('hovered', true)
+            .transition()
+            .duration(300);
+          this.rowHovered(d.id);
+        });
+
+        group.on('mouseout', (event: Event) => {
+          select((<unknown>event.currentTarget) as string)
+            .classed('hovered', false)
+            .transition()
+            .duration(300);
+          this.rowHoveredOff();
+        });
+        return group;
+      }),
+  );
+  combinationMatrix = computed(() =>
+    this.bottomRow()
+      .append('svg:g')
+      .classed('combination-matrix', true)
+      .attr(
+        'transform',
+        `translate(${this.leftColWidth()}, ${this.topRowHeight()})`,
+      )
+      .selectAll('.combination')
+      .data(this.chartData()!.data)
+      .join('svg:g')
+      .attr('class', 'combination')
+      .attr('transform', (d: UpsetData) => {
+        let ret = this.xScale()(d.id);
+        if (!ret) {
+          ret = 0;
+        }
+        return `translate(${ret + this.xScale().bandwidth() / 2}, 0)`;
+      }),
+  );
+
+  intersectionSizeChart = computed(() =>
+    this.topRow()
+      .append('svg:g')
+      .classed('intersection-size', true)
+      .attr(
+        'transform',
+        `translate(${this.leftColWidth() + this.innerMargin}, 0)`,
+      ),
+  );
+
+  intersectionSizeChartScale = computed(() =>
+    this.intersectionSizeChart()
+      .append('g')
+      .classed('intersection-size-scale', true)
+      .attr(
+        'transform',
+        () =>
+          `translate(${-(this.margins().left + this.margins().right)}, ${
+            this.margins().top + this.margins().bottom
+          })`,
+      )
+      .call(
+        axisLeft(this.intersectionSizeScale())
+          .scale(this.intersectionSizeScale())
+          .tickFormat((d, i) => {
+            return (i % 5 === 0 && format(',d')(Number(d))) || '';
+          })
+          .tickSize(5),
+      ),
+  );
+
+  intersectionSizeChartBars = computed(() =>
+    this.intersectionSizeChart()
+      .append('g')
+      .classed('intersection-size-bars', true)
+      .attr(
+        'transform',
+        () =>
+          `translate(${-(this.margins().left + this.margins().right)}, ${
+            this.margins().top + this.margins().bottom
+          })`,
+      )
+      .selectAll('.bar-group')
+      .data(this.chartData()!.data)
+      .join((enter) => {
+        const g = enter.append('g').classed('bar-group', true);
+
+        g.append('rect')
+          .attr('class', 'bar')
+          .attr('height', (d) => {
+            let ret = this.intersectionSizeScale()(d.size);
+            if (!ret) {
+              ret = 0;
+            }
+            return this.topRowHeight() - ret;
+          })
+          .attr('width', this.xScale().bandwidth())
+          .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
+          .attr('y', (d) => {
+            let ret = this.intersectionSizeScale()(d.size);
+            if (!ret) {
+              ret = 0;
+            }
+            return ret;
+          });
+
+        g.append('text')
+          .classed('bar-labels', true)
+          .attr('text-anchor', (d) => (d.size < 0 ? 'end' : 'start'))
+          .attr('font-size', '.8em')
+          .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
+          .attr('y', (d: UpsetData) => {
+            let scale: number = this.margins().top;
+            let ret;
+            if (d.size > 0) {
+              ret = this.intersectionSizeScale()(d.size);
+            } else {
+              ret = this.intersectionSizeScale()(1);
+            }
+            if (ret) {
+              scale = scale + ret;
+            }
+            return scale - this.margins().top;
+          })
+          .text((d: { size: number }) => format(',d')(Number(d.size)));
+
+        g.append('rect')
+          .attr('class', 'hover-column')
+          .attr(
+            'height',
+            this.height() - this.margins().top - this.margins().bottom,
+          )
+          .attr('width', this.xScale().bandwidth())
+          .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
+          .attr('y', 0);
+
+        g.on('mouseover', (event: Event, d) => {
+          select((<unknown>event.currentTarget) as string)
+            .classed('hovered', true)
+            .transition()
+            .duration(300);
+          this.columnHovered(d);
+        });
+
+        g.on('mouseout', (event: Event, d: UpsetData) => {
+          select((<unknown>event.currentTarget) as string)
+            .classed('hovered', false)
+            .transition()
+            .duration(300);
+          this.columnHoveredOff();
+        });
+
+        return g;
+      }),
+  );
 
   /**
    * function to redraw/scale the graph on window resize
    */
   @HostListener('window:resize', [])
   onResize() {
-    this.redrawChart();
-  }
-
-  constructor(@Inject(PLATFORM_ID) platformId: object) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
-
-  ngOnInit(): void {
-    this._data
-      // listen to data as long as term is undefined or null
-      // Unsubscribe once term has value
-      .pipe(
-        takeUntilDestroyed(this.destroyRef),
-        map((data: UpsetData[]) => {
-          data.forEach((d) => this.allSetIds.push(...d.sets));
-          this.allSetIds = [...new Set(this.allSetIds)];
-          // Process data: check set membership for each combination
-          data.forEach((combination) => {
-            this.allSetIds.forEach((d) => {
-              combination.combinations?.push({
-                setId: d,
-                member: combination.sets.includes(d),
-              });
-            });
-
-            // Determine which sets (circles in the combination matrix) should be connected with a line
-            if (combination.sets.length > 1) {
-              combination.connectorIndices = extent(combination.sets, (d) =>
-                this.allSetIds.indexOf(d),
-              );
-            } else {
-              combination.connectorIndices = [0, 0];
-            }
-          });
-          this.allSetIds = [...new Set(this.allSetIds)];
-          return data;
-        }),
-      )
-      .subscribe((data) => {
-        if (this.isBrowser) {
-          if (data.length > 0) {
-            this.drawContainer();
-          }
-        }
-      });
-  }
-
-  redrawChart(): void {
-    select(this.upsetPlotElement.nativeElement).selectAll('*').remove();
     this.drawContainer();
   }
 
-  drawContainer(): void {
-    const element = this.upsetPlotElement.nativeElement;
-    select(element).select('svg').remove();
-    this.width = element.offsetWidth - this.margin.left - this.margin.right;
-    this.height = element.offsetHeight - this.margin.top - this.margin.bottom;
-
-    const innerMargin = 10;
-    const tooltipMargin = 10;
-
-    // const width = this.width - margin.left - margin.right;
-    //  const height = this.height - margin.top - margin.left;
-
-    const leftColWidth = this.width * 0.25;
-    const rightColWidth = this.width - leftColWidth - innerMargin;
-
-    const topRowHeight = this.height * 0.66;
-    const bottomRowHeight = this.height - topRowHeight - innerMargin;
-
-    // Initialize scales
-    const xScale: ScaleBand<string> = scaleBand()
-      .domain(this.data.map((d) => d.id))
-      .range([0, rightColWidth])
-      .paddingInner(0.2);
-
-    const yCombinationScale: ScaleBand<string> = scaleBand()
-      .domain(this.allSetIds)
-      .range([0, bottomRowHeight])
-      .paddingInner(0.2);
-
-    if (this.scale === 'log') {
-      this.intersectionSizeScale = scaleLog()
-        .domain([1, this._getMax()])
-        .range([topRowHeight, 0]);
-
-      axisLeft(this.intersectionSizeScale)
-        .scale(this.intersectionSizeScale)
-        .tickFormat((d, i) => {
-          return (i % 5 === 0 && format(',d')(Number(d))) || '';
-        })
-        .tickSize(5);
-    } else {
-      this.intersectionSizeScale = scaleLinear()
-        .domain([1, this._getMax()])
-        .range([topRowHeight, 0]);
-
-      axisLeft(this.intersectionSizeScale).tickSize(5);
+  ngOnInit(): void {
+    this.margins.set({ top: 10, bottom: 20, left: 5, right: 5 });
+    if (this.isBrowser()) {
+      if (this.chartData() && this.chartData()!.data.length > 0) {
+        this.drawContainer();
+      }
     }
+  }
 
-    // Prepare the overall layout
-    const svg = select(element)
-      .append('svg:svg')
-      .attr('width', this.width)
-      .attr('height', this.height)
-      .append('svg:g')
-      .attr('transform', `translate(-${leftColWidth / 2},0)`);
-
-    const setSizeChart = svg
-      .append('svg:g')
-      .attr('transform', `translate(0, ${topRowHeight + innerMargin})`);
-
-    const intersectionSizeChart = svg
-      .append('svg:g')
-      .attr('class', 'intersection-size')
-      .attr('transform', `translate(${leftColWidth}, 0)`);
-
-    const combinationMatrix = svg
-      .append('svg:g')
-      .attr(
-        'transform',
-        `translate(${leftColWidth}, ${topRowHeight + innerMargin})`,
-      );
+  drawContainer(): void {
+    this.svg().select('svg').remove();
+    const t = this.intersectionSizeChartScale();
+    const tt = this.setSizeChartScale();
+    const tttt = this.setCountBarChart();
+    const ttt = this.intersectionSizeChartBars();
 
     /*
      * Combination matrix
      */
 
-    // Create a group for each combination
-    const combinationGroup = combinationMatrix
-      .selectAll('.combination')
-      .data(this.data)
-      .join('svg:g')
-      .attr('class', 'combination')
-      .attr('transform', (d: UpsetData) => {
-        let ret = xScale(d.id);
-        if (!ret) {
-          ret = 0;
-        }
-        return `translate(${ret + xScale.bandwidth() / 2}, 0)`;
-      });
-
     // Select all circles within each group and bind the inner array per data item
-    combinationGroup
-      .selectAll('circle')
-      .data((combination) => combination.combinations)
+    this.combinationMatrix()
+      .selectAll('.non-set-circle')
+      .data((combination) => combination.combinations.filter((d) => !d.member))
       .join('circle')
-      .classed('member', (d) => d.member)
-
-      .attr('cy', (d) => {
-        const ret = yCombinationScale(<string>d.setId);
-        if (ret) {
-          return ret + yCombinationScale.bandwidth() / 2;
-        } else {
-          return yCombinationScale.bandwidth() / 2;
-        }
-      })
-      .attr('r', () => yCombinationScale.bandwidth() / 4);
+      .classed('non-set-circle', true)
+      .attr(
+        'cy',
+        (d) =>
+          (this.yCombinationScale()(<string>d.setId) as number) -
+          this.innerMargin,
+      )
+      .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
 
     // Connect the sets with a vertical line
-    //  const connector =
-    combinationGroup
+    this.combinationMatrix()
       .filter((d) => d.connectorIndices.length > 0)
       .append('svg:line')
-      .style('fill', '#265668')
-      .attr('class', 'connector')
+      .classed('connector', true)
       .attr('y1', (d) => {
-        if (d.connectorIndices && d.connectorIndices[0]) {
+        if (d.connectorIndices && <number>d.connectorIndices[1] > 0) {
           return (
             <number>(
-              yCombinationScale(<string>this.allSetIds[d.connectorIndices[0]])
-            ) +
-            <number>yCombinationScale.bandwidth() / 2
+              this.yCombinationScale()(
+                <string>(
+                  this.chartData()!.allSetIds[<number>d.connectorIndices[0]].id
+                ),
+              )
+            ) - this.innerMargin
           );
         } else {
           return 0;
@@ -267,123 +490,72 @@ export class UpsetComponent implements OnInit {
         if (d.connectorIndices && d.connectorIndices[1]) {
           return (
             <number>(
-              yCombinationScale(<string>this.allSetIds[d.connectorIndices[1]])
-            ) +
-            <number>yCombinationScale.bandwidth() / 2
+              this.yCombinationScale()(
+                <string>this.chartData()!.allSetIds[d.connectorIndices[1]].id,
+              )
+            ) - this.innerMargin
           );
         } else {
           return 0;
         }
       });
 
-    /*
-     * Set size chart
-     */
-    svg
-      .append('svg:g')
-      .attr('transform', () => `translate(0, ${topRowHeight})`);
-
-    setSizeChart
-      .selectAll('.set-name')
-      .data(this.allSetIds)
-      .join('text')
-      .attr('class', 'set-name')
-      .attr('text-anchor', 'end')
-      .attr('font-size', '.8em')
-      .attr('x', leftColWidth - this.margin.left)
+    this.combinationMatrix()
+      .selectAll('.set-circle')
+      .data((combination) => combination.combinations.filter((d) => d.member))
+      .join('circle')
+      .classed('set-circle', true)
       .attr(
-        'y',
-        (d: string) =>
-          <number>yCombinationScale(d) +
-          <number>yCombinationScale.bandwidth() / 2,
+        'cy',
+        (d) =>
+          (this.yCombinationScale()(<string>d.setId) as number) -
+          this.innerMargin,
       )
-      .attr('dy', '0.35em')
-      .text((d) => d);
+      .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
+  }
 
-    const intersectionSizeAxis = axisLeft(this.intersectionSizeScale)
-      .scale(this.intersectionSizeScale)
-      .tickFormat((d, i) => {
-        return (i % 5 === 0 && format(',d')(Number(d))) || '';
+  columnHovered(d: UpsetData) {
+    selectAll(this.combinationMatrix())
+      .classed('hovered', (datum) => {
+        const r: UpsetData = datum as UpsetData;
+        return d.id === r.id;
       })
-      .tickSize(5);
+      .transition()
+      .duration(100);
+  }
 
-    intersectionSizeChart
-      .append('g')
-      .attr(
-        'transform',
-        () =>
-          `translate(${-(this.margin.left + this.margin.right)}, ${
-            this.margin.top + this.margin.bottom
-          })`,
-      )
-      .call(intersectionSizeAxis);
+  columnHoveredOff() {
+    selectAll(this.combinationMatrix())
+      .classed('hovered', false)
+      .classed('hovered-row', false)
+      .transition()
+      .duration(100);
+  }
 
-    intersectionSizeChart
-      .append('g')
-      .attr(
-        'transform',
-        () => `translate(0, ${this.margin.top + this.margin.bottom})`,
-      )
-      .selectAll('rect')
-      .data(this.data)
-      .join('rect')
-      .attr('class', 'bar')
-      .style('fill', '#265668')
-      .attr('height', (d) => {
-        let ret = this.intersectionSizeScale(d.size);
-        if (!ret) {
-          ret = 0;
-        }
-        return topRowHeight - ret;
+  rowHovered(setName: string) {
+    this.combinationMatrix()
+      .selectAll('.set-circle')
+      .classed('hovered-circle', (datum) => {
+        const r = datum as { setId: string };
+        return r.setId === setName;
       })
-      .attr('width', xScale.bandwidth())
-      .attr('x', (d: UpsetData) => <number>xScale(<string>d.id))
-      .attr('y', (d) => {
-        let ret = this.intersectionSizeScale(d.size);
-        if (!ret) {
-          ret = 0;
-        }
-        return ret;
-      })
-      .on('mouseover', () => {
-        //  d3.select("#tooltip").style("opacity", 1).html(d.values.join("<br/>"));
-      })
-      .on('mousemove', (event) => {
-        select('#tooltip')
-          .style('left', event.pageX + tooltipMargin + 'px')
-          .style('top', event.pageY + tooltipMargin + 'px');
-      })
-      .on('mouseout', () => {
-        select('#tooltip').style('opacity', 0);
-      });
-    intersectionSizeChart
-      .append('svg:g')
-      .attr('transform', () => `translate(0, ${this.margin.top - 1})`)
-      .attr('class', 'bar-labels')
-      .selectAll('.text')
-      .data(this.data)
-      .enter()
-      .append('text')
-      .attr('font-size', '.6em')
-      .attr('x', (d: UpsetData) => <number>xScale(<string>d.id))
-      .attr('y', (d: UpsetData) => {
-        let scale: number = this.margin.top;
-        let ret;
-        if (d.size > 0) {
-          ret = this.intersectionSizeScale(d.size);
-        } else {
-          ret = this.intersectionSizeScale(1);
-        }
-        if (ret) {
-          scale = scale + ret;
-        }
-        return scale;
-      })
-      .text((d: { size: number }) => format(',d')(Number(d.size)));
+      .transition()
+      .duration(100);
+  }
+
+  rowHoveredOff() {
+    selectAll('.set-circle')
+      .classed('hovered-circle', false)
+      .classed('hovered-row', false)
+      .transition()
+      .duration(100);
   }
 
   private _getMax(): number {
-    let maxN: number | undefined = max(this.data, (d) => d.size);
+    let maxN: number | undefined = max(
+      this.chartData()!.data,
+      (d: UpsetData) => (<number>d.size) as number,
+    );
     if (!maxN) {
       maxN = 0;
     }

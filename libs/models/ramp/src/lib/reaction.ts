@@ -1,4 +1,3 @@
-
 export class Reaction {
   reactionId!: string;
   label?: string;
@@ -14,17 +13,6 @@ export class Reaction {
   isCofactor?: boolean;
   htmlEquation?: string;
   direction?: string;
-
-  /*
-  uniprot: uniprot:P00568,
-  proteinName: AK1,
-  ecNumber: 2.7.4.6,
-
-  metabolites: chebi:456215,
-  metNames: AMP,
-  uniprot: uniprot:P00568,
-  proteinName: AK1,
-*/
 
   constructor(obj: Partial<Reaction>) {
     Object.assign(this, obj);

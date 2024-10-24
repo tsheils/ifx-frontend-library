@@ -3,10 +3,14 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   Component,
-  computed, HostListener, input, Input,
+  computed,
+  HostListener,
+  input,
+  Input,
   OnChanges,
-  OnInit, output,
-  ViewEncapsulation
+  OnInit,
+  output,
+  ViewEncapsulation,
 } from '@angular/core';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import {
@@ -51,7 +55,7 @@ export class SharedUtilsBarChartComponent
   });
 
   //data =  input<FilterCategory>();
- // readonly clickElement = output<Filter>();
+  // readonly clickElement = output<Filter>();
   bars!: unknown;
   series!: Stack<never, { [key: string]: number }, string>;
   xScale!: ScaleBand<string>;
@@ -72,7 +76,6 @@ export class SharedUtilsBarChartComponent
 
   ngOnInit() {
     if (this.chartElement() && this.isBrowser()) {
-
       const element = this.chartElement().nativeElement;
 
       select(element).select('svg').remove();
@@ -91,16 +94,16 @@ export class SharedUtilsBarChartComponent
         )
         .on('touchstart', (event) => event.preventDefault());
 
-      if (this.data()) {
+      if (this.dataSignal()) {
         this.makeChart();
       }
     }
   }
 
   ngOnChanges() {
-    if (this.data() && this.svg) {
+    if (this.dataSignal() && this.svg) {
       this.svg.selectAll('*').remove();
-      if (this.data()) {
+      if (this.dataSignal()) {
         this.makeChart();
       }
     }
@@ -108,11 +111,11 @@ export class SharedUtilsBarChartComponent
 
   makeChart() {
     // Determine the series that need to be stacked.
-    this.keys = [...new Set(this.data().values.map((d) => d.term))].sort(
+    this.keys = [...new Set(this.dataSignal().values.map((d) => d.term))].sort(
       (a: string, b: string) => a?.localeCompare(b),
     );
     const seriesIndex: InternMap = index(
-      this.data().values,
+      this.dataSignal().values,
       (d: Filter) => d.term,
       (d: Filter) => d.label,
     ) as InternMap;
@@ -140,14 +143,6 @@ export class SharedUtilsBarChartComponent
       .domain([0, <number>yMax])
       .rangeRound([this.height() - this.margins().bottom, this.margins().top]);
 
-   /* this.svg
-      .append('text')
-      .attr('class', 'chart-title')
-      .attr('x', this.width() / 2)
-      .attr('y', this.margins().top / 2)
-      .attr('text-anchor', 'middle')
-      .text(this.data.label);*/
-
     // Append a group for each series, and a rect for each element in the series.
     this.bars = this.svg
       .append('g')
@@ -172,12 +167,14 @@ export class SharedUtilsBarChartComponent
         this.pointerMoved(event, d),
       )
       .on('mouseout', (event: Event) => this.pointerLeft(event));
-    // .on("click", this.clicked);
 
     // Append the horizontal axis.
     this.svg
       .append('g')
-      .attr('transform', `translate(0,${this.height() - this.margins().bottom})`)
+      .attr(
+        'transform',
+        `translate(0,${this.height() - this.margins().bottom})`,
+      )
       .call(
         axisBottom(this.xScale).tickValues(
           this.xScale.domain().filter(function (d, i) {

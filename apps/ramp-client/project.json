@@ -20,11 +20,6 @@
           "apps/ramp-client/src/favicon.ico",
           "apps/ramp-client/src/assets",
           {
-            "input": "libs/features/ramp/ramp-api/src/assets",
-            "glob": "**/*",
-            "output": "assets/ramp-api"
-          },
-          {
             "input": "libs/features/ramp/ramp-about/src/assets",
             "glob": "**/*",
             "output": "assets/ramp-about"
