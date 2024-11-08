@@ -15,13 +15,13 @@
 @switch (chartType()) {
   @case ('bar') {
     <lib-shared-utils-bar-chart
-      [data]="selectedFilter()!"
+      [dataSignal]="selectedFilter()!"
       #chart
     ></lib-shared-utils-bar-chart>
   }
   @case ('pie') {
     <lib-shared-utils-pie-chart
-      [data]="selectedFilter()!"
+      [dataSignal]="selectedFilter()!"
       #chart
     ></lib-shared-utils-pie-chart>
   }
