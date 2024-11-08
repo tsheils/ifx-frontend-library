@@ -1,5 +1,11 @@
 import { FlatTreeControl, TreeControl } from '@angular/cdk/tree';
-import { Component, effect, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  effect,
+  input,
+  output,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
@@ -16,7 +22,6 @@ import {
 import { HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 
-/** Flat tree item node with expandable and level information */
 export class FlatHierarchyNode implements HierarchyNode {
   level!: number;
   expandable!: boolean;
@@ -42,6 +47,7 @@ export class FlatHierarchyNode implements HierarchyNode {
   ],
   templateUrl: './tree-chart.component.html',
   styleUrl: './tree-chart.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeChartComponent {
   data = input<HierarchyNode[]>();

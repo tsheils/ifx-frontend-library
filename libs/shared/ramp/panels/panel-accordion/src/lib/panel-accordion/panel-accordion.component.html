@@ -1,3 +1,5 @@
+
+{{accordionTabsSignal() | json}}
 <mat-accordion multi>
   <mat-expansion-panel expanded id="input" #input>
     <mat-expansion-panel-header>
@@ -11,17 +13,18 @@
       ></lib-input-panel>
     }
   </mat-expansion-panel>
+
   <mat-expansion-panel
-    [expanded]="resultsTabs()"
-    [disabled]="!resultsTabs()"
-    id="results"
-    #results
+    [expanded]="overviewTabs()"
+    [disabled]="!overviewTabs()"
+    id="overview"
+    #overview
   >
     <mat-expansion-panel-header>
       <mat-panel-title><h2>Overview</h2></mat-panel-title>
     </mat-expansion-panel-header>
-    @if (resultsTabs()) {
-      <lib-results-panel [results]="resultsTabs()"></lib-results-panel>
+    @if (overviewTabs()) {
+      <lib-results-panel [results]="overviewTabs()"></lib-results-panel>
     }
   </mat-expansion-panel>
   <mat-expansion-panel

@@ -1,11 +1,13 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   input,
   OnInit,
-  signal, viewChild,
+  signal,
+  viewChild,
   ViewChild,
-  WritableSignal
+  WritableSignal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -35,6 +37,7 @@ import { ImageDownloadComponent } from 'image-download';
   ],
   templateUrl: './chart-wrapper.component.html',
   styleUrl: './chart-wrapper.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartWrapperComponent implements OnInit {
   chartComponent = viewChild<GenericChartComponent>('chart');

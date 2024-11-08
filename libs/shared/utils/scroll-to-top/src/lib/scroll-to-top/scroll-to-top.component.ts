@@ -40,27 +40,13 @@ import { Subject, takeUntil } from 'rxjs';
 })
 export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
   @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;
-  /**
-   * fires to set the nav to be fixed
-   */
+
   navIsFixed!: boolean;
 
-  /**
-   * Behaviour subject to allow extending class to unsubscribe on destroy
-   * @type {Subject<any>}
-   */
   protected ngUnsubscribe: Subject<string> = new Subject();
 
   @Input() color: 'primary' | 'accent' = 'primary';
 
-  /**
-   * get document to watch for scrol levents
-   * @param {Document} document
-   * @param platformId
-   * @param scrollDispatcher
-   * @param changeRef
-   * @param {Router} router
-   */
   constructor(
     @Inject(DOCUMENT) private document: Document,
     @Inject(PLATFORM_ID)
@@ -70,10 +56,6 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
     private router: Router,
   ) {}
 
-  /**
-   * method that checks to see if the user has scrolled past a certain point. pinned to the window object
-   * @returns void
-   */
   ngAfterViewInit() {
     this.scrollDispatcher
       .scrolled()
@@ -98,20 +80,6 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
       });
   }
 
-  /* @HostListener('window:scroll', [])
-  onWindowScroll(): void {
-    if (window.pageYOffset > 100 || this.document.documentElement.scrollTop > 100 || this.document.body.scrollTop > 100) {
-      this.navIsFixed = true;
-    } else if (this.navIsFixed && window.pageYOffset < 10
-      || this.document.documentElement.scrollTop < 10
-      || this.document.body.scrollTop < 10) {
-      this.navIsFixed = false;
-    }
-  }*/
-
-  /**
-   * method that returns the user to the top position of the document
-   */
   scrollToTop(): void {
     if (isPlatformBrowser(this.platformId)) {
       (function smoothscroll() {
@@ -126,9 +94,6 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  /**
-   * clean up on leaving component
-   */
   ngOnDestroy() {
     this.ngUnsubscribe.next('bye-bye');
     this.ngUnsubscribe.complete();

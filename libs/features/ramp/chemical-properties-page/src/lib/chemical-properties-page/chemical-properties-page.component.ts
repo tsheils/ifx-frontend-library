@@ -7,8 +7,8 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { select } from '@ngrx/store';
-import { DataProperty } from 'ncats-datatable';
 import { PanelAccordionComponent } from 'panel-accordion';
 import {
   Classes,
@@ -186,106 +186,134 @@ export class ChemicalPropertiesPageComponent
   ngOnInit(): void {
     this.store
       .pipe(
-        select(RampSelectors.getProperties),
+        select(RampSelectors.getChemicalPropertyResults),
         takeUntilDestroyed(this.destroyRef),
-        map((res: RampResponse<Properties> | undefined) => {
-          if (res && res.data) {
-            const retData = this._mapData(res.data).map((prop) => {
-              prop['imageUrl'].url =
-                `${this.renderUrl()}(${encodeURIComponent(prop['iso_smiles'].value)})?size=150`;
-              prop['imageUrl'].label = prop['common_name'].value;
-              return prop;
-            });
-            this.dataMap.set('Chemical Properties', {
-              data: retData,
-              fields: this.propertiesColumns,
-              dataframe: res.dataframe,
-              fileName: 'fetchPropertiesFromMetabolites-download.tsv',
-            });
-            const matches = Array.from(
-              new Set(
-                res.data.map((property) =>
-                  property.chem_source_id.toLocaleLowerCase(),
-                ),
-              ),
-            );
-            const noMatches = this.inputList.filter(
-              (p: string) => !matches.includes(p.toLocaleLowerCase()),
-            );
-            this.resultsMap = {
-              matches: matches,
-              noMatches: noMatches,
-              count: res.data.length,
-              inputLength: this.inputList.length,
-              inputType: 'metabolites',
-            };
-          }
-          if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
-          }
-        }),
-      )
-      .subscribe();
-
-    this.store
-      .pipe(
-        select(RampSelectors.getClasses),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: RampResponse<Classes> | undefined) => {
-          if (res && res.data) {
-            this.dataMap.set('Chemical Classes', {
-              data: this._mapData(res.data),
-              fields: this.classesColumns,
-              dataframe: res.dataframe,
-              fileName: 'fetchChemicalClass-download.tsv',
-            });
-            const matches = Array.from(
-              new Set(
-                res.data.map((property) =>
-                  property.sourceId.toLocaleLowerCase(),
-                ),
-              ),
-            );
-            const noMatches = this.inputList.filter(
-              (p: string) => !matches.includes(p.toLocaleLowerCase()),
-            );
-            this.resultsMap = {
-              matches: matches,
-              noMatches: noMatches,
-              count: res.data.length,
-              inputLength: this.inputList.length,
-              inputType: 'metabolites',
-            };
-            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-          }
-          if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
-          }
-        }),
-      )
-      .subscribe();
-
-    this.store
-      .pipe(
-        select(RampSelectors.getChemicalEnrichment),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: RampChemicalEnrichmentResponse | undefined) => {
-          if (res && res.enriched_chemical_class_list) {
-            this.dataMap.set('Enriched Chemical Classes', {
-              data: this._mapData(res.enriched_chemical_class_list),
-              fields: this.enrichmentColumns,
-              dataframe: res.enriched_chemical_class_list,
-              fileName: 'fetchEnrichedChemicalClasses-download.tsv',
-            });
-          }
-          //   this.pathwaysLoading = false;
-          this.changeRef.markForCheck();
-        }),
+        map(
+          (
+            chemicalPropertyResults:
+              | {
+                  chemicalProperties: RampResponse<Properties> | undefined;
+                  chemicalClasses: RampResponse<Classes> | undefined;
+                  chemicalEnrichment:
+                    | RampChemicalEnrichmentResponse
+                    | undefined;
+                }
+              | undefined,
+          ) => {
+            if (
+              chemicalPropertyResults &&
+              chemicalPropertyResults.chemicalProperties
+            ) {
+              this.mapChemicalProperties(
+                chemicalPropertyResults.chemicalProperties,
+              );
+            }
+            if (
+              chemicalPropertyResults &&
+              chemicalPropertyResults.chemicalClasses
+            ) {
+              this.mapChemicalClasses(chemicalPropertyResults.chemicalClasses);
+            }
+            if (
+              chemicalPropertyResults &&
+              chemicalPropertyResults.chemicalEnrichment
+            ) {
+              this.mapChemicalEnrichment(
+                chemicalPropertyResults.chemicalEnrichment,
+              );
+            }
+          },
+        ),
       )
       .subscribe();
   }
 
+  mapChemicalProperties(chemicalProperties: RampResponse<Properties>) {
+    if (chemicalProperties && chemicalProperties.data) {
+      const retData = this._mapData(chemicalProperties.data).map((prop) => {
+        prop['imageUrl'].url =
+          `${this.renderUrl()}(${encodeURIComponent(prop['iso_smiles'].value)})?size=150`;
+        prop['imageUrl'].label = prop['common_name'].value;
+        return prop;
+      });
+      this.accordionPanelMap.dataMap.set('Chemical Properties', {
+        data: retData,
+        fields: this.propertiesColumns,
+        dataframe: chemicalProperties.data,
+        fileName: 'fetchPropertiesFromMetabolites-download.tsv',
+      });
+      const matches = Array.from(
+        new Set(
+          chemicalProperties.data.map((property) =>
+            property.chem_source_id.toLocaleLowerCase(),
+          ),
+        ),
+      );
+      const noMatches = this.inputList.filter(
+        (p: string) => !matches.includes(p.toLocaleLowerCase()),
+      );
+      this.accordionPanelMap.overviewMap = {
+        matches: matches,
+        noMatches: noMatches,
+        count: chemicalProperties.data.length,
+        inputLength: this.inputList.length,
+        inputType: 'metabolites',
+      };
+    }
+    if (chemicalProperties && chemicalProperties.query) {
+      this.accordionPanelMap.overviewMap.function = <string>(
+        chemicalProperties.query.functionCall
+      );
+    }
+  }
+
+  mapChemicalClasses(chemicalClasses: RampResponse<Classes>) {
+    if (chemicalClasses && chemicalClasses.data) {
+      this.accordionPanelMap.dataMap.set('Chemical Classes', {
+        data: this._mapData(chemicalClasses.data),
+        fields: this.classesColumns,
+        dataframe: chemicalClasses.data,
+        fileName: 'fetchChemicalClass-download.tsv',
+      });
+      const matches = Array.from(
+        new Set(
+          chemicalClasses.data.map((property) =>
+            property.sourceId.toLocaleLowerCase(),
+          ),
+        ),
+      );
+      const noMatches = this.inputList.filter(
+        (p: string) => !matches.includes(p.toLocaleLowerCase()),
+      );
+      this.accordionPanelMap.overviewMap = {
+        matches: matches,
+        noMatches: noMatches,
+        count: chemicalClasses.data.length,
+        inputLength: this.inputList.length,
+        inputType: 'metabolites',
+      };
+      this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
+    }
+    if (chemicalClasses && chemicalClasses.query) {
+      this.accordionPanelMap.overviewMap.function = <string>(
+        chemicalClasses.query.functionCall
+      );
+    }
+  }
+
+  mapChemicalEnrichment(enrichmentResponse: RampChemicalEnrichmentResponse) {
+    if (enrichmentResponse && enrichmentResponse.enriched_chemical_class_list) {
+      this.accordionPanelMap.dataMap.set('Enriched Chemical Classes', {
+        data: this._mapData(enrichmentResponse.enriched_chemical_class_list),
+        fields: this.enrichmentColumns,
+        dataframe: enrichmentResponse.enriched_chemical_class_list,
+        fileName: 'fetchEnrichedChemicalClasses-download.tsv',
+      });
+    }
+  }
+
   override fetchData(event: { [key: string]: unknown }): void {
+    this.clearDataMapSignal();
     this.inputList = this._parseInput(
       event['metabolites'] as string | string[],
     );

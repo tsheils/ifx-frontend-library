@@ -49,10 +49,6 @@ export class RampMainComponent {
   private readonly store = inject(Store);
   private readonly router = inject(Router);
 
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
   activeElement = 'pathways';
   api = this.store.selectSignal(RampSelectors.getRampApi);
   paths = computed(() => this.api()?.get(this.router.url.split('/')[1]));
@@ -180,10 +176,6 @@ export class RampMainComponent {
     return inputMap;
   });
 
-  /**
-   * sets active section in nav
-   * @param path
-   */
   isActive(path: string | undefined): boolean {
     return this.fragment() === path;
   }

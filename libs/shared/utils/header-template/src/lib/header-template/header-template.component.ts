@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -33,6 +34,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     NgClass,
     MatSidenavModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderTemplateComponent {
   destroyRef = inject(DestroyRef);

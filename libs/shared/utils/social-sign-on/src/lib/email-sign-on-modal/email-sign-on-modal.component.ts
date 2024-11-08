@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -39,6 +40,7 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailSignOnModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);

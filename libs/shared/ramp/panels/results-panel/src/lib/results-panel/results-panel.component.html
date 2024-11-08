@@ -1,5 +1,6 @@
 <mat-tab-group [mat-stretch-tabs]="false">
   <mat-tab [label]="'Results'">
+    Found {{ results()!.count }} results <br />
     @if (results()) {
       @if (results()!.count) {
         <div class="row">

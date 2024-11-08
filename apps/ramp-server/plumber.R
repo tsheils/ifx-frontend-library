@@ -188,9 +188,8 @@ function(analytes) {
 #' @param maxPathwaySize Upper limit for size of returned pathways
 #' @post /api/analytes-from-pathways
 function(pathway, analyteType="both", namesOrIds="names", match="fuzzy", maxPathwaySize=1000) {
-  analyte <- analyte_type
   analytes_df <- tryCatch({
-    RaMP::getAnalyteFromPathway(db = rampDB, pathway = pathway, analyteType=analyte, match=match, namesOrIds=namesOrIds, maxPathwaySize=max_pathway_size)
+    RaMP::getAnalyteFromPathway(db = rampDB, pathway = pathway, analyteType=analyteType, match=match, namesOrIds=namesOrIds, maxPathwaySize=maxPathwaySize)
   },
     error = function(cond) {
       print(cond)
@@ -208,18 +207,18 @@ function(pathway, analyteType="both", namesOrIds="names", match="fuzzy", maxPath
 
 #####
 #' Return ontology mappings from list of metabolites
-#' @param metabolite
+#' @param metabolites
 #' @post /api/ontologies-from-metabolites
-function(metabolite) {
+function(metabolites) {
     ontologies_df <-
-        RaMP::getOntoFromMeta(db = rampDB, analytes = metabolite)
+        RaMP::getOntoFromMeta(db = rampDB, mets = metabolites)
     if(is.null(ontologies_df)){
         ontologies_df<-data.frame()
     }
     return(
         list(
             data = ontologies_df,
-            function_call = makeFunctionCall(metabolite, "getOntoFromMeta"),
+            function_call = makeFunctionCall(metabolites, "getOntoFromMeta"),
             numFoundIds = length(unique(ontologies_df$sourceId))
         )
     )
@@ -231,15 +230,16 @@ function(metabolite) {
 #' @post /api/metabolites-from-ontologies
 function(ontology, format = "json", res) {
   ontologies_names <- c(ontology)
- # ontologies_names <- paste(ontologies_names, collapse = ", ")
-  ontologies <- RaMP::getMetaFromOnto(db = rampDB, ontology = ontologies_names)
+  message(ontology)
+  message(ontologies_names)
+  ontologies <- RaMP::getMetaFromOnto(db = rampDB, ontology = ontologies_names, minOntologySize= 0)
   if (is.null(nrow(ontologies))) {
     return(
       list(
         data = vector(),
         function_call = paste0("RaMP::getMetaFromOnto(ontology = c(",
                                ontologies_names, "))"),
-        numFoundIds = length(unique(ontologies$Ontology))
+        numFoundIds = length(unique(ontologies))
       )
     )
   }else {
@@ -251,7 +251,7 @@ function(ontology, format = "json", res) {
         list(
           data = ontologies,
           function_call = makeFunctionCall(ontology,"getMetaFromOnto"),
-          numFoundIds = length(unique(ontologies$Ontology))
+          numFoundIds = length(unique(ontologies))
         )
       )
     }
@@ -380,24 +380,24 @@ function(analytes, namesOrIds = "ids") {
 #' @parser json
 #' @post /api/combined-fisher-test
 #' @serializer json list(digits = 6)
-function(analytes = '', background = '', backgroundFile = '', background_type= "database") {
+function(analytes = '', background = '', backgroundFile = '', backgroundType= "database") {
   fishers_results_df <- ''
   if(backgroundFile == "") {
     if(background == "") {
       print("run with database background")
-      fishers_results_df <- RaMP::runCombinedFisherTest(
+      fishers_results_df <- RaMP::runEnrichPathways(
         db = rampDB,
         analytes,
         background = NULL,
-        background_type= "database"
+        backgroundType= "database"
       )
     } else {
       print("run with biospecimen")
-      fishers_results_df <- RaMP::runCombinedFisherTest(
+      fishers_results_df <- RaMP::runEnrichPathways(
         db = rampDB,
         analytes = analytes,
         background = background,
-        background_type= "biospecimen"
+        backgroundType= "biospecimen"
       )
     }
   }
@@ -406,11 +406,11 @@ function(analytes = '', background = '', backgroundFile = '', background_type= "
     bg <- gsub("\r\n", ",", backgroundFile)
        file <- unlist(strsplit(bg, ','))
        if(length(file) > length(analytes)) {
-      fishers_results_df <- RaMP::runCombinedFisherTest(
+      fishers_results_df <- RaMP::runEnrichPathways(
         db = rampDB,
         analytes = analytes,
         background = file,
-        background_type= "list"
+        backgroundType= "list"
       )
     } else {
       error <- function(cond) {
@@ -422,55 +422,55 @@ function(analytes = '', background = '', backgroundFile = '', background_type= "
   analytes <- paste(analytes, collapse = ", ")
   return(list(
     data = fishers_results_df,
-    function_call = paste0("RaMP::runCombinedFisherTest(", analytes, "))")
+    function_call = paste0("RaMP::runEnrichPathways(", analytes, "))")
   ))
 }
 
 #####
 #' Return filtered Fisher's test results
 #' from given list of Fisher's test results
-#' @param fishers_results output of runCombinedFisherTest
-#' @param pval_type one of "fdr" or "holm" or "pval"
-#' @param pval_cutoff p value threshold below which results are considered significant
+#' @param fishers_results output of runEnrichPathways
+#' @param pValType one of "fdr" or "holm" or "pval"
+#' @param pValCutoff p value threshold below which results are considered significant
 #' @post /api/filter-fisher-test-results
 #' @serializer json list(digits = 6)
-function(fishers_results,  pval_type = 'fdr', pval_cutoff = 0.1) {
-  filtered_results <- RaMP::FilterFishersResults(
-    fishers_df = fishers_results,
-    pval_type = pval_type,
-    pval_cutoff = pval_cutoff
+function(fishers_results,  pValType = 'fdr', pValCutoff = 0.1) {
+  filtered_results <- RaMP::filterEnrichResults(
+    enrichResults = fishers_results,
+    pValType = pValType,
+    pValCutoff = pValCutoff
   )
   fishers_results <- paste(fishers_results, collapse = ", ")
   return(list(
     data = filtered_results,
-    function_call = paste0("RaMP::FilterFishersResults(", fishers_results, ")")
+    function_call = paste0("RaMP::filterEnrichResults(", fishers_results, ")")
   ))
 }
 
 #####
 #' from given list of Fisher's test results using the findCluster method from the R package (see documentation for further details)
 #' @param fishers_results Output of Fisher's enrichment
-#' @param perc_analyte_overlap Minimum overlap for pathways to be considered similar
-#' @param perc_pathway_overlap Minimum overlap for clusters to merge
-#' @param min_pathway_tocluster Minimum number of 'similar' pathways required to start a cluster (medoid)
+#' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
+#' @param percPathwayOverlap Minimum overlap for clusters to merge
+#' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
 #' @post /api/cluster-fisher-test-results
 #' @serializer json list(digits = 6)
 function(
   fishers_results,
   #analyte_source_id,
-  perc_analyte_overlap = 0.5,
-  perc_pathway_overlap = 0.5,
-  min_pathway_tocluster=2
+  percAnalyteOverlap = 0.5,
+  percPathwayOverlap = 0.5,
+  minPathwayToCluster = 2
 ) {
-  if (typeof(min_pathway_tocluster) == "character") {
-    min_pathway_tocluster <- strtoi(min_pathway_tocluster, base = 0L)
+  if (typeof(minPathwayToCluster) == "character") {
+    minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
   }
   clustering_results <- RaMP::findCluster(
     db = rampDB,
-    fishers_results,
-    perc_analyte_overlap = perc_analyte_overlap,
-    min_pathway_tocluster = min_pathway_tocluster,
-    perc_pathway_overlap = perc_pathway_overlap
+    fishersDf = fishers_results,
+    percAnalyteOverlap = percAnalyteOverlap,
+    minPathwayToCluster = minPathwayToCluster,
+    percPathwayOverlap = percPathwayOverlap
   )
   return(
     list(
@@ -485,31 +485,31 @@ function(
 #' Return lollipop plot for clustered Fisher's test results
 #' from given list of Fisher's test results using the findCluster method from the R package (see documentation for further details)
 #' @param fishers_results Output of Fisher's enrichment
-#' @param perc_analyte_overlap Minimum overlap for pathways to be considered similar
-#' @param perc_pathway_overlap Minimum overlap for clusters to merge
-#' @param min_pathway_tocluster Minimum number of 'similar' pathways required to start a cluster (medoid)
+#' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
+#' @param percPathwayOverlap Minimum overlap for clusters to merge
+#' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
 #' @param filename
 #' @post /api/cluster-plot
 #' @serializer contentType list(type='image/svg')
 #'
 function(
   fishers_results,
-  perc_analyte_overlap = 0.5,
-  perc_pathway_overlap = 0.5,
-  min_pathway_tocluster=2,
+  percAnalyteOverlap = 0.5,
+  percPathwayOverlap = 0.5,
+  minPathwayToCluster=2,
   filename
 ) {
-  if (typeof(min_pathway_tocluster) == "character") {
-    min_pathway_tocluster <- strtoi(min_pathway_tocluster, base = 0L)
+  if (typeof(minPathwayToCluster) == "character") {
+    minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
   }
 
   clustered_plot <- RaMP::pathwayResultsPlot(
     db = rampDB,
-    fishers_results,
-    text_size = 8,
-    perc_analyte_overlap = perc_analyte_overlap,
-    min_pathway_tocluster = min_pathway_tocluster,
-    perc_pathway_overlap = perc_pathway_overlap
+    pathwaysSig = fishers_results,
+    textSize = 8,
+    percAnalyteOverlap = percAnalyteOverlap,
+    minPathwayToCluster = minPathwayToCluster,
+    percPathwayOverlap = percPathwayOverlap
   )
   file <- ggsave(filename,clustered_plot, width = 10, height = 10)
   r <- readBin(file,'raw',n = file.info(file)$size)

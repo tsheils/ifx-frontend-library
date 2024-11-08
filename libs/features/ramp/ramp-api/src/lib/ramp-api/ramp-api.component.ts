@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Inject,
@@ -15,6 +16,7 @@ import SwaggerUI from 'swagger-ui';
   templateUrl: './ramp-api.component.html',
   styleUrls: ['./ramp-api.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [],
 })

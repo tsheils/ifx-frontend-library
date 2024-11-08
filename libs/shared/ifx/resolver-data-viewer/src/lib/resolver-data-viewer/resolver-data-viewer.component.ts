@@ -11,10 +11,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { ResolverResponse } from 'ifx';
-import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
+import { NcatsDatatableComponent } from 'ncats-datatable';
 
 @Component({
   selector: 'lib-resolver-data-viewer',

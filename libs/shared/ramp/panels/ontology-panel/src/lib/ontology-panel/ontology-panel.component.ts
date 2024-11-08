@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   EventEmitter,
@@ -38,6 +39,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
   ],
   templateUrl: './ontology-panel.component.html',
   styleUrl: './ontology-panel.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OntologyPanelComponent implements OnInit {
   @ViewChildren('filterPanel')
@@ -45,14 +47,15 @@ export class OntologyPanelComponent implements OnInit {
   fetchMetabolitesSearch = output<{ ontologies: string[] }>();
   downloadMetabolitesSearch = output<{ ontologies: string[] }>();
   ontologies = input<FilterCategory[]>();
-  loading = false;
+  filteredOntologies = signal(this.ontologies());
   ontologyMap: Map<string, string[]> = new Map<string, string[]>();
   disableSearch = false;
-  filteredOntologies = signal(this.ontologies());
   allOntoFilterCtrl: FormControl = new FormControl<string>('');
   private destroyRef = inject(DestroyRef);
 
   ngOnInit() {
+    this.filteredOntologies.set(this.ontologies());
+
     this.allOntoFilterCtrl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
@@ -60,14 +63,18 @@ export class OntologyPanelComponent implements OnInit {
         distinctUntilChanged(),
         map((term: string) => {
           const retOntologies: FilterCategory[] = [];
-          this.ontologies()?.forEach((onto) => {
-            const values = onto.values.filter((val) =>
-              val.term
+          this.ontologies()?.forEach((ontologyCategory) => {
+            const values = ontologyCategory.values.filter((ontology) =>
+              ontology.term
                 .toLocaleLowerCase()
                 .includes(<string>term.toLocaleLowerCase()),
             );
             retOntologies.push(
-              new FilterCategory({ ...onto, values: values, query: term }),
+              new FilterCategory({
+                ...ontologyCategory,
+                values: values,
+                query: term,
+              }),
             );
           });
           this.filteredOntologies.set(retOntologies);
@@ -94,24 +101,27 @@ export class OntologyPanelComponent implements OnInit {
   }
 
   filterChange(search: { label: string; term?: string; page?: number }) {
-    this.loading = false;
-    const retOntologies: FilterCategory[] = [];
-    this.ontologies()?.forEach((onto) => {
-      if (onto.label === search.label) {
-        const term = search.term as string;
-        const values = onto.values.filter((val) =>
-          val.term
-            .toLocaleLowerCase()
-            .includes(<string>term.toLocaleLowerCase()),
-        );
-        retOntologies.push(
-          new FilterCategory({ ...onto, values: values, query: term }),
-        );
-      } else {
-        retOntologies.push(onto);
-      }
-      this.filteredOntologies.set(retOntologies);
-    });
+    if (!search.term || search.term === '') {
+      this.filteredOntologies.set(this.ontologies());
+    } else {
+      const returnedOntologies: FilterCategory[] = [];
+      this.ontologies()?.forEach((onto) => {
+        if (onto.label === search.label) {
+          const term = search.term as string;
+          const values = onto.values.filter((val) =>
+            val.term
+              .toLocaleLowerCase()
+              .includes(<string>term.toLocaleLowerCase()),
+          );
+          returnedOntologies.push(
+            new FilterCategory({ ...onto, values: values, query: term }),
+          );
+        } else {
+          returnedOntologies.push(onto);
+        }
+        this.filteredOntologies.set(returnedOntologies);
+      });
+    }
   }
 
   clearAll() {

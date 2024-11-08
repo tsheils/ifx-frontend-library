@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   DestroyRef,
@@ -20,6 +21,7 @@ import { select, Selection } from 'd3-selection';
   standalone: true,
   imports: [CommonModule],
   template: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericChartComponent {
   platformId: InjectionToken<NonNullable<unknown>> = inject(

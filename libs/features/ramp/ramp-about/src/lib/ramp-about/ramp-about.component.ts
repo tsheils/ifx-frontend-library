@@ -19,13 +19,15 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
-import { select, Store } from '@ngrx/store';
-import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
-import { EntityCount, SourceVersion } from 'ramp';
-import { LoadRampActions, RampSelectors } from 'ramp-store';
-
-import { tap } from 'rxjs';
+import {
+  DataProperty,
+  UpsetData,
+  UpsetPlot,
+} from '@ncats-frontend-library/models/utils';
+import { Store } from '@ngrx/store';
+import { NcatsDatatableComponent } from 'ncats-datatable';
+import { EntityCount } from 'ramp';
+import { RampSelectors } from 'ramp-store';
 import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
 import { NgClass, ViewportScroller } from '@angular/common';
 import { MatListModule } from '@angular/material/list';
@@ -69,9 +71,10 @@ export class AboutComponent implements OnInit {
 
   genesData = computed(() => {
     if (this.allRamp() && this.allRamp().geneIntersects) {
-      return new UpsetPlot(
+      const upset = new UpsetPlot(
         this.allRamp()!.geneIntersects!.map((g) => new UpsetData(g)),
       );
+      return upset;
     } else return {} as UpsetPlot;
   });
   compoundsData = computed(() => {
@@ -88,7 +91,6 @@ export class AboutComponent implements OnInit {
       const newObj: { [key: string]: DataProperty } = {};
       Object.entries(count).map((value: string[]) => {
         newObj[<string>value[0]] = new DataProperty({
-          // name: value[0],
           label: <string>value[0],
           value: <string>value[1],
         });

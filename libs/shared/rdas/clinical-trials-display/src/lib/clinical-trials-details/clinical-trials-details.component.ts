@@ -35,9 +35,6 @@ export class ClinicalTrialsDetailsComponent {
   breakpointObserver = inject(BreakpointObserver);
 
   trial = input<ClinicalTrial>();
-  /**
-   * truncated summary text
-   */
   truncatedSummary = computed(() => {
     const t = this.trial();
     let ret = t?.briefSummary ? t?.briefSummary : '';
@@ -54,9 +51,6 @@ export class ClinicalTrialsDetailsComponent {
     return ret;
   });
 
-  /**
-   * boolean to show full or truncated summary
-   */
   fullSummary = computed<boolean>(() => {
     const t = this.trial();
     if (t) {

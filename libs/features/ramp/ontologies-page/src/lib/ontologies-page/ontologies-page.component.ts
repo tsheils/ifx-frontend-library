@@ -6,10 +6,9 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
 import { select } from '@ngrx/store';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { OntologyPanelComponent } from 'ontology-panel';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { Metabolite, RampResponse } from 'ramp';
@@ -58,43 +57,26 @@ export class OntologiesPageComponent
     }),
   ];
 
-  ontologies!: FilterCategory[];
-  allOntologies!: FilterCategory[];
-  loading = false;
+  ontologies = this.store.selectSignal(RampSelectors.getontologiesList);
 
   constructor() {
     super();
   }
 
   ngOnInit() {
-    this.store.dispatch(MetaboliteFromOntologyActions.fetchOntologies());
-
-    this.store
-      .pipe(
-        select(RampSelectors.getontologiesList),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: FilterCategory[] | undefined) => {
-          if (res && res.length) {
-            this.ontologies = res;
-            this.allOntologies = res;
-            this.changeRef.markForCheck();
-          }
-        }),
-      )
-      .subscribe();
-
     this.store
       .pipe(
         select(RampSelectors.getMetabolites),
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<Metabolite> | undefined) => {
           if (res && res.data) {
-            this.dataMap.set('Metabolites', {
+            this.accordionPanelMap.dataMap.set('Metabolites', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
-              dataframe: res.dataframe,
+              dataframe: res.data,
               fileName: 'fetchMetabolitesFromOntologies-download.tsv',
             });
+
             const matches = Array.from(
               new Set(
                 res.data.map((data) => data.ontologyTerm.toLocaleLowerCase()),
@@ -103,7 +85,7 @@ export class OntologiesPageComponent
             const noMatches = this.inputList.filter(
               (p: string) => !matches.includes(p.toLocaleLowerCase()),
             );
-            this.resultsMap = {
+            this.accordionPanelMap.overviewMap = {
               matches: matches,
               noMatches: noMatches,
               count: res.data.length,
@@ -114,8 +96,11 @@ export class OntologiesPageComponent
             this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
           if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
+            this.accordionPanelMap.overviewMap.function = <string>(
+              res.query.functionCall
+            );
           }
+          this.dataMapSignal.set(this.accordionPanelMap);
         }),
       )
       .subscribe();
@@ -130,6 +115,7 @@ export class OntologiesPageComponent
     );
   }
   override fetchData(event: { [key: string]: unknown }): void {
+    this.clearDataMapSignal();
     this.store.dispatch(
       MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies({
         ontologies: event['ontologies'] as string[],

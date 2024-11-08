@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatRipple } from '@angular/material/core';
 import {
@@ -14,6 +14,7 @@ import { MatIcon } from '@angular/material/icon';
   imports: [CommonModule, MatIcon, MatDialogContent, MatRipple],
   templateUrl: './complete-dialog.component.html',
   styleUrl: './complete-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompleteDialogComponent {
   readonly data: {

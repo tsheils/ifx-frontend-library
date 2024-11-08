@@ -1,4 +1,9 @@
-import { Component, ElementRef, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  viewChild,
+} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
@@ -21,13 +26,11 @@ import { RouterLink } from '@angular/router';
   ],
   templateUrl: './ramp-home.component.html',
   styleUrl: './ramp-home.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampHomeComponent {
   elemRef = viewChild<ElementRef>('details');
 
-  /**
-   * scroll to details section of the home page
-   */
   goToDetails(): void {
     this.elemRef()?.nativeElement.scrollIntoView({
       behavior: 'smooth',

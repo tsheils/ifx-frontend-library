@@ -1,7 +1,7 @@
 import { RampDataGeneric } from './_utils';
 
 export class FishersDataframe extends RampDataGeneric {
-  analyte_type?: string[];
+  analyteType?: string[];
   fishresults?: FisherResult[];
   result_type?: string[];
 }
@@ -48,11 +48,15 @@ export class FisherResult extends RampDataGeneric {
     if (obj.Total_In_Path && obj.Num_In_Path) {
       this.pathCount = obj.Num_In_Path + '/' + obj.Total_In_Path;
     }
+
+    if (obj.analytes) {
+      this.analytes = obj.analytes.replaceAll('|', ' | ');
+    }
   }
 
-  _getFields(analyte_type: string) {
+  _getFields(analyteType: string) {
     let ret: string[];
-    if (analyte_type === 'both') {
+    if (analyteType === 'both') {
       return Object.keys(this).filter(
         (field) =>
           ![

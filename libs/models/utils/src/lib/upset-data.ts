@@ -17,6 +17,8 @@ export class UpsetData {
 export class UpsetPlot {
   allSetIds: { id: string; count: number }[] = [];
   data: UpsetData[];
+  columnLabel?: string;
+  rowLabel?: string;
 
   constructor(data: UpsetData[]) {
     let idArr: string[] = [];

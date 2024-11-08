@@ -3,8 +3,6 @@ import { Disease } from '@ncats-frontend-library/models/rdas';
 export class User {
   displayName!: string | null | undefined;
   uid!: string;
-  //  photoURL?: string | null | undefined;
-  //  interests?: string[];
   subscriptions: Subscription[] = [];
 
   constructor(obj: Partial<User>) {

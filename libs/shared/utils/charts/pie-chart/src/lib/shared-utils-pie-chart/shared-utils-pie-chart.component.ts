@@ -1,5 +1,6 @@
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   HostListener,
@@ -22,6 +23,7 @@ import { ImageDownloadComponent } from 'image-download';
   templateUrl: './shared-utils-pie-chart.component.html',
   styleUrl: './shared-utils-pie-chart.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsPieChartComponent
   extends GenericChartComponent

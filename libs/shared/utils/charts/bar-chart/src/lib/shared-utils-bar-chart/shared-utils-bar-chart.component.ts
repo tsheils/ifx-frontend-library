@@ -2,6 +2,7 @@
 // @ts-nocheck
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   HostListener,
@@ -45,6 +46,7 @@ interface ChartPoint extends SeriesPoint<{ [key: string]: number }> {
   templateUrl: './shared-utils-bar-chart.component.html',
   styleUrls: ['./shared-utils-bar-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsBarChartComponent
   extends GenericChartComponent
@@ -66,9 +68,6 @@ export class SharedUtilsBarChartComponent
     this.margins.set({ top: 20, bottom: 50, right: 30, left: 10 });
   }
 
-  /**
-   * function to redraw/scale the graph on window resize
-   */
   @HostListener('window:resize', [])
   onResize() {
     this.makeChart();

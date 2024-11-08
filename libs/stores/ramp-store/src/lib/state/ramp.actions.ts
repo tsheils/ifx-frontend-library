@@ -1,4 +1,5 @@
 import {
+  DataProperty,
   FilterCategory,
   OpenApiPath,
 } from '@ncats-frontend-library/models/utils';
@@ -14,6 +15,7 @@ import {
   Pathway,
   Properties,
   RampChemicalEnrichmentResponse,
+  RampPathwayEnrichmentResponse,
   RampQuery,
   RampResponse,
   Reaction,
@@ -49,17 +51,13 @@ export const PathwayFromAnalyteActions = createActionGroup({
       analytes: string[];
       background?: string;
       backgroundFile?: File;
-      pval_type?: string;
-      pval_cutoff?: number;
-      perc_analyte_overlap?: number;
-      min_pathway_tocluster?: number;
-      perc_pathway_overlap?: number;
+      pValType?: string;
+      pValCutoff?: number;
+      percAnalyteOverlap?: number;
+      minPathwayToCluster?: number;
+      percPathwayOverlap?: number;
     }>(),
-    fetchPathwaysFromAnalytesSuccess: props<{
-      data: Pathway[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchPathwaysFromAnalytesSuccess: props<RampResponse<Pathway>>(),
     fetchPathwaysFromAnalytesFailure: props<{ error: string }>(),
   },
 });
@@ -67,12 +65,11 @@ export const PathwayFromAnalyteActions = createActionGroup({
 export const AnalyteFromPathwayActions = createActionGroup({
   source: 'Analytes from Pathways',
   events: {
-    fetchAnalytesFromPathways: props<{ pathways: string[] }>(),
-    fetchAnalytesFromPathwaysSuccess: props<{
-      data: Analyte[];
-      query: RampQuery;
-      dataframe?: unknown[];
+    fetchAnalytesFromPathways: props<{
+      pathways: string[];
+      analyteType: string;
     }>(),
+    fetchAnalytesFromPathwaysSuccess: props<RampResponse<Analyte>>(),
     fetchAnalytesFromPathwaysFailure: props<{ error: string }>(),
   },
 });
@@ -81,11 +78,7 @@ export const OntologyFromMetaboliteActions = createActionGroup({
   source: 'Ontologies from Metabolites',
   events: {
     fetchOntologiesFromMetabolites: props<{ metabolites: string[] }>(),
-    fetchOntologiesFromMetabolitesSuccess: props<{
-      data: Ontology[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchOntologiesFromMetabolitesSuccess: props<RampResponse<Ontology>>(),
     fetchOntologiesFromMetabolitesFailure: props<{ error: string }>(),
   },
 });
@@ -103,11 +96,7 @@ export const MetaboliteFromOntologyActions = createActionGroup({
       ontologies: string[];
       format: string;
     }>(),
-    fetchMetabolitesFromOntologiesSuccess: props<{
-      data: Metabolite[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchMetabolitesFromOntologiesSuccess: props<RampResponse<Metabolite>>(),
     fetchMetaboliteFromOntologiesFailure: props<{ error: string }>(),
   },
 });
@@ -120,11 +109,7 @@ export const ClassesFromMetabolitesActions = createActionGroup({
       background?: string;
       backgroundFile?: File;
     }>(),
-    fetchClassesFromMetabolitesSuccess: props<{
-      data: Classes[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchClassesFromMetabolitesSuccess: props<RampResponse<Classes>>(),
     fetchClassesFromMetabolitesFailure: props<{ error: string }>(),
   },
 });
@@ -142,11 +127,7 @@ export const CommonReactionAnalyteActions = createActionGroup({
   source: 'Common Reaction Analytes',
   events: {
     fetchCommonReactionAnalytes: props<{ analytes: string[] }>(),
-    fetchCommonReactionAnalytesSuccess: props<{
-      data: CommonAnalyte[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchCommonReactionAnalytesSuccess: props<RampResponse<CommonAnalyte>>(),
     fetchCommonReactionAnalytesFailure: props<{ error: string }>(),
   },
 });
@@ -162,12 +143,7 @@ export const ReactionsFromAnalytesActions = createActionGroup({
       rxnDirs?: string;
       includeRxnURLs?: boolean;
     }>(),
-    fetchReactionsFromAnalytesSuccess: props<{
-      data: Reaction[];
-      query: RampQuery;
-      dataframe?: unknown[];
-      plot?: { id: string; sets: string[]; size: number }[];
-    }>(),
+    fetchReactionsFromAnalytesSuccess: props<RampResponse<Reaction>>(),
     fetchReactionsFromAnalytesFailure: props<{ error: string }>(),
   },
 });
@@ -183,11 +159,8 @@ export const ReactionClassesFromAnalytesActions = createActionGroup({
       includeReactionIDs?: string;
       useIdMapping?: boolean;
     }>(),
-    fetchReactionClassesFromAnalyteSuccess: props<{
-      data: ReactionClass[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchReactionClassesFromAnalyteSuccess:
+      props<RampResponse<ReactionClass>>(),
     fetchReactionClassesFromAnalyteFailure: props<{ error: string }>(),
   },
 });
@@ -199,76 +172,46 @@ export const PathwayEnrichmentsActions = createActionGroup({
       analytes: string[];
       background?: string;
       backgroundFile?: File;
-      pval_type?: string;
-      pval_cutoff?: number;
-      perc_analyte_overlap?: number;
-      min_pathway_tocluster?: number;
-      perc_pathway_overlap?: number;
+      pValType?: string;
+      pValCutoff?: number;
+      percAnalyteOverlap?: number;
+      minPathwayToCluster?: number;
+      percPathwayOverlap?: number;
     }>(),
-    fetchPathwaysFromAnalytesSuccess: props<{
-      data: Pathway[];
-      query: RampQuery;
-      dataframe?: unknown[];
-      background?: string;
-      backgroundFile?: File;
-      pval_type?: string;
-      pval_cutoff?: number;
-      perc_analyte_overlap?: number;
-      min_pathway_tocluster?: number;
-      perc_pathway_overlap?: number;
-    }>(),
+    fetchPathwaysFromAnalytesSuccess: props<RampResponse<Pathway>>(),
     fetchPathwaysFromAnalytesFailure: props<{ error: string }>(),
     fetchEnrichmentFromPathways: props<{
       analytes: string[];
       background?: string;
       backgroundFile?: File;
-      pval_type?: string;
-      pval_cutoff?: number;
-      perc_analyte_overlap?: number;
-      min_pathway_tocluster?: number;
-      perc_pathway_overlap?: number;
+      pValType?: string;
+      pValCutoff?: number;
+      percAnalyteOverlap?: number;
+      minPathwayToCluster?: number;
+      percPathwayOverlap?: number;
     }>(),
-    fetchEnrichmentFromPathwaysSuccess: props<{
-      data: FisherResult[];
-      query: RampQuery;
-      combinedFishersDataframe?: FishersDataframe;
-      pval_type?: string;
-      pval_cutoff?: number;
-    }>(),
+    fetchEnrichmentFromPathwaysSuccess: props<RampPathwayEnrichmentResponse>(),
     fetchEnrichmentFromPathwaysFailure: props<{ error: string }>(),
     filterEnrichmentFromPathways: props<{
-      pval_type: string;
-      pval_cutoff: number;
-      perc_analyte_overlap?: number;
-      min_pathway_tocluster?: number;
-      perc_pathway_overlap?: number;
+      pValType: string;
+      pValCutoff: number;
+      percAnalyteOverlap?: number;
+      minPathwayToCluster?: number;
+      percPathwayOverlap?: number;
     }>(),
-    filterEnrichmentFromPathwaysSuccess: props<{
-      data: FisherResult[];
-      query: RampQuery;
-      filteredFishersDataframe?: FishersDataframe;
-      perc_analyte_overlap?: number;
-      min_pathway_tocluster?: number;
-      perc_pathway_overlap?: number;
-    }>(),
+    filterEnrichmentFromPathwaysSuccess: props<RampPathwayEnrichmentResponse>(),
     filterEnrichmentFromPathwaysFailure: props<{ error: string }>(),
     fetchClusterFromEnrichment: props<{
-      perc_analyte_overlap: number;
-      min_pathway_tocluster: number;
-      perc_pathway_overlap: number;
+      percAnalyteOverlap: number;
+      minPathwayToCluster: number;
+      percPathwayOverlap: number;
     }>(),
-    fetchClusterFromEnrichmentSuccess: props<{
-      data: FisherResult[];
-      plot: string;
-      query: RampQuery;
-      dataframe?: FishersDataframe;
-      openModal?: boolean;
-    }>(),
+    fetchClusterFromEnrichmentSuccess: props<RampPathwayEnrichmentResponse>(),
     fetchClusterFromEnrichmentFailure: props<{ error: string }>(),
     fetchClusterImageFile: props<{
-      perc_analyte_overlap: number;
-      min_pathway_tocluster: number;
-      perc_pathway_overlap: number;
+      percAnalyteOverlap: number;
+      minPathwayToCluster: number;
+      percPathwayOverlap: number;
     }>(),
   },
 });
@@ -281,11 +224,7 @@ export const MetaboliteEnrichmentsActions = createActionGroup({
       background?: string;
       backgroundFile?: File;
     }>(),
-    fetchClassesFromMetabolitesSuccess: props<{
-      data: Classes[];
-      query: RampQuery;
-      dataframe?: unknown[];
-    }>(),
+    fetchClassesFromMetabolitesSuccess: props<RampResponse<Classes>>(),
     fetchClassesFromMetabolitesFailure: props<{ error: string }>(),
     fetchEnrichmentFromMetabolites: props<{
       metabolites: string[];
@@ -295,13 +234,13 @@ export const MetaboliteEnrichmentsActions = createActionGroup({
     fetchEnrichmentFromMetabolitesFile: emptyProps(),
     fetchEnrichmentFromMetabolitesSuccess: props<{
       data: RampChemicalEnrichmentResponse;
-      pval_type?: string;
-      pval_cutoff?: number;
+      pValType?: string;
+      pValCutoff?: number;
     }>(),
     fetchEnrichmentFromMetabolitesFailure: props<{ error: string }>(),
     filterEnrichmentFromMetabolites: props<{
-      pval_type: string;
-      pval_cutoff: number;
+      pValType: string;
+      pValCutoff: number;
     }>(),
     filterEnrichmentFromMetabolitesSuccess: props<{
       data: RampChemicalEnrichmentResponse;

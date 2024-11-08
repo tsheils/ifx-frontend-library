@@ -13,8 +13,6 @@ import {
   OnChanges,
   OnInit,
   output,
-  SimpleChange,
-  SimpleChanges,
   viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -65,24 +63,13 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   }>();
 
   searchCtl: FormControl = new FormControl<string>('');
-
-  /**
-   * selection model to track selected filters
-   * @type {SelectionModel<string>}
-   */
   filterSelection = new SelectionModel<string>(true, []);
-
-  /**
-   * flag to show or hide the spinner for loading all facet options
-   */
   loading = false;
 
   range!: ListRange;
 
   fullList = input(false);
-  /**
-   * retrieve and set facet values, subscribe to changes
-   */
+
   ngOnInit() {
     this.filterSelection.changed.subscribe(() => {
       this.filterSelectionChange.emit([
@@ -98,9 +85,8 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         map((term: string) => {
           this.filterChange.emit({
             label: this.filter().label,
-            term: term ? term : ' ',
+            term: term,
           });
-          //   this.loading = true;
         }),
       )
       .subscribe();

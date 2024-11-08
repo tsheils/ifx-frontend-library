@@ -2,9 +2,7 @@
   class="cdk-boundary"
   [paths]="paths()"
   [inputTab]="inputMap()"
-  [resultsTabs]="resultsMap"
-  [visualizationTabs]="visualizationMap"
-  [dataTabs]="dataMap"
+  [accordionTabsSignal] = dataMapSignal()
   (dataSearch)="fetchData($event)"
 >
 </lib-panel-accordion>

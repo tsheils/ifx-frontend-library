@@ -1,5 +1,10 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { Component, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
@@ -12,6 +17,7 @@ import { GenericChartComponent } from 'generic-chart';
   imports: [CommonModule, MatButtonModule, MatMenuModule, MatIconModule],
   templateUrl: './image-download.component.html',
   styleUrl: './image-download.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageDownloadComponent {
   chartComponent = input<GenericChartComponent>();

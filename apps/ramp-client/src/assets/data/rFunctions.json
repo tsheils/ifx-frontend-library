@@ -65,7 +65,7 @@
   "pathway-enrichment": {
     "title": "Perform Pathway Enrichment",
     "input": "analytes",
-    "function": "analytes <- RaMP::runCombinedFisherTest(analytes=\"###REPLACE###\")",
+    "function": "analytes <- RaMP::runEnrichPathways(analytes=\"###REPLACE###\")",
     "supportedIdTypes": ["Metabolites", "Genes/Proteins"],
     "examples": "hmdb:HMDB0000033, hmdb:HMDB0000052, hmdb:HMDB0000094, hmdb:HMDB0000161, hmdb:HMDB0000168, hmdb:HMDB0000191, hmdb:HMDB0000201, chemspider:10026, hmdb:HMDB0006059, Chemspider:6405,CAS:5657-19-2,hmdb:HMDB0002511, chemspider:20171375, CAS:133-32-4, CAS:5746-90-7, CAS:477251-67-5, hmdb:HMDB0000695, chebi:15934, CAS:838-07-3, hmdb:HMDBP00789, hmdb:HMDBP00283, hmdb:HMDBP00284,hmdb:HMDBP00850",
     "description": "Perform Pathway Enrichment. IDs should be prepended by ID source (e.g. <strong>hmdb</strong>:HMDB0000122). Input analyte IDs can be a mix of genes/proteins or metabolites. See below for supported sources."

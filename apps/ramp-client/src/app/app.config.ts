@@ -20,6 +20,7 @@ import {
   withViewTransitions,
 } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
+import { provideRouterStore } from '@ngrx/router-store';
 import { provideState, provideStore, Store } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import {
@@ -78,7 +79,7 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
     ),
     provideStore({ rampStore: rampReducer }),
-    //  provideRouterStore(),
+    provideRouterStore(),
     provideStoreDevtools(),
     provideEffects([RampEffects]),
     provideState(RAMP_STORE_FEATURE_KEY, rampReducer),

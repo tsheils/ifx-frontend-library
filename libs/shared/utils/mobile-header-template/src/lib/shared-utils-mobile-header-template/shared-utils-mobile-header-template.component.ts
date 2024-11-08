@@ -1,4 +1,10 @@
-import { Component, Input, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { NgClass } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -27,6 +33,7 @@ import {
   templateUrl: './shared-utils-mobile-header-template.component.html',
   styleUrls: ['./shared-utils-mobile-header-template.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MobileHeaderTemplateComponent {
   @ViewChild(MatSidenav, { static: true }) menu!: MatSidenav;

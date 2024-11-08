@@ -1,24 +1,22 @@
 import {
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  computed,
   DestroyRef,
   inject,
   input,
   output,
+  signal,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import {
-  GraphData,
-  HierarchyNode,
-  OpenApiPath
-} from '@ncats-frontend-library/models/utils';
+import { DomSanitizer } from '@angular/platform-browser';
+import { OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { QuestionBase } from 'ncats-form-question';
-import { RampDataGeneric, RampResults } from 'ramp';
+import { AccordionPanelMap } from 'panel-accordion';
+import { RampDataGeneric } from 'ramp';
 
 @Component({
   selector: 'lib-ramp-core-page',
@@ -26,6 +24,7 @@ import { RampDataGeneric, RampResults } from 'ramp';
   imports: [CommonModule],
   template: '',
   styles: '',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampCorePageComponent {
   protected readonly store = inject(Store);
@@ -47,40 +46,19 @@ export class RampCorePageComponent {
   filtersMap = input<Map<string, QuestionBase<string>[]>>();
 
   inputList: string[] = [];
-  resultsMap!: RampResults;
   dataColumns!: DataProperty[];
-  downloadQueued = false;
-  visualizationMap: Map<
-    string,
-    {
-      type: string;
-      data: GraphData;
-    }[]
-  > = new Map<
-    string,
-    {
-      type: string;
-      data: GraphData;
-    }[]
-  >();
-  dataMap: Map<
-    string,
-    {
-      data: { [key: string]: DataProperty }[];
-      fields: DataProperty[];
-      dataframe?: unknown[];
-      fileName?: string;
-      filters?: Map<string, QuestionBase<string>[]>;
-    }
-  > = new Map<
-    string,
-    { data: { [key: string]: DataProperty }[]; fields: DataProperty[] }
-  >();
-  dataAsDataProperty: { [key: string]: DataProperty }[] = [];
   dataframe!: unknown[];
+  accordionPanelMap = new AccordionPanelMap();
+  dataMapSignal = signal(this.accordionPanelMap);
 
   fetchData(event?: { [key: string]: unknown }) {
     console.log(event);
+  }
+
+  clearDataMapSignal() {
+    this.loadedEvent.emit({ dataLoaded: false, resultsLoaded: false });
+    this.accordionPanelMap = new AccordionPanelMap();
+    this.dataMapSignal.set(this.accordionPanelMap);
   }
 
   _parseInput(input: string | string[]) {
@@ -106,7 +84,6 @@ export class RampCorePageComponent {
         const newObj: { [key: string]: DataProperty } = {};
         Object.entries(obj).map((value: string[]) => {
           newObj[value[0]] = new DataProperty({
-            // name: value[0],
             label: value[0],
             value: value[1],
           });

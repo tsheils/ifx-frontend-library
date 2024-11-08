@@ -7,7 +7,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { BehaviorSubject } from 'rxjs';
 import { NgClass } from '@angular/common';
 
@@ -25,9 +25,6 @@ export const STRUCTURE_VIEWER_COMPONENT = new InjectionToken<string>(
   imports: [NgClass],
 })
 export class StructureViewerComponent implements OnInit {
-  /**
-   * image url
-   */
   url = '';
 
   @Input() smiles!: string;
@@ -73,15 +70,12 @@ export class StructureViewerComponent implements OnInit {
    * set as smiles
    */
   ngOnInit() {
-    this._data
-      // listen to data as long as term is undefined or null
-      // Unsubscribe once term has value
-      .subscribe((data) => {
-        if (data && data.url) {
-          this.url = data.url;
-          this.ligandName = data.value;
-          this.ref.detectChanges();
-        }
-      });
+    this._data.subscribe((data) => {
+      if (data && data.url) {
+        this.url = data.url;
+        this.ligandName = data.value;
+        this.ref.detectChanges();
+      }
+    });
   }
 }

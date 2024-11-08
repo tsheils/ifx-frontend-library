@@ -1,4 +1,10 @@
-import { Component, computed, inject, input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+} from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -10,6 +16,7 @@ import { MatTooltip } from '@angular/material/tooltip';
   imports: [CommonModule, MatButton, MatTooltip, MatIcon],
   templateUrl: './data-download-button.component.html',
   styleUrl: './data-download-button.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataDownloadButtonComponent {
   protected dom = inject(DOCUMENT);

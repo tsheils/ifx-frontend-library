@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   DestroyRef,
   inject,
@@ -39,6 +40,7 @@ import { map } from 'rxjs';
     MatInputModule,
     MatCardModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);

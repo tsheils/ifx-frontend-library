@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { select } from '@ngrx/store';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { CommonAnalyte, RampResponse, Reaction, ReactionClass } from 'ramp';
 import {
@@ -212,7 +212,6 @@ export class ReactionsPageComponent
                 }
               | undefined,
           ) => {
-            console.log(res);
             if (res?.reactions) {
               this._mapReactions(res.reactions);
             }
@@ -230,6 +229,7 @@ export class ReactionsPageComponent
   }
 
   override fetchData(event: { [key: string]: unknown }): void {
+    this.clearDataMapSignal();
     this.inputList = this._parseInput(event['analytes'] as string | string[]);
     this.store.dispatch(
       CommonReactionAnalyteActions.fetchCommonReactionAnalytes({
@@ -249,7 +249,7 @@ export class ReactionsPageComponent
   }
 
   private _mapReactions(res: RampResponse<Reaction>) {
-    this.dataMap.set('Reactions', {
+    this.accordionPanelMap.dataMap.set('Reactions', {
       data: this._mapData(res.data),
       fields: this.reactionColumns,
       dataframe: res.data,
@@ -261,7 +261,7 @@ export class ReactionsPageComponent
     const noMatches = this.inputList.filter(
       (p: string) => !matches.includes(p.toLocaleLowerCase()),
     );
-    this.resultsMap = {
+    this.accordionPanelMap.overviewMap = {
       matches: matches,
       noMatches: noMatches,
       count: res.data.length,
@@ -271,10 +271,8 @@ export class ReactionsPageComponent
     };
 
     if (res.plot) {
-      console.log(JSON.stringify(res.plot));
       const upsetData = new UpsetPlot(this._mapToUpset(res.plot));
-      console.log(upsetData);
-      this.visualizationMap.set('Reaction Type Overlap', [
+      this.accordionPanelMap.visualizationMap.set('Reaction Type Overlap', [
         {
           type: 'upset',
           data: { plot: upsetData } as GraphData,
@@ -284,7 +282,9 @@ export class ReactionsPageComponent
     this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
 
     if (res && res.query) {
-      this.resultsMap.function = <string>res.query.functionCall;
+      this.accordionPanelMap.overviewMap.function = <string>(
+        res.query.functionCall
+      );
     }
   }
 
@@ -292,14 +292,13 @@ export class ReactionsPageComponent
     const ret = this._mapToHierarchy(
       res.data.filter((c) => c.reactionCount > 0),
     );
-    //  console.log(JSON.stringify(ret))
     const graphData: GraphData = { values: ret } as GraphData;
-    this.visualizationMap.set('Reaction Classes', [
+    this.accordionPanelMap.visualizationMap.set('Reaction Classes', [
       { type: 'sunburst', data: graphData },
       { type: 'tree', data: graphData },
     ]);
     // map hmdb and rhea reactions
-    this.dataMap.set('Reaction Classes', {
+    this.accordionPanelMap.dataMap.set('Reaction Classes', {
       data: this._mapData(res.data),
       fields: this.reactionClassColumns,
       dataframe: res.data,
@@ -320,22 +319,21 @@ export class ReactionsPageComponent
     this.changeRef.markForCheck();
 
     if (res && res.query) {
-      // this.resultsMap.function = <string>res.query.functionCall;
+      // this.overviewMap.function = <string>res.query.functionCall;
     }
   }
 
   private _mapCommonAnalytes(res: RampResponse<CommonAnalyte>) {
-    // map hmdb and rhea reactions
     const graphData = {
       graph: this._mapToGraph(res.data),
     } as GraphData;
-    this.visualizationMap.set('Common Analyte Network', [
+    this.accordionPanelMap.visualizationMap.set('Common Analyte Network', [
       { type: 'graph', data: graphData },
     ]);
-    this.dataMap.set('Common Analytes', {
+    this.accordionPanelMap.dataMap.set('Common Analytes', {
       data: this._mapData(res.data),
       fields: this.dataColumns,
-      dataframe: res['dataframe'],
+      dataframe: res.data,
       fileName: 'fetchCommonReactionAnalytes-download.tsv',
     });
     const matches = Array.from(
@@ -344,7 +342,7 @@ export class ReactionsPageComponent
     const noMatches = this.inputList.filter(
       (p: string) => !matches.includes(p.toLocaleLowerCase()),
     );
-    this.resultsMap = {
+    this.accordionPanelMap.overviewMap = {
       matches: matches,
       noMatches: noMatches,
       count: res.data.length,
@@ -355,16 +353,19 @@ export class ReactionsPageComponent
     this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
 
     if (res.query) {
-      this.resultsMap.function = <string>res.query.functionCall;
+      this.accordionPanelMap.overviewMap.function = <string>(
+        res.query.functionCall
+      );
     }
 
     this.forceDirectedGraphService.nodeClicked.subscribe((res) => {
-      const allData = this.dataMap.get('Common Analytes')?.data;
+      const allData =
+        this.accordionPanelMap.dataMap.get('Common Analytes')?.data;
       if (allData && res) {
         const filteredData = allData?.filter(
-          (ca) =>
-            ca['inputAnalyte'].value === res?.id ||
-            ca['rxnPartnerCommonName'].value === res?.id,
+          (commonAnalye) =>
+            commonAnalye['inputAnalyte'].value === res?.id ||
+            commonAnalye['rxnPartnerCommonName'].value === res?.id,
         );
         this.forceDirectedGraphService.analyteData.set({
           data: filteredData,
@@ -504,7 +505,6 @@ export class ReactionsPageComponent
     const upsetMap = this._ArrayToUpsetMap(data);
     const upsetData = this._mapToUpsetData(upsetMap);
     const distinctUpsetData = this._upsetArrayToDistictSetData(upsetData);
-    console.log(distinctUpsetData);
     return distinctUpsetData;
   }
 
@@ -523,7 +523,6 @@ export class ReactionsPageComponent
         }
       });
     });
-    console.log(setsMap);
     return setsMap;
   }
 
@@ -550,7 +549,6 @@ export class ReactionsPageComponent
         distinctMap.set(setString, [...new Set(levelSet)]);
       }
     });
-    console.log(distinctMap);
 
     const retData: UpsetData[] = [];
 
@@ -560,6 +558,5 @@ export class ReactionsPageComponent
       );
     });
     return retData.sort((a, b) => b.size - a.size);
-    //  return this._mapToUpsetData(distinctMap);
   }
 }

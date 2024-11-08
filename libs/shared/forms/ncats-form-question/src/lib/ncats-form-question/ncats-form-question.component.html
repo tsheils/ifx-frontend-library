@@ -76,6 +76,7 @@
       </mat-radio-group>
     }
     @case ('file') {
+      <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
       <lib-shared-forms-file-upload
         [formControlName]="question.key"
       ></lib-shared-forms-file-upload>

@@ -16,7 +16,7 @@
     @switch (chart.type) {
       @case ('cluster') {
         <div class="row">
-          @if (!chart.data.message) {
+          @if (!chart.data?.message) {
             <div class="width-10">
               <button
                 mat-stroked-button
@@ -30,12 +30,12 @@
               </button>
             </div>
           }
-          @if (chart.data.message) {
+          @if (chart.data?.message) {
             <div>
-              {{chart.data.message }}
+              {{chart.data?.message }}
             </div>
           }
-          @if (!chart.data.message) {
+          @if (!chart.data?.message) {
             <div [innerHTML]="chart.data!.image"></div>
           }
         </div>
