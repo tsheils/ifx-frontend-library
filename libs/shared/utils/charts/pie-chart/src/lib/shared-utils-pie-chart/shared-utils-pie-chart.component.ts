@@ -4,11 +4,12 @@ import {
   Component,
   computed,
   HostListener,
+  input,
   OnChanges,
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { interpolate, quantize, ScaleOrdinal } from 'd3';
 import { scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
@@ -40,7 +41,7 @@ export class SharedUtilsPieChartComponent
   );
 
   // readonly clickElement = output<Filter>();
-  //data =  input<FilterCategory>();
+  // override dataSignal = input<FilterCategory>();
   pieChart!: unknown;
   color!: ScaleOrdinal<string, unknown>;
 

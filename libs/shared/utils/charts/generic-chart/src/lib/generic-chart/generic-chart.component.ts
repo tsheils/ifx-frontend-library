@@ -13,7 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { select, Selection } from 'd3-selection';
 
 @Component({
@@ -53,7 +53,7 @@ export class GenericChartComponent {
       ),
   );
 
-  dataSignal = input();
+  dataSignal = input<FilterCategory>();
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];

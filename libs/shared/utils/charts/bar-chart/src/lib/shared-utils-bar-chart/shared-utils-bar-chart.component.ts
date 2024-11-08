@@ -56,7 +56,7 @@ export class SharedUtilsBarChartComponent
     return `assets/charts/placeholders/chart${Math.floor(Math.random() * 2)}.webp`;
   });
 
-  //data =  input<FilterCategory>();
+  // override dataSignal = input<FilterCategory>();
   // readonly clickElement = output<Filter>();
   bars!: unknown;
   series!: Stack<never, { [key: string]: number }, string>;
@@ -119,7 +119,7 @@ export class SharedUtilsBarChartComponent
       (d: Filter) => d.label,
     ) as InternMap;
     this.series = (<unknown>stack()
-      .keys(union(this.data().values.map((d) => d.label))) // distinct series keys, in input order
+      .keys(union(this.dataSignal().values.map((d) => d.label))) // distinct series keys, in input order
       .value((D: [string, InternMap<string, Filter>], key: string) => {
         const dKey = D[1].get(key);
         if (dKey) {
