@@ -1,17 +1,13 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  computed,
   inject,
   InjectionToken,
   OnInit,
   signal,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  MatExpansionModule,
-  MatExpansionPanel,
-  MatExpansionPanelTitle,
-} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 import { GraphNode } from '@ncats-frontend-library/models/utils';
 import { NcatsDatatableComponent } from 'ncats-datatable';
 import { ForceDirectedGraphService } from 'utils-force-directed-graph';
@@ -26,6 +22,7 @@ export const GRAPH_LEGEND = new InjectionToken<string>(
   imports: [CommonModule, NcatsDatatableComponent, MatExpansionModule],
   templateUrl: './ramp-graph-legend.component.html',
   styleUrl: './ramp-graph-legend.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampGraphLegendComponent implements OnInit {
   forceDirectedGraphService = inject(ForceDirectedGraphService);

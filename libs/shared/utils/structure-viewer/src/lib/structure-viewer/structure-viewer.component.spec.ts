@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 
 import { StructureViewerComponent } from './structure-viewer.component';
 

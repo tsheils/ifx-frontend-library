@@ -5,6 +5,7 @@ import {
 } from '@ncats-frontend-library/models/utils';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
+import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import {
   Analyte,
@@ -36,7 +37,7 @@ import {
   ReactionsFromAnalytesActions,
 } from './ramp.actions';
 import { RampService } from '../ramp.service';
-import { exhaustMap, mergeMap, of, tap } from 'rxjs';
+import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   getChemicalEnrichment,
@@ -157,11 +158,11 @@ export const fetchPathwaysFromAnalytes = createEffect(
             (ret: RampResponse<Pathway>) => {
               ret.background = action.background;
               ret.backgroundFile = action.backgroundFile;
-              ret.pval_type = action.pval_type;
-              ret.pval_cutoff = action.pval_cutoff;
-              ret.perc_analyte_overlap = action.perc_analyte_overlap;
-              ret.min_pathway_tocluster = action.min_pathway_tocluster;
-              ret.perc_pathway_overlap = action.perc_pathway_overlap;
+              ret.pValType = action.pValType;
+              ret.pValCutoff = action.pValCutoff;
+              ret.percAnalyteOverlap = action.percAnalyteOverlap;
+              ret.minPathwayToCluster = action.minPathwayToCluster;
+              ret.percPathwayOverlap = action.percPathwayOverlap;
               return PathwayFromAnalyteActions.fetchPathwaysFromAnalytesSuccess(
                 ret,
               );
@@ -186,7 +187,7 @@ export const fetchAnalytesFromPathways = createEffect(
     return actions$.pipe(
       ofType(AnalyteFromPathwayActions.fetchAnalytesFromPathways),
       exhaustMap((action) => {
-        return rampService.fetchAnalytesFromPathways(action.pathways).pipe(
+        return rampService.fetchAnalytesFromPathways(action).pipe(
           map(
             (ret: RampResponse<Analyte>) => {
               return AnalyteFromPathwayActions.fetchAnalytesFromPathwaysSuccess(
@@ -240,7 +241,10 @@ export const fetchOntologiesFromMetabolites = createEffect(
 export const fetchOntologies = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
     return actions$.pipe(
-      ofType(MetaboliteFromOntologyActions.fetchOntologies),
+      ofType(ROUTER_NAVIGATION),
+      filter((r: RouterNavigationAction) =>
+        r.payload.routerState.url.includes('/ontologies'),
+      ),
       exhaustMap(() => {
         return rampService.fetchOntologies().pipe(
           map(
@@ -411,7 +415,6 @@ export const fetchReactionsFromAnalytes = createEffect(
           .pipe(
             map(
               (ret: RampResponse<Reaction>) => {
-                console.log(ret);
                 return ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess(
                   {
                     ...ret,
@@ -489,13 +492,11 @@ export const fetchPathwayAnalysis = createEffect(
               (ret: RampPathwayEnrichmentResponse) => {
                 ret.background = action.background;
                 ret.backgroundFile = action.backgroundFile;
-                ret.pval_type = action.pval_type;
-                ret.pval_cutoff = Number(action.pval_cutoff);
-                ret.perc_analyte_overlap = Number(action.perc_analyte_overlap);
-                ret.min_pathway_tocluster = Number(
-                  action.min_pathway_tocluster,
-                );
-                ret.perc_pathway_overlap = Number(action.perc_pathway_overlap);
+                ret.pValType = action.pValType;
+                ret.pValCutoff = Number(action.pValCutoff);
+                ret.percAnalyteOverlap = Number(action.percAnalyteOverlap);
+                ret.minPathwayToCluster = Number(action.minPathwayToCluster);
+                ret.percPathwayOverlap = Number(action.percPathwayOverlap);
                 return PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess(
                   ret,
                 );
@@ -528,20 +529,24 @@ export const filterEnrichedPathways = createEffect(
       ),
       concatLatestFrom(() => store.select(getCombinedFishersDataframe)),
       mergeMap(([action, dataframe]) => {
-        if (dataframe) {
+        if (dataframe && dataframe?.fishresults?.length) {
           return rampService
             .filterPathwayEnrichment(
               dataframe,
-              action.pval_type,
-              action.pval_cutoff,
+              action.pValType,
+              action.pValCutoff,
             )
             .pipe(
               map(
                 (ret: RampPathwayEnrichmentResponse) => {
                   return PathwayEnrichmentsActions.filterEnrichmentFromPathwaysSuccess(
                     {
+                      percAnalyteOverlap: action.percAnalyteOverlap,
+                      minPathwayToCluster: action.minPathwayToCluster,
+                      percPathwayOverlap: action.percPathwayOverlap,
+                      filteredFishersDataframe: ret.data,
                       ...ret,
-                    },
+                    } as RampPathwayEnrichmentResponse,
                   );
                 },
                 catchError((error: ErrorEvent) =>
@@ -581,11 +586,11 @@ export const fetchPathwayCluster = createEffect(
       mergeMap(([action, dataframe]) => {
         if (dataframe) {
           return rampService
-            .getClusterdData(
+            .getClusteredData(
               dataframe,
-              action.perc_analyte_overlap,
-              action.min_pathway_tocluster,
-              action.perc_pathway_overlap,
+              action.percAnalyteOverlap,
+              action.minPathwayToCluster,
+              action.percPathwayOverlap,
             )
             .pipe(
               map(
@@ -596,9 +601,10 @@ export const fetchPathwayCluster = createEffect(
                   return PathwayEnrichmentsActions.fetchClusterFromEnrichmentSuccess(
                     {
                       data: ret.data.data,
-                      plot: ret.plot,
+                      clusterImage: ret.plot,
                       query: ret.data.query,
-                      dataframe: ret.data.combinedFishersDataframe,
+                      //                    dataframe: ret.data.combinedFishersDataframe as unknown[],
+                      dataAsDataProperty: ret.data.dataAsDataProperty,
                     },
                   );
                 },
@@ -694,8 +700,8 @@ export const filterEnrichedChemicalClasses = createEffect(
           return rampService
             .filterMetaboliteEnrichment(
               dataframe.data as RampChemicalEnrichmentResponse,
-              action.pval_type,
-              action.pval_cutoff,
+              action.pValType,
+              action.pValCutoff,
             )
             .pipe(
               map(

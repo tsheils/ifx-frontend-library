@@ -94,7 +94,7 @@ export class OpenApiPath {
                       //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
                       break;
                     }
-                    case 'analyte_type': {
+                    case 'analyteType': {
                       const val = value as { [key: string]: unknown };
                       const valArr = val[key] as unknown[];
                       //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});

@@ -7,6 +7,7 @@ import {
   ComponentPortal,
 } from '@angular/cdk/portal';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -14,11 +15,9 @@ import {
   InjectionToken,
   Injector,
   input,
-  OnChanges,
   OnInit,
   PLATFORM_ID,
   Signal,
-  signal,
   Type,
   viewChild,
 } from '@angular/core';
@@ -49,8 +48,9 @@ import { SunburstChartService } from './sunburst-chart.service';
   ],
   templateUrl: './sunburst-chart.component.html',
   styleUrl: './sunburst-chart.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SunburstChartComponent implements OnInit, OnChanges {
+export class SunburstChartComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
     PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
@@ -104,12 +104,6 @@ export class SunburstChartComponent implements OnInit, OnChanges {
       .sum((d) => d.count || 0)
       .sort((a, b) => b.count - a.count);
   });
-
-  /*  hierarchy = computed(() => {
-    return hierarchy(this.data())
-      .sum((d) => d.count || 0)
-      .sort((a, b) => b.count - a.count);
-  });*/
 
   root = computed(() =>
     partition()
@@ -202,26 +196,10 @@ export class SunburstChartComponent implements OnInit, OnChanges {
       )
       .attr('d', (d) => this.arc()(d['current']))
       .on('mouseover', (event: Event, d) => {
-        /* select((<unknown>event.currentTarget) as string)
-          .transition()
-          .duration(300)
-          .attr('fill-opacity', (d) =>
-            this._arcVisible(d['current']) ? 1 / d.depth + 0.5 : 0,
-          )*/
-
         this.sunburstChartService.nodeHovered.emit({
           event: event,
           node: d.data as HierarchyNode,
         });
-      })
-      .on('mouseout', (event: Event, d) => {
-        //this.sunburstChartService.nodeHovered.emit(undefined);
-        /* select((<unknown>event.currentTarget) as string)
-          .transition()
-          .duration(100)
-          .attr('fill-opacity', (d) =>
-            this._arcVisible(d['current']) ? 1 / d.depth + 0.25 : 0,
-          )*/
       }),
   );
   svgExport = computed(

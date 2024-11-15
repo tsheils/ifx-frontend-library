@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   EventEmitter,
@@ -26,6 +27,7 @@ import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
   templateUrl: './shared-utils-list-filter-row.component.html',
   styleUrl: './shared-utils-list-filter-row.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsListFilterRowComponent {
   filters = input<FilterCategory[]>();

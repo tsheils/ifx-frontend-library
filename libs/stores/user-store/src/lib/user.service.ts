@@ -27,9 +27,6 @@ import { from, Observable } from 'rxjs';
 export class UserService {
   firestore = inject(Firestore);
 
-  /**
-   * list of provider objects used by the auth service
-   */
   providers: Map<string, AuthProvider> = new Map<string, AuthProvider>([
     ['facebook', new FacebookAuthProvider()],
     ['google', new GoogleAuthProvider()],
@@ -39,20 +36,11 @@ export class UserService {
   ]);
 
   actionCodeSettings = {
-    // The URL to redirect to for sign-in completion. This is also the deep
-    // link for mobile redirects. The domain (www.example.com) for this URL
-    // must be whitelisted in the Firebase Console.
     url: 'http://localhost:4200',
     // This must be true.
     handleCodeInApp: true,
   };
 
-  /**
-   * gets info from modal
-   * fetch and login using the proper auth service
-   * closes modal
-   * @param providerName
-   */
   doLogin(providerName: string) {
     const auth: Auth = getAuth();
     const provider: AuthProvider = <AuthProvider>(
@@ -64,11 +52,7 @@ export class UserService {
       fProvider.addScope('public_profile');
       return from(signInWithPopup(auth, fProvider));
     } else {
-      // this.auth.
-      return from(
-        signInWithPopup(auth, provider),
-        //  this.afAuth.signInWithPopup(<firebase.auth.AuthProvider>provider)
-      );
+      return from(signInWithPopup(auth, provider));
     }
   }
 
@@ -84,12 +68,6 @@ export class UserService {
     return from(sendSignInLinkToEmail(auth, email, this.actionCodeSettings));
   }
 
-  /**
-   * registers no user
-   * todo: this ins't set up in the UI
-   * @param email
-   * @param pw
-   */
   doRegister(email: string, pw: string) {
     const auth: Auth = getAuth();
     return from(createUserWithEmailAndPassword(auth, email, pw));

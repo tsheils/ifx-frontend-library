@@ -1,3 +1,4 @@
+
 <mat-accordion multi>
   <mat-expansion-panel expanded id="input" #input>
     <mat-expansion-panel-header>
@@ -11,17 +12,18 @@
       ></lib-input-panel>
     }
   </mat-expansion-panel>
+
   <mat-expansion-panel
-    [expanded]="resultsTabs()"
-    [disabled]="!resultsTabs()"
-    id="results"
-    #results
+    [expanded]="overviewTabs()"
+    [disabled]="!overviewTabs()"
+    id="overview"
+    #overview
   >
     <mat-expansion-panel-header>
       <mat-panel-title><h2>Overview</h2></mat-panel-title>
     </mat-expansion-panel-header>
-    @if (resultsTabs()) {
-      <lib-results-panel [results]="resultsTabs()"></lib-results-panel>
+    @if (overviewTabs()) {
+      <lib-results-panel [results]="overviewTabs()"></lib-results-panel>
     }
   </mat-expansion-panel>
   <mat-expansion-panel
@@ -59,7 +61,7 @@
     @if (dataTabs() && dataTabs()?.size) {
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
         @for (tab of dataTabs() | keyvalue: _originalOrder; track tab.key) {
-          <mat-tab [label]="tab.key">
+          <mat-tab [label]="tab.key + ' ('+ tab.value['data']?.length + ')'">
             <ng-template matTabContent>
               <lib-data-panel
                 [dataAsDataProperty]="tab.value['data']"

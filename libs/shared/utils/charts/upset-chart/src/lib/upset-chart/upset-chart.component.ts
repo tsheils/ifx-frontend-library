@@ -1,4 +1,5 @@
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   HostListener,
@@ -21,6 +22,7 @@ import { max } from 'd3-array';
   templateUrl: './upset-chart.component.html',
   styleUrls: ['./upset-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
 })
 export class UpsetComponent extends GenericChartComponent implements OnInit {
@@ -141,12 +143,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       ),
   );
 
-  bottomLeftColumn = computed(
-    () => this.bottomRow().append('g').classed('bottom-left-column', true),
-    /*.attr(
-        'transform',
-        `translate(0, ${this.innerMargin + this.margins().bottom * 2})`,
-      ),*/
+  bottomLeftColumn = computed(() =>
+    this.bottomRow().append('g').classed('bottom-left-column', true),
   );
 
   setSizeChart = computed(() =>
@@ -176,6 +174,28 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           .tickSize(5)
           .ticks(4),
       ),
+  );
+
+  intersectionSizeChartLabel = computed(() =>
+    this.intersectionSizeChart()
+      .append('g')
+      .classed('intersection-size-label', true)
+      .attr(
+        'transform',
+        () =>
+          ` translate( ${-this.intersectionSizeChartScale()!.node()!.getBBox().width - this.innerMargin * 2}, ${this.topRowHeight()})`,
+      )
+      .append('text')
+      .text(() => {
+        if (this.chartData() && this.chartData()!.columnLabel) {
+          return <string>this.chartData()!.columnLabel;
+        } else {
+          const defaultLabel = 'Intersection Size';
+          const scale = this.scale() === 'log' ? ` (log scale)` : '';
+          return defaultLabel + scale;
+        }
+      })
+      .attr('transform', () => `rotate(-90)`),
   );
 
   setCountBarChart = computed(() =>
@@ -293,7 +313,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       .classed('combination-matrix', true)
       .attr(
         'transform',
-        `translate(${this.leftColWidth()}, ${this.topRowHeight()})`,
+        `translate(${this.leftColWidth()}, ${this.topRowHeight() - this.margins().bottom / 2})`,
       )
       .selectAll('.combination')
       .data(this.chartData()!.data)
@@ -316,6 +336,27 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         'transform',
         `translate(${this.leftColWidth() + this.innerMargin}, 0)`,
       ),
+  );
+
+  setSizeChartLabel = computed(() =>
+    this.setSizeChart()
+      .append('g')
+      .classed('set-size-label', true)
+      .attr(
+        'transform',
+        () =>
+          ` translate(${this.setSizeChartScale()!.node()!.getBBox().width - this.leftColWidth() * 0.4}, ${this.bottomRow()!.node()!.getBBox().height + this.innerMargin})`,
+      )
+      .append('text')
+      .text(() => {
+        if (this.chartData() && this.chartData()!.rowLabel) {
+          return <string>this.chartData()!.rowLabel;
+        } else {
+          const defaultLabel = 'Set Size';
+          const scale = this.scale() === 'log' ? ` (log scale)` : '';
+          return defaultLabel + scale;
+        }
+      }),
   );
 
   intersectionSizeChartScale = computed(() =>
@@ -433,7 +474,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.margins.set({ top: 10, bottom: 20, left: 5, right: 5 });
+    this.margins.set({ top: 10, bottom: 40, left: 5, right: 5 });
     if (this.isBrowser()) {
       if (this.chartData() && this.chartData()!.data.length > 0) {
         this.drawContainer();
@@ -443,10 +484,14 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
 
   drawContainer(): void {
     this.svg().select('svg').remove();
-    const t = this.intersectionSizeChartScale();
-    const tt = this.setSizeChartScale();
-    const tttt = this.setCountBarChart();
-    const ttt = this.intersectionSizeChartBars();
+
+    // computed signals aren't run unless they are called. This is a cheater method to call them and assign them.
+    const svgObject = {
+      setCountBarChart: this.setCountBarChart(),
+      intersectionSizeChartBars: this.intersectionSizeChartBars(),
+      intersectionSizeChartLabel: this.intersectionSizeChartLabel(),
+      setSizeChartLabel: this.setSizeChartLabel(),
+    };
 
     /*
      * Combination matrix

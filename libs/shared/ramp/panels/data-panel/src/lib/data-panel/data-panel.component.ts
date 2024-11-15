@@ -1,11 +1,19 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+  signal,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatTooltip } from '@angular/material/tooltip';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { DataDownloadButtonComponent } from 'data-download-button';
 import { InputPanelComponent } from 'input-panel';
-import { DataProperty, NcatsDatatableComponent } from 'ncats-datatable';
+import { NcatsDatatableComponent } from 'ncats-datatable';
 import { QuestionBase } from 'ncats-form-question';
 
 @Component({
@@ -22,6 +30,7 @@ import { QuestionBase } from 'ncats-form-question';
   ],
   templateUrl: './data-panel.component.html',
   styleUrl: './data-panel.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataPanelComponent {
   dataframe = input<unknown[]>();

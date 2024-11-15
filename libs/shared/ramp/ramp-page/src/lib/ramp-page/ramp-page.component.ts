@@ -1,12 +1,9 @@
 import { CdkScrollable } from '@angular/cdk/overlay';
 import {
+  ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   inject,
   input,
-  OnChanges,
-  Output,
-  signal,
 } from '@angular/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -18,7 +15,6 @@ import {
   MatSidenavContainer,
   MatSidenavContent,
 } from '@angular/material/sidenav';
-import { Sort } from '@angular/material/sort';
 import { RouterOutlet } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { NcatsDatatableComponent } from 'ncats-datatable';
@@ -50,13 +46,10 @@ import { UpsetComponent } from 'upset-chart';
   ],
   templateUrl: './ramp-page.component.html',
   styleUrl: './ramp-page.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampPageComponent<T extends RampCorePageComponent> {
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
-  activeElement = 'input';
+  activeMenuElement = 'input';
   title = input<string>();
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, QuestionBase<string>[]>>();
@@ -81,17 +74,12 @@ export class RampPageComponent<T extends RampCorePageComponent> {
     });
   }
 
-  /**
-   * check which section is active
-   * @param {string} check
-   * @returns {boolean}
-   */
   isActive(check: string): boolean {
-    return this.activeElement === check;
+    return this.activeMenuElement === check;
   }
 
   scrollTo(anchor: string) {
-    this.activeElement === anchor;
+    this.activeMenuElement === anchor;
     this.scroller.scrollToAnchor(anchor);
   }
 }

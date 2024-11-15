@@ -1,5 +1,12 @@
-import { Component, input, output, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -8,14 +15,20 @@ import {
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
-import { GraphData, OpenApiPath } from '@ncats-frontend-library/models/utils';
+import {
+  OpenApiPath,
+  QueryResultsData,
+} from '@ncats-frontend-library/models/utils';
 import { DataPanelComponent } from 'data-panel';
 import { InputPanelComponent } from 'input-panel';
-import { DataProperty } from 'ncats-datatable';
 import { QuestionBase } from 'ncats-form-question';
-import { RampResults } from 'ramp';
 import { ResultsPanelComponent } from 'results-panel';
 import { VisualizationPanelComponent } from 'visualization-panel';
+import {
+  AccordionPanelMap,
+  DataMap,
+  VisualizationMap,
+} from './panel-accordion-models';
 
 @Component({
   selector: 'lib-panel-accordion',
@@ -38,37 +51,30 @@ import { VisualizationPanelComponent } from 'visualization-panel';
   templateUrl: './panel-accordion.component.html',
   styleUrl: './panel-accordion.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelAccordionComponent {
   dataSearch = output<{ [key: string]: unknown }>();
   paths = input<OpenApiPath[]>();
   inputTab = input<Map<string, QuestionBase<string>[]>>();
-  resultsTabs = input<RampResults>();
-  visualizationTabs = input<
-    Map<
-      string,
-      {
-        type: string;
-        data: GraphData;
-      }[]
-    >
-  >();
-  dataTabs = input<
-    Map<
-      string,
-      {
-        data: { [key: string]: DataProperty }[];
-        fields: DataProperty[];
-        dataframe?: unknown[];
-        fileName?: string;
-        filters?: Map<string, QuestionBase<string>[]>;
-      }
-    >
-  >();
+  accordionTabsSignal = input<AccordionPanelMap>();
+  visualizationTabs = input<Map<string, VisualizationMap[]> | undefined>(
+    new Map<string, VisualizationMap[]>(),
+  );
+  dataTabs = input<Map<string, DataMap> | undefined>(undefined);
+  overviewTabs = input<QueryResultsData | undefined>(new QueryResultsData());
 
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event);
   }
+
+  /*  checkIfLoaded(
+    dataMap: Map<string, DataMap[] | VisualizationMap[] | undefined>,
+  ) {
+    if (dataMap) {
+      return !Array.from(dataMap.values())[0][0].loaded;
+    } else return false;
+  }*/
 
   _originalOrder = () => 0;
 }

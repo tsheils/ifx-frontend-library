@@ -1,24 +1,18 @@
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
-  DestroyRef,
+  computed,
   inject,
-  OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatDialog } from '@angular/material/dialog';
 import { LinkTemplateProperty } from '@ncats-frontend-library/models/utils';
 import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
 import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/header-template';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
-import { select, Store } from '@ngrx/store';
+import { Store } from '@ngrx/store';
 import { RampFullBannerComponent } from 'full-banner';
-import { NcatsFooterComponent } from 'ncats-footer';
 import { NcatsHeaderComponent } from 'ncats-header';
 
-import { map } from 'rxjs';
 import { environment } from '../environments/environment';
 import { RouterOutlet } from '@angular/router';
 
@@ -33,7 +27,6 @@ import { RampSelectors } from 'ramp-store';
   standalone: true,
   imports: [
     RouterOutlet,
-    NcatsFooterComponent,
     LoadingSpinnerComponent,
     HeaderTemplateComponent,
     RampFullBannerComponent,
@@ -41,13 +34,11 @@ import { RampSelectors } from 'ramp-store';
     FooterTemplateComponent,
   ],
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   private readonly store = inject(Store);
-  destroyRef = inject(DestroyRef);
-
+  loading = this.store.selectSignal(RampSelectors.getRampLoaded);
+  isProd = computed(() => !environment.production);
   title = 'ramp-client';
-  loading = true;
-  isProd = false;
   links: LinkTemplateProperty[] = [
     {
       link: 'about',
@@ -56,27 +47,6 @@ export class AppComponent implements OnInit {
     {
       link: 'api',
       label: 'API',
-      //external: true
     },
   ];
-
-  constructor(
-    public dialog: MatDialog,
-    private changeRef: ChangeDetectorRef,
-  ) {}
-
-  ngOnInit() {
-    this.isProd = !environment.production;
-
-    this.store
-      .pipe(
-        select(RampSelectors.getRampLoaded),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: boolean) => {
-          this.loading = !res;
-          this.changeRef.markForCheck();
-        }),
-      )
-      .subscribe();
-  }
 }

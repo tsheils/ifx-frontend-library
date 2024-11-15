@@ -1,13 +1,12 @@
 <lib-panel-accordion
   [paths]="paths()"
-  [resultsTabs]="resultsMap"
-  [visualizationTabs]="visualizationMap"
-  [dataTabs]="dataMap"
+  [dataTabs]=" dataMap()"
+  [overviewTabs]="overviewMap()"
   (dataSearch)="fetchData($event)"
 >
   <div class="custom-input">
     <lib-ontology-panel
-      [ontologies]="ontologies"
+      [ontologies]="ontologies()"
       (downloadMetabolitesSearch)="downloadOntologyData($event)"
       (fetchMetabolitesSearch)="fetchData($event)"
     ></lib-ontology-panel>

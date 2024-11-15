@@ -20,11 +20,9 @@ import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card
   templateUrl: './disease-subscription-list.component.html',
   styleUrls: ['./disease-subscription-list.component.scss'],
 })
+
+//TODO refactor with signals
 export class DiseaseSubscriptionListComponent {
-  /**
-   * Behaviour subject to allow extending class to unsubscribe on destroy
-   * @type {Subject<any>}
-   */
   protected ngUnsubscribe: Subject<boolean> = new Subject();
 
   private _subscriptions: Subscription[] = [];

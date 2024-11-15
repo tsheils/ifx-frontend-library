@@ -7,9 +7,6 @@ import {
   group,
 } from '@angular/animations';
 
-/**
- * animation object than animates the header menu changing background color and pharos logo
- */
 export const slideInOutAnimation = [
   trigger('slideInOut', [
     state(

@@ -69,7 +69,7 @@ import { map } from 'rxjs';
 export class AppComponent implements OnInit {
   @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;
   /**
-   * reference to header oject. used to change display options
+   * reference to header object. used to change display options
    */
   @ViewChild(MobileHeaderTemplateComponent, { static: false })
   header!: MobileHeaderTemplateComponent;
@@ -157,9 +157,6 @@ export class AppComponent implements OnInit {
       )
       .subscribe();
 
-    /**
-     * This shows loading spinner for page navigation - usually navigation is finished before the page is finished loading
-     */
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
@@ -215,9 +212,6 @@ export class AppComponent implements OnInit {
     this.router.navigate(['/diseases'], navigationExtras);
   }
 
-  /**
-   * close sidenav for header menu
-   */
   closeSidenav() {
     if (this.header) {
       this.header.menu.close();

@@ -8,6 +8,7 @@ import {
 } from '@angular/cdk/portal';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
@@ -15,7 +16,6 @@ import {
   InjectionToken,
   Injector,
   input,
-  OnChanges,
   OnInit,
   PLATFORM_ID,
   Signal,
@@ -48,8 +48,9 @@ import { ForceDirectedGraphService } from './force-directed-graph.service';
   templateUrl: './utils-force-directed-graph.component.html',
   styleUrl: './utils-force-directed-graph.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class UtilsForceDirectedGraphComponent implements OnInit, OnChanges {
+export class UtilsForceDirectedGraphComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
     PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;

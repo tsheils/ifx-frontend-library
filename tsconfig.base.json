@@ -133,9 +133,6 @@
       "@ncats-frontend-library/shared/utils/rdas-panel-template": [
         "libs/shared/rdas/panel-template/src/index.ts"
       ],
-      "@ncats-frontend-library/shared/utils/scatter-plot": [
-        "libs/shared/utils/charts/scatter-plot/src/index.ts"
-      ],
       "@ncats-frontend-library/shared/utils/scroll-to-top": [
         "libs/shared/utils/scroll-to-top/src/index.ts"
       ],
@@ -177,8 +174,8 @@
       "biochemical-pathways-page": [
         "libs/features/ramp/biochemical-pathways-page/src/index.ts"
       ],
-      "chemical-properties-page": [
-        "libs/features/ramp/chemical-properties-page/src/index.ts"
+      "chemical-descriptors-page": [
+        "libs/features/ramp/chemical-descriptors-page/src/index.ts"
       ],
       "chemkit": ["libs/features/ifx/chemkit/src/index.ts"],
       "complete-dialog": ["libs/shared/utils/complete-dialog/src/index.ts"],
@@ -187,7 +184,6 @@
       ],
       "data-panel": ["libs/shared/ramp/panels/data-panel/src/index.ts"],
       "default-tool": ["libs/features/ifx/default-tool/src/index.ts"],
-      "filter-chip-list": ["libs/shared/utils/filter-chip-list/src/index.ts"],
       "filter-download-button": [
         "libs/shared/utils/filter-download-button/src/index.ts"
       ],
@@ -204,7 +200,6 @@
         "libs/shared/utils/charts/ncats-datatable/src/index.ts"
       ],
       "ncats-find-excel": ["libs/features/ifx/ncats-find-excel/src/index.ts"],
-      "ncats-footer": ["libs/shared/utils/ncats-footer/src/index.ts"],
       "ncats-form": ["libs/shared/forms/ncats-form/src/index.ts"],
       "ncats-form-question": [
         "libs/shared/forms/ncats-form-question/src/index.ts"

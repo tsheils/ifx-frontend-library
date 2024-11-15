@@ -1,5 +1,6 @@
 import {
   afterNextRender,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Inject,
@@ -18,6 +19,7 @@ import SwaggerUI from 'swagger-ui';
   templateUrl: './epi-api.component.html',
   styleUrls: ['./epi-api.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EpiApiComponent {
   /**

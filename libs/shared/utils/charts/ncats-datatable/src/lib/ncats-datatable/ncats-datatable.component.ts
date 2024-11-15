@@ -11,10 +11,11 @@ import {
   OnInit,
   output,
   QueryList,
-  Type, viewChild,
+  Type,
+  viewChild,
   ViewChild,
   ViewChildren,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 import {
   animate,
@@ -24,6 +25,7 @@ import {
   trigger,
 } from '@angular/animations';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { Observable } from 'rxjs';
 import {
   MatRow,
@@ -44,7 +46,6 @@ import {
 } from '@angular/cdk/portal';
 import { SelectionModel } from '@angular/cdk/collections';
 import { PageData } from './models/page-data';
-import { DataProperty } from './models/data-property';
 import { PropertyDisplayComponent } from './components/property-display/property-display.component';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgClass } from '@angular/common';
@@ -97,55 +98,22 @@ const _sortingDataAccessor = (
     PortalModule,
   ],
 })
-
-/**
- * Generic table Component that iterates over a list of options to display fields
- */
 export class NcatsDatatableComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   ref = inject(ChangeDetectorRef);
   _injector = inject(Injector);
 
-  /**
-   * Table object
-   */
-   dataTable= viewChild(MatTable);
+  dataTable = viewChild(MatTable);
+  _sort = viewChild(MatSort);
 
-  /**
-   * Sort object from Angular Material
-   */
-   _sort = viewChild(MatSort);
-
-  /**
-   * gets placeholder expanded row outlets
-   */
   @ViewChildren('expandedRowOutlet', { read: ViewContainerRef })
   rowOutlet!: QueryList<ViewContainerRef>;
-
-  /**
-   * event that emits when the sort value or direction is changed. The parent component will be responsible for
-   * fetching and returning the new sorted data
-   */
   sortChange = output<Sort>();
-
-  /**
-   * event that emits when the page is changed. The parent component will be responsible for
-   * fetching and returning the new data
-   */
   pageChange = output<PageEvent>();
-
-  /**
-   * event that emits when the page is changed. The parent component will be responsible for
-   * fetching and returning the new data
-   */
   rowClick = output<MatRow>();
 
   data = input<{ [key: string]: DataProperty }[]>();
   fieldsConfig = input<DataProperty[]>();
-
-  /**
-   * generated string array of fields that are to be displayed in the table
-   */
   displayColumns = computed(() => {
     let ret: string[] = [];
     if (this.selectableRows()) {
@@ -157,9 +125,7 @@ export class NcatsDatatableComponent implements OnInit {
     }
     return ret;
   });
-  /**
-   * generated  array of DataProperties that are to be displayed in the table
-   */
+
   displayFields = computed(() => {
     let ret: DataProperty[] = [];
     ret = this.fieldsConfig()?.filter(
@@ -173,26 +139,10 @@ export class NcatsDatatableComponent implements OnInit {
 
   selectableRows = input(false);
   pageData = input<PageData>(new PageData({ total: this.data()?.length }));
-
-  /**
-   * show/hide the paginator
-   */
   showPaginator = input(true);
   useInternalPaginator = input(false);
-  /**
-   * show/hide the bottom paginator
-   */
   showBottomPaginator = input(false);
-
-  /**
-   * whether to allow the user to change the size of the page/ show dropdown
-   */
   hidePageSize = input(false);
-
-  /**
-   * Input to toggle if the table should have expandable rows
-   * boolean
-   */
   expandable = input(true);
 
   /**
@@ -236,13 +186,9 @@ export class NcatsDatatableComponent implements OnInit {
     this.dataSource().paginator = paginator;
   }
 
-  /**
-   * Init: get the columns to be displayed.
-   * Table data is tracked by the data getter and setter
-   */
   ngOnInit() {
-    this._sort()?.sortChange
-      .pipe(takeUntilDestroyed(this.destroyRef))
+    this._sort()
+      ?.sortChange.pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
         this.dataSource()?.paginator?.firstPage();
       });

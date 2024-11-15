@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgClass } from '@angular/common';
 
@@ -8,6 +8,7 @@ import { NgClass } from '@angular/common';
   styleUrls: ['./loading-spinner.component.scss'],
   standalone: true,
   imports: [NgClass, MatProgressSpinnerModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingSpinnerComponent {
   @Input() isLoaded: boolean | undefined = false;

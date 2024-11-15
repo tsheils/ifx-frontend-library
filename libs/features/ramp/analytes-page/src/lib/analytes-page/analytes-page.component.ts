@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { select } from '@ngrx/store';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { Analyte, RampResponse } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
@@ -55,8 +55,8 @@ export class AnalytesPageComponent
     }),
     new DataProperty({
       label: 'Pathway ID',
-      field: 'pathwayId',
       sortable: true,
+      field: 'pathwayId',
     }),
   ];
 
@@ -71,10 +71,10 @@ export class AnalytesPageComponent
         takeUntilDestroyed(this.destroyRef),
         map((res: RampResponse<Analyte> | undefined) => {
           if (res && res.data) {
-            this.dataMap.set('Analytes', {
+            this.accordionPanelMap.dataMap.set('Analytes', {
               data: this._mapData(res.data),
               fields: this.dataColumns,
-              dataframe: res.dataframe,
+              dataframe: res.data,
               fileName: 'fetchAnalytesFromPathways-download.tsv',
             });
             const matches = Array.from(
@@ -87,7 +87,7 @@ export class AnalytesPageComponent
             const noMatches = this.inputList.filter(
               (p: string) => !matches.includes(p.toLocaleLowerCase()),
             );
-            this.resultsMap = {
+            this.accordionPanelMap.overviewMap = {
               matches: matches,
               noMatches: noMatches,
               count: res.data.length,
@@ -95,22 +95,28 @@ export class AnalytesPageComponent
               fuzzy: true,
               inputType: 'pathways',
             };
-            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
+            this.loadedEvent.emit({ dataLoaded: true });
           }
           if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
+            this.accordionPanelMap.overviewMap.function = <string>(
+              res.query.functionCall
+            );
+            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
           }
-          this.changeRef.markForCheck()
+          this.dataMapSignal.set(this.accordionPanelMap);
+          this.changeRef.detectChanges();
         }),
       )
       .subscribe();
   }
 
   override fetchData(event: { [key: string]: unknown }): void {
+    this.clearDataMapSignal();
     this.inputList = this._parseInput(event['pathway'] as string | string[]);
     this.store.dispatch(
       AnalyteFromPathwayActions.fetchAnalytesFromPathways({
         pathways: this.inputList,
+        analyteType: <string>event['analyteType'],
       }),
     );
   }

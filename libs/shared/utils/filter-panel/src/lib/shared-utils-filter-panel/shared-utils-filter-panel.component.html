@@ -6,7 +6,7 @@
       #searchInput
       placeholder="Search {{ filter().label | titlecase }}"
       [formControl]="searchCtl"
-      [value]="filter().query"
+      [value]="filter().query ? filter().query : null"
     />
     @if (searchCtl.value) {
       <button

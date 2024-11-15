@@ -1,6 +1,6 @@
 @if (property) {
   <div class="property-holder">
-    @if (showLabel) {
+    @if (showLabel()) {
       <span class="" matTooltip="{{ property.tooltip || property.label }}"
         ><b>{{ property.label }}:&nbsp;</b></span
       >

@@ -195,7 +195,7 @@ paths:
         '500':
           description: Internal Server Error
       requestBody:
-        description: Enter exact pathway name(s). `analyte_type` should be `"gene"`, `"metabolite"`, or `"both"` *(default)*
+        description: Enter exact pathway name(s). `analyteType` should be `"gene"`, `"metabolite"`, or `"both"` *(default)*
         required: true
         content:
           application/json:
@@ -206,7 +206,7 @@ paths:
                   type: array
                   items:
                     type: string
-                analyte_type:
+                analyteType:
                   type: string
                   enum: ['gene', 'metabolite', 'both']
                   required: false
@@ -224,7 +224,7 @@ paths:
                     'De Novo Triacylglycerol Biosynthesis',
                     'sphingolipid metabolism',
                   ]
-                analyte_type: 'both'
+                analyteType: 'both'
                 match: 'exact'
   /api/ontologies-from-metabolites:
     post:
@@ -590,18 +590,18 @@ paths:
                   type: array
                   items:
                     type: object
-                pval_type:
+                pValType:
                   type: string
                   enum: ['fdr', 'holm', 'pval']
                   required: false
-                pval_cutoff:
+                pValCutoff:
                   type: number
                   required: false
               example: # Sample object
                 fishers_results:
-                  pval_cutoff: 0.02
-                  pval_type: 'fdr'
-                  analyte_type: ['both']
+                  pValCutoff: 0.02
+                  pValType: 'fdr'
+                  analyteType: ['both']
                   result_type: ['pathway_enrichment']
                   fishresults:
                     [
@@ -1006,32 +1006,32 @@ paths:
             schema:
               type: object
               properties:
-                min_pathway_tocluster:
+                minPathwayToCluster:
                   type: number
                   required: false
-                perc_analyte_overlap:
+                percAnalyteOverlap:
                   type: number
                   required: false
-                perc_pathway_overlap:
+                percPathwayOverlap:
                   type: number
                   required: false
                 fishers_results:
                   type: array
                   items:
                     type: object
-                pval_type:
+                pValType:
                   type: string
                   enum: ['fdr', 'holm', 'pval']
                   required: false
-                pval_cutoff:
+                pValCutoff:
                   type: number
                   required: false
               example: # Sample object
-                min_pathway_tocluster: 2
-                perc_analyte_overlap: 0.2
-                perc_pathway_overlap: 0.2
+                minPathwayToCluster: 2
+                percAnalyteOverlap: 0.2
+                percPathwayOverlap: 0.2
                 fishers_results:
-                  analyte_type: ['both']
+                  analyteType: ['both']
                   result_type: ['pathway_enrichment']
                   fishresults:
                     [

@@ -1,6 +1,10 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
-import { FilterCategory, Filter } from '@ncats-frontend-library/models/utils';
+import {
+  FilterCategory,
+  Filter,
+  DataProperty,
+} from '@ncats-frontend-library/models/utils';
 import {
   Analyte,
   ChemicalEnrichment,
@@ -19,6 +23,7 @@ import {
   RampDataGeneric,
   RampPathwayEnrichmentAPIResponse,
   RampPathwayEnrichmentResponse,
+  RampReactionAPIResponse,
   RampResponse,
   Reaction,
   ReactionClass,
@@ -43,6 +48,7 @@ const HTTP_TEXT_OPTIONS = {
 })
 export class RampService {
   private url!: string;
+  private renderUrl!: string;
 
   constructor(
     private http: HttpClient,
@@ -68,7 +74,7 @@ export class RampService {
         paths: {
           [key: string]: { post?: { [key: string]: unknown } | undefined };
         };
-      }>(url) // ,{responseType: 'text'})
+      }>(url)
       .pipe(
         map(
           (response: {
@@ -79,17 +85,13 @@ export class RampService {
             return response;
           },
         ),
-        //  catchError(this.handleError('fetchApi', [])),
       );
   }
 
   fetchSourceVersions(): Observable<SourceVersion[]> {
     return this.http
-      .get<{ data: SourceVersion[] }>(`${this.url}source-versions`) // ,{responseType: 'text'})
-      .pipe(
-        map((response) => response.data),
-        //  catchError(this.handleError('fetchSourceVersions', [])),
-      );
+      .get<{ data: SourceVersion[] }>(`${this.url}source-versions`)
+      .pipe(map((response) => response.data));
   }
 
   fetchEntityCounts() {
@@ -122,10 +124,7 @@ export class RampService {
   fetchDatabaseUrl() {
     return this.http
       .get<{ data: string }>(`${this.url}current-db-file-url`)
-      .pipe(
-        map((response: { data: string }) => response.data),
-        //  catchError(this.handleError('fetchAnalyteIntersects', [])),
-      );
+      .pipe(map((response: { data: string }) => response.data));
   }
 
   fetchMetaboliteIntersects() {
@@ -160,48 +159,37 @@ export class RampService {
       analytes: analytes,
     };
     return this.http
-      .post<RampAPIResponse<Pathway>>(
-        `${this.url}pathways-from-analytes`,
-        options,
-      ) // ,{responseType: 'text'})
+      .post<
+        RampAPIResponse<Pathway>
+      >(`${this.url}pathways-from-analytes`, options)
       .pipe(
         map((response: RampAPIResponse<Pathway>) => {
-          return {
-            data: response.data.map((obj: Pathway) => new Pathway(obj)),
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data,
-          };
+          const pathwayList: Pathway[] = response.data.map(
+            (obj: Pathway) => new Pathway(obj),
+          );
+          return this._makeRampResponse(response, pathwayList);
         }),
-        //    catchError(this.handleError('pathways from analytes', of({})))
       );
   }
 
-  fetchAnalytesFromPathways(
-    pathways: string[],
-  ): Observable<RampResponse<Analyte>> {
+  fetchAnalytesFromPathways(action: {
+    pathways: string[];
+    analyteType: string;
+  }): Observable<RampResponse<Analyte>> {
     const options = {
-      pathway: pathways,
+      pathway: action.pathways,
+      analyteType: action.analyteType,
     };
     return this.http
-      .post<RampAPIResponse<Analyte>>(
-        `${this.url}analytes-from-pathways`,
-        options,
-      ) // ,{responseType: 'text'})
+      .post<
+        RampAPIResponse<Analyte>
+      >(`${this.url}analytes-from-pathways`, options)
       .pipe(
         map((response: RampAPIResponse<Analyte>) => {
-          return {
-            data: response.data.map(
-              (obj: Partial<Analyte>) => new Analyte(obj),
-            ),
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data,
-          };
+          const analyteList = response.data.map(
+            (obj: Partial<Analyte>) => new Analyte(obj),
+          );
+          return this._makeRampResponse(response, analyteList);
         }),
       );
   }
@@ -210,25 +198,18 @@ export class RampService {
     analytes: string[],
   ): Observable<RampResponse<Ontology>> {
     const options = {
-      metabolite: analytes,
+      metabolites: analytes,
     };
     return this.http
-      .post<RampAPIResponse<Ontology>>(
-        `${this.url}ontologies-from-metabolites`,
-        options,
-      ) // ,{responseType: 'text'})
+      .post<
+        RampAPIResponse<Ontology>
+      >(`${this.url}ontologies-from-metabolites`, options)
       .pipe(
         map((response: RampAPIResponse<Ontology>) => {
-          return {
-            data: response.data.map(
-              (obj: unknown) => new Ontology(obj as { [key: string]: unknown }),
-            ),
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data,
-          };
+          const ontologyList = response.data.map(
+            (obj: unknown) => new Ontology(obj as { [key: string]: unknown }),
+          );
+          return this._makeRampResponse(response, ontologyList);
         }),
       );
   }
@@ -237,34 +218,28 @@ export class RampService {
     ontologies: string[],
   ): Observable<RampResponse<Metabolite>> {
     const options = {
-      ontology: ontologies, //.join(','),
+      ontology: ontologies,
     };
     return this.http
-      .post<RampAPIResponse<Metabolite>>(
-        `${this.url}metabolites-from-ontologies`,
-        options,
-      ) // ,{responseType: 'text'})
+      .post<
+        RampAPIResponse<Metabolite>
+      >(`${this.url}metabolites-from-ontologies`, options)
       .pipe(
         map((response: RampAPIResponse<Metabolite>) => {
-          return {
-            data: response.data.map(
-              (obj: Partial<Metabolite>) => new Metabolite(obj),
-            ),
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data,
-          };
+          const metaboliteList = response.data.map(
+            (obj: Partial<Metabolite>) => new Metabolite(obj),
+          );
+          return this._makeRampResponse(response, metaboliteList);
         }),
       );
   }
 
   fetchOntologies(): Observable<{ data: FilterCategory[] }> {
     return this.http
-      .get<{ uniq_ontology_types: string[]; data: Ontology[] }>(
-        `${this.url}ontology-types`,
-      ) // ,{responseType: 'text'})
+      .get<{
+        uniq_ontology_types: string[];
+        data: Ontology[];
+      }>(`${this.url}ontology-types`)
       .pipe(
         map((response: { uniq_ontology_types: string[]; data: Ontology[] }) => {
           const ontoMap: Map<string, FilterCategory> = new Map<
@@ -306,7 +281,6 @@ export class RampService {
             data: [...ontoMap.values()].map((fc) => new FilterCategory(fc)),
           };
         }),
-        //  catchError(this.handleError('pathways from analytes', []))
       );
   }
 
@@ -370,14 +344,7 @@ export class RampService {
               (obj: { [key: string]: unknown }) => new Classes(obj),
             );
           }
-          return {
-            data: metClasses,
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data as unknown[],
-          };
+          return this._makeRampResponse(response, metClasses);
         }),
       );
   }
@@ -389,22 +356,25 @@ export class RampService {
       metabolites: metabolites,
     };
     return this.http
-      .post<RampAPIResponse<Properties>>(
-        `${this.url}chemical-properties`,
-        options,
-      ) // ,{responseType: 'text'})
+      .post<
+        RampAPIResponse<Properties>
+      >(`${this.url}chemical-properties`, options)
       .pipe(
         map((response: RampAPIResponse<Properties>) => {
-          return {
-            data: response.data.map(
-              (obj: Partial<Properties>) => new Properties(obj),
-            ),
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data,
-          };
+          const propertyList = response.data.map(
+            (obj: Partial<Properties>) => new Properties(obj),
+          );
+          const propertyListAsDataProperty = this._makeRampResponse(
+            response,
+            propertyList,
+          );
+          propertyListAsDataProperty?.dataAsDataProperty?.map((prop) => {
+            prop['imageUrl'].url =
+              `${this.renderUrl}(${encodeURIComponent(prop['iso_smiles'].value)})?size=150`;
+            prop['imageUrl'].label = prop['common_name'].value;
+            return prop;
+          });
+          return propertyListAsDataProperty;
         }),
       );
   }
@@ -421,17 +391,11 @@ export class RampService {
       >(`${this.url}common-reaction-analytes`, options)
       .pipe(
         map((response: RampAPIResponse<CommonAnalyte>) => {
-          return {
-            data: response.data.map(
-              (obj: unknown) =>
-                new CommonAnalyte(obj as { [key: string]: unknown }),
-            ),
-            query: {
-              functionCall: response.function_call[0],
-              numFoundIds: response.numFoundIds[0],
-            },
-            dataframe: response.data,
-          };
+          const commonAnalyteList = response.data.map(
+            (obj: unknown) =>
+              new CommonAnalyte(obj as { [key: string]: unknown }),
+          );
+          return this._makeRampResponse(response, commonAnalyteList);
         }),
       );
   }
@@ -460,44 +424,36 @@ export class RampService {
           metProteinCommonReactions: Reaction[];
         };
         function_call: string[];
-        plot: { [key: string]: string[] | {} };
+        plot: { [key: string]: string[] };
       }>(`${this.url}reactions-from-analytes`, options)
       .pipe(
-        map(
-          (response: {
-            data: {
-              met2rxn: Reaction[];
-              prot2rxn: Reaction[];
-              metProteinCommonReactions: Reaction[];
-            };
-            function_call: string[];
-            plot: { [key: string]: string[] | {} };
-          }) => {
+        map((response: RampReactionAPIResponse) => {
+          const reactionList = response.data.met2rxn.map(
+            (obj: unknown) => new Reaction(obj as Partial<Reaction>),
+          );
+          const plot = Object.keys(response.plot).map((level: string) => {
+            const t = response.plot[level as keyof typeof response.plot];
+            let r = [];
+            if (Object.is(t, {})) {
+              r = Array.from([]);
+            } else {
+              r = Array.from(t as []);
+            }
             return {
-              data: response.data.met2rxn.map(
-                (obj: unknown) => new Reaction(obj as Partial<Reaction>),
-              ),
-              query: {
-                functionCall: response.function_call[0],
-              },
-              plot: Object.keys(response.plot).map((level: string) => {
-                const t = response.plot[level as keyof typeof response.plot];
-                let r = [];
-                if (Object.is(t, {})) {
-                  r = Array.from([]);
-                } else {
-                  r = Array.from(t as []);
-                }
-                return {
-                  id: level,
-                  sets: [...new Set(r)],
-                  size: [...r].length,
-                };
-              }),
-              //dataframe: response.data as string[],
-            } as RampResponse<Reaction>;
-          },
-        ),
+              id: level,
+              sets: [...new Set(r)],
+              size: [...r].length,
+            };
+          });
+          return this._makeRampResponse(
+            {
+              function_call: response.function_call,
+              data: reactionList,
+            } as RampAPIResponse<Reaction>,
+            reactionList,
+            plot,
+          );
+        }),
       );
   }
 
@@ -523,17 +479,11 @@ export class RampService {
         function_call: string[];
       }>(`${this.url}reaction-classes-from-analytes`, options)
       .pipe(
-        map((response: { data: ReactionClass[]; function_call: string[] }) => {
-          return {
-            data: response.data.map(
-              (obj: unknown) =>
-                new ReactionClass(obj as Partial<ReactionClass>),
-            ),
-            query: {
-              functionCall: response.function_call[0],
-            },
-            //dataframe: response.data as string[],
-          } as RampResponse<ReactionClass>;
+        map((response: RampAPIResponse<ReactionClass>) => {
+          const reactionClassList = response.data.map(
+            (obj: unknown) => new ReactionClass(obj as Partial<ReactionClass>),
+          );
+          return this._makeRampResponse(response, reactionClassList);
         }),
       );
   }
@@ -570,27 +520,28 @@ export class RampService {
               });
             }
           });
+          const dataAsDataProperties = this._mapDataToDataProperty(retList);
           return {
             data: response,
             enriched_chemical_class_list: retList,
+            dataAsDataProperty: dataAsDataProperties,
           } as RampChemicalEnrichmentResponse;
         }),
-        // catchError(this.handleError('chemical enrichment', [])),
       );
   }
 
   filterMetaboliteEnrichment(
     dataframe: RampChemicalEnrichmentResponse,
-    pval_type?: string,
-    pval_cutoff?: number,
+    pValType?: string,
+    pValCutoff?: number,
   ) {
     return this.http
       .post<RampChemicalEnrichmentAPIResponse>(
         `${this.url}filter-fisher-test-results`,
         {
           fishers_results: dataframe.data,
-          pval_type: pval_type,
-          pval_cutoff: pval_cutoff,
+          pValType: pValType,
+          pValCutoff: pValCutoff,
         },
       )
       .pipe(
@@ -604,20 +555,17 @@ export class RampService {
                 );
             });
           });
+          const dataAsDataProperties = this._mapDataToDataProperty(retList);
           return {
             data: response.data,
             enriched_chemical_class_list: retList,
-          };
+            dataAsDataProperty: dataAsDataProperties,
+          } as RampChemicalEnrichmentResponse;
         }),
       );
   }
 
   fetchEnrichmentFromMetabolitesFile(data: ChemicalEnrichment[]) {
-    /*    const enrichments: string[] = [];
-    data.forEach((val: ChemicalEnrichment[]) => {
-      val.forEach((v: string) => enrichments.push(v));
-    });
-    enrichments.pop();*/
     this._downloadFile(
       this._makeBlob(this._toTSV(data)),
       'fetchEnrichmentFromMetabolites-download.tsv',
@@ -643,121 +591,93 @@ export class RampService {
         formData,
       )
       .pipe(
-        map((response: RampPathwayEnrichmentAPIResponse) => {
-          return {
-            data: response.data.fishresults.map(
-              (obj: Partial<FisherResult>) => new FisherResult(obj),
-            ),
-            combinedFishersDataframe: response.data as FishersDataframe,
-            query: {
-              functionCall: response.function_call
-                ? response.function_call[0]
-                : undefined,
-            },
-          } as RampPathwayEnrichmentResponse;
-        }),
+        map((response: RampPathwayEnrichmentAPIResponse) =>
+          this._makeRampPathwayEnrichmentResponse(response),
+        ),
       );
   }
 
   filterPathwayEnrichment(
     dataframe: FishersDataframe,
-    pval_type?: string,
-    pval_cutoff?: number,
+    pValType?: string,
+    pValCutoff?: number,
   ): Observable<RampPathwayEnrichmentResponse> {
     return this.http
       .post<RampPathwayEnrichmentAPIResponse>(
         `${this.url}filter-fisher-test-results`,
         {
           fishers_results: dataframe,
-          pval_type: pval_type,
-          pval_cutoff: pval_cutoff,
+          pValType: pValType,
+          pValCutoff: pValCutoff,
         },
       )
       .pipe(
-        map((response: RampPathwayEnrichmentAPIResponse) => {
-          return {
-            data: response.data.fishresults.map(
-              (obj: Partial<FisherResult>) => new FisherResult(obj),
-            ),
-            filteredFishersDataframe: response.data as FishersDataframe,
-            query: {
-              functionCall: response.function_call
-                ? response.function_call[0]
-                : undefined,
-            },
-          } as RampPathwayEnrichmentResponse;
-        }),
+        map((response: RampPathwayEnrichmentAPIResponse) =>
+          this._makeRampPathwayEnrichmentResponse(response),
+        ),
       );
   }
 
-  getClusterdData(
+  getClusteredData(
     dataframe: FishersDataframe,
-    perc_analyte_overlap?: number,
-    min_pathway_tocluster?: number,
-    perc_pathway_overlap?: number,
+    percAnalyteOverlap?: number,
+    minPathwayToCluster?: number,
+    percPathwayOverlap?: number,
   ): Observable<{ data: RampPathwayEnrichmentResponse; plot: string }> {
     return forkJoin({
       data: this.clusterPathwayEnrichment(
         dataframe,
-        perc_analyte_overlap,
-        min_pathway_tocluster,
-        perc_pathway_overlap,
+        percAnalyteOverlap,
+        minPathwayToCluster,
+        percPathwayOverlap,
       ),
       plot: this.fetchClusterPlot(
         dataframe,
-        perc_analyte_overlap,
-        min_pathway_tocluster,
-        perc_pathway_overlap,
+        percAnalyteOverlap,
+        minPathwayToCluster,
+        percPathwayOverlap,
       ),
     });
   }
 
   clusterPathwayEnrichment(
     dataframe: FishersDataframe,
-    perc_analyte_overlap?: number,
-    min_pathway_tocluster?: number,
-    perc_pathway_overlap?: number,
+    percAnalyteOverlap?: number,
+    minPathwayToCluster?: number,
+    percPathwayOverlap?: number,
   ): Observable<RampPathwayEnrichmentResponse> {
     return this.http
       .post<RampPathwayEnrichmentAPIResponse>(
         `${this.url}cluster-fisher-test-results`,
         {
           fishers_results: dataframe,
-          perc_analyte_overlap: perc_analyte_overlap,
-          min_pathway_tocluster: min_pathway_tocluster,
-          perc_pathway_overlap: perc_pathway_overlap,
+          percAnalyteOverlap: percAnalyteOverlap,
+          minPathwayToCluster: minPathwayToCluster,
+          percPathwayOverlap: percPathwayOverlap,
         },
       )
       .pipe(
-        map((response: RampPathwayEnrichmentAPIResponse) => {
-          return {
-            data: response.data.fishresults.map(
-              (obj: unknown) => new FisherResult(obj as Partial<FisherResult>),
-            ),
-            query: {},
-            combinedFishersDataframe: response.data as FishersDataframe,
-          } as RampPathwayEnrichmentResponse;
-        }),
-        // catchError(this.handleError('chemical enrichment', [])),
+        map((response: RampPathwayEnrichmentAPIResponse) =>
+          this._makeRampPathwayEnrichmentResponse(response),
+        ),
       );
   }
 
   fetchClusterPlot(
     dataframe: FishersDataframe,
-    perc_analyte_overlap?: number,
-    min_pathway_tocluster?: number,
-    perc_pathway_overlap?: number,
+    percAnalyteOverlap?: number,
+    minPathwayToCluster?: number,
+    percPathwayOverlap?: number,
   ): Observable<string> {
-    if (!dataframe.fishresults || dataframe.fishresults.length >= 100) {
-      //todo: check that this doesn't break
+    if (!dataframe.fishresults || dataframe.fishresults.length >= 105) {
       return of(<string>'');
     } else {
       const body = {
         fishers_results: dataframe,
-        text_size: 8,
-        perc_analyte_overlap: perc_analyte_overlap,
-        min_pathway_tocluster: min_pathway_tocluster,
-        perc_pathway_overlap: perc_pathway_overlap,
+        textSize: 8,
+        percAnalyteOverlap: percAnalyteOverlap,
+        minPathwayToCluster: minPathwayToCluster,
+        percPathwayOverlap: percPathwayOverlap,
         filename: Date.now() + '.svg',
       };
       return this.http
@@ -777,47 +697,87 @@ export class RampService {
     );
   }
 
+  private _mapDataToDataProperty<T extends RampDataGeneric>(
+    data: T[],
+  ): { [p: string]: DataProperty }[] {
+    const dataAsDataProperty: { [key: string]: DataProperty }[] = data.map(
+      (obj: T) => {
+        const newObj: { [key: string]: DataProperty } = {};
+        Object.entries(obj).map((value: string[]) => {
+          newObj[value[0]] = new DataProperty({
+            label: value[0],
+            value: value[1],
+          });
+        });
+        return newObj;
+      },
+    );
+    return dataAsDataProperty;
+  }
+
+  _makeRampResponse<T extends RampDataGeneric>(
+    apiResponse: RampAPIResponse<T>,
+    dataList: T[],
+    plot?: { id: string; sets: string[]; size: number }[],
+  ) {
+    return {
+      data: dataList,
+      query: {
+        functionCall: apiResponse.function_call[0],
+        numFoundIds: apiResponse.numFoundIds ? apiResponse.numFoundIds[0] : 0,
+      },
+      plot: plot,
+      dataAsDataProperty: this._mapDataToDataProperty(dataList),
+    } as RampResponse<T>;
+  }
+
+  _makeRampPathwayEnrichmentResponse(
+    apiResponse: RampPathwayEnrichmentAPIResponse,
+  ) {
+    const enrichedPathwayList = apiResponse.data.fishresults.map(
+      (obj: Partial<FisherResult>) => new FisherResult(obj),
+    );
+    return {
+      data: enrichedPathwayList,
+      combinedFishersDataframe: apiResponse.data as FishersDataframe,
+      filteredFishersDataframe: apiResponse.data as FishersDataframe,
+      query: {
+        functionCall: apiResponse.function_call
+          ? apiResponse.function_call[0]
+          : undefined,
+      },
+      dataAsDataProperty: this._mapDataToDataProperty(enrichedPathwayList),
+    } as RampPathwayEnrichmentResponse;
+  }
+
   private _toTSV<T extends RampDataGeneric>(data: unknown[]): string[] {
-    // grab the column headings (separated by tabs)
     const headings: string = Object.keys(data[0] as string[]).join('\t');
-    // iterate over the data
     const rows: string[] = <string[]>(<unknown>data
       .reduce(
         (acc: string[], c: unknown) => {
-          // for each row object get its values and add tabs between them
-          // then add them as a new array to the outgoing array
           const vals = Object.values(c as T);
           const row = vals.join('\t');
           return acc.concat(row);
-
-          // finally joining each row with a line break
         },
         [headings],
       )
       .join('\n'));
     return rows;
   }
-  /**
-   * Handle Http operation that failed.
-   * Let the app continue.
-   * @param operation - name of the operation that failed
-   * @param result - optional value to return as the observable result
-   */
+
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: ErrorEvent): Observable<T> => {
-      // TODO: send the error to remote logging infrastructure
-      // console.error(error); // log to console instead
-
-      // TODO: better job of transforming error for user consumption
       console.log(`${operation} failed: ${error.message}`);
-
-      // Let the app keep running by returning an empty result.
       return of(result as T);
     };
   }
 
   _setUrl(url: string): void {
     this.url = url;
+  }
+
+  _setRendererUrl(url: string): void {
+    this.renderUrl = url;
   }
 
   private _makeBlob(data: string[], type = 'text/tsv'): Blob {
@@ -827,8 +787,6 @@ export class RampService {
   private _downloadFile(blob: Blob, name: string) {
     const link = this.dom.createElement('a');
     if (link.download !== undefined) {
-      // feature detection
-      // Browsers that support HTML5 download attribute
       const url = URL.createObjectURL(blob);
       link.setAttribute('href', url);
       link.setAttribute('download', `${name}`);

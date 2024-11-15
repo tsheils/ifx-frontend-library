@@ -22,7 +22,6 @@ import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/lo
 
 import { BehaviorSubject } from 'rxjs';
 
-/** Flat tree item node with expandable and level information */
 export class FlatDiseaseNode extends DiseaseNode {
   level!: number;
   expandable!: boolean;
@@ -42,27 +41,16 @@ export class FlatDiseaseNode extends DiseaseNode {
   templateUrl: './rdas-tree.component.html',
   styleUrls: ['./rdas-tree.component.scss'],
 })
+
+//todo refactor tu use signals
 export class RdasTreeComponent implements OnInit {
-  /**
-   * initialize a private variable _data, it's a BehaviorSubject
-   * @type {BehaviorSubject<any>}
-   * @private
-   */
   protected _data = new BehaviorSubject<DiseaseNode[]>([]);
 
-  /**
-   * pushes changed data to {BehaviorSubject}
-   * @param value
-   */
   @Input()
   set data(value: DiseaseNode[]) {
     this._data.next(value);
   }
 
-  /**
-   * returns value of {BehaviorSubject}
-   * @returns {any}
-   */
   get data(): DiseaseNode[] {
     return this._data.getValue();
   }

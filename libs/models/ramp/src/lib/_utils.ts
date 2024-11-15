@@ -1,42 +1,46 @@
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { ChemicalEnrichment } from './chemical-enrichment';
 import { FisherResult, FishersDataframe } from './fisher-result';
 import { RampQuery } from './ramp-query';
+import { Reaction } from './reaction';
 
 export class RampDataGeneric {}
-
-export class RampResults {
-  function?: string;
-  matches?: string[];
-  noMatches?: string[];
-  count?: number;
-  inputLength?: number;
-  inputType?: string;
-  fuzzy?: boolean;
-}
 
 export interface RampAPIResponse<T extends RampDataGeneric> {
   data: Array<T>;
   function_call: string[];
-  numFoundIds: number[];
+  numFoundIds?: number[];
+}
+
+export interface RampReactionAPIResponse {
+  data: {
+    met2rxn: Reaction[];
+    prot2rxn: Reaction[];
+    metProteinCommonReactions: Reaction[];
+  };
+  function_call: string[];
+  numFoundIds?: number[];
+  plot: { [key: string]: string[] };
 }
 
 export interface RampResponse<T extends RampDataGeneric> {
   data: Array<T>;
-  query: RampQuery;
-  dataframe?: unknown[];
+  query?: RampQuery;
+  // dataframe?: unknown[];
+  dataAsDataProperty?: { [p: string]: DataProperty }[];
   plot?: { id: string; sets: string[]; size: number }[];
   background?: string;
   backgroundFile?: File;
-  pval_type?: string;
-  pval_cutoff?: number;
-  perc_analyte_overlap?: number;
-  min_pathway_tocluster?: number;
-  perc_pathway_overlap?: number;
+  pValType?: string;
+  pValCutoff?: number;
+  percAnalyteOverlap?: number;
+  minPathwayToCluster?: number;
+  percPathwayOverlap?: number;
 }
 
 export interface RampPathwayEnrichmentAPIResponse {
   data: {
-    analyte_type: string[];
+    analyteType: string[];
     cluster_list?: { [key: string]: string[] };
     fishresults: FisherResult[];
     pathway_matrix?: { [key: string]: string }[];
@@ -45,18 +49,11 @@ export interface RampPathwayEnrichmentAPIResponse {
   function_call?: string[];
 }
 
-export interface RampPathwayEnrichmentResponse {
-  data: FisherResult[];
-  query: RampQuery;
+export interface RampPathwayEnrichmentResponse
+  extends RampResponse<FisherResult> {
+  clusterImage?: string;
   filteredFishersDataframe?: FishersDataframe;
   combinedFishersDataframe?: FishersDataframe;
-  background?: string;
-  backgroundFile?: File;
-  pval_type?: string;
-  pval_cutoff?: number;
-  perc_analyte_overlap?: number;
-  min_pathway_tocluster?: number;
-  perc_pathway_overlap?: number;
 }
 
 export interface RampChemicalEnrichmentAPIResponse {
@@ -70,7 +67,6 @@ export interface RampChemicalEnrichmentAPIResponse {
 }
 
 export interface RampChemicalEnrichmentResponse {
-  //  data: ChemicalEnrichment[];
   data: {
     ClassyFire_class?: ChemicalEnrichment[];
     ClassyFire_sub_class?: ChemicalEnrichment[];
@@ -79,5 +75,5 @@ export interface RampChemicalEnrichmentResponse {
   };
   enriched_chemical_class_list: ChemicalEnrichment[];
   query?: RampQuery;
-  openModal?: boolean;
+  dataAsDataProperty?: { [p: string]: DataProperty }[];
 }

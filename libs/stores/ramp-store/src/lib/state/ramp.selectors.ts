@@ -86,7 +86,7 @@ export const getPathways = createSelector(
 
 export const getMetabolites = createSelector(
   getRampState,
-  (state: State) => state.metabolites,
+  (state: State) => state.metabolitesFromOntologies,
 );
 
 export const getReactions = createSelector(
@@ -143,39 +143,43 @@ export const getClusterPlot = createSelector(
   (state: State) => state.clusterPlot,
 );
 
-
 export const getBiochemicalPathwaysResults = createSelector(
   getPathways,
   getOntologies,
   getPathwayEnrichment,
   getClusterPlot,
-  (getPathways,
-    getOntologies,
-    getPathwayEnrichment,
-    getClusterPlot) => {
+  (getPathways, getOntologies, getPathwayEnrichment, getClusterPlot) => {
     return {
       pathways: getPathways,
       ontologies: getOntologies,
       pathwayEnrichment: getPathwayEnrichment,
-      clusterPlot: getClusterPlot
-    }
-  }
+      clusterPlot: getClusterPlot,
+    };
+  },
 );
-
 
 export const getReactionResults = createSelector(
   getReactions,
   getReactionClasses,
   getCommonReactions,
-  (getReactions,
-   getReactionClasses,
-   getCommonReactions
-    ) => {
+  (getReactions, getReactionClasses, getCommonReactions) => {
     return {
       reactions: getReactions,
       reactionClasses: getReactionClasses,
       commonReactions: getCommonReactions,
-    }
-  }
+    };
+  },
 );
 
+export const getChemicalPropertyResults = createSelector(
+  getProperties,
+  getClasses,
+  getChemicalEnrichment,
+  (getProperties, getClasses, getChemicalEnrichment) => {
+    return {
+      chemicalProperties: getProperties,
+      chemicalClasses: getClasses,
+      chemicalEnrichment: getChemicalEnrichment,
+    };
+  },
+);

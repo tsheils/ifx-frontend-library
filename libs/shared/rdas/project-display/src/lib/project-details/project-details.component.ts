@@ -31,9 +31,6 @@ import { ProjectListCardComponent } from '../project-list-card/project-list-card
 })
 export class ProjectDetailsComponent {
   breakpointObserver = inject(BreakpointObserver);
-  /**
-   * boolean to show full or truncated abstract
-   */
   fullAbstract = true;
 
   grant = input<CoreProject>();
@@ -45,9 +42,7 @@ export class ProjectDetailsComponent {
       return {} as Project;
     }
   });
-  /**
-   * truncated abstract text
-   */
+
   truncatedAbstract = computed(() => {
     const abs = this.latestGrant()?.abstract;
     let ret = abs;

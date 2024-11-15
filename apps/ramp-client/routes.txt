@@ -1,0 +1,8 @@
+/
+/home
+/about
+/api
+/biochemical-pathways
+/ontologies
+/reactions
+/chemical-descriptors

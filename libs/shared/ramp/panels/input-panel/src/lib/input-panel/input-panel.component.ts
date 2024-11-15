@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
   computed,
   input,
@@ -32,6 +33,7 @@ import { QuestionBase } from 'ncats-form-question';
   templateUrl: './input-panel.component.html',
   styleUrl: './input-panel.component.scss',
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputPanelComponent {
   showInput = input<boolean>(true);

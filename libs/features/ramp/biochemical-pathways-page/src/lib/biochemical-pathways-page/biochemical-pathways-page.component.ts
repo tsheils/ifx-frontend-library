@@ -2,27 +2,24 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  OnInit,
-  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatDialogRef } from '@angular/material/dialog';
-import { select } from '@ngrx/store';
 import { CompleteDialogComponent } from 'complete-dialog';
-import { DataProperty } from 'ncats-datatable';
-import { PanelAccordionComponent } from 'panel-accordion';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import {
-  FisherResult,
-  FishersDataframe, Ontology,
-  Pathway,
-  RampQuery,
-  RampResponse
-} from 'ramp';
+  DataMap,
+  PanelAccordionComponent,
+  VisualizationMap,
+} from 'panel-accordion';
+import { Ontology, Pathway } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
-import { OntologyFromMetaboliteActions, PathwayEnrichmentsActions, RampSelectors } from 'ramp-store';
-import { map } from 'rxjs';
+import {
+  OntologyFromMetaboliteActions,
+  PathwayEnrichmentsActions,
+  RampSelectors,
+} from 'ramp-store';
 
 @Component({
   selector: 'lib-biochemical-pathways-page',
@@ -33,10 +30,8 @@ import { map } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BiochemicalPathwaysPageComponent
-  extends RampCorePageComponent
-  implements OnInit
-{
+//  implements OnInit
+export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   pathwayColumns: DataProperty[] = [
     new DataProperty({
       label: 'Input ID',
@@ -86,7 +81,6 @@ export class BiochemicalPathwaysPageComponent
       sortable: true,
     }),
   ];
-  private enrichedDataframe!: FishersDataframe;
   enrichmentColumns: {
     [key: string]: DataProperty[];
   } = {
@@ -249,147 +243,132 @@ export class BiochemicalPathwaysPageComponent
     ],
   };
 
-  previousValues!: { [key: string]: unknown };
+  computedDataColumns = computed(() => {
+    let dataColumnsList = this.enrichmentColumns['both'];
+    if (this.filteredDataframe() && this.filteredDataframe()?.analyteType) {
+      dataColumnsList =
+        this.enrichmentColumns[this.filteredDataframe()!.analyteType![0]];
+    }
+    return dataColumnsList;
+  });
 
-  private analyteType!: string;
-  syncedFields = signal(this.inputMap());
+  previousValues!: { [key: string]: unknown };
+  pathways = this.store.selectSignal(RampSelectors.getPathways);
+  enrichedPathways = this.store.selectSignal(
+    RampSelectors.getPathwayEnrichment,
+  );
+  ontologies = this.store.selectSignal(RampSelectors.getOntologies);
+  clusterPlot = this.store.selectSignal(RampSelectors.getClusterPlot);
+  filteredDataframe = this.store.selectSignal(
+    RampSelectors.getFilteredFishersDataframe,
+  );
+
+  matches = computed(() =>
+    Array.from(
+      new Set(
+        this.pathways()?.data.map((pathway) =>
+          pathway.inputId.toLocaleLowerCase(),
+        ),
+      ),
+    ),
+  );
+  noMatches = computed(() =>
+    this.inputList.filter(
+      (p: string) => !this.matches().includes(p.toLocaleLowerCase()),
+    ),
+  );
+
+  dataMap = computed(() => {
+    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
+    const pathwaysData = this.pathways()?.data;
+    if (pathwaysData) {
+      returnDataMap.set('Pathway Lookups', {
+        data: this.pathways()?.dataAsDataProperty,
+        fields: this.pathwayColumns,
+        dataframe: pathwaysData,
+        fileName: 'fetchPathwaysFromAnalytes-download.tsv',
+        loaded: !!pathwaysData,
+      } as DataMap);
+    }
+
+    const enrichedPathwaysData = this.enrichedPathways()?.dataAsDataProperty;
+    if (enrichedPathwaysData) {
+      returnDataMap.set('Enriched Pathways', {
+        data: this.enrichedPathways()?.dataAsDataProperty,
+        fields: this.computedDataColumns(),
+        fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
+        filters: this.filtersMap(),
+        loaded: !!enrichedPathwaysData,
+      });
+    }
+    const noEnrichedPathwaysModalRef:
+      | MatDialogRef<CompleteDialogComponent>
+      | undefined = this.noEnrichedPathwaysModal();
+    if (returnDataMap.size) {
+      return returnDataMap;
+    } else return undefined;
+  });
+
+  visualizationMap = computed(() => {
+    const visualizationMapComputed = new Map<string, VisualizationMap[]>();
+    let sizeMessage = undefined;
+    if (!(this.clusterPlot() && this.clusterPlot()!.length > 0)) {
+      sizeMessage =
+        'This website currently does not support clustering over 100 pathways. Please use the RaMP R package for this feature.';
+    }
+    if (this.clusterPlot()) {
+      visualizationMapComputed.set('Cluster Plot', [
+        {
+          type: 'cluster',
+          data: {
+            message: sizeMessage,
+            image: this.sanitizer.bypassSecurityTrustHtml(
+              <string>this.clusterPlot(),
+            ),
+          },
+          loaded: !!this.clusterPlot(),
+        },
+      ] as VisualizationMap[]);
+    }
+    if (visualizationMapComputed.size) {
+      return visualizationMapComputed;
+    } else return undefined;
+  });
+
+  overviewMap = computed(() => {
+    if (this.pathways()?.data) {
+      return {
+        matches: this.matches(),
+        noMatches: this.noMatches(),
+        count: this.pathways()?.data.length,
+        inputLength: this.inputList.length,
+        inputType: 'analytes',
+      };
+    } else return undefined;
+  });
+
+  noEnrichedPathwaysModal = computed(() => {
+    if (
+      this.enrichedPathways() &&
+      this.enrichedPathways()?.data &&
+      !this.enrichedPathways()?.data.length
+    ) {
+      return this.dialog.open(CompleteDialogComponent, {
+        data: {
+          title: 'Pathway',
+          message: 'No enriched pathways found.',
+        },
+      });
+    } else return undefined;
+  });
+
   constructor() {
     super();
   }
 
-
-  ngOnInit() {
-    this.store
-      .pipe(
-        select(RampSelectors.getBiochemicalPathwaysResults),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: {
-               pathways: RampResponse<Pathway> | undefined,
-               pathwayEnrichment: {
-                 data: FisherResult[];
-                 plot?: string[];
-                 query?: RampQuery;
-                 dataframe?: unknown;
-                 openModal?: boolean;
-               } | undefined,
-               ontologies: RampResponse<Ontology> | undefined,
-               clusterPlot: string | undefined
-             }
-        ) => {
-          if (res.pathways && res.pathways.data) {
-            this.mapPathways(res.pathways)
-          }
-          if (res.ontologies && res.ontologies.data) {
-            this.mapOntologies(res.ontologies)
-          }
-          if (res.pathwayEnrichment && res.pathwayEnrichment.data) {
-            if (!res.pathwayEnrichment.data.length) {
-              const ref: MatDialogRef<CompleteDialogComponent> =
-                this.dialog.open(CompleteDialogComponent, {
-                  data: {
-                    title: 'Pathway',
-                    message: 'No enriched pathways found.',
-                  },
-                });
-            } else {
-              this.mapEnrichedPathways(res.pathwayEnrichment)
-            }
-          }
-          if (res.clusterPlot) {
-            this.mapClusterPlot(res.clusterPlot)
-          }
-          this.changeRef.markForCheck();
-        }
-      )
-      )
-      .subscribe();
-  }
-
-  mapPathways(res: RampResponse<Pathway>) {
-    this.dataMap.set('Pathway Lookups', {
-      data: this._mapData(res.data),
-      fields: this.pathwayColumns,
-      dataframe: res.dataframe,
-      fileName: 'fetchPathwaysFromAnalytes-download.tsv',
-    });
-    const matches = Array.from(
-      new Set(
-        res.data.map((pathway) => pathway.inputId.toLocaleLowerCase()),
-      ),
-    );
-    const noMatches = this.inputList.filter(
-      (p: string) => !matches.includes(p.toLocaleLowerCase()),
-    );
-    this.resultsMap = {
-      matches: matches,
-      noMatches: noMatches,
-      count: res.data.length,
-      inputLength: this.inputList.length,
-      inputType: 'analytes',
-    };
-    this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-    if (res && res.query) {
-      this.resultsMap.function = <string>res.query.functionCall;
-    }
-  }
-
-  mapEnrichedPathways(res: {
-    data: FisherResult[];
-    plot?: string[];
-    query?: RampQuery;
-    dataframe?: unknown;
-    openModal?: boolean;
-  }){
-    if (res && res.dataframe) {
-      const enrichedDataframe = res.dataframe as FishersDataframe;
-      if (enrichedDataframe.analyte_type) {
-        this.dataColumns =
-          this.enrichmentColumns[enrichedDataframe.analyte_type[0]];
-        this.analyteType = enrichedDataframe.analyte_type[0];
-      }
-      this.dataMap.set('Enriched Pathways', {
-        data: this._mapData(res.data),
-        fields: this.dataColumns,
-        dataframe: enrichedDataframe.fishresults as unknown[],
-        fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
-        filters: this.filtersMap(),
-      });
-    } else {
-      this.dataMap.set('Enriched Pathways', {
-        data: this._mapData(res.data),
-        fields: this.dataColumns,
-      });
-    }
-  }
-
-  mapOntologies(res: RampResponse<Ontology>){
-    this.dataMap.set('Ontology Lookups', {
-      data: this._mapData(res.data),
-      fields: this.ontologyColumns,
-      dataframe: res.dataframe,
-      fileName: 'fetchOntologiesFromMetabolites-download.tsv',
-    });
-  }
-
-  mapClusterPlot(res: string){
-    this.visualizationMap.set('Cluster Plot', [
-      {
-        type: 'cluster',
-        data: {
-          message: !(res.length > 0) ? 'This website currently does not support clustering over 100 pathways.' : undefined,
-          image: this.sanitizer.bypassSecurityTrustHtml(res),
-        },
-      },
-    ]);
-    this.loadedEvent.emit({
-      dataLoaded: true,
-      resultsLoaded: true,
-      visualizationsLoaded: true,
-    });
-  }
-
   override fetchData(formData: { [key: string]: unknown }): void {
-    //super.fetchData();
+    this.clearDataMapSignal();
+
     if (formData['analytes']) {
       this.inputList = this._parseInput(
         formData['analytes'] as string | string[],
@@ -413,17 +392,14 @@ export class BiochemicalPathwaysPageComponent
         analytes: this.inputList,
         background: <string>event['background'],
         backgroundFile: event['backgroundFile'] as File,
-        pval_type: <string>event['pval_type'] || undefined,
-        pval_cutoff: Number(<number>event['pval_cutoff']) || undefined,
-        perc_analyte_overlap:
-          <number>event['perc_analyte_overlap'] || undefined,
-        min_pathway_tocluster:
-          <number>event['min_pathway_tocluster'] || undefined,
-        perc_pathway_overlap:
-          <number>event['perc_pathway_overlap'] || undefined,
+        pValType: <string>event['pValType'] || undefined,
+        pValCutoff: Number(<number>event['pValCutoff']) || undefined,
+        percAnalyteOverlap: <number>event['percAnalyteOverlap'] || undefined,
+        minPathwayToCluster:
+          Number(<number>event['minPathwayToCluster']) || undefined,
+        percPathwayOverlap: <number>event['percPathwayOverlap'] || undefined,
       }),
     );
     this.previousValues = event;
   }
-
 }

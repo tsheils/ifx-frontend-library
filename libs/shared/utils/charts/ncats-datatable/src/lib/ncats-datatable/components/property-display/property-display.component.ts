@@ -1,25 +1,24 @@
-import { Component, Input } from '@angular/core';
-import { DataProperty } from '../../models/data-property';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  Input,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DecimalPipe } from '@angular/common';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 
-/**
- * component to display a property, primarily in a table
- */
 @Component({
   selector: 'ncats-property-display',
   templateUrl: './property-display.component.html',
   styleUrls: ['./property-display.component.scss'],
   standalone: true,
   imports: [MatTooltipModule, RouterLink, DecimalPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PropertyDisplayComponent {
-  /**
-   * show the label/field name
-   * @type {boolean}
-   */
-  @Input() showLabel = true;
+  showLabel = input<boolean>(true);
 
   @Input() displayType?:
     | 'string'
@@ -27,9 +26,7 @@ export class PropertyDisplayComponent {
     | 'externalLink'
     | 'internalLink'
     | 'date';
-  /**
-   * property object being shown
-   */
+
   @Input() property!: DataProperty;
 
   fetchDisplayType(): string {

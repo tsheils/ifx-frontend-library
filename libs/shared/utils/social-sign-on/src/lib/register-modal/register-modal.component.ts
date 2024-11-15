@@ -1,4 +1,10 @@
-import { Component, inject, OnInit, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  OnInit,
+  ViewEncapsulation,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -54,6 +60,7 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
     MatFormFieldModule,
     MatInputModule,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterModalComponent implements OnInit {
   store = inject(Store);

@@ -1,5 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ViewEncapsulation,
+} from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
 
@@ -10,5 +14,6 @@ import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/exte
   templateUrl: './footer-template.component.html',
   styleUrls: ['./footer-template.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterTemplateComponent {}

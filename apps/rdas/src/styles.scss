@@ -206,10 +206,6 @@ a:visited {
   color: #000000;
 }
 
-.scatter-line {
-  stroke: mat.get-theme-color(theme.$light-theme, secondary);
-}
-
 .article-list-card {
   border-bottom: 2px solid mat.get-theme-color(theme.$light-theme, secondary);
 }

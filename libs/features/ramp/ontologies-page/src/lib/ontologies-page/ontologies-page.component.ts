@@ -1,21 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
+  computed,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
-import { select } from '@ngrx/store';
-import { DataProperty } from 'ncats-datatable';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { OntologyPanelComponent } from 'ontology-panel';
-import { PanelAccordionComponent } from 'panel-accordion';
-import { Metabolite, RampResponse } from 'ramp';
+import { DataMap, PanelAccordionComponent } from 'panel-accordion';
+import { Metabolite } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { MetaboliteFromOntologyActions, RampSelectors } from 'ramp-store';
-import { map } from 'rxjs';
 
 @Component({
   selector: 'lib-ontologies-page',
@@ -31,10 +27,7 @@ import { map } from 'rxjs';
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class OntologiesPageComponent
-  extends RampCorePageComponent
-  implements OnInit
-{
+export class OntologiesPageComponent extends RampCorePageComponent {
   override dataColumns: DataProperty[] = [
     new DataProperty({
       label: 'Ontology',
@@ -58,67 +51,59 @@ export class OntologiesPageComponent
     }),
   ];
 
-  ontologies!: FilterCategory[];
-  allOntologies!: FilterCategory[];
-  loading = false;
+  ontologies = this.store.selectSignal(RampSelectors.getontologiesList);
+  metabolitesFromOntologies = this.store.selectSignal(
+    RampSelectors.getMetabolites,
+  );
+
+  matches = computed(() =>
+    Array.from(
+      new Set(
+        this.metabolitesFromOntologies()?.data.map((metabolite) =>
+          metabolite.ontologyTerm.toLocaleLowerCase(),
+        ),
+      ),
+    ),
+  );
+  noMatches = computed(() =>
+    this.inputList.filter(
+      (p: string) => !this.matches().includes(p.toLocaleLowerCase()),
+    ),
+  );
+
+  dataMap = computed(() => {
+    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
+    const metabolitesFromOntologiesData =
+      this.metabolitesFromOntologies()?.data;
+    if (metabolitesFromOntologiesData) {
+      returnDataMap.set('Metabolites', {
+        data: this.metabolitesFromOntologies()?.dataAsDataProperty,
+        fields: this.dataColumns,
+        dataframe: metabolitesFromOntologiesData,
+        fileName: 'fetchMetabolitesFromOntologies-download.tsv',
+        loaded: !!metabolitesFromOntologiesData,
+      } as DataMap);
+    }
+
+    if (returnDataMap.size) {
+      return returnDataMap;
+    } else return undefined;
+  });
+
+  overviewMap = computed(() => {
+    if (this.metabolitesFromOntologies()?.data) {
+      return {
+        matches: this.matches(),
+        noMatches: this.noMatches(),
+        count: this.metabolitesFromOntologies()?.data.length,
+        inputLength: this.inputList.length,
+        inputType: 'ontologies',
+      };
+    } else return undefined;
+  });
 
   constructor() {
     super();
-  }
-
-  ngOnInit() {
-    this.store.dispatch(MetaboliteFromOntologyActions.fetchOntologies());
-
-    this.store
-      .pipe(
-        select(RampSelectors.getontologiesList),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: FilterCategory[] | undefined) => {
-          if (res && res.length) {
-            this.ontologies = res;
-            this.allOntologies = res;
-            this.changeRef.markForCheck();
-          }
-        }),
-      )
-      .subscribe();
-
-    this.store
-      .pipe(
-        select(RampSelectors.getMetabolites),
-        takeUntilDestroyed(this.destroyRef),
-        map((res: RampResponse<Metabolite> | undefined) => {
-          if (res && res.data) {
-            this.dataMap.set('Metabolites', {
-              data: this._mapData(res.data),
-              fields: this.dataColumns,
-              dataframe: res.dataframe,
-              fileName: 'fetchMetabolitesFromOntologies-download.tsv',
-            });
-            const matches = Array.from(
-              new Set(
-                res.data.map((data) => data.ontologyTerm.toLocaleLowerCase()),
-              ),
-            );
-            const noMatches = this.inputList.filter(
-              (p: string) => !matches.includes(p.toLocaleLowerCase()),
-            );
-            this.resultsMap = {
-              matches: matches,
-              noMatches: noMatches,
-              count: res.data.length,
-              inputLength: this.inputList.length,
-              fuzzy: true,
-              inputType: 'pathways',
-            };
-            this.loadedEvent.emit({ dataLoaded: true, resultsLoaded: true });
-          }
-          if (res && res.query) {
-            this.resultsMap.function = <string>res.query.functionCall;
-          }
-        }),
-      )
-      .subscribe();
   }
 
   downloadOntologyData(event: { [key: string]: unknown }) {
@@ -130,6 +115,7 @@ export class OntologiesPageComponent
     );
   }
   override fetchData(event: { [key: string]: unknown }): void {
+    this.clearDataMapSignal();
     this.store.dispatch(
       MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies({
         ontologies: event['ontologies'] as string[],

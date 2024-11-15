@@ -18,11 +18,11 @@
     <div class="main-content">
       <div class="row space-around-row">
         <div class="width-95">
-          <ramp-full-banner [showBanner]="isProd"></ramp-full-banner>
+          <ramp-full-banner [showBanner]="isProd()"></ramp-full-banner>
         </div>
       </div>
       <ncats-frontend-library-loading-spinner
-        [isLoaded]="loading"
+        [isLoaded]="!loading()"
       ></ncats-frontend-library-loading-spinner>
       <router-outlet></router-outlet>
     </div>

@@ -21,6 +21,7 @@ import {
   RampChemicalEnrichmentResponse,
   CommonAnalyte,
   ReactionClass,
+  RampPathwayEnrichmentResponse,
 } from 'ramp';
 
 import {
@@ -54,35 +55,26 @@ export interface State extends EntityState<RampEntity> {
   metaboliteIntersects: { id: string; sets: string[]; size: number }[];
   geneIntersects: { id: string; sets: string[]; size: number }[];
   databaseUrl?: string;
-  ontologies?: RampResponse<Ontology>;
+
+  pathwayEnrichments?: RampPathwayEnrichmentResponse;
+  filteredFishersDataframe?: FishersDataframe;
+  combinedFishersDataframe?: FishersDataframe;
   analytes?: RampResponse<Analyte>;
   pathways?: RampResponse<Pathway>;
+  clusterPlot?: string;
+
   commonReactions?: RampResponse<CommonAnalyte>;
   reactions?: RampResponse<Reaction>;
   reactionClasses?: RampResponse<ReactionClass>;
-  metabolites?: RampResponse<Metabolite>;
+
+  metabolitesFromOntologies?: RampResponse<Metabolite>;
   ontologiesList?: FilterCategory[];
+  ontologies?: RampResponse<Ontology>;
 
   metClasses?: RampResponse<Classes>;
-
   properties?: RampResponse<Properties>;
-
   chemicalEnrichments?: RampChemicalEnrichmentResponse;
 
-  pathwayEnrichments?: {
-    data: FisherResult[];
-    plot?: string[];
-    query?: RampQuery;
-    dataframe?: FishersDataframe;
-    openModal?: boolean;
-  };
-
-  filteredFishersDataframe?: FishersDataframe;
-
-  combinedFishersDataframe?: FishersDataframe;
-
-  clusterPlot?: string;
-  openModal?: boolean;
   api?: Map<string, OpenApiPath[]>;
 }
 
@@ -173,67 +165,67 @@ export const rampReducer = createReducer(
 
   on(
     OntologyFromMetaboliteActions.fetchOntologiesFromMetabolitesSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      ontologies: { data, query, dataframe },
+      ontologies: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     AnalyteFromPathwayActions.fetchAnalytesFromPathwaysSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query }) => ({
       ...state,
       loading: false,
-      analytes: { data, query, dataframe },
+      analytes: { data, query },
     }),
   ),
 
   on(
     PathwayEnrichmentsActions.fetchPathwaysFromAnalytesSuccess,
     PathwayFromAnalyteActions.fetchPathwaysFromAnalytesSuccess,
-    (state, { data, query, dataframe }) => {
+    (state, { data, query, dataAsDataProperty }) => {
       return {
         ...state,
         loading: false,
-        pathways: { data, query, dataframe },
+        pathways: { data, query, dataAsDataProperty },
       };
     },
   ),
 
   on(
     CommonReactionAnalyteActions.fetchCommonReactionAnalytesSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      commonReactions: { data, query, dataframe },
+      commonReactions: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess,
-    (state, { data, query, dataframe, plot }) => ({
+    (state, { data, query, dataAsDataProperty, plot }) => ({
       ...state,
       loading: false,
-      reactions: { data, query, dataframe, plot },
+      reactions: { data, query, dataAsDataProperty, plot },
     }),
   ),
 
   on(
     ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      reactionClasses: { data, query, dataframe },
+      reactionClasses: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      metabolites: { data, query, dataframe },
+      metabolitesFromOntologies: { data, query, dataAsDataProperty },
     }),
   ),
 
@@ -249,19 +241,19 @@ export const rampReducer = createReducer(
   on(
     ClassesFromMetabolitesActions.fetchClassesFromMetabolitesSuccess,
     MetaboliteEnrichmentsActions.fetchClassesFromMetabolitesSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      metClasses: { data, query, dataframe },
+      metClasses: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolitesSuccess,
-    (state, { data, query, dataframe }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      properties: { data, query, dataframe },
+      properties: { data, query, dataAsDataProperty },
     }),
   ),
 
@@ -273,52 +265,51 @@ export const rampReducer = createReducer(
         ...state,
         loading: false,
         chemicalEnrichments: data,
-        openModal: true,
       };
     },
   ),
 
   on(
     PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess,
-    (state, { data, query, combinedFishersDataframe }) => {
+    (state, { data, query, combinedFishersDataframe, dataAsDataProperty }) => {
       return {
         ...state,
         loading: false,
-        pathwayEnrichments: { data, query },
+        pathwayEnrichments: { data, query, dataAsDataProperty },
         combinedFishersDataframe: combinedFishersDataframe,
         filteredFishersDataframe: undefined,
         clusterPlot: '',
+        dataAsDataProperty: dataAsDataProperty,
       };
     },
   ),
 
   on(
     PathwayEnrichmentsActions.filterEnrichmentFromPathwaysSuccess,
-    (state, { data, query, filteredFishersDataframe }) => {
+    (state, { data, query, filteredFishersDataframe, dataAsDataProperty }) => {
       return {
         ...state,
         loading: false,
         pathwayEnrichments: {
           data,
           query,
-          dataframe: filteredFishersDataframe,
-          openModal: true,
+          dataAsDataProperty,
         },
         filteredFishersDataframe: filteredFishersDataframe,
         clusterPlot: '',
+        dataAsDataProperty: dataAsDataProperty,
       };
     },
   ),
 
   on(
     PathwayEnrichmentsActions.fetchClusterFromEnrichmentSuccess,
-    (state, { data, plot, query, dataframe }) => {
+    (state, { data, clusterImage, query, dataAsDataProperty }) => {
       return {
         ...state,
         loading: false,
-        pathwayEnrichments: { data, query, dataframe },
-        clusterPlot: plot,
-        openModal: true,
+        pathwayEnrichments: { data, query, dataAsDataProperty },
+        clusterPlot: clusterImage,
       };
     },
   ),
@@ -344,7 +335,6 @@ export const rampReducer = createReducer(
     PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysFailure,
     PathwayEnrichmentsActions.filterEnrichmentFromPathwaysFailure,
     (state, { error }) => {
-      // console.log(error);
       return {
         ...state,
         loading: false,
