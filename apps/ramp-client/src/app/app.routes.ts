@@ -70,7 +70,7 @@ export const routes: Routes = [
     ],
   },
   {
-    path: 'chemical-properties',
+    path: 'chemical-descriptors',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
@@ -82,13 +82,10 @@ export const routes: Routes = [
             useValue: StructureViewerComponent,
           },
         ],
-        data: {
-          renderUrl: environment.rendererUrl,
-        },
         path: '',
         loadComponent: () =>
-          import('chemical-properties-page').then(
-            (m) => m.ChemicalPropertiesPageComponent,
+          import('chemical-descriptors-page').then(
+            (m) => m.ChemicalDescriptorsPageComponent,
           ),
       },
     ],

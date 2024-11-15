@@ -1,6 +1,7 @@
 <lib-panel-accordion
   [paths]="paths()"
-  [accordionTabsSignal] = dataMapSignal()
+  [dataTabs]=" dataMap()"
+  [overviewTabs]="overviewMap()"
   (dataSearch)="fetchData($event)"
 >
   <div class="custom-input">

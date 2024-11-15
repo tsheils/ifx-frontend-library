@@ -48,6 +48,7 @@ const HTTP_TEXT_OPTIONS = {
 })
 export class RampService {
   private url!: string;
+  private renderUrl!: string;
 
   constructor(
     private http: HttpClient,
@@ -317,6 +318,7 @@ export class RampService {
       .post<RampAPIResponse<Classes>>(`${this.url}chemical-classes`, formData)
       .pipe(
         map((response: RampAPIResponse<Classes>) => {
+          console.log(response);
           const tempResponse: { [key: string]: unknown }[] = (<unknown>(
             response.data
           )) as { [key: string]: unknown }[];
@@ -363,7 +365,18 @@ export class RampService {
           const propertyList = response.data.map(
             (obj: Partial<Properties>) => new Properties(obj),
           );
-          return this._makeRampResponse(response, propertyList);
+          const propertyListAsDataProperty = this._makeRampResponse(
+            response,
+            propertyList,
+          );
+          propertyListAsDataProperty?.dataAsDataProperty?.map((prop) => {
+            prop['imageUrl'].url =
+              `${this.renderUrl}(${encodeURIComponent(prop['iso_smiles'].value)})?size=150`;
+            prop['imageUrl'].label = prop['common_name'].value;
+            return prop;
+          });
+          console.log(propertyListAsDataProperty);
+          return propertyListAsDataProperty;
         }),
       );
   }
@@ -509,9 +522,11 @@ export class RampService {
               });
             }
           });
+          const dataAsDataProperties = this._mapDataToDataProperty(retList);
           return {
             data: response,
             enriched_chemical_class_list: retList,
+            dataAsDataProperty: dataAsDataProperties,
           } as RampChemicalEnrichmentResponse;
         }),
       );
@@ -542,10 +557,12 @@ export class RampService {
                 );
             });
           });
+          const dataAsDataProperties = this._mapDataToDataProperty(retList);
           return {
             data: response.data,
             enriched_chemical_class_list: retList,
-          };
+            dataAsDataProperty: dataAsDataProperties,
+          } as RampChemicalEnrichmentResponse;
         }),
       );
   }
@@ -603,7 +620,7 @@ export class RampService {
       );
   }
 
-  getClusterdData(
+  getClusteredData(
     dataframe: FishersDataframe,
     percAnalyteOverlap?: number,
     minPathwayToCluster?: number,
@@ -759,6 +776,10 @@ export class RampService {
 
   _setUrl(url: string): void {
     this.url = url;
+  }
+
+  _setRendererUrl(url: string): void {
+    this.renderUrl = url;
   }
 
   private _makeBlob(data: string[], type = 'text/tsv'): Blob {

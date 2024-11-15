@@ -25,7 +25,7 @@ export interface RampReactionAPIResponse {
 
 export interface RampResponse<T extends RampDataGeneric> {
   data: Array<T>;
-  query: RampQuery;
+  query?: RampQuery;
   // dataframe?: unknown[];
   dataAsDataProperty?: { [p: string]: DataProperty }[];
   plot?: { id: string; sets: string[]; size: number }[];

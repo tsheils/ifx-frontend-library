@@ -230,9 +230,7 @@ function(metabolites) {
 #' @post /api/metabolites-from-ontologies
 function(ontology, format = "json", res) {
   ontologies_names <- c(ontology)
-  message(ontology)
-  message(ontologies_names)
-  ontologies <- RaMP::getMetaFromOnto(db = rampDB, ontology = ontologies_names, minOntologySize= 0)
+  ontologies <- RaMP::getMetaFromOnto(db = rampDB, ontology = ontologies_names)
   if (is.null(nrow(ontologies))) {
     return(
       list(
@@ -267,11 +265,11 @@ function(ontology, format = "json", res) {
 #' @post /api/chemical-classes
 function(metabolites="") {
     ## 4/25 - add a trycatch here
-    chemical_class_df <- tryCatch({RaMP::chemicalClassSurvey(
+    chemical_class_df <- tryCatch({RaMP::getChemClass(
                                              db = rampDB,
                                              metabolites,
                                              background = NULL,
-                                             background_type= "database"
+                                             backgroundType= "database"
                                          )},
                                   error = function(cond){
                                       print(cond)
@@ -280,7 +278,7 @@ function(metabolites="") {
     return(
         list(
             data = chemical_class_df$met_classes,
-            function_call = makeFunctionCall(metabolites,"chemicalClassSurvey"),
+            function_call = makeFunctionCall(metabolites,"getChemClass"),
             numFoundIds = length(unique(chemical_class_df$met_classes$sourceId))
         )
     )
@@ -475,7 +473,7 @@ function(
   return(
     list(
       data = clustering_results
-      # function_call = paste0("RaMP::chemicalClassEnrichment(", mets ,"))"),
+      # function_call = paste0("RaMP::runEnrichChemClass(", mets ,"))"),
       #numFoundIds = length(unique(chemical_enrichment_df$chem_props$chem_source_id))
     )
   )
@@ -503,13 +501,13 @@ function(
     minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
   }
 
-  clustered_plot <- RaMP::pathwayResultsPlot(
+  clustered_plot <- RaMP::plotPathwayResults(
     db = rampDB,
     pathwaysSig = fishers_results,
     textSize = 8,
     percAnalyteOverlap = percAnalyteOverlap,
     minPathwayToCluster = minPathwayToCluster,
-    percPathwayOverlap = percPathwayOverlap
+    percPathwayOverlap = percPathwayOverlap,
   )
   file <- ggsave(filename,clustered_plot, width = 10, height = 10)
   r <- readBin(file,'raw',n = file.info(file)$size)
@@ -526,24 +524,24 @@ function(
 #' @parser text
 #' @parser json
 #' @post /api/chemical-enrichment
-function(metabolites = '', backgroundFile = '', background = '', background_type = "database") {
+function(metabolites = '', backgroundFile = '', background = '', backgroundType = "database") {
   chemical_enrichment_df <- ''
   if(backgroundFile == "") {
     if(background == "") {
       print("run with database background")
-      chemical_enrichment_df <- RaMP::chemicalClassEnrichment(
+      chemical_enrichment_df <- RaMP::runEnrichChemClass(
         db = rampDB,
         metabolites,
         background = NULL,
-        background_type= "database"
+        backgroundType= "database"
       )
     } else {
       print("run with biospecimen")
-      chemical_enrichment_df <- RaMP::chemicalClassEnrichment(
+      chemical_enrichment_df <- RaMP::runEnrichChemClass(
         db = rampDB,
         metabolites,
         background = background,
-        background_type= "biospecimen"
+        backgroundType= "biospecimen"
       )
     }
   }
@@ -552,11 +550,11 @@ function(metabolites = '', backgroundFile = '', background = '', background_type
     bg <- gsub("\r\n", ",", backgroundFile)
     background <- unlist(strsplit(bg, ','))
     if(length(background) > length(metabolites)) {
-      chemical_enrichment_df <- RaMP::chemicalClassEnrichment(
+      chemical_enrichment_df <- RaMP::runEnrichChemClass(
         db = rampDB,
         metabolites,
         background = background,
-        background_type= "list"
+        backgroundType= "list"
       )
     } else {
       error <- function(cond) {

@@ -1,6 +1,7 @@
 <lib-panel-accordion
   [paths]="paths()"
   [inputTab]="inputMap()"
-  [accordionTabsSignal] = dataMapSignal()
+  [dataTabs]=" dataMap()"
+  [overviewTabs]="overviewMap()"
   (dataSearch)="fetchData($event)"
 ></lib-panel-accordion>

@@ -174,8 +174,8 @@
       "biochemical-pathways-page": [
         "libs/features/ramp/biochemical-pathways-page/src/index.ts"
       ],
-      "chemical-properties-page": [
-        "libs/features/ramp/chemical-properties-page/src/index.ts"
+      "chemical-descriptors-page": [
+        "libs/features/ramp/chemical-descriptors-page/src/index.ts"
       ],
       "chemkit": ["libs/features/ifx/chemkit/src/index.ts"],
       "complete-dialog": ["libs/shared/utils/complete-dialog/src/index.ts"],

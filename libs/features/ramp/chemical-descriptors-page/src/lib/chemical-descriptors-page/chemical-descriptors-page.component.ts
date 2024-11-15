@@ -1,15 +1,22 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatDialogRef } from '@angular/material/dialog';
 import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { select } from '@ngrx/store';
-import { PanelAccordionComponent } from 'panel-accordion';
+import { CompleteDialogComponent } from 'complete-dialog';
+import {
+  DataMap,
+  PanelAccordionComponent,
+  VisualizationMap,
+} from 'panel-accordion';
 import {
   Classes,
   Properties,
@@ -26,15 +33,15 @@ import {
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'lib-chemical-properties-page',
+  selector: 'lib-chemical-descriptors-page',
   standalone: true,
   imports: [CommonModule, PanelAccordionComponent],
-  templateUrl: './chemical-properties-page.component.html',
-  styleUrl: './chemical-properties-page.component.scss',
+  templateUrl: './chemical-descriptors-page.component.html',
+  styleUrl: './chemical-descriptors-page.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChemicalPropertiesPageComponent
+export class ChemicalDescriptorsPageComponent
   extends RampCorePageComponent
   implements OnInit
 {
@@ -179,12 +186,87 @@ export class ChemicalPropertiesPageComponent
   ];
   renderUrl = input<string>();
 
+  chemicalProperties = this.store.selectSignal(RampSelectors.getProperties);
+  chemicalClasses = this.store.selectSignal(RampSelectors.getClasses);
+  chemicalEnrichment = this.store.selectSignal(
+    RampSelectors.getChemicalEnrichment,
+  );
+
+  matches = computed(() =>
+    Array.from(
+      new Set(
+        this.chemicalProperties()?.data.map((property) =>
+          property.chem_source_id.toLocaleLowerCase(),
+        ),
+      ),
+    ),
+  );
+  noMatches = computed(() =>
+    this.inputList.filter(
+      (p: string) => !this.matches().includes(p.toLocaleLowerCase()),
+    ),
+  );
+
+  dataMap = computed(() => {
+    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
+    const chemicalPropertiesData =
+      this.chemicalProperties()?.dataAsDataProperty;
+    if (chemicalPropertiesData) {
+      returnDataMap.set('Chemical Properties', {
+        data: chemicalPropertiesData,
+        fields: this.propertiesColumns,
+        dataframe: this.chemicalProperties()?.data,
+        fileName: 'fetchPropertiesFromMetabolites-download.tsv',
+      } as DataMap);
+    }
+
+    console.log(this.chemicalEnrichment());
+    const chemicalClassesData = this.chemicalClasses()?.dataAsDataProperty;
+    if (chemicalClassesData) {
+      returnDataMap.set('Chemical Classes', {
+        data: chemicalClassesData,
+        fields: this.classesColumns,
+        fileName: 'fetchChemicalClass-download.tsv',
+        filters: this.filtersMap(),
+        loaded: !!chemicalClassesData,
+      });
+    }
+
+    const chemicalEnrichmentData =
+      this.chemicalEnrichment()?.dataAsDataProperty;
+    if (chemicalEnrichmentData) {
+      returnDataMap.set('Enriched Pathways', {
+        data: chemicalEnrichmentData,
+        fields: this.enrichmentColumns,
+        fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
+        filters: this.filtersMap(),
+        loaded: !!chemicalEnrichmentData,
+      });
+    }
+
+    if (returnDataMap.size) {
+      return returnDataMap;
+    } else return undefined;
+  });
+
+  overviewMap = computed(() => {
+    if (this.chemicalProperties()?.data) {
+      return {
+        matches: this.matches(),
+        noMatches: this.noMatches(),
+        count: this.chemicalProperties()?.data.length,
+        inputLength: this.inputList.length,
+        inputType: 'analytes',
+      };
+    } else return undefined;
+  });
+
   constructor() {
     super();
   }
 
   ngOnInit(): void {
-    this.store
+    /*    this.store
       .pipe(
         select(RampSelectors.getChemicalPropertyResults),
         takeUntilDestroyed(this.destroyRef),
@@ -225,7 +307,7 @@ export class ChemicalPropertiesPageComponent
           },
         ),
       )
-      .subscribe();
+      .subscribe();*/
   }
 
   mapChemicalProperties(chemicalProperties: RampResponse<Properties>) {

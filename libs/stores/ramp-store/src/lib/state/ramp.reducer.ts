@@ -55,28 +55,26 @@ export interface State extends EntityState<RampEntity> {
   metaboliteIntersects: { id: string; sets: string[]; size: number }[];
   geneIntersects: { id: string; sets: string[]; size: number }[];
   databaseUrl?: string;
-  ontologies?: RampResponse<Ontology>;
+
+  pathwayEnrichments?: RampPathwayEnrichmentResponse;
+  filteredFishersDataframe?: FishersDataframe;
+  combinedFishersDataframe?: FishersDataframe;
   analytes?: RampResponse<Analyte>;
   pathways?: RampResponse<Pathway>;
+  clusterPlot?: string;
+
   commonReactions?: RampResponse<CommonAnalyte>;
   reactions?: RampResponse<Reaction>;
   reactionClasses?: RampResponse<ReactionClass>;
-  metabolites?: RampResponse<Metabolite>;
+
+  metabolitesFromOntologies?: RampResponse<Metabolite>;
   ontologiesList?: FilterCategory[];
+  ontologies?: RampResponse<Ontology>;
 
   metClasses?: RampResponse<Classes>;
-
   properties?: RampResponse<Properties>;
-
   chemicalEnrichments?: RampChemicalEnrichmentResponse;
 
-  pathwayEnrichments?: RampPathwayEnrichmentResponse;
-
-  filteredFishersDataframe?: FishersDataframe;
-
-  combinedFishersDataframe?: FishersDataframe;
-
-  clusterPlot?: string;
   api?: Map<string, OpenApiPath[]>;
 }
 
@@ -197,37 +195,37 @@ export const rampReducer = createReducer(
 
   on(
     CommonReactionAnalyteActions.fetchCommonReactionAnalytesSuccess,
-    (state, { data, query }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      commonReactions: { data, query },
+      commonReactions: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess,
-    (state, { data, query, plot }) => ({
+    (state, { data, query, dataAsDataProperty, plot }) => ({
       ...state,
       loading: false,
-      reactions: { data, query, plot },
+      reactions: { data, query, dataAsDataProperty, plot },
     }),
   ),
 
   on(
     ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteSuccess,
-    (state, { data, query }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      reactionClasses: { data, query },
+      reactionClasses: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesSuccess,
-    (state, { data, query }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      metabolites: { data, query },
+      metabolitesFromOntologies: { data, query, dataAsDataProperty },
     }),
   ),
 
@@ -243,19 +241,19 @@ export const rampReducer = createReducer(
   on(
     ClassesFromMetabolitesActions.fetchClassesFromMetabolitesSuccess,
     MetaboliteEnrichmentsActions.fetchClassesFromMetabolitesSuccess,
-    (state, { data, query }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      metClasses: { data, query },
+      metClasses: { data, query, dataAsDataProperty },
     }),
   ),
 
   on(
     PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolitesSuccess,
-    (state, { data, query }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      properties: { data, query },
+      properties: { data, query, dataAsDataProperty },
     }),
   ),
 
@@ -274,10 +272,12 @@ export const rampReducer = createReducer(
   on(
     PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess,
     (state, { data, query, combinedFishersDataframe, dataAsDataProperty }) => {
+      console.log(data);
+      console.log(combinedFishersDataframe);
       return {
         ...state,
         loading: false,
-        pathwayEnrichments: { data, query },
+        pathwayEnrichments: { data, query, dataAsDataProperty },
         combinedFishersDataframe: combinedFishersDataframe,
         filteredFishersDataframe: undefined,
         clusterPlot: '',
@@ -289,12 +289,14 @@ export const rampReducer = createReducer(
   on(
     PathwayEnrichmentsActions.filterEnrichmentFromPathwaysSuccess,
     (state, { data, query, filteredFishersDataframe, dataAsDataProperty }) => {
+      console.log(data);
       return {
         ...state,
         loading: false,
         pathwayEnrichments: {
           data,
           query,
+          dataAsDataProperty,
         },
         filteredFishersDataframe: filteredFishersDataframe,
         clusterPlot: '',

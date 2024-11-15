@@ -1,5 +1,4 @@
 
-{{accordionTabsSignal() | json}}
 <mat-accordion multi>
   <mat-expansion-panel expanded id="input" #input>
     <mat-expansion-panel-header>
@@ -62,7 +61,7 @@
     @if (dataTabs() && dataTabs()?.size) {
       <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
         @for (tab of dataTabs() | keyvalue: _originalOrder; track tab.key) {
-          <mat-tab [label]="tab.key">
+          <mat-tab [label]="tab.key + ' ('+ tab.value['data']?.length + ')'">
             <ng-template matTabContent>
               <lib-data-panel
                 [dataAsDataProperty]="tab.value['data']"

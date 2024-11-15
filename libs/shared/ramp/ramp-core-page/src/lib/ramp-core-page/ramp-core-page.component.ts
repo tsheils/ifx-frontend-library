@@ -57,8 +57,8 @@ export class RampCorePageComponent {
 
   clearDataMapSignal() {
     this.loadedEvent.emit({ dataLoaded: false, resultsLoaded: false });
-    this.accordionPanelMap = new AccordionPanelMap();
-    this.dataMapSignal.set(this.accordionPanelMap);
+    // this.accordionPanelMap = new AccordionPanelMap();
+    //  this.dataMapSignal.set(this.accordionPanelMap);
   }
 
   _parseInput(input: string | string[]) {

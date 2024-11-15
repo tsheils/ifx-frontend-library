@@ -10,7 +10,6 @@ import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { GraphData } from '@ncats-frontend-library/models/utils';
 import { VisualizationMap } from 'panel-accordion';
 import { SunburstChartComponent } from 'sunburst-chart';
 import { TreeChartComponent } from 'tree-chart';

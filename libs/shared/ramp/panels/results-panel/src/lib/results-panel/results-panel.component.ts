@@ -18,10 +18,4 @@ import { QueryResultsData } from '@ncats-frontend-library/models/utils';
 })
 export class ResultsPanelComponent {
   results = input<QueryResultsData>();
-
-  constructor() {
-    effect(() => {
-      console.log(this.results());
-    });
-  }
 }

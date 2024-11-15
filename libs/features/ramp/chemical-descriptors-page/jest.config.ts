@@ -1,10 +1,10 @@
 /* eslint-disable */
 export default {
-  displayName: 'chemical-properties-page',
+  displayName: 'chemical-descriptors-page',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
-    '../../../../coverage/libs/features/ramp/chemical-properties-page',
+    '../../../../coverage/libs/features/ramp/chemical-descriptors-page',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',

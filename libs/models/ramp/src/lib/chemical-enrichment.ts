@@ -4,7 +4,7 @@ export class ChemicalEnrichment {
   class_name!: string;
   met_hits!: number;
   met_size!: number;
-  p_value!: number;
+  pVal!: number;
   pop_hits!: number;
   pop_size!: number;
 
@@ -24,8 +24,8 @@ export class ChemicalEnrichment {
     if (obj['met_size']) {
       this.met_size = <number>obj['met_size'];
     }
-    if (obj['p-value']) {
-      this.p_value = <number>obj['p-value'];
+    if (obj['pVal']) {
+      this.pVal = <number>obj['pVal'];
     }
     if (obj['pop_hits']) {
       this.pop_hits = <number>obj['pop_hits'];

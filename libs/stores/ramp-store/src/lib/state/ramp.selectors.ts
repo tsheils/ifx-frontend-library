@@ -86,7 +86,7 @@ export const getPathways = createSelector(
 
 export const getMetabolites = createSelector(
   getRampState,
-  (state: State) => state.metabolites,
+  (state: State) => state.metabolitesFromOntologies,
 );
 
 export const getReactions = createSelector(

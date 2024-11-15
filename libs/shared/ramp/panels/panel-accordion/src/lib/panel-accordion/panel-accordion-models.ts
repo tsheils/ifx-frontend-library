@@ -11,11 +11,13 @@ export class DataMap {
   dataframe?: unknown[];
   fileName?: string;
   filters?: Map<string, QuestionBase<string>[]>;
+  loaded? = false;
 }
 
 export class VisualizationMap {
   type!: string;
   data?: GraphData;
+  loaded? = false;
 }
 
 export class AccordionPanelMap {

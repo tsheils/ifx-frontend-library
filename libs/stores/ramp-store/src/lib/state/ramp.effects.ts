@@ -531,7 +531,7 @@ export const filterEnrichedPathways = createEffect(
       ),
       concatLatestFrom(() => store.select(getCombinedFishersDataframe)),
       mergeMap(([action, dataframe]) => {
-        if (dataframe) {
+        if (dataframe && dataframe?.fishresults?.length) {
           return rampService
             .filterPathwayEnrichment(
               dataframe,
@@ -589,7 +589,7 @@ export const fetchPathwayCluster = createEffect(
       mergeMap(([action, dataframe]) => {
         if (dataframe) {
           return rampService
-            .getClusterdData(
+            .getClusteredData(
               dataframe,
               action.percAnalyteOverlap,
               action.minPathwayToCluster,

@@ -37,6 +37,7 @@ import { routes } from './app.routes';
 export function set_url(rampService: RampService) {
   return () => {
     rampService._setUrl(environment.apiBaseUrl);
+    rampService._setRendererUrl(environment.rendererUrl);
   };
 }
 

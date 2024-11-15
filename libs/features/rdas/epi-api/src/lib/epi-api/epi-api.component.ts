@@ -1,5 +1,6 @@
 import {
   afterNextRender,
+  ChangeDetectionStrategy,
   Component,
   ElementRef,
   Inject,

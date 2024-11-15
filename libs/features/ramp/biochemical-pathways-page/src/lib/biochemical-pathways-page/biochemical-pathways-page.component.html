@@ -1,12 +1,8 @@
-
-{{dataMap().entries() | json}}
-{{matches() | json}}
-
 <lib-panel-accordion
   [paths]="paths()"
   [inputTab]="inputMap()"
   [dataTabs]=" dataMap()"
+  [overviewTabs]="overviewMap()"
   [visualizationTabs]="visualizationMap()"
-   [accordionTabsSignal] = accordionPanelMap
   (dataSearch)="fetchData($event)"
 ></lib-panel-accordion>

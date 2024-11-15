@@ -226,7 +226,7 @@
     },
     "/api/chemical-class-type": {
       "get": {
-        "tags": ["chemical-properties"],
+        "tags": ["chemical-descriptors"],
         "summary": "Return chemical class levels present in RaMP-DB (e.g. sub-class, super-class)",
         "responses": {
           "200": {
@@ -1394,7 +1394,7 @@
     },
     "/api/chemical-classes": {
       "post": {
-        "tags": ["chemical-properties"],
+        "tags": ["chemical-descriptors"],
         "summary": "Retrieve Chemical Classes from Input Metabolites",
         "responses": {
           "200": {
@@ -1465,7 +1465,7 @@
     },
     "/api/chemical-properties": {
       "post": {
-        "tags": ["chemical-properties"],
+        "tags": ["chemical-descriptors"],
         "summary": "Retrieve Chemical Properties from Input Metabolites",
         "responses": {
           "200": {
@@ -1536,7 +1536,7 @@
     },
     "/api/chemical-enrichment": {
       "post": {
-        "tags": ["chemical-properties"],
+        "tags": ["chemical-descriptors"],
         "summary": "Run Chemical Class Enrichment",
         "responses": {
           "200": {
