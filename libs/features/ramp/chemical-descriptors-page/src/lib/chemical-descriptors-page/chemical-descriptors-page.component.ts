@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  OnInit,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -25,10 +24,7 @@ import {
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ChemicalDescriptorsPageComponent
-  extends RampCorePageComponent
-  implements OnInit
-{
+export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
   propertiesColumns: DataProperty[] = [
     new DataProperty({
       label: 'Source ID',
@@ -162,8 +158,14 @@ export class ChemicalDescriptorsPageComponent
       displayType: 'string',
     }),
     new DataProperty({
-      label: 'adjP_BH',
-      field: 'adjP_BH',
+      label: 'FDR P Value',
+      field: 'pVal_FDR',
+      sortable: true,
+      displayType: 'string',
+    }),
+    new DataProperty({
+      label: 'Holm P Value',
+      field: 'pVal_Holm',
       sortable: true,
       displayType: 'string',
     }),
@@ -203,7 +205,6 @@ export class ChemicalDescriptorsPageComponent
       } as DataMap);
     }
 
-    console.log(this.chemicalEnrichment());
     const chemicalClassesData = this.chemicalClasses()?.dataAsDataProperty;
     if (chemicalClassesData) {
       returnDataMap.set('Chemical Classes', {

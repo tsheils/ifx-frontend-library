@@ -272,8 +272,6 @@ export const rampReducer = createReducer(
   on(
     PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess,
     (state, { data, query, combinedFishersDataframe, dataAsDataProperty }) => {
-      console.log(data);
-      console.log(combinedFishersDataframe);
       return {
         ...state,
         loading: false,
@@ -289,7 +287,6 @@ export const rampReducer = createReducer(
   on(
     PathwayEnrichmentsActions.filterEnrichmentFromPathwaysSuccess,
     (state, { data, query, filteredFishersDataframe, dataAsDataProperty }) => {
-      console.log(data);
       return {
         ...state,
         loading: false,
@@ -308,7 +305,6 @@ export const rampReducer = createReducer(
   on(
     PathwayEnrichmentsActions.fetchClusterFromEnrichmentSuccess,
     (state, { data, clusterImage, query, dataAsDataProperty }) => {
-      console.log(data);
       return {
         ...state,
         loading: false,
@@ -339,7 +335,6 @@ export const rampReducer = createReducer(
     PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysFailure,
     PathwayEnrichmentsActions.filterEnrichmentFromPathwaysFailure,
     (state, { error }) => {
-      // console.log(error);
       return {
         ...state,
         loading: false,

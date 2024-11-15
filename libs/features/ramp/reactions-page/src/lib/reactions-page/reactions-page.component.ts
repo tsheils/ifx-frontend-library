@@ -219,7 +219,6 @@ export class ReactionsPageComponent
   dataMap = computed(() => {
     const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
     const reactionsFromAnalytesData = this.reactionsFromAnalytes()?.data;
-    console.log(this.reactionsFromAnalytes());
     if (reactionsFromAnalytesData) {
       returnDataMap.set('Reactions from Analytes', {
         data: this.reactionsFromAnalytes()?.dataAsDataProperty,

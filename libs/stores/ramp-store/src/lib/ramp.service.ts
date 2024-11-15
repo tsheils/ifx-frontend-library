@@ -318,7 +318,6 @@ export class RampService {
       .post<RampAPIResponse<Classes>>(`${this.url}chemical-classes`, formData)
       .pipe(
         map((response: RampAPIResponse<Classes>) => {
-          console.log(response);
           const tempResponse: { [key: string]: unknown }[] = (<unknown>(
             response.data
           )) as { [key: string]: unknown }[];
@@ -375,7 +374,6 @@ export class RampService {
             prop['imageUrl'].label = prop['common_name'].value;
             return prop;
           });
-          console.log(propertyListAsDataProperty);
           return propertyListAsDataProperty;
         }),
       );

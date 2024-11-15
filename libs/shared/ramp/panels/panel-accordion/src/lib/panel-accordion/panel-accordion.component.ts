@@ -58,19 +58,11 @@ export class PanelAccordionComponent {
   paths = input<OpenApiPath[]>();
   inputTab = input<Map<string, QuestionBase<string>[]>>();
   accordionTabsSignal = input<AccordionPanelMap>();
-  /*  overviewTabs = computed(() => {
-    console.log(this.accordionTabsSignal());
-    return this.accordionTabsSignal()?.overviewMap;
-  });*/
-  /*  visualizationTabs = computed(
-    () => this.accordionTabsSignal()?.visualizationMap,
-  );*/
   visualizationTabs = input<Map<string, VisualizationMap[]> | undefined>(
     new Map<string, VisualizationMap[]>(),
   );
   dataTabs = input<Map<string, DataMap> | undefined>(undefined);
   overviewTabs = input<QueryResultsData | undefined>(new QueryResultsData());
-  // dataTabs = computed(() => this.accordionTabsSignal()!.dataMap);
 
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event);
@@ -79,9 +71,7 @@ export class PanelAccordionComponent {
   /*  checkIfLoaded(
     dataMap: Map<string, DataMap[] | VisualizationMap[] | undefined>,
   ) {
-    console.log(dataMap);
     if (dataMap) {
-      console.log(Array.from(dataMap.values())[0][0].loaded);
       return !Array.from(dataMap.values())[0][0].loaded;
     } else return false;
   }*/

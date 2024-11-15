@@ -348,7 +348,6 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   });
 
   noEnrichedPathwaysModal = computed(() => {
-    console.log(this.enrichedPathways());
     if (
       this.enrichedPathways() &&
       this.enrichedPathways()?.data &&

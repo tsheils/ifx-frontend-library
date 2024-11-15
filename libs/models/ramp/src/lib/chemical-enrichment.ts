@@ -1,17 +1,15 @@
 export class ChemicalEnrichment {
-  adjP_BH!: number;
   category!: string;
   class_name!: string;
   met_hits!: number;
   met_size!: number;
   pVal!: number;
+  pVal_FDR!: number;
+  pVal_Holm!: number;
   pop_hits!: number;
   pop_size!: number;
 
   constructor(obj: { [key: string]: unknown }) {
-    if (obj['adjP_BH']) {
-      this.adjP_BH = <number>obj['adjP_BH'];
-    }
     if (obj['category']) {
       this.category = <string>obj['category'];
     }
@@ -24,8 +22,14 @@ export class ChemicalEnrichment {
     if (obj['met_size']) {
       this.met_size = <number>obj['met_size'];
     }
-    if (obj['pVal']) {
-      this.pVal = <number>obj['pVal'];
+    if (obj['Pval']) {
+      this.pVal = <number>obj['Pval'];
+    }
+    if (obj['Pval_FDR']) {
+      this.pVal_FDR = <number>obj['Pval_FDR'];
+    }
+    if (obj['Pval_Holm']) {
+      this.pVal_Holm = <number>obj['Pval_Holm'];
     }
     if (obj['pop_hits']) {
       this.pop_hits = <number>obj['pop_hits'];

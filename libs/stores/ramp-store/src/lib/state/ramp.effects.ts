@@ -490,7 +490,6 @@ export const fetchPathwayAnalysis = createEffect(
           .pipe(
             map(
               (ret: RampPathwayEnrichmentResponse) => {
-                console.log(ret);
                 ret.background = action.background;
                 ret.backgroundFile = action.backgroundFile;
                 ret.pValType = action.pValType;
@@ -498,7 +497,6 @@ export const fetchPathwayAnalysis = createEffect(
                 ret.percAnalyteOverlap = Number(action.percAnalyteOverlap);
                 ret.minPathwayToCluster = Number(action.minPathwayToCluster);
                 ret.percPathwayOverlap = Number(action.percPathwayOverlap);
-                console.log(ret);
                 return PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess(
                   ret,
                 );
@@ -541,7 +539,6 @@ export const filterEnrichedPathways = createEffect(
             .pipe(
               map(
                 (ret: RampPathwayEnrichmentResponse) => {
-                  console.log(ret);
                   return PathwayEnrichmentsActions.filterEnrichmentFromPathwaysSuccess(
                     {
                       percAnalyteOverlap: action.percAnalyteOverlap,
