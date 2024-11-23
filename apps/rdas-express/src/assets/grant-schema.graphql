@@ -49,7 +49,11 @@ type GARD {
   GardName: String
   Synonyms: [String]
   researchedByProjects: [Project!]!
-    @relationship(type: "RESEARCHED_BY", direction: OUT)
+    @relationship(
+      type: "RESEARCHED_BY"
+      direction: OUT
+      properties: "ResearchedByProperties"
+    )
 }
 
 type Journal {
@@ -92,7 +96,11 @@ type Project {
   application_type: BigInt
   funding_year: BigInt
   gardsresearchedBy: [GARD!]!
-    @relationship(type: "RESEARCHED_BY", direction: IN)
+    @relationship(
+      type: "RESEARCHED_BY"
+      direction: IN
+      properties: "ResearchedByProperties"
+    )
   phr: String
   principalInvestigatorsInvestigated: [PrincipalInvestigator!]!
     @relationship(type: "INVESTIGATED", direction: IN)
@@ -126,6 +134,15 @@ type PublishedInProperties @relationshipProperties {
   issue: String
   page: String
   volume: String
+}
+
+type ResearchedByProperties @relationshipProperties {
+  confidence_score: Float!
+  semantic_similarity: Float!
+}
+
+type UserTesting {
+  Approved: Boolean!
 }
 
 type ProjectFilters {

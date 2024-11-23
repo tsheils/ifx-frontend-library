@@ -9,10 +9,10 @@
               <mat-select [formControlName]="filter.field" multiple>
                 <mat-select-trigger>
                   {{
-                    filterFormControls().controls[filter.field].value[0]?.term
+                    filterFormControls().controls[filter.field]?.value[0]?.term
                   }}
                   @if (
-                    (filterFormControls().controls[filter.field].value.length ||
+                    (filterFormControls().controls[filter.field]?.value.length ||
                       0) > 1
                   ) {
                     <span class="filter-description">

@@ -34,6 +34,8 @@ import {
   TRIALTYPEFILTERS,
   TRIALSTATUSFILTERS,
   TRIALPHASEFILTERS,
+  ALLARTICLES,
+  NHSARTICLES,
 } from '@ncats-frontend-library/models/rdas';
 import {
   Filter,
@@ -108,11 +110,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
           diseaseService
             .fetchTrials(TRIALFILTERS, {
               ctfilters: {
-                investigatesConditionConditions_SOME: {
-                  hasAnnotationAnnotations_SOME: {
-                    mappedToGardGards_SOME: { GardId: gardid },
-                  },
-                },
+                mappedToGardGards_SOME: { GardId: gardid },
               },
             })
             .pipe(take(1)),
@@ -292,10 +290,7 @@ export const loadDisease$ = createEffect(
             .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
             .pipe(take(1)),
           diseaseService
-            .fetchArticles(FETCHARTICLESQUERY, NONEPIARTICLES)
-            .pipe(take(1)),
-          diseaseService
-            .fetchArticles(FETCHARTICLESQUERY, EPIARTICLES)
+            .fetchArticles(FETCHARTICLESQUERY, ALLARTICLES)
             .pipe(take(1)),
           diseaseService
             .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
@@ -305,14 +300,7 @@ export const loadDisease$ = createEffect(
             .pipe(take(1)),
         ).pipe(
           map(
-            ([
-              diseaseData,
-              articleData,
-              epiArticleData,
-              projectsData,
-              trialsData,
-            ]: [
-              ApolloQueryResult<unknown>,
+            ([diseaseData, articleData, projectsData, trialsData]: [
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
@@ -322,7 +310,6 @@ export const loadDisease$ = createEffect(
                 const diseaseObj: Disease = _makeDiseaseObj(
                   diseaseData,
                   articleData,
-                  epiArticleData,
                   projectsData,
                   trialsData,
                 );
@@ -844,7 +831,6 @@ export const loadAllDiseaseFilters$ = createEffect(
 function _makeDiseaseObj(
   diseaseData: ApolloQueryResult<unknown>,
   articleData?: ApolloQueryResult<unknown>,
-  epiArticleData?: ApolloQueryResult<unknown>,
   projectsData?: ApolloQueryResult<unknown>,
   trialsData?: ApolloQueryResult<unknown>,
 ): Disease {
@@ -868,35 +854,18 @@ function _makeDiseaseObj(
         }[];
       };
       if (articles) {
-        diseaseObj.nonEpiArticles = articles.articles[0].articles.map(
+        diseaseObj.allArticles = articles.articles[0].articles.map(
           (art: Partial<Article>) => new Article(art),
         );
-        diseaseObj.nonEpiCount = articles.articles[0]._count.count;
-        diseaseObj.allNonEpiCount = articles.articles[0].allCount.count;
-      }
-    }
-    if (epiArticleData) {
-      const epiArticles: {
-        articles: {
-          articles: Article[];
-          _count: { count: number };
-          allCount: { count: number };
-        }[];
-      } = epiArticleData.data as {
-        articles: {
-          articles: Article[];
-          _count: { count: number };
-          allCount: { count: number };
-        }[];
-      };
-      if (epiArticles) {
-        diseaseObj.epiArticles = epiArticles.articles[0].articles.map(
-          (art: Partial<Article>) => new Article(art),
-        );
-        diseaseObj.epiCount = epiArticles.articles[0]._count.count;
+        diseaseObj.allArticleCount = articles.articles[0]._count.count;
+        diseaseObj.articleCount = articles.articles[0].allCount.count;
+        /*diseaseObj.epiCount = epiArticles.articles[0]._count.count;
         diseaseObj.allEpiCount = epiArticles.articles[0].allCount.count;
+        diseaseObj.nhsCount = nhsArticles.articles[0]._count.count;
+        diseaseObj.allNhsCount = nhsArticles.articles[0].allCount.count;*/
       }
     }
+
     if (projectsData) {
       const projects: {
         coreProjects: CoreProject[];
@@ -1000,15 +969,15 @@ function _setFragment(
       }
       break;
     }
-    case 'nonEpiArticles': {
-      NONEPIARTICLES.articleOptions.limit = <number>options['limit']
+    case 'articles': {
+      ALLARTICLES.articleOptions.limit = <number>options['limit']
         ? <number>options['limit']
         : 10;
       if (<number>options['offset']) {
-        NONEPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
+        ALLARTICLES.articleOptions.offset = <number>options['offset'] * 1;
       }
       if (options['year'] && options['year'].length > 0) {
-        NONEPIARTICLES.articleFilter.publicationYear_IN = options['year'];
+        ALLARTICLES.articleFilter.publicationYear_IN = options['year'];
       } else {
         //  NONEPIARTICLES.articleFilter.publicationYear_IN = undefined;
       }
@@ -1024,14 +993,6 @@ function _setFragment(
       }
       break;
     }
-    /*
-       if (options['GardId']) {
-         FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
-           <string>options['GardId'];
-         FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId =
-           <string>options['GardId'];
-     }
-     */
     case 'trials': {
       FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit']
         ? <number>options['limit']
@@ -1042,8 +1003,9 @@ function _setFragment(
         FETCHTRIALSVARIABLES.ctoptions.offset = 0;
       }
       if (options['GardId']) {
-        FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId =
-          <string>options['GardId'];
+        FETCHTRIALSVARIABLES.ctwhere.mappedToGardGards_SOME.GardId = <string>(
+          options['GardId']
+        );
       }
       if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
         FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN =
@@ -1069,13 +1031,11 @@ function _setFragment(
 function _setGardId(gardid: string) {
   DISEASEQUERYPARAMETERS.where = { GardId: gardid };
   EPIARTICLES.gardWhere.GardId = gardid;
-  NONEPIARTICLES.gardWhere.GardId = gardid;
+  ALLARTICLES.gardWhere.GardId = gardid;
   PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
     gardid;
-  FETCHTRIALSVARIABLES.ctwhere.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId =
-    gardid;
-  FETCHTRIALSVARIABLES.ctfilters.investigatesConditionConditions_SOME.hasAnnotationAnnotations_SOME.mappedToGardGards_SOME.GardId =
-    gardid;
+  FETCHTRIALSVARIABLES.ctwhere.mappedToGardGards_SOME.GardId = gardid;
+  FETCHTRIALSVARIABLES.ctfilters.mappedToGardGards_SOME.GardId = gardid;
 }
 
 function _setTrialVariables(params: Params, origin: string) {
@@ -1145,14 +1105,11 @@ function _parseFilterResponse(
       filters.push(fc);
       filters.push(
         new FilterCategory({
-          parent: 'nonEpiArticles',
+          parent: 'articles',
           label: 'Articles by Year',
           field: 'year',
           values: articleFilterDataList.countsByYear
-            .filter(
-              (year: Partial<Filter>) =>
-                year.label == 'Non Epidemiology Articles',
-            )
+            .filter((year: Partial<Filter>) => year.label == 'All Articles')
             .map(
               (fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }),
             ),

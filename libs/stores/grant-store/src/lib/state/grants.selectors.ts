@@ -1,43 +1,53 @@
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import {
-  GRANTS_FEATURE_KEY,
-  GrantsState,
-  grantsAdapter,
+  PROJECTS_FEATURE_KEY,
+  ProjectsState,
+  projectsAdapter,
 } from './grants.reducer';
 
-// Lookup the 'Grants' feature state managed by NgRx
-export const selectGrantsState =
-  createFeatureSelector<GrantsState>(GRANTS_FEATURE_KEY);
+// Lookup the 'Projects' feature state managed by NgRx
+export const selectProjectsState =
+  createFeatureSelector<ProjectsState>(PROJECTS_FEATURE_KEY);
 
-const { selectAll, selectEntities } = grantsAdapter.getSelectors();
+const { selectAll, selectEntities } = projectsAdapter.getSelectors();
 
-export const selectGrantsLoaded = createSelector(
-  selectGrantsState,
-  (state: GrantsState) => state.loaded,
+export const selectProjectsLoaded = createSelector(
+  selectProjectsState,
+  (state: ProjectsState) => state.loaded,
 );
 
-export const selectGrantsError = createSelector(
-  selectGrantsState,
-  (state: GrantsState) => state.error,
+export const selectProjectsError = createSelector(
+  selectProjectsState,
+  (state: ProjectsState) => state.error,
 );
 
-export const selectAllGrants = createSelector(
-  selectGrantsState,
-  (state: GrantsState) => selectAll(state),
+export const selectAllProjects = createSelector(
+  selectProjectsState,
+  (state: ProjectsState) => selectAll(state),
 );
 
-export const selectGrantsEntities = createSelector(
-  selectGrantsState,
-  (state: GrantsState) => selectEntities(state),
+export const selectProjectsEntities = createSelector(
+  selectProjectsState,
+  (state: ProjectsState) => selectEntities(state),
 );
 
 export const selectSelectedId = createSelector(
-  selectGrantsState,
-  (state: GrantsState) => state.selectedId,
+  selectProjectsState,
+  (state: ProjectsState) => state.selectedId,
+);
+
+export const selectAllProjectsCount = createSelector(
+  selectProjectsState,
+  (state: ProjectsState) => state.allProjectsCount,
+);
+
+export const selectProjectsCount = createSelector(
+  selectProjectsState,
+  (state: ProjectsState) => state.projectsCount,
 );
 
 export const selectEntity = createSelector(
-  selectGrantsEntities,
+  selectProjectsEntities,
   selectSelectedId,
   (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
 );

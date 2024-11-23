@@ -32,6 +32,7 @@ type Article {
     @relationship(type: "HAS_OMIM_REF", direction: OUT)
   hasPubtatorAnnotation: Boolean
   isEpi: Boolean
+  isNHS: Boolean
   keywordsKeywordFor: [Keyword!]!
     @relationship(type: "KEYWORD_FOR", direction: IN)
   meshTermsMeshTermFor: [MeshTerm!]!

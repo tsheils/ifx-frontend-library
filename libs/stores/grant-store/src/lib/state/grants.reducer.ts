@@ -1,50 +1,63 @@
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { FetchGrantActions, LoadGrantsActions } from './grants.actions';
+import {
+  FetchProjectActions,
+  FetchProjectsListActions,
+} from './grants.actions';
 
-import * as GrantsActions from './grants.actions';
+import * as ProjectsActions from './grants.actions';
 
-export const GRANTS_FEATURE_KEY = 'grants';
+export const PROJECTS_FEATURE_KEY = 'Projects';
 
-export interface GrantsState extends EntityState<CoreProject> {
-  selectedId?: string | number; // which Grants record has been selected
-  loaded: boolean; // has the Grants list been loaded
+export interface ProjectsState extends EntityState<CoreProject> {
+  selectedId?: string | number; // which Projects record has been selected
+  loaded: boolean; // has the Projects list been loaded
   error?: string | null; // last known error (if any)
-  grant?: CoreProject;
-  grants?: CoreProject[];
+  project?: CoreProject;
+  projects?: CoreProject[];
+  allProjectsCount?: number;
+  projectsCount?: number;
 }
 
-export interface GrantsPartialState {
-  readonly [GRANTS_FEATURE_KEY]: GrantsState;
+export interface ProjectsPartialState {
+  readonly [PROJECTS_FEATURE_KEY]: ProjectsState;
 }
 
-export const grantsAdapter: EntityAdapter<CoreProject> =
+export const projectsAdapter: EntityAdapter<CoreProject> =
   createEntityAdapter<CoreProject>({
-    selectId: (grant) => grant.core_project_num,
+    selectId: (project) => project.core_project_num,
   });
 
-export const initialGrantsState: GrantsState = grantsAdapter.getInitialState({
-  // set initial required properties
-  loaded: false,
-});
+export const initialProjectsState: ProjectsState =
+  projectsAdapter.getInitialState({
+    // set initial required properties
+    loaded: false,
+  });
 
 const reducer = createReducer(
-  initialGrantsState,
-  on(LoadGrantsActions.loadGrantsSuccess, (state, { grants }) =>
-    grantsAdapter.setAll(grants, { ...state, loaded: true }),
+  initialProjectsState,
+  on(
+    FetchProjectsListActions.fetchProjectsListSuccess,
+    (state, { projects, allProjectsCount, projectsCount }) =>
+      projectsAdapter.setAll(projects, {
+        ...state,
+        loaded: true,
+        allProjectsCount: allProjectsCount,
+        projectsCount: projectsCount,
+      }),
   ),
 
-  on(FetchGrantActions.fetchGrantSuccess, (state, { grant }) =>
-    grantsAdapter.setOne(grant, {
+  on(FetchProjectActions.fetchProjectSuccess, (state, { project }) =>
+    projectsAdapter.setOne(project, {
       ...state,
-      selectedId: grant.core_project_num,
+      selectedId: project.core_project_num,
       loaded: true,
     }),
   ),
   on(
-    LoadGrantsActions.loadGrantsFailure,
-    FetchGrantActions.fetchGrantFailure,
+    FetchProjectsListActions.fetchProjectsListFailure,
+    FetchProjectActions.fetchProjectFailure,
     (state, { error }) => ({
       ...state,
       error,
@@ -52,6 +65,9 @@ const reducer = createReducer(
   ),
 );
 
-export function grantsReducer(state: GrantsState | undefined, action: Action) {
+export function projectsReducer(
+  state: ProjectsState | undefined,
+  action: Action,
+) {
   return reducer(state, action);
 }

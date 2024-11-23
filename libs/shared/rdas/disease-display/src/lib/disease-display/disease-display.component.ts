@@ -26,7 +26,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Disease } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrial, Disease } from '@ncats-frontend-library/models/rdas';
 import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { ArticleListComponent } from '@ncats-frontend-library/shared/rdas/article-display';
 import { ClinicalTrialsListComponent } from '@ncats-frontend-library/shared/rdas/clinical-trials-display';
@@ -37,6 +37,9 @@ import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/char
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { RdasPanelTemplateComponent } from '@ncats-frontend-library/shared/utils/rdas-panel-template';
+import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
+import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
+import { Store } from '@ngrx/store';
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
 
 @Component({
@@ -73,11 +76,14 @@ export class DiseaseDisplayComponent
   destroyRef = inject(DestroyRef);
   private changeRef = inject(ChangeDetectorRef);
   private router = inject(Router);
+  private store = inject(Store);
   public scroller = inject(ViewportScroller);
   private scrollDispatcher = inject(ScrollDispatcher);
   private breakpointObserver = inject(BreakpointObserver);
 
   disease = input<Disease>();
+  trialsList = this.store.selectSignal(TrialSelectors.selectAllTrials);
+  projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
   loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();
   staticFilters = input<FilterCategory[]>();

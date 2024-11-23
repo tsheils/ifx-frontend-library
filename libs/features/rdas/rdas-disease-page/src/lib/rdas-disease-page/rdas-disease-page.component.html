@@ -40,12 +40,12 @@
             <a
               mat-list-item
               class="list-button"
-              (click)="scroll('nonEpiArticles')"
-              [activated]="isActive('nonEpiArticles')"
+              (click)="scroll('articles')"
+              [activated]="isActive('articles')"
             >
               <div class="row space-between-row">
                 <div>Articles</div>
-                <div>{{ disease()?.allNonEpiCount }}</div>
+                <div>{{ disease()?.allArticleCount }}</div>
               </div>
             </a>
             <a
@@ -132,12 +132,12 @@
                 <a
                   mat-list-item
                   class="list-button"
-                  (click)="scroll('nonEpiArticles')"
-                  [activated]="isActive('nonEpiArticles')"
+                  (click)="scroll('articles')"
+                  [activated]="isActive('articles')"
                 >
                   <div class="row space-between-row">
                     <div>Articles</div>
-                    <div>{{ disease()?.allNonEpiCount }}</div>
+                    <div>{{ disease()?.allArticleCount }}</div>
                   </div>
                 </a>
                 <a

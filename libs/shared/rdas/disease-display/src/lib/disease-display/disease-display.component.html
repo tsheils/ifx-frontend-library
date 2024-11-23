@@ -9,7 +9,7 @@
             >
           </mat-panel-title>
         </mat-expansion-panel-header>
-        <div class="row space-around-row top-align">
+       <!-- <div class="row space-around-row top-align">
           @if (!mobile) {
             @if (staticFilterMap() && staticFilterMap().has('articles')) {
               <div class="width-30">
@@ -39,7 +39,7 @@
               </div>
             }
           }
-        </div>
+        </div>-->
       </mat-expansion-panel>
     }
   </div>
@@ -83,39 +83,39 @@
   </div>
   <div
     class="disease-display-panel"
-    id="nonEpiArticles"
-    #nonEpiArticles
+    id="articles"
+    #articles
     #scrollSection
   >
     <mat-expansion-panel
-      [disabled]="!disease()?.nonEpiCount"
-      [expanded]="disease()?.nonEpiCount"
+      [disabled]="!disease()?.allArticleCount"
+      [expanded]="disease()?.allArticleCount"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Articles {{ disease()?.nonEpiCount }}</span
+            >Articles {{ disease()?.allArticleCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
-        [_id]="'nonEpiArticles'"
-        [count]="disease()?.nonEpiCount!"
-        [filters]="filterMap().get('nonEpiArticles')!"
+        [_id]="'articles'"
+        [count]="disease()?.allArticleCount!"
+        [filters]="filterMap().get('articles')!"
         [message]="'No Articles Found'"
-        (listChange)="fetchList($event, 'nonEpiArticles')"
+        (listChange)="fetchList($event, 'articles')"
       >
-        @if (disease() && disease()?.nonEpiArticles) {
+        @if (disease() && disease()?.allArticles) {
           <div class="data-list">
             <ncats-frontend-library-article-list
-              [articles]="disease()?.nonEpiArticles"
+              [articles]="disease()?.allArticles"
             ></ncats-frontend-library-article-list>
           </div>
         }
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>
-  <div
+ <!-- <div
     class="disease-display-panel"
     id="epiArticles"
     #epiArticles
@@ -149,7 +149,7 @@
         }
       </lib-rdas-panel-template>
     </mat-expansion-panel>
-  </div>
+  </div>-->
   <div class="disease-display-panel" id="projects" #projects #scrollSection>
     <mat-expansion-panel
       [disabled]="!disease()?.projectCount"
@@ -171,7 +171,7 @@
         @if (disease() && disease()?.projects) {
           <div class="data-list">
             <ncats-frontend-library-project-list
-              [projects]="disease()?.projects"
+              [projects]="projectsList()"
             ></ncats-frontend-library-project-list>
           </div>
         }
@@ -202,7 +202,7 @@
         @if (disease() && disease()?.clinicalTrials) {
           <div class="data-list">
             <ncats-frontend-library-clinical-trials-list
-              [trials]="disease()?.clinicalTrials"
+              [trials]="trialsList()"
             ></ncats-frontend-library-clinical-trials-list>
           </div>
         }

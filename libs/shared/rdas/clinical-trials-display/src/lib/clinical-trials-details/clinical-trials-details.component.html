@@ -130,8 +130,7 @@
                       </div>
                     }
                     @if (
-                      studyDesign.designMasking ||
-                      studyDesign.designMaskingDescription
+                      studyDesign.designMasking
                     ) {
                       <div class="accent-chip-outlined">Design Masking</div>
                     }
@@ -141,12 +140,12 @@
                         <span>{{ studyDesign.designMasking }}</span>
                       </div>
                     }
-                    @if (studyDesign.designMaskingDescription) {
+                  <!--  @if (studyDesign.designMaskingDescription) {
                       <div>
                         <b>Description: &nbsp;</b>
                         <span>{{ studyDesign.designMaskingDescription }}</span>
                       </div>
-                    }
+                    }-->
                     @if (studyDesign.designAllocation) {
                       <div>
                         <div class="accent-chip-outlined">
@@ -174,14 +173,6 @@
                         </div>
                         <div class="list-item-content">
                           {{ studyDesign.designTimePerspective }}
-                        </div>
-                      </div>
-                    }
-                    @if (studyDesign.samplingMethod) {
-                      <div>
-                        <div class="accent-chip-outlined">Sampling Method</div>
-                        <div class="list-item-content">
-                          {{ studyDesign.samplingMethod }}
                         </div>
                       </div>
                     }
@@ -332,7 +323,7 @@
                 </mat-list>
               }
             </mat-tab>
-            <mat-tab
+           <!-- <mat-tab
               [label]="getLabel('sponsors')"
               [disabled]="!trial()?.sponsors || trial()?.sponsors?.length === 0"
             >
@@ -350,7 +341,7 @@
                   }
                 </div>
               }
-            </mat-tab>
+            </mat-tab>-->
             <mat-tab
               [label]="getLabel('interventions')"
               [disabled]="
@@ -391,7 +382,7 @@
                   @if (reference.referencePMID) {
                     <div #link>
                       <span class="list-item-content">{{
-                        reference.referenceCitation
+                        reference.citation
                       }}</span>
                       <br />
                       <span class="list-item-content"
@@ -410,7 +401,7 @@
                   } @else {
                     <div #nolink>
                       <span class="list-item-content">{{
-                        reference.referenceCitation
+                        reference.citation
                       }}</span>
                     </div>
                   }

@@ -90,6 +90,11 @@ type Phenotype {
     )
 }
 
+type UserTesting {
+	Approved: Boolean!
+	LastApprovedRDAS: String!
+}
+
 type Query {
   diseaseSearch(searchString: String, limit: Int): [GARD]
     @cypher(

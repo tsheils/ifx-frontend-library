@@ -26,15 +26,10 @@ fragment trialFields on ClinicalTrial {
         designInterventionModel: DesignInterventionModel
         designInterventionModelDescription: DesignInterventionModelDescription
         designMasking: DesignMasking
-        designMaskingDescription: DesignMaskingDescription
         designObservationalModel: DesignObservationalModel
         designPrimaryPurpose: DesignPrimaryPurpose
         designTimePerspective: DesignTimePerspective
         detailedDescription: DetailedDescription
-        #    primaryOutcomeDescription: PrimaryOutcomeDescription
-        #    primaryOutcomeMeasure: PrimaryOutcomeMeasure
-        #    primaryOutcomeTimeFrame: PrimaryOutcomeTimeFrame
-        samplingMethod: SamplingMethod
       }
       locations: inLocationsLocations {
         locationCity: LocationCity
@@ -48,14 +43,11 @@ fragment trialFields on ClinicalTrial {
         condition: Condition
       }
       references: referencesisAbout {
-        referenceCitation: ReferenceCitation
         referencePMID: ReferencePMID
         referenceType: ReferenceType
+        citation: Citation
       }
-      sponsors: sponsoredBySponsors {
-        leadSponsorClass: LeadSponsorClass
-        leadSponsorName: LeadSponsorName
-      }
+
 }
 `;
 
@@ -96,61 +88,18 @@ export const TRIALDETAILSVARIABLES: {
   },
 };
 
-
-/*export const FETCHTRIALSVARIABLES: {
-  ctwhere: {
-    investigatesConditionConditions_SOME: {
-      hasAnnotationAnnotations_SOME: {
-        mappedToGardGards_SOME: {
-          GardId: string | null | undefined
-        }
-      }
-    },
-    StudyType_IN?: unknown;
-    OverallStatus_IN?: unknown;
-    Phase_IN?: unknown;
-  }
-  ctoptions: {
-    limit: number,
-    offset: number
-  }
-} = {
-  ctoptions: {
-    limit: 10,
-    offset: 0,
-  },
-  ctwhere: {
-    investigatesConditionConditions_SOME : {
-      hasAnnotationAnnotations_SOME : {
-        mappedToGardGards_SOME : {
-          GardId : undefined
-        }
-      }
-    }
-  }
-};*/
-
-
 export const FETCHTRIALSVARIABLES: {
   ctwhere: {
-    investigatesConditionConditions_SOME: {
-      hasAnnotationAnnotations_SOME: {
-        mappedToGardGards_SOME: {
-          GardId: string | null | undefined;
-        };
-      };
+    mappedToGardGards_SOME: {
+      GardId: string | null | undefined;
     };
     StudyType_IN?: unknown;
     OverallStatus_IN?: unknown;
     Phase_IN?: unknown;
   };
   ctfilters: {
-    investigatesConditionConditions_SOME: {
-      hasAnnotationAnnotations_SOME: {
-        mappedToGardGards_SOME: {
-          GardId: string | null | undefined;
-        };
-      };
+    mappedToGardGards_SOME: {
+      GardId: string | null | undefined;
     };
     StudyType_IN?: unknown;
     OverallStatus_IN?: unknown;
@@ -162,12 +111,8 @@ export const FETCHTRIALSVARIABLES: {
   };
 } = {
   ctwhere: {
-    investigatesConditionConditions_SOME: {
-      hasAnnotationAnnotations_SOME: {
-        mappedToGardGards_SOME: {
-          GardId: undefined,
-        },
-      },
+    mappedToGardGards_SOME: {
+      GardId: undefined,
     },
   },
   ctoptions: {
@@ -175,16 +120,11 @@ export const FETCHTRIALSVARIABLES: {
     offset: 0,
   },
   ctfilters: {
-    investigatesConditionConditions_SOME: {
-      hasAnnotationAnnotations_SOME: {
-        mappedToGardGards_SOME: {
-          GardId: undefined,
-        },
-      },
+    mappedToGardGards_SOME: {
+      GardId: undefined,
     },
   },
-
-}
+};
 
 export const TRIALTYPEFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {

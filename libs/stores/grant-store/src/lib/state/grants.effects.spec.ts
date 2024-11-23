@@ -4,7 +4,7 @@ import { Action } from '@ngrx/store';
 import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-import { LoadGrantsActions } from './grants.actions';
+import { FetchGrantsListActions } from './grants.actions';
 import { loadGrant$ } from './grants.effects';
 import * as GrantsEffects from './grants.effects';
 
@@ -25,11 +25,11 @@ describe('GrantsEffects', () => {
   describe('init$', () => {
     it('should work', () => {
       actions = hot('-a-|', {
-        a: LoadGrantsActions.loadGrants({ top: 0, skip: 0 }),
+        a: FetchGrantsListActions.FetchGrantsList({ top: 0, skip: 0 }),
       });
 
       const expected = hot('-a-|', {
-        a: LoadGrantsActions.loadGrantsSuccess({ grants: [] }),
+        a: FetchGrantsListActions.FetchGrantsListSuccess({ grants: [] }),
       });
 
       expect([]).toEqual([]);

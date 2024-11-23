@@ -10,6 +10,7 @@ export const ARTICLEFIELDS = `
     doi
     firstPublicationDate
     isEpi
+    isNHS
     pubmed_id
     source
     title
@@ -52,9 +53,11 @@ class ARTICLEVARIABLES {
   gardWhere!: { GardId: undefined | string };
   articleWhere!: {
     isEpi?: null | string | boolean;
+    isNHS?: null | string | boolean;
   };
   articleFilter!: {
     isEpi?: null | string | boolean;
+    isNHS?: null | string | boolean;
     publicationYear_IN?: undefined | string[] | string;
   };
   articleOptions!: {
@@ -82,6 +85,41 @@ export const EPIARTICLES: ARTICLEVARIABLES = {
     ],
   },
 };
+
+export const NHSARTICLES: ARTICLEVARIABLES = {
+  gardWhere: { GardId: undefined },
+  articleWhere: {
+    isNHS: true,
+  },
+  articleFilter: {
+    isNHS: true,
+  },
+  articleOptions: {
+    limit: 10,
+    sort: [
+      {
+        firstPublicationDate: 'DESC',
+      },
+    ],
+  },
+};
+
+export const ALLARTICLES: ARTICLEVARIABLES = {
+  gardWhere: { GardId: undefined },
+  articleWhere: {},
+  articleFilter: {
+    publicationYear_IN: undefined,
+  },
+  articleOptions: {
+    limit: 10,
+    sort: [
+      {
+        firstPublicationDate: 'DESC',
+      },
+    ],
+  },
+};
+
 export const NONEPIARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
   articleWhere: {

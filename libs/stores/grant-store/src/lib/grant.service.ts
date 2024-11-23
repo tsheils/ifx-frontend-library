@@ -8,7 +8,7 @@ import { Apollo } from 'apollo-angular';
 export class GrantService {
   constructor(private apollo: Apollo) {}
 
-  fetchGrants(query: DocumentNode, variables: object = {}) {
+  fetchProjects(query: DocumentNode, variables: object = {}) {
     return this.apollo
       .use('projects')
       .watchQuery({

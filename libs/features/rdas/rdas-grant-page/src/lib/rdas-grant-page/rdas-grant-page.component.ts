@@ -1,16 +1,8 @@
-import {
-  ChangeDetectorRef,
-  Component,
-  DestroyRef,
-  inject,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { ProjectDetailsComponent } from '@ncats-frontend-library/shared/rdas/project-display';
 import { Store } from '@ngrx/store';
-import { GrantSelectors } from '@ncats-frontend-library/stores/grant-store';
+import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
 
 @Component({
   selector: 'ncats-frontend-library-grant-page',
@@ -20,6 +12,6 @@ import { GrantSelectors } from '@ncats-frontend-library/stores/grant-store';
   styleUrls: ['./rdas-grant-page.component.scss'],
 })
 export class RdasGrantPageComponent {
-  private readonly grantStore = inject(Store);
-  grant = this.grantStore.selectSignal(GrantSelectors.selectEntity);
+  private readonly projectStore = inject(Store);
+  grant = this.projectStore.selectSignal(ProjectSelectors.selectEntity);
 }
