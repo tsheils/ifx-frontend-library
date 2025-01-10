@@ -25,7 +25,6 @@ import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-
   selector: 'ncats-frontend-library-social-sign-on-button',
   templateUrl: './social-sign-on-button.component.html',
   styleUrls: ['./social-sign-on-button.component.scss'],
-  standalone: true,
   imports: [
     MatMenuModule,
     MatIconModule,
@@ -33,6 +32,7 @@ import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-
     RouterLink,
     MatDialogModule,
   ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 //, OnChanges

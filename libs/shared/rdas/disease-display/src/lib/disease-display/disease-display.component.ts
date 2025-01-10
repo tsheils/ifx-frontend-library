@@ -4,6 +4,7 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ViewportScroller } from '@angular/common';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
   computed,
@@ -23,10 +24,11 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ClinicalTrial, Disease } from '@ncats-frontend-library/models/rdas';
+import { Disease } from '@ncats-frontend-library/models/rdas';
 import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { ArticleListComponent } from '@ncats-frontend-library/shared/rdas/article-display';
 import { ClinicalTrialsListComponent } from '@ncats-frontend-library/shared/rdas/clinical-trials-display';
@@ -37,8 +39,9 @@ import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/char
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { RdasPanelTemplateComponent } from '@ncats-frontend-library/shared/utils/rdas-panel-template';
-import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
+import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
 import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
+import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
 import { Store } from '@ngrx/store';
 import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
 
@@ -47,23 +50,20 @@ import { DiseaseHeaderComponent } from '../disease-header/disease-header.compone
   templateUrl: './disease-display.component.html',
   styleUrls: ['./disease-display.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
   imports: [
     MatCardModule,
-    DiseaseHeaderComponent,
     ArticleListComponent,
     ProjectListComponent,
     ClinicalTrialsListComponent,
     GeneListComponent,
     PhenotypeListComponent,
-    SharedUtilsDataNotFoundComponent,
-    LoadingSpinnerComponent,
     MatExpansionModule,
     MatTabsModule,
     ScrollingModule,
     RdasPanelTemplateComponent,
     ChartWrapperComponent,
-    MatProgressSpinner,
   ],
 })
 export class DiseaseDisplayComponent
@@ -84,6 +84,12 @@ export class DiseaseDisplayComponent
   disease = input<Disease>();
   trialsList = this.store.selectSignal(TrialSelectors.selectAllTrials);
   projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
+  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
+  projectsCount = this.store.selectSignal(
+    ProjectSelectors.selectAllProjectsCount,
+  );
+  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
+  articlesList = this.store.selectSignal(ArticleSelectors.selectAllArticles);
   loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();
   staticFilters = input<FilterCategory[]>();
@@ -162,10 +168,11 @@ export class DiseaseDisplayComponent
         this.route.snapshot &&
         this.route.snapshot.queryParamMap.has('offset')
       ) {
-        template[0].paginator.pageIndex =
+        const paginator = template[0].paginator() as MatPaginator;
+        paginator.pageIndex =
           Number(this.route.snapshot.queryParamMap.get('offset')) / 10;
       } else {
-        template[0].paginator.pageIndex = 0;
+        template[0].paginator()!.firstPage();
       }
     }
   }

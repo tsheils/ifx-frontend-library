@@ -6,11 +6,10 @@ import { ToolDetailsComponent } from 'tool-details';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-default-tool',
-  standalone: true,
-  imports: [CommonModule, ToolDetailsComponent],
-  templateUrl: './default-tool.component.html',
-  styleUrl: './default-tool.component.scss',
+    selector: 'lib-default-tool',
+    imports: [CommonModule, ToolDetailsComponent],
+    templateUrl: './default-tool.component.html',
+    styleUrl: './default-tool.component.scss'
 })
 export class DefaultToolComponent {
   private readonly store = inject(Store);

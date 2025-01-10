@@ -9,17 +9,16 @@ import { ScreenshotDisplayComponent } from 'screenshot-display';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-qhts-sample-client',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DefaultToolComponent,
-    ScreenshotDisplayComponent,
-    JavaWebstartComponent,
-    MatTabsModule,
-  ],
-  templateUrl: './qhts-sample-client.component.html',
-  styleUrl: './qhts-sample-client.component.scss',
+    selector: 'lib-qhts-sample-client',
+    imports: [
+        CommonModule,
+        DefaultToolComponent,
+        ScreenshotDisplayComponent,
+        JavaWebstartComponent,
+        MatTabsModule,
+    ],
+    templateUrl: './qhts-sample-client.component.html',
+    styleUrl: './qhts-sample-client.component.scss'
 })
 export class QhtsSampleClientComponent {
   private readonly store = inject(Store);

@@ -17,20 +17,19 @@ import { ResolverResponse } from 'ifx';
 import { NcatsDatatableComponent } from 'ncats-datatable';
 
 @Component({
-  selector: 'lib-resolver-data-viewer',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatSlideToggleModule,
-    MatMenuModule,
-    NcatsDatatableComponent,
-    LoadingSpinnerComponent,
-  ],
-  templateUrl: './resolver-data-viewer.component.html',
-  styleUrl: './resolver-data-viewer.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-resolver-data-viewer',
+    imports: [
+        CommonModule,
+        MatButtonModule,
+        MatIconModule,
+        MatSlideToggleModule,
+        MatMenuModule,
+        NcatsDatatableComponent,
+        LoadingSpinnerComponent,
+    ],
+    templateUrl: './resolver-data-viewer.component.html',
+    styleUrl: './resolver-data-viewer.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ResolverDataViewerComponent {
   private dom: Document = inject(DOCUMENT);

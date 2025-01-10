@@ -16,7 +16,6 @@ import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 
 @Component({
   selector: 'lib-shared-utils-list-filter-row',
-  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -27,6 +26,7 @@ import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
   templateUrl: './shared-utils-list-filter-row.component.html',
   styleUrl: './shared-utils-list-filter-row.component.scss',
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsListFilterRowComponent {

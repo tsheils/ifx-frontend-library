@@ -1,10 +1,5 @@
-<mat-sidenav-container class="about-page">
-  <mat-sidenav
-    #navigationsidenav
-    [opened]="true"
-    [mode]="'side'"
-    class="main-ramp-rail"
-  >
+<div class="ramp-main-page">
+<div class="main-ramp-rail">
     <div class="ramp-rail ramp-main" cdkScrollable>
       <div
         matRipple
@@ -13,7 +8,22 @@
         routerLink="/biochemical-pathways"
       >
         <a>
-          <div class="rail-icon">B</div>
+          <div class="icon-button-image">
+            @if(isActive('biochemical-pathways')){
+              <img
+              ngSrc="/assets/icons/network.svg"
+              alt="network icon"
+              priority
+              fill
+            />
+            } @else {
+              <img
+                ngSrc="/assets/icons/network-white.svg"
+                alt="network icon"
+                fill
+              />
+            }
+          </div>
         </a>
         <div class="rail-label">
           Biochemical <br />
@@ -23,22 +33,26 @@
       <div
         matRipple
         class="rail-button"
-        [ngClass]="{ 'active-rail-button': isActive('analytes') }"
-        routerLink="/analytes"
-      >
-        <a>
-          <div class="rail-icon">A</div>
-        </a>
-        <div class="rail-label">Analytes</div>
-      </div>
-      <div
-        matRipple
-        class="rail-button"
         [ngClass]="{ 'active-rail-button': isActive('ontologies') }"
         routerLink="/ontologies"
       >
         <a>
-          <div class="rail-icon">O</div>
+          <div class="icon-button-image">
+            @if(isActive('ontologies')){
+              <img
+              ngSrc="/assets/icons/dna.svg"
+              alt="network icon"
+              fill
+            />
+            } @else {
+              <img
+                ngSrc="/assets/icons/dna-white.svg"
+                alt="network icon"
+                priority
+                fill
+              />
+            }
+          </div>
         </a>
         <div class="rail-label">Ontologies</div>
       </div>
@@ -49,7 +63,22 @@
         routerLink="/reactions"
       >
         <a>
-          <div class="rail-icon">R</div>
+          <div class="icon-button-image">
+            @if(isActive('reactions')){
+              <img
+              ngSrc="/assets/icons/lipid.svg"
+              alt="network icon"
+              fill
+            />
+            } @else {
+              <img
+                ngSrc="/assets/icons/lipid-white.svg"
+                alt="network icon"
+                priority
+                fill
+              />
+            }
+          </div>
         </a>
         <div class="rail-label">Reactions</div>
       </div>
@@ -60,22 +89,38 @@
         routerLink="/chemical-descriptors"
       >
         <a>
-          <div class="rail-icon">C</div>
+          <div class="icon-button-image">
+            @if(isActive('chemical-descriptors')){
+              <img
+              ngSrc="/assets/icons/disaccharide.svg"
+              alt="disaccharide icon"
+              priority
+              fill
+            />
+            } @else {
+              <img
+                ngSrc="/assets/icons/disaccharide-white.svg"
+                alt="disaccharide icon"
+                priority
+                fill
+              />
+            }
+          </div>
         </a>
         <div class="rail-label">Chemical Descriptors</div>
       </div>
     </div>
-  </mat-sidenav>
-  <mat-sidenav-content class="drawer-container-content">
-    <div class="row">
-      <div class="width-95">
+  </div>
+  <div class="drawer-container-content">
+        @defer(){
         <lib-ramp-page
           [paths]="paths()"
           [title]="title()"
-          [inputMap]="inputFields()"
+          [inputMap]="inputMap()"
           [filterMap]="filtersMap()"
         ></lib-ramp-page>
-      </div>
-    </div>
-  </mat-sidenav-content>
-</mat-sidenav-container>
+        } @placeholder () {
+          <div class="side-placeholder"></div>
+        }
+  </div>
+</div>

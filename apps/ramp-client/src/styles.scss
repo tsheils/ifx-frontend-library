@@ -7,7 +7,8 @@
   as upset;
 @use 'libs/features/ramp/ramp-about/src/lib/ramp-about/_ramp-about-theme.scss'
   as ramp-about;
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 @include utils.width-sm(50);
 @include utils.width-sm(90);
@@ -43,12 +44,7 @@
 
 html,
 body {
-  @include mat.all-component-themes(theme.$light-theme);
-  @include footer.theme(theme.$light-theme);
-  @include upset.theme(theme.$light-theme);
-  @include ramp-about.theme(theme.$light-theme);
-
-  height: 100%;
+   height: 100%;
   margin: 0 !important;
   font-family:
     Roboto,
@@ -58,6 +54,10 @@ body {
     Arial,
     Lucida Grande,
     sans-serif;
+  @include mat.all-component-themes(theme.$light-theme);
+  @include footer.theme(theme.$light-theme);
+  @include upset.theme(theme.$light-theme);
+  @include ramp-about.theme(theme.$light-theme);
 }
 
 a {
@@ -94,7 +94,7 @@ a {
   color: #ffffff;
   border: solid 1px;
   border-radius: 5px;
-  padding: 10px;
+ // padding: 10px;
   max-width: 100%;
 }
 
@@ -229,6 +229,12 @@ a {
 .banner-title {
   font-size: 1.5rem;
   font-weight: bold;
+}
+
+.icon-button-image {
+  width: 40px;
+  height: 40px;
+  position: sticky;
 }
 
 ncats-frontend-library-loading-spinner {

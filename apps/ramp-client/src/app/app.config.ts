@@ -3,7 +3,7 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { APP_INITIALIZER, ApplicationConfig, inject } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
 import {
   BrowserModule,
   provideClientHydration,
@@ -56,18 +56,14 @@ export function rampInit(store = inject(Store)) {
 export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: set_url,
-      deps: [RampService],
-      multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: rampInit,
-      deps: [],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (set_url)(inject(RampService));
+        return initializerFn();
+      }),
+    provideAppInitializer(() => {
+        const initializerFn = (rampInit)();
+        return initializerFn();
+      }),
     provideRouter(
       routes,
       withViewTransitions(),

@@ -7,11 +7,10 @@ import { MarkdownComponent } from 'ngx-markdown';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-chemkit',
-  standalone: true,
-  imports: [CommonModule, DefaultToolComponent, MarkdownComponent],
-  templateUrl: './chemkit.component.html',
-  styleUrl: './chemkit.component.scss',
+    selector: 'lib-chemkit',
+    imports: [CommonModule, DefaultToolComponent, MarkdownComponent],
+    templateUrl: './chemkit.component.html',
+    styleUrl: './chemkit.component.scss'
 })
 export class ChemkitComponent {
   private readonly store = inject(Store);

@@ -29,18 +29,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-email-sign-on-modal',
-  templateUrl: './email-sign-on-modal.component.html',
-  styleUrls: ['./email-sign-on-modal.component.scss'],
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-frontend-library-email-sign-on-modal',
+    templateUrl: './email-sign-on-modal.component.html',
+    styleUrls: ['./email-sign-on-modal.component.scss'],
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EmailSignOnModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);

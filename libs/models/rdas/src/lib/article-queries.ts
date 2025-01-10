@@ -14,11 +14,14 @@ export const ARTICLEFIELDS = `
     pubmed_id
     source
     title
-    authorsWrote {
-                firstName
-                lastName
-                fullName
-            }
+    journals: appearsInJournalVolumes {
+        dateOfPublication
+        printPublicationDate
+        volume
+        _title: contentOfJournals {
+          title
+        }
+      }
   }
 `;
 
@@ -29,7 +32,7 @@ export const FETCHARTICLESQUERY = gql`
     $articleFilter: ArticleWhere
     $articleOptions: ArticleOptions
   ) {
-    articles: gards(where: $gardWhere) {
+    articlesData: gards(where: $gardWhere) {
       _count: mentionedInArticlesAggregate(where: $articleFilter) {
         count
       }
@@ -38,7 +41,15 @@ export const FETCHARTICLESQUERY = gql`
         count
       }
 
-      articles: mentionedInArticles(
+      epiCount: mentionedInArticlesAggregate(where: { isEpi: true }) {
+        count
+      }
+
+      nhsCount: mentionedInArticlesAggregate(where: { isNHS: true }) {
+        count
+      }
+
+      articlesList: mentionedInArticles(
         options: $articleOptions
         where: $articleFilter
       ) {
@@ -52,12 +63,12 @@ export const FETCHARTICLESQUERY = gql`
 class ARTICLEVARIABLES {
   gardWhere!: { GardId: undefined | string };
   articleWhere!: {
-    isEpi?: null | string | boolean;
-    isNHS?: null | string | boolean;
+    isEpi?: null | boolean;
+    isNHS?: null | boolean;
   };
   articleFilter!: {
-    isEpi?: null | string | boolean;
-    isNHS?: null | string | boolean;
+    isEpi?: null | boolean;
+    isNHS?: null | boolean;
     publicationYear_IN?: undefined | string[] | string;
   };
   articleOptions!: {
@@ -212,6 +223,16 @@ export const ARTICLEDETAILSVARIABLES: {
 export const ARTICLEFILTERS = gql`
   query ArticleFilters($gardId: String) {
     countsByYear(gardId: $gardId) {
+      term
+      count
+      label
+    }
+    countsByEpi(gardId: $gardId) {
+      term
+      count
+      label
+    }
+    countsByNHS(gardId: $gardId) {
       term
       count
       label

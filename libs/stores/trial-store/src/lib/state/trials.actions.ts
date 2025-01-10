@@ -20,7 +20,10 @@ export const FetchTrialsListActions = createActionGroup({
       top: number;
       skip: number;
     }>(),
-    FetchTrialsListSuccess: props<{ trials: ClinicalTrial[] }>(),
+    FetchTrialsListSuccess: props<{
+      trials: ClinicalTrial[];
+      allTrialCount: number;
+    }>(),
     FetchTrialsListFailure: props<{ error: string }>(),
   },
 });

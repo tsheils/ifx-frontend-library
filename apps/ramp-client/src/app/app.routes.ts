@@ -10,6 +10,7 @@ export const routes: Routes = [
     path: '',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Home',
     loadComponent: () =>
       import('@ramp/features/ramp/ramp-home').then((m) => m.RampHomeComponent),
     //  import('@ramp/features/ramp/ramp-home').then((m) => m.HomeComponent),
@@ -18,6 +19,7 @@ export const routes: Routes = [
     path: 'biochemical-pathways',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Biochemical Pathways',
     loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
     children: [
       {
@@ -28,25 +30,14 @@ export const routes: Routes = [
           ),
       },
     ],
+
     //  import('@ramp/features/ramp/ramp-home').then((m) => m.HomeComponent),
-  },
-  {
-    path: 'analytes',
-    pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
-    children: [
-      {
-        path: '',
-        loadComponent: () =>
-          import('analytes-page').then((m) => m.AnalytesPageComponent),
-      },
-    ],
   },
   {
     path: 'ontologies',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Ontologies',
     loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
     children: [
       {
@@ -60,6 +51,7 @@ export const routes: Routes = [
     path: 'reactions',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Chemical Reactions',
     loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
     children: [
       {
@@ -73,6 +65,7 @@ export const routes: Routes = [
     path: 'chemical-descriptors',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Chemical Descriptors',
     loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
     children: [
       {
@@ -94,6 +87,7 @@ export const routes: Routes = [
     path: 'about',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: About',
     loadComponent: () =>
       import('@ramp/features/ramp/ramp-about').then((m) => m.AboutComponent),
   },
@@ -101,6 +95,7 @@ export const routes: Routes = [
     path: 'api',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: API',
     loadComponent: () =>
       import('@ramp/features/ramp/ramp-api').then((m) => m.RampApiComponent),
   },

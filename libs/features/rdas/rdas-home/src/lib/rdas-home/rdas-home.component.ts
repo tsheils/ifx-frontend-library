@@ -17,20 +17,19 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 
 @Component({
-  selector: 'rdas-home',
-  templateUrl: './rdas-home.component.html',
-  styleUrls: ['./rdas-home.component.scss'],
-  standalone: true,
-  imports: [
-    MatIconModule,
-    MatCardModule,
-    ScrollingModule,
-    CdkScrollableModule,
-    NgOptimizedImage,
-    LoadingSpinnerComponent,
-    MatAnchor,
-  ],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'rdas-home',
+    templateUrl: './rdas-home.component.html',
+    styleUrls: ['./rdas-home.component.scss'],
+    imports: [
+        MatIconModule,
+        MatCardModule,
+        ScrollingModule,
+        CdkScrollableModule,
+        NgOptimizedImage,
+        LoadingSpinnerComponent,
+        MatAnchor,
+    ],
+    encapsulation: ViewEncapsulation.None
 })
 export class RdasHomeComponent {
   @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;

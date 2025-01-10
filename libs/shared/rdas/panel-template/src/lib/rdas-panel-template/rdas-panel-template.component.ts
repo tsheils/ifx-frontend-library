@@ -1,12 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  input,
-  Input,
-  Output,
-  ViewChild,
-} from '@angular/core';
 import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+  viewChild,
+} from '@angular/core';
 import {
   MatPaginator,
   MatPaginatorModule,
@@ -19,16 +18,16 @@ import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/lo
 
 @Component({
   selector: 'lib-rdas-panel-template',
-  standalone: true,
   imports: [
     CommonModule,
     MatPaginatorModule,
     SharedUtilsListFilterRowComponent,
     SharedUtilsDataNotFoundComponent,
-    LoadingSpinnerComponent,
   ],
   templateUrl: './rdas-panel-template.component.html',
   styleUrl: './rdas-panel-template.component.scss',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdasPanelTemplateComponent {
   filters = input<FilterCategory[]>();
@@ -37,9 +36,8 @@ export class RdasPanelTemplateComponent {
   message = input<string>();
   count = input<number>(0);
   showPagination = input<boolean>(true);
-  @Output() listChange: EventEmitter<{ [key: string]: unknown }> =
-    new EventEmitter<{ [key: string]: unknown }>();
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  listChange = output<{ [key: string]: unknown }>();
+  paginator = viewChild<MatPaginator>(MatPaginator);
 
   fetchList(event: { [key: string]: Filter[] }) {
     const retObj: { [key: string]: string[] } = {};

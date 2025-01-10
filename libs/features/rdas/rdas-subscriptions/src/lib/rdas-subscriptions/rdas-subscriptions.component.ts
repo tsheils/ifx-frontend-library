@@ -17,11 +17,10 @@ import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-subscriptions',
-  templateUrl: './rdas-subscriptions.component.html',
-  styleUrls: ['./rdas-subscriptions.component.scss'],
-  standalone: true,
-  imports: [DiseaseListCardComponent],
+    selector: 'ncats-frontend-library-rdas-subscriptions',
+    templateUrl: './rdas-subscriptions.component.html',
+    styleUrls: ['./rdas-subscriptions.component.scss'],
+    imports: [DiseaseListCardComponent]
 })
 export class RdasSubscriptionsComponent implements OnInit {
   private readonly store = inject(Store);

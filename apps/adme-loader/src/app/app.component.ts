@@ -37,27 +37,26 @@ import { MobileHeaderTemplateComponent } from '@ncats-frontend-library/shared/ut
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
 
 @Component({
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [
-    RouterLink,
-    NgClass,
-    MatSidenavModule,
-    RdasSearchComponent,
-    RouterOutlet,
-    FooterTemplateComponent,
-    HeaderTemplateComponent,
-    SocialSignOnButtonComponent,
-    CdkScrollableModule,
-    ScrollingModule,
-    LoadingSpinnerComponent,
-    MobileHeaderTemplateComponent,
-    SharedUtilsFileUploadComponent,
-  ],
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: [
+        RouterLink,
+        NgClass,
+        MatSidenavModule,
+        RdasSearchComponent,
+        RouterOutlet,
+        FooterTemplateComponent,
+        HeaderTemplateComponent,
+        SocialSignOnButtonComponent,
+        CdkScrollableModule,
+        ScrollingModule,
+        LoadingSpinnerComponent,
+        MobileHeaderTemplateComponent,
+        SharedUtilsFileUploadComponent,
+    ],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements OnInit {
   @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;

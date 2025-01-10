@@ -1,6 +1,10 @@
 .main-rail {
   width: 80px;
   background-color: #ffffff;
+  position: fixed;
+  left:80px;
+  padding-top: 20px;
+  height:100%;
 }
 
 .ramp-rail {
@@ -8,10 +12,6 @@
   width: 80px;
   display: grid;
   justify-items: center;
-}
-
-.disabled-rail {
-  //  background-color: red;
 }
 
 .ramp-sub {
@@ -42,6 +42,3 @@
   font-size: 24px;
 }
 
-.drawer-container-content {
-  min-height: 100vh;
-}

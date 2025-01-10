@@ -20,8 +20,9 @@ serializers <- list(
 makeFunctionCall<-function(input, functionName){
     input <- paste(input, collapse = '", "')
     input <- paste0('c("',input,'")')
-    string <- paste0("RaMP::",functionName,"(",input,")")
-    string <- gsub('(.{1,130})(\\s|$)', '\\1\n', string)
+    #string <- paste0("RaMP::",functionName,"(",input,")")
+    string <- paste0("RaMP::",functionName,"(INPUT)")
+   # string <- gsub('(.{1,130})(\\s|$)', '\\1\n', string)
     return(string)
 }
 
@@ -229,6 +230,7 @@ function(metabolites) {
 #' @param format one of "json" or "tsv"
 #' @post /api/metabolites-from-ontologies
 function(ontology, format = "json", res) {
+  print(ontology)
   ontologies_names <- c(ontology)
   ontologies <- RaMP::getMetaFromOnto(db = rampDB, ontology = ontologies_names)
   if (is.null(nrow(ontologies))) {
@@ -376,9 +378,9 @@ function(analytes, namesOrIds = "ids") {
 #' @parser multi
 #' @parser text
 #' @parser json
-#' @post /api/combined-fisher-test
+#' @post /api/enrich-pathways
 #' @serializer json list(digits = 6)
-function(analytes = '', background = '', backgroundFile = '', backgroundType= "database") {
+function(analytes, background = '', backgroundFile = '', backgroundType= "database") {
   fishers_results_df <- ''
   if(backgroundFile == "") {
     if(background == "") {
@@ -420,7 +422,7 @@ function(analytes = '', background = '', backgroundFile = '', backgroundType= "d
   analytes <- paste(analytes, collapse = ", ")
   return(list(
     data = fishers_results_df,
-    function_call = paste0("RaMP::runEnrichPathways(", analytes, "))")
+    function_call = paste0("RaMP::runEnrichPathways()")
   ))
 }
 
@@ -430,7 +432,7 @@ function(analytes = '', background = '', backgroundFile = '', backgroundType= "d
 #' @param fishers_results output of runEnrichPathways
 #' @param pValType one of "fdr" or "holm" or "pval"
 #' @param pValCutoff p value threshold below which results are considered significant
-#' @post /api/filter-fisher-test-results
+#' @post /api/filter-enrichment-results
 #' @serializer json list(digits = 6)
 function(fishers_results,  pValType = 'fdr', pValCutoff = 0.1) {
   filtered_results <- RaMP::filterEnrichResults(
@@ -441,7 +443,7 @@ function(fishers_results,  pValType = 'fdr', pValCutoff = 0.1) {
   fishers_results <- paste(fishers_results, collapse = ", ")
   return(list(
     data = filtered_results,
-    function_call = paste0("RaMP::filterEnrichResults(", fishers_results, ")")
+    function_call = paste0("RaMP::filterEnrichResults()")
   ))
 }
 
@@ -451,7 +453,7 @@ function(fishers_results,  pValType = 'fdr', pValCutoff = 0.1) {
 #' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
 #' @param percPathwayOverlap Minimum overlap for clusters to merge
 #' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
-#' @post /api/cluster-fisher-test-results
+#' @post /api/cluster-enrichment-results
 #' @serializer json list(digits = 6)
 function(
   fishers_results,
@@ -472,8 +474,8 @@ function(
   )
   return(
     list(
-      data = clustering_results
-      # function_call = paste0("RaMP::runEnrichChemClass(", mets ,"))"),
+      data = clustering_results,
+       function_call = paste0("RaMP::runEnrichChemClass())")
       #numFoundIds = length(unique(chemical_enrichment_df$chem_props$chem_source_id))
     )
   )
@@ -565,7 +567,8 @@ function(metabolites = '', backgroundFile = '', background = '', backgroundType 
   }
     return(
       list(
-        data = chemical_enrichment_df
+        data = chemical_enrichment_df,
+        function_call = makeFunctionCall(metabolites,"runEnrichChemClass")
       )
     )
   }
@@ -613,7 +616,8 @@ plot<- RaMP:::buildAnalyteOverlapPerRxnLevelUpsetDataframe(result)
     list(
       data = result,
       plot = plot,
-      function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,"), includeRxnURLs=",includeRxnURLs,"")
+     # function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,"), includeRxnURLs=",includeRxnURLs,"")
+      function_call = makeFunctionCall(analyteStr, "getReactionsForAnalytes")
     )
   )
 }
@@ -650,7 +654,8 @@ function(
   return(
     list(
       data = result,
-      function_call = paste0("RaMP::getReactionClassesForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), multiRxnParticipantCount=",multiRxnParticipantCount,", humanProtein=",humanProtein,", concatResults=",concatResults,")")
+     # function_call = paste0("RaMP::getReactionClassesForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), multiRxnParticipantCount=",multiRxnParticipantCount,", humanProtein=",humanProtein,", concatResults=",concatResults,")")
+      function_call = makeFunctionCall(analytes,"getReactionClassesForAnalyes"),
     )
   )
 }
@@ -674,7 +679,8 @@ function(
   return(
     list(
       data = result,
-      function_call = paste0("RaMP::getReactionParticipants(db=RaMPDB, reactionList=c(",rxnStr,"))")
+     # function_call = paste0("RaMP::getReactionParticipants(db=RaMPDB, reactionList=c(",rxnStr,"))")
+      function_call = makeFunctionCall(rxnStr,"getReactionParticipants"),
     )
   )
 }
@@ -698,7 +704,9 @@ function(
   return(
     list(
       data = result,
-      function_call = paste0("RaMP::getReactionDetails(db=RaMPDB, reactionList=c(",rxnStr,"))")
+    #  function_call = paste0("RaMP::getReactionDetails(db=RaMPDB, reactionList=c(",rxnStr,"))")
+      function_call = makeFunctionCall(rxnStr,"getReactionDetails"),
+
     )
   )
 }

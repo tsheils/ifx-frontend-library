@@ -10,7 +10,7 @@ import {
 } from '@ncats-frontend-library/models/rdas';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { filter, map, mergeMap } from 'rxjs';
+import { filter, map, mergeMap, withLatestFrom } from 'rxjs';
 import { GrantService } from '../grant.service';
 import {
   FetchProjectActions,
@@ -64,17 +64,15 @@ export const fetchProjectList$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => {
-        const fragment = <string>r.payload.routerState.root.fragment;
-        return (
-          (fragment === '' || fragment === 'projects') &&
-          r.payload.routerState.url.startsWith('/disease')
-        );
+        return r.payload.routerState.url.startsWith('/disease');
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        const params = root.queryParams;
-        const gardid: string = params['id'];
-        _setProjectsOptions(params);
+        PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
+          root.queryParams['id'];
+        if (root.fragment === 'projects') {
+          _setProjectsOptions(root.queryParams);
+        }
         return projectService
           .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
           .pipe(
@@ -109,7 +107,11 @@ export const fetchProjectList$ = createEffect(
   { functional: true },
 );
 
-function _setProjectsOptions(options: { limit?: number; offset?: number }) {
+function _setProjectsOptions(options: {
+  id?: string;
+  limit?: number;
+  offset?: number;
+}) {
   PROJECTVARIABLES.coreProjectsOptions.limit = <number>options['limit']
     ? <number>options['limit']
     : 10;

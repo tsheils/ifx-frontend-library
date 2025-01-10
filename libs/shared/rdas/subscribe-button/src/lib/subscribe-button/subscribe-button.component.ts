@@ -45,7 +45,6 @@ import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-moda
     MatCheckboxModule,
     MatDialogModule,
     MatSnackBarModule,
-    SocialSignOnButtonComponent,
   ],
 })
 export class SubscribeButtonComponent implements OnInit {

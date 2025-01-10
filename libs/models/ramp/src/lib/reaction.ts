@@ -1,4 +1,6 @@
-export class Reaction {
+import { RampDataGeneric } from './_utils';
+
+export class Reaction extends RampDataGeneric {
   reactionId!: string;
   label?: string;
   equation?: string;
@@ -15,11 +17,13 @@ export class Reaction {
   direction?: string;
 
   constructor(obj: Partial<Reaction>) {
+    super();
     Object.assign(this, obj);
+    this.id = this.metSourceId;
   }
 }
 
-export class ReactionClass {
+export class ReactionClass extends RampDataGeneric {
   classLevel!: number;
   ecNumber!: string;
   metCount!: number;
@@ -36,7 +40,10 @@ export class ReactionClass {
   totalReactionAverage?: string;
 
   constructor(obj: Partial<ReactionClass>) {
+    super();
     Object.assign(this, obj);
+
+    this.id = this.ecNumber;
 
     if (obj['rxnClassHierarcy']) {
       const hierarchy = <string>obj['rxnClassHierarcy'];
@@ -56,7 +63,7 @@ export class ReactionClass {
   }
 }
 
-export class CommonAnalyte {
+export class CommonAnalyte extends RampDataGeneric {
   inputAnalyte!: string;
   inputCommonName!: string;
   rxnPartnerCommonName!: string;
@@ -66,6 +73,8 @@ export class CommonAnalyte {
   source!: string;
 
   constructor(obj: { [key: string]: unknown }) {
+    super();
+
     if (obj['input_analyte']) {
       this.inputAnalyte = <string>obj['input_analyte'];
     }
@@ -79,6 +88,7 @@ export class CommonAnalyte {
     }
 
     if (obj['input_common_name']) {
+      this.id = <string>obj['input_common_name'];
       this.inputCommonName = <string>obj['input_common_name'];
     }
 

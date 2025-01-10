@@ -3,12 +3,7 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  importProvidersFrom,
-  inject,
-} from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -28,7 +23,11 @@ import {
   withPreloading,
   withViewTransitions,
 } from '@angular/router';
-import { articlesReducer } from '@ncats-frontend-library/stores/article-store';
+import {
+  ARTICLE_STORE_FEATURE_KEY,
+  ArticleEffects,
+  articlesReducer,
+} from '@ncats-frontend-library/stores/article-store';
 import {
   DiseaseEffects,
   DISEASES_FEATURE_KEY,
@@ -73,12 +72,10 @@ export function rdasInit(store = inject(Store)) {
 export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: rdasInit,
-      deps: [],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (rdasInit)();
+        return initializerFn();
+      }),
     provideRouter(
       routes,
       withViewTransitions(),
@@ -101,11 +98,13 @@ export const appConfig: ApplicationConfig = {
     }),
     provideEffects([
       UserEffects,
+      ArticleEffects,
       DiseaseEffects,
       FilterEffects,
       TrialEffects,
       ProjectEffects,
     ]),
+    provideState(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
     provideState(PROJECTS_FEATURE_KEY, projectsReducer),
     provideState(TRIALS_FEATURE_KEY, trialsReducer),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),

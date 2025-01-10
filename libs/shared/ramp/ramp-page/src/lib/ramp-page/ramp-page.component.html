@@ -1,10 +1,5 @@
-<mat-sidenav
-  #navigationsidenav
-  [opened]="true"
-  [mode]="'side'"
-  class="main-rail"
->
-  <div class="ramp-rail ramp-sub" cdkScrollable>
+<div class=" main-rail">
+  <div class=" ramp-rail ramp-sub" cdkScrollable>
     <button
       matRipple
       class="rail-button"
@@ -19,10 +14,10 @@
       class="rail-button"
       [ngClass]="{
         'active-rail': isActive('results'),
-        'disabled-rail': !resultsLoaded,
+        'disabled-rail': !loadedTracker().resultsLoaded,
       }"
       (click)="scrollTo('results')"
-      [disabled]="!resultsLoaded"
+      [disabled]="!loadedTracker().resultsLoaded"
     >
       <div class="rail-icon"><mat-icon>output</mat-icon></div>
       <div class="rail-label">Overview</div>
@@ -33,9 +28,9 @@
       (click)="scrollTo('visualizations')"
       [ngClass]="{
         'active-rail': isActive('visualizations'),
-        'disabled-rail': !visualizationsLoaded,
+        'disabled-rail': !loadedTracker().visualizationsLoaded,
       }"
-      [disabled]="!visualizationsLoaded"
+      [disabled]="!loadedTracker().visualizationsLoaded"
     >
       <div class="rail-icon"><mat-icon>dashboard</mat-icon></div>
       <div class="rail-label">Visualizations</div>
@@ -45,26 +40,26 @@
       class="rail-button"
       [ngClass]="{
         'active-rail': isActive('data'),
-        'disabled-rail': !dataLoaded,
+        'disabled-rail': !loadedTracker().dataLoaded,
       }"
       (click)="scrollTo('data')"
-      [disabled]="!dataLoaded"
+      [disabled]="!loadedTracker().dataLoaded"
     >
       <div class="rail-icon"><mat-icon>data_array</mat-icon></div>
       <div class="rail-label">Results</div>
     </button>
   </div>
-</mat-sidenav>
-<mat-sidenav-content class="drawer-container-content">
-  <div class="row centered-row">
+</div>
+<div class="page-content">
+  <div class="row">
     <div class="width-95">
-      <h1>{{ title() | titlecase }}</h1>
+      <h1>{{ title() | titlecase }}</h1><br>
+      <h3>{{paths() ? paths()![0].summary : ''}}</h3>
     </div>
   </div>
-
-  <div class="row centered-row">
-    <div class="width-95">
+    <div class="row space-around-row">
+      <div class="width-95">
       <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
-    </div>
-  </div>
-</mat-sidenav-content>
+      </div>
+</div>
+</div>

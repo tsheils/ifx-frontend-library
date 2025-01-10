@@ -10,3 +10,4 @@ export * from './lib/header-animation';
 export * from './lib/open-api-path';
 export * from './lib/query-results-data';
 export * from './lib/force-directed-graph.models';
+export * from './lib/panel-accordion-models';

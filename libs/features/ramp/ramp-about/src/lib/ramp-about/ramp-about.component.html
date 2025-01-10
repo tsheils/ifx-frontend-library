@@ -389,30 +389,36 @@
               covered for each resource.
             </p>
             <div class="row">
-              @if (compoundsData() && compoundsData().data) {
-                <div class="width-75 width-md-90 width-sm-100">
+                <div class="width-90 width-sm-100">
                   <h3>Metabolite Overlap</h3>
+                  <div class="upset-holder metabolite-upset">
                   <lib-shared-utils-upset-chart
                     [title]="'Metabolite Overlap'"
                     [chartData]="compoundsData()"
                     [scale] = "'log'"
                   >
                   </lib-shared-utils-upset-chart>
+
                 </div>
-              }
-            </div>
+                </div>
+                         </div>
             <div class="row">
-              @if (genesData() && genesData().data) {
-                <div class="width-50 width-md-90 width-sm-100">
+                <div class="width-75 width-md-90 width-sm-100">
                   <h3>Gene Overlap</h3>
+                  <div class="upset-holder">
+                    @defer (on viewport) {
                   <lib-shared-utils-upset-chart
                     [title]="'Gene Overlap'"
                     [chartData]="genesData()"
                     scale="log"
                   >
                   </lib-shared-utils-upset-chart>
+                    } @placeholder (){
+                      <div class="upset-holder metabolite-upset"></div>
+
+                    }
+                  </div>
                 </div>
-              }
             </div>
           </div>
         </div>

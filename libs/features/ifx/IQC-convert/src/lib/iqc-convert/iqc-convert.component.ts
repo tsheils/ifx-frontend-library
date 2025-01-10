@@ -11,20 +11,19 @@ import { Tool } from 'ifx';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-iqc-convert',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DefaultToolComponent,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatInputModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-  ],
-  templateUrl: './iqc-convert.component.html',
-  styleUrl: './iqc-convert.component.scss',
+    selector: 'lib-iqc-convert',
+    imports: [
+        CommonModule,
+        DefaultToolComponent,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatInputModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+    ],
+    templateUrl: './iqc-convert.component.html',
+    styleUrl: './iqc-convert.component.scss'
 })
 export class IqcConvertComponent {
   private readonly store = inject(Store);

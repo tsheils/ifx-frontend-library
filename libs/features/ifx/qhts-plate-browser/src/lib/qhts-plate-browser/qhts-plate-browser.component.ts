@@ -9,17 +9,16 @@ import { ScreenshotDisplayComponent } from 'screenshot-display';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-qhts-plate-browser',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DefaultToolComponent,
-    ScreenshotDisplayComponent,
-    JavaWebstartComponent,
-    MatTabsModule,
-  ],
-  templateUrl: './qhts-plate-browser.component.html',
-  styleUrl: './qhts-plate-browser.component.scss',
+    selector: 'lib-qhts-plate-browser',
+    imports: [
+        CommonModule,
+        DefaultToolComponent,
+        ScreenshotDisplayComponent,
+        JavaWebstartComponent,
+        MatTabsModule,
+    ],
+    templateUrl: './qhts-plate-browser.component.html',
+    styleUrl: './qhts-plate-browser.component.scss'
 })
 export class QhtsPlateBrowserComponent {
   private readonly store = inject(Store);

@@ -1,4 +1,4 @@
-@for (article of articles; track article.pubmed_id) {
+@for (article of articles(); track article.pubmed_id) {
   <div class="row centered-row">
     <ncats-frontend-library-article-list-card
       [article]="article"

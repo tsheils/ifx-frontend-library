@@ -24,6 +24,7 @@ import {
   UpsetData,
   UpsetPlot,
 } from '@ncats-frontend-library/models/utils';
+import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { Store } from '@ngrx/store';
 import { NcatsDatatableComponent } from 'ncats-datatable';
 import { EntityCount } from 'ramp';
@@ -52,6 +53,7 @@ import { UpsetComponent } from 'upset-chart';
     MatIconModule,
     MatSidenavModule,
     MatButtonModule,
+    LoadingSpinnerComponent,
   ],
 })
 export class AboutComponent implements OnInit {

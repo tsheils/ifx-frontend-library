@@ -21,21 +21,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'ncats-frontend-library-features-rdas-about',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatListModule,
-    ScrollingModule,
-    OverlayModule,
-    MatMenuModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatButtonModule,
-  ],
-  templateUrl: './features-rdas-rdas-about.component.html',
-  styleUrls: ['./features-rdas-rdas-about.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'ncats-frontend-library-features-rdas-about',
+    imports: [
+        CommonModule,
+        MatListModule,
+        ScrollingModule,
+        OverlayModule,
+        MatMenuModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatButtonModule,
+    ],
+    templateUrl: './features-rdas-rdas-about.component.html',
+    styleUrls: ['./features-rdas-rdas-about.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class FeaturesRdasRdasAboutComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;

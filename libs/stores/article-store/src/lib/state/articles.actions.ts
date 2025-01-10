@@ -14,19 +14,26 @@ export const FetchArticleActions = createActionGroup({
   },
 });
 
-export const LoadArticlesActions = createActionGroup({
+export const FetchArticlesListActions = createActionGroup({
   source: 'Load Articles',
   events: {
     loadArticles: props<{
       top: number;
       skip: number;
     }>(),
-    loadArticlesSuccess: props<{ articles: Article[]; page?: Page }>(),
-    loadArticlesFailure: props<{ error: string }>(),
+    fetchArticlesListSuccess: props<{
+      articles: Article[];
+      allArticlesCount?: number;
+      articlesCount?: number;
+      epiArticlesCount?: number;
+      nhsArticlesCount?: number;
+      page?: Page;
+    }>(),
+    fetchArticlesListFailure: props<{ error: string }>(),
   },
 });
 
-export const FetchAllDiseasesArticleFilterActions = createActionGroup({
+export const FetchArticleFilterActions = createActionGroup({
   source: 'Fetch Article Filters',
   events: {
     fetchArticleFilters: emptyProps(),

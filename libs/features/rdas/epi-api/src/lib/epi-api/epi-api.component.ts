@@ -13,13 +13,12 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-  selector: 'ncats-frontend-library-epi-api',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './epi-api.component.html',
-  styleUrls: ['./epi-api.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-frontend-library-epi-api',
+    imports: [CommonModule],
+    templateUrl: './epi-api.component.html',
+    styleUrls: ['./epi-api.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class EpiApiComponent {
   /**

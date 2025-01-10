@@ -1,7 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SafeHtml } from '@angular/platform-browser';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { VisualizationPanelComponent } from './visualization-panel.component';
 
 describe('VisualizationPanelComponent', () => {

@@ -21,7 +21,6 @@ import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/exte
 
 @Component({
   selector: 'ncats-frontend-library-gene-list',
-  standalone: true,
   imports: [
     MatPaginatorModule,
     MatCardModule,
@@ -31,11 +30,11 @@ import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/exte
     MatTableModule,
     MatSortModule,
     ExternalLinkComponent,
-    SharedUtilsDataNotFoundComponent,
     MatTooltip,
   ],
   templateUrl: './gene-list.component.html',
   styleUrls: ['./gene-list.component.scss'],
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class GeneListComponent {

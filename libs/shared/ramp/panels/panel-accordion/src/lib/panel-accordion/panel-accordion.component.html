@@ -1,16 +1,21 @@
 
+
 <mat-accordion multi>
   <mat-expansion-panel expanded id="input" #input>
     <mat-expansion-panel-header>
       <mat-panel-title><h2>Input</h2></mat-panel-title>
     </mat-expansion-panel-header>
-    <ng-content select=".custom-input"></ng-content>
-    @if (inputTab() && inputTab()?.size) {
-      <lib-input-panel
-        [inputQuestions]="inputTab()!"
-        (dataSearch)="searchData($event)"
-      ></lib-input-panel>
+    @defer( when paths()) {
+    <h4>{{(paths() && paths()![0].description) ? paths()![0].description : ''}}</h4>
+    Supported source ids: <br/>
+    Genes/Proteins: {{paths()![0].allowedTypes!['genes/proteins']!.length ? paths()![0].allowedTypes!['genes/proteins']!.join(', ') : ' No gene/protein ids are supported'}} <br/>
+    Metabolites: {{paths() ? paths()![0].allowedTypes!.metabolites!.join(', ') : 'No metabolite ids supported'}} <br/>
     }
+    <ng-content select=".custom-input"></ng-content>
+            <lib-input-panel
+              [inputQuestions]="inputTab()"
+              (dataSearch)="searchData($event)"
+            ></lib-input-panel>
   </mat-expansion-panel>
 
   <mat-expansion-panel
@@ -36,13 +41,15 @@
       <mat-panel-title><h2>Visualizations</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (visualizationTabs() && visualizationTabs()?.size) {
-      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" >
         @for (tab of visualizationTabs() | keyvalue; track tab.key) {
-          <mat-tab [label]="tab.key">
+          <mat-tab [label]="tab.key" class="viz-tab">
             <ng-template matTabContent>
+              <div class="viz-holder">
               <lib-visualization-panel
                 [data]="tab.value"
               ></lib-visualization-panel>
+              </div>
             </ng-template>
           </mat-tab>
         }

@@ -86,20 +86,28 @@ export const loadApi$ = createEffect(
                 if (value.post && value.post['tags']) {
                   const parent = key.split('/api/')[1];
                   const tags: string[] = value.post['tags'] as string[];
-                  tags.forEach((tag) => {
-                    let tempArr: OpenApiPath[] = [];
-                    if (tempMap.has(tag)) {
-                      tempArr = tempMap.get(tag) as OpenApiPath[];
-                      tempArr.push(
-                        new OpenApiPath({ ...value.post, parent: parent }),
-                      );
-                      tempMap.set(tag, tempArr);
-                    } else {
-                      tempMap.set(tag, [
-                        new OpenApiPath({ ...value.post, parent: parent }),
-                      ]);
-                    }
-                  });
+                  //   tags.forEach((tag, index) => {
+                  let tempArr: OpenApiPath[] = [];
+                  if (tempMap.has(tags[0])) {
+                    tempArr = tempMap.get(tags[0]) as OpenApiPath[];
+                    tempArr.push(
+                      new OpenApiPath({
+                        ...value.post,
+                        parent: parent,
+                        child: tags.length > 1 ? tags[1] : null,
+                      }),
+                    );
+                    tempMap.set(tags[0], tempArr);
+                  } else {
+                    tempMap.set(tags[0], [
+                      new OpenApiPath({
+                        ...value.post,
+                        parent: parent,
+                        child: tags.length > 1 ? tags[1] : null,
+                      }),
+                    ]);
+                  }
+                  // });
                 }
               });
               return LoadRampActions.loadRampApiSuccess({ api: tempMap });

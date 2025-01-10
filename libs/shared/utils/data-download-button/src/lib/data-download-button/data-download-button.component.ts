@@ -12,10 +12,10 @@ import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lib-data-download-button',
-  standalone: true,
   imports: [CommonModule, MatButton, MatTooltip, MatIcon],
   templateUrl: './data-download-button.component.html',
   styleUrl: './data-download-button.component.scss',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataDownloadButtonComponent {

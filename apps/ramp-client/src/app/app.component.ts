@@ -11,7 +11,6 @@ import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/he
 import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { Store } from '@ngrx/store';
 import { RampFullBannerComponent } from 'full-banner';
-import { NcatsHeaderComponent } from 'ncats-header';
 
 import { environment } from '../environments/environment';
 import { RouterOutlet } from '@angular/router';
@@ -24,13 +23,11 @@ import { RampSelectors } from 'ramp-store';
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     RouterOutlet,
     LoadingSpinnerComponent,
     HeaderTemplateComponent,
     RampFullBannerComponent,
-    NcatsHeaderComponent,
     FooterTemplateComponent,
   ],
 })

@@ -24,7 +24,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   styleUrls: ['./header-template.component.scss'],
   animations: [slideInOutAnimation],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     MatToolbarModule,
     MatButtonModule,
@@ -34,6 +33,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     NgClass,
     MatSidenavModule,
   ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderTemplateComponent {

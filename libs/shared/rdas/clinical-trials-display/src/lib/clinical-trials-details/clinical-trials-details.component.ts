@@ -18,17 +18,11 @@ import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/cl
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ClinicalTrialsListCardComponent,
-    MatCardModule,
-    MatTabsModule,
-    MatListModule,
-  ],
+  imports: [CommonModule, MatCardModule, MatTabsModule, MatListModule],
   templateUrl: './clinical-trials-details.component.html',
   styleUrls: ['./clinical-trials-details.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ClinicalTrialsDetailsComponent {

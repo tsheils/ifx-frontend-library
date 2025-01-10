@@ -8,18 +8,17 @@ import { RouterLink } from '@angular/router';
 import { Tool } from 'ifx';
 
 @Component({
-  selector: 'lib-tool-card',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NgOptimizedImage,
-    MatCardModule,
-    RouterLink,
-    MatIcon,
-    MatTooltip,
-  ],
-  templateUrl: './tool-card.component.html',
-  styleUrl: './tool-card.component.scss',
+    selector: 'lib-tool-card',
+    imports: [
+        CommonModule,
+        NgOptimizedImage,
+        MatCardModule,
+        RouterLink,
+        MatIcon,
+        MatTooltip,
+    ],
+    templateUrl: './tool-card.component.html',
+    styleUrl: './tool-card.component.scss'
 })
 export class ToolCardComponent {
   tool = input<Tool>();

@@ -1,10 +1,25 @@
-import { DataProperty } from '@ncats-frontend-library/models/utils';
+import {
+  DataMap,
+  DataProperty,
+  QueryResultsData,
+  VisualizationMap,
+} from '@ncats-frontend-library/models/utils';
+import { QuestionBase } from 'ncats-form-question';
 import { ChemicalEnrichment } from './chemical-enrichment';
 import { FisherResult, FishersDataframe } from './fisher-result';
 import { RampQuery } from './ramp-query';
 import { Reaction } from './reaction';
 
-export class RampDataGeneric {}
+export class RampDataGeneric {
+  id!: string;
+}
+
+export class RampPage {
+  inputMap?: FormSubsection[];
+  overviewMap?: QueryResultsData;
+  visualizationsMap?: Map<string, VisualizationMap[]>;
+  dataMap?: Map<string, DataMap>;
+}
 
 export interface RampAPIResponse<T extends RampDataGeneric> {
   data: Array<T>;
@@ -76,4 +91,9 @@ export interface RampChemicalEnrichmentResponse {
   enriched_chemical_class_list: ChemicalEnrichment[];
   query?: RampQuery;
   dataAsDataProperty?: { [p: string]: DataProperty }[];
+}
+
+export class FormSubsection {
+  section!: string;
+  questions!: QuestionBase<string>[];
 }

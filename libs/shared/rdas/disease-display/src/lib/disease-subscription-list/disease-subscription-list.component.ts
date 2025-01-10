@@ -9,16 +9,15 @@ import { Subject } from 'rxjs';
 import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card.component';
 
 @Component({
-  selector: 'ncats-frontend-library-disease-subscription-list',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    DiseaseListCardComponent,
-  ],
-  templateUrl: './disease-subscription-list.component.html',
-  styleUrls: ['./disease-subscription-list.component.scss'],
+    selector: 'ncats-frontend-library-disease-subscription-list',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatIconModule,
+        DiseaseListCardComponent,
+    ],
+    templateUrl: './disease-subscription-list.component.html',
+    styleUrls: ['./disease-subscription-list.component.scss']
 })
 
 //TODO refactor with signals

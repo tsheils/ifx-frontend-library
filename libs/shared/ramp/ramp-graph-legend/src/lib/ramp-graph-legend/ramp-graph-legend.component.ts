@@ -17,12 +17,11 @@ export const GRAPH_LEGEND = new InjectionToken<string>(
 );
 
 @Component({
-  selector: 'lib-ramp-graph-legend',
-  standalone: true,
-  imports: [CommonModule, NcatsDatatableComponent, MatExpansionModule],
-  templateUrl: './ramp-graph-legend.component.html',
-  styleUrl: './ramp-graph-legend.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-ramp-graph-legend',
+    imports: [CommonModule, NcatsDatatableComponent, MatExpansionModule],
+    templateUrl: './ramp-graph-legend.component.html',
+    styleUrl: './ramp-graph-legend.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RampGraphLegendComponent implements OnInit {
   forceDirectedGraphService = inject(ForceDirectedGraphService);

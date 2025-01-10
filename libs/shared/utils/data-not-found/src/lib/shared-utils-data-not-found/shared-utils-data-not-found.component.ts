@@ -10,11 +10,11 @@ import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/su
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-data-not-found',
-  standalone: true,
-  imports: [CommonModule, SubscribeButtonComponent, MatButton],
+  imports: [CommonModule, SubscribeButtonComponent],
   templateUrl: './shared-utils-data-not-found.component.html',
   styleUrls: ['./shared-utils-data-not-found.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class SharedUtilsDataNotFoundComponent {

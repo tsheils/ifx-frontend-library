@@ -12,12 +12,11 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-  selector: 'lib-history-api',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './history-api.component.html',
-  styleUrl: './history-api.component.scss',
-  encapsulation: ViewEncapsulation.None,
+    selector: 'lib-history-api',
+    imports: [CommonModule],
+    templateUrl: './history-api.component.html',
+    styleUrl: './history-api.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 export class HistoryApiComponent {
   /**

@@ -4,10 +4,10 @@ import { Annotation } from '@ncats-frontend-library/models/rdas';
 
 @Component({
   selector: 'ncats-frontend-library-annotations-display',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './annotations-display.component.html',
   styleUrls: ['./annotations-display.component.scss'],
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class AnnotationsDisplayComponent {

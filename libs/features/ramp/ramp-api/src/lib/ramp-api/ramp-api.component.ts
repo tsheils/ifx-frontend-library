@@ -12,13 +12,12 @@ import {
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-  selector: 'ramp-ramp-api',
-  templateUrl: './ramp-api.component.html',
-  styleUrls: ['./ramp-api.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [],
+    selector: 'ramp-ramp-api',
+    templateUrl: './ramp-api.component.html',
+    styleUrls: ['./ramp-api.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    imports: []
 })
 export class RampApiComponent implements AfterViewInit {
   /**
@@ -27,6 +26,7 @@ export class RampApiComponent implements AfterViewInit {
   @ViewChild('documentation') el!: ElementRef;
 
   isBrowser: boolean;
+  url = '/assets/data/ramp-api.json';
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
@@ -39,7 +39,7 @@ export class RampApiComponent implements AfterViewInit {
     if (this.isBrowser) {
       SwaggerUI({
         //url: '/assets/ramp-api/data/ramp_openapi_with_extensions.yml',
-        url: '/assets/data/ramp-api.json',
+        url: this.url,
         domNode: this.el.nativeElement,
       });
     }

@@ -2,76 +2,49 @@ import { CdkScrollable } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
 } from '@angular/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
-import { MatList, MatListItem, MatNavList } from '@angular/material/list';
-import {
-  MatSidenav,
-  MatSidenavContainer,
-  MatSidenavContent,
-} from '@angular/material/sidenav';
 import { RouterOutlet } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
-import { NcatsDatatableComponent } from 'ncats-datatable';
 import { QuestionBase } from 'ncats-form-question';
-import { PanelAccordionComponent } from 'panel-accordion';
+import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
-import { UpsetComponent } from 'upset-chart';
 
 @Component({
   selector: 'lib-ramp-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    CdkScrollable,
-    MatButton,
-    MatIcon,
-    MatList,
-    MatListItem,
-    MatNavList,
-    MatSidenav,
-    MatSidenavContainer,
-    MatSidenavContent,
-    NcatsDatatableComponent,
-    UpsetComponent,
-    PanelAccordionComponent,
-    RouterOutlet,
-    MatIconButton,
-    MatRipple,
-  ],
+  imports: [CommonModule, CdkScrollable, MatIcon, RouterOutlet, MatRipple],
   templateUrl: './ramp-page.component.html',
   styleUrl: './ramp-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class RampPageComponent<T extends RampCorePageComponent> {
+  scroller = inject(ViewportScroller);
   activeMenuElement = 'input';
   title = input<string>();
   paths = input<OpenApiPath[]>();
-  inputMap = input<Map<string, QuestionBase<string>[]>>();
+  inputMap = input<Map<string, FormSubsection[]>>();
   filterMap = input<Map<string, QuestionBase<string>[]>>();
-
-  scroller = inject(ViewportScroller);
-
-  resultsLoaded = false;
-  visualizationsLoaded = false;
-  dataLoaded = false;
+  loadedTracker = computed(() => {
+    return {
+      resultsLoaded: false,
+      visualizationsLoaded: false,
+      dataLoaded: false,
+    };
+  });
 
   onOutletLoaded(component: T) {
+    console.log(this.paths());
     component['paths'] = this.paths;
     component['title'] = this.title;
     component['inputMap'] = this.inputMap;
     component['filtersMap'] = this.filterMap;
-
-    component.loadedEvent.subscribe((event) => {
-      this.resultsLoaded = event.resultsLoaded || false;
-      this.visualizationsLoaded = event.visualizationsLoaded || false;
-      this.dataLoaded = event.dataLoaded || false;
-    });
+    this.loadedTracker = component['loadedTracker'];
   }
 
   isActive(check: string): boolean {

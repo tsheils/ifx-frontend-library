@@ -1,5 +1,5 @@
 export class QueryResultsData {
-  function?: string;
+  function?: string[];
   matches?: string[];
   noMatches?: string[];
   count?: number;

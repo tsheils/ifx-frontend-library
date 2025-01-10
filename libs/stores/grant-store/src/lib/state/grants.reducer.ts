@@ -8,7 +8,7 @@ import {
 
 import * as ProjectsActions from './grants.actions';
 
-export const PROJECTS_FEATURE_KEY = 'Projects';
+export const PROJECTS_FEATURE_KEY = 'projects';
 
 export interface ProjectsState extends EntityState<CoreProject> {
   selectedId?: string | number; // which Projects record has been selected
@@ -16,8 +16,8 @@ export interface ProjectsState extends EntityState<CoreProject> {
   error?: string | null; // last known error (if any)
   project?: CoreProject;
   projects?: CoreProject[];
-  allProjectsCount?: number;
-  projectsCount?: number;
+  allProjectsCount: number;
+  projectsCount: number;
 }
 
 export interface ProjectsPartialState {
@@ -33,6 +33,8 @@ export const initialProjectsState: ProjectsState =
   projectsAdapter.getInitialState({
     // set initial required properties
     loaded: false,
+    allProjectsCount: 0,
+    projectsCount: 0,
   });
 
 const reducer = createReducer(
@@ -43,8 +45,8 @@ const reducer = createReducer(
       projectsAdapter.setAll(projects, {
         ...state,
         loaded: true,
-        allProjectsCount: allProjectsCount,
-        projectsCount: projectsCount,
+        allProjectsCount: allProjectsCount || 0,
+        projectsCount: projectsCount || 0,
       }),
   ),
 

@@ -35,6 +35,13 @@
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
+    },
+    "e2e-ci--**/*": {
+      "dependsOn": [
+        "^ifx-toolbox:build",
+        "^ramp-client:build",
+        "^resolver:build"
+      ]
     }
   },
   "namedInputs": {

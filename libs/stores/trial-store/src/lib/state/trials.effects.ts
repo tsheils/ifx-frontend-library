@@ -57,17 +57,17 @@ export const fetchTrialList$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => {
-        const fragment = <string>r.payload.routerState.root.fragment;
-        return (
-          (fragment === '' || fragment === 'trials') &&
-          r.payload.routerState.url.startsWith('/disease')
-        );
+        return r.payload.routerState.url.startsWith('/disease');
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        const params = root.queryParams;
-        const gardid: string = params['id'];
-        _setTrialsOptions(params);
+        FETCHTRIALSVARIABLES.ctwhere.mappedToGardGards_SOME.GardId =
+          root.queryParams['id'];
+        FETCHTRIALSVARIABLES.ctfilters.mappedToGardGards_SOME.GardId =
+          root.queryParams['id'];
+        if (root.fragment === 'trials') {
+          _setTrialsOptions(root.queryParams);
+        }
         return trialService
           .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
           .pipe(
@@ -87,6 +87,7 @@ export const fetchTrialList$ = createEffect(
               if (trialsList) {
                 return FetchTrialsListActions.fetchTrialsListSuccess({
                   trials: trialsList,
+                  allTrialCount: trials.allCount.count,
                 });
               } else
                 return FetchTrialsListActions.fetchTrialsListFailure({
@@ -104,6 +105,7 @@ function _setTrialsOptions(options: {
   limit?: number;
   offset?: number;
   GardId?: string;
+  id?: string;
   OverallStatus?: string[];
   StudyType?: string[];
   Phase?: string[];

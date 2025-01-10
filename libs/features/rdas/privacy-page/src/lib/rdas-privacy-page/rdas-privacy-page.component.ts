@@ -21,21 +21,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'rdas-privacy-page',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatListModule,
-    ScrollingModule,
-    OverlayModule,
-    MatMenuModule,
-    MatIconModule,
-    MatSidenavModule,
-    MatButtonModule,
-  ],
-  templateUrl: './rdas-privacy-page.component.html',
-  styleUrl: './rdas-privacy-page.component.scss',
-  encapsulation: ViewEncapsulation.None,
+    selector: 'rdas-privacy-page',
+    imports: [
+        CommonModule,
+        MatListModule,
+        ScrollingModule,
+        OverlayModule,
+        MatMenuModule,
+        MatIconModule,
+        MatSidenavModule,
+        MatButtonModule,
+    ],
+    templateUrl: './rdas-privacy-page.component.html',
+    styleUrl: './rdas-privacy-page.component.scss',
+    encapsulation: ViewEncapsulation.None
 })
 export class RdasPrivacyPageComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;

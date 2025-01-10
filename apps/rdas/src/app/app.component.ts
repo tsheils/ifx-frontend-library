@@ -36,7 +36,6 @@ import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-se
   standalone: true,
   imports: [
     RouterLink,
-    NgClass,
     MatSidenavModule,
     RdasSearchComponent,
     RouterOutlet,
@@ -45,7 +44,6 @@ import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-se
     SocialSignOnButtonComponent,
     CdkScrollableModule,
     ScrollingModule,
-    LoadingSpinnerComponent,
     MobileHeaderTemplateComponent,
     MatIconModule,
     MatButtonModule,

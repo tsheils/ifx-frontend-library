@@ -13,11 +13,10 @@ import { Store } from '@ngrx/store';
 import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
 
 @Component({
-  selector: 'ncats-frontend-library-trial-page',
-  standalone: true,
-  imports: [CommonModule, ClinicalTrialsDetailsComponent],
-  templateUrl: './rdas-trial-page.component.html',
-  styleUrls: ['./rdas-trial-page.component.scss'],
+    selector: 'ncats-frontend-library-trial-page',
+    imports: [CommonModule, ClinicalTrialsDetailsComponent],
+    templateUrl: './rdas-trial-page.component.html',
+    styleUrls: ['./rdas-trial-page.component.scss']
 })
 export class RdasTrialPageComponent {
   private readonly trialStore = inject(Store);

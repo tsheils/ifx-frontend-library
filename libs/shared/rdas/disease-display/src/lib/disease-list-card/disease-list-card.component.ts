@@ -20,7 +20,6 @@ import { UserSelectors } from '@ncats-frontend-library/stores/user-store';
     MatCardModule,
     MatIconModule,
     SubscribeButtonComponent,
-    MatDivider,
   ],
 })
 export class DiseaseListCardComponent {

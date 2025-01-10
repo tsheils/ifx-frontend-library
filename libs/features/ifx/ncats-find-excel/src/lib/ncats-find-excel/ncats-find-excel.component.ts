@@ -7,11 +7,10 @@ import { ScreenshotDisplayComponent } from 'screenshot-display';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-ncats-find-excel',
-  standalone: true,
-  imports: [CommonModule, DefaultToolComponent, ScreenshotDisplayComponent],
-  templateUrl: './ncats-find-excel.component.html',
-  styleUrl: './ncats-find-excel.component.scss',
+    selector: 'lib-ncats-find-excel',
+    imports: [CommonModule, DefaultToolComponent, ScreenshotDisplayComponent],
+    templateUrl: './ncats-find-excel.component.html',
+    styleUrl: './ncats-find-excel.component.scss'
 })
 export class NcatsFindExcelComponent {
   private readonly store = inject(Store);

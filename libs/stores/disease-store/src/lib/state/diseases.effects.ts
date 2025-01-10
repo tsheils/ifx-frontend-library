@@ -285,34 +285,12 @@ export const loadDisease$ = createEffect(
           _setFragment(root.fragment, params);
         }
 
-        return combineLatest(
-          diseaseService
-            .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
-            .pipe(take(1)),
-          diseaseService
-            .fetchArticles(FETCHARTICLESQUERY, ALLARTICLES)
-            .pipe(take(1)),
-          diseaseService
-            .fetchProjects(FETCHPROJECTSQUERY, PROJECTVARIABLES)
-            .pipe(take(1)),
-          diseaseService
-            .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
-            .pipe(take(1)),
-        ).pipe(
-          map(
-            ([diseaseData, articleData, projectsData, trialsData]: [
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>,
-            ]) => {
+        return diseaseService
+          .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
+          .pipe(
+            map((diseaseData: ApolloQueryResult<unknown>) => {
               if (diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = _makeDiseaseObj(
-                  diseaseData,
-                  articleData,
-                  projectsData,
-                  trialsData,
-                );
+                const diseaseObj: Disease = _makeDiseaseObj(diseaseData);
                 return FetchDiseaseActions.fetchDiseaseSuccess({
                   disease: diseaseObj,
                 });
@@ -320,9 +298,8 @@ export const loadDisease$ = createEffect(
                 return FetchDiseaseActions.fetchDiseaseFailure({
                   error: 'No Disease found',
                 });
-            },
-          ),
-        );
+            }),
+          );
       }),
     );
   },
@@ -854,11 +831,11 @@ function _makeDiseaseObj(
         }[];
       };
       if (articles) {
-        diseaseObj.allArticles = articles.articles[0].articles.map(
+        /*diseaseObj.allArticles = articles.articles[0].articles.map(
           (art: Partial<Article>) => new Article(art),
         );
         diseaseObj.allArticleCount = articles.articles[0]._count.count;
-        diseaseObj.articleCount = articles.articles[0].allCount.count;
+        diseaseObj.articleCount = articles.articles[0].allCount.count;*/
         /*diseaseObj.epiCount = epiArticles.articles[0]._count.count;
         diseaseObj.allEpiCount = epiArticles.articles[0].allCount.count;
         diseaseObj.nhsCount = nhsArticles.articles[0]._count.count;
@@ -1079,40 +1056,43 @@ function _parseFilterResponse(
 ): FilterCategory[] {
   const filters: FilterCategory[] = [];
   if (articleFilterData) {
-    const articleFilterDataList: { countsByYear: Filter[] } =
-      articleFilterData.data as { countsByYear: Filter[] };
+    const articleFilterDataList: {
+      countsByYear: Filter[];
+      countsByEpi: Filter[];
+      countsByNHS: Filter[];
+    } = articleFilterData.data as {
+      countsByYear: Filter[];
+      countsByEpi: Filter[];
+      countsByNHS: Filter[];
+    };
     if (articleFilterDataList.countsByYear.length) {
       filters.push(
         new FilterCategory({
           parent: 'articles',
           label: 'Articles by Year',
-          filterable: false,
+          field: 'year',
           values: articleFilterDataList.countsByYear.map(
             (fil: Partial<Filter>) => new Filter(fil),
           ),
         }),
       );
       const fc = new FilterCategory({
-        parent: 'epiArticles',
-        label: 'Epidemiology Articles by Year',
-        field: 'year',
-        values: articleFilterDataList.countsByYear
-          .filter(
-            (year: Partial<Filter>) => year.label == 'Epidemiology Articles',
-          )
-          .map((fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' })),
+        parent: 'articles',
+        label: 'Epidemiology Articles ',
+        field: 'isEpi',
+        values: articleFilterDataList.countsByEpi.map(
+          (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isEpi' }),
+        ),
       });
       filters.push(fc);
       filters.push(
         new FilterCategory({
           parent: 'articles',
-          label: 'Articles by Year',
-          field: 'year',
-          values: articleFilterDataList.countsByYear
-            .filter((year: Partial<Filter>) => year.label == 'All Articles')
-            .map(
-              (fil: Partial<Filter>) => new Filter({ ...fil, label: 'year' }),
-            ),
+          label: 'Natural Health Study Articles',
+          field: 'isNHS',
+          values: articleFilterDataList.countsByNHS.map(
+            (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isNHS' }),
+          ),
         }),
       );
     }

@@ -67,11 +67,9 @@ const navigationExtras: NavigationExtras = {
   selector: 'ncats-frontend-library-rdas-browse',
   templateUrl: './rdas-browse.component.html',
   styleUrls: ['./rdas-browse.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     RdasTreeComponent,
-    RdasSearchComponent,
     MatPaginatorModule,
     LoadingSpinnerComponent,
     ScrollToTopComponent,
@@ -84,11 +82,11 @@ const navigationExtras: NavigationExtras = {
     SharedUtilsFilterPanelComponent,
     SharedUtilsSelectedFilterListComponent,
     ChartWrapperComponent,
-    NgOptimizedImage,
     MatTooltip,
     DiseaseListCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasBrowseComponent implements OnInit, OnDestroy {

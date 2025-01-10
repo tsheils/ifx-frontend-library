@@ -13,19 +13,18 @@ import { MatListModule } from '@angular/material/list';
 import { Tool } from 'ifx';
 
 @Component({
-  selector: 'lib-tool-details',
-  standalone: true,
-  imports: [
-    CommonModule,
-    NgOptimizedImage,
-    MatListModule,
-    MatIconModule,
-    MatButtonModule,
-  ],
-  templateUrl: './tool-details.component.html',
-  styleUrl: './tool-details.component.scss',
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-tool-details',
+    imports: [
+        CommonModule,
+        NgOptimizedImage,
+        MatListModule,
+        MatIconModule,
+        MatButtonModule,
+    ],
+    templateUrl: './tool-details.component.html',
+    styleUrl: './tool-details.component.scss',
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToolDetailsComponent {
   tool = input<Tool>();

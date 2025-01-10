@@ -1,4 +1,4 @@
-@for (trial of trials; track trial.NCTId) {
+@for (trial of trials(); track trial.NCTId) {
   <div class="row centered-row">
     <ncats-frontend-library-clinical-trials-list-card
       [trial]="trial"
