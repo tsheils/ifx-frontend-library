@@ -21,20 +21,20 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-    selector: 'ncats-frontend-library-features-rdas-about',
-    imports: [
-        CommonModule,
-        MatListModule,
-        ScrollingModule,
-        OverlayModule,
-        MatMenuModule,
-        MatIconModule,
-        MatSidenavModule,
-        MatButtonModule,
-    ],
-    templateUrl: './features-rdas-rdas-about.component.html',
-    styleUrls: ['./features-rdas-rdas-about.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'ncats-frontend-library-features-rdas-about',
+  imports: [
+    CommonModule,
+    MatListModule,
+    ScrollingModule,
+    OverlayModule,
+    MatMenuModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatButtonModule,
+  ],
+  templateUrl: './features-rdas-rdas-about.component.html',
+  styleUrls: ['./features-rdas-rdas-about.component.scss'],
+  encapsulation: ViewEncapsulation.None,
 })
 export class FeaturesRdasRdasAboutComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
@@ -42,10 +42,6 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   mobile = false;
 
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
   activeElement = 'about';
 
   constructor(
@@ -84,12 +80,7 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
       });
   }
 
-  /**
-   * scroll to section
-   * @param el
-   */
   public scroll(el: HTMLElement): void {
-    //  el.scrollIntoView(true);
     el.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
@@ -97,11 +88,6 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
     });
   }
 
-  /**
-   * check which section is active
-   * @param {string} check
-   * @returns {boolean}
-   */
   isActive(check: string): boolean {
     return this.activeElement === check;
   }

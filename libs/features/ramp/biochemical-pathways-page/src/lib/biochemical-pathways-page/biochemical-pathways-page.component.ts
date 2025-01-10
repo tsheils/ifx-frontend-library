@@ -283,7 +283,6 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   override dataMap = computed(() => {
     const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
     const field = <string>this.activeTab();
-    console.log(field);
     let ret!: { [p: string]: Map<string, DataMap> };
     switch (field) {
       case 'pathways-from-analytes': {

@@ -655,7 +655,7 @@ function(
     list(
       data = result,
      # function_call = paste0("RaMP::getReactionClassesForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), multiRxnParticipantCount=",multiRxnParticipantCount,", humanProtein=",humanProtein,", concatResults=",concatResults,")")
-      function_call = makeFunctionCall(analytes,"getReactionClassesForAnalyes"),
+      function_call = makeFunctionCall(analytes,"getReactionClassesForAnalyes")
     )
   )
 }

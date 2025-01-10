@@ -122,10 +122,6 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
   animationState = signal('in');
 
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
   activeElement = 'overview';
   mobile = false;
 
@@ -176,19 +172,11 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   setActiveElement(event: string) {
     this.activeElement = event;
   }
-  /**
-   * scroll to section
-   * @param el
-   */
+
   public scroll(el: string): void {
     this.setUrl({ fragment: el });
   }
 
-  /**
-   * check which section is active
-   * @param {string} check
-   * @returns {boolean}
-   */
   isActive(check: string): boolean {
     return this.activeElement === check;
   }

@@ -21,20 +21,21 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-    selector: 'rdas-privacy-page',
-    imports: [
-        CommonModule,
-        MatListModule,
-        ScrollingModule,
-        OverlayModule,
-        MatMenuModule,
-        MatIconModule,
-        MatSidenavModule,
-        MatButtonModule,
-    ],
-    templateUrl: './rdas-privacy-page.component.html',
-    styleUrl: './rdas-privacy-page.component.scss',
-    encapsulation: ViewEncapsulation.None
+  selector: 'rdas-privacy-page',
+  imports: [
+    CommonModule,
+    MatListModule,
+    ScrollingModule,
+    OverlayModule,
+    MatMenuModule,
+    MatIconModule,
+    MatSidenavModule,
+    MatButtonModule,
+  ],
+  templateUrl: './rdas-privacy-page.component.html',
+  styleUrl: './rdas-privacy-page.component.scss',
+  standalone: true,
+  encapsulation: ViewEncapsulation.None,
 })
 export class RdasPrivacyPageComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
@@ -42,10 +43,6 @@ export class RdasPrivacyPageComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   mobile = false;
 
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
   activeElement = 'statement';
 
   constructor(
@@ -84,12 +81,7 @@ export class RdasPrivacyPageComponent implements OnInit {
       });
   }
 
-  /**
-   * scroll to section
-   * @param el
-   */
   public scroll(el: HTMLElement): void {
-    //  el.scrollIntoView(true);
     el.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
@@ -97,11 +89,6 @@ export class RdasPrivacyPageComponent implements OnInit {
     });
   }
 
-  /**
-   * check which section is active
-   * @param {string} check
-   * @returns {boolean}
-   */
   isActive(check: string): boolean {
     return this.activeElement === check;
   }

@@ -67,15 +67,11 @@
       }
       @case ('upset') {
         @if (chart.data!.plot) {
-          <div class="row space-around-row">
-            <div class=" width-80">
-              @defer(on timer(1s)){
+              @defer(on viewport){
               <lib-shared-utils-upset-chart [chartData]="chart.data!.plot" [scale]="'linear'"></lib-shared-utils-upset-chart>
-              } @placeholder(){
-                <div class="upset-visualization"></div>
+              } @placeholder{
+                <div></div>
               }
-            </div>
-          </div>
         }
       }
     }

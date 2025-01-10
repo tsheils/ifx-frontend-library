@@ -217,11 +217,9 @@ export class RampService {
   fetchMetabolitesFromOntologies(
     ontologies: string[],
   ): Observable<RampResponse<Metabolite>> {
-    console.log('fgdfgdgfdg');
     const options = {
       ontology: ontologies,
     };
-    console.log(options);
     return this.http
       .post<
         RampAPIResponse<Metabolite>
@@ -738,7 +736,6 @@ export class RampService {
     const noMatches = inputList.filter(
       (p: string) => !matches.includes(p.toLocaleLowerCase()),
     );
-    console.log(apiResponse);
     return {
       data: dataList,
       query: {
@@ -758,7 +755,6 @@ export class RampService {
     const enrichedPathwayList = apiResponse.data.fishresults.map(
       (obj: Partial<FisherResult>) => new FisherResult(obj),
     );
-    console.log(apiResponse);
 
     return {
       data: enrichedPathwayList,

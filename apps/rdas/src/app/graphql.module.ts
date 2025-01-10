@@ -24,10 +24,10 @@ const link = onError(({ graphQLErrors, networkError }) => {
   exports: [ApolloModule],
   providers: [
     {
-      provide: APOLLO_NAMED_OPTIONS, // <-- Different from standard initialization
+      provide: APOLLO_NAMED_OPTIONS,
       useFactory(httpLink: HttpLink): NamedOptions {
         return {
-          diseases: /* <-- this settings will be saved as default client */ {
+          diseases: {
             cache: new InMemoryCache(),
             link: httpLink.create({
               uri: `${environment.baseUrl}${
@@ -35,7 +35,7 @@ const link = onError(({ graphQLErrors, networkError }) => {
               }api/diseases`,
             }),
           },
-          articles: /* <-- this settings will be saved as default client */ {
+          articles: {
             cache: new InMemoryCache(),
             link: httpLink.create({
               uri: `${environment.baseUrl}${
@@ -51,15 +51,14 @@ const link = onError(({ graphQLErrors, networkError }) => {
               }api/grants`,
             }),
           },
-          trials:
-            /* <-- these settings will be saved by name: newClientName */ {
-              cache: new InMemoryCache(),
-              link: httpLink.create({
-                uri: `${environment.baseUrl}${
-                  environment.production ? '/' : ':4003/'
-                }api/trials`,
-              }),
-            },
+          trials: {
+            cache: new InMemoryCache(),
+            link: httpLink.create({
+              uri: `${environment.baseUrl}${
+                environment.production ? '/' : ':4003/'
+              }api/trials`,
+            }),
+          },
         };
       },
       deps: [HttpLink],

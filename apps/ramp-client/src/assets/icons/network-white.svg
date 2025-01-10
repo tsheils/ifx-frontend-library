@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="SVGRoot" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 111.4 93.3">
+  <!-- Generator: Adobe Illustrator 29.1.0, SVG Export Plug-In . SVG Version: 2.1.0 Build 142)  -->
+  <defs>
+    <style>
+      .st0 {
+        stroke-width: 3.1px;
+      }
+
+      .st0, .st1 {
+        fill: #ffffff;
+        stroke: #ffffff;
+        stroke-miterlimit: 11.3;
+      }
+
+      .st1 {
+        stroke-width: 1.1px;
+      }
+    </style>
+  </defs>
+  <g id="layer1">
+    <circle id="circle866" class="st1" cx="84.1" cy="80.6" r="12.1"/>
+    <circle id="circle868" class="st1" cx="33.1" cy="80.6" r="12.1"/>
+    <circle id="circle870" class="st1" cx="12.7" cy="46.7" r="12.1"/>
+    <circle id="circle872" class="st1" cx="98.7" cy="46.7" r="12.1"/>
+    <circle id="circle874" class="st1" cx="84.1" cy="12.7" r="12.1"/>
+    <circle id="circle876" class="st1" cx="33.1" cy="12.7" r="12.1"/>
+    <circle id="circle878" class="st1" cx="58.5" cy="46.7" r="12.1"/>
+    <path id="path880" class="st0" d="M33,12.5l50.8,68.8h.4"/>
+    <path id="path882" class="st0" d="M84.1,12.5l-50.8,67.7h0"/>
+    <path id="path884" class="st0" d="M12.4,47.5h85.8"/>
+  </g>
+</svg>

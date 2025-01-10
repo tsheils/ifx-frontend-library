@@ -70,8 +70,6 @@ export class SunburstChartComponent implements OnInit {
   );
 
   height = computed(() => {
-    console.log(this.chartElement());
-    console.log(this.chartElement()?.nativeElement.offsetHeight);
     if (
       this.chartElement() &&
       this.chartElement()?.nativeElement.offsetHeight > 200

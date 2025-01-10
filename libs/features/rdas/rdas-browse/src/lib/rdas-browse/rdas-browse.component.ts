@@ -56,9 +56,6 @@ import {
 } from '@ncats-frontend-library/stores/disease-store';
 import { Store } from '@ngrx/store';
 
-/**
- * navigation options to merge query parameters that are added on in navigation/query/facets/pagination
- */
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge',
 };
@@ -169,10 +166,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * change pages of list
-   * @param event
-   */
   paginationChanges(event: PageEvent): void {
     navigationExtras.queryParams = {
       pageIndex: event.pageIndex + 1,
@@ -300,8 +293,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       const file = new Blob([data], { type: type });
       const link = this.dom.createElement('a');
       if (link.download !== undefined) {
-        // feature detection
-        // Browsers that support HTML5 download attribute
         const url = URL.createObjectURL(file);
         link.setAttribute('href', url);
         link.setAttribute('download', `${name}`);
@@ -313,11 +304,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * navigate on changes, mainly just changes url, shouldn't reload entire page, just data
-   * @param {NavigationExtras} navExtras
-   * @private
-   */
   private _navigate(navExtras: NavigationExtras): void {
     this.router.navigate([], navExtras);
   }

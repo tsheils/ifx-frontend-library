@@ -12,16 +12,14 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-    selector: 'lib-history-api',
-    imports: [CommonModule],
-    templateUrl: './history-api.component.html',
-    styleUrl: './history-api.component.scss',
-    encapsulation: ViewEncapsulation.None
+  selector: 'lib-history-api',
+  imports: [CommonModule],
+  templateUrl: './history-api.component.html',
+  styleUrl: './history-api.component.scss',
+  standalone: true,
+  encapsulation: ViewEncapsulation.None,
 })
 export class HistoryApiComponent {
-  /**
-   * container that holds the swagger ui
-   */
   @ViewChild('documentation') el!: ElementRef;
   isBrowser: boolean;
 
@@ -30,9 +28,6 @@ export class HistoryApiComponent {
     private platformId: InjectionToken<NonNullable<unknown>>,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    /**
-     * create swagger ui viewer
-     */
     afterNextRender(() => {
       if (this.isBrowser) {
         SwaggerUI({

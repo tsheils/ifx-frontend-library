@@ -39,7 +39,6 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   });
 
   onOutletLoaded(component: T) {
-    console.log(this.paths());
     component['paths'] = this.paths;
     component['title'] = this.title;
     component['inputMap'] = this.inputMap;

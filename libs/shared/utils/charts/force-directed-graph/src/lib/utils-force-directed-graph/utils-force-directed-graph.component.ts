@@ -87,8 +87,6 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
   color = scaleOrdinal(schemeCategory10);
 
   svg = computed(() => {
-    console.log(this.chartElement());
-    console.log(this.height());
     return select(this.chartElement()?.nativeElement)
       .append('svg:svg')
       .attr('width', this.width())

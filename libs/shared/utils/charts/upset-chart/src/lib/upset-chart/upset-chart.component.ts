@@ -116,19 +116,18 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   // Prepare the overall layout
 
   override svg = computed(() => {
-    console.log('make svg');
-    console.log(this.chartElement());
-    console.log(this.chartElement()?.nativeElement.offsetHeight);
-    if (
-      this.chartElement()?.nativeElement &&
-      this.chartElement()?.nativeElement.offsetHeight > 0
-    ) {
+    if (this.chartElement()?.nativeElement) {
       return select(this.chartElement()?.nativeElement)
         .append('svg:svg')
         .attr('width', this.width())
-        .attr('height', this.height())
-        .attr('viewBox', [0, 0, this.width(), this.height()])
-        .attr('style', 'max-width: 100%; height: 100%;');
+        .attr('height', this.height() > 500 ? this.height() : 500)
+        .attr('viewBox', [
+          0,
+          0,
+          this.width(),
+          this.height() > 500 ? this.height() : 500,
+        ])
+        .attr('style', 'max-width: 100%; height: auto;');
     } else return undefined;
   });
 
@@ -496,7 +495,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('oninit');
     this.margins.set({ top: 10, bottom: 40, left: 5, right: 5 });
     if (this.isBrowser()) {
       if (this.chartData() && this.chartData()!.data.length > 0) {
@@ -509,8 +507,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     if (this.svg()) {
       this.svg()!.select('svg').remove();
     }
-    console.log('draw container');
-    console.log(this.height());
     // computed signals aren't run unless they are called. This is a cheater method to call them and assign them.
     const svgObject = {
       setCountBarChart: this.setCountBarChart(),

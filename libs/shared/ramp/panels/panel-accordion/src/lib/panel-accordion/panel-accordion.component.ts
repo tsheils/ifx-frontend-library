@@ -61,22 +61,5 @@ export class PanelAccordionComponent {
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event);
   }
-
-  /*  tabChange(event: MatTabChangeEvent) {
-    console.log(event);
-    console.log(this.inputTab());
-    const t = this.inputTab()?.get(
-      Array.from(this.inputTab()!.keys())[event.index],
-    );
-    const r = Array.from(this.inputTab()!.entries())[event.index];
-    console.log(t);
-    console.log(r);
-    this.tabChangeEmitter.emit(true);
-  }*/
-
-  cleanLabel(label: string): string {
-    return label.replace(/-/g, ' ');
-  }
-
   _originalOrder = () => 0;
 }
