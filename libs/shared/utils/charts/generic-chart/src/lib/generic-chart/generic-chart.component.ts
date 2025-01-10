@@ -31,16 +31,16 @@ export class GenericChartComponent {
   readonly clickElement = output<Filter>();
   destroyRef = inject(DestroyRef);
 
-  chartElement = viewChild<ElementRef>('chartElement');
+  chartElement = viewChild<ElementRef<HTMLInputElement>>('chartElement');
   width = computed(
     () =>
-      this.chartElement()?.nativeElement.offsetWidth -
+      this.chartElement()!.nativeElement?.offsetWidth -
       this.margins().left -
       this.margins().right,
   );
   height = computed(
     () =>
-      this.chartElement()?.nativeElement.offsetHeight +
+      this.chartElement()!.nativeElement.offsetHeight +
       this.margins().top +
       this.margins().bottom,
   );
@@ -49,7 +49,7 @@ export class GenericChartComponent {
   svgExport = computed(
     () =>
       <SVGElement>(
-        select(this.chartElement()?.nativeElement).select('svg').node()
+        select(this.chartElement()!.nativeElement).select('svg').node()
       ),
   );
 
@@ -57,4 +57,12 @@ export class GenericChartComponent {
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];
+
+  getHeight() {
+    let mainHeight = this.chartElement()!.nativeElement.offsetHeight;
+    if (!mainHeight) {
+      mainHeight = 500;
+    }
+    return mainHeight + this.margins().top + this.margins().bottom;
+  }
 }

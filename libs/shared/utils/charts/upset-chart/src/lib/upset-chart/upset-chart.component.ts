@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   HostListener,
   input,
   OnInit,
@@ -38,10 +39,10 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     () => this.width() - this.leftColWidth() - this.innerMargin,
   );
 
-  topRowHeight = computed(() => this.height() * 0.7 - this.margins().bottom);
+  topRowHeight = computed(() => this.getHeight() * 0.7 - this.margins().bottom);
   bottomRowHeight = computed(
     () =>
-      this.height() -
+      this.getHeight() -
       this.topRowHeight() -
       this.innerMargin -
       this.margins().bottom * 2,
@@ -117,16 +118,11 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
 
   override svg = computed(() => {
     if (this.chartElement()?.nativeElement) {
-      return select(this.chartElement()?.nativeElement)
+      return select(this.chartElement()!.nativeElement)
         .append('svg:svg')
         .attr('width', this.width())
-        .attr('height', this.height() > 500 ? this.height() : 500)
-        .attr('viewBox', [
-          0,
-          0,
-          this.width(),
-          this.height() > 500 ? this.height() : 500,
-        ])
+        .attr('height', this.getHeight())
+        .attr('viewBox', [0, 0, this.width(), this.getHeight()])
         .attr('style', 'max-width: 100%; height: auto;');
     } else return undefined;
   });
@@ -319,26 +315,24 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     }
   });
   combinationMatrix = computed(() => {
-    if (this.bottomRow()) {
-      return this.bottomRow()!
-        .append('svg:g')
-        .classed('combination-matrix', true)
-        .attr(
-          'transform',
-          `translate(${this.leftColWidth()}, ${this.topRowHeight() - this.margins().bottom / 2})`,
-        )
-        .selectAll('.combination')
-        .data(this.chartData()!.data)
-        .join('svg:g')
-        .attr('class', 'combination')
-        .attr('transform', (d: UpsetData) => {
-          let ret = this.xScale()(d.id);
-          if (!ret) {
-            ret = 0;
-          }
-          return `translate(${ret + this.xScale().bandwidth() / 2}, 0)`;
-        });
-    } else return undefined;
+    return this.bottomRow()!
+      .append('svg:g')
+      .classed('combination-matrix', true)
+      .attr(
+        'transform',
+        `translate(${this.leftColWidth()}, ${this.topRowHeight() - this.margins().bottom / 2})`,
+      )
+      .selectAll('.combination')
+      .data(this.chartData()!.data)
+      .join('svg:g')
+      .attr('class', 'combination')
+      .attr('transform', (d: UpsetData) => {
+        let ret = this.xScale()(d.id);
+        if (!ret) {
+          ret = 0;
+        }
+        return `translate(${ret + this.xScale().bandwidth() / 2}, 0)`;
+      });
   });
 
   intersectionSizeChart = computed(() => {
@@ -459,7 +453,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             .attr('class', 'hover-column')
             .attr(
               'height',
-              this.height() - this.margins().top - this.margins().bottom,
+              this.getHeight() - this.margins().top - this.margins().bottom,
             )
             .attr('width', this.xScale().bandwidth())
             .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
@@ -494,7 +488,16 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     this.drawContainer();
   }
 
+  constructor() {
+    super();
+    effect(() => {
+      console.log('in effect');
+      this.drawContainer();
+    });
+  }
+
   ngOnInit(): void {
+    console.log('oninit');
     this.margins.set({ top: 10, bottom: 40, left: 5, right: 5 });
     if (this.isBrowser()) {
       if (this.chartData() && this.chartData()!.data.length > 0) {
@@ -507,118 +510,114 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     if (this.svg()) {
       this.svg()!.select('svg').remove();
     }
+    console.log('draw container');
+    console.log(this.getHeight());
     // computed signals aren't run unless they are called. This is a cheater method to call them and assign them.
     const svgObject = {
+      chartElement: this.chartElement(),
+      height: this.getHeight(),
+      svg: this.svg(),
       setCountBarChart: this.setCountBarChart(),
       intersectionSizeChartBars: this.intersectionSizeChartBars(),
       intersectionSizeChartLabel: this.intersectionSizeChartLabel(),
       setSizeChartLabel: this.setSizeChartLabel(),
+      combinationMatrix: this.combinationMatrix(),
     };
+    console.log(svgObject);
 
     /*
      * Combination matrix
      */
 
-    if (this.combinationMatrix()) {
-      // Select all circles within each group and bind the inner array per data item
-      this.combinationMatrix()!
-        .selectAll('.non-set-circle')
-        .data((combination) =>
-          combination.combinations.filter((d) => !d.member),
-        )
-        .join('circle')
-        .classed('non-set-circle', true)
-        .attr(
-          'cy',
-          (d) =>
-            (this.yCombinationScale()(<string>d.setId) as number) -
-            this.innerMargin,
-        )
-        .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
+    // Select all circles within each group and bind the inner array per data item
+    this.combinationMatrix()!
+      .selectAll('.non-set-circle')
+      .data((combination) => combination.combinations.filter((d) => !d.member))
+      .join('circle')
+      .classed('non-set-circle', true)
+      .attr(
+        'cy',
+        (d) =>
+          (this.yCombinationScale()(<string>d.setId) as number) -
+          this.innerMargin,
+      )
+      .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
 
-      // Connect the sets with a vertical line
-      this.combinationMatrix()!
-        .filter((d) => d.connectorIndices.length > 0)
-        .append('svg:line')
-        .classed('connector', true)
-        .attr('y1', (d) => {
-          if (d.connectorIndices && <number>d.connectorIndices[1] > 0) {
-            return (
-              <number>(
-                this.yCombinationScale()(
-                  <string>(
-                    this.chartData()!.allSetIds[<number>d.connectorIndices[0]]
-                      .id
-                  ),
-                )
-              ) - this.innerMargin
-            );
-          } else {
-            return 0;
-          }
-        })
-        .attr('y2', (d) => {
-          if (d.connectorIndices && d.connectorIndices[1]) {
-            return (
-              <number>(
-                this.yCombinationScale()(
-                  <string>this.chartData()!.allSetIds[d.connectorIndices[1]].id,
-                )
-              ) - this.innerMargin
-            );
-          } else {
-            return 0;
-          }
-        });
+    // Connect the sets with a vertical line
+    this.combinationMatrix()!
+      .filter((d) => d.connectorIndices.length > 0)
+      .append('svg:line')
+      .classed('connector', true)
+      .attr('y1', (d) => {
+        if (d.connectorIndices && <number>d.connectorIndices[1] > 0) {
+          return (
+            <number>(
+              this.yCombinationScale()(
+                <string>(
+                  this.chartData()!.allSetIds[<number>d.connectorIndices[0]].id
+                ),
+              )
+            ) - this.innerMargin
+          );
+        } else {
+          return 0;
+        }
+      })
+      .attr('y2', (d) => {
+        if (d.connectorIndices && d.connectorIndices[1]) {
+          return (
+            <number>(
+              this.yCombinationScale()(
+                <string>this.chartData()!.allSetIds[d.connectorIndices[1]].id,
+              )
+            ) - this.innerMargin
+          );
+        } else {
+          return 0;
+        }
+      });
 
-      this.combinationMatrix()!
-        .selectAll('.set-circle')
-        .data((combination) => combination.combinations.filter((d) => d.member))
-        .join('circle')
-        .classed('set-circle', true)
-        .attr(
-          'cy',
-          (d) =>
-            (this.yCombinationScale()(<string>d.setId) as number) -
-            this.innerMargin,
-        )
-        .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
-    }
+    this.combinationMatrix()!
+      .selectAll('.set-circle')
+      .data((combination) => combination.combinations.filter((d) => d.member))
+      .join('circle')
+      .classed('set-circle', true)
+      .attr(
+        'cy',
+        (d) =>
+          (this.yCombinationScale()(<string>d.setId) as number) -
+          this.innerMargin,
+      )
+      .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
   }
 
   columnHovered(d: UpsetData) {
-    if (this.combinationMatrix()) {
-      selectAll(this.combinationMatrix()!)
-        .classed('hovered', (datum) => {
-          const r: UpsetData = datum as UpsetData;
-          return d.id === r.id;
-        })
-        .transition()
-        .duration(100);
-    }
+    selectAll(this.combinationMatrix()!)
+      .classed('hovered', (datum) => {
+        const r: UpsetData = datum as UpsetData;
+        return d.id === r.id;
+      })
+      .transition()
+      .duration(100);
   }
 
   columnHoveredOff() {
-    if (this.combinationMatrix) {
-      selectAll(this.combinationMatrix()!)
-        .classed('hovered', false)
-        .classed('hovered-row', false)
-        .transition()
-        .duration(100);
-    }
+    selectAll(this.combinationMatrix()!)
+      .classed('hovered', false)
+      .classed('hovered-row', false)
+      .transition()
+      .duration(100);
   }
 
   rowHovered(setName: string) {
-    if (this.combinationMatrix()) {
-      this.combinationMatrix()!
-        .selectAll('.set-circle')
-        .classed('hovered-circle', (datum) => {
-          const r = datum as { setId: string };
-          return r.setId === setName;
-        })
-        .transition()
-        .duration(100);
-    }
+    this.combinationMatrix()!
+      .selectAll('.set-circle')
+      .classed('hovered-circle', (datum) => {
+        const r = datum as { setId: string };
+        return r.setId === setName;
+      })
+      .transition()
+      .duration(100);
   }
 
   rowHoveredOff() {
