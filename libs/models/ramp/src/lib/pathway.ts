@@ -12,5 +12,6 @@ export class Pathway extends RampDataGeneric {
   constructor(obj: Partial<Pathway>) {
     super();
     Object.assign(this, obj);
+    this.id = this.inputId;
   }
 }

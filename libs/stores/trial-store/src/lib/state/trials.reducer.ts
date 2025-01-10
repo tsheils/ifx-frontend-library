@@ -1,9 +1,7 @@
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { FetchTrialActions, LoadTrialsActions } from './trials.actions';
-
-import * as TrialsActions from './trials.actions';
+import { FetchTrialActions, FetchTrialsListActions } from './trials.actions';
 
 export const TRIALS_FEATURE_KEY = 'trials';
 
@@ -13,6 +11,7 @@ export interface TrialsState extends EntityState<ClinicalTrial> {
   error?: string | null; // last known error (if any)
   trial?: ClinicalTrial;
   trials?: ClinicalTrial[];
+  allTrialCount: number;
 }
 
 export interface TrialsPartialState {
@@ -27,12 +26,19 @@ export const trialsAdapter: EntityAdapter<ClinicalTrial> =
 export const initialTrialsState: TrialsState = trialsAdapter.getInitialState({
   // set initial required properties
   loaded: false,
+  allTrialCount: 0,
 });
 
 const reducer = createReducer(
   initialTrialsState,
-  on(LoadTrialsActions.loadTrialsSuccess, (state, { trials }) =>
-    trialsAdapter.setAll(trials, { ...state, loaded: true }),
+  on(
+    FetchTrialsListActions.fetchTrialsListSuccess,
+    (state, { trials, allTrialCount }) =>
+      trialsAdapter.setAll(trials, {
+        ...state,
+        loaded: true,
+        allTrialCount: allTrialCount || 0,
+      }),
   ),
 
   on(FetchTrialActions.fetchTrialSuccess, (state, { trial }) =>
@@ -44,7 +50,7 @@ const reducer = createReducer(
   ),
 
   on(
-    LoadTrialsActions.loadTrialsFailure,
+    FetchTrialsListActions.fetchTrialsListFailure,
     FetchTrialActions.fetchTrialFailure,
     (state, { error }) => ({
       ...state,

@@ -1,4 +1,6 @@
-export class Classes {
+import { RampDataGeneric } from './_utils';
+
+export class Classes extends RampDataGeneric {
   commonNames!: string;
   classyFireSuperClass!: string;
   classyFireClass!: string;
@@ -9,7 +11,9 @@ export class Classes {
   sourceId!: string;
 
   constructor(obj: { [key: string]: unknown }) {
+    super();
     if (obj['sourceId']) {
+      this.id = <string>obj['sourceId'];
       this.sourceId = <string>obj['sourceId'];
     }
     if (obj['levels']) {

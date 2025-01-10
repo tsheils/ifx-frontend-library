@@ -6,7 +6,6 @@ import {
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, RouterOutlet } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
-import { AnalytesPageComponent } from 'analytes-page';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { RAMP_STORE_FEATURE_KEY, rampReducer } from 'ramp-store';
 import { RampPageComponent } from './ramp-page.component';
@@ -19,7 +18,6 @@ describe('RampPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RampPageComponent,
-        AnalytesPageComponent,
         NoopAnimationsModule,
         MatSidenavModule,
         MatSidenavContainer,

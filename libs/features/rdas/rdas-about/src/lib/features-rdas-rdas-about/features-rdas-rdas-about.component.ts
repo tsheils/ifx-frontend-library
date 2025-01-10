@@ -22,7 +22,6 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
   selector: 'ncats-frontend-library-features-rdas-about',
-  standalone: true,
   imports: [
     CommonModule,
     MatListModule,
@@ -43,10 +42,6 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
   destroyRef = inject(DestroyRef);
   mobile = false;
 
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
   activeElement = 'about';
 
   constructor(
@@ -85,12 +80,7 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
       });
   }
 
-  /**
-   * scroll to section
-   * @param el
-   */
   public scroll(el: HTMLElement): void {
-    //  el.scrollIntoView(true);
     el.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
@@ -98,11 +88,6 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
     });
   }
 
-  /**
-   * check which section is active
-   * @param {string} check
-   * @returns {boolean}
-   */
   isActive(check: string): boolean {
     return this.activeElement === check;
   }

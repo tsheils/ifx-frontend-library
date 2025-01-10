@@ -145,13 +145,11 @@ export const getClusterPlot = createSelector(
 
 export const getBiochemicalPathwaysResults = createSelector(
   getPathways,
-  getOntologies,
   getPathwayEnrichment,
   getClusterPlot,
-  (getPathways, getOntologies, getPathwayEnrichment, getClusterPlot) => {
+  (getPathways, getPathwayEnrichment, getClusterPlot) => {
     return {
       pathways: getPathways,
-      ontologies: getOntologies,
       pathwayEnrichment: getPathwayEnrichment,
       clusterPlot: getClusterPlot,
     };

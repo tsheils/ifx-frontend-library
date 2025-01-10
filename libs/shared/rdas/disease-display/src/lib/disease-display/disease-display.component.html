@@ -83,39 +83,42 @@
   </div>
   <div
     class="disease-display-panel"
-    id="nonEpiArticles"
-    #nonEpiArticles
+    id="articles"
+    #articles
+    #epiArticles
+    #nhsArticles
     #scrollSection
   >
+    <div id="epiArticles"></div>
+    <div id="nhsArticles"></div>
     <mat-expansion-panel
-      [disabled]="!disease()?.nonEpiCount"
-      [expanded]="disease()?.nonEpiCount"
+      [disabled]="!articlesCount()"
+      [expanded]="articlesCount()"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Articles {{ disease()?.nonEpiCount }}</span
+            >Articles {{ articlesCount().allArticlesCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
-        [_id]="'nonEpiArticles'"
-        [count]="disease()?.nonEpiCount!"
-        [filters]="filterMap().get('nonEpiArticles')!"
+        [_id]="'articles'"
+        [count]="articlesCount().currentArticlesCount"
+        [filters]="filterMap().get('articles')!"
         [message]="'No Articles Found'"
-        (listChange)="fetchList($event, 'nonEpiArticles')"
+        (listChange)="fetchList($event, 'articles')"
       >
-        @if (disease() && disease()?.nonEpiArticles) {
           <div class="data-list">
             <ncats-frontend-library-article-list
-              [articles]="disease()?.nonEpiArticles"
+              [articles]="articlesList()"
             ></ncats-frontend-library-article-list>
           </div>
-        }
+
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>
-  <div
+ <!-- <div
     class="disease-display-panel"
     id="epiArticles"
     #epiArticles
@@ -149,63 +152,61 @@
         }
       </lib-rdas-panel-template>
     </mat-expansion-panel>
-  </div>
+  </div>-->
   <div class="disease-display-panel" id="projects" #projects #scrollSection>
     <mat-expansion-panel
-      [disabled]="!disease()?.projectCount"
-      [expanded]="disease()?.projectCount"
+      [disabled]="!projectsCount()"
+      [expanded]="projectsCount()"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >NIH-funded Projects {{ disease()?.projectCount }}</span
+            >NIH-funded Projects {{ projectsCount() }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
         [_id]="'projects'"
-        [count]="disease()?.projectCount!"
+        [count]="projectsCount()"
         [message]="'No NIH Funded Projects Available'"
         (listChange)="fetchList($event, 'projects')"
       >
-        @if (disease() && disease()?.projects) {
           <div class="data-list">
             <ncats-frontend-library-project-list
-              [projects]="disease()?.projects"
+              [projects]="projectsList()"
             ></ncats-frontend-library-project-list>
           </div>
-        }
+
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>
   <div class="disease-display-panel" id="trials" #trials #scrollSection>
     <mat-expansion-panel
-      [disabled]="!disease()?.clinicalTrialCount"
-      [expanded]="disease()?.clinicalTrialCount"
+      [disabled]="!trialsCount()"
+      [expanded]="trialsCount()"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Clinical Trials {{ disease()?.clinicalTrialCount }}</span
+            >Clinical Trials {{ trialsCount() }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <lib-rdas-panel-template
         [_id]="'trials'"
-        [count]="disease()?.clinicalTrialCount!"
+        [count]="trialsCount()"
         [filters]="filterMap().get('trials')!"
         [loaded]="loaded()"
         [message]="'No Clinical Trial Data Available'"
         (listChange)="fetchList($event, 'trials')"
       >
-        @if (disease() && disease()?.clinicalTrials) {
           <div class="data-list">
             <ncats-frontend-library-clinical-trials-list
-              [trials]="disease()?.clinicalTrials"
+              [trials]="trialsList()"
             ></ncats-frontend-library-clinical-trials-list>
           </div>
-        }
+
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>

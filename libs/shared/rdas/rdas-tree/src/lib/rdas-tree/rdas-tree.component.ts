@@ -29,7 +29,6 @@ export class FlatDiseaseNode extends DiseaseNode {
 
 @Component({
   selector: 'ncats-frontend-library-rdas-tree',
-  standalone: true,
   imports: [
     CommonModule,
     MatTreeModule,
@@ -39,6 +38,7 @@ export class FlatDiseaseNode extends DiseaseNode {
     LoadingSpinnerComponent,
   ],
   templateUrl: './rdas-tree.component.html',
+  standalone: true,
   styleUrls: ['./rdas-tree.component.scss'],
 })
 

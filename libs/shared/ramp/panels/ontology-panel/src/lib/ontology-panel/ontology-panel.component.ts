@@ -26,7 +26,6 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
   selector: 'lib-ontology-panel',
-  standalone: true,
   imports: [
     CommonModule,
     MatTooltip,
@@ -39,6 +38,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
   ],
   templateUrl: './ontology-panel.component.html',
   styleUrl: './ontology-panel.component.scss',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OntologyPanelComponent implements OnInit {

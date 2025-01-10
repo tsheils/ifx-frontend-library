@@ -258,77 +258,9 @@
         ]
       }
     },
-    "/api/analytes-from-pathways": {
-      "post": {
-        "tags": ["analytes"],
-        "summary": "Retrieve Analytes From Input Pathways",
-        "responses": {
-          "200": {
-            "description": "OK"
-          },
-          "500": {
-            "description": "Internal Server Error"
-          }
-        },
-        "requestBody": {
-          "description": "Enter exact pathway name(s). `analyteType` should be `\"gene\"`, `\"metabolite\"`, or `\"both\"` *(default)*",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "pathway": {
-                    "type": "array",
-                    "items": {
-                      "type": "string"
-                    },
-                    "description": "a string or a vector of strings that contains pathways of interest"
-                  },
-                  "analyteType": {
-                    "type": "string",
-                    "enum": ["gene", "metabolite", "both"],
-                    "required": false,
-                    "description": "a string denoting the type of analyte to return (\"gene\", \"metabolite\", \"both\")"
-                  },
-                  "match": {
-                    "type": "string",
-                    "enum": ["exact", "fuzzy"],
-                    "required": false,
-                    "description": "type of matching to use, options are \"exact\" or \"fuzzy\". The default is \"fuzzy\".",
-                    "hidden": true
-                  },
-                  "namesOrIds": {
-                    "type": "string",
-                    "enum": ["names", "ids"],
-                    "required": false,
-                    "label": "Names or IDs",
-                    "description": "are the input pathways input as pathway names or as pathway ids of genes and metabolites",
-                    "hidden": true
-                  },
-                  "maxPathwaySize": {
-                    "type": "number",
-                    "required": false,
-                    "label": "Max Pathway Size",
-                    "description": "(default Inf), trims returned results to pathways that have fewer than this number",
-                    "hidden": true
-                  }
-                },
-                "example": {
-                  "pathway": [
-                    "sphingolipid metabolism"
-                  ],
-                  "analyteType": "both"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/api/pathways-from-analytes": {
       "post": {
-        "tags": ["biochemical-pathways"],
+        "tags": ["biochemical-pathways", "pathways-from-analytes"],
         "summary": "Get Pathways From Input Analytes",
         "x-title": "Retrieve Pathways From Input Analyte(s)",
         "x-allowedTypes": {
@@ -406,10 +338,116 @@
         }
       }
     },
-    "/api/combined-fisher-test": {
+    "/api/analytes-from-pathways": {
       "post": {
-        "tags": ["biochemical-pathways"],
+        "tags": ["biochemical-pathways","analytes-from-pathways"],
+        "summary": "Retrieve Analytes From Input Pathways",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Enter exact pathway name(s). `analyteType` should be `\"gene\"`, `\"metabolite\"`, or `\"both\"` *(default)*",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "pathway": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "a string or a vector of strings that contains pathways of interest"
+                  },
+                  "analyteType": {
+                    "type": "string",
+                    "enum": ["gene", "metabolite", "both"],
+                    "required": false,
+                    "description": "a string denoting the type of analyte to return (\"gene\", \"metabolite\", \"both\")"
+                  },
+                  "match": {
+                    "type": "string",
+                    "enum": ["exact", "fuzzy"],
+                    "required": false,
+                    "description": "type of matching to use, options are \"exact\" or \"fuzzy\". The default is \"fuzzy\".",
+                    "hidden": true
+                  },
+                  "namesOrIds": {
+                    "type": "string",
+                    "enum": ["names", "ids"],
+                    "required": false,
+                    "label": "Names or IDs",
+                    "description": "are the input pathways input as pathway names or as pathway ids of genes and metabolites",
+                    "hidden": true
+                  },
+                  "maxPathwaySize": {
+                    "type": "number",
+                    "required": false,
+                    "label": "Max Pathway Size",
+                    "description": "(default Inf), trims returned results to pathways that have fewer than this number",
+                    "hidden": true
+                  }
+                },
+                "example": {
+                  "pathway": [
+                    "sphingolipid metabolism"
+                  ],
+                  "analyteType": "both"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/enrich-pathways": {
+      "post": {
+        "tags": ["biochemical-pathways", "biochemical-pathway-analysis"],
         "summary": "Run Pathway Enrichment Analysis",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -434,6 +472,7 @@
                 "type": "object",
                 "properties": {
                   "analytes": {
+                    "description": "Perform enrichment analysis on pathway(s) for a given analyte(s). IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
                     "type": "array",
                     "items": {
                       "type": "string"
@@ -496,10 +535,14 @@
         }
       }
     },
-    "/api/filter-fisher-test-results": {
+    "/api/filter-enrichment-results": {
       "post": {
-        "tags": ["biochemical-pathways"],
+        "tags": ["biochemical-pathways", "biochemical-pathway-analysis"],
         "summary": "Filter the Results of the Enrichment Tests",
+        "x-allowedTypes": {
+          "metabolites": [],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -549,8 +592,8 @@
                 },
                 "example": {
                   "fishers_results": {
-                    "pValCutoff": 0.02,
-                    "pValType": "fdr",
+                    "pValCutoff": 0.05,
+                    "pValType": "holm",
                     "analyteType": ["both"],
                     "result_type": ["pathway_enrichment"],
                     "fishresults": [
@@ -941,10 +984,14 @@
         }
       }
     },
-    "/api/cluster-fisher-test-results": {
+    "/api/cluster-enrichment-results": {
       "post": {
-        "tags": ["biochemical-pathways"],
+        "tags": ["biochemical-pathways", "biochemical-pathway-analysis"],
         "summary": "Return clustered Fisher's test results from given list of Fisher's test results",
+        "x-allowedTypes": {
+          "metabolites": [],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK",
@@ -999,8 +1046,8 @@
                 },
                 "example": {
                   "minPathwayToCluster": 2.0,
-                  "percAnalyteOverlap": 0.5,
-                  "percPathwayOverlap": 0.5,
+                  "percAnalyteOverlap": 0.2,
+                  "percPathwayOverlap": 0.2,
                   "fishers_results": {
                     "analyteType": ["both"],
                     "result_type": ["pathway_enrichment"],
@@ -1394,8 +1441,15 @@
     },
     "/api/chemical-classes": {
       "post": {
-        "tags": ["chemical-descriptors"],
+        "tags": ["chemical-descriptors", "chemical-class-enrichment"],
         "summary": "Retrieve Chemical Classes from Input Metabolites",
+        "x-allowedTypes": {
+          "metabolites": [
+            "hmdb",
+            "LIPIDMAPS"
+          ],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1465,8 +1519,27 @@
     },
     "/api/chemical-properties": {
       "post": {
-        "tags": ["chemical-descriptors"],
+        "tags": ["chemical-descriptors", "chemical-properties"],
         "summary": "Retrieve Chemical Properties from Input Metabolites",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1536,8 +1609,28 @@
     },
     "/api/chemical-enrichment": {
       "post": {
-        "tags": ["chemical-descriptors"],
+        "tags": ["chemical-descriptors", "chemical-class-enrichment"],
         "summary": "Run Chemical Class Enrichment",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
+        "x-hideSection": true,
         "responses": {
           "200": {
             "description": "OK"
@@ -1608,8 +1701,27 @@
 
     "/api/ontologies-from-metabolites": {
       "post": {
-        "tags": ["ontologies"],
+        "tags": ["ontologies", "ontologies-from-metabolites"],
         "summary": "Retrieve Ontologies from Input Metabolites ",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1650,8 +1762,27 @@
     },
     "/api/metabolites-from-ontologies": {
       "post": {
-        "tags": ["ontologies"],
+        "tags": ["ontologies","metabolites-from-ontologies"],
         "summary": "Retrieve Metabolites From Input Ontology names.  The ontologies are derived from HMDB.",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1696,6 +1827,25 @@
       "post": {
         "tags": ["reactions"],
         "summary": "Retrieve Analytes Involved in the Same Reaction",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
         "responses": {
           "200": {
             "description": "OK"
@@ -1746,6 +1896,26 @@
       "post": {
         "tags": ["reactions"],
         "summary": "Return reactions from a given list of analytes",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
+        "x-hideSection": true,
         "responses": {
           "200": {
             "description": "OK"
@@ -1824,6 +1994,26 @@
       "post": {
         "tags": ["reactions"],
         "summary": "Retrieve Reaction Classes from Input Analytes",
+        "x-allowedTypes": {
+          "metabolites": [
+            "CAS",
+            "chebi",
+            "chemspider",
+            "hmdb",
+            "kegg",
+            "kegg_glycan",
+            "lipidbank",
+            "LIPIDMAPS",
+            "plantfa",
+            "polymer",
+            "pubchem",
+            "rhea-comp",
+            "swisslipids",
+            "wikidata"
+          ],
+          "genes/proteins": []
+        },
+        "x-hideSection": true,
         "responses": {
           "200": {
             "description": "OK"

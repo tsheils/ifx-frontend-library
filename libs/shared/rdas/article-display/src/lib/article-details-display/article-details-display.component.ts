@@ -12,18 +12,17 @@ import {
 import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';
 
 @Component({
-  selector: 'ncats-frontend-library-article-details-display',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatIconModule,
-    MatButtonModule,
-    ArticleListCardComponent,
-  ],
-  templateUrl: './article-details-display.component.html',
-  styleUrls: ['./article-details-display.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'ncats-frontend-library-article-details-display',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatIconModule,
+        MatButtonModule,
+        ArticleListCardComponent,
+    ],
+    templateUrl: './article-details-display.component.html',
+    styleUrls: ['./article-details-display.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class ArticleDetailsDisplayComponent {
   article = input<Article>();

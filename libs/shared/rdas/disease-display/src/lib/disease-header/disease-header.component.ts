@@ -26,14 +26,13 @@ import { shrinkOnScroll } from './disease-header-animation';
   styleUrls: ['./disease-header.component.scss'],
   animations: [shrinkOnScroll],
   encapsulation: ViewEncapsulation.None,
-  standalone: true,
   imports: [
     MatIconModule,
     SubscribeButtonComponent,
     NgOptimizedImage,
-    CdkScrollable,
     LowerCasePipe,
   ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DiseaseHeaderComponent implements OnInit {

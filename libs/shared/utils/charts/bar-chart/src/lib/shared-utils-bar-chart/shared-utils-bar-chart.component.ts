@@ -41,11 +41,11 @@ interface ChartPoint extends SeriesPoint<{ [key: string]: number }> {
 
 @Component({
   selector: 'lib-shared-utils-bar-chart',
-  standalone: true,
-  imports: [CommonModule, ImageDownloadComponent, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './shared-utils-bar-chart.component.html',
   styleUrls: ['./shared-utils-bar-chart.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsBarChartComponent

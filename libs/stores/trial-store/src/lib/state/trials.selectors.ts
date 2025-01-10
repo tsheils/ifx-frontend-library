@@ -36,6 +36,11 @@ export const selectSelectedId = createSelector(
   (state: TrialsState) => state.selectedId,
 );
 
+export const getTrialCount = createSelector(
+  selectTrialsState,
+  (state: TrialsState) => state.allTrialCount,
+);
+
 export const selectEntity = createSelector(
   selectTrialsEntities,
   selectSelectedId,

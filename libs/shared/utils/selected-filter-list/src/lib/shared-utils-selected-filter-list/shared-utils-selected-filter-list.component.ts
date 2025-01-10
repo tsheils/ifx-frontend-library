@@ -12,11 +12,11 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-selected-filter-list',
-  standalone: true,
   imports: [CommonModule, MatChipsModule, MatButtonModule, MatIconModule],
   templateUrl: './shared-utils-selected-filter-list.component.html',
   styleUrls: ['./shared-utils-selected-filter-list.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsSelectedFilterListComponent {

@@ -13,14 +13,17 @@ export const FetchTrialActions = createActionGroup({
   },
 });
 
-export const LoadTrialsActions = createActionGroup({
-  source: 'Load Trials',
+export const FetchTrialsListActions = createActionGroup({
+  source: 'Fetch Trials List',
   events: {
-    loadTrials: props<{
+    FetchTrialsList: props<{
       top: number;
       skip: number;
     }>(),
-    loadTrialsSuccess: props<{ trials: ClinicalTrial[] }>(),
-    loadTrialsFailure: props<{ error: string }>(),
+    FetchTrialsListSuccess: props<{
+      trials: ClinicalTrial[];
+      allTrialCount: number;
+    }>(),
+    FetchTrialsListFailure: props<{ error: string }>(),
   },
 });

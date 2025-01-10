@@ -1,4 +1,6 @@
-export class Properties {
+import { RampDataGeneric } from './_utils';
+
+export class Properties extends RampDataGeneric {
   chem_source_id!: string;
   iso_smiles!: string;
   inchi_key_prefix!: string;
@@ -11,7 +13,9 @@ export class Properties {
   imageUrl!: string;
 
   constructor(obj: Partial<Properties>) {
+    super();
     Object.assign(this, obj);
+    this.id = this.chem_source_id;
     this.imageUrl = this.iso_smiles;
   }
 }

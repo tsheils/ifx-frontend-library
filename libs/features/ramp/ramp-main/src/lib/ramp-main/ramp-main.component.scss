@@ -1,17 +1,21 @@
+.ramp-main-page {
+padding-top: 0
+}
+
+
 .main-ramp-rail {
   position: fixed;
-  padding-top: 64px;
   width: 80px;
+  height: 100vh;
 }
 
 .ramp-rail {
-  width: 80px;
   display: grid;
   justify-items: center;
 }
 
 .rail-button {
-  height: 56px;
+  height: 64px;
   padding-bottom: 12px;
   padding-top: 12px;
   display: grid;
@@ -34,5 +38,7 @@
 
 .drawer-container-content {
   min-height: 100vh;
-  width: 100%;
+  margin-left:160px;
+  padding-left: 1vw
+
 }

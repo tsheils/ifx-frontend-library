@@ -32,6 +32,7 @@ type Article {
     @relationship(type: "HAS_OMIM_REF", direction: OUT)
   hasPubtatorAnnotation: Boolean
   isEpi: Boolean
+  isNHS: Boolean
   keywordsKeywordFor: [Keyword!]!
     @relationship(type: "KEYWORD_FOR", direction: IN)
   meshTermsMeshTermFor: [MeshTerm!]!
@@ -191,17 +192,38 @@ type Query {
   countsByYear(gardId: String): [FilterCount]
     @cypher(
       statement: """
-      match (d:GARD {GardId: $gardId})-[]-(a:Article {isEpi: true})
+      match (d:GARD {GardId: $gardId})-[]-(a:Article)
       WITH a.publicationYear as year
       with count(year) as ct, year
-      RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as yearCounts order by year DESC
-      UNION ALL
-      match (d:GARD {GardId: $gardId})-[]-(a:Article {isEpi: false})
-      WITH a.publicationYear as year
-      with count(year) as ct, year
-      RETURN {term: year, count: ct, label: 'Non Epidemiology Articles'} as yearCounts order by year DESC
+      RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
       """
       columnName: "yearCounts"
+    )
+}
+
+type Query {
+  countsByEpi(gardId: String): [FilterCount]
+    @cypher(
+      statement: """
+      match (d:GARD {GardId: $gardId})-[]-(a:Article)
+      WITH a.isEpi as isEpi
+      with count(isEpi) as ct, isEpi
+      RETURN {term: isEpi, count: ct, label: 'Epidemiology Articles'} as epiCounts order by isEpi DESC
+      """
+      columnName: "epiCounts"
+    )
+}
+
+type Query {
+  countsByNHS(gardId: String): [FilterCount]
+    @cypher(
+      statement: """
+      match (d:GARD {GardId: $gardId})-[]-(a:Article)
+      WITH a.isNHS as isNhs
+      with count(isNhs) as ct, isNhs
+      RETURN {term: isNhs, count: ct, label: 'Natural Health Study Articles'} as nhsCounts order by isNhs DESC
+      """
+      columnName: "nhsCounts"
     )
 }
 
@@ -209,17 +231,11 @@ type Query {
   allCountsByYear: [FilterCount]
     @cypher(
       statement: """
-      match (a:Article {isEpi: true})
+      match (a:Article)
              WHERE (a)<-[:MENTIONED_IN]-(:GARD)
              WITH a.publicationYear as year
              with count(year) as ct, year
-             RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as yearCounts order by year DESC
-             UNION ALL
-             match (a:Article {isEpi: false})
-             WHERE (a)<-[:MENTIONED_IN]-(:GARD)
-             WITH a.publicationYear as year
-             with count(year) as ct, year
-             RETURN {term: year, count: ct, label: 'Non Epidemiology Articles'} as yearCounts order by year DESC
+             RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
       """
       columnName: "yearCounts"
     )

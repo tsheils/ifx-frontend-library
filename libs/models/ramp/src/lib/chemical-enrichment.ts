@@ -1,4 +1,6 @@
-export class ChemicalEnrichment {
+import { RampDataGeneric } from './_utils';
+
+export class ChemicalEnrichment extends RampDataGeneric {
   category!: string;
   class_name!: string;
   met_hits!: number;
@@ -10,7 +12,9 @@ export class ChemicalEnrichment {
   pop_size!: number;
 
   constructor(obj: { [key: string]: unknown }) {
+    super();
     if (obj['category']) {
+      this.id = <string>obj['category'];
       this.category = <string>obj['category'];
     }
     if (obj['class_name']) {

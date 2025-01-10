@@ -31,7 +31,6 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-filter-panel',
-  standalone: true,
   imports: [
     CommonModule,
     MatCheckboxModule,
@@ -44,11 +43,11 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
     HighlightPipe,
     MatButtonModule,
     MatIconModule,
-    MatDivider,
   ],
   templateUrl: './shared-utils-filter-panel.component.html',
   styleUrls: ['./shared-utils-filter-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   destroyRef = inject(DestroyRef);

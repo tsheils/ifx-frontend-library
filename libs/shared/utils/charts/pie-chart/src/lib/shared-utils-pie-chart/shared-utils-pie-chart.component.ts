@@ -19,11 +19,11 @@ import { ImageDownloadComponent } from 'image-download';
 
 @Component({
   selector: 'lib-shared-utils-pie-chart',
-  standalone: true,
-  imports: [CommonModule, ImageDownloadComponent, NgOptimizedImage],
+  imports: [CommonModule, NgOptimizedImage],
   templateUrl: './shared-utils-pie-chart.component.html',
   styleUrl: './shared-utils-pie-chart.component.scss',
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsPieChartComponent
@@ -90,7 +90,7 @@ export class SharedUtilsPieChartComponent
           this.width(),
           this.height(),
         ])
-        .attr('style', 'max-width: 100%; height: auto; height: intrinsic;');
+        .attr('style', 'max-width: 100%; height: 100%;');
       this.makeChart();
     }
   }

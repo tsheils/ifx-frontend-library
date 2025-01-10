@@ -174,10 +174,10 @@ export const rampReducer = createReducer(
 
   on(
     AnalyteFromPathwayActions.fetchAnalytesFromPathwaysSuccess,
-    (state, { data, query }) => ({
+    (state, { data, query, dataAsDataProperty }) => ({
       ...state,
       loading: false,
-      analytes: { data, query },
+      analytes: { data, query, dataAsDataProperty },
     }),
   ),
 

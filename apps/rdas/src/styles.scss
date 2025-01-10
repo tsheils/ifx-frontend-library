@@ -12,7 +12,8 @@
 @use 'libs/shared/rdas/disease-display/src/lib/disease-list-card/_disease-list-card-theme.scss'
   as disease-list-card;
 
-@include mat.core();
+@include mat.elevation-classes();
+@include mat.app-background();
 
 @include utils.width-sm(50);
 @include utils.width-sm(90);
@@ -44,9 +45,6 @@
 @include utils.text-align(right);
 
 html {
-  // Emit styles for MatButton based on `$my-theme`. Because the configuration
-  // passed to `define-theme` omits typography, `button-theme` will not
-  // emit any typography styles.
   @include mat.system-level-colors(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
   @include footer.theme(theme.$light-theme);
@@ -361,10 +359,6 @@ span.search-highlight {
 
 .fill-spinner > .progress-bar-container {
   min-height: 60vh;
-}
-
-button.mat-ripple.mat-mdc-tab-header-pagination.mat-mdc-tab-header-pagination-after {
-  // z-index: 1;
 }
 
 .navigation-menu-panel {

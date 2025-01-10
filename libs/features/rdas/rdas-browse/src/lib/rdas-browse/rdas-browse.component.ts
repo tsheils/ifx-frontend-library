@@ -1,9 +1,4 @@
-import {
-  BreakpointObserver,
-  Breakpoints,
-  MediaMatcher,
-} from '@angular/cdk/layout';
-import { ScrollDispatcher } from '@angular/cdk/overlay';
+import { MediaMatcher } from '@angular/cdk/layout';
 import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -14,7 +9,6 @@ import {
   inject,
   OnDestroy,
   OnInit,
-  signal,
   Signal,
   viewChild,
   ViewEncapsulation,
@@ -31,6 +25,7 @@ import {
 import { MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatTooltip } from '@angular/material/tooltip';
 import {
   Event,
   NavigationEnd,
@@ -39,12 +34,11 @@ import {
   Router,
 } from '@angular/router';
 import {
-  Disease,
   DiseaseNode,
   GeneAssociation,
 } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory, Page } from '@ncats-frontend-library/models/utils';
-import { DiseaseListComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
+import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
 import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
 import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree';
 import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
@@ -61,12 +55,7 @@ import {
   DiseaseSelectors,
 } from '@ncats-frontend-library/stores/disease-store';
 import { Store } from '@ngrx/store';
-import { map, Subject } from 'rxjs';
-import { temp } from 'three/examples/jsm/nodes/core/VarNode';
 
-/**
- * navigation options to merge query parameters that are added on in navigation/query/facets/pagination
- */
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge',
 };
@@ -75,14 +64,11 @@ const navigationExtras: NavigationExtras = {
   selector: 'ncats-frontend-library-rdas-browse',
   templateUrl: './rdas-browse.component.html',
   styleUrls: ['./rdas-browse.component.scss'],
-  standalone: true,
   imports: [
     CommonModule,
     RdasTreeComponent,
-    RdasSearchComponent,
     MatPaginatorModule,
     LoadingSpinnerComponent,
-    DiseaseListComponent,
     ScrollToTopComponent,
     MatMenuModule,
     MatIconModule,
@@ -93,9 +79,11 @@ const navigationExtras: NavigationExtras = {
     SharedUtilsFilterPanelComponent,
     SharedUtilsSelectedFilterListComponent,
     ChartWrapperComponent,
-    NgOptimizedImage,
+    MatTooltip,
+    DiseaseListCardComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasBrowseComponent implements OnInit, OnDestroy {
@@ -133,12 +121,11 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
   filters = this.store.selectSignal(FilterSelectors.selectAllFilters);
 
-  mobileQuery!: MediaQueryList;
-
   sort = 'COUNT_ARTICLES';
   selectedValues: Map<string, string[]> = new Map<string, string[]>();
   showDownload = false;
 
+  mobileQuery!: MediaQueryList;
   private _mobileQueryListener: () => void;
 
   constructor() {
@@ -179,10 +166,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * change pages of list
-   * @param event
-   */
   paginationChanges(event: PageEvent): void {
     navigationExtras.queryParams = {
       pageIndex: event.pageIndex + 1,
@@ -197,27 +180,10 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     navigationExtras.queryParams = {
       sort: this.sort,
       direction: this.sort === 'GardName' ? 'ASC' : 'DESC',
+      pageIndex: 1,
     };
 
     this._navigate(navigationExtras);
-  }
-
-  selectDisease(event: Disease): void {
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        id: event.gardId,
-      },
-    };
-    this.router.navigate(['/disease'], navigationExtras);
-  }
-
-  searchDiseaseString(event: string): void {
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        q: event,
-      },
-    };
-    this.router.navigate(['/diseases'], navigationExtras);
   }
 
   filterChange(event: { label: string; term?: string; page?: number }): void {
@@ -327,8 +293,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       const file = new Blob([data], { type: type });
       const link = this.dom.createElement('a');
       if (link.download !== undefined) {
-        // feature detection
-        // Browsers that support HTML5 download attribute
         const url = URL.createObjectURL(file);
         link.setAttribute('href', url);
         link.setAttribute('download', `${name}`);
@@ -340,11 +304,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
   }
 
-  /**
-   * navigate on changes, mainly just changes url, shouldn't reload entire page, just data
-   * @param {NavigationExtras} navExtras
-   * @private
-   */
   private _navigate(navExtras: NavigationExtras): void {
     this.router.navigate([], navExtras);
   }

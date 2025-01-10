@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   input,
   output,
   ViewEncapsulation,
@@ -10,36 +9,30 @@ import {
 import {
   MatAccordion,
   MatExpansionPanel,
-  MatExpansionPanelDescription,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle,
 } from '@angular/material/expansion';
 import { MatTab, MatTabContent, MatTabGroup } from '@angular/material/tabs';
 import {
+  DataMap,
   OpenApiPath,
   QueryResultsData,
+  VisualizationMap,
 } from '@ncats-frontend-library/models/utils';
 import { DataPanelComponent } from 'data-panel';
 import { InputPanelComponent } from 'input-panel';
-import { QuestionBase } from 'ncats-form-question';
+import { FormSubsection } from 'ramp';
 import { ResultsPanelComponent } from 'results-panel';
 import { VisualizationPanelComponent } from 'visualization-panel';
-import {
-  AccordionPanelMap,
-  DataMap,
-  VisualizationMap,
-} from './panel-accordion-models';
 
 @Component({
   selector: 'lib-panel-accordion',
-  standalone: true,
   imports: [
     CommonModule,
     MatAccordion,
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
-    MatExpansionPanelDescription,
     DataPanelComponent,
     VisualizationPanelComponent,
     ResultsPanelComponent,
@@ -50,14 +43,15 @@ import {
   ],
   templateUrl: './panel-accordion.component.html',
   styleUrl: './panel-accordion.component.scss',
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelAccordionComponent {
   dataSearch = output<{ [key: string]: unknown }>();
+  tabChangeEmitter = output<boolean>();
   paths = input<OpenApiPath[]>();
-  inputTab = input<Map<string, QuestionBase<string>[]>>();
-  accordionTabsSignal = input<AccordionPanelMap>();
+  inputTab = input<FormSubsection[]>();
   visualizationTabs = input<Map<string, VisualizationMap[]> | undefined>(
     new Map<string, VisualizationMap[]>(),
   );
@@ -67,14 +61,5 @@ export class PanelAccordionComponent {
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event);
   }
-
-  /*  checkIfLoaded(
-    dataMap: Map<string, DataMap[] | VisualizationMap[] | undefined>,
-  ) {
-    if (dataMap) {
-      return !Array.from(dataMap.values())[0][0].loaded;
-    } else return false;
-  }*/
-
   _originalOrder = () => 0;
 }

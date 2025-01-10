@@ -14,24 +14,23 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'lib-shared-forms-file-upload',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatButtonModule,
-    MatInputModule,
-    MatIconModule,
-  ],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      multi: true,
-      useExisting: SharedFormsFileUploadComponent,
-    },
-  ],
-  templateUrl: './shared-forms-file-upload.component.html',
-  styleUrls: ['./shared-forms-file-upload.component.scss'],
+    selector: 'lib-shared-forms-file-upload',
+    imports: [
+        CommonModule,
+        MatFormFieldModule,
+        MatButtonModule,
+        MatInputModule,
+        MatIconModule,
+    ],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            multi: true,
+            useExisting: SharedFormsFileUploadComponent,
+        },
+    ],
+    templateUrl: './shared-forms-file-upload.component.html',
+    styleUrls: ['./shared-forms-file-upload.component.scss']
 })
 export class SharedFormsFileUploadComponent implements ControlValueAccessor {
   fileUpload = viewChild(ElementRef);

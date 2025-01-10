@@ -1,4 +1,6 @@
-export class Ontology {
+import { RampDataGeneric } from './_utils';
+
+export class Ontology extends RampDataGeneric {
   HMDBOntologyType!: string;
   idType?: string;
   metabolites?: string;
@@ -11,6 +13,7 @@ export class Ontology {
   source?: string;
 
   constructor(obj: { [key: string]: unknown }) {
+    super();
     if (obj['HMDBOntologyType']) {
       this.HMDBOntologyType = <string>obj['HMDBOntologyType'];
       this.source = <string>obj['HMDBOntologyType'];
@@ -26,6 +29,7 @@ export class Ontology {
       this.value = <string>obj['Ontology'];
     }
     if (obj['sourceId']) {
+      this.id = <string>obj['sourceId'];
       this.sourceId = <string>obj['sourceId'];
     }
     if (obj['commonName']) {

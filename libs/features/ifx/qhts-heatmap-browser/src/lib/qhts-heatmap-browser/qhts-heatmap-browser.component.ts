@@ -9,17 +9,16 @@ import { ScreenshotDisplayComponent } from 'screenshot-display';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-qhts-heatmap-browser',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DefaultToolComponent,
-    ScreenshotDisplayComponent,
-    JavaWebstartComponent,
-    MatTabsModule,
-  ],
-  templateUrl: './qhts-heatmap-browser.component.html',
-  styleUrl: './qhts-heatmap-browser.component.scss',
+    selector: 'lib-qhts-heatmap-browser',
+    imports: [
+        CommonModule,
+        DefaultToolComponent,
+        ScreenshotDisplayComponent,
+        JavaWebstartComponent,
+        MatTabsModule,
+    ],
+    templateUrl: './qhts-heatmap-browser.component.html',
+    styleUrl: './qhts-heatmap-browser.component.scss'
 })
 export class QhtsHeatmapBrowserComponent {
   private readonly store = inject(Store);

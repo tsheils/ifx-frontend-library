@@ -13,10 +13,8 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'lib-ramp-home',
-  standalone: true,
   imports: [
     CommonModule,
-    MatButton,
     MatRipple,
     RouterLink,
     MatCard,

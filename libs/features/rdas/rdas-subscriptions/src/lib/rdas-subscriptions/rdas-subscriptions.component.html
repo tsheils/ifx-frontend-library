@@ -1,9 +1,13 @@
 <div class="row centered-row">
   <div class="width-75">
-    <ncats-frontend-library-disease-list
-      [diseases]="subscriptions()"
-      class="fill-container"
-    ></ncats-frontend-library-disease-list>
+    @for (disease of subscriptions(); track disease.gardId) {
+      <div>
+        <ncats-frontend-library-disease-list-card
+          [disease]="disease"
+        ></ncats-frontend-library-disease-list-card>
+        <br />
+      </div>
+    }
     <br />
   </div>
 </div>

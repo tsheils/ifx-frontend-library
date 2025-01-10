@@ -1300,7 +1300,7 @@ export const DISEASESTATEMOCK = {
       },
       {
         label: 'Articles by Year',
-        parent: 'nonEpiArticles',
+        parent: 'articles',
         filterable: true,
         page: 1,
         values: [

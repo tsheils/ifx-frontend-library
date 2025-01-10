@@ -47,20 +47,19 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
 }
 
 @Component({
-  selector: 'ncats-frontend-library-register-modal',
-  templateUrl: './register-modal.component.html',
-  styleUrls: ['./register-modal.component.scss'],
-  encapsulation: ViewEncapsulation.None,
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-frontend-library-register-modal',
+    templateUrl: './register-modal.component.html',
+    styleUrls: ['./register-modal.component.scss'],
+    encapsulation: ViewEncapsulation.None,
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RegisterModalComponent implements OnInit {
   store = inject(Store);

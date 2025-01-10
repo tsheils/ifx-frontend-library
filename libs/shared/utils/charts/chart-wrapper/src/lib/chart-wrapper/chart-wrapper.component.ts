@@ -23,12 +23,10 @@ import { ImageDownloadComponent } from 'image-download';
 
 @Component({
   selector: 'lib-chart-wrapper',
-  standalone: true,
   imports: [
     CommonModule,
     SharedUtilsPieChartComponent,
     SharedUtilsBarChartComponent,
-    FilterDownloadButtonComponent,
     ImageDownloadComponent,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -37,6 +35,7 @@ import { ImageDownloadComponent } from 'image-download';
   ],
   templateUrl: './chart-wrapper.component.html',
   styleUrl: './chart-wrapper.component.scss',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartWrapperComponent implements OnInit {

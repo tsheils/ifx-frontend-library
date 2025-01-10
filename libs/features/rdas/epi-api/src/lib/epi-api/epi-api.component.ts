@@ -14,7 +14,6 @@ import SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'ncats-frontend-library-epi-api',
-  standalone: true,
   imports: [CommonModule],
   templateUrl: './epi-api.component.html',
   styleUrls: ['./epi-api.component.scss'],
@@ -22,9 +21,6 @@ import SwaggerUI from 'swagger-ui';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EpiApiComponent {
-  /**
-   * container that holds the swagger ui
-   */
   @ViewChild('documentation') el!: ElementRef;
   isBrowser: boolean;
 
@@ -33,9 +29,6 @@ export class EpiApiComponent {
     private platformId: InjectionToken<NonNullable<unknown>>,
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
-    /**
-     * create swagger ui viewer
-     */
     afterNextRender(() => {
       if (this.isBrowser) {
         SwaggerUI({

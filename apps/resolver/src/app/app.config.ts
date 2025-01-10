@@ -4,12 +4,7 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  inject,
-  PLATFORM_ID,
-} from '@angular/core';
+import { ApplicationConfig, inject, PLATFORM_ID, provideAppInitializer } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -76,18 +71,14 @@ export function load_from_local_storage(
 export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: load_from_local_storage,
-      deps: [],
-      multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: load_resolver,
-      deps: [ResolverService],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (load_from_local_storage)();
+        return initializerFn();
+      }),
+    provideAppInitializer(() => {
+        const initializerFn = (load_resolver)(inject(ResolverService));
+        return initializerFn();
+      }),
     provideClientHydration(),
     provideRouter(
       appRoutes,

@@ -16,11 +16,13 @@
   </header>
   <main role="ncats-main">
     <div class="main-content">
+      @if(isProd()){
       <div class="row space-around-row">
         <div class="width-95">
           <ramp-full-banner [showBanner]="isProd()"></ramp-full-banner>
         </div>
       </div>
+      }
       <ncats-frontend-library-loading-spinner
         [isLoaded]="!loading()"
       ></ncats-frontend-library-loading-spinner>

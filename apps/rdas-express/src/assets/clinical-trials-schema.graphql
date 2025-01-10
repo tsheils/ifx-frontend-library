@@ -1,102 +1,80 @@
 extend schema @mutation(operations: [])
 scalar JSON
 
-type ClinicalTrial {
-  Acronym: String
-  BriefSummary: String
-  BriefTitle: String
-  CompletionDate: String
-  CompletionDateType: String
-  DateCreatedRDAS: String
-  LastKnownStatus: String
-  LastUpdatePostDate: String
-  LastUpdatePostDateType: String
-  LastUpdateSubmitDate: String
-  LastUpdatedRDAS: String
-  NCTId: String
-  NCTIdAlias: [String]
-  OfficialTitle: String
-  OverallStatus: String
-  Phase: String
-  PrimaryCompletionDate: String
-  PrimaryCompletionDateType: String
-  ResultsFirstPostDate: String
-  ResultsFirstPostDateType: String
-  ResultsFirstPostedQCCommentsDate: String
-  ResultsFirstPostedQCCommentsDateType: String
-  StartDate: String
-  StartDateType: String
-  StudyFirstPostDate: String
-  StudyFirstPostDateType: String
-  StudyType: String
-  collaboratedWithCollaborators: [Collaborator!]!
-    @relationship(type: "collaborated_with", direction: OUT)
-  conductedByOrganizations: [Organization!]!
-    @relationship(type: "conducted_by", direction: OUT)
-  expandedAccessInfoExpandedAccesses: [ExpandedAccess!]!
-    @relationship(type: "expanded_access_info", direction: OUT)
-  hasIndividualPatientDataIndividualPatientData: [IndividualPatientData!]!
-    @relationship(type: "has_individual_patient_data", direction: OUT)
-  hasInterventionInterventions: [Intervention!]!
-    @relationship(type: "has_intervention", direction: OUT)
-  hasMetamapAnnotationTrialAnnotations: [TrialAnnotation!]!
-    @relationship(
-      type: "has_metamap_annotation"
-      direction: OUT
-      properties: "HasMetamapAnnotationProperties"
-    )
-  hasOutcomePrimaryOutcomes: [PrimaryOutcome!]!
-    @relationship(type: "has_outcome", direction: OUT)
-  hasParticipantInfoParticipants: [Participant!]!
-    @relationship(type: "has_participant_info", direction: OUT)
-  hasStudyDesignStudyDesigns: [StudyDesign!]!
-    @relationship(type: "has_study_design", direction: OUT)
-  inLocationsLocations: [Location!]!
-    @relationship(type: "in_locations", direction: OUT)
-  investigatesConditionConditions: [Condition!]!
-    @relationship(type: "investigates_condition", direction: OUT)
-  investigatorsinvestigates: [Investigator!]!
-    @relationship(type: "investigates", direction: IN)
-  patientRegistryInfoPatientRegistries: [PatientRegistry!]!
-    @relationship(type: "patient_registry_info", direction: OUT)
-  referencesisAbout: [Reference!]!
-    @relationship(type: "is_about", direction: IN)
-  sponsoredBySponsors: [Sponsor!]!
-    @relationship(type: "sponsored_by", direction: OUT)
+type AssociatedEntity {
+	EntityClass: String!
+	EntityName: String!
+	EntityType: String!
+	associatedWithClinicalTrials: [ClinicalTrial!]! @relationship(type: "associated_with", direction: OUT)
 }
 
-type Collaborator {
-  CollaboratorClass: String
-  CollaboratorName: String
-  clinicalTrialscollaboratedWith: [ClinicalTrial!]!
-    @relationship(type: "collaborated_with", direction: IN)
+type ClinicalTrial {
+	Acronym: String!
+	BriefSummary: String!
+	BriefTitle: String!
+	CompletionDate: String!
+	CompletionDateType: String!
+	DateCreatedRDAS: String!
+	IPDSharing: String!
+	IPDSharingAccessCriteria: String!
+	IPDSharingDescription: String!
+	IPDSharingTimeFrame: String!
+	LastKnownStatus: String!
+	LastUpdatePostDate: String!
+	LastUpdatePostDateType: String!
+	LastUpdateSubmitDate: String!
+	LastUpdatedRDAS: String!
+	NCTId: String!
+	OfficialTitle: String!
+	OverallStatus: String!
+	PatientRegistry: Boolean!
+	Phase: String
+	PrimaryCompletionDate: String!
+	PrimaryCompletionDateType: String!
+	ResultsFirstPostDate: String!
+	ResultsFirstPostDateType: String!
+	ResultsFirstPostedQCCommentsDate: String!
+	StartDate: String!
+	StartDateType: String!
+	StudyType: String!
+	associatedEntitiesassociatedWith: [AssociatedEntity!]! @relationship(type: "associated_with", direction: IN)
+	hasContactContacts: [Contact!]! @relationship(type: "has_contact", direction: OUT)
+	hasInterventionInterventions: [Intervention!]! @relationship(type: "has_intervention", direction: OUT)
+	hasOutcomePrimaryOutcomes: [PrimaryOutcome!]! @relationship(type: "has_outcome", direction: OUT)
+	hasParticipantInfoParticipants: [Participant!]! @relationship(type: "has_participant_info", direction: OUT)
+	hasStudyDesignStudyDesigns: [StudyDesign!]! @relationship(type: "has_study_design", direction: OUT)
+	inLocationsLocations: [Location!]! @relationship(type: "in_locations", direction: OUT)
+	investigatesConditionConditions: [Condition!]! @relationship(type: "investigates_condition", direction: OUT)
+	investigatorsinvestigates: [Investigator!]! @relationship(type: "investigates", direction: IN)
+	mappedToGardGards: [GARD!]! @relationship(type: "mapped_to_gard", direction: OUT, properties: "MappedToGardProperties")
+	referencesisAbout: [Reference!]! @relationship(type: "is_about", direction: IN)
 }
 
 type Condition {
-  Condition: String
+  Condition: String!
   clinicalTrialsinvestigatesCondition: [ClinicalTrial!]!
     @relationship(type: "investigates_condition", direction: IN)
-  hasAnnotationConditionAnnotations: [ConditionAnnotation!]!
+  mappedToGardGards: [GARD!]!
     @relationship(
-      type: "has_annotation"
+      type: "mapped_to_gard"
       direction: OUT
-      properties: "HasAnnotationProperties"
+      properties: "MappedToGardProperties"
     )
 }
 
-type ConditionAnnotation {
-  MATCH_TYPE: String
-  SEMANTIC_TYPE: [String]
-  UMLSPreferredName: String
-  UMLS_CUI: String
-  conditionshasAnnotation: [Condition!]!
-    @relationship(
-      type: "has_annotation"
-      direction: IN
-      properties: "HasAnnotationProperties"
-    )
-  mappedToGardGards: [GARD!]!
-    @relationship(type: "mapped_to_gard", direction: OUT)
+type Contact {
+  ContactEmail: String!
+  ContactName: String!
+  ContactPhone: String!
+  ContactPhoneExt: String!
+  ContactRole: String!
+  ContactScope: String!
+  clinicalTrialshasContact: [ClinicalTrial!]!
+    @relationship(type: "has_contact", direction: IN)
+  contactForLocationLocations: [Location!]!
+    @relationship(type: "contact_for_location", direction: OUT)
+  investigatorshasContact: [Investigator!]!
+    @relationship(type: "has_contact", direction: IN)
 }
 
 type Drug {
@@ -108,32 +86,31 @@ type Drug {
   BN_CARDINALITY: [String]
   CVX: [String]
   DRUGBANK: [String]
-  GENERAL_CARDINALITY: [String]
+  GENERAL_CARDINALITY: [String]!
   HUMAN_DRUG: [String]
   IN_EXPRESSED_FLAG: [String]
-  MESH: [String]
   MMSL_CODE: [String]
+  NADA: [String]
   NDA: [String]
   NHRIC: [String]
   ORIG_CODE: [String]
   ORIG_SOURCE: [String]
   PRESCRIBABLE: [String]
   PrescribableSynonym: [String]
-  QUALITATIVE_DISTINCTION: [String]
   QUANTITY: [String]
   RXNAV_HUMAN_DRUG: [String]
-  RXNAV_STR: [String]
+  RXNAV_STR: [String]!
   RXNAV_VET_DRUG: [String]
-  RxCUI: [String]
-  RxNormID: BigInt
-  RxNormName: [String]
+  RxCUI: [String]!
+  RxNormID: BigInt!
+  RxNormName: [String]!
   RxNormSynonym: [String]
   SCHEDULE: [String]
   SNOMEDCT: [String]
   SPL_SET_ID: [String]
   STRENGTH: [String]
   Source: [String]
-  TTY: [String]
+  TTY: [String]!
   TallmanSynonym: [String]
   UNII_CODE: [String]
   USP: [String]
@@ -147,51 +124,27 @@ type Drug {
     )
 }
 
-type ExpandedAccess {
-  ExpAccTypeIndividual: String
-  ExpAccTypeIntermediate: String
-  ExpAccTypeTreatment: String
-  ExpandedAccessNCTId: String
-  ExpandedAccessStatusForNCTId: String
-  HasExpandedAccess: String
-  clinicalTrialsexpandedAccessInfo: [ClinicalTrial!]!
-    @relationship(type: "expanded_access_info", direction: IN)
-}
-
 type GARD {
-  GardId: String
-  GardName: String
-  Synonyms: [String]
-  UMLS: [String]
-  UMLS_Source: String
-  conditionAnnotationsmappedToGard: [ConditionAnnotation!]!
-    @relationship(type: "mapped_to_gard", direction: IN)
+  GardId: String!
+  GardName: String!
+  Synonyms: [String]!
+  clinicalTrialsmappedToGard: [ClinicalTrial!]!
+    @relationship(
+      type: "mapped_to_gard"
+      direction: IN
+      properties: "MappedToGardProperties"
+    )
+  conditionsmappedToGard: [Condition!]!
+    @relationship(
+      type: "mapped_to_gard"
+      direction: IN
+      properties: "MappedToGardProperties"
+    )
 }
-
-type HasAnnotationProperties @relationshipProperties {
-  FUZZY_SCORE: BigInt
-  METAMAP_SCORE: BigInt
-}
-
-type HasMetamapAnnotationProperties @relationshipProperties {
-  umls_score: BigInt
-}
-
-type IndividualPatientData {
-  IPDSharing: String
-  IPDSharingAccessCriteria: String
-  IPDSharingDescription: String
-  IPDSharingInfoType: [String]
-  IPDSharingTimeFrame: String
-  IPDSharingURL: String
-  clinicalTrialshasIndividualPatientData: [ClinicalTrial!]!
-    @relationship(type: "has_individual_patient_data", direction: IN)
-}
-
 type Intervention {
-  InterventionDescription: String
-  InterventionName: String
-  InterventionType: String
+  InterventionDescription: String!
+  InterventionName: String!
+  InterventionType: String!
   clinicalTrialshasIntervention: [ClinicalTrial!]!
     @relationship(type: "has_intervention", direction: IN)
   mappedToRxnormDrugs: [Drug!]!
@@ -203,111 +156,74 @@ type Intervention {
 }
 
 type Investigator {
-  ContactEmail: String
-  ContactPhone: String
-  OfficialAffiliation: String
-  OfficialName: String
-  OfficialRole: String
+  OfficialAffiliation: String!
+  OfficialName: String!
+  OfficialRole: String!
+  hasContactContacts: [Contact!]!
+    @relationship(type: "has_contact", direction: OUT)
   investigatesClinicalTrials: [ClinicalTrial!]!
     @relationship(type: "investigates", direction: OUT)
 }
 
 type Location {
-  LocationCity: String
-  LocationCountry: String
-  LocationFacility: String
-  LocationState: String
-  LocationStatus: String
-  LocationZip: String
+  LocationCity: String!
+  LocationCountry: String!
+  LocationFacility: String!
+  LocationState: String!
+  LocationStatus: String!
+  LocationZip: String!
   clinicalTrialsinLocations: [ClinicalTrial!]!
     @relationship(type: "in_locations", direction: IN)
+  contactscontactForLocation: [Contact!]!
+    @relationship(type: "contact_for_location", direction: IN)
+}
+
+type MappedToGardProperties @relationshipProperties {
+  MatchedTermRDAS: String
 }
 
 type MappedToRxnormProperties @relationshipProperties {
-  WITH_SPACY: Boolean
-}
-
-type Organization {
-  OrgClass: String
-  OrgName: String
-  OrgType: String
-  clinicalTrialsconductedBy: [ClinicalTrial!]!
-    @relationship(type: "conducted_by", direction: IN)
+  WITH_SPACY: Boolean!
 }
 
 type Participant {
-  EligibilityCriteria: String
-  EnrollmentCount: String
-  EnrollmentType: String
-  Gender: String
-  GenderBased: String
-  GenderDescription: String
-  HealthyVolunteers: String
-  MinimumAge: String
-  StdAge: [String]
-  StudyPopulation: String
+  EligibilityCriteria: String!
+  EnrollmentType: String!
+  Gender: String!
+  MaximumAge: String!
+  MinimumAge: String!
+  StdAge: [String]!
   clinicalTrialshasParticipantInfo: [ClinicalTrial!]!
     @relationship(type: "has_participant_info", direction: IN)
 }
 
-type PatientRegistry {
-  PatientRegistry: String
-  clinicalTrialspatientRegistryInfo: [ClinicalTrial!]!
-    @relationship(type: "patient_registry_info", direction: IN)
-}
-
 type PrimaryOutcome {
-  PrimaryOutcomeDescription: String
-  PrimaryOutcomeMeasure: String
-  PrimaryOutcomeTimeFrame: String
+  PrimaryOutcomeDescription: String!
+  PrimaryOutcomeMeasure: String!
+  PrimaryOutcomeTimeFrame: String!
   clinicalTrialshasOutcome: [ClinicalTrial!]!
     @relationship(type: "has_outcome", direction: IN)
 }
 
 type Reference {
-  ReferenceCitation: String
-  ReferencePMID: String
-  ReferenceType: String
+  Citation: String!
+  ReferencePMID: String!
+  ReferenceType: String!
   isAboutClinicalTrials: [ClinicalTrial!]!
     @relationship(type: "is_about", direction: OUT)
 }
 
-type Sponsor {
-  LeadSponsorClass: String
-  LeadSponsorName: String
-  clinicalTrialssponsoredBy: [ClinicalTrial!]!
-    @relationship(type: "sponsored_by", direction: IN)
-}
-
 type StudyDesign {
-  DesignAllocation: String
-  DesignInterventionModel: String
-  DesignInterventionModelDescription: String
-  DesignMasking: String
-  DesignMaskingDescription: String
-  DesignObservationalModel: [String]
-  DesignPrimaryPurpose: String
-  DesignTimePerspective: [String]
-  DetailedDescription: String
-  SamplingMethod: String
+  DesignAllocation: String!
+  DesignInterventionModel: String!
+  DesignInterventionModelDescription: String!
+  DesignMasking: String!
+  DesignObservationalModel: String!
+  DesignPrimaryPurpose: String!
+  DesignTimePerspective: String!
+  DetailedDescription: String!
   clinicalTrialshasStudyDesign: [ClinicalTrial!]!
     @relationship(type: "has_study_design", direction: IN)
-}
-
-type TrialAnnotation {
-  clinicalTrialshasMetamapAnnotation: [ClinicalTrial!]!
-    @relationship(
-      type: "has_metamap_annotation"
-      direction: IN
-      properties: "HasMetamapAnnotationProperties"
-    )
-  umls_concept: String
-  umls_cui: String
-  umls_types: [String]
-}
-
-type UserTesting {
-  Approved: String
 }
 
 type CTFilters {
@@ -327,8 +243,8 @@ type Query {
     @cypher(
       statement: """
       MATCH (n:GARD)
-            WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-            MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+            WHERE n.GardId = $where.mappedToGardGards_SOME.GardId
+            MATCH (n)-[m:mapped_to_gard]-(cl:ClinicalTrial)
                        WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
                        AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
                        AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
@@ -344,8 +260,8 @@ type Query {
     @cypher(
       statement: """
       MATCH (n:GARD)
-            WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-            MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+            WHERE n.GardId = $where.mappedToGardGards_SOME.GardId
+            MATCH (n)-[m:mapped_to_gard]-(cl:ClinicalTrial)
                        WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
                        AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
                        AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
@@ -361,8 +277,8 @@ type Query {
     @cypher(
       statement: """
       MATCH (n:GARD)
-            WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-            MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+            WHERE n.GardId = $where.mappedToGardGards_SOME.GardId
+            MATCH (n)-[m:mapped_to_gard]-(cl:ClinicalTrial)
                        WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
                        AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
                        AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
@@ -378,8 +294,8 @@ type Query {
     @cypher(
       statement: """
       MATCH (n:GARD)
-      WHERE n.GardId = $where.investigatesConditionConditions_SOME.hasAnnotationConditionAnnotations_SOME.mappedToGardGards_SOME.GardId
-      MATCH (n)-[m:mapped_to_gard]-(a:ConditionAnnotation)-[h:has_annotation]-(c:Condition)-[i:investigates_condition]-(cl:ClinicalTrial)
+      WHERE n.GardId = $where.mappedToGardGards_SOME.GardId
+      MATCH (n)-[m:mapped_to_gard]-(cl:ClinicalTrial)
                  WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
                  AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
                  AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)

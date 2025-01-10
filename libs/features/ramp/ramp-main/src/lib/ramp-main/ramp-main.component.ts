@@ -5,13 +5,8 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MatRipple } from '@angular/material/core';
-import {
-  MatSidenav,
-  MatSidenavContainer,
-  MatSidenavContent,
-} from '@angular/material/sidenav';
 import { RouterLink, Router } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { Store } from '@ngrx/store';
@@ -25,25 +20,24 @@ import {
   TextareaQuestion,
   TextboxQuestion,
 } from 'ncats-form-question';
+import { FormSubsection } from 'ramp';
 import { RampPageComponent } from 'ramp-page';
 import { RampSelectors } from 'ramp-store';
 
 @Component({
   selector: 'lib-ramp-main',
-  standalone: true,
   imports: [
     CommonModule,
     RampPageComponent,
     CdkScrollable,
-    MatSidenav,
-    MatSidenavContainer,
-    MatSidenavContent,
     RouterLink,
     MatRipple,
+    NgOptimizedImage,
   ],
   templateUrl: './ramp-main.component.html',
   styleUrl: './ramp-main.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class RampMainComponent {
   private readonly store = inject(Store);
@@ -51,7 +45,7 @@ export class RampMainComponent {
 
   activeElement = 'pathways';
   api = this.store.selectSignal(RampSelectors.getRampApi);
-  paths = computed(() => this.api()?.get(this.router.url.split('/')[1]));
+  paths = computed(() => this.api()?.get(this.fragment()));
   fragment = computed(() => this.router.url.split('/')[1]);
   title = computed(() => this.fragment()?.replace(/-/g, ' '));
 
@@ -60,6 +54,7 @@ export class RampMainComponent {
       string,
       QuestionBase<string>[]
     >();
+    /*
     Array.from(this.inputMap().entries()).forEach(([key, value]) => {
       const prop = value.properties.filter((prop) => (prop['field'] = key))[0];
       if (prop['filter']) {
@@ -82,97 +77,32 @@ export class RampMainComponent {
         }
       }
     });
-    return questionMap;
-  });
-
-  inputFields = computed(() => {
-    const questionMap: Map<string, QuestionBase<string>[]> = new Map<
-      string,
-      QuestionBase<string>[]
-    >();
-    Array.from(this.inputMap().entries()).forEach(([key, value]) => {
-      const prop = value.properties.filter((prop) => (prop['field'] = key))[0];
-      const example = value.examples.filter((exam) => (exam['field'] = key))[0];
-      const question = this._mapPathToQuestion(key, prop, example);
-      if (questionMap.has(<string>prop['parent'])) {
-        const form: QuestionBase<string>[] = questionMap.get(
-          <string>prop['parent'],
-        ) as QuestionBase<string>[];
-        form.push(question);
-        questionMap.set(<string>prop['parent'], form);
-      } else {
-        questionMap.set(<string>prop['parent'], [question]);
-      }
-    });
+*/
     return questionMap;
   });
 
   inputMap = computed(() => {
-    const inputMap: Map<
+    const inputMap: Map<string, FormSubsection[]> = new Map<
       string,
-      {
-        properties: { [key: string]: unknown }[];
-        examples: { [key: string]: unknown }[];
-      }
-    > = new Map<
-      string,
-      {
-        properties: { [key: string]: unknown }[];
-        examples: { [key: string]: unknown }[];
-      }
+      FormSubsection[]
     >();
-    this.paths()?.forEach((path: OpenApiPath) => {
-      path.properties.forEach((prop: { [key: string]: unknown }) => {
-        if (inputMap.has(<string>prop['field'])) {
-          const propObj: {
-            properties: { [key: string]: unknown }[];
-            examples: { [key: string]: unknown }[];
-          } = inputMap.get(<string>prop['field']) as {
-            properties: { [key: string]: unknown }[];
-            examples: { [key: string]: unknown }[];
-          };
-          const x = propObj.properties.find(
-            (item: { [key: string]: unknown }) =>
-              item['field'] === prop['field'],
-          );
-          if (!x) {
-            propObj.properties.push({ ...prop });
+    const pathsValue = this.paths();
+    if (pathsValue) {
+      const separatedPaths = this._separateInputTabs(pathsValue);
+      separatedPaths.forEach((inputTab, formKey) => {
+        inputTab.forEach((parsedPath) => {
+          const questionsList = parsedPath.properties;
+          const mappedSubform = this._questionListToObject(questionsList);
+          if (inputMap.has(formKey)) {
+            const tabQuestionsList = inputMap.get(formKey) as FormSubsection[];
+            tabQuestionsList.push(mappedSubform);
+            inputMap.set(formKey, tabQuestionsList);
+          } else {
+            inputMap.set(formKey, [mappedSubform]);
           }
-          inputMap.set(<string>prop['field'], propObj);
-        } else {
-          const propObj: {
-            properties: { [key: string]: unknown }[];
-            examples: { [key: string]: unknown }[];
-          } = { properties: [prop], examples: [] };
-          inputMap.set(<string>prop['field'], propObj);
-        }
+        });
       });
-      path.example.forEach((exam) => {
-        if (inputMap.has(<string>exam['field'])) {
-          const propObj: {
-            properties: { [key: string]: unknown }[];
-            examples: { [key: string]: unknown }[];
-          } = inputMap.get(exam['field']) as {
-            properties: { [key: string]: unknown }[];
-            examples: { [key: string]: unknown }[];
-          };
-          const x = propObj.examples.find(
-            (item: { [key: string]: unknown }) =>
-              item['field'] === exam['field'],
-          );
-          if (!x) {
-            propObj.examples.push({ ...exam });
-          }
-          inputMap.set(<string>exam['field'], propObj);
-        } else {
-          const propObj: {
-            properties: { [key: string]: unknown }[];
-            examples: { [key: string]: unknown }[];
-          } = { examples: [exam], properties: [] };
-          inputMap.set(<string>exam['field'], propObj);
-        }
-      });
-    });
+    }
     return inputMap;
   });
 
@@ -183,7 +113,6 @@ export class RampMainComponent {
   _mapPathToQuestion(
     key: string,
     prop: { [key: string]: unknown },
-    example?: { [key: string]: unknown },
   ): QuestionBase<string> {
     let q = {} as QuestionBase<string>;
     switch (prop['type']) {
@@ -260,10 +189,43 @@ export class RampMainComponent {
       q.description = <string>prop['description'];
     }
 
-    if (example && example['value']) {
-      q.value = <string>example['value'];
+    if (prop['value']) {
+      q.value = <string>prop['value'];
     }
 
     return q;
+  }
+
+  _questionListToObject(questionsList: { [key: string]: unknown }[]) {
+    const parent = <string>questionsList[0]['parent'];
+    const questionArray: QuestionBase<string>[] = [];
+    questionsList.forEach((question) => {
+      const field = <string>question['field'];
+      const questionObject = this._mapPathToQuestion(field, question);
+      questionArray.push(questionObject);
+    });
+    return { section: parent, questions: questionArray };
+  }
+
+  _separateInputTabs(paths: OpenApiPath[]) {
+    const inputTabMap: Map<string, OpenApiPath[]> = new Map<
+      string,
+      OpenApiPath[]
+    >();
+    paths.forEach((path) => {
+      if (!(<boolean>path.hideSection)) {
+        const subForm: string = path.child
+          ? <string>path.child
+          : <string>path.parent;
+        if (inputTabMap.has(subForm)) {
+          const pathArray = inputTabMap.get(subForm) as OpenApiPath[];
+          pathArray.push(path);
+          inputTabMap.set(subForm, pathArray);
+        } else {
+          inputTabMap.set(subForm, [path]);
+        }
+      }
+    });
+    return inputTabMap;
   }
 }

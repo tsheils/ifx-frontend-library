@@ -38,7 +38,6 @@ export class ClinicalTrial {
   locations?: Location[];
   participantInfo?: ParticipantInfo[];
   references?: Reference[];
-  sponsors?: Sponsor[];
   studyDesigns?: StudyDesign[];
   studyDiseases?: Disease[];
 
@@ -66,10 +65,6 @@ export class ClinicalTrial {
 
     if (obj.references) {
       this.references = obj.references.map((data) => new Reference(data));
-    }
-
-    if (obj.sponsors) {
-      this.sponsors = obj.sponsors.map((data) => new Sponsor(data));
     }
 
     if (obj.studyDesigns) {
@@ -123,18 +118,10 @@ export class Condition {
 }
 
 export class Reference {
-  referenceCitation?: string;
+  citation?: string;
   referencePMID?: string;
   referenceType?: string;
   constructor(obj: Partial<Reference> = {}) {
-    Object.assign(this, obj);
-  }
-}
-export class Sponsor {
-  leadSponsorClass?: string;
-  leadSponsorName?: string;
-
-  constructor(obj: Partial<Sponsor> = {}) {
     Object.assign(this, obj);
   }
 }
@@ -144,7 +131,6 @@ export class StudyDesign {
   designInterventionModel?: string;
   designInterventionModelDescription?: string;
   designMasking?: string;
-  designMaskingDescription?: string;
   designObservationalModel?: string;
   designPrimaryPurpose?: string;
   designTimePerspective?: string;
@@ -152,7 +138,6 @@ export class StudyDesign {
   primaryOutcomeDescription?: string;
   primaryOutcomeMeasure?: string;
   primaryOutcomeTimeFrame?: string;
-  samplingMethod?: string;
 
   constructor(obj: Partial<StudyDesign> = {}) {
     Object.assign(this, obj);

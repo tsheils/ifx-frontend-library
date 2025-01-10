@@ -8,18 +8,21 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { select } from '@ngrx/store';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
-import { CompleteDialogComponent } from 'complete-dialog';
+import {
+  MatTab,
+  MatTabContent,
+  MatTabGroup,
+  MatTabLabel,
+} from '@angular/material/tabs';
 import {
   DataMap,
-  PanelAccordionComponent,
+  DataProperty,
+  QueryResultsData,
   VisualizationMap,
-} from 'panel-accordion';
-import { CommonAnalyte, RampResponse, Reaction, ReactionClass } from 'ramp';
+} from '@ncats-frontend-library/models/utils';
+import { PanelAccordionComponent } from 'panel-accordion';
+import { CommonAnalyte, ReactionClass } from 'ramp';
 import {
   GraphData,
   GraphLink,
@@ -40,14 +43,19 @@ import {
   RampSunburstTooltipComponent,
   SUNBURST_TOOLTIP,
 } from 'ramp-sunburst-tooltip';
-import { map } from 'rxjs';
 import { SunburstChartService } from 'sunburst-chart';
 import { ForceDirectedGraphService } from 'utils-force-directed-graph';
 
 @Component({
   selector: 'lib-reactions-page',
-  standalone: true,
-  imports: [CommonModule, PanelAccordionComponent],
+  imports: [
+    CommonModule,
+    PanelAccordionComponent,
+    MatTabGroup,
+    MatTab,
+    MatTabLabel,
+    MatTabContent,
+  ],
   providers: [
     {
       provide: SUNBURST_TOOLTIP,
@@ -62,6 +70,7 @@ import { ForceDirectedGraphService } from 'utils-force-directed-graph';
   styleUrl: './reactions-page.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ReactionsPageComponent
   extends RampCorePageComponent
@@ -175,6 +184,7 @@ export class ReactionsPageComponent
       sortable: false,
     }),
   ];
+
   hoveredNode = signal<ReactionClass | undefined>(undefined);
   textLabel = signal<string | undefined>(undefined);
 
@@ -216,8 +226,10 @@ export class ReactionsPageComponent
     ),
   );
 
-  dataMap = computed(() => {
+  override dataMap = computed(() => {
     const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
+    const field = <string>this.activeTab();
+    let ret!: { [p: string]: Map<string, DataMap> };
     const reactionsFromAnalytesData = this.reactionsFromAnalytes()?.data;
     if (reactionsFromAnalytesData) {
       returnDataMap.set('Reactions from Analytes', {
@@ -251,11 +263,12 @@ export class ReactionsPageComponent
     }
 
     if (returnDataMap.size) {
-      return returnDataMap;
-    } else return undefined;
+      ret = { [field]: returnDataMap };
+    }
+    return ret;
   });
 
-  visualizationMap = computed(() => {
+  override visualizationsMap = computed(() => {
     const visualizationMapComputed = new Map<string, VisualizationMap[]>();
     const reactionsPlot = this.reactionsFromAnalytes()?.plot;
     if (reactionsPlot) {
@@ -293,20 +306,26 @@ export class ReactionsPageComponent
     }
 
     if (visualizationMapComputed.size) {
-      return visualizationMapComputed;
+      const field = <string>this.activeTab();
+      return { [field]: visualizationMapComputed };
     } else return undefined;
   });
 
-  overviewMap = computed(() => {
+  override overviewMap = computed(() => {
+    const field = <string>this.activeTab();
+    let ret!: { [p: string]: QueryResultsData };
     if (this.reactionsFromAnalytes()?.data) {
-      return {
-        matches: this.matches(),
-        noMatches: this.noMatches(),
-        count: this.reactionsFromAnalytes()?.data.length,
-        inputLength: this.inputList.length,
-        inputType: 'analytes',
+      ret = {
+        [field]: {
+          matches: this.reactionsFromAnalytes()?.query?.matches,
+          noMatches: this.reactionsFromAnalytes()?.query?.noMatches,
+          count: this.reactionsFromAnalytes()?.data.length,
+          inputLength: this.inputList.length,
+          inputType: 'analytes',
+        } as QueryResultsData,
       };
-    } else return undefined;
+    }
+    return ret;
   });
 
   constructor() {
@@ -345,9 +364,14 @@ export class ReactionsPageComponent
     });
   }
 
-  override fetchData(event: { [key: string]: unknown }): void {
-    this.clearDataMapSignal();
-    this.inputList = this._parseInput(event['analytes'] as string | string[]);
+  override fetchData(
+    formData: { [key: string]: unknown },
+    origin: string,
+  ): void {
+    this.activeTab.set(origin);
+    this.inputList = this._parseInput(
+      formData['analytes'] as string | string[],
+    );
     this.store.dispatch(
       CommonReactionAnalyteActions.fetchCommonReactionAnalytes({
         analytes: this.inputList,

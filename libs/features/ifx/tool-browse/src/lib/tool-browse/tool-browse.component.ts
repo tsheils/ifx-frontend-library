@@ -30,22 +30,21 @@ import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ToolCardComponent } from 'tool-card';
 
 @Component({
-  selector: 'lib-tool-browse',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatAutocompleteModule,
-    MatIconModule,
-    MatButtonModule,
-    HighlightPipe,
-    ToolCardComponent,
-  ],
-  templateUrl: './tool-browse.component.html',
-  styleUrl: './tool-browse.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-tool-browse',
+    imports: [
+        CommonModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatAutocompleteModule,
+        MatIconModule,
+        MatButtonModule,
+        HighlightPipe,
+        ToolCardComponent,
+    ],
+    templateUrl: './tool-browse.component.html',
+    styleUrl: './tool-browse.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToolBrowseComponent implements OnInit {
   private readonly store = inject(Store);

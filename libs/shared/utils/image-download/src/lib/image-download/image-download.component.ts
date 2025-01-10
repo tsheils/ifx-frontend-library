@@ -13,10 +13,10 @@ import { GenericChartComponent } from 'generic-chart';
 
 @Component({
   selector: 'lib-image-download',
-  standalone: true,
   imports: [CommonModule, MatButtonModule, MatMenuModule, MatIconModule],
   templateUrl: './image-download.component.html',
   styleUrl: './image-download.component.scss',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ImageDownloadComponent {

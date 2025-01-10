@@ -52,13 +52,15 @@ import {
   DiseaseSelectors,
   FetchDiseaseActions,
 } from '@ncats-frontend-library/stores/disease-store';
+import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
+import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
+import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
 import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ncats-frontend-library-rdas-disease-page',
   templateUrl: './rdas-disease-page.component.html',
   styleUrls: ['./rdas-disease-page.component.scss'],
-  standalone: true,
   animations: [
     trigger('followOnScroll', [
       state('in', style({ top: '30vh' })),
@@ -84,15 +86,13 @@ import { Store } from '@ngrx/store';
     MatButtonModule,
     MatSelectModule,
     MatListModule,
-    LoadingSpinnerComponent,
     ScrollToTopComponent,
-    NgOptimizedImage,
     ScrollingModule,
-    GeneListComponent,
     MatExpansionPanel,
     MatExpansionPanelHeader,
     MatExpansionPanelTitle,
   ],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdasDiseasePageComponent implements OnInit, OnDestroy {
@@ -115,13 +115,13 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
     this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
   staticDiseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getStaticDiseaseFilters);
-
+  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
+  projectsCount = this.store.selectSignal(
+    ProjectSelectors.selectAllProjectsCount,
+  );
+  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
   animationState = signal('in');
 
-  /**
-   * default active element for menu highlighting, will be replaced on scroll
-   * @type {string}
-   */
   activeElement = 'overview';
   mobile = false;
 
@@ -172,19 +172,11 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   setActiveElement(event: string) {
     this.activeElement = event;
   }
-  /**
-   * scroll to section
-   * @param el
-   */
+
   public scroll(el: string): void {
     this.setUrl({ fragment: el });
   }
 
-  /**
-   * check which section is active
-   * @param {string} check
-   * @returns {boolean}
-   */
   isActive(check: string): boolean {
     return this.activeElement === check;
   }

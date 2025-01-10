@@ -4,7 +4,22 @@
       <ncats-frontend-library-article-list-card
         [article]="article()"
       ></ncats-frontend-library-article-list-card>
+
       <mat-card-content>
+        <div>
+          @for (
+              author of article()?.authorsWrote;
+            track author.fullName;
+            let last = $last
+            ) {
+            <span>
+          <i>{{ author.fullName }}</i>
+              @if (!last) {
+                <span>, </span>
+              }
+        </span>
+          }
+        </div>
         @if (article()?.epidemiologies && article()?.epidemiologies?.length) {
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">

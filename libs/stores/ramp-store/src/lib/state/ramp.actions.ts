@@ -1,5 +1,4 @@
 import {
-  DataProperty,
   FilterCategory,
   OpenApiPath,
 } from '@ncats-frontend-library/models/utils';
@@ -8,15 +7,12 @@ import {
   Analyte,
   Classes,
   CommonAnalyte,
-  FisherResult,
-  FishersDataframe,
   Metabolite,
   Ontology,
   Pathway,
   Properties,
   RampChemicalEnrichmentResponse,
   RampPathwayEnrichmentResponse,
-  RampQuery,
   RampResponse,
   Reaction,
   ReactionClass,

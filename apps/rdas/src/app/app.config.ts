@@ -3,12 +3,7 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import {
-  APP_INITIALIZER,
-  ApplicationConfig,
-  importProvidersFrom,
-  inject,
-} from '@angular/core';
+import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -24,11 +19,15 @@ import {
   provideRouter,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
-  withHashLocation,
   withInMemoryScrolling,
   withPreloading,
   withViewTransitions,
 } from '@angular/router';
+import {
+  ARTICLE_STORE_FEATURE_KEY,
+  ArticleEffects,
+  articlesReducer,
+} from '@ncats-frontend-library/stores/article-store';
 import {
   DiseaseEffects,
   DISEASES_FEATURE_KEY,
@@ -39,6 +38,16 @@ import {
   filtersReducer,
   FilterEffects,
 } from '@ncats-frontend-library/stores/filter-store';
+import {
+  PROJECTS_FEATURE_KEY,
+  projectsReducer,
+  ProjectEffects,
+} from '@ncats-frontend-library/stores/grant-store';
+import {
+  TRIALS_FEATURE_KEY,
+  trialsReducer,
+  TrialEffects,
+} from '@ncats-frontend-library/stores/trial-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
@@ -63,12 +72,10 @@ export function rdasInit(store = inject(Store)) {
 export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: rdasInit,
-      deps: [],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (rdasInit)();
+        return initializerFn();
+      }),
     provideRouter(
       routes,
       withViewTransitions(),
@@ -80,17 +87,26 @@ export const appConfig: ApplicationConfig = {
       }),
       withPreloading(PreloadAllModules),
     ),
-    //  provideEffects([UserEffects, DiseasesEffects]),
     provideStore({
       router: routerReducer,
       user: usersReducer,
-      //  articles: articlesReducer,
-      //  trials: trialsReducer,
-      //  grants: grantsReducer,
+      articles: articlesReducer,
+      trials: trialsReducer,
+      projects: projectsReducer,
       filters: filtersReducer,
       diseases: diseasesReducer,
     }),
-    provideEffects([UserEffects, DiseaseEffects, FilterEffects]),
+    provideEffects([
+      UserEffects,
+      ArticleEffects,
+      DiseaseEffects,
+      FilterEffects,
+      TrialEffects,
+      ProjectEffects,
+    ]),
+    provideState(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
+    provideState(PROJECTS_FEATURE_KEY, projectsReducer),
+    provideState(TRIALS_FEATURE_KEY, trialsReducer),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),
     provideState(USERS_FEATURE_KEY, usersReducer),
     provideState(FILTERS_FEATURE_KEY, filtersReducer),

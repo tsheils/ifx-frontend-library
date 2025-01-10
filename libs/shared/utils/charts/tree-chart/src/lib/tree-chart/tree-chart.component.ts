@@ -32,7 +32,6 @@ export class FlatHierarchyNode implements HierarchyNode {
 }
 @Component({
   selector: 'lib-tree-chart',
-  standalone: true,
   imports: [
     CommonModule,
     LoadingSpinnerComponent,
@@ -47,6 +46,7 @@ export class FlatHierarchyNode implements HierarchyNode {
   ],
   templateUrl: './tree-chart.component.html',
   styleUrl: './tree-chart.component.scss',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TreeChartComponent {

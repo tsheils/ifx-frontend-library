@@ -4,7 +4,7 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { APP_INITIALIZER, ApplicationConfig, inject } from '@angular/core';
+import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -46,18 +46,14 @@ export function ifxToolsInit(store = inject(Store)) {
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    {
-      provide: APP_INITIALIZER,
-      useFactory: fetch_data,
-      deps: [IfxToolsService],
-      multi: true,
-    },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: ifxToolsInit,
-      deps: [],
-      multi: true,
-    },
+    provideAppInitializer(() => {
+        const initializerFn = (fetch_data)(inject(IfxToolsService));
+        return initializerFn();
+      }),
+    provideAppInitializer(() => {
+        const initializerFn = (ifxToolsInit)();
+        return initializerFn();
+      }),
     provideMarkdown(),
     provideRouter(
       appRoutes,

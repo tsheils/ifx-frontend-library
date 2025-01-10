@@ -1,4 +1,6 @@
-export class Analyte {
+import { RampDataGeneric } from './_utils';
+
+export class Analyte extends RampDataGeneric {
   analyteName = '';
   sourceAnalyteIDs = '';
   geneOrCompound = '';
@@ -8,9 +10,10 @@ export class Analyte {
   pathwayId = '';
 
   constructor(obj: Partial<Analyte>) {
-    // Object.assign(this, obj);
+    super();
 
     if (obj.analyteName) {
+      this.id = obj.analyteName;
       this.analyteName = obj.analyteName;
     }
     if (obj.sourceAnalyteIDs) {

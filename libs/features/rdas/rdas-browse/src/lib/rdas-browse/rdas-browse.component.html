@@ -85,14 +85,6 @@
         }
       }
     </div>
-    <div class="row centered-row">
-      <div class="width-75">
-        <ncats-frontend-library-rdas-search
-          (diseaseSelect)="selectDisease($event)"
-          (diseaseSearch)="searchDiseaseString($event)"
-        ></ncats-frontend-library-rdas-search>
-      </div>
-    </div>
     <br />
     <ncats-frontend-library-shared-utils-selected-filter-list
       [filters]="selectedValues"
@@ -129,7 +121,7 @@
             matTooltip="Download Data"
             color="accent"
           >
-            <span fxHide.lt-lg>Download </span><mat-icon>download</mat-icon>
+            <span>Download </span><mat-icon>download</mat-icon>
           </button>
         }
         @if (page()) {
@@ -146,10 +138,14 @@
     </div>
     <br />
     @defer (when diseases()) {
-      <ncats-frontend-library-disease-list
-        [diseases]="diseases()"
-        class="fill-container"
-      ></ncats-frontend-library-disease-list>
+      @for (disease of diseases(); track disease.gardId) {
+        <div>
+          <ncats-frontend-library-disease-list-card
+            [disease]="disease"
+          ></ncats-frontend-library-disease-list-card>
+          <br />
+        </div>
+      }
       <div class="row right-justified-row">
         @if (page()) {
           <mat-paginator

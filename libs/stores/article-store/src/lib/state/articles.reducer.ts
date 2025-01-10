@@ -1,7 +1,10 @@
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
-import { FetchArticleActions } from './articles.actions';
+import {
+  FetchArticleActions,
+  FetchArticlesListActions,
+} from './articles.actions';
 
 import * as ArticleActions from './articles.actions';
 
@@ -13,6 +16,10 @@ export interface ArticleState extends EntityState<Article> {
   error?: string | null; // last known error (if any)
   article?: Article;
   articles?: Article[];
+  allArticlesCount: number;
+  articlesCount: number;
+  epiArticlesCount: number;
+  nhsArticlesCount: number;
 }
 
 export interface ArticleStorePartialState {
@@ -28,6 +35,10 @@ export const initialState: ArticleState = articlesAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   error: 'No Error Available',
+  allArticlesCount: 0,
+  articlesCount: 0,
+  epiArticlesCount: 0,
+  nhsArticlesCount: 0,
 });
 
 const reducer = createReducer(
@@ -39,6 +50,29 @@ const reducer = createReducer(
       loaded: true,
     }),
   ),
+
+  on(
+    FetchArticlesListActions.fetchArticlesListSuccess,
+    (
+      state,
+      {
+        articles,
+        allArticlesCount,
+        articlesCount,
+        epiArticlesCount,
+        nhsArticlesCount,
+      },
+    ) =>
+      articlesAdapter.setAll(articles, {
+        ...state,
+        loaded: true,
+        allArticlesCount: allArticlesCount || 0,
+        articlesCount: articlesCount || 0,
+        epiArticlesCount: epiArticlesCount || 0,
+        nhsArticlesCount: nhsArticlesCount || 0,
+      }),
+  ),
+
   on(FetchArticleActions.fetchArticleFailure, (state, { error }) => ({
     ...state,
     error,

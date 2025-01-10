@@ -18,7 +18,6 @@ import { QuestionBase } from 'ncats-form-question';
 
 @Component({
   selector: 'lib-data-panel',
-  standalone: true,
   imports: [
     CommonModule,
     NcatsDatatableComponent,
@@ -26,11 +25,11 @@ import { QuestionBase } from 'ncats-form-question';
     MatIcon,
     MatTooltip,
     DataDownloadButtonComponent,
-    InputPanelComponent,
   ],
   templateUrl: './data-panel.component.html',
   styleUrl: './data-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class DataPanelComponent {
   dataframe = input<unknown[]>();

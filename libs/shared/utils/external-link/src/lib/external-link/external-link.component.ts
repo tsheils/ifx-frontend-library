@@ -4,7 +4,6 @@ import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ncats-frontend-library-external-link',
-  standalone: true,
   imports: [MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -18,6 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
       <mat-icon class="exit-disclaimer">open_in_new</mat-icon>
     </a>
   `,
+  standalone: true,
   styles: [
     `
       .exit-disclaimer {

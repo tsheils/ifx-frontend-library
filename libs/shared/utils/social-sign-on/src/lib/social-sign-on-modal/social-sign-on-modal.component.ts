@@ -23,19 +23,18 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-social-sign-on-modal',
-  templateUrl: './social-sign-on-modal.component.html',
-  styleUrls: ['./social-sign-on-modal.component.scss'],
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    MatListModule,
-    MatRippleModule,
-    MatDialogActions,
-    MatDialogContent,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-frontend-library-social-sign-on-modal',
+    templateUrl: './social-sign-on-modal.component.html',
+    styleUrls: ['./social-sign-on-modal.component.scss'],
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        MatListModule,
+        MatRippleModule,
+        MatDialogActions,
+        MatDialogContent,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SocialSignOnModalComponent implements OnInit {
   destroyRef = inject(DestroyRef);

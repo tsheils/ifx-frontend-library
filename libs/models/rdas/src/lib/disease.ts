@@ -5,8 +5,6 @@ import { Phenotype, PhenotypeAssociation } from './phenotype';
 import { CoreProject } from './project';
 
 export class Disease {
-  allArticleCount = 0;
-  articleCount = 0;
   classificationLevel?: string;
   dataSource!: string;
   dataSourceId!: string;
@@ -26,12 +24,15 @@ export class Disease {
   snomed?: string[];
   synonyms?: string[];
   umls?: string[];
+  allArticles?: Article[];
   epiArticles?: Article[];
-  nonEpiArticles?: Article[];
-  allEpiCount = 0;
+  nhsArticles?: Article[];
+  allEpiCount = 0; //todo need 2 counts to preserve counts in sidebar for filtering
   epiCount = 0;
-  allNonEpiCount = 0;
-  nonEpiCount = 0;
+  allArticleCount = 0;
+  articleCount = 0;
+  allNhsCount = 0;
+  nhsCount = 0;
   projects?: CoreProject[];
   projectCount = 0;
   allProjectCount = 0;
@@ -48,22 +49,42 @@ export class Disease {
   _genesCount?: { count?: number; low: 0 };
   _phenotypesCount?: { count: number; low: 0 };
   _epiCount?: { count: number };
-  _nonEpiCount?: { count: number };
+  _allArticleCount?: { count: number };
+  _nhsCount?: { count: number };
   _childrenCount?: { count?: number; low: 0 };
 
   constructor(obj: Partial<Disease>) {
     Object.assign(this, obj);
 
+    if (obj.allArticles) {
+      this.allArticles = obj.allArticles.map(
+        (article: Partial<Article> = {}) => new Article(article),
+      );
+    }
+
+    if (obj._allArticleCount) {
+      this.allArticleCount = obj._allArticleCount.count;
+      delete this._allArticleCount;
+    }
     if (obj.epiArticles) {
       this.epiArticles = obj.epiArticles.map(
         (article: Partial<Article> = {}) => new Article(article),
       );
     }
+    if (obj._epiCount) {
+      this.epiCount = obj._epiCount.count;
+      delete this._epiCount;
+    }
 
-    if (obj.nonEpiArticles) {
-      this.nonEpiArticles = obj.nonEpiArticles.map(
+    if (obj.nhsArticles) {
+      this.nhsArticles = obj.nhsArticles.map(
         (article: Partial<Article> = {}) => new Article(article),
       );
+    }
+
+    if (obj._nhsCount) {
+      this.nhsCount = obj._nhsCount.count;
+      delete this._nhsCount;
     }
 
     if (obj._geneAssociations && obj._geneAssociations.edges) {
@@ -97,11 +118,6 @@ export class Disease {
       delete this._phenotypeAssociations;
     }
 
-    if (obj._epiCount) {
-      this.epiCount = obj._epiCount.count;
-      delete this._epiCount;
-    }
-
     if (obj._genesCount && obj._genesCount.count) {
       this.geneCount = obj._genesCount.count;
       delete this._genesCount;
@@ -110,11 +126,6 @@ export class Disease {
     if (obj._phenotypesCount && obj._phenotypesCount.count) {
       this.phenotypeCount = obj._phenotypesCount.count;
       delete this._phenotypesCount;
-    }
-
-    if (obj._nonEpiCount) {
-      this.nonEpiCount = obj._nonEpiCount.count;
-      delete this._nonEpiCount;
     }
 
     if (obj.synonyms) {

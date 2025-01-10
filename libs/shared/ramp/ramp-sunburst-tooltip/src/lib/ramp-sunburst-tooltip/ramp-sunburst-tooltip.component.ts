@@ -13,12 +13,11 @@ export const SUNBURST_TOOLTIP = new InjectionToken<string>(
   'SunburstTooltipComponent',
 );
 @Component({
-  selector: 'lib-ramp-sunburst-tooltip',
-  standalone: true,
-  imports: [CommonModule, MatIcon],
-  templateUrl: './ramp-sunburst-tooltip.component.html',
-  styleUrl: './ramp-sunburst-tooltip.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'lib-ramp-sunburst-tooltip',
+    imports: [CommonModule, MatIcon],
+    templateUrl: './ramp-sunburst-tooltip.component.html',
+    styleUrl: './ramp-sunburst-tooltip.component.scss',
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class RampSunburstTooltipComponent {
   sunburstChartService = inject(SunburstChartService);

@@ -1,6 +1,6 @@
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { Action } from '@ngrx/store';
-import { LoadGrantsActions } from './grants.actions';
+import { FetchGrantsListActions } from './grants.actions';
 
 import {
   GrantsState,
@@ -15,12 +15,12 @@ describe('Grants Reducer', () => {
     });
 
   describe('valid Grants actions', () => {
-    it('loadGrantsSuccess should return the list of known Grants', () => {
+    it('FetchGrantsListSuccess should return the list of known Grants', () => {
       const grants = [
         createGrantsEntity('PRODUCT-AAA'),
         createGrantsEntity('PRODUCT-zzz'),
       ];
-      const action = LoadGrantsActions.loadGrantsSuccess({ grants });
+      const action = FetchGrantsListActions.FetchGrantsListSuccess({ grants });
 
       const result: GrantsState = grantsReducer(initialGrantsState, action);
 

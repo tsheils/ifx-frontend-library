@@ -16,10 +16,8 @@ import { ProjectListCardComponent } from '../project-list-card/project-list-card
 
 @Component({
   selector: 'ncats-frontend-library-project-details',
-  standalone: true,
   imports: [
     CommonModule,
-    ProjectListCardComponent,
     MatCardModule,
     MatTabsModule,
     MatExpansionModule,
@@ -27,6 +25,7 @@ import { ProjectListCardComponent } from '../project-list-card/project-list-card
   ],
   templateUrl: './project-details.component.html',
   styleUrls: ['./project-details.component.scss'],
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class ProjectDetailsComponent {

@@ -3,12 +3,13 @@ export class OpenApiPath {
   required?: string;
   title?: string;
   allowedTypes?: { metabolites: string[]; 'genes/proteins': string[] };
-  tags?: string[];
+  tags: string[] = [];
   summary?: string;
   parent?: string;
+  child?: string;
   properties: { [key: string]: unknown }[] = [];
-  example: any[] = [];
   content: unknown;
+  hideSection = false;
 
   constructor(obj: { [key: string]: any }) {
     Object.assign(this, obj['requestBody']);
@@ -21,12 +22,20 @@ export class OpenApiPath {
       this.parent = <string>obj['parent'];
     }
 
+    if (obj['child']) {
+      this.child = <string>obj['child'];
+    }
+
     if (obj['tags']) {
       this.tags = <string[]>obj['tags'];
     }
 
     if (obj['x-title']) {
       this.title = <string>obj['x-title'];
+    }
+
+    if (obj['x-hideSection']) {
+      this.hideSection = <boolean>obj['x-hideSection'];
     }
 
     if (obj['x-allowedTypes']) {
@@ -61,56 +70,19 @@ export class OpenApiPath {
             'example'
           ];
       }
-      Object.entries(properties).forEach(([key, value]) => {
-        const tempVal = value as { [key: string]: unknown };
-        if (key != 'fishers_results' && !tempVal['hidden']) {
-          this.properties.push({
-            ...tempVal,
-            field: key,
-            parent: this.parent || '',
-          });
-        }
-      });
 
+      const exampleObj: { [key: string]: unknown } = {};
       if (examples) {
         Object.entries(examples).forEach(([key, value]) => {
           if (key != 'fishers_results') {
-            this.example.push({
-              value: value,
-              field: key,
-              parent: this.parent || '',
-            });
+            exampleObj[key] = value;
           } else {
             if (value instanceof Object) {
               Object.keys(value as { [key: string]: unknown }).forEach(
                 (key) => {
-                  switch (key) {
-                    case 'fishresults': {
-                      break;
-                    }
-                    case 'result_type': {
-                      const val = value as { [key: string]: unknown };
-                      const valArr = val[key] as unknown[];
-                      //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
-                      break;
-                    }
-                    case 'analyteType': {
-                      const val = value as { [key: string]: unknown };
-                      const valArr = val[key] as unknown[];
-                      //   this.example.push({ value: valArr[0], field: key, parent: this.parent || ''});
-                      break;
-                    }
-                    default: {
-                      const val = value as { [key: string]: unknown };
-                      if (!val['hidden']) {
-                        this.example.push({
-                          value: val[key],
-                          field: key,
-                          parent: this.parent || '',
-                        });
-                      }
-                      break;
-                    }
+                  const val = value as { [key: string]: unknown };
+                  if (!val['hidden']) {
+                    exampleObj[key] = value[key as keyof typeof value];
                   }
                 },
               );
@@ -118,6 +90,17 @@ export class OpenApiPath {
           }
         });
       }
+      Object.entries(properties).forEach(([key, value]) => {
+        const tempVal = value as { [key: string]: unknown };
+        if (key != 'fishers_results' && !tempVal['hidden']) {
+          this.properties.push({
+            ...tempVal,
+            field: key,
+            parent: this.parent || '',
+            value: exampleObj[key] ? exampleObj[key] : undefined,
+          });
+        }
+      });
       delete this['content'];
     }
   }

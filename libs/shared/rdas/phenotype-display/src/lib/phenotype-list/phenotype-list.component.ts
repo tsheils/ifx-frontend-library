@@ -20,7 +20,6 @@ import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/exte
 
 @Component({
   selector: 'ncats-frontend-library-phenotype-list',
-  standalone: true,
   imports: [
     CommonModule,
     MatPaginatorModule,
@@ -35,6 +34,7 @@ import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/exte
   templateUrl: './phenotype-list.component.html',
   styleUrls: ['./phenotype-list.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
 export class PhenotypeListComponent {

@@ -9,17 +9,16 @@ import { ScreenshotDisplayComponent } from 'screenshot-display';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-scaffold-hopper',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DefaultToolComponent,
-    ScreenshotDisplayComponent,
-    JavaWebstartComponent,
-    MatTabsModule,
-  ],
-  templateUrl: './scaffold-hopper.component.html',
-  styleUrl: './scaffold-hopper.component.scss',
+    selector: 'lib-scaffold-hopper',
+    imports: [
+        CommonModule,
+        DefaultToolComponent,
+        ScreenshotDisplayComponent,
+        JavaWebstartComponent,
+        MatTabsModule,
+    ],
+    templateUrl: './scaffold-hopper.component.html',
+    styleUrl: './scaffold-hopper.component.scss'
 })
 export class ScaffoldHopperComponent {
   private readonly store = inject(Store);

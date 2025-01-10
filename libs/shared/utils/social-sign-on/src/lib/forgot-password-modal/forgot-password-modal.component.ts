@@ -28,19 +28,18 @@ import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'ncats-frontend-library-forgot-password-modal',
-  templateUrl: './forgot-password-modal.component.html',
-  styleUrls: ['./forgot-password-modal.component.scss'],
-  standalone: true,
-  imports: [
-    MatButtonModule,
-    MatIconModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatCardModule,
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-frontend-library-forgot-password-modal',
+    templateUrl: './forgot-password-modal.component.html',
+    styleUrls: ['./forgot-password-modal.component.scss'],
+    imports: [
+        MatButtonModule,
+        MatIconModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatCardModule,
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);

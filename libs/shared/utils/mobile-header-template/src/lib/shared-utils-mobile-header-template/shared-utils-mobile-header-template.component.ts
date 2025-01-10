@@ -19,7 +19,6 @@ import {
 
 @Component({
   selector: 'ncats-frontend-library-mobile-header-template',
-  standalone: true,
   animations: [slideInOutAnimation],
   imports: [
     MatToolbarModule,
@@ -33,6 +32,7 @@ import {
   templateUrl: './shared-utils-mobile-header-template.component.html',
   styleUrls: ['./shared-utils-mobile-header-template.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MobileHeaderTemplateComponent {

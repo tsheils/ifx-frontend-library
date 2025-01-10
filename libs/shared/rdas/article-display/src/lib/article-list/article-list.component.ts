@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  inject,
+  input,
   Input,
   OnChanges,
 } from '@angular/core';
@@ -12,23 +14,16 @@ import { Article } from '@ncats-frontend-library/models/rdas';
 import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';
 
 @Component({
-  standalone: true,
   selector: 'ncats-frontend-library-article-list',
   templateUrl: './article-list.component.html',
   imports: [CommonModule, MatPaginatorModule, ArticleListCardComponent],
   styleUrls: ['./article-list.component.scss'],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ArticleListComponent implements OnChanges {
-  @Input() articles!: Article[] | undefined;
-  constructor(
-    private changeRef: ChangeDetectorRef,
-    private router: Router,
-  ) {}
-
-  ngOnChanges() {
-    this.changeRef.markForCheck();
-  }
+export class ArticleListComponent {
+  router = inject(Router);
+  articles = input<Article[]>();
 
   navigate(id: string): void {
     if (id) {

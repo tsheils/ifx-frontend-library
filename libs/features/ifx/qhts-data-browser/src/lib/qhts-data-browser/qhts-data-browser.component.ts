@@ -10,18 +10,17 @@ import { ScreenshotDisplayComponent } from 'screenshot-display';
 import { IFXToolsSelectors } from 'ifx-tool-store';
 
 @Component({
-  selector: 'lib-qhts-data-browser',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DefaultToolComponent,
-    ScreenshotDisplayComponent,
-    JavaWebstartComponent,
-    MatTabsModule,
-    MatCardModule,
-  ],
-  templateUrl: './qhts-data-browser.component.html',
-  styleUrl: './qhts-data-browser.component.scss',
+    selector: 'lib-qhts-data-browser',
+    imports: [
+        CommonModule,
+        DefaultToolComponent,
+        ScreenshotDisplayComponent,
+        JavaWebstartComponent,
+        MatTabsModule,
+        MatCardModule,
+    ],
+    templateUrl: './qhts-data-browser.component.html',
+    styleUrl: './qhts-data-browser.component.scss'
 })
 export class QhtsDataBrowserComponent {
   private readonly store = inject(Store);

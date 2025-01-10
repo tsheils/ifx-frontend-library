@@ -11,7 +11,6 @@ import { QuestionBase } from './question-base';
 
 @Component({
   selector: 'lib-ncats-form-question',
-  standalone: true,
   imports: [
     CommonModule,
     MatRadioButton,
@@ -23,7 +22,6 @@ import { QuestionBase } from './question-base';
     MatInput,
     MatSelect,
     MatOption,
-    MatIconButton,
     SharedFormsFileUploadComponent,
   ],
   templateUrl: './ncats-form-question.component.html',

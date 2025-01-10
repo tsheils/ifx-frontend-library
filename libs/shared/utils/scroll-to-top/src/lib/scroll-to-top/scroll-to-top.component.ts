@@ -25,7 +25,6 @@ import { Subject, takeUntil } from 'rxjs';
  */
 @Component({
   selector: 'ncats-frontend-library-scroll-to-top',
-  standalone: true,
   imports: [
     CommonModule,
     MatIconModule,
@@ -36,6 +35,7 @@ import { Subject, takeUntil } from 'rxjs';
   templateUrl: './scroll-to-top.component.html',
   styleUrls: ['./scroll-to-top.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScrollToTopComponent implements AfterViewInit, OnDestroy {

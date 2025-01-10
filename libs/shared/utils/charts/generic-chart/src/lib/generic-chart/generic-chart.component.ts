@@ -18,9 +18,9 @@ import { select, Selection } from 'd3-selection';
 
 @Component({
   selector: 'lib-generic-chart',
-  standalone: true,
   imports: [CommonModule],
   template: '',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GenericChartComponent {

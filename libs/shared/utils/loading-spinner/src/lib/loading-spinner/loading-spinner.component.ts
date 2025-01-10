@@ -6,8 +6,8 @@ import { NgClass } from '@angular/common';
   selector: 'ncats-frontend-library-loading-spinner',
   templateUrl: './loading-spinner.component.html',
   styleUrls: ['./loading-spinner.component.scss'],
-  standalone: true,
   imports: [NgClass, MatProgressSpinnerModule],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoadingSpinnerComponent {

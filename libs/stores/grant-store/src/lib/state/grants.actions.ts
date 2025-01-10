@@ -1,26 +1,30 @@
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { createActionGroup, props } from '@ngrx/store';
 
-export const FetchGrantActions = createActionGroup({
-  source: 'Fetch Grant',
+export const FetchProjectActions = createActionGroup({
+  source: 'Fetch Project',
   events: {
-    fetchGrant: props<{
+    fetchProject: props<{
       core_project_num: string;
       options?: { [key: string]: string };
     }>(),
-    fetchGrantSuccess: props<{ grant: CoreProject }>(),
-    fetchGrantFailure: props<{ error: string }>(),
+    fetchProjectSuccess: props<{ project: CoreProject }>(),
+    fetchProjectFailure: props<{ error: string }>(),
   },
 });
 
-export const LoadGrantsActions = createActionGroup({
-  source: 'Load Grants',
+export const FetchProjectsListActions = createActionGroup({
+  source: 'Load Projects',
   events: {
-    loadGrants: props<{
+    FetchProjectsList: props<{
       top: number;
       skip: number;
     }>(),
-    loadGrantsSuccess: props<{ grants: CoreProject[] }>(),
-    loadGrantsFailure: props<{ error: string }>(),
+    FetchProjectsListSuccess: props<{
+      projects: CoreProject[];
+      projectsCount: number;
+      allProjectsCount: number;
+    }>(),
+    FetchProjectsListFailure: props<{ error: string }>(),
   },
 });

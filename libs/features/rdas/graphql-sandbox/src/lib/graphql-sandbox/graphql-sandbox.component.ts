@@ -14,12 +14,11 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApolloSandbox } from '@apollo/sandbox';
 
 @Component({
-  selector: 'ncats-frontend-library-graphql-sandbox',
-  standalone: true,
-  imports: [],
-  template: `<div id="embedded-sandbox" #embeddedsandbox></div>`,
-  styleUrls: ['./graphql-sandbox.component.scss'],
-  encapsulation: ViewEncapsulation.None,
+    selector: 'ncats-frontend-library-graphql-sandbox',
+    imports: [],
+    template: `<div id="embedded-sandbox" #embeddedsandbox></div>`,
+    styleUrls: ['./graphql-sandbox.component.scss'],
+    encapsulation: ViewEncapsulation.None
 })
 export class GraphqlSandboxComponent {
   @ViewChild('embeddedsandbox', { static: true }) embeddedsandbox!: ElementRef;

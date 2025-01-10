@@ -170,7 +170,6 @@
         "libs/features/ramp/ramp-home/src/index.ts"
       ],
       "adme-store": ["libs/stores/adme-store/src/index.ts"],
-      "analytes-page": ["libs/features/ramp/analytes-page/src/index.ts"],
       "biochemical-pathways-page": [
         "libs/features/ramp/biochemical-pathways-page/src/index.ts"
       ],

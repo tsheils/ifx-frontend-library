@@ -22,7 +22,7 @@ export const selectArticleStoreError = createSelector(
   (state: ArticleState) => state.error,
 );
 
-export const selectAllArticleStore = createSelector(
+export const selectAllArticles = createSelector(
   selectArticleStoreState,
   (state: ArticleState) => selectAll(state),
 );
@@ -37,6 +37,18 @@ export const selectArticleStoreEntities = createSelector(
 export const selectSelectedId = createSelector(
   selectArticleStoreState,
   (state: ArticleState) => state.selectedId,
+);
+
+export const getArticleCount = createSelector(
+  selectArticleStoreState,
+  (state: ArticleState) => {
+    return {
+      allArticlesCount: state.allArticlesCount,
+      epiArticlesCount: state.epiArticlesCount,
+      nhsArticlesCount: state.nhsArticlesCount,
+      currentArticlesCount: state.articlesCount,
+    };
+  },
 );
 
 export const selectEntity = createSelector(

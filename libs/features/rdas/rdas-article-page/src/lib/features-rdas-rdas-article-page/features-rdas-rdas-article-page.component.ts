@@ -13,12 +13,11 @@ import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'ncats-frontend-library-features-rdas-rdas-article-page',
-  standalone: true,
-  imports: [CommonModule, ArticleDetailsDisplayComponent],
-  templateUrl: './features-rdas-rdas-article-page.component.html',
-  styleUrls: ['./features-rdas-rdas-article-page.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-frontend-library-features-rdas-rdas-article-page',
+    imports: [CommonModule, ArticleDetailsDisplayComponent],
+    templateUrl: './features-rdas-rdas-article-page.component.html',
+    styleUrls: ['./features-rdas-rdas-article-page.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class FeaturesRdasRdasArticlePageComponent {
   private readonly articleStore = inject(Store);

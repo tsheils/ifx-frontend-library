@@ -10,12 +10,11 @@ import { DecimalPipe } from '@angular/common';
 import { DataProperty } from '@ncats-frontend-library/models/utils';
 
 @Component({
-  selector: 'ncats-property-display',
-  templateUrl: './property-display.component.html',
-  styleUrls: ['./property-display.component.scss'],
-  standalone: true,
-  imports: [MatTooltipModule, RouterLink, DecimalPipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'ncats-property-display',
+    templateUrl: './property-display.component.html',
+    styleUrls: ['./property-display.component.scss'],
+    imports: [MatTooltipModule, RouterLink, DecimalPipe],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class PropertyDisplayComponent {
   showLabel = input<boolean>(true);

@@ -43,12 +43,12 @@ import { ForceDirectedGraphService } from './force-directed-graph.service';
 
 @Component({
   selector: 'lib-utils-force-directed-graph',
-  standalone: true,
-  imports: [CommonModule, CdkPortal, CdkPortalOutlet],
+  imports: [CommonModule, CdkPortalOutlet],
   templateUrl: './utils-force-directed-graph.component.html',
   styleUrl: './utils-force-directed-graph.component.scss',
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class UtilsForceDirectedGraphComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
@@ -86,14 +86,12 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
   color = scaleOrdinal(schemeCategory10);
 
-  gZoom = computed(() => this.svg().append('g'));
-
-  svg = computed(() =>
-    select(this.chartElement()?.nativeElement)
+  svg = computed(() => {
+    return select(this.chartElement()?.nativeElement)
       .append('svg:svg')
       .attr('width', this.width())
-      .attr('height', this.height())
-      .attr('viewBox', [0, 0, this.width(), this.height()])
+      .attr('height', 750)
+      .attr('viewBox', [0, 0, this.width(), 750])
       .attr('style', 'max-width: 100%; height: auto;')
       .call(
         zoom()
@@ -103,8 +101,10 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
           ])
           .scaleExtent([-1, 8])
           .on('zoom', (event) => this.zoomed(event)),
-      ),
-  );
+      );
+  });
+
+  gZoom = computed(() => this.svg().append('g'));
 
   // The force simulation mutates links and nodes, so create a copy
   // so that re-evaluating this cell produces the same result.
@@ -193,7 +193,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
   allNodes = computed(() => selectAll('.dataNode'));
 
-  labels = computed(() =>
+  /*labels = computed(() =>
     this.gZoom()
       .append('g')
       .attr('pointer-events', 'none')
@@ -205,8 +205,8 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .classed('graph-label-text', true)
       .text((d) => d.id),
   );
-
-  ngOnInit(): void {
+*/
+  ngAfterViewInit(): void {
     this.simulation().restart();
 
     if (this.graphChartService && this.graphChartService.customComponent) {
@@ -266,10 +266,10 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .transition()
       .duration(100);
 
-    selectAll(this.labels())
+    /*    selectAll(this.labels())
       .classed('hoveredLabel', (n) => nodes.includes(n.id))
       .transition()
-      .duration(100);
+      .duration(100);*/
 
     this.graphChartService.nodeHovered.emit(d as GraphNode);
   }
@@ -297,9 +297,9 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
     this.circleNode()
       .attr('cx', (d) => d.x)
       .attr('cy', (d) => d.y);
-    this.labels()
+    /*  this.labels()
       .attr('x', (d) => d.x + 10)
-      .attr('y', (d) => d.y + 10);
+      .attr('y', (d) => d.y + 10);*/
   }
 
   // Reheat the simulation when drag starts, and fix the subject position.

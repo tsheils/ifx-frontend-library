@@ -42,12 +42,13 @@
       }
       @case ('sunburst') {
         @if (chart.data!.values) {
-          <lib-sunburst-chart
+          @defer(on viewport){
+            <lib-sunburst-chart
             [data]="chart.data!.values"
           ></lib-sunburst-chart>
-
-      <!--    <lib-sunburst-chart
-          ></lib-sunburst-chart>-->
+          } @placeholder {
+            <div></div>
+          }
         }
       }
       @case ('tree') {
@@ -57,16 +58,20 @@
       }
       @case ('graph') {
         @if (chart.data!.graph) {
+          @defer(on viewport){
           <lib-utils-force-directed-graph [data]="chart.data!"></lib-utils-force-directed-graph>
+          } @placeholder {
+            <div></div>
+          }
         }
       }
       @case ('upset') {
         @if (chart.data!.plot) {
-          <div class="row space-around-row">
-            <div class=" width-80">
+              @defer(on viewport){
               <lib-shared-utils-upset-chart [chartData]="chart.data!.plot" [scale]="'linear'"></lib-shared-utils-upset-chart>
-            </div>
-          </div>
+              } @placeholder{
+                <div></div>
+              }
         }
       }
     }

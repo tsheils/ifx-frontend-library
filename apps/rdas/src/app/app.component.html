@@ -1,9 +1,9 @@
 <div class="content-wrapper" #contentWrapper cdkScrollable>
   <mat-sidenav-container class="mobile-menu-container">
     <header>
-      @if (mobile) {
+      @if (mobile()) {
         <ncats-frontend-library-mobile-header-template
-          [links]="links"
+          [links]="displayLinks()"
           #appHeader
         >
           <div left-options>
@@ -34,7 +34,7 @@
           </div>
         </ncats-frontend-library-mobile-header-template>
       } @else {
-        <ncats-frontend-library-header-template [links]="links">
+        <ncats-frontend-library-header-template [links]="displayLinks()">
           <div class="left-options">
             <a routerLink="/">
               <picture>
@@ -55,13 +55,11 @@
             </a>
           </div>
           <div class="right-options">
-            @if (!hideSearch) {
               <ncats-frontend-library-rdas-search
                 class="header-search"
                 (diseaseSelect)="selectDisease($event)"
                 (diseaseSearch)="searchDiseaseString($event)"
               ></ncats-frontend-library-rdas-search>
-            }
             <a
               mat-button
               [color]="'primary'"

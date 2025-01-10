@@ -21,25 +21,18 @@ import SwaggerUI from 'swagger-ui';
   imports: [],
 })
 export class RampApiComponent implements AfterViewInit {
-  /**
-   * container that holds the swagger ui
-   */
   @ViewChild('documentation') el!: ElementRef;
 
   isBrowser: boolean;
+  url = '/assets/data/ramp-api.json';
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
     this.isBrowser = isPlatformBrowser(platformId);
   }
-
-  /**
-   * create swagger ui viewer
-   */
   ngAfterViewInit() {
     if (this.isBrowser) {
       SwaggerUI({
-        //url: '/assets/ramp-api/data/ramp_openapi_with_extensions.yml',
-        url: '/assets/data/ramp-api.json',
+        url: this.url,
         domNode: this.el.nativeElement,
       });
     }

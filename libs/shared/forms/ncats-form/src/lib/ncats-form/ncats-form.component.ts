@@ -19,17 +19,10 @@ import { NcatsFormQuestionComponent, QuestionBase } from 'ncats-form-question';
 
 @Component({
   selector: 'lib-ncats-form',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatRadioGroup,
-    MatRadioButton,
-    NcatsFormQuestionComponent,
-    MatButton,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, NcatsFormQuestionComponent],
   templateUrl: './ncats-form.component.html',
   styleUrl: './ncats-form.component.scss',
+  standalone: true,
 })
 export class NcatsFormComponent {
   @Input() questions: QuestionBase<string>[] | null = [];
