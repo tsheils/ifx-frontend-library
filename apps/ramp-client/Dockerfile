@@ -14,10 +14,8 @@ RUN apk update && apk upgrade
 RUN apk add --no-cache bash git openssh
 #RUN npm install --unsafe-perm=true
 #RUN npm config set unsafe-perm true
-RUN npm i -g @angular/cli
 RUN npm install -g nx
 RUN npm install
-RUN nx g @nrwl/workspace:fix-configuration
 RUN npm i
 RUN NODE_OPTIONS=--max_old_space_size=8192 nx run ramp-client:build:production --verbose
 
