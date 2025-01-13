@@ -29,7 +29,6 @@ import { UtilsForceDirectedGraphComponent } from 'utils-force-directed-graph';
     MatRadioGroup,
     UtilsForceDirectedGraphComponent,
     UpsetComponent,
-    LoadingSpinnerComponent,
   ],
   templateUrl: './visualization-panel.component.html',
   styleUrl: './visualization-panel.component.scss',
