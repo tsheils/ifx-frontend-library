@@ -1,36 +1,30 @@
-<!--
-<lib-panel-accordion
-  [paths]="paths()"
-  [dataTabs]=" dataMap()"
-  [inputTab]="inputMap()"
-  [overviewTabs]="overviewMap()"
-  (dataSearch)="fetchData($event)"
->
- &lt;!&ndash; <div class="custom-input">
-    <lib-ontology-panel
-      [ontologies]="ontologies()"
-      (downloadMetabolitesSearch)="downloadOntologyData($event)"
-      (fetchMetabolitesSearch)="fetchData($event)"
-    ></lib-ontology-panel>
-  </div>&ndash;&gt;
-</lib-panel-accordion>
--->
-@if (mainPageMap() && mainPageMap()?.size){
+@let ontoFromMeta = _getMapField('ontologies-from-metabolites');
+
+@if (mainPageMap() && mainPageMap().size){
   <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
-    @for (mainTab of mainPageMap() | keyvalue: _originalOrder; track mainTab.key) {
       <mat-tab>
         <ng-template mat-tab-label>
-          {{cleanLabel(mainTab.key) | titlecase}}
+          Ontologies from Metabolites
         </ng-template>
         <lib-panel-accordion
           [paths]="paths()"
-          [inputTab]="mainTab.value.inputMap"
-          [overviewTabs]="mainTab.value.overviewMap"
-          [visualizationTabs]="mainTab.value.visualizationsMap"
-          [dataTabs]="mainTab.value.dataMap"
-          (dataSearch)="fetchData($event, mainTab.key)"
+          [inputTab]="ontoFromMeta.inputMap"
+          [overviewTabs]="ontoFromMeta.overviewMap"
+          [visualizationTabs]="ontoFromMeta.visualizationsMap"
+          [dataTabs]="ontoFromMeta.dataMap"
+          (dataSearch)="fetchData($event,'ontologies-from-metabolites')"
         ></lib-panel-accordion>
       </mat-tab>
-    }
+      <mat-tab>
+        <ng-template mat-tab-label>
+          Metabolites from Ontologies
+        </ng-template>
+          <div class="custom-input">
+            <lib-ontology-panel
+              [ontologies]="ontologies()"
+              (downloadMetabolitesSearch)="downloadOntologyData($event)"
+            ></lib-ontology-panel>
+          </div>
+      </mat-tab>
   </mat-tab-group>
 }

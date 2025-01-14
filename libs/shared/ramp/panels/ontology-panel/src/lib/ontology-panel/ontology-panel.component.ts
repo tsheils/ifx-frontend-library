@@ -84,19 +84,8 @@ export class OntologyPanelComponent implements OnInit {
   }
 
   setValues(values: { label: string; values: string[] }[]) {
-    let sum = 0;
     values.forEach((onto) => {
       this.ontologyMap.set(onto.label, onto.values);
-      [...this.ontologyMap.entries()].forEach(([key, value]) => {
-        const category = this.ontologies()?.filter((fc) => fc.label === key)[0];
-        if (category && category.values) {
-          value.forEach((val) => {
-            const filterVal = category.values.filter((f) => f.term === val)[0];
-            sum += filterVal.count;
-            this.disableSearch = sum > 10000;
-          });
-        }
-      });
     });
   }
 

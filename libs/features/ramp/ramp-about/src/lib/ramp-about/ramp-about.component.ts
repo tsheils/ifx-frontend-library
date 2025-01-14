@@ -53,7 +53,6 @@ import { UpsetComponent } from 'upset-chart';
     MatIconModule,
     MatSidenavModule,
     MatButtonModule,
-    LoadingSpinnerComponent,
   ],
 })
 export class AboutComponent implements OnInit {

@@ -23,19 +23,8 @@
     }
   }
   <div>
-    *note: Search is only available when the total metabolite count < 10,000.
-    <br />
     <button
       mat-flat-button
-      [disabled]="disableSearch"
-      (click)="fetchMetabolites()"
-      class="bottom-align"
-    >
-      <span class="hide-small">Search</span> <mat-icon>search</mat-icon>
-    </button>
-    &nbsp;&nbsp;&nbsp;
-    <button
-      mat-stroked-button
       class="tool-button list-download"
       (click)="fetchMetabolitesFile()"
       matTooltip="Download Data"
