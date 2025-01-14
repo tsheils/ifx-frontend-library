@@ -11,8 +11,9 @@ import {
   DataProperty,
   QueryResultsData,
 } from '@ncats-frontend-library/models/utils';
+import { OntologyPanelComponent } from 'ontology-panel';
 import { PanelAccordionComponent } from 'panel-accordion';
-import { Metabolite } from 'ramp';
+import { Metabolite, RampPage } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import {
   MetaboliteFromOntologyActions,
@@ -28,6 +29,7 @@ import {
     MatTab,
     MatTabGroup,
     MatTabLabel,
+    OntologyPanelComponent,
   ],
   templateUrl: './ontologies-page.component.html',
   styleUrl: './ontologies-page.component.scss',
@@ -89,52 +91,26 @@ export class OntologiesPageComponent extends RampCorePageComponent {
     RampSelectors.getMetabolites,
   );
 
-  matches = computed(() =>
-    Array.from(
-      new Set(
-        this.metabolitesFromOntologies()?.data.map((metabolite) =>
-          metabolite.ontologyTerm.toLocaleLowerCase(),
-        ),
-      ),
-    ),
-  );
-  noMatches = computed(() =>
-    this.inputList.filter(
-      (p: string) => !this.matches().includes(p.toLocaleLowerCase()),
-    ),
-  );
-
   override dataMap = computed(() => {
     const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
     const field = <string>this.activeTab();
     let ret!: { [p: string]: Map<string, DataMap> };
-
     if (field == 'ontologies-from-metabolites') {
       const ontologiesFromMetabolitesData =
         this.ontologiesFromMetabolites()?.data;
-      returnDataMap.set('Metabolites', {
-        data: this.ontologiesFromMetabolites()?.dataAsDataProperty,
-        fields: this.ontologyDataColumns,
-        dataframe: ontologiesFromMetabolitesData,
-        fileName: 'fetchOntologiesFromMetabolites-download.tsv',
-        loaded: !!ontologiesFromMetabolitesData,
-      } as DataMap);
-    } else {
-      const metabolitesFromOntologiesData =
-        this.metabolitesFromOntologies()?.data;
-      if (metabolitesFromOntologiesData) {
+      if (ontologiesFromMetabolitesData) {
         returnDataMap.set('Metabolites', {
-          data: this.metabolitesFromOntologies()?.dataAsDataProperty,
-          fields: this.dataColumns,
-          dataframe: metabolitesFromOntologiesData,
-          fileName: 'fetchMetabolitesFromOntologies-download.tsv',
-          loaded: !!metabolitesFromOntologiesData,
+          data: this.ontologiesFromMetabolites()?.dataAsDataProperty,
+          fields: this.ontologyDataColumns,
+          dataframe: ontologiesFromMetabolitesData,
+          fileName: 'fetchOntologiesFromMetabolites-download.tsv',
+          loaded: !!ontologiesFromMetabolitesData,
         } as DataMap);
       }
+    }
 
-      if (returnDataMap.size) {
-        ret = { [field]: returnDataMap };
-      }
+    if (returnDataMap.size) {
+      ret = { [field]: returnDataMap };
     }
     return ret;
   });
@@ -156,15 +132,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
         };
       }
     } else {
-      ret = {
-        [field]: {
-          matches: this.metabolitesFromOntologies()?.query?.matches,
-          noMatches: this.metabolitesFromOntologies()?.query?.noMatches,
-          count: this.metabolitesFromOntologies()?.data.length,
-          inputLength: this.inputList.length,
-          inputType: 'ontologies',
-        } as QueryResultsData,
-      };
+      ret = (<unknown>undefined) as { [p: string]: QueryResultsData };
     }
     return ret;
   });
@@ -173,11 +141,15 @@ export class OntologiesPageComponent extends RampCorePageComponent {
     super();
   }
 
+  _getMapField(field: string): RampPage {
+    return this.mainPageMap()!.get(field) as RampPage;
+  }
+
   downloadOntologyData(event: { [key: string]: unknown }) {
     this.store.dispatch(
       MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesFile({
         format: 'tsv',
-        ontologies: event['ontology'] as string[],
+        ontologies: event['ontologies'] as string[],
       }),
     );
   }

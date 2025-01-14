@@ -491,13 +491,11 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   constructor() {
     super();
     effect(() => {
-      console.log('in effect');
       this.drawContainer();
     });
   }
 
   ngOnInit(): void {
-    console.log('oninit');
     this.margins.set({ top: 10, bottom: 40, left: 5, right: 5 });
     if (this.isBrowser()) {
       if (this.chartData() && this.chartData()!.data.length > 0) {
@@ -510,8 +508,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     if (this.svg()) {
       this.svg()!.select('svg').remove();
     }
-    console.log('draw container');
-    console.log(this.getHeight());
     // computed signals aren't run unless they are called. This is a cheater method to call them and assign them.
     const svgObject = {
       chartElement: this.chartElement(),
@@ -523,7 +519,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       setSizeChartLabel: this.setSizeChartLabel(),
       combinationMatrix: this.combinationMatrix(),
     };
-    console.log(svgObject);
 
     /*
      * Combination matrix

@@ -31,19 +31,28 @@ export class GenericChartComponent {
   readonly clickElement = output<Filter>();
   destroyRef = inject(DestroyRef);
 
-  chartElement = viewChild<ElementRef<HTMLInputElement>>('chartElement');
+  chartElement =
+    viewChild.required<ElementRef<HTMLInputElement>>('chartElement');
   width = computed(
     () =>
       this.chartElement()!.nativeElement?.offsetWidth -
       this.margins().left -
       this.margins().right,
   );
-  height = computed(
-    () =>
-      this.chartElement()!.nativeElement.offsetHeight +
-      this.margins().top +
-      this.margins().bottom,
-  );
+
+  height = computed(() => {
+    if (
+      this.chartElement() &&
+      this.chartElement()?.nativeElement.offsetHeight > 200
+    ) {
+      return (
+        this.chartElement()?.nativeElement.offsetHeight -
+        this.margins().top -
+        this.margins().bottom
+      );
+    } else return 500;
+  });
+
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   margins = signal({ top: 10, bottom: 10, left: 10, right: 10 });
   svgExport = computed(
