@@ -3,20 +3,20 @@ import {
   RampPartialState,
   initialState,
   RampEntity,
-} from './ramp.reducer';
-import * as RampSelectors from './ramp.selectors';
+} from './ramp.reducer'
+import * as RampSelectors from './ramp.selectors'
 
 describe('Ramp Selectors', () => {
-  const ERROR_MSG = 'No Error Available';
-  const getRampStoreId = () => 'PRODUCT-BBB';
+  const ERROR_MSG = 'No Error Available'
+  const getRampStoreId = () => 'PRODUCT-BBB'
   const createRampEntity = (id: string, name = '') =>
     ({
       loading: false,
       id,
       name: name || `name-${id}`,
-    }) as RampEntity;
+    } as RampEntity)
 
-  let state: RampPartialState;
+  let state: RampPartialState
 
   beforeEach(() => {
     state = {
@@ -31,30 +31,30 @@ describe('Ramp Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loading: false,
-        },
+        }
       ),
-    };
-  });
+    }
+  })
 
   describe('RampStore Selectors', () => {
     it('getAllRampStore() should return the list of RampStore', () => {
-      const results = RampSelectors.getAllRampEntity(state);
-      const selId = getRampStoreId();
+      const results = RampSelectors.getAllRampEntity(state)
+      const selId = getRampStoreId()
 
-      expect(results.length).toBe(3);
-      expect(selId).toBe('PRODUCT-BBB');
-    });
+      expect(results.length).toBe(3)
+      expect(selId).toBe('PRODUCT-BBB')
+    })
 
     it('getRampStoreLoaded() should return the current "loaded" status', () => {
-      const result = RampSelectors.getRampLoaded(state);
+      const result = RampSelectors.getRampLoaded(state)
 
-      expect(result).toBe(false);
-    });
+      expect(result).toBe(false)
+    })
 
     it('getRampStoreError() should return the current "error" state', () => {
-      const result = RampSelectors.getRampError(state);
+      const result = RampSelectors.getRampError(state)
 
-      expect(result).toBe(ERROR_MSG);
-    });
-  });
-});
+      expect(result).toBe(ERROR_MSG)
+    })
+  })
+})

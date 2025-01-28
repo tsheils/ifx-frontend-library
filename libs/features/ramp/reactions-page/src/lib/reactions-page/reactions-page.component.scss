@@ -1,16 +1,18 @@
 .common-reaction-analytes {
-  width: 40%;
+  width: 50%;
 }
 
 .reactions-from-analytes {
-  width: 25%;
+  width: 50%;
 }
 
 .reaction-classes-from-analytes {
-  padding-left: 5vw;
-  width: 25%;
+  width: 50%;
 }
 
+.enrich-reaction-classes {
+  width: 50%;
+}
 
 .dataNode {
   fill: #e6f1f9;
@@ -54,7 +56,6 @@ line.edgeLinks.clickedEdge {
 
 .legend-input {
   background-color: #000000;
-
 }
 
 .legend-output {

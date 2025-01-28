@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from '@ncats-frontend-library/stores/disease-store'
 import {
   FILTERS_FEATURE_KEY,
   filtersReducer,
-} from '@ncats-frontend-library/stores/filter-store';
+} from '@ncats-frontend-library/stores/filter-store'
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
-import { StoreModule } from '@ngrx/store';
+} from '@ncats-frontend-library/stores/user-store'
+import { StoreModule } from '@ngrx/store'
 
-import { RdasBrowseComponent } from './rdas-browse.component';
+import { RdasBrowseComponent } from './rdas-browse.component'
 
 describe('RdasBrowseComponent', () => {
-  let component: RdasBrowseComponent;
-  let fixture: ComponentFixture<RdasBrowseComponent>;
+  let component: RdasBrowseComponent
+  let fixture: ComponentFixture<RdasBrowseComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -32,14 +32,14 @@ describe('RdasBrowseComponent', () => {
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
       providers: [],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(RdasBrowseComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(RdasBrowseComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

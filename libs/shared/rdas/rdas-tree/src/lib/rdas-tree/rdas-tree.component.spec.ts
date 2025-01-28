@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 
-import { RdasTreeComponent } from './rdas-tree.component';
+import { RdasTreeComponent } from './rdas-tree.component'
 
 describe('RdasTreeComponent', () => {
-  let component: RdasTreeComponent;
-  let fixture: ComponentFixture<RdasTreeComponent>;
+  let component: RdasTreeComponent
+  let fixture: ComponentFixture<RdasTreeComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [RdasTreeComponent],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(RdasTreeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(RdasTreeComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

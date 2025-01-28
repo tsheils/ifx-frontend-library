@@ -1,5 +1,5 @@
-import { Subscription, User } from '@ncats-frontend-library/models/utils';
-import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { Subscription, User } from '@ncats-frontend-library/models/utils'
+import { createActionGroup, emptyProps, props } from '@ngrx/store'
 
 export const RdasUsersInitActions = createActionGroup({
   source: 'Users Init',
@@ -8,7 +8,7 @@ export const RdasUsersInitActions = createActionGroup({
     initSuccess: props<{ user: User }>(),
     initFailure: props<{ error: string }>(),
   },
-});
+})
 
 export const ResetPasswordEmailActions = createActionGroup({
   source: 'Reset Password Email',
@@ -17,7 +17,7 @@ export const ResetPasswordEmailActions = createActionGroup({
     resetPasswordEmailSuccess: emptyProps(),
     resetPasswordEmailFailure: props<{ error: string }>(),
   },
-});
+})
 
 export const LoginLinkActions = createActionGroup({
   source: 'Login Link',
@@ -26,7 +26,7 @@ export const LoginLinkActions = createActionGroup({
     loginLinkUserSuccess: props<{ email: string }>(),
     loginLinkUserFailure: props<{ error: string }>(),
   },
-});
+})
 
 export const LoginEmailUserActions = createActionGroup({
   source: 'Login Email User',
@@ -35,7 +35,7 @@ export const LoginEmailUserActions = createActionGroup({
     loginEmailUserSuccess: props<{ user: User }>(),
     loginEmailUserFailure: props<{ error: string }>(),
   },
-});
+})
 
 export const RegisterEmailUserActions = createActionGroup({
   source: 'Login Email User',
@@ -44,7 +44,7 @@ export const RegisterEmailUserActions = createActionGroup({
     RegisterEmailUserSuccess: props<{ user: User }>(),
     RegisterEmailUserFailure: props<{ error: string }>(),
   },
-});
+})
 
 export const UserLoginActions = createActionGroup({
   source: 'User',
@@ -59,7 +59,7 @@ export const UserLoginActions = createActionGroup({
     logoutUserSuccess: emptyProps(),
     logoutUserFailure: props<{ error: string }>(),
   },
-});
+})
 
 export const UpdateUserActions = createActionGroup({
   source: 'Login Email User',
@@ -68,7 +68,7 @@ export const UpdateUserActions = createActionGroup({
     updateUserSubscriptionsSuccess: props<{ user: User }>(),
     updateUserSubscriptionsFailure: props<{ error: string }>(),
   },
-});
+})
 
 /*
 export const fetchUser = createAction('[Users/API] Fetch User Success');

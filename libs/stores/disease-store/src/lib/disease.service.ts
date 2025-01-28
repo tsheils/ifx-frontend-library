@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { ApolloQueryResult, DocumentNode } from '@apollo/client';
-import { Apollo } from 'apollo-angular';
-import { Observable } from 'rxjs';
+import { Injectable } from '@angular/core'
+import { ApolloQueryResult, DocumentNode } from '@apollo/client'
+import { Apollo } from 'apollo-angular'
+import { Observable } from 'rxjs'
 
 @Injectable({
   providedIn: 'root',
@@ -11,7 +11,7 @@ export class DiseaseService {
 
   fetchDiseases(
     query: DocumentNode,
-    variables: { [key: string]: unknown } | undefined,
+    variables: { [key: string]: unknown } | undefined
   ): Observable<ApolloQueryResult<unknown>> {
     return this.apollo
       .use('diseases')
@@ -19,7 +19,7 @@ export class DiseaseService {
         query,
         variables,
       })
-      .valueChanges.pipe();
+      .valueChanges.pipe()
   }
 
   fetchArticles(query: DocumentNode, variables: object = {}) {
@@ -29,7 +29,7 @@ export class DiseaseService {
         query,
         variables,
       })
-      .valueChanges.pipe();
+      .valueChanges.pipe()
   }
 
   fetchTrials(query: DocumentNode, variables: object = {}) {
@@ -39,7 +39,7 @@ export class DiseaseService {
         query,
         variables,
       })
-      .valueChanges.pipe();
+      .valueChanges.pipe()
   }
 
   fetchProjects(query: DocumentNode, variables: object = {}) {
@@ -49,6 +49,6 @@ export class DiseaseService {
         query,
         variables,
       })
-      .valueChanges.pipe();
+      .valueChanges.pipe()
   }
 }

@@ -14,7 +14,7 @@
         [formControlName]="'email'"
       />
       @if (registerForm.controls['email'].invalid) {
-        <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+      <mat-error>{{ getEmailErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>
@@ -27,7 +27,7 @@
         [formControlName]="'pw'"
       />
       @if (registerForm.controls['pw'].invalid) {
-        <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+      <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>
@@ -40,7 +40,7 @@
         [formControlName]="'pwVerify'"
       />
       @if (registerForm.controls['pwVerify'].invalid) {
-        <mat-error>{{ getPasswordVerifyErrorMessage() }}</mat-error>
+      <mat-error>{{ getPasswordVerifyErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>

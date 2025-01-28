@@ -1,1 +1,1 @@
-export * from './lib/reactions-page/reactions-page.component';
+export * from './lib/reactions-page/reactions-page.component'

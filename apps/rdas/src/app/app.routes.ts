@@ -7,7 +7,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-home').then(
-        (m) => m.RdasHomeComponent,
+        (m) => m.RdasHomeComponent
       ),
   },
   {
@@ -16,7 +16,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-browse').then(
-        (m) => m.RdasBrowseComponent,
+        (m) => m.RdasBrowseComponent
       ),
   },
   {
@@ -25,7 +25,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'pathParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-disease-page').then(
-        (m) => m.RdasDiseasePageComponent,
+        (m) => m.RdasDiseasePageComponent
       ),
   },
   {
@@ -34,7 +34,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-about').then(
-        (m) => m.FeaturesRdasRdasAboutComponent,
+        (m) => m.FeaturesRdasRdasAboutComponent
       ),
   },
   {
@@ -43,7 +43,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/privacy-page').then(
-        (m) => m.RdasPrivacyPageComponent,
+        (m) => m.RdasPrivacyPageComponent
       ),
   },
   {
@@ -52,7 +52,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-article-page').then(
-        (m) => m.FeaturesRdasRdasArticlePageComponent,
+        (m) => m.FeaturesRdasRdasArticlePageComponent
       ),
   },
   {
@@ -61,7 +61,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-grant-page').then(
-        (m) => m.RdasGrantPageComponent,
+        (m) => m.RdasGrantPageComponent
       ),
   },
   {
@@ -70,7 +70,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-trial-page').then(
-        (m) => m.RdasTrialPageComponent,
+        (m) => m.RdasTrialPageComponent
       ),
   },
   {
@@ -79,7 +79,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/rdas-subscriptions').then(
-        (m) => m.RdasSubscriptionsComponent,
+        (m) => m.RdasSubscriptionsComponent
       ),
   },
   {
@@ -92,9 +92,8 @@ export const routes: Routes = [
       }api/diseases`,
     },
     loadComponent: () =>
-      // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent,
+        (m) => m.GraphqlSandboxComponent
       ),
   },
   {
@@ -107,9 +106,8 @@ export const routes: Routes = [
       }api/articles`,
     },
     loadComponent: () =>
-      // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent,
+        (m) => m.GraphqlSandboxComponent
       ),
   },
   {
@@ -122,9 +120,8 @@ export const routes: Routes = [
       }api/grants`,
     },
     loadComponent: () =>
-      // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent,
+        (m) => m.GraphqlSandboxComponent
       ),
   },
   {
@@ -137,9 +134,8 @@ export const routes: Routes = [
       }api/trials`,
     },
     loadComponent: () =>
-      // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
-        (m) => m.GraphqlSandboxComponent,
+        (m) => m.GraphqlSandboxComponent
       ),
   },
   {
@@ -147,9 +143,8 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/epi-api').then(
-        (m) => m.EpiApiComponent,
+        (m) => m.EpiApiComponent
       ),
   },
   {
@@ -157,9 +152,8 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      // eslint-disable-next-line @nx/enforce-module-boundaries
       import('@ncats-frontend-library/features/rdas/history-api').then(
-        (m) => m.HistoryApiComponent,
+        (m) => m.HistoryApiComponent
       ),
   },
   { path: '**', redirectTo: '' },

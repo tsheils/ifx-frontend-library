@@ -5,8 +5,8 @@ import {
   CdkPortal,
   CdkPortalOutlet,
   ComponentPortal,
-} from '@angular/cdk/portal';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+} from '@angular/cdk/portal'
+import { CommonModule, isPlatformBrowser } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,8 +23,8 @@ import {
   Type,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
-import { GraphData, GraphNode } from '@ncats-frontend-library/models/utils';
+} from '@angular/core'
+import { GraphData, GraphNode } from '@ncats-frontend-library/models/utils'
 import {
   drag,
   forceCenter,
@@ -36,10 +36,10 @@ import {
   schemeCategory10,
   selectAll,
   zoom,
-} from 'd3';
-import { scaleOrdinal } from 'd3-scale';
-import { select } from 'd3-selection';
-import { ForceDirectedGraphService } from './force-directed-graph.service';
+} from 'd3'
+import { scaleOrdinal } from 'd3-scale'
+import { select } from 'd3-selection'
+import { ForceDirectedGraphService } from './force-directed-graph.service'
 
 @Component({
   selector: 'lib-utils-force-directed-graph',
@@ -52,39 +52,39 @@ import { ForceDirectedGraphService } from './force-directed-graph.service';
 })
 export class UtilsForceDirectedGraphComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID,
-  ) as InjectionToken<NonNullable<unknown>>;
-  isBrowser = computed(() => isPlatformBrowser(this.platformId));
-  chartElement = viewChild<ElementRef>('graphElement');
+    PLATFORM_ID
+  ) as InjectionToken<NonNullable<unknown>>
+  isBrowser = computed(() => isPlatformBrowser(this.platformId))
+  chartElement = viewChild<ElementRef>('graphElement')
   width = computed(
     () =>
       this.chartElement()?.nativeElement.offsetWidth -
       this.margins().left -
-      this.margins().right,
-  );
+      this.margins().right
+  )
   height = computed(
     () =>
       this.chartElement()?.nativeElement.offsetHeight +
       this.margins().top +
-      this.margins().bottom,
-  );
-  margins = signal({ top: 10, bottom: 10, left: 10, right: 10 });
+      this.margins().bottom
+  )
+  margins = signal({ top: 10, bottom: 10, left: 10, right: 10 })
   svgExport = computed(
     () =>
       <SVGElement>(
         select(this.chartElement()?.nativeElement).select('svg').node()
-      ),
-  );
-  data = input<GraphData>({ graph: { nodes: [], links: [] } });
+      )
+  )
+  data = input<GraphData>({ graph: { nodes: [], links: [] } })
 
-  graphChartService = inject(ForceDirectedGraphService);
+  graphChartService = inject(ForceDirectedGraphService)
   graphLegendElement: Signal<ElementRef | undefined> = viewChild(
-    'forceDirectedGraphElement',
-  );
-  _injector = inject(Injector);
-  componentPortal?: ComponentPortal<unknown>;
+    'forceDirectedGraphElement'
+  )
+  _injector = inject(Injector)
+  componentPortal?: ComponentPortal<unknown>
 
-  color = scaleOrdinal(schemeCategory10);
+  color = scaleOrdinal(schemeCategory10)
 
   svg = computed(() => {
     return select(this.chartElement()?.nativeElement)
@@ -100,29 +100,29 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
             [this.width(), this.height()],
           ])
           .scaleExtent([-1, 8])
-          .on('zoom', (event) => this.zoomed(event)),
-      );
-  });
+          .on('zoom', (event) => this.zoomed(event))
+      )
+  })
 
-  gZoom = computed(() => this.svg().append('g'));
+  gZoom = computed(() => this.svg().append('g'))
 
   // The force simulation mutates links and nodes, so create a copy
   // so that re-evaluating this cell produces the same result.
-  links = computed(() => this.data().graph.links.map((d) => ({ ...d })));
-  nodes = computed(() => this.data().graph.nodes.map((d) => ({ ...d })));
+  links = computed(() => this.data().graph.links.map((d) => ({ ...d })))
+  nodes = computed(() => this.data().graph.nodes.map((d) => ({ ...d })))
 
   simulation = computed(() =>
     forceSimulation(this.nodes())
       .force(
         'link',
-        forceLink(this.links()).id((d) => d.id),
+        forceLink(this.links()).id((d) => d.id)
       )
       .force('charge', forceManyBody())
       .force('center', forceCenter(this.width() / 2, this.height() / 2))
       .force('x', forceX())
       .force('y', forceY())
-      .on('tick', () => this.ticked()),
-  );
+      .on('tick', () => this.ticked())
+  )
 
   link = computed(() =>
     this.gZoom()
@@ -133,8 +133,8 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .classed('edgeLinks', true)
       .attr('stroke-width', 1)
       .attr('stroke', (d) => d.color || '#ffffff')
-      .attr('opacity', 0.2),
-  );
+      .attr('opacity', 0.2)
+  )
   // Add a drag behavior.;
   // Add a line for each link, and a circle for each node.
   squareNode = computed(() =>
@@ -161,9 +161,9 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
         drag()
           .on('start', (event) => this.dragStarted(event))
           .on('drag', (event) => this.dragged(event))
-          .on('end', (event) => this.dragEnded(event)),
-      ),
-  );
+          .on('end', (event) => this.dragEnded(event))
+      )
+  )
 
   circleNode = computed(() =>
     this.gZoom()
@@ -187,11 +187,11 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
         drag()
           .on('start', (event) => this.dragStarted(event))
           .on('drag', (event) => this.dragged(event))
-          .on('end', (event) => this.dragEnded(event)),
-      ),
-  );
+          .on('end', (event) => this.dragEnded(event))
+      )
+  )
 
-  allNodes = computed(() => selectAll('.dataNode'));
+  allNodes = computed(() => selectAll('.dataNode'))
 
   /*labels = computed(() =>
     this.gZoom()
@@ -207,81 +207,81 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
   );
 */
   ngAfterViewInit(): void {
-    this.simulation().restart();
+    this.simulation().restart()
 
     if (this.graphChartService && this.graphChartService.customComponent) {
       const comp = this._injector.get<Type<unknown>>(
-        this.graphChartService.customComponent,
-      );
-      this.componentPortal = new ComponentPortal(comp);
+        this.graphChartService.customComponent
+      )
+      this.componentPortal = new ComponentPortal(comp)
     }
   }
 
   clicked(event, d) {
     const filterList = this.links().filter(
-      (l) => l.target['id'] === d.id || l.source['id'] === d.id,
-    );
+      (l) => l.target['id'] === d.id || l.source['id'] === d.id
+    )
     const nodes = Array.from(
       new Set([
         ...filterList.map((l) => l.target['id']),
         ...filterList.map((l) => l.source['id']),
-      ]),
-    );
+      ])
+    )
     selectAll(this.link())
       .classed(
         'clickedEdge',
-        (l) => l.target['id'] === d.id || l.source['id'] === d.id,
+        (l) => l.target['id'] === d.id || l.source['id'] === d.id
       )
       .transition()
-      .duration(100);
+      .duration(100)
 
     selectAll(this.allNodes())
       .classed('clickedNode', (n) => nodes.includes(n.id))
       .transition()
-      .duration(100);
+      .duration(100)
 
-    this.graphChartService.nodeClicked.emit(d as GraphNode);
+    this.graphChartService.nodeClicked.emit(d as GraphNode)
   }
 
   hovered(event, d) {
     const filterList = this.links().filter(
-      (l) => l.target['id'] === d.id || l.source['id'] === d.id,
-    );
+      (l) => l.target['id'] === d.id || l.source['id'] === d.id
+    )
     const nodes = Array.from(
       new Set([
         ...filterList.map((l) => l.target['id']),
         ...filterList.map((l) => l.source['id']),
-      ]),
-    );
+      ])
+    )
     selectAll(this.link())
       .classed(
         'hoveredEdge',
-        (l) => l.target['id'] === d.id || l.source['id'] === d.id,
+        (l) => l.target['id'] === d.id || l.source['id'] === d.id
       )
       .transition()
-      .duration(100);
+      .duration(100)
 
     selectAll(this.allNodes())
       .classed('hoveredNode', (n) => nodes.includes(n.id))
       .transition()
-      .duration(100);
+      .duration(100)
 
     /*    selectAll(this.labels())
       .classed('hoveredLabel', (n) => nodes.includes(n.id))
       .transition()
       .duration(100);*/
 
-    this.graphChartService.nodeHovered.emit(d as GraphNode);
+    this.graphChartService.nodeHovered.emit(d as GraphNode)
   }
 
   hoveredOff(event, d) {
     /*  select(event.target)
        .attr('fill', d.color)*/
-    this.graphChartService.nodeHovered.emit(null);
+    this.graphChartService.nodeHovered.emit(null)
   }
 
   zoomed({ transform }) {
-    this.gZoom().attr('transform', transform);
+    this.gZoom().attr('transform', transform)
   }
 
   // Set the position attributes of links and nodes each time the simulation ticks.
@@ -290,13 +290,13 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .attr('x1', (d) => d.source.x)
       .attr('y1', (d) => d.source.y)
       .attr('x2', (d) => d.target.x)
-      .attr('y2', (d) => d.target.y);
+      .attr('y2', (d) => d.target.y)
     this.squareNode()
       .attr('x', (d) => d.x)
-      .attr('y', (d) => d.y);
+      .attr('y', (d) => d.y)
     this.circleNode()
       .attr('cx', (d) => d.x)
-      .attr('cy', (d) => d.y);
+      .attr('cy', (d) => d.y)
     /*  this.labels()
       .attr('x', (d) => d.x + 10)
       .attr('y', (d) => d.y + 10);*/
@@ -304,22 +304,22 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
   // Reheat the simulation when drag starts, and fix the subject position.
   dragStarted(event) {
-    if (!event.active) this.simulation().alphaTarget(0.3).restart();
-    event.subject.fx = event['subject'].x;
-    event.subject.fy = event['subject'].y;
+    if (!event.active) this.simulation().alphaTarget(0.3).restart()
+    event.subject.fx = event['subject'].x
+    event.subject.fy = event['subject'].y
   }
 
   // Update the subject (dragged node) position during drag.
   dragged(event) {
-    event.subject.fx = event['x'];
-    event.subject.fy = event['y'];
+    event.subject.fx = event['x']
+    event.subject.fy = event['y']
   }
 
   // Restore the target alpha so the simulation cools after dragging ends.
   // Unfix the subject position now that it’s no longer being dragged.
   dragEnded(event) {
-    if (!event.active) this.simulation().alphaTarget(0);
-    event['subject'].fx = event['x'];
-    event['subject'].fy = event['y'];
+    if (!event.active) this.simulation().alphaTarget(0)
+    event['subject'].fx = event['x']
+    event['subject'].fy = event['y']
   }
 }

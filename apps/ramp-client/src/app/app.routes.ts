@@ -1,9 +1,8 @@
-import { Routes } from '@angular/router';
+import { Routes } from '@angular/router'
 import {
   STRUCTURE_VIEWER_COMPONENT,
   StructureViewerComponent,
-} from 'structure-viewer';
-import { environment } from '../environments/environment';
+} from 'structure-viewer'
 
 export const routes: Routes = [
   {
@@ -13,7 +12,13 @@ export const routes: Routes = [
     title: 'RaMP: Home',
     loadComponent: () =>
       import('@ramp/features/ramp/ramp-home').then((m) => m.RampHomeComponent),
-    //  import('@ramp/features/ramp/ramp-home').then((m) => m.HomeComponent),
+  },
+  {
+    path: 'analyze',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Biochemical Pathways',
+    loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
   },
   {
     path: 'biochemical-pathways',
@@ -26,12 +31,10 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('biochemical-pathways-page').then(
-            (m) => m.BiochemicalPathwaysPageComponent,
+            (m) => m.BiochemicalPathwaysPageComponent
           ),
       },
     ],
-
-    //  import('@ramp/features/ramp/ramp-home').then((m) => m.HomeComponent),
   },
   {
     path: 'ontologies',
@@ -78,7 +81,7 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('chemical-descriptors-page').then(
-            (m) => m.ChemicalDescriptorsPageComponent,
+            (m) => m.ChemicalDescriptorsPageComponent
           ),
       },
     ],
@@ -99,4 +102,4 @@ export const routes: Routes = [
     loadComponent: () =>
       import('@ramp/features/ramp/ramp-api').then((m) => m.RampApiComponent),
   },
-];
+]

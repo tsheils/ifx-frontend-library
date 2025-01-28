@@ -2,7 +2,9 @@
   <mat-card-content class="row centered-row">
     <div class="row space-between-row link-row">
       <div
+        role="button" tabindex="0"
         (click)="navigate(disease()?.gardId)"
+        (keydown.enter)="navigate(disease()?.gardId)"
         class="width-75 clickable-area"
       >
         <h3 class="disease-name">
@@ -18,21 +20,20 @@
     </div>
     <div class="width-75">
       @if (disease()?.classificationLevel) {
-        <div class="primary-chip-outlined">
-          {{ disease()?.classificationLevel }}
-        </div>
-      }
-      &nbsp;&nbsp;&nbsp;
-      @if (disease()?.disorderType && disease()?.disorderType?.length) {
-        <div class="accent-chip-outlined">
-          {{ disease()?.disorderType?.join(', ') }}
-        </div>
+      <div class="primary-chip-outlined">
+        {{ disease()?.classificationLevel }}
+      </div>
+      } &nbsp;&nbsp;&nbsp; @if (disease()?.disorderType &&
+      disease()?.disorderType?.length) {
+      <div class="accent-chip-outlined">
+        {{ disease()?.disorderType?.join(', ') }}
+      </div>
       }
     </div>
     @if (disease()?.synonyms && disease()?.synonyms?.length) {
-      <div class="width-75">
-        <i>{{ disease()?.synonyms?.join(', ') }}</i>
-      </div>
+    <div class="width-75">
+      <i>{{ disease()?.synonyms?.join(', ') }}</i>
+    </div>
     }
     <div class="count-grid">
       <div class="count-card">

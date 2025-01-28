@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
-import { StoreModule } from '@ngrx/store';
-import { GeneListComponent } from './gene-list.component';
+} from '@ncats-frontend-library/stores/disease-store'
+import { StoreModule } from '@ngrx/store'
+import { GeneListComponent } from './gene-list.component'
 
 describe('GeneListComponent', () => {
-  let component: GeneListComponent;
-  let fixture: ComponentFixture<GeneListComponent>;
+  let component: GeneListComponent
+  let fixture: ComponentFixture<GeneListComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -17,14 +17,14 @@ describe('GeneListComponent', () => {
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
       ],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(GeneListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(GeneListComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

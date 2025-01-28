@@ -8,9 +8,9 @@ import {
   PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
-} from '@angular/core';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import SwaggerUI from 'swagger-ui';
+} from '@angular/core'
+import { CommonModule, isPlatformBrowser } from '@angular/common'
+import SwaggerUI from 'swagger-ui'
 
 @Component({
   selector: 'ncats-frontend-library-epi-api',
@@ -19,23 +19,24 @@ import SwaggerUI from 'swagger-ui';
   styleUrls: ['./epi-api.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true
 })
 export class EpiApiComponent {
-  @ViewChild('documentation') el!: ElementRef;
-  isBrowser: boolean;
+  @ViewChild('documentation') el!: ElementRef
+  isBrowser: boolean
 
   constructor(
     @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
+    private platformId: InjectionToken<NonNullable<unknown>>
   ) {
-    this.isBrowser = isPlatformBrowser(platformId);
+    this.isBrowser = isPlatformBrowser(platformId)
     afterNextRender(() => {
       if (this.isBrowser) {
         SwaggerUI({
           url: '/assets/epi-api/epi4rdas.json',
           domNode: this.el.nativeElement,
-        });
+        })
       }
-    });
+    })
   }
 }

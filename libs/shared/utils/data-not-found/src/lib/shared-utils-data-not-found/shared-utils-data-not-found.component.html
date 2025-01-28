@@ -1,20 +1,19 @@
 @if (!subscribed) {
-  <div class="row right-justified-row">
-    <ncats-frontend-library-subscribe-button (isSubscribed)="setSub($event)">
-    </ncats-frontend-library-subscribe-button>
-  </div>
-  <div class="text-align-center">
-    @if (message()) {
-      <h2>{{ message() }}</h2>
-    }
-    <h3>Subscribe to receive updates when new data is available.</h3>
-  </div>
-}
-@if (subscribed) {
-  <div class="text-align-center">
-    @if (message()) {
-      <h2>{{ message() }}</h2>
-    }
-    <h3>You will receive updates when new data is available.</h3>
-  </div>
+<div class="row right-justified-row">
+  <ncats-frontend-library-subscribe-button (isSubscribed)="setSub($event)">
+  </ncats-frontend-library-subscribe-button>
+</div>
+<div class="text-align-center">
+  @if (message()) {
+  <h2>{{ message() }}</h2>
+  }
+  <h3>Subscribe to receive updates when new data is available.</h3>
+</div>
+} @if (subscribed) {
+<div class="text-align-center">
+  @if (message()) {
+  <h2>{{ message() }}</h2>
+  }
+  <h3>You will receive updates when new data is available.</h3>
+</div>
 }

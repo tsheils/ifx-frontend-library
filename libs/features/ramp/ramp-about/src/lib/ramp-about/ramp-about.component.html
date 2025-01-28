@@ -22,46 +22,51 @@
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(about)"
+            routerLink="/about"
+            fragment="about"
             [activated]="isActive('about')"
-
           >
             About
           </a>
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(interactRaMP)"
+            routerLink="/about"
+            fragment="interactRaMP"
             [activated]="isActive('interactRaMP')"
             >Interacting With RaMP
           </a>
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(capabilities)"
+            routerLink="/about"
+            fragment="capabilities"
             [activated]="isActive('capabilities')"
             >Capabilities
           </a>
           @if (entityCounts()) {
-            <a
-              mat-list-item
-              class="list-button"
-              (click)="scroll(dataSources)"
-              [activated]="isActive('dataSources')"
-              >Data Sources
-            </a>
+          <a
+            mat-list-item
+            class="list-button"
+            routerLink="/about"
+            fragment="dataSources"
+            [activated]="isActive('dataSources')"
+            >Data Sources
+          </a>
           }
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(summaryStatistics)"
+            routerLink="/about"
+            fragment="summaryStatistics"
             [activated]="isActive('summaryStatistics')"
             >Summary Statistics
           </a>
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(citation)"
+            routerLink="/about"
+            fragment="citation"
             [activated]="isActive('citation')"
           >
             Citation
@@ -69,7 +74,8 @@
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(contact)"
+            routerLink="/about"
+            fragment="contact"
             [activated]="isActive('contact')"
           >
             RaMP Team and Contact
@@ -77,7 +83,8 @@
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(code)"
+            routerLink="/about"
+            fragment="code"
             [activated]="isActive('code')"
           >
             Code
@@ -85,7 +92,8 @@
           <a
             mat-list-item
             class="list-button"
-            (click)="scroll(license)"
+            routerLink="/about"
+            fragment="license"
             [activated]="isActive('license')"
           >
             License
@@ -96,17 +104,17 @@
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
     @if (!navigationsidenav.opened) {
-      <div class="row">
-        <button
-          [color]="'accent'"
-          mat-stroked-button
-          class="menu-button"
-          aria-label="menu button"
-          (click)="navigationsidenav.toggle()"
-        >
-          Jump to...<mat-icon>bookmark</mat-icon>
-        </button>
-      </div>
+    <div class="row">
+      <button
+        [color]="'accent'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="navigationsidenav.toggle()"
+      >
+        Jump to...<mat-icon>bookmark</mat-icon>
+      </button>
+    </div>
     }
     <div class="row centered-row">
       <div
@@ -132,10 +140,9 @@
           <div class="section-content">
             <p>
               @if (dbVersion()) {
-                <span>Version: {{ dbVersion() }}</span>
-              }
-              @if (dbUpdated()) {
-                <span> Last updated: {{ dbUpdated() }}</span>
+              <span>Version: {{ dbVersion() }}</span>
+              } @if (dbUpdated()) {
+              <span> Last updated: {{ dbUpdated() }}</span>
               }
             </p>
             <p>
@@ -150,30 +157,31 @@
               analyses. The inclusion of a mix of ID types as input is supported
               (e.g. users must prepend IDs with the source, such as
               hmdb:HMDB0000562). Further details on which IDs are supported is
-              provided for each query or analyses module.
-              @if (sourceVersions() && sourceVersions()!.length) {
-                <span
-                  >Information within RaMP-DB is compiled from the following
-                  multiple sources:
-                </span>
+              provided for each query or analyses module. @if (sourceVersions()
+              && sourceVersions()!.length) {
+              <span
+                >Information within RaMP-DB is compiled from the following
+                multiple sources:
+              </span>
               }
             </p>
             <ul class="ramp-list">
-              @for (version of sourceVersions(); track version.data_source_name) {
-                <li>
-                  <a
-                    href="{{ version.data_source_url }}"
-                    target="_blank"
-                    rel="noreferrer"
-                    attr.aria-label="Hyperlink to the {{
-                      version.data_source_name
-                    }} website. Link opens in a new tab."
-                  >
-                    {{ version.data_source_name }}</a
-                  >
-                  &nbsp;
-                  <span>{{ version.data_source_version }}</span>
-                </li>
+              @for (version of sourceVersions(); track version.data_source_name)
+              {
+              <li>
+                <a
+                  href="{{ version.data_source_url }}"
+                  target="_blank"
+                  rel="noreferrer"
+                  attr.aria-label="Hyperlink to the {{
+                    version.data_source_name
+                  }} website. Link opens in a new tab."
+                >
+                  {{ version.data_source_name }}</a
+                >
+                &nbsp;
+                <span>{{ version.data_source_version }}</span>
+              </li>
               }
             </ul>
             <p>
@@ -388,38 +396,41 @@
               plots highlight the common and unique metabolites and genes
               covered for each resource.
             </p>
+            @if(compoundsData() && compoundsData().length){
             <div class="row">
-                <div class="width-90 width-sm-100">
-                  <h3>Metabolite Overlap</h3>
-                  <div class="upset-holder metabolite-upset">
+              <div class="width-90 width-sm-100">
+                <h3>Metabolite Overlap</h3>
+                <div class="upset-holder metabolite-upset">
                   <lib-shared-utils-upset-chart
                     [title]="'Metabolite Overlap'"
                     [chartData]="compoundsData()"
-                    [scale] = "'log'"
+                    [scale]="'log'"
                   >
                   </lib-shared-utils-upset-chart>
-
                 </div>
-                </div>
-                         </div>
-            <div class="row">
-                <div class="width-75 width-md-90 width-sm-100">
-                  <h3>Gene Overlap</h3>
-                  <div class="upset-holder">
-                    @defer (on viewport) {
+              </div>
+            </div>
+            }
+            @if(genesData() && genesData().length){
+              <div class="row">
+              <div class="width-75 width-md-90 width-sm-100">
+                <h3>Gene Overlap</h3>
+                <div class="upset-holder">
+                  @defer (on viewport) {
                   <lib-shared-utils-upset-chart
                     [title]="'Gene Overlap'"
                     [chartData]="genesData()"
                     scale="log"
                   >
                   </lib-shared-utils-upset-chart>
-                    } @placeholder (){
-                      <div class="upset-holder metabolite-upset"></div>
+                  } @placeholder (){
+                  <div class="upset-holder metabolite-upset"></div>
 
-                    }
-                  </div>
+                  }
                 </div>
+              </div>
             </div>
+            }
           </div>
         </div>
         <div class="row" id="citation" #citation #scrollSection>
@@ -614,67 +625,66 @@
                   <h2>Timothy Sheils</h2>
                 </a>
               </div>
-
             </div>
             <br />
             <br />
             <h2>Previous Contributors</h2>
             <div class="row space-around-row">
-            <div class="portrait-holder width-20 width-sm-50">
-              <picture>
-                <source
-                  srcset="/assets/ramp-about/images/team/john_braisted.webp"
-                  type="image/webp"
-                />
-                <source
-                  srcset="/assets/ramp-about/images/team/john_braisted.jpg"
-                  type="image/jpeg"
-                />
-                <img
-                  src="/assets/ramp-about/images/team/john_braisted.jpg"
-                  alt="John Braisted portrait"
-                  class="ramp-portrait"
-                />
-              </picture>
-              <br />
+              <div class="portrait-holder width-20 width-sm-50">
+                <picture>
+                  <source
+                    srcset="/assets/ramp-about/images/team/john_braisted.webp"
+                    type="image/webp"
+                  />
+                  <source
+                    srcset="/assets/ramp-about/images/team/john_braisted.jpg"
+                    type="image/jpeg"
+                  />
+                  <img
+                    src="/assets/ramp-about/images/team/john_braisted.jpg"
+                    alt="John Braisted portrait"
+                    class="ramp-portrait"
+                  />
+                </picture>
+                <br />
                 <h2>John Braisted</h2>
-            </div>
-            <div class="portrait-holder width-20 width-sm-50">
-              <picture>
-                <source
-                  srcset="/assets/ramp-about/images/team/tara_eicher.webp"
-                  type="image/webp"
-                />
-                <source
-                  srcset="/assets/ramp-about/images/team/tara_eicher.jpg"
-                  type="image/jpeg"
-                />
-                <img
-                  src="/assets/ramp-about/images/team/tara_eicher.jpg"
-                  alt="Tara Eicher portrait"
-                  class="ramp-portrait"
-                />
-              </picture>
+              </div>
+              <div class="portrait-holder width-20 width-sm-50">
+                <picture>
+                  <source
+                    srcset="/assets/ramp-about/images/team/tara_eicher.webp"
+                    type="image/webp"
+                  />
+                  <source
+                    srcset="/assets/ramp-about/images/team/tara_eicher.jpg"
+                    type="image/jpeg"
+                  />
+                  <img
+                    src="/assets/ramp-about/images/team/tara_eicher.jpg"
+                    alt="Tara Eicher portrait"
+                    class="ramp-portrait"
+                  />
+                </picture>
                 <h2>Tara Eicher</h2>
-            </div>
-            <div class="portrait-holder width-20 width-sm-50">
-              <picture>
-                <source
-                  srcset="/assets/ramp-about/images/team/kyle_spencer.webp"
-                  type="image/webp"
-                />
-                <source
-                  srcset="/assets/ramp-about/images/team/kyle_spencer.jpg"
-                  type="image/jpeg"
-                />
-                <img
-                  src="/assets/ramp-about/images/team/kyle_spencer.jpg"
-                  alt="Kyle Spencer portrait"
-                  class="ramp-portrait"
-                />
-              </picture>
+              </div>
+              <div class="portrait-holder width-20 width-sm-50">
+                <picture>
+                  <source
+                    srcset="/assets/ramp-about/images/team/kyle_spencer.webp"
+                    type="image/webp"
+                  />
+                  <source
+                    srcset="/assets/ramp-about/images/team/kyle_spencer.jpg"
+                    type="image/jpeg"
+                  />
+                  <img
+                    src="/assets/ramp-about/images/team/kyle_spencer.jpg"
+                    alt="Kyle Spencer portrait"
+                    class="ramp-portrait"
+                  />
+                </picture>
                 <h2>Kyle Spencer</h2>
-            </div>
+              </div>
             </div>
             <ul>
               <li>

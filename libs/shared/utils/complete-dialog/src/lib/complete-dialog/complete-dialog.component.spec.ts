@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
 import {
   MAT_DIALOG_DATA,
   MatDialog,
   MatDialogRef,
-} from '@angular/material/dialog';
-import { CompleteDialogComponent } from './complete-dialog.component';
+} from '@angular/material/dialog'
+import { CompleteDialogComponent } from './complete-dialog.component'
 
 describe('CompleteDialogComponent', () => {
-  let component: CompleteDialogComponent;
-  let fixture: ComponentFixture<CompleteDialogComponent>;
+  let component: CompleteDialogComponent
+  let fixture: ComponentFixture<CompleteDialogComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -18,14 +18,14 @@ describe('CompleteDialogComponent', () => {
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
       ],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(CompleteDialogComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(CompleteDialogComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

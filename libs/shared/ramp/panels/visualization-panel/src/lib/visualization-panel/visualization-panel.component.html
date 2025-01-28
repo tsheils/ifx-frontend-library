@@ -1,79 +1,53 @@
-@if (data() && data().length > 1) {
-  Chart type:
-  <mat-radio-group [value]="activeChart()!">
-    @for (chart of data(); track chart.type) {
-      <mat-radio-button
-        [value]="chart.type"
-        (click)="writableChart.set(chart.type)"
-        >{{ chart.type }}</mat-radio-button
-      >
-    }
-  </mat-radio-group>
-}
-
-@for (chart of data(); track chart.type) {
-  @if (activeChart() === chart.type) {
-    @switch (chart.type) {
-      @case ('cluster') {
-        <div class="row">
-          @if (!chart.data?.message) {
-            <div class="width-10">
-              <button
-                mat-stroked-button
-                class="tool-button list-download"
-                (click)="downloadImage()"
-                matTooltip="Download Data"
-                color="accent"
-              >
-                <span class="hide-small">Save Image</span
-                ><mat-icon>download</mat-icon>
-              </button>
-            </div>
-          }
-          @if (chart.data?.message) {
-            <div>
-              {{chart.data?.message }}
-            </div>
-          }
-          @if (!chart.data?.message) {
-            <div [innerHTML]="chart.data!.image"></div>
-          }
-        </div>
-      }
-      @case ('sunburst') {
-        @if (chart.data!.values) {
-          @defer(on viewport){
-            <lib-sunburst-chart
-            [data]="chart.data!.values"
-          ></lib-sunburst-chart>
-          } @placeholder {
-            <div></div>
-          }
-        }
-      }
-      @case ('tree') {
-        @if (chart.data!.values) {
-          <lib-tree-chart [data]="chart.data!.values"></lib-tree-chart>
-        }
-      }
-      @case ('graph') {
-        @if (chart.data!.graph) {
-          @defer(on viewport){
-          <lib-utils-force-directed-graph [data]="chart.data!"></lib-utils-force-directed-graph>
-          } @placeholder {
-            <div></div>
-          }
-        }
-      }
-      @case ('upset') {
-        @if (chart.data!.plot) {
-              @defer(on viewport){
-              <lib-shared-utils-upset-chart [chartData]="chart.data!.plot" [scale]="'linear'"></lib-shared-utils-upset-chart>
-              } @placeholder{
-                <div></div>
-              }
-        }
-      }
-    }
+@if (data() && data().length > 1) { Chart type:
+<mat-radio-group [value]="activeChart()!">
+  @for (chart of data(); track chart.type) {
+  <mat-radio-button
+    [value]="chart.type"
+    (click)="writableChart.set(chart.type)"
+    >{{ chart.type }}</mat-radio-button
+  >
   }
-}
+</mat-radio-group>
+} @for (chart of data(); track chart.type) { @if (activeChart() === chart.type)
+{ @switch (chart.type) { @case ('cluster') {
+<div class="row">
+  @if (!chart.data?.message) {
+  <div class="width-10">
+    <button
+      mat-stroked-button
+      class="tool-button list-download"
+      (click)="downloadImage()"
+      matTooltip="Download Data"
+      color="accent"
+    >
+      <span class="hide-small">Save Image</span><mat-icon>download</mat-icon>
+    </button>
+  </div>
+  } @if (chart.data?.message) {
+  <div>
+    {{ chart.data?.message }}
+  </div>
+  } @if (!chart.data?.message) {
+  <div [innerHTML]="chart.data!.image"></div>
+  }
+</div>
+} @case ('sunburst') { @if (chart.data!.values) { @defer(on viewport){
+<lib-sunburst-chart [data]="chart.data!.values"></lib-sunburst-chart>
+} @placeholder {
+<div></div>
+} } } @case ('tree') { @if (chart.data!.values) {
+<lib-tree-chart [data]="chart.data!.values"></lib-tree-chart>
+} } @case ('graph') { @if (chart.data!.graph) { @defer(on viewport){
+<lib-utils-force-directed-graph
+  [data]="chart.data!"
+></lib-utils-force-directed-graph>
+} @placeholder {
+<div></div>
+} } } @case ('upset') { @if (chart.data!.plot) { @defer(on viewport){
+<lib-shared-utils-upset-chart
+  [chartData]="chart.data!.plot"
+  [scale]="'linear'"
+></lib-shared-utils-upset-chart>
+} @placeholder{
+<div></div>
+} } } } } }

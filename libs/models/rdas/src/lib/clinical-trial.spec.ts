@@ -1,7 +1,7 @@
-import { ClinicalTrial } from './clinical-trial';
+import { ClinicalTrial } from './clinical-trial'
 
 describe('ClinicalTrial', () => {
   it('should create an instance', () => {
-    expect(new ClinicalTrial()).toBeTruthy();
-  });
-});
+    expect(new ClinicalTrial()).toBeTruthy()
+  })
+})

@@ -1,6 +1,6 @@
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
-import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay'
+import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling'
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common'
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -13,16 +13,12 @@ import {
   PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
-} from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
+} from '@angular/core'
+import { MatButtonModule } from '@angular/material/button'
+import { MatIconModule } from '@angular/material/icon'
+import { Router } from '@angular/router'
+import { Subject, takeUntil } from 'rxjs'
 
-/**
- * Component that contains a ui button that appears after scrolling past the top menu, on click, it scrolls the user back
- * to the top of the page
- */
 @Component({
   selector: 'ncats-frontend-library-scroll-to-top',
   imports: [
@@ -39,13 +35,13 @@ import { Subject, takeUntil } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;
+  @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable
 
-  navIsFixed!: boolean;
+  navIsFixed!: boolean
 
-  protected ngUnsubscribe: Subject<string> = new Subject();
+  protected ngUnsubscribe: Subject<string> = new Subject()
 
-  @Input() color: 'primary' | 'accent' = 'primary';
+  @Input() color: 'primary' | 'accent' = 'primary'
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -53,7 +49,7 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
     private platformId: InjectionToken<NonNullable<unknown>>,
     private scrollDispatcher: ScrollDispatcher,
     private changeRef: ChangeDetectorRef,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngAfterViewInit() {
@@ -67,35 +63,35 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
             this.document.documentElement.scrollTop > 100 ||
             this.document.body.scrollTop > 100
           ) {
-            this.navIsFixed = true;
+            this.navIsFixed = true
           } else if (
             (this.navIsFixed && window.pageYOffset < 10) ||
             this.document.documentElement.scrollTop < 10 ||
             this.document.body.scrollTop < 10
           ) {
-            this.navIsFixed = false;
+            this.navIsFixed = false
           }
         }
-        this.changeRef.detectChanges();
-      });
+        this.changeRef.detectChanges()
+      })
   }
 
   scrollToTop(): void {
     if (isPlatformBrowser(this.platformId)) {
-      (function smoothscroll() {
+      ;(function smoothscroll() {
         const currentScroll =
-          document.documentElement.scrollTop || document.body.scrollTop;
+          document.documentElement.scrollTop || document.body.scrollTop
         if (currentScroll > 0) {
-          window.requestAnimationFrame(smoothscroll);
-          window.scrollTo(0, currentScroll - currentScroll / 5);
+          window.requestAnimationFrame(smoothscroll)
+          window.scrollTo(0, currentScroll - currentScroll / 5)
         }
-      })();
-      this.router.navigate([], { queryParamsHandling: 'merge' });
+      })()
+      this.router.navigate([], { queryParamsHandling: 'merge' })
     }
   }
 
   ngOnDestroy() {
-    this.ngUnsubscribe.next('bye-bye');
-    this.ngUnsubscribe.complete();
+    this.ngUnsubscribe.next('bye-bye')
+    this.ngUnsubscribe.complete()
   }
 }

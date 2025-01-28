@@ -1,5 +1,5 @@
-<div class=" main-rail">
-  <div class=" ramp-rail ramp-sub" cdkScrollable>
+<div class="main-rail">
+  <div class="ramp-rail ramp-sub" cdkScrollable>
     <button
       matRipple
       class="rail-button"
@@ -53,13 +53,15 @@
 <div class="page-content">
   <div class="row">
     <div class="width-95">
-      <h1>{{ title() | titlecase }}</h1><br>
-      <h3>{{paths() ? paths()![0].summary : ''}}</h3>
+      <h1>{{ title() | titlecase }}</h1>
+      <br />
+      <h2>{{ paths() ? paths()![0].summary : '' }}</h2>
+      <h3>{{ paths() ? paths()![0].pageDescription : '' }}</h3>
     </div>
   </div>
-    <div class="row space-around-row">
-      <div class="width-95">
+  <div class="row space-around-row">
+    <div class="width-95">
       <router-outlet (activate)="onOutletLoaded($event)"></router-outlet>
-      </div>
-</div>
+    </div>
+  </div>
 </div>

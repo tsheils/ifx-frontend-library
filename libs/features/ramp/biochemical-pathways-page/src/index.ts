@@ -1,1 +1,1 @@
-export * from './lib/biochemical-pathways-page/biochemical-pathways-page.component';
+export * from './lib/biochemical-pathways-page/biochemical-pathways-page.component'

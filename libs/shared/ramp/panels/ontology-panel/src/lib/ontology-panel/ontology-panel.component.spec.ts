@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { OntologyPanelComponent } from './ontology-panel.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { OntologyPanelComponent } from './ontology-panel.component'
 
 describe('OntologyPanelComponent', () => {
-  let component: OntologyPanelComponent;
-  let fixture: ComponentFixture<OntologyPanelComponent>;
+  let component: OntologyPanelComponent
+  let fixture: ComponentFixture<OntologyPanelComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OntologyPanelComponent, NoopAnimationsModule],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(OntologyPanelComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(OntologyPanelComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

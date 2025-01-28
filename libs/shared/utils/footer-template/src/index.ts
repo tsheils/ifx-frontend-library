@@ -1,1 +1,1 @@
-export * from './lib/footer-template/footer-template.component';
+export * from './lib/footer-template/footer-template.component'

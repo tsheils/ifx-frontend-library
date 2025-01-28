@@ -1,16 +1,16 @@
-import { gql } from 'apollo-angular';
+import { gql } from 'apollo-angular'
 
 export const GENEFILTERPARAMETERS: {
-  skip?: number;
-  limit?: number;
-  term?: string;
-  terms?: string[];
+  skip?: number
+  limit?: number
+  term?: string
+  terms?: string[]
 } = {
   skip: 0,
   limit: 200,
   term: '""',
   terms: [],
-};
+}
 
 export const GENEFILTERS = gql`
   query GeneFilters($skip: Int, $limit: Int, $term: String, $terms: [String]) {
@@ -27,4 +27,4 @@ export const GENEFILTERS = gql`
       count
     }
   }
-`;
+`

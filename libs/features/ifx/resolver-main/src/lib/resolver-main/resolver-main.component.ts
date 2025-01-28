@@ -39,29 +39,30 @@ import {
 } from 'resolver-store';
 
 @Component({
-    selector: 'lib-resolver-main',
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatCheckboxModule,
-        MatSelectModule,
-        MatChipsModule,
-        MatIconModule,
-        SharedUtilsListFilterRowComponent,
-        MatRadioModule,
-        MatButtonModule,
-        ResolverDataViewerComponent,
-        HighlightPipe,
-        LoadingSpinnerComponent,
-    ],
-    templateUrl: './resolver-main.component.html',
-    styleUrl: './resolver-main.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+  selector: 'lib-resolver-main',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatIconModule,
+    SharedUtilsListFilterRowComponent,
+    MatRadioModule,
+    MatButtonModule,
+    ResolverDataViewerComponent,
+    HighlightPipe,
+    LoadingSpinnerComponent
+  ],
+  templateUrl: './resolver-main.component.html',
+  styleUrl: './resolver-main.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  encapsulation: ViewEncapsulation.None
 })
 export class ResolverMainComponent implements OnInit {
   private readonly store = inject(Store);

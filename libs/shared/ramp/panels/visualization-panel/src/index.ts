@@ -1,1 +1,1 @@
-export * from './lib/visualization-panel/visualization-panel.component';
+export * from './lib/visualization-panel/visualization-panel.component'

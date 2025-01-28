@@ -1,1 +1,1 @@
-export * from './lib/ontologies-page/ontologies-page.component';
+export * from './lib/ontologies-page/ontologies-page.component'

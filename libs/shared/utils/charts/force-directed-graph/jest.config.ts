@@ -1,7 +1,7 @@
 /* eslint-disable */
 export default {
   displayName: 'utils-force-directed-graph',
-  preset: '../../../../../../jest.preset.js',
+  preset: '../../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory:
     '../../../../coverage/libs/shared/utils/charts/force-directed-graph',
@@ -22,4 +22,4 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment',
   ],
-};
+}

@@ -1,1 +1,1 @@
-export * from './lib/graphql-sandbox/graphql-sandbox.component';
+export * from './lib/graphql-sandbox/graphql-sandbox.component'

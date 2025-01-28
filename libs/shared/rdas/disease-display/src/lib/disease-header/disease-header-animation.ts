@@ -5,7 +5,7 @@ import {
   transition,
   animate,
   group,
-} from '@angular/animations';
+} from '@angular/animations'
 
 export const shrinkOnScroll = [
   trigger('shrinkOnScroll', [
@@ -13,15 +13,15 @@ export const shrinkOnScroll = [
       'in',
       style({
         height: '22vh',
-      }),
+      })
     ),
     state(
       'out',
       style({
         height: '8vh',
-      }),
+      })
     ),
     transition('in => out', [group([animate('200ms ease-out')])]),
     transition('out => in', [group([animate('200ms ease-in')])]),
   ]),
-];
+]

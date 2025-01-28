@@ -1,1 +1,1 @@
-export * from './lib/rdas-panel-template/rdas-panel-template.component';
+export * from './lib/rdas-panel-template/rdas-panel-template.component'

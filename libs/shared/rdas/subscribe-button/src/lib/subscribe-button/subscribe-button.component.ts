@@ -1,5 +1,5 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
+import { SelectionModel } from '@angular/cdk/collections'
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,24 +12,24 @@ import {
   output,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Subscription, User } from '@ncats-frontend-library/models/utils';
-import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
+} from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { MatButtonModule } from '@angular/material/button'
+import { MatCheckboxModule } from '@angular/material/checkbox'
+import { MatDialog, MatDialogModule } from '@angular/material/dialog'
+import { MatIconModule } from '@angular/material/icon'
+import { MatMenuModule } from '@angular/material/menu'
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar'
+import { Subscription } from '@ncats-frontend-library/models/utils'
+import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on'
 import {
   UpdateUserActions,
   UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
-import { Store } from '@ngrx/store';
-import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
-import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-modal.component';
+} from '@ncats-frontend-library/stores/user-store'
+import { Store } from '@ngrx/store'
+import { debounceTime, distinctUntilChanged } from 'rxjs'
+import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component'
+import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-modal.component'
 
 @Component({
   selector: 'ncats-frontend-library-subscribe-button',
@@ -48,83 +48,83 @@ import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-moda
   ],
 })
 export class SubscribeButtonComponent implements OnInit {
-  private readonly userStore = inject(Store);
-  destroyRef = inject(DestroyRef);
-  public dialog = inject(MatDialog);
-  private _snackBar = inject(MatSnackBar);
-  private changeRef = inject(ChangeDetectorRef);
-  private breakpointObserver = inject(BreakpointObserver);
-  user = this.userStore.selectSignal(UserSelectors.getUser);
+  private readonly userStore = inject(Store)
+  destroyRef = inject(DestroyRef)
+  public dialog = inject(MatDialog)
+  private _snackBar = inject(MatSnackBar)
+  private changeRef = inject(ChangeDetectorRef)
+  private breakpointObserver = inject(BreakpointObserver)
+  user = this.userStore.selectSignal(UserSelectors.getUser)
 
-  subscriptionName = input<string | undefined>();
-  subscriptionId = input<string | undefined>();
+  subscriptionName = input<string | undefined>()
+  subscriptionId = input<string | undefined>()
   subscribed = computed<boolean>(() => {
     return (
       !!this.user() &&
       this.user()!.subscriptions.filter(
-        (sub: Subscription) => sub.gardID == this.subscriptionId(),
+        (sub: Subscription) => sub.gardID == this.subscriptionId()
       ).length > 0
-    );
-  });
-  mobile = signal(false);
+    )
+  })
+  mobile = signal(false)
 
-  isSubscribed = output<boolean>();
+  isSubscribed = output<boolean>()
 
   /*user!: User;
   subscription?: Subscription;
 */
-  all = ['articles', 'grants', 'trials'];
+  all = ['articles', 'grants', 'trials']
 
   subscriptionSelection = computed(() => {
-    const ret = new SelectionModel<string>(true, this.all);
+    const ret = new SelectionModel<string>(true, this.all)
     const subscription = this.user()?.subscriptions?.filter(
-      (sub: Subscription) => sub.gardID == this.subscriptionId(),
-    )[0];
+      (sub: Subscription) => sub.gardID == this.subscriptionId()
+    )[0]
     if (subscription?.alerts) {
-      ret.setSelection(...subscription.alerts);
+      ret.setSelection(...subscription.alerts)
     }
-    return ret;
-  });
+    return ret
+  })
 
   ngOnInit(): void {
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        this.mobile.set(result.matches);
-      });
+        this.mobile.set(result.matches)
+      })
 
     this.subscriptionSelection()
       .changed.pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(1000),
-        distinctUntilChanged(),
+        distinctUntilChanged()
       )
       .subscribe(() => {
-        const subscriptionClone: Subscription[] = [];
+        const subscriptionClone: Subscription[] = []
         if (this.user() && this.user()!.subscriptions) {
           this.user()?.subscriptions.forEach((sub) =>
-            subscriptionClone.push(sub),
-          );
+            subscriptionClone.push(sub)
+          )
           subscriptionClone.splice(
             this.user()!.subscriptions.findIndex(
-              (obj) => obj.gardID === this.subscriptionId(),
+              (obj) => obj.gardID === this.subscriptionId()
             ),
-            1,
-          );
+            1
+          )
           const subscription = new Subscription({
             diseaseName: this.subscriptionName(),
             gardID: this.subscriptionId(),
             alerts: this.subscriptionSelection().selected,
-          });
-          subscriptionClone.push(subscription);
+          })
+          subscriptionClone.push(subscription)
           this.userStore.dispatch(
             UpdateUserActions.updateUserSubscriptions({
               subscriptions: subscriptionClone,
-            }),
-          );
+            })
+          )
         }
-      });
+      })
   }
 
   /*
@@ -151,17 +151,17 @@ export class SubscribeButtonComponent implements OnInit {
         diseaseName: this.subscriptionName(),
         gardID: this.subscriptionId(),
         alerts: this.all,
-      });
-      const subscriptionClone: Subscription[] = [{ ...subscription }];
-      this.user()?.subscriptions.forEach((sub) => subscriptionClone.push(sub));
+      })
+      const subscriptionClone: Subscription[] = [{ ...subscription }]
+      this.user()?.subscriptions.forEach((sub) => subscriptionClone.push(sub))
       this.userStore.dispatch(
         UpdateUserActions.updateUserSubscriptions({
           subscriptions: subscriptionClone,
-        }),
-      );
+        })
+      )
       this._snackBar.open('Subscription updated', '', {
         duration: 3000,
-      });
+      })
     } else {
       //  alert("sign in, pal")
     }
@@ -178,22 +178,22 @@ export class SubscribeButtonComponent implements OnInit {
       .afterClosed()
       .subscribe((res: { [key: string]: string }) => {
         if (res) {
-          const subscriptionClone: Subscription[] = [];
+          const subscriptionClone: Subscription[] = []
           this.user()?.subscriptions.forEach((sub) => {
             if (sub.gardID !== this.subscriptionId()) {
-              subscriptionClone.push(Object.assign({}, { ...sub }));
+              subscriptionClone.push(Object.assign({}, { ...sub }))
             }
-          });
+          })
           this.userStore.dispatch(
             UpdateUserActions.updateUserSubscriptions({
               subscriptions: subscriptionClone,
-            }),
-          );
+            })
+          )
           this._snackBar.open('Subscription removed', '', {
             duration: 3000,
-          });
+          })
         }
-      });
+      })
   }
 
   aboutSubscribe() {
@@ -202,14 +202,14 @@ export class SubscribeButtonComponent implements OnInit {
       data: {
         user: !!this.user(),
       },
-    });
+    })
   }
 
   toggleAll() {
     if (this.subscriptionSelection()?.selected.length === 3) {
-      this.subscriptionSelection()?.clear();
+      this.subscriptionSelection()?.clear()
     } else {
-      this.subscriptionSelection()?.select(...this.all);
+      this.subscriptionSelection()?.select(...this.all)
     }
   }
 }

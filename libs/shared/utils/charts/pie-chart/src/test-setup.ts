@@ -1,12 +1,10 @@
-// @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
-globalThis.ngJest = {
-  testEnvironmentOptions: {
-    errorOnUnknownElements: true,
-    errorOnUnknownProperties: true,
-  },
-};
-import 'jest-preset-angular/setup-jest';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+
+setupZoneTestEnv({
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+});
+import { FilterCategory } from '@ncats-frontend-library/models/utils'
 
 export const PIEFILTERS: FilterCategory = new FilterCategory({
   field: '',
@@ -16,16 +14,18 @@ export const PIEFILTERS: FilterCategory = new FilterCategory({
   page: 1,
   values: [
     {
+      value: 'Interventional',
       term: 'Interventional',
       label: 'StudyType',
       count: 45,
       selected: false,
     },
     {
+      value: 'Observational',
       term: 'Observational',
       label: 'StudyType',
       count: 30,
       selected: false,
     },
   ],
-});
+})

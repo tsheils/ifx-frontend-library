@@ -1,18 +1,17 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { CommonModule } from '@angular/common';
+import { BreakpointObserver } from '@angular/cdk/layout'
+import { CommonModule } from '@angular/common'
 import {
   Component,
   computed,
   inject,
   input,
   ViewEncapsulation,
-} from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatTabsModule } from '@angular/material/tabs';
-import { CoreProject, Project } from '@ncats-frontend-library/models/rdas';
-import { AnnotationsDisplayComponent } from '../annotations-display/annotations-display.component';
-import { ProjectListCardComponent } from '../project-list-card/project-list-card.component';
+} from '@angular/core'
+import { MatCardModule } from '@angular/material/card'
+import { MatExpansionModule } from '@angular/material/expansion'
+import { MatTabsModule } from '@angular/material/tabs'
+import { CoreProject, Project } from '@ncats-frontend-library/models/rdas'
+import { AnnotationsDisplayComponent } from '../annotations-display/annotations-display.component'
 
 @Component({
   selector: 'ncats-frontend-library-project-details',
@@ -29,39 +28,39 @@ import { ProjectListCardComponent } from '../project-list-card/project-list-card
   encapsulation: ViewEncapsulation.None,
 })
 export class ProjectDetailsComponent {
-  breakpointObserver = inject(BreakpointObserver);
-  fullAbstract = true;
+  breakpointObserver = inject(BreakpointObserver)
+  fullAbstract = true
 
-  grant = input<CoreProject>();
+  grant = input<CoreProject>()
   latestGrant = computed<Project>(() => {
-    const g = this.grant();
+    const g = this.grant()
     if (g && g.projects) {
-      return g.projects[0];
+      return g.projects[0]
     } else {
-      return {} as Project;
+      return {} as Project
     }
-  });
+  })
 
   truncatedAbstract = computed(() => {
-    const abs = this.latestGrant()?.abstract;
-    let ret = abs;
+    const abs = this.latestGrant()?.abstract
+    let ret = abs
     if (abs && abs.length > 800) {
-      this.fullAbstract = false;
-      ret = abs.slice(0, 800);
+      this.fullAbstract = false
+      ret = abs.slice(0, 800)
     }
     if (this.breakpointObserver.isMatched('(max-width: 768px)')) {
-      this.fullAbstract = false;
+      this.fullAbstract = false
       if (abs && abs.length > 400) {
-        ret = abs.slice(0, 400);
+        ret = abs.slice(0, 400)
       }
     }
-    return ret;
-  });
+    return ret
+  })
 
   funding = computed(() => {
-    const gr = this.grant();
+    const gr = this.grant()
     if (gr && gr.fundedByAgents) {
-      return gr.fundedByAgents.map((obj) => obj.name).join(', ');
-    } else return null;
-  });
+      return gr.fundedByAgents.map((obj) => obj.name).join(', ')
+    } else return null
+  })
 }

@@ -1,4 +1,4 @@
-import { EntityCount } from './entity-count';
+import { EntityCount } from './entity-count'
 
 describe('EntityCount', () => {
   it('should create an instance', () => {
@@ -10,7 +10,7 @@ describe('EntityCount', () => {
         Reactome: '-',
         WikiPathways: '-',
         status_category: 'Chemical Property Records',
-      }),
-    ).toBeTruthy();
-  });
-});
+      })
+    ).toBeTruthy()
+  })
+})

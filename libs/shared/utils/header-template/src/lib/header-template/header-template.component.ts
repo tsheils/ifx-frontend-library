@@ -5,18 +5,18 @@ import {
   inject,
   Input,
   ViewEncapsulation,
-} from '@angular/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { Router, RouterLink } from '@angular/router';
+} from '@angular/core'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { Router, RouterLink } from '@angular/router'
 import {
   LinkTemplateProperty,
   slideInOutAnimation,
-} from '@ncats-frontend-library/models/utils';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatButtonModule } from '@angular/material/button';
-import { NgClass } from '@angular/common';
-import { MatToolbarModule } from '@angular/material/toolbar';
+} from '@ncats-frontend-library/models/utils'
+import { MatIconModule } from '@angular/material/icon'
+import { MatMenuModule } from '@angular/material/menu'
+import { MatButtonModule } from '@angular/material/button'
+import { NgClass } from '@angular/common'
+import { MatToolbarModule } from '@angular/material/toolbar'
 
 @Component({
   selector: 'ncats-frontend-library-header-template',
@@ -37,19 +37,19 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderTemplateComponent {
-  destroyRef = inject(DestroyRef);
+  destroyRef = inject(DestroyRef)
 
   /**
    * animation state changed by scrolling
    * @type {string}
    */
-  @Input() animationState = 'in';
+  @Input() animationState = 'in'
 
-  @Input() title?: string;
+  @Input() title?: string
 
-  @Input() links?: LinkTemplateProperty[] = [];
+  @Input() links?: LinkTemplateProperty[] = []
 
-  mobile = false;
+  mobile = false
 
   constructor(private router: Router) {}
 
@@ -59,6 +59,6 @@ export class HeaderTemplateComponent {
    * @param path
    */
   isActive(path: string | undefined): boolean {
-    return this.router.url === `/${path}`;
+    return this.router.url === `/${path}`
   }
 }

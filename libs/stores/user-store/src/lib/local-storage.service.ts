@@ -1,5 +1,5 @@
-import { isPlatformBrowser } from '@angular/common';
-import { Inject, Injectable, InjectionToken, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common'
+import { Inject, Injectable, InjectionToken, PLATFORM_ID } from '@angular/core'
 
 @Injectable({
   providedIn: 'root',
@@ -7,30 +7,30 @@ import { Inject, Injectable, InjectionToken, PLATFORM_ID } from '@angular/core';
 export class LocalStorageService {
   constructor(
     @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
+    private platformId: InjectionToken<NonNullable<unknown>>
   ) {}
 
   clearLocalStorage() {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.clear();
+      localStorage.clear()
     }
   }
 
   removeItem(key: string) {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.removeItem(key);
+      localStorage.removeItem(key)
     }
   }
 
   setItem(key: string, data: string) {
     if (isPlatformBrowser(this.platformId)) {
-      localStorage.setItem(key, data);
+      localStorage.setItem(key, data)
     }
   }
 
   fetchFromStorage(key: string): string | null {
     if (isPlatformBrowser(this.platformId)) {
-      return localStorage.getItem(key);
-    } else return null;
+      return localStorage.getItem(key)
+    } else return null
   }
 }

@@ -1,1 +1,1 @@
-export * from './lib/data-download-button/data-download-button.component';
+export * from './lib/data-download-button/data-download-button.component'

@@ -1,12 +1,10 @@
-// @ts-expect-error https://thymikee.github.io/jest-preset-angular/docs/getting-started/test-environment
-globalThis.ngJest = {
-  testEnvironmentOptions: {
-    errorOnUnknownElements: true,
-    errorOnUnknownProperties: true,
-  },
-};
-import 'jest-preset-angular/setup-jest';
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+
+setupZoneTestEnv({
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+});
+import { CoreProject } from '@ncats-frontend-library/models/rdas'
 
 export const PROJECTMOCK: CoreProject = new CoreProject({
   core_project_num: 'K01OH000018',
@@ -394,4 +392,4 @@ export const PROJECTMOCK: CoreProject = new CoreProject({
       ],
     },
   ],
-} as unknown as Partial<CoreProject>);
+} as unknown as Partial<CoreProject>)

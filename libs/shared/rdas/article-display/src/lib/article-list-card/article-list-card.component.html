@@ -1,45 +1,46 @@
 <div class="row space-between-row top-align article-list-card">
   <div class="width-sm-100 width-75">
     <div class="rdas-article-title">{{ article()?.title }}</div>
-    @for (journal of article()!.journals; track journal.title) {
-      <div>
-        <i>{{ journal.title }}, </i> {{journal.dateOfPublication ||journal.printPublicationDate }}
-      </div>
+    @if(article()?.journals && article()?.journals.length){
+    @for (journal of article().journals; track journal.title) {
+    <div>
+      <i>{{ journal.title }}, </i>
+      {{ journal.dateOfPublication || journal.printPublicationDate }}
+    </div>
+    }
     }
   </div>
   <div class="width-sm-100 width-25 right-text">
     <div class="mat-h3 right-text">
-      @if (article()?.pubmed_id) {
-        PMID:
-        <a
-          href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmed_id }}"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Link to publication in PubMed"
-          >{{ article()?.pubmed_id }}</a
-        >
+      @if (article()?.pubmed_id) { PMID:
+      <a
+        href="https://pubmed.ncbi.nlm.nih.gov/{{ article()?.pubmed_id }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to publication in PubMed"
+        >{{ article()?.pubmed_id }}</a
+      >
       }
       <br />
       @if (article()?.doi) {
-        <a
-          href="https://doi.org/{{ article()?.doi }}"
-          target="_blank"
-          rel="noreferrer"
-          aria-label="Link to publication via DOI"
-          >DOI: {{ article()?.doi }}</a
-        >
+      <a
+        href="https://doi.org/{{ article()?.doi }}"
+        target="_blank"
+        rel="noreferrer"
+        aria-label="Link to publication via DOI"
+        >DOI: {{ article()?.doi }}</a
+      >
       }
     </div>
     @if (article()?.pubType) {
-      <span class="mat-h3">Publication Type: </span>
-    }
-    @for (pubType of article()?.pubType; track pubType; let last = $last) {
-      <span>
-        <span>{{ pubType }}</span>
-        @if (!last) {
-          <span> , </span>
-        }
-      </span>
+    <span class="mat-h3">Publication Type: </span>
+    } @for (pubType of article()?.pubType; track pubType; let last = $last) {
+    <span>
+      <span>{{ pubType }}</span>
+      @if (!last) {
+      <span> , </span>
+      }
+    </span>
     }
   </div>
 </div>

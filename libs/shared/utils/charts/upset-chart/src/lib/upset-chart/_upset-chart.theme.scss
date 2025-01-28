@@ -30,11 +30,9 @@
     fill: mat.get-theme-color($theme, primary, 90);
   }
 
-
   .non-set-circle {
     fill: #e0e0e0;
   }
-
 
   .set-circle {
     fill: mat.get-theme-color($theme, primary);
@@ -60,5 +58,4 @@
   .hovered > line.connector {
     stroke: mat.get-theme-color($theme, primary, 90);
   }
-
 }

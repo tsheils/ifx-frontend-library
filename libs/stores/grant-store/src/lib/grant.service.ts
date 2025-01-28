@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { DocumentNode } from '@apollo/client';
-import { Apollo } from 'apollo-angular';
+import { Injectable } from '@angular/core'
+import { DocumentNode } from '@apollo/client'
+import { Apollo } from 'apollo-angular'
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,6 @@ export class GrantService {
         query,
         variables,
       })
-      .valueChanges.pipe();
+      .valueChanges.pipe()
   }
 }

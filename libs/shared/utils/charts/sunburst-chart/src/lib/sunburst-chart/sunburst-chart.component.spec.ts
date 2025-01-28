@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { SunburstChartComponent } from './sunburst-chart.component';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { SunburstChartComponent } from './sunburst-chart.component'
 
 describe('SunburstChartComponent', () => {
-  let component: SunburstChartComponent;
-  let fixture: ComponentFixture<SunburstChartComponent>;
+  let component: SunburstChartComponent
+  let fixture: ComponentFixture<SunburstChartComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SunburstChartComponent],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(SunburstChartComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(SunburstChartComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

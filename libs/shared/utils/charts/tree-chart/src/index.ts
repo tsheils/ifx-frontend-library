@@ -1,1 +1,1 @@
-export * from './lib/tree-chart/tree-chart.component';
+export * from './lib/tree-chart/tree-chart.component'

@@ -11,18 +11,18 @@ import {
   QueryList,
   signal,
   ViewChildren,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatFormField } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
-import { MatTooltip } from '@angular/material/tooltip';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
-import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+} from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { FormControl, ReactiveFormsModule } from '@angular/forms'
+import { MatButton } from '@angular/material/button'
+import { MatFormField } from '@angular/material/form-field'
+import { MatIcon } from '@angular/material/icon'
+import { MatInput } from '@angular/material/input'
+import { MatTooltip } from '@angular/material/tooltip'
+import { FilterCategory } from '@ncats-frontend-library/models/utils'
+import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel'
+import { debounceTime, distinctUntilChanged, map } from 'rxjs'
 
 @Component({
   selector: 'lib-ontology-panel',
@@ -43,18 +43,18 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 })
 export class OntologyPanelComponent implements OnInit {
   @ViewChildren('filterPanel')
-  filterPanels!: QueryList<SharedUtilsFilterPanelComponent>;
-  fetchMetabolitesSearch = output<{ ontologies: string[] }>();
-  downloadMetabolitesSearch = output<{ ontologies: string[] }>();
-  ontologies = input<FilterCategory[]>();
-  filteredOntologies = signal(this.ontologies());
-  ontologyMap: Map<string, string[]> = new Map<string, string[]>();
-  disableSearch = false;
-  allOntoFilterCtrl: FormControl = new FormControl<string>('');
-  private destroyRef = inject(DestroyRef);
+  filterPanels!: QueryList<SharedUtilsFilterPanelComponent>
+  fetchMetabolitesSearch = output<{ ontologies: string[] }>()
+  downloadMetabolitesSearch = output<{ ontologies: string[] }>()
+  ontologies = input<FilterCategory[]>()
+  filteredOntologies = signal(this.ontologies())
+  ontologyMap: Map<string, string[]> = new Map<string, string[]>()
+  disableSearch = false
+  allOntoFilterCtrl: FormControl = new FormControl<string>('')
+  private destroyRef = inject(DestroyRef)
 
   ngOnInit() {
-    this.filteredOntologies.set(this.ontologies());
+    this.filteredOntologies.set(this.ontologies())
 
     this.allOntoFilterCtrl.valueChanges
       .pipe(
@@ -62,72 +62,72 @@ export class OntologyPanelComponent implements OnInit {
         debounceTime(400),
         distinctUntilChanged(),
         map((term: string) => {
-          const retOntologies: FilterCategory[] = [];
+          const retOntologies: FilterCategory[] = []
           this.ontologies()?.forEach((ontologyCategory) => {
             const values = ontologyCategory.values.filter((ontology) =>
               ontology.term
                 .toLocaleLowerCase()
-                .includes(<string>term.toLocaleLowerCase()),
-            );
+                .includes(<string>term.toLocaleLowerCase())
+            )
             retOntologies.push(
               new FilterCategory({
                 ...ontologyCategory,
                 values: values,
                 query: term,
-              }),
-            );
-          });
-          this.filteredOntologies.set(retOntologies);
-        }),
+              })
+            )
+          })
+          this.filteredOntologies.set(retOntologies)
+        })
       )
-      .subscribe();
+      .subscribe()
   }
 
   setValues(values: { label: string; values: string[] }[]) {
     values.forEach((onto) => {
-      this.ontologyMap.set(onto.label, onto.values);
-    });
+      this.ontologyMap.set(onto.label, onto.values)
+    })
   }
 
   filterChange(search: { label: string; term?: string; page?: number }) {
     if (!search.term || search.term === '') {
-      this.filteredOntologies.set(this.ontologies());
+      this.filteredOntologies.set(this.ontologies())
     } else {
-      const returnedOntologies: FilterCategory[] = [];
+      const returnedOntologies: FilterCategory[] = []
       this.ontologies()?.forEach((onto) => {
         if (onto.label === search.label) {
-          const term = search.term as string;
+          const term = search.term as string
           const values = onto.values.filter((val) =>
             val.term
               .toLocaleLowerCase()
-              .includes(<string>term.toLocaleLowerCase()),
-          );
+              .includes(<string>term.toLocaleLowerCase())
+          )
           returnedOntologies.push(
-            new FilterCategory({ ...onto, values: values, query: term }),
-          );
+            new FilterCategory({ ...onto, values: values, query: term })
+          )
         } else {
-          returnedOntologies.push(onto);
+          returnedOntologies.push(onto)
         }
-        this.filteredOntologies.set(returnedOntologies);
-      });
+        this.filteredOntologies.set(returnedOntologies)
+      })
     }
   }
 
   clearAll() {
     this.filterPanels.forEach((panel) => {
-      panel.filterSelection.clear();
-    });
+      panel.filterSelection.clear()
+    })
   }
 
   fetchMetabolitesFile() {
-    const searchArr: string[] = [...this.ontologyMap.values()].flat();
-    const searchObj = { ontologies: searchArr };
-    this.downloadMetabolitesSearch.emit(searchObj);
+    const searchArr: string[] = [...this.ontologyMap.values()].flat()
+    const searchObj = { ontologies: searchArr }
+    this.downloadMetabolitesSearch.emit(searchObj)
   }
 
   fetchMetabolites() {
-    const searchArr: string[] = [...this.ontologyMap.values()].flat();
-    const searchObj = { ontologies: searchArr };
-    this.fetchMetabolitesSearch.emit(searchObj);
+    const searchArr: string[] = [...this.ontologyMap.values()].flat()
+    const searchObj = { ontologies: searchArr }
+    this.fetchMetabolitesSearch.emit(searchObj)
   }
 }

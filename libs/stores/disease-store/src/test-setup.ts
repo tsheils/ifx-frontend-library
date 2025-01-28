@@ -1,4 +1,9 @@
-import 'jest-preset-angular/setup-jest';
+import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+
+setupZoneTestEnv({
+  errorOnUnknownElements: true,
+  errorOnUnknownProperties: true,
+});
 
 export const DISEASEENTITIESMOCK = {
   entities: {
@@ -193,7 +198,7 @@ export const DISEASEENTITIESMOCK = {
       },
     },
   },
-};
+}
 
 export const DISEASELISTMOCK = {
   diseases: [
@@ -386,7 +391,7 @@ export const DISEASELISTMOCK = {
       },
     },
   ],
-};
+}
 export const SUBSCRIPTIONLISTMOCK = {
   subscriptions: [
     {
@@ -460,7 +465,7 @@ export const SUBSCRIPTIONLISTMOCK = {
       gardID: 'GARD:0017890',
     },
   ],
-};
+}
 
 export const DISEASESTATEMOCK = {
   diseases: {
@@ -2595,4 +2600,4 @@ export const DISEASESTATEMOCK = {
       },
     ],
   },
-};
+}

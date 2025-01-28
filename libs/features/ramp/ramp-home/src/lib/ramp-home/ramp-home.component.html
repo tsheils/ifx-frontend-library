@@ -16,12 +16,12 @@
               routerLink="/biochemical-pathways"
             >
               <div class="icon-button-image">
-              <img
-                ngSrc="/assets/icons/network.svg"
-                alt="network icon"
-                priority
-                fill
-              />
+                <img
+                  ngSrc="/assets/icons/network.svg"
+                  alt="network icon"
+                  priority
+                  fill
+                />
               </div>
               <div class="rail-label">
                 Biochemical <br />
@@ -29,15 +29,15 @@
               </div>
             </div>
           </a>
-                   <a class="hovered-home-button">
+          <a class="hovered-home-button">
             <div matRipple class="home-button" routerLink="/ontologies">
               <div class="icon-button-image">
-              <img
-                ngSrc="/assets/icons/dna.svg"
-                alt="dna icon"
-                priority
-                fill
-              />
+                <img
+                  ngSrc="/assets/icons/pulmonology_48dp_265668_FILL0_wght400_GRAD0_opsz48.svg"
+                  alt="network icon"
+                  priority
+                  fill
+                />
               </div>
               <div class="rail-label">Ontologies</div>
             </div>
@@ -45,12 +45,12 @@
           <a class="hovered-home-button">
             <div matRipple class="home-button" routerLink="/reactions">
               <div class="icon-button-image">
-              <img
-                ngSrc="/assets/icons/lipid.svg"
-                alt="lipid icon"
-                priority
-                fill
-              />
+                <img
+                  ngSrc="/assets/icons/science_48dp_265668_FILL0_wght400_GRAD0_opsz48.svg"
+                  alt="network icon"
+                  priority
+                  fill
+                />
               </div>
               <div class="rail-label">Reactions</div>
             </div>
@@ -62,12 +62,12 @@
               routerLink="/chemical-descriptors"
             >
               <div class="icon-button-image">
-              <img
-                ngSrc="/assets/icons/disaccharide.svg"
-                alt="disaccharide icon"
-                priority
-                fill
-              />
+                <img
+                  ngSrc="/assets/icons/disaccharide.svg"
+                  alt="disaccharide icon"
+                  priority
+                  fill
+                />
               </div>
               <div class="rail-label">Chemical Descriptors</div>
             </div>
@@ -79,137 +79,137 @@
 </div>
 <div class="primary-background learn-more">
   <div class="row centered-row no-padding learn-more-text">
-    <a mat-flat-button (click)="goToDetails()">
+    <a mat-flat-button
+       role="button" tabindex="0"
+       (click)="goToDetails()"
+       (keydown.enter)="goToDetails()"
+    >
       <p>Learn More</p>
       <mat-icon>expand_more</mat-icon>
     </a>
   </div>
 </div>
 @defer (on viewport) {
-  <div class="sub-content 3d-graph" id="3d-graph" #details>
-    <div class="row space-around-row">
-      <div class="width-50">
-        <mat-card class="stats-card">
-          <h1>RaMP Contains</h1>
-          <div class="row space-around-row">
-            <div class="width-15 stat-box">
-              <div class="number-count">53,831</div>
-              pathways
-            </div>
-            <div class="stat-box-spacer"></div>
-            <div class="width-15 stat-box">
-              <div class="number-count">256,086</div>
-              metabolites
-            </div>
-            <div class="stat-box-spacer"></div>
-            <div class="width-15 stat-box">
-              <div class="number-count">15,827</div>
-              genes/enzymes
-            </div>
-            <div class="stat-box-spacer"></div>
-            <div class="width-15 stat-box">
-              <div class="number-count">256,952</div>
-              chemical properties
-            </div>
-            <div class="stat-box-spacer"></div>
-            <div class="width-15 stat-box">
-              <div class="number-count">699</div>
-              ontologies
-            </div>
-            <div class="stat-box-spacer"></div>
-            <div class="width-15 stat-box">
-              <div class="number-count">1,541,996</div>
-              reactions
-            </div>
+<div class="sub-content 3d-graph" id="3d-graph" #details>
+  <div class="row space-around-row">
+    <div class="width-50">
+      <mat-card class="stats-card">
+        <h1>RaMP Contains</h1>
+        <div class="row space-around-row">
+          <div class="width-15 stat-box">
+            <div class="number-count">53,831</div>
+            pathways
           </div>
-        </mat-card>
-      </div>
-      <div class="width-40"></div>
+          <div class="stat-box-spacer"></div>
+          <div class="width-15 stat-box">
+            <div class="number-count">256,086</div>
+            metabolites
+          </div>
+          <div class="stat-box-spacer"></div>
+          <div class="width-15 stat-box">
+            <div class="number-count">15,827</div>
+            genes/enzymes
+          </div>
+          <div class="stat-box-spacer"></div>
+          <div class="width-15 stat-box">
+            <div class="number-count">256,952</div>
+            chemical properties
+          </div>
+          <div class="stat-box-spacer"></div>
+          <div class="width-15 stat-box">
+            <div class="number-count">699</div>
+            ontologies
+          </div>
+          <div class="stat-box-spacer"></div>
+          <div class="width-15 stat-box">
+            <div class="number-count">1,541,996</div>
+            reactions
+          </div>
+        </div>
+      </mat-card>
+    </div>
+    <div class="width-40"></div>
+  </div>
+</div>
+
+<div class="sub-content-white">
+  <h1>RaMP Sources</h1>
+
+  <div class="row space-around-row centered-row">
+    <div class="width-20 centered">
+      <a href="https://hmdb.ca/" title="Go to the HMDB website" target="_blank">
+        <img
+          ngSrc="/assets/ramp-home/logos/hmdb-logo.png"
+          width="250"
+          height="168"
+          alt="HMDB Logo"
+        />
+        <br />
+      </a>
+      (includes Kegg)
+    </div>
+    <div class="width-20 centered">
+      <a
+        href="https://www.lipidmaps.org/"
+        title="Go to the lipid maps website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/lipid-maps-logo.png"
+          width="250"
+          height="168"
+          alt="LipidMaps Logo"
+        />
+      </a>
+    </div>
+    <div class="width-20 centered">
+      <a
+        href="https://www.ebi.ac.uk/chebi/"
+        title="Go to the ChEBI website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/ChEBI_logo.png"
+          width="100"
+          height="100"
+          alt="ChEBI Logo"
+        /><span class="chebi-text">ChEBI</span>
+      </a>
     </div>
   </div>
-
-  <div class="sub-content-white">
-    <h1>RaMP Sources</h1>
-
-    <div class="row space-around-row centered-row">
-      <div class="width-20 centered">
-        <a
-          href="https://hmdb.ca/"
-          title="Go to the HMDB website"
-          target="_blank"
-        >
-          <img
-            ngSrc="/assets/ramp-home/logos/hmdb-logo.png"
-            width="250"
-            height="168"
-            alt="HMDB Logo"
-          />
-          <br />
-        </a>
-        (includes Kegg)
-      </div>
-      <div class="width-20 centered">
-        <a
-          href="https://www.lipidmaps.org/"
-          title="Go to the lipid maps website"
-          target="_blank"
-        >
-          <img
-            ngSrc="/assets/ramp-home/logos/lipid-maps-logo.png"
-            width="250"
-            height="168"
-            alt="LipidMaps Logo"
-          />
-        </a>
-      </div>
-      <div class="width-20 centered">
-        <a
-          href="https://www.ebi.ac.uk/chebi/"
-          title="Go to the ChEBI website"
-          target="_blank"
-        >
-          <img
-            ngSrc="/assets/ramp-home/logos/ChEBI_logo.png"
-            width="100"
-            height="100"
-            alt="ChEBI Logo"
-          /><span class="chebi-text">ChEBI</span>
-        </a>
-      </div>
+  <div class="row space-around-row centered">
+    <div class="width-50 centered">
+      <a
+        href="https://www.wikipathways.org/"
+        title="Go to the WikiPathways website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/wikipathways-logo.svg"
+          width="300"
+          height="91"
+          alt="WikiPathways Logo"
+        />
+      </a>
     </div>
-    <div class="row space-around-row centered">
-      <div class="width-50 centered">
-        <a
-          href="https://www.wikipathways.org/"
-          title="Go to the WikiPathways website"
-          target="_blank"
-        >
-          <img
-            ngSrc="/assets/ramp-home/logos/wikipathways-logo.svg"
-            width="300"
-            height="91"
-            alt="WikiPathways Logo"
-          />
-        </a>
-      </div>
-      <div class="width-50 centered">
-        <a
-          href="https://reactome.org/"
-          title="Go to the Reactome website"
-          target="_blank"
-        >
-          <img
-            ngSrc="/assets/ramp-home/logos/reactome-logo.png"
-            width="459"
-            height="108"
-            alt="Reactome Logo"
-          />
-        </a>
-      </div>
+    <div class="width-50 centered">
+      <a
+        href="https://reactome.org/"
+        title="Go to the Reactome website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/reactome-logo.png"
+          width="459"
+          height="108"
+          alt="Reactome Logo"
+        />
+      </a>
     </div>
   </div>
+</div>
 } @placeholder {
-  <div class="sub-content 3d-graph" #details>
-    <div class="row space-around-row"></div>
-  </div>
+<div class="sub-content 3d-graph" #details>
+  <div class="row space-around-row"></div>
+</div>
 }

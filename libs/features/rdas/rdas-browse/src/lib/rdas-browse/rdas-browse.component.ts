@@ -1,5 +1,5 @@
-import { MediaMatcher } from '@angular/cdk/layout';
-import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
+import { MediaMatcher } from '@angular/cdk/layout'
+import { CommonModule, DOCUMENT } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -12,53 +12,52 @@ import {
   Signal,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatMenuModule } from '@angular/material/menu';
+} from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+import { MatButtonModule } from '@angular/material/button'
+import { MatIconModule } from '@angular/material/icon'
+import { MatMenuModule } from '@angular/material/menu'
 import {
   MatPaginator,
   MatPaginatorModule,
   PageEvent,
-} from '@angular/material/paginator';
-import { MatSelectChange, MatSelectModule } from '@angular/material/select';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatTooltip } from '@angular/material/tooltip';
+} from '@angular/material/paginator'
+import { MatSelectChange, MatSelectModule } from '@angular/material/select'
+import { MatSidenavModule } from '@angular/material/sidenav'
+import { MatTabsModule } from '@angular/material/tabs'
+import { MatTooltip } from '@angular/material/tooltip'
 import {
   Event,
   NavigationEnd,
   NavigationExtras,
   NavigationStart,
   Router,
-} from '@angular/router';
+} from '@angular/router'
 import {
   DiseaseNode,
   GeneAssociation,
-} from '@ncats-frontend-library/models/rdas';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
-import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
-import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
-import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree';
-import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
-import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
-import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
-import { SharedUtilsSelectedFilterListComponent } from '@ncats-frontend-library/shared/utils/selected-filter-list';
+} from '@ncats-frontend-library/models/rdas'
+import { FilterCategory } from '@ncats-frontend-library/models/utils'
+import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display'
+import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree'
+import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper'
+import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel'
+import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner'
+import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top'
+import { SharedUtilsSelectedFilterListComponent } from '@ncats-frontend-library/shared/utils/selected-filter-list'
 import {
   FetchFiltersActions,
   FilterSelectors,
-} from '@ncats-frontend-library/stores/filter-store';
+} from '@ncats-frontend-library/stores/filter-store'
 import {
   BrowseDiseaseListActions,
   DiseaseSelectors,
-} from '@ncats-frontend-library/stores/disease-store';
-import { Store } from '@ngrx/store';
+} from '@ncats-frontend-library/stores/disease-store'
+import { Store } from '@ngrx/store'
 
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge',
-};
+}
 
 @Component({
   selector: 'ncats-frontend-library-rdas-browse',
@@ -87,81 +86,81 @@ const navigationExtras: NavigationExtras = {
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasBrowseComponent implements OnInit, OnDestroy {
-  private readonly store = inject(Store);
-  paginator = viewChild<MatPaginator>(MatPaginator);
-  destroyRef = inject(DestroyRef);
-  private router = inject(Router);
-  protected dom = inject(DOCUMENT);
+  private readonly store = inject(Store)
+  paginator = viewChild<MatPaginator>(MatPaginator)
+  destroyRef = inject(DestroyRef)
+  private router = inject(Router)
+  protected dom = inject(DOCUMENT)
 
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
-    const map = new Map<string, FilterCategory[]>();
+    const map = new Map<string, FilterCategory[]>()
     const filtersL = this.store.selectSignal(
-      DiseaseSelectors.getAllDiseaseFilters,
-    );
+      DiseaseSelectors.getAllDiseaseFilters
+    )
     if (filtersL() && filtersL()?.length) {
       filtersL()?.forEach((filterCat) => {
         if (filterCat.parent) {
           let filterCats: FilterCategory[] | undefined = map.get(
-            filterCat.parent,
-          );
+            filterCat.parent
+          )
           if (filterCats) {
-            filterCats.push(filterCat);
+            filterCats.push(filterCat)
           } else {
-            filterCats = [filterCat];
+            filterCats = [filterCat]
           }
-          map.set(filterCat.parent, filterCats);
+          map.set(filterCat.parent, filterCats)
         }
-      });
+      })
     }
-    return map;
-  });
-  page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
-  loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
-  diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
-  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
-  filters = this.store.selectSignal(FilterSelectors.selectAllFilters);
+    return map
+  })
+  page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage)
+  loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded)
+  diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases)
+  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree)
+  filters = this.store.selectSignal(FilterSelectors.selectAllFilters)
 
-  sort = 'COUNT_ARTICLES';
-  selectedValues: Map<string, string[]> = new Map<string, string[]>();
-  showDownload = false;
+  sort = 'COUNT_ARTICLES'
+  selectedValues: Map<string, string[]> = new Map<string, string[]>()
+  showDownload = false
 
-  mobileQuery!: MediaQueryList;
-  private _mobileQueryListener: () => void;
+  mobileQuery!: MediaQueryList
+  private _mobileQueryListener: () => void
 
   constructor() {
-    const changeDetectorRef = inject(ChangeDetectorRef);
-    const media = inject(MediaMatcher);
+    const changeDetectorRef = inject(ChangeDetectorRef)
+    const media = inject(MediaMatcher)
 
-    this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
-    this.mobileQuery.addListener(this._mobileQueryListener);
+    this.mobileQuery = media.matchMedia('(max-width: 600px)')
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges()
+    this.mobileQuery.addListener(this._mobileQueryListener)
   }
 
   ngOnDestroy(): void {
-    this.mobileQuery.removeListener(this._mobileQueryListener);
+    this.mobileQuery.removeListener(this._mobileQueryListener)
   }
 
   ngOnInit(): void {
-    this.selectedValues.clear();
-    this.fetchParameters();
+    this.selectedValues.clear()
+    this.fetchParameters()
 
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
         if (e instanceof NavigationStart) {
-          this.store.dispatch(BrowseDiseaseListActions.setLoading());
+          this.store.dispatch(BrowseDiseaseListActions.setLoading())
         }
         if (e instanceof NavigationEnd) {
-          this.selectedValues.clear();
-          this.fetchParameters();
+          this.selectedValues.clear()
+          this.fetchParameters()
         }
-      });
+      })
 
     if (this.router.routerState.root.snapshot.queryParamMap.has('sort')) {
       const sort =
-        this.router.routerState.root.snapshot.queryParamMap.get('sort');
+        this.router.routerState.root.snapshot.queryParamMap.get('sort')
       if (sort) {
-        this.sort = sort;
+        this.sort = sort
       }
     }
   }
@@ -171,23 +170,23 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       pageIndex: event.pageIndex + 1,
       pageSize: event.pageSize,
       sort: this.sort,
-    };
-    this._navigate(navigationExtras);
+    }
+    this._navigate(navigationExtras)
   }
 
   changeSort(event: MatSelectChange): void {
-    this.sort = event.value;
+    this.sort = event.value
     navigationExtras.queryParams = {
       sort: this.sort,
       direction: this.sort === 'GardName' ? 'ASC' : 'DESC',
       pageIndex: 1,
-    };
+    }
 
-    this._navigate(navigationExtras);
+    this._navigate(navigationExtras)
   }
 
   filterChange(event: { label: string; term?: string; page?: number }): void {
-    const skip = event.page ? event.page * 200 : 0;
+    const skip = event.page ? event.page * 200 : 0
     if (event.term) {
       this.store.dispatch(
         FetchFiltersActions.fetchFilters({
@@ -195,39 +194,39 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           term: event.term,
           limit: 200,
           skip: 0,
-        }),
-      );
+        })
+      )
     } else {
       this.store.dispatch(
         FetchFiltersActions.fetchFilters({
           label: event.label,
           limit: 200,
           skip: skip,
-        }),
-      );
+        })
+      )
     }
   }
 
   filterSelectionChange(filters: { label: string; values: string[] }[]): void {
-    let navigationExtras: NavigationExtras = { queryParamsHandling: 'merge' };
-    const newObj: { [key: string]: string | null } = {};
+    let navigationExtras: NavigationExtras = { queryParamsHandling: 'merge' }
+    const newObj: { [key: string]: string | null } = {}
     if (this.router.routerState.snapshot.root.queryParamMap.has('sort')) {
       navigationExtras = {
         queryParams: {
           sort: this.router.routerState.snapshot.root.queryParamMap.get('sort'),
           direction: this.sort === 'GardName' ? 'ASC' : 'DESC',
         },
-      };
+      }
     }
     filters.forEach((filter) => {
       if (filter.values.length) {
-        newObj[filter.label] = filter.values.join('&');
+        newObj[filter.label] = filter.values.join('&')
       } else {
-        newObj[filter.label] = null;
+        newObj[filter.label] = null
       }
-    });
-    navigationExtras.queryParams = { ...newObj };
-    this.router.navigate(['/diseases'], navigationExtras);
+    })
+    navigationExtras.queryParams = { ...newObj }
+    this.router.navigate(['/diseases'], navigationExtras)
   }
 
   treeExpand(event: DiseaseNode): void {
@@ -235,23 +234,23 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       queryParams: {
         parentId: event.gardId,
       },
-    };
-    this.router.navigate(['/diseases'], navigationExtras);
+    }
+    this.router.navigate(['/diseases'], navigationExtras)
   }
 
   fetchParameters(): void {
     const params =
       this.router.routerState.root.snapshot.queryParamMap.keys.filter(
-        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key),
-      );
+        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key)
+      )
     if (params && params.length) {
       params.forEach((param) => {
         const selectedValues: string | null =
-          this.router.routerState.root.snapshot.queryParamMap.get(param);
+          this.router.routerState.root.snapshot.queryParamMap.get(param)
         if (selectedValues) {
-          this.selectedValues.set(param, selectedValues.split('&'));
+          this.selectedValues.set(param, selectedValues.split('&'))
         }
-      });
+      })
     }
   }
 
@@ -269,7 +268,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
       'associationStatus',
       'associationType',
       'references',
-    ].join('\t');
+    ].join('\t')
 
     // iterate over the data
     const rows: string = data
@@ -278,33 +277,33 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           // for each row object get its values and add tabs between them
           // then add them as a new array to the outgoing array
 
-          return acc.concat([c._toString()]);
+          return acc.concat([c._toString()])
 
           // finally joining each row with a line break
         },
-        [headings],
+        [headings]
       )
-      .join('\n');
-    return rows;
+      .join('\n')
+    return rows
   }
 
   _downloadFile(data: string, name: string, type = 'text/tsv') {
     if (this.dom) {
-      const file = new Blob([data], { type: type });
-      const link = this.dom.createElement('a');
+      const file = new Blob([data], { type: type })
+      const link = this.dom.createElement('a')
       if (link.download !== undefined) {
-        const url = URL.createObjectURL(file);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `${name}`);
-        link.style.visibility = 'hidden';
-        this.dom.body.appendChild(link);
-        link.click();
-        this.dom.body.removeChild(link);
+        const url = URL.createObjectURL(file)
+        link.setAttribute('href', url)
+        link.setAttribute('download', `${name}`)
+        link.style.visibility = 'hidden'
+        this.dom.body.appendChild(link)
+        link.click()
+        this.dom.body.removeChild(link)
       }
     }
   }
 
   private _navigate(navExtras: NavigationExtras): void {
-    this.router.navigate([], navExtras);
+    this.router.navigate([], navExtras)
   }
 }

@@ -1,4 +1,4 @@
-import { gql } from 'apollo-angular';
+import { gql } from 'apollo-angular'
 
 export const DISEASELISTFIELDS = `
         fragment diseaseListFields on GARD {
@@ -13,7 +13,7 @@ export const DISEASELISTFIELDS = `
       projectCount: COUNT_PROJECTS
       clinicalTrialCount: COUNT_TRIALS
       }
-`;
+`
 
 export const TREEROOTPARAMETERS = {
   where: {
@@ -26,26 +26,26 @@ export const TREEROOTPARAMETERS = {
       },
     ],
   },
-};
+}
 
 export const DISEASEBRANCHPARAMETERS: {
-  searchString?: string;
-  skip?: number;
-  limit?: number;
+  searchString?: string
+  skip?: number
+  limit?: number
   where?: {
-    GardName_CONTAINS?: string | null | undefined;
+    GardName_CONTAINS?: string | null | undefined
     hasPhenotypePhenotypes_SOME?: {
-      HPOTerm_IN?: string[];
-    };
+      HPOTerm_IN?: string[]
+    }
     associatedWithGeneGenes_SOME?: {
-      GeneSymbol_IN?: string[];
-    };
-  };
+      GeneSymbol_IN?: string[]
+    }
+  }
 } = {
   searchString: '',
   skip: 0,
   limit: 10,
-};
+}
 
 export const CATEGORYTREEBRANCH = gql`
   query Tree($where: GARDWhere) {
@@ -60,7 +60,7 @@ export const CATEGORYTREEBRANCH = gql`
     }
   }
   ${DISEASELISTFIELDS}
-`;
+`
 
 export const CATEGORYTREE = gql`
   query Tree($where: GARDWhere) {
@@ -72,7 +72,7 @@ export const CATEGORYTREE = gql`
     }
   }
   ${DISEASELISTFIELDS}
-`;
+`
 
 export const DISEASELIST = gql`
   query Tree($where: GARDWhere) {
@@ -81,19 +81,19 @@ export const DISEASELIST = gql`
     }
   }
   ${DISEASELISTFIELDS}
-`;
+`
 
 export const FETCHPATH = gql`
   query Query($searchString: String) {
     treeBranch(searchString: $searchString)
   }
-`;
+`
 
 export const FETCHROOT = gql`
   query Query {
     diseases: treeParent
   }
-`;
+`
 
 export const FETCHPATHDISEASES = gql`
   query Query($searchString: String, $skip: Int, $limit: Int) {
@@ -111,7 +111,7 @@ export const FETCHPATHDISEASES = gql`
     )
   }
   ${DISEASELISTFIELDS}
-`;
+`
 
 export const DISEASETYPEAHEAD = gql`
   query Gards($searchString: String, $limit: Int) {
@@ -121,7 +121,7 @@ export const DISEASETYPEAHEAD = gql`
       synonyms: Synonyms
     }
   }
-`;
+`
 
 export const FETCHDISEASESLISTQUERY = gql`
   query Gards($options: GARDOptions, $where: GARDWhere) {
@@ -133,7 +133,7 @@ export const FETCHDISEASESLISTQUERY = gql`
     }
   }
   ${DISEASELISTFIELDS}
-`;
+`
 
 export const FETCHDISEASEQUERY = gql`
   query Gards($where: GARDWhere) {
@@ -211,46 +211,46 @@ export const FETCHDISEASEQUERY = gql`
       count
     }
   }
-`;
+`
 
 export const DISEASEQUERYPARAMETERS: {
   where?: {
-    GardId?: null | string;
-    hasPhenotypePhenotypes_SOME?: { HPOTerm_IN: string[] };
-    associatedWithGeneGenes_SOME?: { GeneSymbol_IN: string[] };
+    GardId?: null | string
+    hasPhenotypePhenotypes_SOME?: { HPOTerm_IN: string[] }
+    associatedWithGeneGenes_SOME?: { GeneSymbol_IN: string[] }
     AND?: [
       {
         hasPhenotypePhenotypes_SOME?: {
-          HPOTerm_IN?: string[];
-        };
+          HPOTerm_IN?: string[]
+        }
       },
       {
         associatedWithGeneGenes_SOME?: {
-          GeneSymbol_IN?: string[];
-        };
-      },
-    ];
-  };
+          GeneSymbol_IN?: string[]
+        }
+      }
+    ]
+  }
 } = {
   where: { GardId: null },
-};
+}
 
 export const LISTQUERYPARAMETERS: {
   options: {
-    limit?: number;
-    offset?: number;
-    sort?: [{ [key: string]: string }];
-  };
+    limit?: number
+    offset?: number
+    sort?: [{ [key: string]: string }]
+  }
   where?: {
-    GardName_CONTAINS?: string | null | undefined;
+    GardName_CONTAINS?: string | null | undefined
     hasPhenotypePhenotypes_SOME?: {
-      HPOTerm_IN?: string[];
-    };
+      HPOTerm_IN?: string[]
+    }
     associatedWithGeneGenes_SOME?: {
-      GeneSymbol_IN?: string[];
-    };
-    AND?: unknown[];
-  };
+      GeneSymbol_IN?: string[]
+    }
+    AND?: unknown[]
+  }
 } = {
   options: {
     limit: 10,
@@ -261,4 +261,4 @@ export const LISTQUERYPARAMETERS: {
       },
     ],
   },
-};
+}

@@ -5,16 +5,16 @@ import {
   input,
   output,
   signal,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
-import { DataDownloadButtonComponent } from 'data-download-button';
-import { InputPanelComponent } from 'input-panel';
-import { NcatsDatatableComponent } from 'ncats-datatable';
-import { QuestionBase } from 'ncats-form-question';
+} from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { MatButton } from '@angular/material/button'
+import { MatIcon } from '@angular/material/icon'
+import { MatTooltip } from '@angular/material/tooltip'
+import { DataProperty } from '@ncats-frontend-library/models/utils'
+import { DataDownloadButtonComponent } from 'data-download-button'
+import { InputPanelComponent } from 'input-panel'
+import { NcatsDatatableComponent } from 'ncats-datatable'
+import { QuestionBase } from 'ncats-form-question'
 
 @Component({
   selector: 'lib-data-panel',
@@ -32,20 +32,20 @@ import { QuestionBase } from 'ncats-form-question';
   standalone: true,
 })
 export class DataPanelComponent {
-  dataframe = input<unknown[]>();
-  dataColumns = input<DataProperty[]>();
-  dataAsDataProperty = input<{ [key: string]: DataProperty }[]>();
+  dataframe = input<unknown[]>()
+  dataColumns = input<DataProperty[]>()
+  dataAsDataProperty = input<{ [key: string]: DataProperty }[]>()
   noDataArr = computed(
     () =>
       !this.dataAsDataProperty()?.length ||
-      this.dataAsDataProperty()?.length === 0,
-  );
-  fileName = input<string>();
-  filters = input<Map<string, QuestionBase<string>[]>>();
-  dataSearch = output<{ [key: string]: unknown }>();
-  showFilters = signal<boolean>(false);
+      this.dataAsDataProperty()?.length === 0
+  )
+  fileName = input<string>()
+  filters = input<Map<string, QuestionBase<string>[]>>()
+  dataSearch = output<{ [key: string]: unknown }>()
+  showFilters = signal<boolean>(false)
 
   searchData(event: { [key: string]: unknown }) {
-    this.dataSearch.emit(event);
+    this.dataSearch.emit(event)
   }
 }

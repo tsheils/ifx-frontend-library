@@ -1,24 +1,24 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatCardModule } from '@angular/material/card';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { MatCardModule } from '@angular/material/card'
 
-import { ClinicalTrialsListComponent } from './clinical-trials-list.component';
+import { ClinicalTrialsListComponent } from './clinical-trials-list.component'
 
 describe('ClinicalTrialsListComponent', () => {
-  let component: ClinicalTrialsListComponent;
-  let fixture: ComponentFixture<ClinicalTrialsListComponent>;
+  let component: ClinicalTrialsListComponent
+  let fixture: ComponentFixture<ClinicalTrialsListComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
       imports: [MatCardModule, ClinicalTrialsListComponent],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(ClinicalTrialsListComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(ClinicalTrialsListComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

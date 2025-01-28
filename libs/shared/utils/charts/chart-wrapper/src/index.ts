@@ -1,1 +1,1 @@
-export * from './lib/chart-wrapper/chart-wrapper.component';
+export * from './lib/chart-wrapper/chart-wrapper.component'

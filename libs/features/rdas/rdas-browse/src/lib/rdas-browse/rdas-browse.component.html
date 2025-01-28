@@ -20,21 +20,21 @@
     <mat-tab-group>
       <mat-tab label="Filters">
         @for (filter of filters(); track filter.label) {
-          <ncats-frontend-library-shared-utils-filter-panel
-            [filter]="filter"
-            (filterSelectionChange)="filterSelectionChange($event)"
-            (filterChange)="filterChange($event)"
-          ></ncats-frontend-library-shared-utils-filter-panel>
-          <br />
+        <ncats-frontend-library-shared-utils-filter-panel
+          [filter]="filter"
+          (filterSelectionChange)="filterSelectionChange($event)"
+          (filterChange)="filterChange($event)"
+        ></ncats-frontend-library-shared-utils-filter-panel>
+        <br />
         }
       </mat-tab>
       <mat-tab label="Hierarchy">
         <ng-template matTabContent>
           @if (diseaseTree()) {
-            <ncats-frontend-library-rdas-tree
-              (leafExpand)="treeExpand($event)"
-              [data]="diseaseTree()!"
-            ></ncats-frontend-library-rdas-tree>
+          <ncats-frontend-library-rdas-tree
+            (leafExpand)="treeExpand($event)"
+            [data]="diseaseTree()!"
+          ></ncats-frontend-library-rdas-tree>
           }
         </ng-template>
       </mat-tab>
@@ -42,48 +42,45 @@
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
     @if (!filtersidenav.opened) {
-      <div class="row">
-        <button
-          [color]="'primary'"
-          mat-stroked-button
-          class="menu-button"
-          aria-label="menu button"
-          (click)="filtersidenav.toggle()"
-        >
-          Filters <mat-icon>filter_list</mat-icon>
-        </button>
-      </div>
+    <div class="row">
+      <button
+        [color]="'primary'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="filtersidenav.toggle()"
+      >
+        Filters <mat-icon>filter_list</mat-icon>
+      </button>
+    </div>
     }
     <div class="row space-around-row top-align">
-      @if (!mobileQuery.matches) {
-        @if (filterMap() && filterMap().has('articles')) {
-          <div class="width-30">
-            <lib-chart-wrapper
-              [chartType]="'bar'"
-              [filters]="filterMap().get('articles')!"
-            ></lib-chart-wrapper>
-            <br />
-          </div>
-        }
-        @if (filterMap() && filterMap().has('projects')) {
-          <div class="width-30">
-            <lib-chart-wrapper
-              [chartType]="'bar'"
-              [filters]="filterMap().get('projects')!"
-            ></lib-chart-wrapper>
-            <br />
-          </div>
-        }
-        @if (filterMap() && filterMap().has('trials')) {
-          <div class="width-30">
-            <lib-chart-wrapper
-              [chartType]="'pie'"
-              [filters]="filterMap().get('trials')!"
-            ></lib-chart-wrapper>
-            <br />
-          </div>
-        }
-      }
+      @if (!mobileQuery.matches) { @if (filterMap() &&
+      filterMap().has('articles')) {
+      <div class="width-30">
+        <lib-chart-wrapper
+          [chartType]="'bar'"
+          [filters]="filterMap().get('articles')!"
+        ></lib-chart-wrapper>
+        <br />
+      </div>
+      } @if (filterMap() && filterMap().has('projects')) {
+      <div class="width-30">
+        <lib-chart-wrapper
+          [chartType]="'bar'"
+          [filters]="filterMap().get('projects')!"
+        ></lib-chart-wrapper>
+        <br />
+      </div>
+      } @if (filterMap() && filterMap().has('trials')) {
+      <div class="width-30">
+        <lib-chart-wrapper
+          [chartType]="'pie'"
+          [filters]="filterMap().get('trials')!"
+        ></lib-chart-wrapper>
+        <br />
+      </div>
+      } }
     </div>
     <br />
     <ncats-frontend-library-shared-utils-selected-filter-list
@@ -114,57 +111,56 @@
       </div>
       <div class="row centered">
         @if (showDownload) {
-          <button
-            mat-stroked-button
-            class="tool-button list-download"
-            (click)="downloadData()"
-            matTooltip="Download Data"
-            color="accent"
-          >
-            <span>Download </span><mat-icon>download</mat-icon>
-          </button>
-        }
-        @if (page()) {
-          <mat-paginator
-            [pageSize]="page()?.pageSize"
-            [pageIndex]="page()?.pageIndex"
-            [pageSizeOptions]="[10, 25, 50]"
-            (page)="paginationChanges($event)"
-            [length]="page()?.total"
-            class="browse-paginator"
-          ></mat-paginator>
+        <button
+          mat-stroked-button
+          class="tool-button list-download"
+          (click)="downloadData()"
+          matTooltip="Download Data"
+          color="accent"
+        >
+          <span>Download </span><mat-icon>download</mat-icon>
+        </button>
+        } @if (page()) {
+        <mat-paginator
+          [pageSize]="page()?.pageSize"
+          [pageIndex]="page()?.pageIndex"
+          [pageSizeOptions]="[10, 25, 50]"
+          (page)="paginationChanges($event)"
+          [length]="page()?.total"
+          class="browse-paginator"
+        ></mat-paginator>
         }
       </div>
     </div>
     <br />
-    @defer (when diseases()) {
-      @for (disease of diseases(); track disease.gardId) {
-        <div>
-          <ncats-frontend-library-disease-list-card
-            [disease]="disease"
-          ></ncats-frontend-library-disease-list-card>
-          <br />
-        </div>
+    @defer (when diseases()) { @for (disease of diseases(); track
+    disease.gardId) {
+    <div>
+      <ncats-frontend-library-disease-list-card
+        [disease]="disease"
+      ></ncats-frontend-library-disease-list-card>
+      <br />
+    </div>
+    }
+    <div class="row right-justified-row">
+      @if (page()) {
+      <mat-paginator
+        [pageSize]="page()?.pageSize"
+        [pageIndex]="page()?.pageIndex"
+        [hidePageSize]="true"
+        (page)="paginationChanges($event)"
+        [length]="page()?.total"
+        class="browse-paginator"
+      ></mat-paginator>
       }
-      <div class="row right-justified-row">
-        @if (page()) {
-          <mat-paginator
-            [pageSize]="page()?.pageSize"
-            [pageIndex]="page()?.pageIndex"
-            [hidePageSize]="true"
-            (page)="paginationChanges($event)"
-            [length]="page()?.total"
-            class="browse-paginator"
-          ></mat-paginator>
-        }
-        <ncats-frontend-library-scroll-to-top
-          [color]="'accent'"
-        ></ncats-frontend-library-scroll-to-top>
-      </div>
+      <ncats-frontend-library-scroll-to-top
+        [color]="'accent'"
+      ></ncats-frontend-library-scroll-to-top>
+    </div>
     } @placeholder {
-      <ncats-frontend-library-loading-spinner
-        [isLoaded]="false"
-      ></ncats-frontend-library-loading-spinner>
+    <ncats-frontend-library-loading-spinner
+      [isLoaded]="false"
+    ></ncats-frontend-library-loading-spinner>
     }
   </mat-sidenav-content>
 </mat-sidenav-container>

@@ -434,7 +434,7 @@ function(analytes, background = '', backgroundFile = '', backgroundType= "databa
 #' @param pValCutoff p value threshold below which results are considered significant
 #' @post /api/filter-enrichment-results
 #' @serializer json list(digits = 6)
-function(fishers_results,  pValType = 'fdr', pValCutoff = 0.1) {
+function(fishers_results,  pValType = 'holm', pValCutoff = 0.1) {
   filtered_results <- RaMP::filterEnrichResults(
     enrichResults = fishers_results,
     pValType = pValType,
@@ -659,6 +659,61 @@ function(
     )
   )
 }
+
+
+#####
+#' Perform reaction class enrichment on given analytes
+#' @param analytes Input for reaction class enrichment
+#' @param background Restrict background to particular biospecimen
+#' @param backgroundFile: File
+#' @parser multi
+#' @parser text
+#' @parser json
+#' @post /api/reaction-class-enrichment
+function(analytes = '', backgroundFile = '', background = '', backgroundType = "database") {
+  reaction_class_enrichment_df <- ''
+  if(backgroundFile == "") {
+    if(background == "") {
+      reaction_class_enrichment_df <- RaMP::runEnrichReactionClass(
+               analytes,
+      #  background = NULL,
+       # backgroundType= "database",
+        db = rampDB,
+      )
+    } else {
+      reaction_class_enrichment_df <- RaMP::runEnrichReactionClass(
+        analytes,
+       # background = background,
+       # backgroundType= "biospecimen",
+        db = rampDB
+      )
+    }
+  }
+  else {
+    bg <- gsub("\r\n", ",", backgroundFile)
+    background <- unlist(strsplit(bg, ','))
+    if(length(background) > length(analytes)) {
+      reaction_class_enrichment_df <- RaMP::runEnrichReactionClass(
+        analytes,
+       # background = background,
+       # backgroundType= "list",
+        db = rampDB
+      )
+    } else {
+      error <- function(cond) {
+        print(cond)
+        return(data.frame(stringsAsFactors = FALSE))
+      }
+    }
+  }
+  return(
+    list(
+      data = reaction_class_enrichment_df,
+      function_call = makeFunctionCall(analytes,"runEnrichReactionClass")
+    )
+  )
+}
+
 
 
 #' getReactionParticipants returns protein information for a list of reaction ids.

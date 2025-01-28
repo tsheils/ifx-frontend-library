@@ -1,9 +1,9 @@
 @for (grant of projects(); track grant.core_project_num) {
-  <div class="row centered-row">
-    <ncats-frontend-library-project-list-card
-      [grant]="grant"
-      (click)="navigate(grant.core_project_num)"
-      class="clickable-area"
-    ></ncats-frontend-library-project-list-card>
-  </div>
+<div class="row centered-row">
+  <ncats-frontend-library-project-list-card
+    [grant]="grant"
+    (click)="navigate(grant.core_project_num)"
+    class="clickable-area"
+  ></ncats-frontend-library-project-list-card>
+</div>
 }

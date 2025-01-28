@@ -4,8 +4,8 @@ import {
   ElementRef,
   OnInit,
   ViewChild,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
+} from '@angular/core'
+import { CommonModule } from '@angular/common'
 @Component({
   selector: 'lib-utils-animated-force-directed-graph',
   standalone: true,
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UtilsAnimatedForceDirectedGraphComponent implements OnInit {
-  @ViewChild('animatedFDG', { static: true }) graphElement!: ElementRef;
+  @ViewChild('animatedFDG', { static: true }) graphElement!: ElementRef
 
   ngOnInit() {
     if (this.graphElement) {

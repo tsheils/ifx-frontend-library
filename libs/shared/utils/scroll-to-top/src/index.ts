@@ -1,1 +1,1 @@
-export * from './lib/scroll-to-top/scroll-to-top.component';
+export * from './lib/scroll-to-top/scroll-to-top.component'

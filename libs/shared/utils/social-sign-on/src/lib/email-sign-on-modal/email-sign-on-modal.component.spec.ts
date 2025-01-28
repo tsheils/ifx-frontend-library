@@ -1,22 +1,22 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ReactiveFormsModule } from '@angular/forms'
+import { MatButtonModule } from '@angular/material/button'
+import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+import { MatFormFieldModule } from '@angular/material/form-field'
+import { MatIconModule } from '@angular/material/icon'
+import { MatInputModule } from '@angular/material/input'
+import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
-import { StoreModule } from '@ngrx/store';
+} from '@ncats-frontend-library/stores/user-store'
+import { StoreModule } from '@ngrx/store'
 
-import { EmailSignOnModalComponent } from './email-sign-on-modal.component';
+import { EmailSignOnModalComponent } from './email-sign-on-modal.component'
 
 describe('EmailSignOnModalComponent', () => {
-  let component: EmailSignOnModalComponent;
-  let fixture: ComponentFixture<EmailSignOnModalComponent>;
+  let component: EmailSignOnModalComponent
+  let fixture: ComponentFixture<EmailSignOnModalComponent>
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -36,14 +36,14 @@ describe('EmailSignOnModalComponent', () => {
         { provide: MatDialog, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
       ],
-    }).compileComponents();
+    }).compileComponents()
 
-    fixture = TestBed.createComponent(EmailSignOnModalComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    fixture = TestBed.createComponent(EmailSignOnModalComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
 
   it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+    expect(component).toBeTruthy()
+  })
+})

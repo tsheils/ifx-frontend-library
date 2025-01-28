@@ -2,52 +2,68 @@ extend schema @mutation(operations: [])
 scalar JSON
 
 type AssociatedEntity {
-	EntityClass: String!
-	EntityName: String!
-	EntityType: String!
-	associatedWithClinicalTrials: [ClinicalTrial!]! @relationship(type: "associated_with", direction: OUT)
+  EntityClass: String!
+  EntityName: String!
+  EntityType: String!
+  associatedWithClinicalTrials: [ClinicalTrial!]!
+    @relationship(type: "associated_with", direction: OUT)
 }
 
 type ClinicalTrial {
-	Acronym: String!
-	BriefSummary: String!
-	BriefTitle: String!
-	CompletionDate: String!
-	CompletionDateType: String!
-	DateCreatedRDAS: String!
-	IPDSharing: String!
-	IPDSharingAccessCriteria: String!
-	IPDSharingDescription: String!
-	IPDSharingTimeFrame: String!
-	LastKnownStatus: String!
-	LastUpdatePostDate: String!
-	LastUpdatePostDateType: String!
-	LastUpdateSubmitDate: String!
-	LastUpdatedRDAS: String!
-	NCTId: String!
-	OfficialTitle: String!
-	OverallStatus: String!
-	PatientRegistry: Boolean!
-	Phase: String
-	PrimaryCompletionDate: String!
-	PrimaryCompletionDateType: String!
-	ResultsFirstPostDate: String!
-	ResultsFirstPostDateType: String!
-	ResultsFirstPostedQCCommentsDate: String!
-	StartDate: String!
-	StartDateType: String!
-	StudyType: String!
-	associatedEntitiesassociatedWith: [AssociatedEntity!]! @relationship(type: "associated_with", direction: IN)
-	hasContactContacts: [Contact!]! @relationship(type: "has_contact", direction: OUT)
-	hasInterventionInterventions: [Intervention!]! @relationship(type: "has_intervention", direction: OUT)
-	hasOutcomePrimaryOutcomes: [PrimaryOutcome!]! @relationship(type: "has_outcome", direction: OUT)
-	hasParticipantInfoParticipants: [Participant!]! @relationship(type: "has_participant_info", direction: OUT)
-	hasStudyDesignStudyDesigns: [StudyDesign!]! @relationship(type: "has_study_design", direction: OUT)
-	inLocationsLocations: [Location!]! @relationship(type: "in_locations", direction: OUT)
-	investigatesConditionConditions: [Condition!]! @relationship(type: "investigates_condition", direction: OUT)
-	investigatorsinvestigates: [Investigator!]! @relationship(type: "investigates", direction: IN)
-	mappedToGardGards: [GARD!]! @relationship(type: "mapped_to_gard", direction: OUT, properties: "MappedToGardProperties")
-	referencesisAbout: [Reference!]! @relationship(type: "is_about", direction: IN)
+  Acronym: String!
+  BriefSummary: String!
+  BriefTitle: String!
+  CompletionDate: String!
+  CompletionDateType: String!
+  DateCreatedRDAS: String!
+  IPDSharing: String!
+  IPDSharingAccessCriteria: String!
+  IPDSharingDescription: String!
+  IPDSharingTimeFrame: String!
+  LastKnownStatus: String!
+  LastUpdatePostDate: String!
+  LastUpdatePostDateType: String!
+  LastUpdateSubmitDate: String!
+  LastUpdatedRDAS: String!
+  NCTId: String!
+  OfficialTitle: String!
+  OverallStatus: String!
+  PatientRegistry: Boolean!
+  Phase: String
+  PrimaryCompletionDate: String!
+  PrimaryCompletionDateType: String!
+  ResultsFirstPostDate: String!
+  ResultsFirstPostDateType: String!
+  ResultsFirstPostedQCCommentsDate: String!
+  StartDate: String!
+  StartDateType: String!
+  StudyType: String!
+  associatedEntitiesassociatedWith: [AssociatedEntity!]!
+    @relationship(type: "associated_with", direction: IN)
+  hasContactContacts: [Contact!]!
+    @relationship(type: "has_contact", direction: OUT)
+  hasInterventionInterventions: [Intervention!]!
+    @relationship(type: "has_intervention", direction: OUT)
+  hasOutcomePrimaryOutcomes: [PrimaryOutcome!]!
+    @relationship(type: "has_outcome", direction: OUT)
+  hasParticipantInfoParticipants: [Participant!]!
+    @relationship(type: "has_participant_info", direction: OUT)
+  hasStudyDesignStudyDesigns: [StudyDesign!]!
+    @relationship(type: "has_study_design", direction: OUT)
+  inLocationsLocations: [Location!]!
+    @relationship(type: "in_locations", direction: OUT)
+  investigatesConditionConditions: [Condition!]!
+    @relationship(type: "investigates_condition", direction: OUT)
+  investigatorsinvestigates: [Investigator!]!
+    @relationship(type: "investigates", direction: IN)
+  mappedToGardGards: [GARD!]!
+    @relationship(
+      type: "mapped_to_gard"
+      direction: OUT
+      properties: "MappedToGardProperties"
+    )
+  referencesisAbout: [Reference!]!
+    @relationship(type: "is_about", direction: IN)
 }
 
 type Condition {

@@ -1,14 +1,14 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   Component,
   input,
   output,
   ViewEncapsulation,
-} from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatIconModule } from '@angular/material/icon';
+} from '@angular/core'
+import { MatButtonModule } from '@angular/material/button'
+import { MatChipsModule } from '@angular/material/chips'
+import { MatIconModule } from '@angular/material/icon'
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-selected-filter-list',
@@ -20,40 +20,40 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SharedUtilsSelectedFilterListComponent {
-  filters = input<Map<string, string[]>>();
-  filterChange = output<{ label: string; values: string[] }[]>();
+  filters = input<Map<string, string[]>>()
+  filterChange = output<{ label: string; values: string[] }[]>()
 
   removeFilterFamily(family: string): void {
-    this.filters()?.set(family, []);
-    this.filterChange.emit(this._flattenMap());
+    this.filters()?.set(family, [])
+    this.filterChange.emit(this._flattenMap())
   }
 
   removeField(label: string, value: string): void {
     const vals = this.filters()
       ?.get(label)
-      ?.filter((val) => val !== value);
+      ?.filter((val) => val !== value)
     if (vals && vals.length) {
-      this.filters()?.set(label, vals);
+      this.filters()?.set(label, vals)
     } else {
-      this.removeFilterFamily(label);
+      this.removeFilterFamily(label)
     }
-    this.filterChange.emit(this._flattenMap());
+    this.filterChange.emit(this._flattenMap())
   }
 
   removeAll(): void {
-    this.filters()?.clear();
-    this.filterChange.emit(this._flattenMap());
+    this.filters()?.clear()
+    this.filterChange.emit(this._flattenMap())
   }
 
   _flattenMap(): { label: string; values: string[] }[] {
-    const ret: { label: string; values: string[] }[] = [];
-    [...this.filters()!.keys()].forEach((key) => {
-      let valuesArr = this.filters()?.get(key);
+    const ret: { label: string; values: string[] }[] = []
+    ;[...this.filters()!.keys()].forEach((key) => {
+      let valuesArr = this.filters()?.get(key)
       if (!valuesArr) {
-        valuesArr = [];
+        valuesArr = []
       }
-      ret.push({ label: key, values: valuesArr });
-    });
-    return ret;
+      ret.push({ label: key, values: valuesArr })
+    })
+    return ret
   }
 }

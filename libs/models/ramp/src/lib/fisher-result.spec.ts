@@ -1,4 +1,4 @@
-import { FisherResult } from './fisher-result';
+import { FisherResult } from './fisher-result'
 
 describe('FisherResult', () => {
   it('should create an instance', () => {
@@ -14,7 +14,7 @@ describe('FisherResult', () => {
         pathwayName: 'Glycine, serine and threonine metabolism',
         pathwaySource: 'kegg',
         pathwayId: 'map00260',
-      }),
-    ).toBeTruthy();
-  });
-});
+      })
+    ).toBeTruthy()
+  })
+})

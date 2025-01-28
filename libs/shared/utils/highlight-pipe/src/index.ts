@@ -1,1 +1,1 @@
-export * from './lib/highlight.pipe';
+export * from './lib/highlight.pipe'

@@ -40,9 +40,9 @@ describe.skip('RdasHomeComponent', () => {
     fixture = TestBed.createComponent(RdasHomeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();*/
-  });
+  })
 
   it('should create', () => {
     //  expect(component).toBeTruthy();
-  });
-});
+  })
+})

@@ -1,1 +1,1 @@
-export * from './lib/loading-spinner/loading-spinner.component';
+export * from './lib/loading-spinner/loading-spinner.component'

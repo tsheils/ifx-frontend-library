@@ -1,1 +1,1 @@
-export * from './lib/rdas-tree/rdas-tree.component';
+export * from './lib/rdas-tree/rdas-tree.component'

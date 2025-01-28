@@ -1,20 +1,20 @@
 export class Reference {
-  code!: string;
-  url!: string;
+  code!: string
+  url!: string
 
   constructor(obj: Partial<Reference> = {}) {
-    Object.assign(this, obj);
+    Object.assign(this, obj)
 
     if (obj.code) {
-      const split = obj.code.split(':');
+      const split = obj.code.split(':')
       this.url = REFERENCELOOKUP.filter(
-        (ref) => ref.origin == split[0],
-      )[0].url.concat(split[1]);
+        (ref) => ref.origin == split[0]
+      )[0].url.concat(split[1])
     }
   }
 
   _toString() {
-    return this.code + ' | ' + this.url;
+    return this.code + ' | ' + this.url
   }
 }
 
@@ -26,4 +26,4 @@ const REFERENCELOOKUP = [
     url: 'https://www.orpha.net/consor/cgi-bin/OC_Exp.php?Expert=',
   },
   { origin: 'PMID', url: 'https://pubmed.ncbi.nlm.nih.gov/' },
-];
+]

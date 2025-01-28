@@ -1,10 +1,10 @@
-import { DomSanitizer } from '@angular/platform-browser';
-import { TestBed, inject, waitForAsync } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser'
+import { TestBed, inject, waitForAsync } from '@angular/core/testing'
 
-import { HighlightPipe } from './highlight.pipe';
+import { HighlightPipe } from './highlight.pipe'
 
 describe('AutoComplete Component - Highlight pipe', () => {
-  let pipe: HighlightPipe;
+  let pipe: HighlightPipe
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -17,22 +17,22 @@ describe('AutoComplete Component - Highlight pipe', () => {
         },
         HighlightPipe,
       ],
-    });
-  }));
+    })
+  }))
 
   beforeEach(inject([HighlightPipe], (p: HighlightPipe) => {
-    pipe = p;
-  }));
+    pipe = p
+  }))
 
   it('highlights search term in the text', () => {
-    const result = pipe.transform('search text', 'text');
+    const result = pipe.transform('search text', 'text')
     expect(result).toBe(
-      'search <span style="font-weight:900;" class="search-highlight">text</span>',
-    );
-  });
+      'search <span style="font-weight:900;" class="search-highlight">text</span>'
+    )
+  })
 
   it('should return same text', () => {
-    const result = pipe.transform('search text', '');
-    expect(result).toBe('search text');
-  });
-});
+    const result = pipe.transform('search text', '')
+    expect(result).toBe('search text')
+  })
+})

@@ -8,20 +8,16 @@
   </mat-form-field>
 </div>
 <div class="grid-list">
-  @for (
-    ontology of filteredOntologies();
-    track ontology.label
-  ) {
-    @if (ontology.label) {
-      <ncats-frontend-library-shared-utils-filter-panel
-        #filterPanel
-        [filter]="ontology"
-        [fullList]="true"
-        (filterSelectionChange)="setValues($event)"
-        (filterChange)="filterChange($event)"
-      ></ncats-frontend-library-shared-utils-filter-panel>
-    }
-  }
+  @for ( ontology of filteredOntologies(); track ontology.label ) { @if
+  (ontology.label) {
+  <ncats-frontend-library-shared-utils-filter-panel
+    #filterPanel
+    [filter]="ontology"
+    [fullList]="true"
+    (filterSelectionChange)="setValues($event)"
+    (filterChange)="filterChange($event)"
+  ></ncats-frontend-library-shared-utils-filter-panel>
+  } }
   <div>
     <button
       mat-flat-button

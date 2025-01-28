@@ -1,4 +1,4 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common'
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -8,8 +8,8 @@ import {
   PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
-} from '@angular/core';
-import SwaggerUI from 'swagger-ui';
+} from '@angular/core'
+import SwaggerUI from 'swagger-ui'
 
 @Component({
   selector: 'ramp-ramp-api',
@@ -21,20 +21,20 @@ import SwaggerUI from 'swagger-ui';
   imports: [],
 })
 export class RampApiComponent implements AfterViewInit {
-  @ViewChild('documentation') el!: ElementRef;
+  @ViewChild('documentation') el!: ElementRef
 
-  isBrowser: boolean;
-  url = '/assets/data/ramp-api.json';
+  isBrowser: boolean
+  url = '/assets/data/ramp-api.json'
 
   constructor(@Inject(PLATFORM_ID) platformId: object) {
-    this.isBrowser = isPlatformBrowser(platformId);
+    this.isBrowser = isPlatformBrowser(platformId)
   }
   ngAfterViewInit() {
     if (this.isBrowser) {
       SwaggerUI({
         url: this.url,
         domNode: this.el.nativeElement,
-      });
+      })
     }
   }
 }

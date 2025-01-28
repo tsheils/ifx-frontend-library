@@ -1,4 +1,4 @@
-import { ChemicalEnrichment } from './chemical-enrichment';
+import { ChemicalEnrichment } from './chemical-enrichment'
 
 describe('ChemicalEnrichment', () => {
   it('should create an instance', () => {
@@ -12,7 +12,7 @@ describe('ChemicalEnrichment', () => {
         'p-value': 1.2086e-13,
         pop_hits: 4270,
         pop_size: 145833,
-      }),
-    ).toBeTruthy();
-  });
-});
+      })
+    ).toBeTruthy()
+  })
+})

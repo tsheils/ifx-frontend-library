@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'stores-trial-store',
   preset: '../../../jest.preset.js',
@@ -19,4 +18,4 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment',
   ],
-};
+}

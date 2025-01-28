@@ -1,8 +1,9 @@
-const nxPreset = require('@nx/jest/preset').default;
+const nxPreset = require('@nx/jest/preset').default
 
 module.exports = {
   ...nxPreset,
   setupFiles: ['./jest.polyfills.js'],
+  setupFilesAfterEnv: ['./jest.setup.ts'],
   testPathIgnorePatterns: ['<rootDir>/src/environments/'],
   transformIgnorePatterns: [
     'node_modules/?!d3-(selection|axis|scale|format|array|shape)',
@@ -12,6 +13,6 @@ module.exports = {
     d3: 'node_modules/d3/dist/d3.min.js',
   },
   async setup() {
-    await super.setup();
+    await super.setup()
   },
-};
+}

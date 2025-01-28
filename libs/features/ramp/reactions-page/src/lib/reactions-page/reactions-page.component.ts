@@ -6,23 +6,23 @@ import {
   OnInit,
   signal,
   ViewEncapsulation,
-} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { MatSnackBar } from '@angular/material/snack-bar';
+} from '@angular/core'
+import { CommonModule } from '@angular/common'
+import { MatSnackBar } from '@angular/material/snack-bar'
 import {
   MatTab,
   MatTabContent,
   MatTabGroup,
   MatTabLabel,
-} from '@angular/material/tabs';
+} from '@angular/material/tabs'
 import {
   DataMap,
   DataProperty,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
-import { PanelAccordionComponent } from 'panel-accordion';
-import { CommonAnalyte, ReactionClass } from 'ramp';
+} from '@ncats-frontend-library/models/utils'
+import { PanelAccordionComponent } from 'panel-accordion'
+import { CommonAnalyte, RampResponse, ReactionClass } from 'ramp'
 import {
   GraphData,
   GraphLink,
@@ -30,21 +30,22 @@ import {
   HierarchyNode,
   UpsetData,
   UpsetPlot,
-} from '@ncats-frontend-library/models/utils';
-import { RampCorePageComponent } from 'ramp-core-page';
-import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend';
+} from '@ncats-frontend-library/models/utils'
+import { RampCorePageComponent } from 'ramp-core-page'
+import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend'
 import {
   CommonReactionAnalyteActions,
   RampSelectors,
+  ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
   ReactionsFromAnalytesActions,
-} from 'ramp-store';
+} from 'ramp-store'
 import {
   RampSunburstTooltipComponent,
   SUNBURST_TOOLTIP,
-} from 'ramp-sunburst-tooltip';
-import { SunburstChartService } from 'sunburst-chart';
-import { ForceDirectedGraphService } from 'utils-force-directed-graph';
+} from 'ramp-sunburst-tooltip'
+import { SunburstChartService } from 'sunburst-chart'
+import { ForceDirectedGraphService } from 'utils-force-directed-graph'
 
 @Component({
   selector: 'lib-reactions-page',
@@ -76,9 +77,9 @@ export class ReactionsPageComponent
   extends RampCorePageComponent
   implements OnInit
 {
-  sunburstChartService = inject(SunburstChartService);
-  forceDirectedGraphService = inject(ForceDirectedGraphService);
-  _snackBar = inject(MatSnackBar);
+  sunburstChartService = inject(SunburstChartService)
+  forceDirectedGraphService = inject(ForceDirectedGraphService)
+  _snackBar = inject(MatSnackBar)
 
   override dataColumns: DataProperty[] = [
     new DataProperty({
@@ -109,7 +110,7 @@ export class ReactionsPageComponent
       label: 'Source',
       field: 'source',
     }),
-  ];
+  ]
   reactionFromAnalyteColumns: DataProperty[] = [
     new DataProperty({
       label: 'Metabolite Id',
@@ -151,7 +152,7 @@ export class ReactionsPageComponent
       field: 'isTransport',
       sortable: true,
     }),
-  ];
+  ]
   reactionClassColumns: DataProperty[] = [
     new DataProperty({
       label: 'Reaction Class',
@@ -183,223 +184,351 @@ export class ReactionsPageComponent
       field: 'totalReactionAverage',
       sortable: false,
     }),
-  ];
+  ]
+  reactionClassEnrichmentColumns: DataProperty[] = [
+    new DataProperty({
+      label: 'Reaction Class',
+      field: 'rxnClass',
+      sortable: true,
+    }),
+    new DataProperty({
+      label: 'EC Number',
+      field: 'ecNumber',
+      sortable: true,
+    }),
+    new DataProperty({
+      label: 'FDR Pval',
+      field: 'Pval_FDR',
+      sortable: true,
+      displayType: 'number',
+    }),
+    new DataProperty({
+      label: 'Holm Pval',
+      field: 'Pval_Holm',
+      sortable: true,
+      displayType: 'number',
+    }),
+    new DataProperty({
+      label: 'Combined Pval',
+      field: 'Pval_combined',
+      sortable: true,
+      displayType: 'number',
+    }),
+    new DataProperty({
+      label: 'Metabolite Pval',
+      field: 'Pval_Metab',
+      sortable: true,
+      displayType: 'number',
+    }),
+    new DataProperty({
+      label: 'Metabolite Odds Ratio',
+      field: 'Metab_OR',
+      sortable: true,
+      displayType: 'number',
+    }),
+    new DataProperty({
+      label: 'Protein Pval',
+      field: 'Pval_Prot',
+      sortable: true,
+      displayType: 'number',
+    }),
+    new DataProperty({
+      label: 'Protein Odds Ratio',
+      field: 'Prot_OR',
+      sortable: true,
+      displayType: 'number',
+    }),
+  ]
 
-  hoveredNode = signal<ReactionClass | undefined>(undefined);
-  textLabel = signal<string | undefined>(undefined);
+  hoveredNode = signal<ReactionClass | undefined>(undefined)
+  textLabel = signal<string | undefined>(undefined)
 
   nodeShapes = {
     met: 'circle',
     protein: 'rect',
     gene: 'rect',
-  };
+  }
 
   edgeColors = {
     hmdb: '#ca1f7c',
     rhea: '#cc5501',
     both: '#0e8080',
-  };
+  }
 
   edgeTypes = {
     met2gene: 'Metabolite to Gene',
     gene2met: 'Gene to Metabolite',
     met2protein: 'Metabolite to Protein',
     protein2met: 'Protein to Metabolite',
-  };
+  }
 
-  reactionClasses = this.store.selectSignal(RampSelectors.getReactionClasses);
-  commonReactions = this.store.selectSignal(RampSelectors.getCommonReactions);
-  reactionsFromAnalytes = this.store.selectSignal(RampSelectors.getReactions);
-
-  matches = computed(() =>
-    Array.from(
-      new Set(
-        this.commonReactions()?.data.map((reaction) =>
-          reaction.inputAnalyte.toLocaleLowerCase(),
-        ),
-      ),
-    ),
-  );
-  noMatches = computed(() =>
-    this.inputList.filter(
-      (p: string) => !this.matches().includes(p.toLocaleLowerCase()),
-    ),
-  );
+  reactionClasses = this.store.selectSignal(RampSelectors.getReactionClasses)
+  commonReactions = this.store.selectSignal(RampSelectors.getCommonReactions)
+  reactionsFromAnalytes = this.store.selectSignal(RampSelectors.getReactions)
+  reactionClassEnrichment = this.store.selectSignal(
+    RampSelectors.getReactionClassEnrichment
+  )
 
   override dataMap = computed(() => {
-    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
-    const field = <string>this.activeTab();
-    let ret!: { [p: string]: Map<string, DataMap> };
-    const reactionsFromAnalytesData = this.reactionsFromAnalytes()?.data;
-    if (reactionsFromAnalytesData) {
-      returnDataMap.set('Reactions from Analytes', {
-        data: this.reactionsFromAnalytes()?.dataAsDataProperty,
-        fields: this.reactionFromAnalyteColumns,
-        dataframe: reactionsFromAnalytesData,
-        fileName: 'fetchReactionsFromAnalytes-download.tsv',
-        loaded: !!reactionsFromAnalytesData,
-      } as DataMap);
+    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>()
+    const field = <string>this.activeTab()
+    let ret!: { [p: string]: Map<string, DataMap> }
+    console.log(field)
+    switch (field) {
+      case 'rhea-reactions-from-analytes': {
+        const reactionsFromAnalytesData = this.reactionsFromAnalytes()?.data
+        if (reactionsFromAnalytesData) {
+          returnDataMap.set('Rhea Reactions from Analytes', {
+            data: this.reactionsFromAnalytes()?.dataAsDataProperty,
+            fields: this.reactionFromAnalyteColumns,
+            dataframe: reactionsFromAnalytesData,
+            fileName: 'fetchReactionsFromAnalytes-download.tsv',
+            loaded: !!reactionsFromAnalytesData,
+          } as DataMap)
+        }
+        break
+      }
+      case 'reaction-classes-from-analytes': {
+        const reactionClassesData = this.reactionClasses()?.dataAsDataProperty
+        if (reactionClassesData) {
+          returnDataMap.set('Reaction Classes', {
+            data: this.reactionClasses()?.dataAsDataProperty,
+            fields: this.reactionClassColumns,
+            fileName: 'fetchreactionClassesFromAnalytes-download.tsv',
+            filters: this.filtersMap(),
+            loaded: !!reactionClassesData,
+          })
+        }
+        break
+      }
+      case 'common-reaction-analytes': {
+        const commonReactionsData = this.commonReactions()?.dataAsDataProperty
+        if (commonReactionsData) {
+          returnDataMap.set('Common Reactions', {
+            data: this.commonReactions()?.dataAsDataProperty,
+            fields: this.dataColumns,
+            fileName: 'fetchcommonReactionsFromAnalytes-download.tsv',
+            filters: this.filtersMap(),
+            loaded: !!commonReactionsData,
+          })
+        }
+        break
+      }
+      case 'reaction-class-enrichment': {
+        console.log(this.reactionClassEnrichment())
+        const reactionClassEnrichmentData =
+          this.reactionClassEnrichment()?.dataAsDataProperty
+        if (reactionClassEnrichmentData) {
+          returnDataMap.set('Reaction Class Enrichment', {
+            data: this.reactionClassEnrichment()?.dataAsDataProperty,
+            fields: this.reactionClassEnrichmentColumns,
+            fileName: 'reactionClassEnrichment-download.tsv',
+            filters: this.filtersMap(),
+            loaded: !!reactionClassEnrichmentData,
+          })
+        }
+        break
+      }
     }
-    const reactionClassesData = this.reactionClasses()?.dataAsDataProperty;
-    if (reactionClassesData) {
-      returnDataMap.set('Reaction Classes', {
-        data: this.reactionClasses()?.dataAsDataProperty,
-        fields: this.reactionClassColumns,
-        fileName: 'fetchreactionClassesFromAnalytes-download.tsv',
-        filters: this.filtersMap(),
-        loaded: !!reactionClassesData,
-      });
-    }
-
-    const commonReactionsData = this.commonReactions()?.dataAsDataProperty;
-    if (commonReactionsData) {
-      returnDataMap.set('Common Reactions', {
-        data: this.commonReactions()?.dataAsDataProperty,
-        fields: this.dataColumns,
-        fileName: 'fetchcommonReactionsFromAnalytes-download.tsv',
-        filters: this.filtersMap(),
-        loaded: !!commonReactionsData,
-      });
-    }
-
     if (returnDataMap.size) {
-      ret = { [field]: returnDataMap };
+      ret = { [field]: returnDataMap }
     }
-    return ret;
-  });
+    return ret
+  })
 
   override visualizationsMap = computed(() => {
-    const visualizationMapComputed = new Map<string, VisualizationMap[]>();
-    const reactionsPlot = this.reactionsFromAnalytes()?.plot;
-    if (reactionsPlot) {
-      visualizationMapComputed.set('Reaction Type Overlap', [
-        {
-          type: 'upset',
-          data: {
-            plot: new UpsetPlot(this._mapToUpset(reactionsPlot)),
-          } as GraphData,
-        },
-      ] as VisualizationMap[]);
-    }
-
-    const reactionClassHierarchyData = this.reactionClasses()?.data.filter(
-      (c) => c.reactionCount > 0,
-    );
-    if (reactionClassHierarchyData) {
-      const graphData: GraphData = {
-        values: this._mapToHierarchy(reactionClassHierarchyData),
-      } as GraphData;
-      visualizationMapComputed.set('Reaction Classes', [
-        { type: 'sunburst', data: graphData },
-        { type: 'tree', data: graphData },
-      ]);
-    }
-
-    const commonReactionGraphData = this.commonReactions()?.data;
-    if (commonReactionGraphData) {
-      const commonReactionNetwork = {
-        graph: this._mapToGraph(commonReactionGraphData),
-      } as GraphData;
-      visualizationMapComputed.set('Common Analyte Network', [
-        { type: 'graph', data: commonReactionNetwork },
-      ]);
+    const visualizationMapComputed = new Map<string, VisualizationMap[]>()
+    const field = <string>this.activeTab()
+    switch (field) {
+      case 'rhea-reactions-from-analytes': {
+        const reactionsPlot = this.reactionsFromAnalytes()?.plot
+        if (reactionsPlot) {
+          visualizationMapComputed.set('Reaction Type Overlap', [
+            {
+              type: 'upset',
+              data: {
+                plot: new UpsetPlot(this._mapToUpset(reactionsPlot)),
+              } as GraphData,
+            },
+          ] as VisualizationMap[])
+        }
+        break
+      }
+      case 'reaction-classes-from-analytes': {
+        const reactionClassHierarchyData = this.reactionClasses()?.data.filter(
+          (c) => c.reactionCount > 0
+        )
+        if (reactionClassHierarchyData) {
+          const graphData: GraphData = {
+            values: this._mapToHierarchy(reactionClassHierarchyData),
+          } as GraphData
+          visualizationMapComputed.set('Reaction Classes', [
+            { type: 'sunburst', data: graphData },
+            { type: 'tree', data: graphData },
+          ])
+        }
+        break
+      }
+      case 'common-reaction-analytes': {
+        const commonReactionGraphData = this.commonReactions()?.data
+        if (commonReactionGraphData) {
+          const commonReactionNetwork = {
+            graph: this._mapToGraph(commonReactionGraphData),
+          } as GraphData
+          visualizationMapComputed.set('Common Analyte Network', [
+            { type: 'graph', data: commonReactionNetwork },
+          ])
+        }
+        break
+      }
     }
 
     if (visualizationMapComputed.size) {
-      const field = <string>this.activeTab();
-      return { [field]: visualizationMapComputed };
-    } else return undefined;
-  });
+      const field = <string>this.activeTab()
+      return { [field]: visualizationMapComputed }
+    } else return undefined
+  })
 
   override overviewMap = computed(() => {
-    const field = <string>this.activeTab();
-    let ret!: { [p: string]: QueryResultsData };
-    if (this.reactionsFromAnalytes()?.data) {
-      ret = {
-        [field]: {
-          matches: this.reactionsFromAnalytes()?.query?.matches,
-          noMatches: this.reactionsFromAnalytes()?.query?.noMatches,
-          count: this.reactionsFromAnalytes()?.data.length,
-          inputLength: this.inputList.length,
-          inputType: 'analytes',
-        } as QueryResultsData,
-      };
+    const field = <string>this.activeTab()
+    let ret!: { [p: string]: QueryResultsData }
+    switch (field) {
+      case 'rhea-reactions-from-analytes': {
+        if (this.reactionsFromAnalytes()?.data) {
+          ret = {
+            [field]: {
+              matches: this.reactionsFromAnalytes()?.query?.matches,
+              noMatches: this.reactionsFromAnalytes()?.query?.noMatches,
+              count: this.reactionsFromAnalytes()?.data.length,
+              inputLength: this.inputList.length,
+              inputType: 'analytes',
+            } as QueryResultsData,
+          }
+        }
+        break
+      }
+      case 'reaction-classes-from-analytes': {
+        if (this.reactionClasses()?.data) {
+          ret = {
+            [field]: {
+              matches: this.reactionClasses()?.query?.matches,
+              noMatches: this.reactionClasses()?.query?.noMatches,
+              count: this.reactionClasses()?.data.length,
+              inputLength: this.inputList.length,
+              inputType: 'analytes',
+            } as QueryResultsData,
+          }
+        }
+        break
+      }
+      case 'common-reaction-analytes': {
+        if (this.commonReactions()?.data) {
+          ret = {
+            [field]: {
+              matches: this.commonReactions()?.query?.matches,
+              noMatches: this.commonReactions()?.query?.noMatches,
+              count: this.commonReactions()?.data.length,
+              inputLength: this.inputList.length,
+              inputType: 'analytes',
+            } as QueryResultsData,
+          }
+        }
+        break
+      }
     }
-    return ret;
-  });
+    return ret
+  })
 
   constructor() {
-    super();
+    super()
   }
 
   ngOnInit() {
-    this.sunburstChartService.customComponent = SUNBURST_TOOLTIP;
-    this.forceDirectedGraphService.customComponent = GRAPH_LEGEND;
+    this.sunburstChartService.customComponent = SUNBURST_TOOLTIP
+    this.forceDirectedGraphService.customComponent = GRAPH_LEGEND
 
     this.sunburstChartService.nodeHovered.subscribe((value) => {
       if (value) {
-        const term = value.node.term;
-        const node = this.reactionClasses()!.data.filter(
-          (prop) => prop.rxnClass === term,
-        )[0];
-        this.hoveredNode.set(node);
-        this.sunburstChartService.reactionNode.set(node);
+        const term = value.node.term
+        const reactionClasses = this.reactionClasses() as RampResponse<ReactionClass>
+        const node = reactionClasses.data.filter(
+          (prop) => prop.rxnClass === term
+        )[0]
+        this.hoveredNode.set(node)
+        this.sunburstChartService.reactionNode.set(node)
       } else {
         //  this.hoveredNode.set(value);
       }
-    });
+    })
     this.forceDirectedGraphService.nodeClicked.subscribe((res) => {
-      const allData = this.commonReactions()?.dataAsDataProperty;
+      const allData = this.commonReactions()?.dataAsDataProperty
       if (allData && res) {
         const filteredData = allData?.filter(
           (commonAnalye) =>
             commonAnalye['inputAnalyte'].value === res?.id ||
-            commonAnalye['rxnPartnerCommonName'].value === res?.id,
-        );
+            commonAnalye['rxnPartnerCommonName'].value === res?.id
+        )
         this.forceDirectedGraphService.analyteData.set({
           data: filteredData,
           fields: this.dataColumns,
-        });
+        })
       }
-    });
+    })
   }
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string,
+    origin: string
   ): void {
-    this.activeTab.set(origin);
-    this.inputList = this._parseInput(
-      formData['analytes'] as string | string[],
-    );
-    this.store.dispatch(
-      CommonReactionAnalyteActions.fetchCommonReactionAnalytes({
-        analytes: this.inputList,
-      }),
-    );
-    this.store.dispatch(
-      ReactionsFromAnalytesActions.fetchReactionsFromAnalytes({
-        analytes: this.inputList,
-      }),
-    );
-    this.store.dispatch(
-      ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes({
-        analytes: this.inputList,
-      }),
-    );
+    this.activeTab.set(origin)
+    this.inputList = this._parseInput(formData['analytes'] as string | string[])
+    switch (origin) {
+      case 'rhea-reactions-from-analytes': {
+        this.store.dispatch(
+          ReactionsFromAnalytesActions.fetchReactionsFromAnalytes({
+            analytes: this.inputList,
+          })
+        )
+        break
+      }
+      case 'reaction-classes-from-analytes': {
+        this.store.dispatch(
+          ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes({
+            analytes: this.inputList,
+          })
+        )
+        break
+      }
+      case 'common-reaction-analytes': {
+        this.store.dispatch(
+          CommonReactionAnalyteActions.fetchCommonReactionAnalytes({
+            analytes: this.inputList,
+          })
+        )
+        break
+      }
+      case 'reaction-class-enrichment': {
+        this.store.dispatch(
+          ReactionClassEnrichmentsActions.fetchReactionClassEnrichment({
+            analytes: this.inputList,
+          })
+        )
+        break
+      }
+    }
   }
 
   private _mapToHierarchy(classes: ReactionClass[]): HierarchyNode[] {
-    let hierarchyArr: HierarchyNode[] = [];
+    let hierarchyArr: HierarchyNode[] = []
     const sortedClasses: Map<number, HierarchyNode[]> = new Map<
       number,
       HierarchyNode[]
-    >();
+    >()
 
     classes.forEach((reactionClass) => {
       const level = sortedClasses.get(
-        reactionClass.classLevel,
-      ) as HierarchyNode[];
+        reactionClass.classLevel
+      ) as HierarchyNode[]
       const rxnClass = {
         term: reactionClass.rxnClass,
         count: reactionClass.reactionCount,
@@ -408,50 +537,49 @@ export class ReactionsPageComponent
           reactionClass.hierarchyArray.length > 1
             ? reactionClass.hierarchyArray[reactionClass.classLevel - 2]
             : undefined,
-      } as HierarchyNode;
+      } as HierarchyNode
       if (level) {
-        level.push(rxnClass);
-        sortedClasses.set(reactionClass.classLevel, level);
+        level.push(rxnClass)
+        sortedClasses.set(reactionClass.classLevel, level)
       } else {
-        sortedClasses.set(reactionClass.classLevel, [rxnClass]);
+        sortedClasses.set(reactionClass.classLevel, [rxnClass])
       }
-    });
+    })
     if ([...sortedClasses.keys()].length - 1 > 0) {
-      [...sortedClasses.keys()].reverse().forEach((key) => {
+      ;[...sortedClasses.keys()].reverse().forEach((key) => {
         if (key - 1 > 0) {
-          const bottom = sortedClasses.get(key) as HierarchyNode[];
-          const next = sortedClasses.get(key - 1) as HierarchyNode[];
+          const bottom = sortedClasses.get(key) as HierarchyNode[]
+          const next = sortedClasses.get(key - 1) as HierarchyNode[]
           const nextMap: Map<string, HierarchyNode> = new Map<
             string,
             HierarchyNode
-          >();
+          >()
           next.forEach((node) => {
-            nextMap.set(<string>node.term, node as HierarchyNode);
-          });
-          const retMap = this._mapParent(nextMap, bottom);
-          hierarchyArr = [...retMap.values()];
+            nextMap.set(<string>node.term, node as HierarchyNode)
+          })
+          const retMap = this._mapParent(nextMap, bottom)
+          hierarchyArr = [...retMap.values()]
         }
-      });
+      })
     }
-    return hierarchyArr;
+    return hierarchyArr
   }
 
   private _mapParent(map: Map<string, HierarchyNode>, nodes: HierarchyNode[]) {
     nodes.forEach((node) => {
-      const parent = map.get(node.parent as string) as HierarchyNode;
+      const parent = map.get(node.parent as string) as HierarchyNode
       if (parent.children) {
-        parent.children.push(node);
+        parent.children.push(node)
       } else {
-        parent.children = [node];
+        parent.children = [node]
       }
-      map.set(parent.term, parent);
-    });
-    return map;
+      map.set(parent.term, parent)
+    })
+    return map
   }
 
   private _mapColor(node: ReactionClass) {
-    const index = ((<unknown>node.ecNumber[0]) as number) - 1;
-    const level = node.classLevel;
+    const index = ((<unknown>node.ecNumber[0]) as number) - 1
     const colors = [
       ['#6E899CCC'],
       ['#DC587DCC'],
@@ -460,20 +588,20 @@ export class ReactionsPageComponent
       ['#FE00CECC'],
       ['#B68E00CC'],
       ['#FC6955CC'],
-    ];
+    ]
 
-    return colors[index][0];
+    return colors[index][0]
   }
 
   private _mapToGraph(data: CommonAnalyte[]) {
-    const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
-    const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>();
-    let nodes: GraphNode[] = [];
-    const links: GraphLink[] = [];
+    const sourceNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>()
+    const targetNodeMap: Map<string, GraphNode> = new Map<string, GraphNode>()
+    let nodes: GraphNode[] = []
+    const links: GraphLink[] = []
     data.forEach((analyte) => {
-      let sourceNode = sourceNodeMap.get(analyte.inputAnalyte);
-      let targetNode = targetNodeMap.get(analyte.rxnPartnerCommonName);
-      const types = analyte.queryRelation.split(`2`);
+      let sourceNode = sourceNodeMap.get(analyte.inputAnalyte)
+      let targetNode = targetNodeMap.get(analyte.rxnPartnerCommonName)
+      const types = analyte.queryRelation.split(`2`)
       if (!sourceNode) {
         sourceNode = new GraphNode({
           id: analyte.inputAnalyte,
@@ -481,8 +609,8 @@ export class ReactionsPageComponent
           color: '#000000',
           extraClass: 'inputNode',
           shape: this.nodeShapes[types[0] as keyof typeof this.nodeShapes],
-        });
-        sourceNodeMap.set(analyte.inputAnalyte, sourceNode);
+        })
+        sourceNodeMap.set(analyte.inputAnalyte, sourceNode)
       }
       if (!targetNode) {
         targetNode = new GraphNode({
@@ -490,8 +618,8 @@ export class ReactionsPageComponent
           label: analyte.rxnPartnerCommonName,
           color: '#e6f1f9',
           shape: this.nodeShapes[types[1] as keyof typeof this.nodeShapes],
-        });
-        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode);
+        })
+        targetNodeMap.set(analyte.rxnPartnerCommonName, targetNode)
       }
       links.push(
         new GraphLink({
@@ -506,71 +634,71 @@ export class ReactionsPageComponent
           type: this.edgeTypes[
             analyte.queryRelation as keyof typeof this.edgeTypes
           ],
-        }),
-      );
-    });
-    nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()];
-    return { nodes: nodes, links: links };
+        })
+      )
+    })
+    nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()]
+    return { nodes: nodes, links: links }
   }
 
   private _mapToUpset(
-    data: { id: string; sets: string[]; size: number }[],
+    data: { id: string; sets: string[]; size: number }[]
   ): UpsetData[] {
-    const upsetMap = this._ArrayToUpsetMap(data);
-    const upsetData = this._mapToUpsetData(upsetMap);
-    const distinctUpsetData = this._upsetArrayToDistinctSetData(upsetData);
-    return distinctUpsetData;
+    const upsetMap = this._ArrayToUpsetMap(data)
+    const upsetData = this._mapToUpsetData(upsetMap)
+    const distinctUpsetData = this._upsetArrayToDistinctSetData(upsetData)
+    return distinctUpsetData
   }
 
   private _ArrayToUpsetMap(
-    data: { id: string; sets: string[]; size: number }[],
+    data: { id: string; sets: string[]; size: number }[]
   ) {
-    const setsMap: Map<string, string[]> = new Map<string, string[]>();
+    const setsMap: Map<string, string[]> = new Map<string, string[]>()
     data.forEach((level) => {
       level.sets.forEach((set) => {
-        const levelSet = setsMap.get(set);
+        const levelSet = setsMap.get(set)
         if (!levelSet) {
-          setsMap.set(set, [level.id]);
+          setsMap.set(set, [level.id])
         } else {
-          levelSet.push(level.id);
-          setsMap.set(set, [...new Set(levelSet)]);
+          levelSet.push(level.id)
+          setsMap.set(set, [...new Set(levelSet)])
         }
-      });
-    });
-    return setsMap;
+      })
+    })
+    return setsMap
   }
 
   private _mapToUpsetData(upsetMap: Map<string, string[]>) {
-    const retData: { id: string; sets: string[]; size: number }[] = [];
+    const retData: { id: string; sets: string[]; size: number }[] = []
 
-    [...upsetMap.entries()].forEach(([key, value]) => {
-      retData.push({ id: key, sets: value, size: value.length });
-    });
-    return retData.sort((a, b) => b.size - a.size);
+    ;[...upsetMap.entries()].forEach(([key, value]) => {
+      retData.push({ id: key, sets: value, size: value.length })
+    })
+    return retData.sort((a, b) => b.size - a.size)
   }
 
   private _upsetArrayToDistinctSetData(
-    upsetArray: { id: string; sets: string[]; size: number }[],
+    upsetArray: { id: string; sets: string[]; size: number }[]
   ) {
-    const distinctMap: Map<string, string[]> = new Map<string, string[]>();
+    const distinctMap: Map<string, string[]> = new Map<string, string[]>()
     upsetArray.forEach((set) => {
-      const setString = set.sets.join(', ');
-      const levelSet = distinctMap.get(setString);
+      const setString = set.sets.join(', ')
+      const levelSet = distinctMap.get(setString)
       if (!levelSet) {
-        distinctMap.set(setString, [set.id]);
+        distinctMap.set(setString, [set.id])
       } else {
-        levelSet.push(set.id);
-        distinctMap.set(setString, [...new Set(levelSet)]);
+        levelSet.push(set.id)
+        distinctMap.set(setString, [...new Set(levelSet)])
       }
-    });
+    })
 
-    const retData: UpsetData[] = [];
+    const retData: UpsetData[] = []
 
-    [...distinctMap.entries()].forEach(([key, value]) => {
+    ;[...distinctMap.entries()].forEach(([key, value]) => {
       retData.push(
-        new UpsetData({ id: key, sets: key.split(', '), size: value.length }),
-      );
-    });
-    return retData.sort((a, b) => b.size - a.size);
+        new UpsetData({ id: key, sets: key.split(', '), size: value.length })
+      )
+    })
+    return retData.sort((a, b) => b.size - a.size)
   }
 }

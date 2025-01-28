@@ -1,27 +1,27 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'
 import {
   ChangeDetectionStrategy,
   Component,
   computed,
   ViewEncapsulation,
-} from '@angular/core';
-import { MatDialogRef } from '@angular/material/dialog';
-import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
+} from '@angular/core'
+import { MatDialogRef } from '@angular/material/dialog'
+import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs'
 import {
   DataMap,
   DataProperty,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
-import { CompleteDialogComponent } from 'complete-dialog';
-import { PanelAccordionComponent } from 'panel-accordion';
-import { Pathway } from 'ramp';
-import { RampCorePageComponent } from 'ramp-core-page';
+} from '@ncats-frontend-library/models/utils'
+import { CompleteDialogComponent } from 'complete-dialog'
+import { PanelAccordionComponent } from 'panel-accordion'
+import { Pathway } from 'ramp'
+import { RampCorePageComponent } from 'ramp-core-page'
 import {
   AnalyteFromPathwayActions,
   PathwayEnrichmentsActions,
   RampSelectors,
-} from 'ramp-store';
+} from 'ramp-store'
 
 @Component({
   selector: 'lib-biochemical-pathways-page',
@@ -70,7 +70,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       sortable: true,
       field: 'pathwayId',
     }),
-  ];
+  ]
   pathwayColumns: DataProperty[] = [
     new DataProperty({
       label: 'Input ID',
@@ -97,9 +97,9 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       field: 'commonName',
       sortable: true,
     }),
-  ];
+  ]
   enrichmentColumns: {
-    [key: string]: DataProperty[];
+    [key: string]: DataProperty[]
   } = {
     metabolites: [
       new DataProperty({
@@ -258,35 +258,33 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         sorted: 'asc',
       }),
     ],
-  };
+  }
   computedDataColumns = computed(() => {
-    let dataColumnsList = this.enrichmentColumns['both'];
+    let dataColumnsList = this.enrichmentColumns['both']
     if (this.filteredDataframe() && this.filteredDataframe()?.analyteType) {
       dataColumnsList =
-        this.enrichmentColumns[this.filteredDataframe()!.analyteType![0]];
+        this.enrichmentColumns[this.filteredDataframe()!.analyteType![0]]
     }
-    return dataColumnsList;
-  });
+    return dataColumnsList
+  })
 
-  analytes = this.store.selectSignal(RampSelectors.getAnalytes);
-  pathways = this.store.selectSignal(RampSelectors.getPathways);
-  enrichedPathways = this.store.selectSignal(
-    RampSelectors.getPathwayEnrichment,
-  );
-  clusterPlot = this.store.selectSignal(RampSelectors.getClusterPlot);
+  analytes = this.store.selectSignal(RampSelectors.getAnalytes)
+  pathways = this.store.selectSignal(RampSelectors.getPathways)
+  enrichedPathways = this.store.selectSignal(RampSelectors.getPathwayEnrichment)
+  clusterPlot = this.store.selectSignal(RampSelectors.getClusterPlot)
   filteredDataframe = this.store.selectSignal(
-    RampSelectors.getFilteredFishersDataframe,
-  );
+    RampSelectors.getFilteredFishersDataframe
+  )
 
-  previousValues!: { [key: string]: unknown };
+  previousValues!: { [key: string]: unknown }
 
   override dataMap = computed(() => {
-    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
-    const field = <string>this.activeTab();
-    let ret!: { [p: string]: Map<string, DataMap> };
+    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>()
+    const field = <string>this.activeTab()
+    let ret!: { [p: string]: Map<string, DataMap> }
     switch (field) {
       case 'pathways-from-analytes': {
-        const pathwaysData = this.pathways()?.data;
+        const pathwaysData = this.pathways()?.data
         if (pathwaysData) {
           returnDataMap.set('Pathway Lookups', {
             data: this.pathways()?.dataAsDataProperty,
@@ -294,12 +292,12 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             dataframe: pathwaysData,
             fileName: 'fetchPathwaysFromAnalytes-download.tsv',
             loaded: !!pathwaysData,
-          } as DataMap);
+          } as DataMap)
         }
-        break;
+        break
       }
       case 'analytes-from-pathways': {
-        const analytesData = this.analytes()?.data;
+        const analytesData = this.analytes()?.data
         if (analytesData) {
           returnDataMap.set('Analytes', {
             data: this.analytes()?.dataAsDataProperty,
@@ -307,16 +305,15 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             dataframe: analytesData,
             fileName: 'fetchPathwaysFromAnalytes-download.tsv',
             loaded: !!analytesData,
-          } as DataMap);
+          } as DataMap)
         }
         if (returnDataMap.size) {
-          ret = { [field]: returnDataMap };
+          ret = { [field]: returnDataMap }
         }
-        break;
+        break
       }
       case 'biochemical-pathway-analysis': {
-        const enrichedPathwaysData =
-          this.enrichedPathways()?.dataAsDataProperty;
+        const enrichedPathwaysData = this.enrichedPathways()?.dataAsDataProperty
         if (enrichedPathwaysData) {
           returnDataMap.set('Enriched Pathways', {
             data: this.enrichedPathways()?.dataAsDataProperty,
@@ -324,28 +321,28 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
             filters: this.filtersMap(),
             loaded: !!enrichedPathwaysData,
-          });
+          })
         }
         const noEnrichedPathwaysModalRef:
           | MatDialogRef<CompleteDialogComponent>
-          | undefined = this.noEnrichedPathwaysModal();
-        break;
+          | undefined = this.noEnrichedPathwaysModal()
+        break
       }
     }
 
     if (returnDataMap.size) {
-      ret = { [field]: returnDataMap };
+      ret = { [field]: returnDataMap }
     }
-    return ret;
-  });
+    return ret
+  })
 
   override visualizationsMap = computed(() => {
-    const visualizationMapComputed = new Map<string, VisualizationMap[]>();
-    let sizeMessage = undefined;
+    const visualizationMapComputed = new Map<string, VisualizationMap[]>()
+    let sizeMessage = undefined
 
     if (!(this.clusterPlot() && this.clusterPlot()!.length > 0)) {
       sizeMessage =
-        'This website currently does not support clustering over 100 pathways. Please use the RaMP R package for this feature.';
+        'This website currently does not support clustering over 100 pathways. Please use the RaMP R package for this feature.'
     }
     if (this.clusterPlot()) {
       visualizationMapComputed.set('Cluster Plot', [
@@ -354,25 +351,25 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
           data: {
             message: sizeMessage,
             image: this.sanitizer.bypassSecurityTrustHtml(
-              <string>this.clusterPlot(),
+              <string>this.clusterPlot()
             ),
           },
           loaded: !!this.clusterPlot(),
         },
-      ] as VisualizationMap[]);
+      ] as VisualizationMap[])
     }
     if (
       visualizationMapComputed.size &&
       this.activeTab() === 'biochemical-pathway-analysis'
     ) {
-      const field = <string>this.activeTab();
-      return { [field]: visualizationMapComputed };
-    } else return undefined;
-  });
+      const field = <string>this.activeTab()
+      return { [field]: visualizationMapComputed }
+    } else return undefined
+  })
 
   override overviewMap = computed(() => {
-    const field = <string>this.activeTab();
-    let ret!: { [p: string]: QueryResultsData };
+    const field = <string>this.activeTab()
+    let ret!: { [p: string]: QueryResultsData }
     switch (field) {
       case 'analytes-from-pathways': {
         if (this.analytes()?.data) {
@@ -385,9 +382,9 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               inputType: 'pathways',
               fuzzy: true,
             } as QueryResultsData,
-          };
+          }
         }
-        break;
+        break
       }
       case 'pathways-from-analytes': {
         if (this.pathways()?.data) {
@@ -399,9 +396,9 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               inputLength: this.inputList.length,
               inputType: 'analytes',
             } as QueryResultsData,
-          };
+          }
         }
-        break;
+        break
       }
       case 'biochemical-pathway-analysis': {
         if (this.pathways()?.data) {
@@ -413,13 +410,13 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               inputLength: this.inputList.length,
               inputType: 'analytes',
             } as QueryResultsData,
-          };
+          }
         }
-        break;
+        break
       }
     }
-    return ret;
-  });
+    return ret
+  })
 
   noEnrichedPathwaysModal = computed(() => {
     if (
@@ -432,58 +429,58 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
           title: 'Pathway',
           message: 'No enriched pathways found.',
         },
-      });
-    } else return undefined;
-  });
+      })
+    } else return undefined
+  })
 
   constructor() {
-    super();
+    super()
   }
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string,
+    origin: string
   ): void {
-    this.activeTab.set(origin);
+    this.activeTab.set(origin)
     switch (origin) {
       case 'analytes-from-pathways': {
         if (formData['pathway']) {
           this.inputList = this._parseInput(
-            formData['pathway'] as string | string[],
-          );
+            formData['pathway'] as string | string[]
+          )
         }
-        formData['pathway'] = this.inputList;
+        formData['pathway'] = this.inputList
 
         this.store.dispatch(
           AnalyteFromPathwayActions.fetchAnalytesFromPathways({
             pathways: this.inputList,
             analyteType: <string>formData['analyteType'],
-          }),
-        );
-        break;
+          })
+        )
+        break
       }
       case 'pathways-from-analytes': {
         if (formData['analytes']) {
           this.inputList = this._parseInput(
-            formData['analytes'] as string | string[],
-          );
+            formData['analytes'] as string | string[]
+          )
         }
-        formData['analytes'] = this.inputList;
+        formData['analytes'] = this.inputList
 
         this.store.dispatch(
           PathwayEnrichmentsActions.fetchPathwaysFromAnalytes({
             analytes: this.inputList,
-          }),
-        );
-        break;
+          })
+        )
+        break
       }
       case 'biochemical-pathway-analysis': {
         if (formData['analytes']) {
           this.inputList = this._parseInput(
-            formData['analytes'] as string | string[],
-          );
+            formData['analytes'] as string | string[]
+          )
         }
-        const event = { ...this.previousValues, ...formData };
+        const event = { ...this.previousValues, ...formData }
         this.store.dispatch(
           PathwayEnrichmentsActions.fetchEnrichmentFromPathways({
             analytes: this.inputList,
@@ -497,10 +494,10 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               Number(<number>event['minPathwayToCluster']) || undefined,
             percPathwayOverlap:
               <number>event['percPathwayOverlap'] || undefined,
-          }),
-        );
-        this.previousValues = event;
-        break;
+          })
+        )
+        this.previousValues = event
+        break
       }
     }
   }

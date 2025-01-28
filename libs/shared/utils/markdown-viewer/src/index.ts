@@ -1,1 +1,1 @@
-export * from './lib/markdown-viewer/markdown-viewer.component';
+export * from './lib/markdown-viewer/markdown-viewer.component'

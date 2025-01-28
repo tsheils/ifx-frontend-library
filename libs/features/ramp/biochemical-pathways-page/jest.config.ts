@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'biochemical-pathways-page',
   preset: '../../../../jest.preset.js',
@@ -20,4 +19,4 @@ export default {
     'jest-preset-angular/build/serializers/ng-snapshot',
     'jest-preset-angular/build/serializers/html-comment',
   ],
-};
+}

@@ -81,26 +81,6 @@
   font-size: 3rem;
 }
 
-.home-button {
-  height: 56px;
-  width: 84px;
-  padding-bottom: 18px;
-  padding-top: 12px;
-  display: grid;
-  justify-content: center;
-  justify-items: center;
-  text-align: center;
-  border: #265668 2px solid;
-  border-radius: 10%;
-  background-color: rgba(255, 255, 255, 0.6);
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.hovered-home-button :hover {
-  background-color: rgba(255, 255, 255);
-}
-
 .chebi-text {
   font-size: 4rem !important;
   color: #3572a2 !important;
@@ -116,8 +96,6 @@
 .rail-icon {
   font-size: 24px;
 }
-
-
 
 @media only screen and (max-width: 1024px) {
   .feature-text {
