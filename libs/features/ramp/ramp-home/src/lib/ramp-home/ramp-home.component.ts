@@ -1,15 +1,17 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
-  viewChild,
-} from '@angular/core'
+  ElementRef, inject,
+  viewChild
+} from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common'
 import { MatAnchor } from '@angular/material/button'
 import { MatCard } from '@angular/material/card'
 import { MatRipple } from '@angular/material/core'
 import { MatIcon } from '@angular/material/icon'
 import { RouterLink } from '@angular/router'
+import { Store } from '@ngrx/store';
+import { RampSelectors } from 'ramp-store'
 
 @Component({
   selector: 'lib-ramp-home',
@@ -28,7 +30,9 @@ import { RouterLink } from '@angular/router'
   standalone: true,
 })
 export class RampHomeComponent {
+  private readonly store = inject(Store)
   elemRef = viewChild<ElementRef>('details')
+  api = this.store.selectSignal(RampSelectors.getRampApi)
 
   goToDetails(): void {
     this.elemRef()?.nativeElement.scrollIntoView({
@@ -37,4 +41,10 @@ export class RampHomeComponent {
       inline: 'nearest',
     })
   }
+
+  cleanLabel(label: string): string {
+    return label.replace(/-/g, ' ')
+  }
+
+  _originalOrder = () => 0
 }

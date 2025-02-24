@@ -20,7 +20,7 @@ import { MatFormField } from '@angular/material/form-field'
 import { MatIcon } from '@angular/material/icon'
 import { MatInput } from '@angular/material/input'
 import { MatTooltip } from '@angular/material/tooltip'
-import { FilterCategory } from '@ncats-frontend-library/models/utils'
+import { FilterCategory, OpenApiPath } from '@ncats-frontend-library/models/utils';
 import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel'
 import { debounceTime, distinctUntilChanged, map } from 'rxjs'
 
@@ -44,6 +44,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs'
 export class OntologyPanelComponent implements OnInit {
   @ViewChildren('filterPanel')
   filterPanels!: QueryList<SharedUtilsFilterPanelComponent>
+  paths = input<OpenApiPath[]>()
   fetchMetabolitesSearch = output<{ ontologies: string[] }>()
   downloadMetabolitesSearch = output<{ ontologies: string[] }>()
   ontologies = input<FilterCategory[]>()

@@ -90,7 +90,7 @@ export class SunburstChartComponent implements OnInit {
       term: 'main',
       children: this.data(),
     } as HierarchyNode)
-      .sum((d) => d.count || 0)
+      .sum((d) => d.children ? 0 : d.count)
       .sort((a, b) => b.count - a.count)
   })
 
@@ -108,7 +108,7 @@ export class SunburstChartComponent implements OnInit {
       .padRadius(this.radius() * 1.5)
       .innerRadius((d) => d['y0'] * this.radius())
       .outerRadius((d) =>
-        Math.max(d['y0'] * this.radius(), d['y1'] * this.radius())
+        Math.max(d['y0'] * this.radius(), d['y1'] * this.radius() - 1 )
       )
   )
 
@@ -199,7 +199,7 @@ export class SunburstChartComponent implements OnInit {
   )
 
   ngOnInit() {
-    if (this.chartElement() && this.isBrowser()) {
+     if (this.chartElement() && this.isBrowser()) {
       if (this.context()) {
         this.context().font = '16px Roboto'
       }
@@ -220,8 +220,7 @@ export class SunburstChartComponent implements OnInit {
   }
 
   makeChart() {
-    // Make them clickable if they have children.
-    this.path()
+      this.path()
       .filter((d) => d.children)
       .style('cursor', 'pointer')
       .on('click', (event: Event, d) => {

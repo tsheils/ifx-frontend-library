@@ -20,8 +20,8 @@ import {
   CommonAnalyte,
   ReactionClass,
   RampPathwayEnrichmentResponse,
-  RampReactionClassEnrichmentResponse,
-} from 'ramp'
+  RampReactionClassEnrichmentResponse, RampOntologyEnrichmentResponse
+} from 'ramp';
 
 import {
   AnalyteFromPathwayActions,
@@ -29,15 +29,15 @@ import {
   CommonReactionAnalyteActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
-  MetaboliteFromOntologyActions,
+  MetaboliteFromOntologyActions, OntologyEnrichmentsActions,
   OntologyFromMetaboliteActions,
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions,
-} from './ramp.actions'
+  ReactionsFromAnalytesActions
+} from './ramp.actions';
 
 export const RAMP_STORE_FEATURE_KEY = 'rampStore'
 
@@ -70,7 +70,7 @@ export interface State extends EntityState<RampEntity> {
   metabolitesFromOntologies?: RampResponse<Metabolite>
   ontologiesList?: FilterCategory[]
   ontologies?: RampResponse<Ontology>
-
+  ontologyEnrichments?: RampOntologyEnrichmentResponse
   metClasses?: RampResponse<Classes>
   properties?: RampResponse<Properties>
   chemicalEnrichments?: RampChemicalEnrichmentResponse
@@ -115,9 +115,15 @@ export const rampReducer = createReducer(
     PathwayEnrichmentsActions.fetchPathwaysFromAnalytes,
     PathwayFromAnalyteActions.fetchPathwaysFromAnalytes,
     MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies,
+    OntologyEnrichmentsActions.fetchOntologyEnrichment,
     CommonReactionAnalyteActions.fetchCommonReactionAnalytes,
+    ReactionsFromAnalytesActions.fetchReactionsFromAnalytes,
+    ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes,
+    ReactionClassEnrichmentsActions.fetchReactionClassEnrichment,
+    ReactionClassEnrichmentsActions.filterReactionClassEnrichment,
     ClassesFromMetabolitesActions.fetchClassesFromMetabolites,
     PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolites,
+    MetaboliteEnrichmentsActions.fetchClassesFromMetabolites,
     MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites,
     PathwayEnrichmentsActions.fetchEnrichmentFromPathways,
     (state) => ({
@@ -225,11 +231,22 @@ export const rampReducer = createReducer(
     ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess,
     // ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess,
     (state, { data }) => {
-      console.log(data)
       return {
         ...state,
         loading: false,
         reactionClassEnrichments: data,
+      }
+    }
+  ),
+
+  on(
+    OntologyEnrichmentsActions.fetchOntologyEnrichmentSuccess,
+    // OntologyEnrichmentsActions.filterOntologyEnrichmentSuccess,
+    (state, { data }) => {
+      return {
+        ...state,
+        loading: false,
+        ontologyEnrichments: data,
       }
     }
   ),
@@ -337,6 +354,7 @@ export const rampReducer = createReducer(
     OntologyFromMetaboliteActions.fetchOntologiesFromMetabolitesFailure,
     MetaboliteFromOntologyActions.fetchMetaboliteFromOntologiesFailure,
     MetaboliteFromOntologyActions.fetchOntologiesFailure,
+    OntologyEnrichmentsActions.fetchOntologyEnrichmentFailure,
     CommonReactionAnalyteActions.fetchCommonReactionAnalytesFailure,
     ReactionsFromAnalytesActions.fetchReactionsFromAnalytesFailure,
     ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteFailure,

@@ -15,29 +15,29 @@ import {
   Ontology,
   Pathway,
   Properties,
-  RampChemicalEnrichmentResponse,
+  RampChemicalEnrichmentResponse, RampOntologyEnrichmentResponse,
   RampPathwayEnrichmentResponse,
   RampReactionClassEnrichmentResponse,
   RampResponse,
   Reaction,
   ReactionClass,
-  Stats,
-} from 'ramp'
+  Stats
+} from 'ramp';
 import {
   AnalyteFromPathwayActions,
   ClassesFromMetabolitesActions,
   CommonReactionAnalyteActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
-  MetaboliteFromOntologyActions,
+  MetaboliteFromOntologyActions, OntologyEnrichmentsActions,
   OntologyFromMetaboliteActions,
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions,
-} from './ramp.actions'
+  ReactionsFromAnalytesActions
+} from './ramp.actions';
 import { RampService } from '../ramp.service'
 import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
@@ -46,9 +46,9 @@ import {
   getClusterPlot,
   getCombinedFishersDataframe,
   // getEnrichedChemicalClass,
-  getFilteredFishersDataframe,
-  getReactionClassEnrichment,
-} from './ramp.selectors'
+  getFilteredFishersDataframe, getOntologyEnrichment,
+  getReactionClassEnrichment
+} from './ramp.selectors';
 
 export const init$ = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -79,43 +79,57 @@ export const loadApi$ = createEffect(
         return rampService.fetchApi(action.url).pipe(
           map(
             (ret: {
-              tags: { name: string; description: string }[]
+              tags: { name: string; description: string, sections?: string[] }[]
               paths: { [key: string]: { post?: { [key: string]: unknown } } }
             }) => {
               const tempMap: Map<string, OpenApiPath[]> = new Map<
                 string,
                 OpenApiPath[]
               >()
-              Object.entries(ret.paths).forEach(([key, value]) => {
-                if (value.post && value.post['tags']) {
-                  const parent = key.split('/api/')[1]
-                  const tags: string[] = value.post['tags'] as string[]
-                  const mainTag = ret.tags.filter(
-                    (tag) => tag.name === tags[0]
-                  )[0].description
-                  let tempArr: OpenApiPath[] = []
-                  if (tempMap.has(tags[0])) {
-                    tempArr = tempMap.get(tags[0]) as OpenApiPath[]
+              ret.tags.forEach((tag: { name: string; description: string, sections?: string[] }) => {
+                let tempArr: OpenApiPath[] = [] as OpenApiPath[];
+                if (tempMap.has(tag.name)) {
+                  tempArr = tempMap.get(tag.name) as OpenApiPath[];
+                }
+
+                Object.entries(ret.paths).forEach(([pathKey, pathValue]) => {
+                  const title = pathKey.split('/api/')[1]
+                  if (tag.sections?.includes(title)) {
+                    let subsections: string[] = [];
+                    if (pathValue.post && pathValue.post['x-subsections']) {
+                      subsections = pathValue.post['x-subsections'] as string[];
+                    }
                     tempArr.push(
                       new OpenApiPath({
-                        ...value.post,
-                        parent: parent,
-                        child: tags.length > 1 ? tags[1] : null,
-                        pageDescription: mainTag,
+                        ...pathValue.post,
+                        title: title,
+                        pageDescription: tag.description,
                       })
                     )
-                    tempMap.set(tags[0], tempArr)
-                  } else {
-                    tempMap.set(tags[0], [
-                      new OpenApiPath({
-                        ...value.post,
-                        parent: parent,
-                        child: tags.length > 1 ? tags[1] : null,
-                        pageDescription: mainTag,
-                      }),
-                    ])
+                    subsections.forEach(subsection => {
+                      let path: {
+                        [key: string]: { post?: { [key: string]: unknown } }
+                      } = {}
+                      Object.entries(ret.paths).forEach(([pathKey, pathValue]) => {
+                        const splitPathName = pathKey.split('/api/')[1];
+                        if (splitPathName === subsection) {
+                          path = pathValue;
+                        }
+                      })
+                      tempArr.push(
+                        new OpenApiPath({
+                          ...path['post'],
+                          title: title,
+                          subtitle: subsection,
+                          pageDescription: tag.description,
+                        })
+                      )
+                    })
                   }
-                }
+                  if(tempArr.length) {
+                    tempMap.set(tag.name, tempArr)
+                  }
+                })
               })
               return LoadRampActions.loadRampApiSuccess({ api: tempMap })
             },
@@ -305,6 +319,111 @@ export const fetchMetabolitesFromOntologies = createEffect(
     )
   },
   { functional: true }
+)
+
+export const fetchOntologyEnrichment = createEffect(
+  (actions$ = inject(Actions), rampService = inject(RampService)) => {
+    return actions$.pipe(
+      ofType(OntologyEnrichmentsActions.fetchOntologyEnrichment),
+      exhaustMap((action) => {
+        return rampService
+          .fetchEnrichmentFromOntologies(
+            action.metabolites,
+            action.background,
+            action.backgroundFile
+          )
+          .pipe(
+            map(
+              (ret: RampOntologyEnrichmentResponse) => {
+                return OntologyEnrichmentsActions.fetchOntologyEnrichmentSuccess(
+                  {
+                    data: ret,
+                  }
+                )
+              },
+              catchError((error: ErrorEvent) =>
+                of(
+                  OntologyEnrichmentsActions.fetchOntologyEnrichmentFailure(
+                    { error: error.message }
+                  )
+                )
+              )
+            )
+          )
+      })
+    )
+  },
+  { functional: true }
+)
+
+/*
+export const filterOntologyEnrichment = createEffect(
+  (
+    actions$ = inject(Actions),
+    rampService = inject(RampService),
+    store = inject(Store),
+  ) => {
+    return actions$.pipe(
+      ofType(
+        OntologyEnrichmentsActions.fetchOntologyEnrichmentSuccess,
+        OntologyEnrichmentsActions.filterOntologyEnrichment,
+      ),
+      concatLatestFrom(() => store.select(getOntologyEnrichment)),
+      mergeMap(([action, dataframe]) => {
+        if (dataframe) {
+          return rampService
+            .filterOntologyEnrichment(
+              dataframe.data as RampOntologyEnrichmentResponse,
+              action.pValType,
+              action.pValCutoff,
+            )
+            .pipe(
+              map(
+                (ret: RampReaction0ClassEnrichmentResponse) => {
+                  return OntologyEnrichmentsActions.filterOntologyEnrichmentSuccess(
+                    { data: ret },
+                  );
+                },
+                catchError((error: ErrorEvent) =>
+                  of(
+                    OntologyEnrichmentsActions.filterOntologyEnrichmentFailure(
+                      { error: error.message },
+                    ),
+                  ),
+                ),
+              ),
+            );
+        } else {
+          return of(
+            MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesFailure(
+              { error: 'No dataframe available' },
+            ),
+          );
+        }
+      }),
+    );
+  },
+  { functional: true },
+);
+*/
+
+export const fetchOntologyEnrichmentFile = createEffect(
+  (
+    actions$ = inject(Actions),
+    rampService = inject(RampService),
+    store = inject(Store)
+  ) => {
+    return actions$.pipe(
+      ofType(OntologyEnrichmentsActions.fetchOntologyEnrichmentFile),
+      concatLatestFrom(() => store.select(getOntologyEnrichment)),
+      tap(([action, dataframe]) => {
+        if (action && dataframe) {
+          //     rampService.fetchOntologyEnrichmentFile(dataframe.data);
+        }
+      })
+    )
+  },
+  { functional: true, dispatch: false }
 )
 
 export const fetchMetabolitesFromOntologiesFile = createEffect(
@@ -503,7 +622,6 @@ export const fetchReactionClassEnrichment = createEffect(
           .pipe(
             map(
               (ret: RampReactionClassEnrichmentResponse) => {
-                console.log(ret)
                 return ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess(
                   {
                     data: ret,

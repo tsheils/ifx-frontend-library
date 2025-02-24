@@ -72,6 +72,11 @@ export const getontologiesList = createSelector(
   (state: State) => state.ontologiesList
 )
 
+export const getOntologyEnrichment = createSelector(
+  getRampState,
+  (state: State) => state.ontologyEnrichments
+)
+
 export const getAnalytes = createSelector(
   getRampState,
   (state: State) => state.analytes

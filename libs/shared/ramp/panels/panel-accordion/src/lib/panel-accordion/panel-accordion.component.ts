@@ -58,6 +58,10 @@ export class PanelAccordionComponent {
   dataTabs = input<Map<string, DataMap> | undefined>(undefined)
   overviewTabs = input<QueryResultsData | undefined>(new QueryResultsData())
 
+  constructor(){
+    console.log(this.paths())
+  }
+
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event)
   }

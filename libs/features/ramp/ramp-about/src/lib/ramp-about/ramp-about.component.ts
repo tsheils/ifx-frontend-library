@@ -50,8 +50,7 @@ import { UpsetComponent } from 'upset-chart'
     MatIconModule,
     MatSidenavModule,
     MatButtonModule,
-    RouterLink,
-    RouterLinkActive
+    RouterLink
   ]
 })
 export class AboutComponent implements OnInit {

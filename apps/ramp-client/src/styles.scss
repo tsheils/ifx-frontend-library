@@ -48,6 +48,8 @@ body {
   margin: 0 !important;
   font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
     Lucida Grande, sans-serif;
+  scroll-behavior: smooth;
+  @include mat.system-level-colors(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
   @include footer.theme(theme.$light-theme);
   @include upset.theme(theme.$light-theme);
@@ -57,6 +59,12 @@ body {
 a {
   color: mat.get-theme-color(theme.$light-theme, primary);
   font-weight: bold;
+}
+
+.info-card {
+  @include mat.card-overrides((
+    outlined-container-color: mat.get-theme-color(theme.$light-theme, surface-container)
+  ));
 }
 
 .main {
@@ -115,8 +123,40 @@ a {
   border: none !important;
 }
 
-.active-rail-button {
-  background-color: white;
+.main-rail {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+  width: 80px;
+  position: fixed;
+  left: 80px;
+  padding-top: 20px;
+  height: 100%;
+}
+
+.rail-button {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+  margin-bottom: 6px;
+  margin-top: 6px;
+  height: 56px;
+  padding-bottom: 12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  width: 100%;
+  border: none;
+}
+
+.drawer-container-content {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-container);
+}
+
+.ramp-main > .rail-button {
+  background-color: mat.get-theme-color(theme.$light-theme, primary);
+}
+
+.ramp-main > .active-rail-button {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+  color:  mat.get-theme-color(theme.$light-theme, surface-dim);
   width: 103%;
 }
 
@@ -127,6 +167,14 @@ a {
 
 .rail-label-primary {
   color: mat.get-theme-color(theme.$light-theme, primary) !important;
+}
+
+.page-content {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-container);
+}
+
+.tabs-section {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-bright);
 }
 
 .active-sidemenu {
@@ -210,9 +258,12 @@ a {
   cursor: pointer;
 }
 
-.body-tabs {
-  padding: 1vw !important;
+.accordion-holder {
+  @include mat.expansion-overrides((
+    container-shape: square
+  ));
 }
+
 .centered-row {
   align-content: center;
   align-items: center;

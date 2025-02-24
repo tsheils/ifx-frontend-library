@@ -15,13 +15,13 @@ import {
   FisherResult,
   FishersDataframe,
   Metabolite,
-  Ontology,
+  Ontology, OntologyEnrichment,
   Pathway,
   Properties,
   RampAPIResponse,
   RampChemicalEnrichmentAPIResponse,
   RampChemicalEnrichmentResponse,
-  RampDataGeneric,
+  RampDataGeneric, RampOntologyEnrichmentAPIResponse, RampOntologyEnrichmentResponse,
   RampPathwayEnrichmentAPIResponse,
   RampPathwayEnrichmentResponse,
   RampReactionAPIResponse,
@@ -30,8 +30,8 @@ import {
   RampResponse,
   Reaction,
   ReactionClass,
-  SourceVersion,
-} from 'ramp'
+  SourceVersion
+} from 'ramp';
 import { forkJoin, Observable, of } from 'rxjs'
 import { catchError, map } from 'rxjs/operators'
 
@@ -293,6 +293,42 @@ export class RampService {
       )
   }
 
+  fetchEnrichmentFromOntologies(
+    metabolites: string[],
+    background?: string,
+    backgroundFile?: File
+  ): Observable<RampOntologyEnrichmentResponse> {
+    const formData = new FormData()
+    formData.set('metabolites', JSON.stringify(metabolites))
+    if (background) {
+      formData.set('background', JSON.stringify([background]))
+    }
+    if (backgroundFile) {
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name)
+    }
+    return this.http
+      .post<RampOntologyEnrichmentAPIResponse>(
+        `${this.url}ontology-enrichment`,
+        formData
+      )
+      .pipe(
+        map((response: RampOntologyEnrichmentAPIResponse) => {
+          const enrichedOntologyList: OntologyEnrichment[] = response.data.fishertresults.map((enrichedOntology: Partial<OntologyEnrichment>) => new OntologyEnrichment(enrichedOntology))
+
+          const dataAsDataProperties = this._mapDataToDataProperty(enrichedOntologyList)
+          return <RampOntologyEnrichmentResponse>{
+            data: response.data.fishertresults,
+            dataAsDataProperty: dataAsDataProperties,
+            query: {
+              functionCall: response.function_call
+                ? response.function_call[0]
+                : undefined,
+            },
+          }
+        })
+      )
+  }
+
   fetchMetabolitesFromOntologiesFile(ontologies: string[], format: string) {
     const params = {
       ontology: ontologies.join(','),
@@ -524,7 +560,6 @@ export class RampService {
       )
       .pipe(
         map((response: RampReactionClassEnrichmentAPIResponse) => {
-          console.log(response)
           const reactionList: ReactionClass[] = []
           response.data.EC_Level1Stats.forEach((reaction) =>
             reactionList.push(new ReactionClass(reaction))
@@ -599,7 +634,7 @@ export class RampService {
     }
     return this.http
       .post<RampChemicalEnrichmentAPIResponse>(
-        `${this.url}chemical-enrichment`,
+        `${this.url}chemical-class-enrichment`,
         formData
       )
       .pipe(
@@ -693,7 +728,7 @@ export class RampService {
     }
     return this.http
       .post<RampPathwayEnrichmentAPIResponse>(
-        `${this.url}enrich-pathways`,
+        `${this.url}pathway-enrichment`,
         formData
       )
       .pipe(
@@ -849,7 +884,17 @@ export class RampService {
     const enrichedPathwayList = apiResponse.data.fishresults.map(
       (obj: Partial<FisherResult>) => new FisherResult(obj)
     )
+   console.log(apiResponse)
+   console.log(enrichedPathwayList)
 
+    const matches = Array.from(
+      new Set(enrichedPathwayList.map((data) => data.pathwayId.toLocaleLowerCase()))
+    )
+ /*   const noMatches = inputList.filter(
+      (p: string) => !matches.includes(p.toLocaleLowerCase())
+    )*/
+
+    console.log(matches)
     return {
       data: enrichedPathwayList,
       combinedFishersDataframe: apiResponse.data as FishersDataframe,
@@ -858,6 +903,7 @@ export class RampService {
         functionCall: apiResponse.function_call
           ? apiResponse.function_call[0]
           : undefined,
+        matches: matches.length
       },
       dataAsDataProperty: this._mapDataToDataProperty(enrichedPathwayList),
     } as RampPathwayEnrichmentResponse

@@ -11,15 +11,15 @@ import {
   Ontology,
   Pathway,
   Properties,
-  RampChemicalEnrichmentResponse,
+  RampChemicalEnrichmentResponse, RampOntologyEnrichmentResponse,
   RampPathwayEnrichmentResponse,
   RampReactionClassEnrichmentResponse,
   RampResponse,
   Reaction,
   ReactionClass,
   SourceVersion,
-  Stats,
-} from 'ramp'
+  Stats
+} from 'ramp';
 
 export const LoadRampActions = createActionGroup({
   source: 'Load Ramp',
@@ -95,6 +95,32 @@ export const MetaboliteFromOntologyActions = createActionGroup({
     }>(),
     fetchMetabolitesFromOntologiesSuccess: props<RampResponse<Metabolite>>(),
     fetchMetaboliteFromOntologiesFailure: props<{ error: string }>(),
+  },
+})
+
+export const OntologyEnrichmentsActions = createActionGroup({
+  source: 'Ontology Enrichment',
+  events: {
+    fetchOntologyEnrichment: props<{
+      metabolites: string[]
+      background?: string
+      backgroundFile?: File
+    }>(),
+    fetchOntologyEnrichmentFile: emptyProps(),
+    fetchOntologyEnrichmentSuccess: props<{
+      data: RampOntologyEnrichmentResponse
+      // pValType?: string;
+      //  pValCutoff?: number;
+    }>(),
+    fetchOntologyEnrichmentFailure: props<{ error: string }>(),
+    filterOntologyEnrichment: props<{
+      pValType: string
+      pValCutoff: number
+    }>(),
+    filterOntologyEnrichmentSuccess: props<{
+      data: RampOntologyEnrichmentResponse
+    }>(),
+    filterOntologyEnrichmentFailure: props<{ error: string }>(),
   },
 })
 

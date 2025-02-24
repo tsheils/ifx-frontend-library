@@ -396,7 +396,7 @@
               plots highlight the common and unique metabolites and genes
               covered for each resource.
             </p>
-            @if(compoundsData() && compoundsData().length){
+            @if(compoundsData() && compoundsData().data.length){
             <div class="row">
               <div class="width-90 width-sm-100">
                 <h3>Metabolite Overlap</h3>
@@ -411,7 +411,7 @@
               </div>
             </div>
             }
-            @if(genesData() && genesData().length){
+            @if(genesData() && genesData().data.length){
               <div class="row">
               <div class="width-75 width-md-90 width-sm-100">
                 <h3>Gene Overlap</h3>
@@ -629,64 +629,20 @@
             <br />
             <br />
             <h2>Previous Contributors</h2>
-            <div class="row space-around-row">
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/john_braisted.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/john_braisted.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/john_braisted.jpg"
-                    alt="John Braisted portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                <br />
-                <h2>John Braisted</h2>
-              </div>
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/tara_eicher.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/tara_eicher.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/tara_eicher.jpg"
-                    alt="Tara Eicher portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                <h2>Tara Eicher</h2>
-              </div>
-              <div class="portrait-holder width-20 width-sm-50">
-                <picture>
-                  <source
-                    srcset="/assets/ramp-about/images/team/kyle_spencer.webp"
-                    type="image/webp"
-                  />
-                  <source
-                    srcset="/assets/ramp-about/images/team/kyle_spencer.jpg"
-                    type="image/jpeg"
-                  />
-                  <img
-                    src="/assets/ramp-about/images/team/kyle_spencer.jpg"
-                    alt="Kyle Spencer portrait"
-                    class="ramp-portrait"
-                  />
-                </picture>
-                <h2>Kyle Spencer</h2>
-              </div>
-            </div>
             <ul>
+              <li>
+                John Braisted
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/tara-eicher-phd-1501909a/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Tara Eicher on LinkedIn"
+                >
+                  Tara Eicher
+                </a>
+              </li>
               <li>
                 <a
                   href="https://www.linkedin.com/in/jorge-neyra-aba63920"
@@ -697,8 +653,36 @@
                   Jorge Neyra
                 </a>
               </li>
-              <li>Cole Tindall</li>
-              <li>Rohith Vanam</li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/kdspencer77/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Kyle Spencer on LinkedIn"
+                >
+                  Kyle Spencer
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/coletindall/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Cole Tindall on LinkedIn"
+                >
+                  Cole Tindall
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://www.linkedin.com/in/rohith-vanam-557a17114/"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Rohith Vanam on LinkedIn"
+                >
+                  Rohith Vanam
+                </a>
+              </li>
               <li>
                 <a
                   href="https://www.linkedin.com/in/shunchaowang"

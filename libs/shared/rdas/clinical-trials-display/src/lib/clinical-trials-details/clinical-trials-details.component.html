@@ -62,16 +62,19 @@
           @if (fullSummary()) {
           <div>
             <span class="mat-subtitle-2">{{ truncatedSummary() }}</span>
-            <!--@if (fullSummary && truncatedSummary) {
-                <a (click)="fullSummary = false" class="expand-link">...less</a>
-              }-->
+            <a
+              role="button" tabindex="0"
+              (click)="showFullSummary = true"
+              (keydown.enter)="showFullSummary =true"
+              class="expand-link">...more</a>
           </div>
           } @else {
           <div #truncated>
             <span class="mat-subtitle-2">{{ truncatedSummary() }}</span>
-            <!-- @if (!fullSummary()) {
-                <a (click)="fullSummary.set(false)" class="expand-link">...more</a>
-              }-->
+            <a role="button" tabindex="0"
+               (click)="showFullSummary = false"
+               (keydown.enter)="showFullSummary =false"
+               class="expand-link">...less</a>
           </div>
           }
         </div>

@@ -6,8 +6,7 @@ export class OpenApiPath {
   tags: string[] = []
   pageDescription?: string
   summary?: string
-  parent?: string
-  child?: string
+  subtitle?: string
   properties: { [key: string]: unknown }[] = []
   content: unknown
   hideSection = false
@@ -19,23 +18,20 @@ export class OpenApiPath {
       this.summary = <string>obj['summary']
     }
 
-    if (obj['parent']) {
-      this.parent = <string>obj['parent']
-    }
     if (obj['pageDescription']) {
       this.pageDescription = <string>obj['pageDescription']
-    }
-
-    if (obj['child']) {
-      this.child = <string>obj['child']
     }
 
     if (obj['tags']) {
       this.tags = <string[]>obj['tags']
     }
 
-    if (obj['x-title']) {
-      this.title = <string>obj['x-title']
+    if (obj['title']) {
+      this.title = <string>obj['title']
+    }
+
+    if (obj['subtitle']) {
+      this.subtitle = <string>obj['subtitle']
     }
 
     if (obj['x-hideSection']) {
@@ -98,7 +94,7 @@ export class OpenApiPath {
           this.properties.push({
             ...tempVal,
             field: key,
-            parent: this.parent || '',
+            parent: this.title || '',
             value: exampleObj[key] ? exampleObj[key] : undefined,
           })
         }

@@ -1,12 +1,12 @@
-<mat-accordion multi>
+<mat-accordion [displayMode]="'flat'" class="accordion-holder" multi>
   <mat-expansion-panel expanded id="input" #input>
     <mat-expansion-panel-header>
       <mat-panel-title><h2>Input</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @defer( when paths()) {
-    <h4>
+    <p>
       {{ paths() && paths()![0].description ? paths()![0].description : '' }}
-    </h4>
+    </p>
     @if (paths()![0].allowedTypes){ Supported source ids: <br />
     Genes/Proteins:
     {{

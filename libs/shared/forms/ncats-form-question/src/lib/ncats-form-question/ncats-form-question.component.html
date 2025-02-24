@@ -1,11 +1,11 @@
 <div [formGroup]="form">
   @switch (question.controlType) { @case ('textbox') {
-  <mat-form-field class="full-width" appearance="outline" color="accent">
+  <mat-form-field class="full-width"  color="accent">
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
     <input matInput [id]="question.key" [type]="question.type" />
   </mat-form-field>
   } @case ('number') {
-  <mat-form-field class="full-width" appearance="outline" color="accent">
+  <mat-form-field class="full-width"  color="accent">
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
     <input
       matInput
@@ -18,7 +18,7 @@
     />
   </mat-form-field>
   } @case ('textarea') {
-  <mat-form-field class="full-width" appearance="outline" color="accent">
+  <mat-form-field class="full-width"  color="accent">
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
     <textarea
       matInput
@@ -29,7 +29,7 @@
     ></textarea>
   </mat-form-field>
   } @case ('dropdown') {
-  <mat-form-field class="full-width" appearance="outline" color="accent">
+  <mat-form-field class="full-width"  color="accent">
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
     <mat-select [id]="question.key" [formControlName]="question.key">
       @for (opt of question.options; track opt.key) {
@@ -38,7 +38,7 @@
     </mat-select>
   </mat-form-field>
   } @case ('multiselect') {
-  <mat-form-field class="full-width" appearance="outline" color="accent">
+  <mat-form-field class="full-width"  color="accent">
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
     <mat-select [id]="question.key" [formControlName]="question.key" multiple>
       @for (opt of question.options; track opt.key) {

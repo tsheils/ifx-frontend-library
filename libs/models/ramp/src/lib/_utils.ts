@@ -7,6 +7,7 @@ import {
 import { QuestionBase } from 'ncats-form-question'
 import { ChemicalEnrichment } from './chemical-enrichment'
 import { FisherResult, FishersDataframe } from './fisher-result'
+import { OntologyEnrichment } from './ontology';
 import { RampQuery } from './ramp-query'
 import { Reaction, ReactionClass } from './reaction'
 
@@ -79,6 +80,19 @@ export interface RampReactionClassEnrichmentAPIResponse {
     result_type?: string[]
   }
   function_call?: string[]
+}
+export interface RampOntologyEnrichmentAPIResponse {
+  data: {
+    fishertresults: OntologyEnrichment[]
+  };
+  function_call?: string[]
+}
+
+export interface RampOntologyEnrichmentResponse {
+  data: OntologyEnrichment[];
+  function_call?: string[];
+  query?: RampQuery
+  dataAsDataProperty?: { [p: string]: DataProperty }[]
 }
 
 export interface RampReactionClassEnrichmentResponse {

@@ -55,8 +55,14 @@
     <div class="width-95">
       <h1>{{ title() | titlecase }}</h1>
       <br />
+      <mat-card class="info-card" [appearance]="'outlined'">
+        <mat-card-content>
+<!--
       <h2>{{ paths() ? paths()![0].summary : '' }}</h2>
-      <h3>{{ paths() ? paths()![0].pageDescription : '' }}</h3>
+-->
+      <p>{{ paths() ? paths()![0].pageDescription : '' }}</p>
+        </mat-card-content>
+      </mat-card>
     </div>
   </div>
   <div class="row space-around-row">

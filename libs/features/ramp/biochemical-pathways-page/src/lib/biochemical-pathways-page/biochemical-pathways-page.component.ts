@@ -307,16 +307,13 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             loaded: !!analytesData,
           } as DataMap)
         }
-        if (returnDataMap.size) {
-          ret = { [field]: returnDataMap }
-        }
         break
       }
-      case 'biochemical-pathway-analysis': {
+      case 'pathway-enrichment': {
         const enrichedPathwaysData = this.enrichedPathways()?.dataAsDataProperty
         if (enrichedPathwaysData) {
           returnDataMap.set('Enriched Pathways', {
-            data: this.enrichedPathways()?.dataAsDataProperty,
+            data: enrichedPathwaysData,
             fields: this.computedDataColumns(),
             fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
             filters: this.filtersMap(),
@@ -400,13 +397,13 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         }
         break
       }
-      case 'biochemical-pathway-analysis': {
-        if (this.pathways()?.data) {
+      case 'pathway-enrichment': {
+        if (this.enrichedPathways()?.data) {
           ret = {
             [field]: {
               matches: this.pathways()?.query?.matches,
               noMatches: this.pathways()?.query?.noMatches,
-              count: this.pathways()?.data.length,
+              count: this.enrichedPathways()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
             } as QueryResultsData,
@@ -415,6 +412,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         break
       }
     }
+    console.log(ret);
     return ret
   })
 
@@ -441,6 +439,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
     formData: { [key: string]: unknown },
     origin: string
   ): void {
+    console.log(origin)
     this.activeTab.set(origin)
     switch (origin) {
       case 'analytes-from-pathways': {
@@ -474,12 +473,13 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         )
         break
       }
-      case 'biochemical-pathway-analysis': {
+      case 'pathway-enrichment': {
         if (formData['analytes']) {
           this.inputList = this._parseInput(
             formData['analytes'] as string | string[]
           )
         }
+        console.log(this.inputList)
         const event = { ...this.previousValues, ...formData }
         this.store.dispatch(
           PathwayEnrichmentsActions.fetchEnrichmentFromPathways({

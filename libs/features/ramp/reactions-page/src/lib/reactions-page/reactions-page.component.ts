@@ -273,9 +273,8 @@ export class ReactionsPageComponent
     const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>()
     const field = <string>this.activeTab()
     let ret!: { [p: string]: Map<string, DataMap> }
-    console.log(field)
     switch (field) {
-      case 'rhea-reactions-from-analytes': {
+      case 'reactions-from-analytes': {
         const reactionsFromAnalytesData = this.reactionsFromAnalytes()?.data
         if (reactionsFromAnalytesData) {
           returnDataMap.set('Rhea Reactions from Analytes', {
@@ -315,7 +314,6 @@ export class ReactionsPageComponent
         break
       }
       case 'reaction-class-enrichment': {
-        console.log(this.reactionClassEnrichment())
         const reactionClassEnrichmentData =
           this.reactionClassEnrichment()?.dataAsDataProperty
         if (reactionClassEnrichmentData) {
@@ -340,7 +338,7 @@ export class ReactionsPageComponent
     const visualizationMapComputed = new Map<string, VisualizationMap[]>()
     const field = <string>this.activeTab()
     switch (field) {
-      case 'rhea-reactions-from-analytes': {
+      case 'reactions-from-analytes': {
         const reactionsPlot = this.reactionsFromAnalytes()?.plot
         if (reactionsPlot) {
           visualizationMapComputed.set('Reaction Type Overlap', [
@@ -393,7 +391,7 @@ export class ReactionsPageComponent
     const field = <string>this.activeTab()
     let ret!: { [p: string]: QueryResultsData }
     switch (field) {
-      case 'rhea-reactions-from-analytes': {
+      case 'reactions-from-analytes': {
         if (this.reactionsFromAnalytes()?.data) {
           ret = {
             [field]: {
@@ -480,10 +478,11 @@ export class ReactionsPageComponent
     formData: { [key: string]: unknown },
     origin: string
   ): void {
+    console.log(origin)
     this.activeTab.set(origin)
     this.inputList = this._parseInput(formData['analytes'] as string | string[])
     switch (origin) {
-      case 'rhea-reactions-from-analytes': {
+      case 'reactions-from-analytes': {
         this.store.dispatch(
           ReactionsFromAnalytesActions.fetchReactionsFromAnalytes({
             analytes: this.inputList,

@@ -48,7 +48,6 @@ export class RampMainComponent {
   activeElement = 'pathways'
   api = this.store.selectSignal(RampSelectors.getRampApi)
   paths = computed(() => {
-    console.log(this.api())
     return this.api()?.get(this.fragment())
   })
   fragment = computed(() => this.router.url.split('/')[1])
@@ -96,8 +95,7 @@ export class RampMainComponent {
       const separatedPaths = this._separateInputTabs(pathsValue)
       separatedPaths.forEach((inputTab, formKey) => {
         inputTab.forEach((parsedPath) => {
-          const questionsList = parsedPath.properties
-          const mappedSubform = this._questionListToObject(questionsList)
+          const mappedSubform = this._pathToQuestionObject(parsedPath)
           if (inputMap.has(formKey)) {
             const tabQuestionsList = inputMap.get(formKey) as FormSubsection[]
             tabQuestionsList.push(mappedSubform)
@@ -201,15 +199,16 @@ export class RampMainComponent {
     return q
   }
 
-  _questionListToObject(questionsList: { [key: string]: unknown }[]) {
-    const parent = <string>questionsList[0]['parent']
+  _pathToQuestionObject(path: OpenApiPath) {
+    const questionsList = path.properties
+    const title: string = path.subtitle ? <string>path.subtitle: <string>path.title
     const questionArray: QuestionBase<string>[] = []
     questionsList.forEach((question) => {
       const field = <string>question['field']
       const questionObject = this._mapPathToQuestion(field, question)
       questionArray.push(questionObject)
     })
-    return { section: parent, questions: questionArray }
+    return { section: title, questions: questionArray }
   }
 
   _separateInputTabs(paths: OpenApiPath[]) {
@@ -219,9 +218,7 @@ export class RampMainComponent {
     >()
     paths.forEach((path) => {
       if (!(<boolean>path.hideSection)) {
-        const subForm: string = path.child
-          ? <string>path.child
-          : <string>path.parent
+        const subForm: string =  <string>path.title
         if (inputTabMap.has(subForm)) {
           const pathArray = inputTabMap.get(subForm) as OpenApiPath[]
           pathArray.push(path)

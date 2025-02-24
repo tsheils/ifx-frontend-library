@@ -9,69 +9,27 @@
       <div class="width-40">
         <h2 class="centered"><b>Get Started:</b></h2>
         <div class="row space-around-row">
-          <a class="hovered-home-button">
-            <div
-              matRipple
-              class="home-button"
-              routerLink="/biochemical-pathways"
-            >
-              <div class="icon-button-image">
-                <img
-                  ngSrc="/assets/icons/network.svg"
-                  alt="network icon"
-                  priority
-                  fill
-                />
+          @for(path of api() | keyvalue: _originalOrder; track path.key) {
+            <a class="hovered-home-button">
+              <div
+                matRipple
+                class="home-button"
+                routerLink="/{{ path.key }}"
+              >
+                <div class="icon-button-image">
+                  <img
+                    ngSrc="/assets/icons/{{ path.key }}.svg"
+                    alt="{{ cleanLabel(path.key) | titlecase }} icon"
+                    priority
+                    fill
+                  />
+                </div>
+                <div class="rail-label">
+                  {{ cleanLabel(path.key) | titlecase }}
+                </div>
               </div>
-              <div class="rail-label">
-                Biochemical <br />
-                Pathways
-              </div>
-            </div>
-          </a>
-          <a class="hovered-home-button">
-            <div matRipple class="home-button" routerLink="/ontologies">
-              <div class="icon-button-image">
-                <img
-                  ngSrc="/assets/icons/pulmonology_48dp_265668_FILL0_wght400_GRAD0_opsz48.svg"
-                  alt="network icon"
-                  priority
-                  fill
-                />
-              </div>
-              <div class="rail-label">Ontologies</div>
-            </div>
-          </a>
-          <a class="hovered-home-button">
-            <div matRipple class="home-button" routerLink="/reactions">
-              <div class="icon-button-image">
-                <img
-                  ngSrc="/assets/icons/science_48dp_265668_FILL0_wght400_GRAD0_opsz48.svg"
-                  alt="network icon"
-                  priority
-                  fill
-                />
-              </div>
-              <div class="rail-label">Reactions</div>
-            </div>
-          </a>
-          <a class="hovered-home-button">
-            <div
-              matRipple
-              class="home-button"
-              routerLink="/chemical-descriptors"
-            >
-              <div class="icon-button-image">
-                <img
-                  ngSrc="/assets/icons/disaccharide.svg"
-                  alt="disaccharide icon"
-                  priority
-                  fill
-                />
-              </div>
-              <div class="rail-label">Chemical Descriptors</div>
-            </div>
-          </a>
+            </a>
+          }
         </div>
       </div>
     </div>

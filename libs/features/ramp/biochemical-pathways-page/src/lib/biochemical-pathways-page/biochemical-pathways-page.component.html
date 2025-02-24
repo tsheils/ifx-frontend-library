@@ -1,5 +1,5 @@
 @if (mainPageMap() && mainPageMap().size){
-<mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
+<mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)" class="tabs-section">
   @for (mainTab of mainPageMap() | keyvalue: _originalOrder; track mainTab.key)
   {
   <mat-tab [bodyClass]="'body-tabs'">

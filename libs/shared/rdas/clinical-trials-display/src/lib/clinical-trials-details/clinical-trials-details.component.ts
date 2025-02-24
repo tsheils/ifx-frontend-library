@@ -25,7 +25,7 @@ import { ClinicalTrial } from '@ncats-frontend-library/models/rdas'
 })
 export class ClinicalTrialsDetailsComponent {
   breakpointObserver = inject(BreakpointObserver)
-
+  showFullSummary = false;
   trial = input<ClinicalTrial>()
   truncatedSummary = computed(() => {
     const t = this.trial()
