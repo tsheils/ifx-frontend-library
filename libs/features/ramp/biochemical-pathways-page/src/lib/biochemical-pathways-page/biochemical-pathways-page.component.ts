@@ -412,7 +412,6 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         break
       }
     }
-    console.log(ret);
     return ret
   })
 
@@ -439,7 +438,6 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
     formData: { [key: string]: unknown },
     origin: string
   ): void {
-    console.log(origin)
     this.activeTab.set(origin)
     switch (origin) {
       case 'analytes-from-pathways': {
@@ -479,7 +477,6 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             formData['analytes'] as string | string[]
           )
         }
-        console.log(this.inputList)
         const event = { ...this.previousValues, ...formData }
         this.store.dispatch(
           PathwayEnrichmentsActions.fetchEnrichmentFromPathways({

@@ -884,8 +884,6 @@ export class RampService {
     const enrichedPathwayList = apiResponse.data.fishresults.map(
       (obj: Partial<FisherResult>) => new FisherResult(obj)
     )
-   console.log(apiResponse)
-   console.log(enrichedPathwayList)
 
     const matches = Array.from(
       new Set(enrichedPathwayList.map((data) => data.pathwayId.toLocaleLowerCase()))
@@ -894,7 +892,6 @@ export class RampService {
       (p: string) => !matches.includes(p.toLocaleLowerCase())
     )*/
 
-    console.log(matches)
     return {
       data: enrichedPathwayList,
       combinedFishersDataframe: apiResponse.data as FishersDataframe,

@@ -1,6 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
 import {
+  AfterContentInit, AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -9,19 +10,20 @@ import {
   inject,
   OnInit,
   signal,
-  Signal,
+  Signal, viewChild,
   ViewEncapsulation,
-  WritableSignal,
+  WritableSignal
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -56,7 +58,8 @@ import {
     MatButtonModule,
     ResolverDataViewerComponent,
     HighlightPipe,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    MatMenuTrigger
   ],
   templateUrl: './resolver-main.component.html',
   styleUrl: './resolver-main.component.scss',
@@ -64,10 +67,12 @@ import {
   standalone: true,
   encapsulation: ViewEncapsulation.None
 })
-export class ResolverMainComponent implements OnInit {
+export class ResolverMainComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);
   private router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  autocompleteTrigger = viewChild<MatAutocompleteTrigger>(MatAutocompleteTrigger)
+
   destroyRef = inject(DestroyRef);
   changeRef = inject(ChangeDetectorRef);
 
@@ -159,6 +164,10 @@ export class ResolverMainComponent implements OnInit {
     this.filteredSearchOptions.set(this.optionCategories());
   }
 
+  ngAfterViewInit () {
+    this.autocompleteTrigger()?.openPanel()
+  }
+
   resolve() {
     this.clicked.set(true);
 
@@ -227,6 +236,7 @@ export class ResolverMainComponent implements OnInit {
 
   clearParams() {
     this.subscriptionSelectionSignal().clear();
+    this.router.navigate([]);
   }
 
   searchDisabled() {

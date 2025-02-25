@@ -67,10 +67,7 @@ export class RampCorePageComponent {
 
   activePath = computed(() => {
     const tabString = this.activeTab() || Array.from(this.inputMap()!.keys())[0]
-    console.log(this.paths())
-    console.log(tabString)
     const ret =  this.paths()?.filter((path) => path.title === tabString)
-    console.log(ret)
     return ret;
   })
   activeTab = signal(<string>this._getActiveTab())

@@ -45,7 +45,6 @@ export class RampPageComponent<T extends RampCorePageComponent> {
     component['inputMap'] = this.inputMap
     component['filtersMap'] = this.filterMap
     this.loadedTracker = component['loadedTracker']
-    console.log(this.loadedTracker())
   }
 
   isActive(check: string): boolean {

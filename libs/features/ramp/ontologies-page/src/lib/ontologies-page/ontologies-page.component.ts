@@ -169,7 +169,6 @@ export class OntologiesPageComponent extends RampCorePageComponent {
         const ontologiesEnrichmentData =
           this.ontologyEnrichment()?.dataAsDataProperty
         if (ontologiesEnrichmentData) {
-          console.log(this.ontologyEnrichment())
           returnDataMap.set('Ontology Enrichment', {
             data: ontologiesEnrichmentData,
             fields: this.ontologyEnrichmentDataColumns,

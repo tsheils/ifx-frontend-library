@@ -478,7 +478,6 @@ export class ReactionsPageComponent
     formData: { [key: string]: unknown },
     origin: string
   ): void {
-    console.log(origin)
     this.activeTab.set(origin)
     this.inputList = this._parseInput(formData['analytes'] as string | string[])
     switch (origin) {
