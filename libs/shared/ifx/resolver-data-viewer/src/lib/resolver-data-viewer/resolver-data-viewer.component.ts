@@ -3,7 +3,6 @@ import {
   Component,
   computed,
   inject,
-  Inject,
   input,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
@@ -17,19 +16,20 @@ import { ResolverResponse } from 'ifx';
 import { NcatsDatatableComponent } from 'ncats-datatable';
 
 @Component({
-    selector: 'lib-resolver-data-viewer',
-    imports: [
-        CommonModule,
-        MatButtonModule,
-        MatIconModule,
-        MatSlideToggleModule,
-        MatMenuModule,
-        NcatsDatatableComponent,
-        LoadingSpinnerComponent,
-    ],
-    templateUrl: './resolver-data-viewer.component.html',
-    styleUrl: './resolver-data-viewer.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-resolver-data-viewer',
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSlideToggleModule,
+    MatMenuModule,
+    NcatsDatatableComponent,
+    LoadingSpinnerComponent,
+  ],
+  templateUrl: './resolver-data-viewer.component.html',
+  styleUrl: './resolver-data-viewer.component.scss',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResolverDataViewerComponent {
   private dom: Document = inject(DOCUMENT);
@@ -76,7 +76,7 @@ export class ResolverDataViewerComponent {
           label: field,
           field: field,
           sortable: true,
-        }),
+        })
       );
     });
     return fieldsArr;
@@ -90,7 +90,7 @@ export class ResolverDataViewerComponent {
         this._downloadFile(
           JSON.stringify(this.dataAsObject()),
           'resolver.json',
-          'json',
+          'json'
         );
         break;
       }
@@ -108,7 +108,7 @@ export class ResolverDataViewerComponent {
       const inputLine: string[] = [];
       this.headers()?.forEach((field) => {
         inputLine.push(
-          input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' ',
+          input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' '
         );
       });
       lines.push(inputLine.join(','));

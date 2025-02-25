@@ -16,7 +16,7 @@ describe('Resolver Selectors', () => {
       response: name || `name-${id}`,
       source: name || `name-${id}`,
       url: name || `name-${id}`,
-    }) as ResolverResponse;
+    } as ResolverResponse);
 
   let state: ResolverPartialState;
 
@@ -33,7 +33,7 @@ describe('Resolver Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        },
+        }
       ),
     };
   });

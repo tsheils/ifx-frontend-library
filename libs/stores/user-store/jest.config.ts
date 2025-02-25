@@ -1,6 +1,5 @@
-/* eslint-disable */
-global.TextEncoder = require('util').TextEncoder;
-global.TextDecoder = require('util').TextDecoder;
+import 'cross-fetch/polyfill';
+
 export default {
   displayName: 'stores-user-store',
   preset: '../../../jest.preset.js',

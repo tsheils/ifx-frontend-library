@@ -7,6 +7,7 @@ import {
   input,
 } from '@angular/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
+import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
@@ -17,7 +18,15 @@ import { RampCorePageComponent } from 'ramp-core-page';
 
 @Component({
   selector: 'lib-ramp-page',
-  imports: [CommonModule, CdkScrollable, MatIcon, RouterOutlet, MatRipple],
+  imports: [
+    CommonModule,
+    CdkScrollable,
+    MatIcon,
+    RouterOutlet,
+    MatRipple,
+    MatCard,
+    MatCardContent,
+  ],
   templateUrl: './ramp-page.component.html',
   styleUrl: './ramp-page.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,7 +60,7 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   }
 
   scrollTo(anchor: string) {
-    this.activeMenuElement === anchor;
+    this.activeMenuElement = anchor;
     this.scroller.scrollToAnchor(anchor);
   }
 }

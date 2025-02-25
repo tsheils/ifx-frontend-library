@@ -12,17 +12,18 @@ import {
 import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';
 
 @Component({
-    selector: 'ncats-frontend-library-article-details-display',
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatIconModule,
-        MatButtonModule,
-        ArticleListCardComponent,
-    ],
-    templateUrl: './article-details-display.component.html',
-    styleUrls: ['./article-details-display.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'ncats-frontend-library-article-details-display',
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    MatButtonModule,
+    ArticleListCardComponent,
+  ],
+  templateUrl: './article-details-display.component.html',
+  styleUrls: ['./article-details-display.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
 })
 export class ArticleDetailsDisplayComponent {
   article = input<Article>();
@@ -53,7 +54,7 @@ export class ArticleDetailsDisplayComponent {
 
   constructor(
     private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer
   ) {}
 
   getArticleAbstract(): SafeHtml | undefined {

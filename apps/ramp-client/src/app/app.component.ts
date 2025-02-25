@@ -30,6 +30,7 @@ import { RampSelectors } from 'ramp-store';
     RampFullBannerComponent,
     FooterTemplateComponent,
   ],
+  standalone: true,
 })
 export class AppComponent {
   private readonly store = inject(Store);
@@ -37,6 +38,10 @@ export class AppComponent {
   isProd = computed(() => !environment.production);
   title = 'ramp-client';
   links: LinkTemplateProperty[] = [
+    {
+      link: 'analyze',
+      label: 'Analyze',
+    },
     {
       link: 'about',
       label: 'About',

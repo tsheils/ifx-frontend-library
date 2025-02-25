@@ -27,7 +27,6 @@ describe('DiseasesEffects', () => {
       gardId,
       name: name || `name-${gardId}`,
       epiCount: 0,
-      nonEpiCount: 0,
       projectCount: 0,
     });
 

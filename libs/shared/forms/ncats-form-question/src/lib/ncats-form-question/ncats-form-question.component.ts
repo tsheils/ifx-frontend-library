@@ -26,6 +26,7 @@ import { QuestionBase } from './question-base';
   ],
   templateUrl: './ncats-form-question.component.html',
   styleUrl: './ncats-form-question.component.scss',
+  standalone: true,
 })
 export class NcatsFormQuestionComponent {
   @Input() question!: QuestionBase<string>;

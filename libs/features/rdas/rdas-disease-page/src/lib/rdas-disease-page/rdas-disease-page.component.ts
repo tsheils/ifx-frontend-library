@@ -8,11 +8,7 @@ import {
 } from '@angular/animations';
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScrollDispatcher, ScrollingModule } from '@angular/cdk/scrolling';
-import {
-  CommonModule,
-  NgOptimizedImage,
-  ViewportScroller,
-} from '@angular/common';
+import { CommonModule, ViewportScroller } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -45,8 +41,6 @@ import {
   DiseaseDisplayComponent,
   DiseaseHeaderComponent,
 } from '@ncats-frontend-library/shared/rdas/disease-display';
-import { GeneListComponent } from '@ncats-frontend-library/shared/rdas/gene-display';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
 import {
   DiseaseSelectors,
@@ -68,7 +62,7 @@ import { Store } from '@ngrx/store';
         'out',
         style({
           top: '15vh',
-        }),
+        })
       ),
       transition('in => out', [group([animate('200ms ease-out')])]),
       transition('out => in', [group([animate('200ms ease-in')])]),
@@ -106,10 +100,10 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   destroyRef = inject(DestroyRef);
 
   disease: Signal<Disease | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getSelected,
+    DiseaseSelectors.getSelected
   );
   loaded: Signal<boolean | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getDiseasesLoaded,
+    DiseaseSelectors.getDiseasesLoaded
   );
   diseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
@@ -117,7 +111,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
     this.store.selectSignal(DiseaseSelectors.getStaticDiseaseFilters);
   articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
   projectsCount = this.store.selectSignal(
-    ProjectSelectors.selectAllProjectsCount,
+    ProjectSelectors.selectAllProjectsCount
   );
   trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
   animationState = signal('in');
@@ -128,7 +122,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.scrollDispatcher.scrolled().subscribe(() => {
       this.animationState.set(
-        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
+        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in'
       );
     });
 

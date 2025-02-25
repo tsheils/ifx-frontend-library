@@ -24,10 +24,10 @@ export const fetchProject$ = createEffect(
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/grants') &&
-          r.payload.routerState.url.startsWith('/grant'),
+          r.payload.routerState.url.startsWith('/grant')
       ),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
       ),
       mergeMap((params: { projectid?: string }) => {
         GRANTDETAILSVARIABLES.coreProjectsWhere.core_project_num =
@@ -42,7 +42,7 @@ export const fetchProject$ = createEffect(
                 };
               if (data) {
                 const project: CoreProject = new CoreProject(
-                  data.coreProjects[0],
+                  data.coreProjects[0]
                 );
                 return FetchProjectActions.fetchProjectSuccess({
                   project: project,
@@ -51,12 +51,12 @@ export const fetchProject$ = createEffect(
                 return FetchProjectActions.fetchProjectFailure({
                   error: 'No Project found',
                 });
-            }),
+            })
           );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 export const fetchProjectList$ = createEffect(
@@ -85,7 +85,7 @@ export const fetchProjectList$ = createEffect(
                 count: { count: number };
               };
               const projectsList = projects.coreProjects.map(
-                (proj: Partial<CoreProject>) => new CoreProject(proj),
+                (proj: Partial<CoreProject>) => new CoreProject(proj)
               );
               const projectCount = projects.count.count;
               const allProjectCount = projects.count.count;
@@ -99,12 +99,12 @@ export const fetchProjectList$ = createEffect(
                 return FetchProjectsListActions.fetchProjectsListFailure({
                   error: 'No Disease found',
                 });
-            }),
+            })
           );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 function _setProjectsOptions(options: {

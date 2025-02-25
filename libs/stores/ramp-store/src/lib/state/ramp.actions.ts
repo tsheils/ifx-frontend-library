@@ -12,7 +12,9 @@ import {
   Pathway,
   Properties,
   RampChemicalEnrichmentResponse,
+  RampOntologyEnrichmentResponse,
   RampPathwayEnrichmentResponse,
+  RampReactionClassEnrichmentResponse,
   RampResponse,
   Reaction,
   ReactionClass,
@@ -97,6 +99,32 @@ export const MetaboliteFromOntologyActions = createActionGroup({
   },
 });
 
+export const OntologyEnrichmentsActions = createActionGroup({
+  source: 'Ontology Enrichment',
+  events: {
+    fetchOntologyEnrichment: props<{
+      metabolites: string[];
+      background?: string;
+      backgroundFile?: File;
+    }>(),
+    fetchOntologyEnrichmentFile: emptyProps(),
+    fetchOntologyEnrichmentSuccess: props<{
+      data: RampOntologyEnrichmentResponse;
+      // pValType?: string;
+      //  pValCutoff?: number;
+    }>(),
+    fetchOntologyEnrichmentFailure: props<{ error: string }>(),
+    filterOntologyEnrichment: props<{
+      pValType: string;
+      pValCutoff: number;
+    }>(),
+    filterOntologyEnrichmentSuccess: props<{
+      data: RampOntologyEnrichmentResponse;
+    }>(),
+    filterOntologyEnrichmentFailure: props<{ error: string }>(),
+  },
+});
+
 export const ClassesFromMetabolitesActions = createActionGroup({
   source: 'Classes From Metabolites',
   events: {
@@ -158,6 +186,32 @@ export const ReactionClassesFromAnalytesActions = createActionGroup({
     fetchReactionClassesFromAnalyteSuccess:
       props<RampResponse<ReactionClass>>(),
     fetchReactionClassesFromAnalyteFailure: props<{ error: string }>(),
+  },
+});
+
+export const ReactionClassEnrichmentsActions = createActionGroup({
+  source: 'Reaction Class Enrichment',
+  events: {
+    fetchReactionClassEnrichment: props<{
+      analytes: string[];
+      background?: string;
+      backgroundFile?: File;
+    }>(),
+    fetchReactionClassEnrichmentFile: emptyProps(),
+    fetchReactionClassEnrichmentSuccess: props<{
+      data: RampReactionClassEnrichmentResponse;
+      // pValType?: string;
+      //  pValCutoff?: number;
+    }>(),
+    fetchReactionClassEnrichmentFailure: props<{ error: string }>(),
+    filterReactionClassEnrichment: props<{
+      pValType: string;
+      pValCutoff: number;
+    }>(),
+    filterReactionClassEnrichmentSuccess: props<{
+      data: RampReactionClassEnrichmentResponse;
+    }>(),
+    filterReactionClassEnrichmentFailure: props<{ error: string }>(),
   },
 });
 

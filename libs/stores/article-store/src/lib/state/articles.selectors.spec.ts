@@ -1,13 +1,4 @@
-import {
-  Article,
-  Author,
-  Disease,
-  Epidemiology,
-  JournalVolume,
-  MeshTerm,
-  PubtatorAnnotation,
-  Source,
-} from '@ncats-frontend-library/models/rdas';
+import { Article } from '@ncats-frontend-library/models/rdas';
 import {
   articlesAdapter,
   ArticleStorePartialState,
@@ -31,7 +22,7 @@ describe('ArticleStore Selectors', () => {
       diseases: [],
       journals: [],
       sources: [],
-    }) as Article;
+    } as Article);
 
   let state: ArticleStorePartialState;
 
@@ -48,14 +39,14 @@ describe('ArticleStore Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        },
+        }
       ),
     };
   });
 
   describe('ArticleStore Selectors', () => {
     it('selectAllArticleStore() should return the list of ArticleStore', () => {
-      const results = ArticleStoreSelectors.selectAllArticleStore(state);
+      const results = ArticleStoreSelectors.selectAllArticles(state);
       const selId = getArticleStoreId(results[1]);
 
       expect(results.length).toBe(3);

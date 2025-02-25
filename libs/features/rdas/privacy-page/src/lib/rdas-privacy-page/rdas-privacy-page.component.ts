@@ -49,7 +49,7 @@ export class RdasPrivacyPageComponent implements OnInit {
     private changeRef: ChangeDetectorRef,
     private scrollDispatcher: ScrollDispatcher,
     public scroller: ViewportScroller,
-    private breakpointObserver: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {

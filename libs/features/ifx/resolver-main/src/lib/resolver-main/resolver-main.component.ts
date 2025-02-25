@@ -1,6 +1,8 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
 import {
+  AfterContentInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -10,18 +12,24 @@ import {
   OnInit,
   signal,
   Signal,
+  viewChild,
   ViewEncapsulation,
   WritableSignal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+  MatAutocompleteTrigger,
+} from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatMenuTrigger } from '@angular/material/menu';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -39,55 +47,61 @@ import {
 } from 'resolver-store';
 
 @Component({
-    selector: 'lib-resolver-main',
-    imports: [
-        CommonModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatAutocompleteModule,
-        MatCheckboxModule,
-        MatSelectModule,
-        MatChipsModule,
-        MatIconModule,
-        SharedUtilsListFilterRowComponent,
-        MatRadioModule,
-        MatButtonModule,
-        ResolverDataViewerComponent,
-        HighlightPipe,
-        LoadingSpinnerComponent,
-    ],
-    templateUrl: './resolver-main.component.html',
-    styleUrl: './resolver-main.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    encapsulation: ViewEncapsulation.None
+  selector: 'lib-resolver-main',
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatAutocompleteModule,
+    MatCheckboxModule,
+    MatSelectModule,
+    MatChipsModule,
+    MatIconModule,
+    SharedUtilsListFilterRowComponent,
+    MatRadioModule,
+    MatButtonModule,
+    ResolverDataViewerComponent,
+    HighlightPipe,
+    LoadingSpinnerComponent,
+    MatMenuTrigger,
+  ],
+  templateUrl: './resolver-main.component.html',
+  styleUrl: './resolver-main.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  encapsulation: ViewEncapsulation.None,
 })
-export class ResolverMainComponent implements OnInit {
+export class ResolverMainComponent implements OnInit, AfterViewInit {
   private readonly store = inject(Store);
   private router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  autocompleteTrigger = viewChild<MatAutocompleteTrigger>(
+    MatAutocompleteTrigger
+  );
+
   destroyRef = inject(DestroyRef);
   changeRef = inject(ChangeDetectorRef);
 
   optsList = computed(() =>
-    this.store.selectSignal(ResolverSelectors.selectResolverOptions)(),
+    this.store.selectSignal(ResolverSelectors.selectResolverOptions)()
   );
 
   optionCategories: Signal<FilterCategory[]> = computed(() =>
     this._mapFilterCategoriesFromArray(
-      this.store.selectSignal(ResolverSelectors.selectResolverOptions)(),
-    ),
+      this.store.selectSignal(ResolverSelectors.selectResolverOptions)()
+    )
   );
 
   filteredSearchOptions: WritableSignal<FilterCategory[]> = signal(
-    this.optionCategories(),
+    this.optionCategories()
   );
 
   selectedFilters: Signal<{ [key: string]: Filter[] }> = computed(() =>
     this._mapFilterArrayToObject(
-      this.store.selectSignal(ResolverSelectors.fetchSelectedOptions)(),
-    ),
+      this.store.selectSignal(ResolverSelectors.fetchSelectedOptions)()
+    )
   );
 
   selectedFiltersSignal = signal(this.selectedFilters());
@@ -106,7 +120,7 @@ export class ResolverMainComponent implements OnInit {
   inputCtrl = new FormControl();
   filterSearchCtrl = new FormControl();
   loading = computed(
-    () => !!(this.resolvedData().length || this.badData().length),
+    () => !!(this.resolvedData().length || this.badData().length)
   );
   clicked = signal(false);
 
@@ -118,7 +132,7 @@ export class ResolverMainComponent implements OnInit {
   subscriptionSelectionSignal = computed(() => {
     return new SelectionModel<string>(
       true,
-      this.store.selectSignal(ResolverSelectors.fetchPreviousFilters)(),
+      this.store.selectSignal(ResolverSelectors.fetchPreviousFilters)()
     );
   });
 
@@ -136,7 +150,7 @@ export class ResolverMainComponent implements OnInit {
       if (optsString) {
         const optsArr: string[] = optsString.split(';');
         this.store.dispatch(
-          LoadResolverOptionsActions.setPreviousFilters({ filters: optsArr }),
+          LoadResolverOptionsActions.setPreviousFilters({ filters: optsArr })
         );
       }
       this.resolveCtrl.setValue(params.get('standardize'));
@@ -150,12 +164,16 @@ export class ResolverMainComponent implements OnInit {
       .subscribe((res) => {
         const selected: string[] = this.subscriptionSelectionSignal().selected;
         const filters = this.optsList().filter((opt) =>
-          selected.includes(opt.value),
+          selected.includes(opt.value)
         );
         this.selectedFiltersSignal.set(this._mapFilterArrayToObject(filters));
       });
     this.selectedFiltersSignal.set(this.selectedFilters());
     this.filteredSearchOptions.set(this.optionCategories());
+  }
+
+  ngAfterViewInit() {
+    this.autocompleteTrigger()?.openPanel();
   }
 
   resolve() {
@@ -178,7 +196,7 @@ export class ResolverMainComponent implements OnInit {
       ResolveQueryActions.resolveQuery({
         urlStub: '/' + this.sortedSelection().join('/'),
         form: formData,
-      }),
+      })
     );
 
     this.router.navigate([], {
@@ -213,7 +231,7 @@ export class ResolverMainComponent implements OnInit {
         }
       });
       this.filteredSearchOptions.set(
-        this._mapFilterCategoriesFromArray(retArr),
+        this._mapFilterCategoriesFromArray(retArr)
       );
     } else {
       this.filteredSearchOptions.set(this.optionCategories());
@@ -226,6 +244,7 @@ export class ResolverMainComponent implements OnInit {
 
   clearParams() {
     this.subscriptionSelectionSignal().clear();
+    this.router.navigate([]);
   }
 
   searchDisabled() {
@@ -235,7 +254,7 @@ export class ResolverMainComponent implements OnInit {
   }
 
   _mapFilterCategoriesFromArray(
-    filterArr: Filter[] | undefined,
+    filterArr: Filter[] | undefined
   ): FilterCategory[] {
     if (filterArr && filterArr.length) {
       const retMap: Map<string, FilterCategory> = new Map<
@@ -252,7 +271,7 @@ export class ResolverMainComponent implements OnInit {
             } else {
               retMap.set(
                 tag,
-                new FilterCategory({ parent: tag, values: [opt] }),
+                new FilterCategory({ parent: tag, values: [opt] })
               );
             }
           });
@@ -271,7 +290,7 @@ export class ResolverMainComponent implements OnInit {
           if (tempObj[field] && tempObj[field].length) {
             tempObj[field].push(filter);
             tempObj[field] = tempObj[field].sort((a, b) =>
-              a.term.localeCompare(b.term),
+              a.term.localeCompare(b.term)
             );
           } else {
             tempObj[field] = [filter];

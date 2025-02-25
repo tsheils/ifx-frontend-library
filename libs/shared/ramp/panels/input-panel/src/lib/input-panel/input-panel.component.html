@@ -1,12 +1,12 @@
 <div class="row top-align">
-  @for (tab of inputQuestions();  track tab.section) {
-    <div [ngClass]="tab.section">
-      <h3>{{ cleanLabel(tab.section) | titlecase }} Parameters</h3>
-      <lib-ncats-form
-        [questions]="tab.questions"
-        (formCreated)="setForm($event, tab.section)"
-      ></lib-ncats-form>
-    </div>
+  @for (tab of inputQuestions(); track tab.section) {
+  <div [ngClass]="tab.section">
+    <h3>{{ cleanLabel(tab.section) | titlecase }} Parameters</h3>
+    <lib-ncats-form
+      [questions]="tab.questions"
+      (formCreated)="setForm($event, tab.section)"
+    ></lib-ncats-form>
+  </div>
   }
 </div>
 <div class="row centered-row bottom-align">

@@ -49,7 +49,7 @@ export class ClinicalTrial {
 
     if (obj.interventions) {
       this.interventions = obj.interventions.map(
-        (data) => new Intervention(data),
+        (data) => new Intervention(data)
       );
     }
 
@@ -59,7 +59,7 @@ export class ClinicalTrial {
 
     if (obj.participantInfo) {
       this.participantInfo = obj.participantInfo.map(
-        (data) => new ParticipantInfo(data),
+        (data) => new ParticipantInfo(data)
       );
     }
 

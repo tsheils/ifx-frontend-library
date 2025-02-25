@@ -51,7 +51,7 @@ export const reducer = createReducer(
     FetchDiseaseActions.fetchDisease,
     (state) => {
       return { ...state, loaded: false, error: null };
-    },
+    }
   ),
 
   on(
@@ -59,13 +59,13 @@ export const reducer = createReducer(
     (state, { diseases }) => ({
       ...state,
       tree: diseases,
-    }),
+    })
   ),
 
   on(
     BrowseDiseaseListActions.fetchDiseaseListSuccess,
     (state, { diseases, page }) =>
-      diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true }),
+      diseasesAdapter.setAll(diseases, { ...state, page: page, loaded: true })
   ),
 
   on(
@@ -76,7 +76,7 @@ export const reducer = createReducer(
         ...state,
         selectedId: disease.gardId,
         loaded: true,
-      }),
+      })
   ),
 
   on(
@@ -85,7 +85,7 @@ export const reducer = createReducer(
       ...state,
       subscriptions: diseases,
       loaded: true,
-    }),
+    })
   ),
 
   on(FetchDiseaseActions.fetchDiseaseFiltersSuccess, (state, { filters }) => ({
@@ -98,7 +98,7 @@ export const reducer = createReducer(
     (state, { filters }) => ({
       ...state,
       staticDiseaseFilters: filters,
-    }),
+    })
   ),
 
   on(
@@ -106,7 +106,7 @@ export const reducer = createReducer(
     (state, { filters }) => ({
       ...state,
       allDiseaseFilters: filters,
-    }),
+    })
   ),
 
   on(FetchDiseaseActions.clearStaticDiseaseFilters, (state) => ({
@@ -143,8 +143,8 @@ export const reducer = createReducer(
       ...state,
       loaded: false,
       error,
-    }),
-  ),
+    })
+  )
 );
 
 export function diseasesReducer(state: State | undefined, action: Action) {

@@ -9,15 +9,16 @@ import { Subject } from 'rxjs';
 import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card.component';
 
 @Component({
-    selector: 'ncats-frontend-library-disease-subscription-list',
-    imports: [
-        CommonModule,
-        MatCardModule,
-        MatIconModule,
-        DiseaseListCardComponent,
-    ],
-    templateUrl: './disease-subscription-list.component.html',
-    styleUrls: ['./disease-subscription-list.component.scss']
+  selector: 'ncats-frontend-library-disease-subscription-list',
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatIconModule,
+    DiseaseListCardComponent,
+  ],
+  templateUrl: './disease-subscription-list.component.html',
+  styleUrls: ['./disease-subscription-list.component.scss'],
+  standalone: true,
 })
 
 //TODO refactor with signals
@@ -33,7 +34,7 @@ export class DiseaseSubscriptionListComponent {
       const diseaseArr: Disease[] = [];
       subscriptions.forEach((sub) => {
         diseaseArr.push(
-          new Disease({ gardId: sub.gardID, name: sub.diseaseName }),
+          new Disease({ gardId: sub.gardID, name: sub.diseaseName })
         );
         this.diseases = signal<Disease[]>(diseaseArr);
       });

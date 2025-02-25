@@ -38,6 +38,13 @@ export class ReactionClass extends RampDataGeneric {
   metCountAverage?: string;
   proteinCountAverage?: string;
   totalReactionAverage?: string;
+  Metab_OR?: number;
+  Prot_OR?: number;
+  Pval_FDR?: number;
+  Pval_Holm?: number;
+  Pval_Metab?: number;
+  Pval_Prot?: number;
+  Pval_combined?: number;
 
   constructor(obj: Partial<ReactionClass>) {
     super();
@@ -50,15 +57,21 @@ export class ReactionClass extends RampDataGeneric {
       this.hierarchyArray = hierarchy.split(' | ') as string[];
     }
     if (obj['metCount'] && obj['totalMetsInRxnClass']) {
-      this.metCountAverage = `${obj['metCount']?.toString()}/${obj['totalMetsInRxnClass']?.toString()}`;
+      this.metCountAverage = `${obj['metCount']?.toString()}/${obj[
+        'totalMetsInRxnClass'
+      ]?.toString()}`;
     }
 
     if (obj['proteinCount'] && obj['totalProteinsInRxnClass']) {
-      this.proteinCountAverage = `${obj['proteinCount']?.toString()}/${obj['totalProteinsInRxnClass']?.toString()}`;
+      this.proteinCountAverage = `${obj['proteinCount']?.toString()}/${obj[
+        'totalProteinsInRxnClass'
+      ]?.toString()}`;
     }
 
     if (obj['reactionCount'] && obj['totalRxnsInClass']) {
-      this.totalReactionAverage = `${obj['reactionCount']?.toString()}/${obj['totalRxnsInClass']?.toString()}`;
+      this.totalReactionAverage = `${obj['reactionCount']?.toString()}/${obj[
+        'totalRxnsInClass'
+      ]?.toString()}`;
     }
   }
 }
@@ -99,7 +112,7 @@ export class CommonAnalyte extends RampDataGeneric {
     if (obj['rxn_partner_ids']) {
       this.rxnPartnerIdsString = (<string>obj['rxn_partner_ids']).replace(
         /,/g,
-        ', ',
+        ', '
       );
       this.rxnPartnerIds = this.rxnPartnerIdsString.split(',');
     }

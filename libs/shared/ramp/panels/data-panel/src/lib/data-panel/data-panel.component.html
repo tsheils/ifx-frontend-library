@@ -1,59 +1,52 @@
-@if (dataAsDataProperty() && dataAsDataProperty()!.length > 0) {
-  @if (filters() || dataframe()) {
-    <div class="row right-justified-row">
-      <div class="width-15">
-        @if (showFilters()) {
-          <button
-            mat-stroked-button
-            matTooltip="Hide Filters"
-            (click)="showFilters.set(false)"
-          >
-            <span class="hide-small">Hide Filters </span
-            ><mat-icon>close</mat-icon>
-          </button>
-        } @else {
-          <button
-            mat-stroked-button
-            matTooltip="Show Filters"
-            (click)="showFilters.set(true)"
-          >
-            <span class="hide-small">Show Filters </span
-            ><mat-icon>filter_list</mat-icon>
-          </button>
-        }
-
-        @if (dataframe()) {
-          &nbsp; &nbsp; &nbsp;
-          <lib-data-download-button
-            [data]="dataframe()"
-            [fileName]="fileName()!"
-          ></lib-data-download-button>
-        }
-      </div>
-    </div>
-  }
-  @if (filters() && showFilters()) {
-  <!--  <lib-input-panel
+@if (dataAsDataProperty() && dataAsDataProperty()!.length > 0) { @if (filters()
+|| dataframe()) {
+<div class="row right-justified-row">
+  <div class="width-15">
+    @if (showFilters()) {
+    <button
+      mat-stroked-button
+      matTooltip="Hide Filters"
+      (click)="showFilters.set(false)"
+    >
+      <span class="hide-small">Hide Filters </span><mat-icon>close</mat-icon>
+    </button>
+    } @else {
+    <button
+      mat-stroked-button
+      matTooltip="Show Filters"
+      (click)="showFilters.set(true)"
+    >
+      <span class="hide-small">Show Filters </span
+      ><mat-icon>filter_list</mat-icon>
+    </button>
+    } @if (dataframe()) { &nbsp; &nbsp; &nbsp;
+    <lib-data-download-button
+      [data]="dataframe()"
+      [fileName]="fileName()!"
+    ></lib-data-download-button>
+    }
+  </div>
+</div>
+} @if (filters() && showFilters()) {
+<!--  <lib-input-panel
       [inputQuestions]="filters()!"
       (dataSearch)="searchData($event)"
     ></lib-input-panel>-->
-  }
-  <div class="row space-around-row">
-    <div class="width-90">
-      <ncats-datatable
-        [fieldsConfig]="dataColumns()"
-        [data]="dataAsDataProperty()"
-        [internalSort]="true"
-        [useInternalPaginator]="true"
-      ></ncats-datatable>
-    </div>
-  </div>
-} @else {
-  @if (noDataArr()) {
-    <div class="row space-around-row">
-      <div class="width-90">
-        <h1>no data found!</h1>
-      </div>
-    </div>
-  }
 }
+<div class="row space-around-row">
+  <div class="width-90">
+    <ncats-datatable
+      [fieldsConfig]="dataColumns()"
+      [data]="dataAsDataProperty()"
+      [internalSort]="true"
+      [useInternalPaginator]="true"
+    ></ncats-datatable>
+  </div>
+</div>
+} @else { @if (noDataArr()) {
+<div class="row space-around-row">
+  <div class="width-90">
+    <h1>no data found!</h1>
+  </div>
+</div>
+} }

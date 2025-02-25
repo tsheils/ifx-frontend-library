@@ -53,7 +53,9 @@ export class SharedUtilsBarChartComponent
   implements OnInit, OnChanges
 {
   placeholderUrl = computed(() => {
-    return `assets/charts/placeholders/chart${Math.floor(Math.random() * 2)}.webp`;
+    return `assets/charts/placeholders/chart${Math.floor(
+      Math.random() * 2
+    )}.webp`;
   });
 
   // override dataSignal = input<FilterCategory>();
@@ -89,7 +91,7 @@ export class SharedUtilsBarChartComponent
         .attr('viewBox', [0, 0, this.width(), this.height()])
         .attr(
           'style',
-          'max-width: 100%; height: auto; height: intrinsic; overflow: visible;',
+          'max-width: 100%; height: auto; height: intrinsic; overflow: visible;'
         )
         .on('touchstart', (event) => event.preventDefault());
 
@@ -111,12 +113,12 @@ export class SharedUtilsBarChartComponent
   makeChart() {
     // Determine the series that need to be stacked.
     this.keys = [...new Set(this.dataSignal().values.map((d) => d.term))].sort(
-      (a: string, b: string) => a?.localeCompare(b),
+      (a: string, b: string) => a?.localeCompare(b)
     );
     const seriesIndex: InternMap = index(
       this.dataSignal().values,
       (d: Filter) => d.term,
-      (d: Filter) => d.label,
+      (d: Filter) => d.label
     ) as InternMap;
     this.series = (<unknown>stack()
       .keys(union(this.dataSignal().values.map((d) => d.label))) // distinct series keys, in input order
@@ -127,7 +129,7 @@ export class SharedUtilsBarChartComponent
         } else return 0;
       })(
       // get value for each series key and stack
-      seriesIndex as Iterable<{ [key: string]: number }>,
+      seriesIndex as Iterable<{ [key: string]: number }>
     )) as Stack<never, { [key: string]: number }, string>; // group by stack then series key
     // Prepare the scales for positional and color encodings.
     this.xScale = scaleBand()
@@ -136,7 +138,7 @@ export class SharedUtilsBarChartComponent
       .padding(0.1);
 
     const yMax: unknown = max(this.series, (d) =>
-      max(d, (d: ChartPoint) => d[1]),
+      max(d, (d: ChartPoint) => d[1])
     );
     this.yScale = scaleLinear()
       .domain([0, <number>yMax])
@@ -151,11 +153,11 @@ export class SharedUtilsBarChartComponent
       .attr('class', 'bar-chart-fill')
       .attr(
         'id',
-        (d: { key: string }) => `${<string>d.key.replaceAll(' ', '-')}-fill`,
+        (d: { key: string }) => `${<string>d.key.replaceAll(' ', '-')}-fill`
       )
       .selectAll('rect')
       .data((D: Series<{ [key: string]: number }, string>) =>
-        D.map((d: ChartPoint) => ((d.key = D.key), d)),
+        D.map((d: ChartPoint) => ((d.key = D.key), d))
       )
       .join('rect')
       .attr('x', (d: ChartPoint) => this.xScale(<string>(<unknown>d.data[0])))
@@ -163,7 +165,7 @@ export class SharedUtilsBarChartComponent
       .attr('height', (d: number[]) => this.yScale(d[0]) - this.yScale(d[1]))
       .attr('width', this.xScale.bandwidth())
       .on('mouseover', (event: Event, d: ChartPoint) =>
-        this.pointerMoved(event, d),
+        this.pointerMoved(event, d)
       )
       .on('mouseout', (event: Event) => this.pointerLeft(event));
 
@@ -172,14 +174,14 @@ export class SharedUtilsBarChartComponent
       .append('g')
       .attr(
         'transform',
-        `translate(0,${this.height() - this.margins().bottom})`,
+        `translate(0,${this.height() - this.margins().bottom})`
       )
       .call(
         axisBottom(this.xScale).tickValues(
           this.xScale.domain().filter(function (d, i) {
             return !(i % 4);
-          }),
-        ),
+          })
+        )
       )
       .selectAll('text')
       .style('text-anchor', 'end')
@@ -216,9 +218,9 @@ export class SharedUtilsBarChartComponent
     Array.from(d.data[1].entries()).forEach(
       (value: [string, { [key: string]: unknown }]) => {
         dataString.push(
-          (value[1]['label'] + ': ' + value[1]['count']) as string,
+          (value[1]['label'] + ': ' + value[1]['count']) as string
         );
-      },
+      }
     );
 
     this.tooltip.style('display', null);
@@ -256,7 +258,7 @@ export class SharedUtilsBarChartComponent
           .attr('x', 0)
           .attr('y', (_, i) => `${i * 1.1}em`)
           .attr('font-weight', (_, i) => (i ? null : 'bold'))
-          .text((d) => d),
+          .text((d) => d)
       );
 
     this.tooltip.transition().duration(100).style('opacity', 0.9);
@@ -267,7 +269,7 @@ export class SharedUtilsBarChartComponent
   // Wraps the text with a callout path of the correct size, as measured in the page.
   size(
     text: Selection<BaseType | SVGTextElement, undefined, null, undefined>,
-    path: Selection<BaseType | SVGPathElement, undefined, null, undefined>,
+    path: Selection<BaseType | SVGPathElement, undefined, null, undefined>
   ) {
     if (text.node()) {
       //@ts-expect-error dumb
@@ -275,7 +277,7 @@ export class SharedUtilsBarChartComponent
       text.attr('transform', `translate(${-w / 2},${15 - y})`);
       path.attr(
         'd',
-        `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`,
+        `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`
       );
     }
   }

@@ -13,31 +13,31 @@ const { selectAll, selectEntities } = filtersAdapter.getSelectors();
 
 export const selectFiltersLoaded = createSelector(
   selectFiltersState,
-  (state: FiltersState) => state.loaded,
+  (state: FiltersState) => state.loaded
 );
 
 export const selectFiltersError = createSelector(
   selectFiltersState,
-  (state: FiltersState) => state.error,
+  (state: FiltersState) => state.error
 );
 
 export const selectAllFilters = createSelector(
   selectFiltersState,
-  (state: FiltersState) => selectAll(state),
+  (state: FiltersState) => selectAll(state)
 );
 
 export const selectFiltersEntities = createSelector(
   selectFiltersState,
-  (state: FiltersState) => selectEntities(state),
+  (state: FiltersState) => selectEntities(state)
 );
 
 export const selectSelectedId = createSelector(
   selectFiltersState,
-  (state: FiltersState) => state.selectedId,
+  (state: FiltersState) => state.selectedId
 );
 
 export const selectEntity = createSelector(
   selectFiltersEntities,
   selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
+  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
 );

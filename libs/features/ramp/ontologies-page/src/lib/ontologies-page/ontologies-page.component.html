@@ -1,30 +1,38 @@
-@let ontoFromMeta = _getMapField('ontologies-from-metabolites');
-
-@if (mainPageMap() && mainPageMap().size){
-  <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
-      <mat-tab>
-        <ng-template mat-tab-label>
-          Ontologies from Metabolites
-        </ng-template>
-        <lib-panel-accordion
-          [paths]="paths()"
-          [inputTab]="ontoFromMeta.inputMap"
-          [overviewTabs]="ontoFromMeta.overviewMap"
-          [visualizationTabs]="ontoFromMeta.visualizationsMap"
-          [dataTabs]="ontoFromMeta.dataMap"
-          (dataSearch)="fetchData($event,'ontologies-from-metabolites')"
-        ></lib-panel-accordion>
-      </mat-tab>
-      <mat-tab>
-        <ng-template mat-tab-label>
-          Metabolites from Ontologies
-        </ng-template>
-          <div class="custom-input">
-            <lib-ontology-panel
-              [ontologies]="ontologies()"
-              (downloadMetabolitesSearch)="downloadOntologyData($event)"
-            ></lib-ontology-panel>
-          </div>
-      </mat-tab>
-  </mat-tab-group>
+@let ontoFromMeta = _getMapField('ontologies-from-metabolites'); @let
+ontoEnrichment = _getMapField('ontology-enrichment'); @if (mainPageMap() &&
+mainPageMap().size){
+<mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
+  <mat-tab [bodyClass]="'body-tabs'">
+    <ng-template mat-tab-label> Ontologies from Metabolites </ng-template>
+    <lib-panel-accordion
+      [paths]="activePath()"
+      [inputTab]="ontoFromMeta.inputMap"
+      [overviewTabs]="ontoFromMeta.overviewMap"
+      [visualizationTabs]="ontoFromMeta.visualizationsMap"
+      [dataTabs]="ontoFromMeta.dataMap"
+      (dataSearch)="fetchData($event, 'ontologies-from-metabolites')"
+    ></lib-panel-accordion>
+  </mat-tab>
+  <mat-tab [bodyClass]="'body-tabs'">
+    <ng-template mat-tab-label> Metabolites from Ontologies </ng-template>
+    <div class="custom-input">
+      <lib-ontology-panel
+        [ontologies]="ontologies()"
+        [paths]="activePath()"
+        (downloadMetabolitesSearch)="downloadOntologyData($event)"
+      ></lib-ontology-panel>
+    </div>
+  </mat-tab>
+  <mat-tab [bodyClass]="'body-tabs'">
+    <ng-template mat-tab-label> Ontology Enrichment</ng-template>
+    <lib-panel-accordion
+      [paths]="activePath()"
+      [inputTab]="ontoEnrichment.inputMap"
+      [overviewTabs]="ontoEnrichment.overviewMap"
+      [visualizationTabs]="ontoEnrichment.visualizationsMap"
+      [dataTabs]="ontoEnrichment.dataMap"
+      (dataSearch)="fetchData($event, 'ontology-enrichment')"
+    ></lib-panel-accordion>
+  </mat-tab>
+</mat-tab-group>
 }

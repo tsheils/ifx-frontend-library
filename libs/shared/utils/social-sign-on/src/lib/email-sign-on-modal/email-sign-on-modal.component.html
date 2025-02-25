@@ -14,7 +14,7 @@
         [formControlName]="'email'"
       />
       @if (signOnForm.controls['email'].invalid) {
-        <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+      <mat-error>{{ getEmailErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>
@@ -27,19 +27,24 @@
         [formControlName]="'pw'"
       />
       @if (signOnForm.controls['pw'].invalid) {
-        <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+      <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>
   <div class="row centered-row no-padding">
-    <a (click)="forgotPassword()" class="modal-button clickable-area"
+    <a
+      role="button"
+      tabindex="0"
+      (click)="forgotPassword()"
+      (keydown.enter)="forgotPassword()"
+      class="modal-button clickable-area"
       >Forgot password?</a
     >
   </div>
 </form>
 <div class="row centered-row">
   @if (loginError) {
-    <mat-error>{{ loginError }}</mat-error>
+  <mat-error>{{ loginError }}</mat-error>
   }
 </div>
 <div class="row centered-row">
@@ -55,7 +60,14 @@
 
 <div class="row centered-row">Don't have an account?</div>
 <div class="row centered-row">
-  <a (click)="register()" class="clickable-area">Register Now</a>
+  <a
+    role="button"
+    tabindex="0"
+    (click)="register()"
+    (keydown.enter)="register()"
+    class="clickable-area"
+    >Register Now</a
+  >
 </div>
 <div class="row centered-row">
   <p class="disclaimer">

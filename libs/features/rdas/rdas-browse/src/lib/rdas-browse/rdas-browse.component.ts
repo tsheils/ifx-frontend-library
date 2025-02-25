@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { CommonModule, DOCUMENT, NgOptimizedImage } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -39,7 +39,6 @@ import {
 } from '@ncats-frontend-library/models/rdas';
 import { FilterCategory } from '@ncats-frontend-library/models/utils';
 import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
-import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
 import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree';
 import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
 import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
@@ -96,13 +95,13 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
     const map = new Map<string, FilterCategory[]>();
     const filtersL = this.store.selectSignal(
-      DiseaseSelectors.getAllDiseaseFilters,
+      DiseaseSelectors.getAllDiseaseFilters
     );
     if (filtersL() && filtersL()?.length) {
       filtersL()?.forEach((filterCat) => {
         if (filterCat.parent) {
           let filterCats: FilterCategory[] | undefined = map.get(
-            filterCat.parent,
+            filterCat.parent
           );
           if (filterCats) {
             filterCats.push(filterCat);
@@ -195,7 +194,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           term: event.term,
           limit: 200,
           skip: 0,
-        }),
+        })
       );
     } else {
       this.store.dispatch(
@@ -203,7 +202,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           label: event.label,
           limit: 200,
           skip: skip,
-        }),
+        })
       );
     }
   }
@@ -242,7 +241,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   fetchParameters(): void {
     const params =
       this.router.routerState.root.snapshot.queryParamMap.keys.filter(
-        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key),
+        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key)
       );
     if (params && params.length) {
       params.forEach((param) => {
@@ -282,7 +281,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
 
           // finally joining each row with a line break
         },
-        [headings],
+        [headings]
       )
       .join('\n');
     return rows;

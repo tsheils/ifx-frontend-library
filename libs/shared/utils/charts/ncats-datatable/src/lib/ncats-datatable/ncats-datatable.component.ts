@@ -52,7 +52,7 @@ import { NgClass } from '@angular/common';
 
 const _sortingDataAccessor = (
   data: { [key: string]: DataProperty },
-  property: string,
+  property: string
 ) => {
   if (data[property] && data[property].value) {
     if (!isNaN(Number(data[property].value))) {
@@ -78,12 +78,12 @@ const _sortingDataAccessor = (
     trigger('detailExpand', [
       state(
         'collapsed',
-        style({ height: '0px', minHeight: '0', display: 'none' }),
+        style({ height: '0px', minHeight: '0', display: 'none' })
       ),
       state('expanded', style({ height: '*' })),
       transition(
         'expanded <=> collapsed',
-        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'),
+        animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')
       ),
     ]),
   ],
@@ -118,7 +118,7 @@ export class NcatsDatatableComponent implements OnInit {
     let ret: string[] = [];
     if (this.selectableRows()) {
       ret = ['select'].concat(
-        this.displayFields()?.map((field) => field.field) as string[],
+        this.displayFields()?.map((field) => field.field) as string[]
       );
     } else {
       ret = this.displayFields()?.map((field) => field.field) as string[];
@@ -129,7 +129,7 @@ export class NcatsDatatableComponent implements OnInit {
   displayFields = computed(() => {
     let ret: DataProperty[] = [];
     ret = this.fieldsConfig()?.filter(
-      (field) => !!field.visible,
+      (field) => !!field.visible
     ) as DataProperty[];
     if (!ret || !ret.length) {
       ret = this.fieldsConfig() as DataProperty[];
@@ -157,12 +157,12 @@ export class NcatsDatatableComponent implements OnInit {
    */
   dataSource = computed(() => {
     const ds = new MatTableDataSource<{ [key: string]: DataProperty }>(
-      this.data(),
+      this.data()
     );
 
     if (this.internalSort() && this._sort()) {
       ds.sortingDataAccessor = _sortingDataAccessor;
-      ds.sort = this._sort()!;
+      ds.sort = this._sort() as MatSort;
     }
     return ds;
   });
@@ -271,7 +271,7 @@ export class NcatsDatatableComponent implements OnInit {
   componentAttached(
     component: CdkPortalOutletAttachedRef,
     index: number,
-    field: DataProperty,
+    field: DataProperty
   ) {
     if (component) {
       const dataArr: { [p: string]: DataProperty }[] = this.data() as {
@@ -337,9 +337,11 @@ export class NcatsDatatableComponent implements OnInit {
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource().data.forEach((row) => this.selection.select(row));
+    if (this.isAllSelected() == true) {
+      this.selection.clear();
+    } else {
+      this.dataSource().data.forEach((row) => this.selection.select(row));
+    }
     this.ref.detectChanges();
   }
 

@@ -6,7 +6,6 @@ import {
   USERS_FEATURE_KEY,
   usersReducer,
 } from '@ncats-frontend-library/stores/user-store';
-import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
 import { SocialSignOnButtonComponent } from './social-sign-on-button.component';

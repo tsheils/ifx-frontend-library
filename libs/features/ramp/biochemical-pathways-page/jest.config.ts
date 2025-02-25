@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'biochemical-pathways-page',
   preset: '../../../../jest.preset.js',

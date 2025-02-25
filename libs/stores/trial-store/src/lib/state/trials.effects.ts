@@ -25,7 +25,7 @@ export const fetchTrial$ = createEffect(
         );
       }),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
       ),
       mergeMap((params: { nctid?: string }) => {
         TRIALDETAILSVARIABLES.ctwhere.NCTId = params.nctid;
@@ -37,19 +37,19 @@ export const fetchTrial$ = createEffect(
                 trialData.data as { clinicalTrials: ClinicalTrial[] };
               if (data) {
                 const trial: ClinicalTrial = new ClinicalTrial(
-                  data.clinicalTrials[0],
+                  data.clinicalTrials[0]
                 );
                 return FetchTrialActions.fetchTrialSuccess({ trial: trial });
               } else
                 return FetchTrialActions.fetchTrialFailure({
                   error: 'No Disease found',
                 });
-            }),
+            })
           );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 export const fetchTrialList$ = createEffect(
@@ -82,7 +82,7 @@ export const fetchTrialList$ = createEffect(
                 allCount: { count: number };
               };
               const trialsList = trials.clinicalTrials.map(
-                (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
+                (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial)
               );
               if (trialsList) {
                 return FetchTrialsListActions.fetchTrialsListSuccess({
@@ -93,12 +93,12 @@ export const fetchTrialList$ = createEffect(
                 return FetchTrialsListActions.fetchTrialsListFailure({
                   error: 'No Disease found',
                 });
-            }),
+            })
           );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 function _setTrialsOptions(options: {

@@ -6,6 +6,11 @@ library(readr)
 library(ggplot2)
 library(svglite)
 
+###########
+########### Utils
+###########
+
+
 rampDB <<- RaMP:::RaMP(branch='ramp3.0') # pre-load sqlite database to the container
 
 #* @apiTitle RaMP_API
@@ -40,6 +45,11 @@ cors <- function(req, res) {
     plumber::forward()
   }
 }
+
+###########
+########### RaMP info endpoints
+###########
+
 
 ######
 #' Return source version information. Includes RaMP version number, source database versions, and other metadata
@@ -160,6 +170,12 @@ function() {
   return(classtypes)
 }
 
+
+###########
+########### Biochemical Pathway endpoints
+###########
+
+
 #####
 #' Return pathway mappings from given list of analytes
 #' @post /api/pathways-from-analytes
@@ -205,6 +221,162 @@ function(pathway, analyteType="both", namesOrIds="names", match="fuzzy", maxPath
       )
   )
 }
+
+###########
+########### Biochemical Pathway enrichment endpoints
+###########
+
+#####
+#' Return combined Fisher's test results
+#' from given list of analytes query results
+#' @param analytes list of analytes of interest for pathway analysis
+#' @param background biospecimen background for Fisher's test
+#' @param backgroundFile: File
+#' @parser multi
+#' @parser text
+#' @parser json
+#' @post /api/pathway-enrichment
+#' @serializer json list(digits = 6)
+function(analytes, background = '', backgroundFile = '', backgroundType= "database") {
+  fishers_results_df <- ''
+  if(backgroundFile == "") {
+    if(background == "") {
+      print("run with database background")
+      fishers_results_df <- RaMP::runEnrichPathways(
+        db = rampDB,
+        analytes,
+        background = NULL,
+        backgroundType= "database"
+      )
+    } else {
+      print("run with biospecimen")
+      fishers_results_df <- RaMP::runEnrichPathways(
+        db = rampDB,
+        analytes = analytes,
+        background = background,
+        backgroundType= "biospecimen"
+      )
+    }
+  }
+  else {
+    print("run with background file")
+    bg <- gsub("\r\n", ",", backgroundFile)
+    file <- unlist(strsplit(bg, ','))
+    if(length(file) > length(analytes)) {
+      fishers_results_df <- RaMP::runEnrichPathways(
+        db = rampDB,
+        analytes = analytes,
+        background = file,
+        backgroundType= "list"
+      )
+    } else {
+      error <- function(cond) {
+        print(cond)
+        return(data.frame(stringsAsFactors = FALSE))
+      }
+    }
+  }
+  analytes <- paste(analytes, collapse = ", ")
+  return(list(
+    data = fishers_results_df,
+    function_call = paste0("RaMP::runEnrichPathways()")
+  ))
+}
+
+#####
+#' Return filtered Fisher's test results
+#' from given list of Fisher's test results
+#' @param fishers_results output of runEnrichPathways
+#' @param pValType one of "fdr" or "holm" or "pval"
+#' @param pValCutoff p value threshold below which results are considered significant
+#' @post /api/filter-enrichment-results
+#' @serializer json list(digits = 6)
+function(fishers_results,  pValType = 'holm', pValCutoff = 0.1) {
+  filtered_results <- RaMP::filterEnrichResults(
+    enrichResults = fishers_results,
+    pValType = pValType,
+    pValCutoff = pValCutoff
+  )
+  fishers_results <- paste(fishers_results, collapse = ", ")
+  return(list(
+    data = filtered_results,
+    function_call = paste0("RaMP::filterEnrichResults()")
+  ))
+}
+
+#####
+#' from given list of Fisher's test results using the findCluster method from the R package (see documentation for further details)
+#' @param fishers_results Output of Fisher's enrichment
+#' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
+#' @param percPathwayOverlap Minimum overlap for clusters to merge
+#' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
+#' @post /api/cluster-enrichment-results
+#' @serializer json list(digits = 6)
+function(
+  fishers_results,
+  #analyte_source_id,
+  percAnalyteOverlap = 0.5,
+  percPathwayOverlap = 0.5,
+  minPathwayToCluster = 2
+) {
+  if (typeof(minPathwayToCluster) == "character") {
+    minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
+  }
+  clustering_results <- RaMP::findCluster(
+    db = rampDB,
+    fishersDf = fishers_results,
+    percAnalyteOverlap = percAnalyteOverlap,
+    minPathwayToCluster = minPathwayToCluster,
+    percPathwayOverlap = percPathwayOverlap
+  )
+  return(
+    list(
+      data = clustering_results,
+      function_call = paste0("RaMP::runEnrichChemClass())")
+      #numFoundIds = length(unique(chemical_enrichment_df$chem_props$chem_source_id))
+    )
+  )
+}
+
+#####
+#' Return lollipop plot for clustered Fisher's test results
+#' from given list of Fisher's test results using the findCluster method from the R package (see documentation for further details)
+#' @param fishers_results Output of Fisher's enrichment
+#' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
+#' @param percPathwayOverlap Minimum overlap for clusters to merge
+#' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
+#' @param filename
+#' @post /api/cluster-plot
+#' @serializer contentType list(type='image/svg')
+#'
+function(
+  fishers_results,
+  percAnalyteOverlap = 0.5,
+  percPathwayOverlap = 0.5,
+  minPathwayToCluster=2,
+  filename
+) {
+  if (typeof(minPathwayToCluster) == "character") {
+    minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
+  }
+
+  clustered_plot <- RaMP::plotPathwayResults(
+    db = rampDB,
+    pathwaysSig = fishers_results,
+    textSize = 8,
+    percAnalyteOverlap = percAnalyteOverlap,
+    minPathwayToCluster = minPathwayToCluster,
+    percPathwayOverlap = percPathwayOverlap,
+  )
+  file <- ggsave(filename,clustered_plot, width = 10, height = 10)
+  r <- readBin(file,'raw',n = file.info(file)$size)
+  unlink(filename)
+  return(r)
+}
+
+###########
+########### Ontology endpoints
+###########
 
 #####
 #' Return ontology mappings from list of metabolites
@@ -257,6 +429,304 @@ function(ontology, format = "json", res) {
     }
   }
 }
+
+#####
+#' Perform ontology enrichment on given metabolites
+#' @param metabolites Input for ontology enrichment
+#' @param background Restrict background to particular biospecimen
+#' @param backgroundFile: File
+#' @parser multi
+#' @parser text
+#' @parser json
+#' @post /api/ontology-enrichment
+function(metabolites = '', backgroundFile = '', background = '', backgroundType = "database") {
+  ontology_enrichment_df <- ''
+  if(backgroundFile == "") {
+    if(background == "") {
+      print("run with database background")
+      ontology_enrichment_df <- RaMP::runEnrichOntologies(
+        db = rampDB,
+        metabolites,
+        background = NULL,
+        backgroundType= "database"
+      )
+    } else {
+      print("run with biospecimen")
+      ontology_enrichment_df <- RaMP::runEnrichOntologies(
+        db = rampDB,
+        metabolites,
+        background = background,
+        backgroundType= "biospecimen"
+      )
+    }
+  }
+  else {
+    print("run with background file")
+    bg <- gsub("\r\n", ",", backgroundFile)
+    background <- unlist(strsplit(bg, ','))
+    if(length(background) > length(metabolites)) {
+      ontology_enrichment_df <- RaMP::runEnrichOntologies(
+        db = rampDB,
+        metabolites,
+        background = background,
+        backgroundType= "list"
+      )
+    } else {
+      error <- function(cond) {
+        print(cond)
+        return(data.frame(stringsAsFactors = FALSE))
+      }
+    }
+  }
+  return(
+    list(
+      data = ontology_enrichment_df,
+      function_call = makeFunctionCall(metabolites,"runEnrichOntologies")
+    )
+  )
+}
+
+
+###########
+########### Reaction endpoints
+###########
+
+
+####
+#' Return analytes involved in same reaction as given list of analytes from the 'catalyzed' table
+#' @param analyte list of analytes to be queried
+#' @post /api/common-reaction-analytes
+function(analytes, namesOrIds = "ids") {
+  analytes_df <-
+    tryCatch({
+      RaMP::rampFastCata(
+        db = rampDB,
+        analytes = analytes
+      )
+      # hmdbMatches <- unlist(unique(analytes_df[[1]]$input_analyte))
+      #  rheaMatches <- unlist(unique(analytes_df[[2]]$input_analyte))
+      # idMatches = length(union(hmdbMatches, rheaMatches))
+      # idMatches = length(analytes_df)
+
+      # this is the return object from the try/catch
+      # with ramp v3.0, the result is a dataframe of HMDB results and a second dataframe of Rhea results
+      #  list(data=analytes_df, idMatchCount=idMatches)
+    },
+      error = function(cond) {
+        idMatches = 0
+        return(data.frame(stringsAsFactors = FALSE))
+      })
+
+  # Removing Capacity to search by name for now - EM 12/13/2021
+  #    analytes_df_names <- tryCatch({
+  #        analytes_df <- RaMP::rampFastCata(
+  #            analytes = analytes,
+  #            namesOrIds = "names"
+  #        )
+  #    },
+  #        error = function(cond) {
+  #            return(data.frame(stringsAsFactors = FALSE))
+  #        }
+  #    )
+  #    analytes_df <- rbind(analytes_df_ids, analytes_df_names)
+
+  return(
+    # note... currently we're just returning the HMDB results.
+    # RaMP v3 also has Rhea results that can be displayed
+    # It would be referenced like this in this method:  analytes_df_ids$data$Rhea_Analyte_Associations
+    # note below we only reference the HMDB result until the UI can process both dataframes.
+    list(
+      data = unique(analytes_df),
+      function_call = makeFunctionCall(analytes,"rampFastCata"),
+      numFoundIds = length(analytes_df)
+    )
+  )
+}
+
+#' Returns reactions associated with input analytes, metabolites and/or genes/proteins.
+#' @param analytes
+#' @param onlyHumanMets
+#' @param humanProtein
+#' @param includeTransportRxns
+#' @param rxnDirs
+#' @param includeRxnURLs
+#' @post /api/reactions-from-analytes
+#' @serializer json list(digits = 6)
+function(
+  analytes,
+  onlyHumanMets = FALSE,
+  humanProtein = TRUE,
+  includeTransportRxns = TRUE,
+  rxnDirs = 'UN',
+  includeRxnURLs = FALSE
+) {
+  result = RaMP::getReactionsForAnalytes(
+    db=rampDB,
+    analytes=analytes,
+    onlyHumanMets = onlyHumanMets,
+    humanProtein = humanProtein,
+    includeTransportRxns = includeTransportRxns,
+    rxnDirs = rxnDirs,
+    includeRxnURLs = includeRxnURLs
+  )
+
+  plot<- RaMP:::buildAnalyteOverlapPerRxnLevelUpsetDataframe(result)
+  analyteStr = RaMP:::listToQueryString(analytes)
+  rxnDirs = RaMP:::listToQueryString(rxnDirs)
+
+  return(
+    list(
+      data = result,
+      plot = plot,
+      # function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,"), includeRxnURLs=",includeRxnURLs,"")
+      function_call = makeFunctionCall(analyteStr, "getReactionsForAnalytes")
+    )
+  )
+}
+
+#' getReactionClassesForAnalytes returns reactions class and EC numbers for a collection of input compound ids
+#'
+#' @param analytes
+#' @param multiRxnParticipantCount
+#' @param humanProtein
+#' @param concatResults
+#' @post /api/reaction-classes-from-analytes
+#' @serializer json list(digits = 6)
+function(
+  analytes,
+  multiRxnParticipantCount = 1,
+  humanProtein = TRUE,
+  concatResults = TRUE,
+  includeReactionIDs = FALSE,
+  useIdMapping = FALSE
+) {
+  result <- RaMP::getReactionClassesForAnalytes(
+    db=rampDB,
+    analytes=analytes,
+    multiRxnParticipantCount = multiRxnParticipantCount,
+    humanProtein=humanProtein,
+    concatResults=concatResults,
+    includeReactionIDs=includeReactionIDs,
+    useIdMapping = useIdMapping
+  )
+
+  analyteStr = RaMP:::listToQueryString(analytes)
+
+  return(
+    list(
+      data = result,
+      # function_call = paste0("RaMP::getReactionClassesForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), multiRxnParticipantCount=",multiRxnParticipantCount,", humanProtein=",humanProtein,", concatResults=",concatResults,")")
+      function_call = makeFunctionCall(analytes,"getReactionClassesForAnalyes")
+    )
+  )
+}
+
+#####
+#' Perform reaction class enrichment on given analytes
+#' @param analytes Input for reaction class enrichment
+#' @param background Restrict background to particular biospecimen
+#' @param backgroundFile: File
+#' @parser multi
+#' @parser text
+#' @parser json
+#' @post /api/reaction-class-enrichment
+function(analytes = '', backgroundFile = '', background = '', backgroundType = "database") {
+  reaction_class_enrichment_df <- ''
+  if(backgroundFile == "") {
+    if(background == "") {
+      reaction_class_enrichment_df <- RaMP::runEnrichReactionClass(
+        analytes,
+        #  background = NULL,
+        # backgroundType= "database",
+        db = rampDB,
+      )
+    } else {
+      reaction_class_enrichment_df <- RaMP::runEnrichReactionClass(
+        analytes,
+        # background = background,
+        # backgroundType= "biospecimen",
+        db = rampDB
+      )
+    }
+  }
+  else {
+    bg <- gsub("\r\n", ",", backgroundFile)
+    background <- unlist(strsplit(bg, ','))
+    if(length(background) > length(analytes)) {
+      reaction_class_enrichment_df <- RaMP::runEnrichReactionClass(
+        analytes,
+        # background = background,
+        # backgroundType= "list",
+        db = rampDB
+      )
+    } else {
+      error <- function(cond) {
+        print(cond)
+        return(data.frame(stringsAsFactors = FALSE))
+      }
+    }
+  }
+  return(
+    list(
+      data = reaction_class_enrichment_df,
+      function_call = makeFunctionCall(analytes,"runEnrichReactionClass")
+    )
+  )
+}
+
+#' getReactionParticipants returns protein information for a list of reaction ids.
+#' This utility method can help extend information from previous queries.
+#' For instance, if a user queries for reactions related to a list of metabolites,
+#' this method can be used to return proteins on some subset of reaction ids to find related proteins.
+#'
+#' @param reactionList Rhea reactions ids, such as rhea:38747
+#' @post /api/get-reaction-participants
+#' @serializer json list(digits = 6)
+function(
+  reactionList
+) {
+  result = getReactionParticipants(db=rampDB, reactionList=reactionList)
+
+  rxnStr = RaMP:::listToQueryString(reactionList)
+
+  return(
+    list(
+      data = result,
+      # function_call = paste0("RaMP::getReactionParticipants(db=RaMPDB, reactionList=c(",rxnStr,"))")
+      function_call = makeFunctionCall(rxnStr,"getReactionParticipants"),
+    )
+  )
+}
+
+#' getReactionDetails returns general reaction information for a list of reaction ids.
+#' This utility methed can help extend information from previous queries.
+#' For instance, if a user queries for reactions related to a list of analytes, or filtered on reactions,
+#' this method can be used to return general reaction info on some subset of reaction ids of interest.
+#'
+#' @param reactionList list of reaction ids
+#' @post /api/get-reaction-details
+#' @serializer json list(digits = 6)
+function(
+  reactionList
+) {
+  result = getReactionDetails(db=rampDB, reactionList=reactionList)
+
+  rxnStr = RaMP:::listToQueryString(reactionList)
+
+  return(
+    list(
+      data = result,
+      #  function_call = paste0("RaMP::getReactionDetails(db=RaMPDB, reactionList=c(",rxnStr,"))")
+      function_call = makeFunctionCall(rxnStr,"getReactionDetails"),
+
+    )
+  )
+}
+
+###########
+########### Chemical descriptor endpoints
+###########
+
 
 ######
 #' Return available chemical classes of given metabolites in RaMP-DB
@@ -318,205 +788,6 @@ function(metabolites="", property="all") {
     )
 }
 
-####
-#' Return analytes involved in same reaction as given list of analytes from the 'catalyzed' table
-#' @param analyte list of analytes to be queried
-#' @post /api/common-reaction-analytes
-function(analytes, namesOrIds = "ids") {
-  analytes_df <-
-    tryCatch({
-     RaMP::rampFastCata(
-      db = rampDB,
-      analytes = analytes
-    )
-   # hmdbMatches <- unlist(unique(analytes_df[[1]]$input_analyte))
-  #  rheaMatches <- unlist(unique(analytes_df[[2]]$input_analyte))
-    # idMatches = length(union(hmdbMatches, rheaMatches))
-   # idMatches = length(analytes_df)
-
-    # this is the return object from the try/catch
-    # with ramp v3.0, the result is a dataframe of HMDB results and a second dataframe of Rhea results
-  #  list(data=analytes_df, idMatchCount=idMatches)
-  },
-    error = function(cond) {
-      idMatches = 0
-      return(data.frame(stringsAsFactors = FALSE))
-  })
-
-  # Removing Capacity to search by name for now - EM 12/13/2021
-  #    analytes_df_names <- tryCatch({
-  #        analytes_df <- RaMP::rampFastCata(
-  #            analytes = analytes,
-  #            namesOrIds = "names"
-  #        )
-  #    },
-  #        error = function(cond) {
-  #            return(data.frame(stringsAsFactors = FALSE))
-  #        }
-  #    )
-  #    analytes_df <- rbind(analytes_df_ids, analytes_df_names)
-
-  return(
-    # note... currently we're just returning the HMDB results.
-    # RaMP v3 also has Rhea results that can be displayed
-    # It would be referenced like this in this method:  analytes_df_ids$data$Rhea_Analyte_Associations
-    # note below we only reference the HMDB result until the UI can process both dataframes.
-    list(
-      data = unique(analytes_df),
-      function_call = makeFunctionCall(analytes,"rampFastCata"),
-      numFoundIds = length(analytes_df)
-    )
-  )
-}
-
-#####
-#' Return combined Fisher's test results
-#' from given list of analytes query results
-#' @param analytes list of analytes of interest for pathway analysis
-#' @param background biospecimen background for Fisher's test
-#' @param backgroundFile: File
-#' @parser multi
-#' @parser text
-#' @parser json
-#' @post /api/enrich-pathways
-#' @serializer json list(digits = 6)
-function(analytes, background = '', backgroundFile = '', backgroundType= "database") {
-  fishers_results_df <- ''
-  if(backgroundFile == "") {
-    if(background == "") {
-      print("run with database background")
-      fishers_results_df <- RaMP::runEnrichPathways(
-        db = rampDB,
-        analytes,
-        background = NULL,
-        backgroundType= "database"
-      )
-    } else {
-      print("run with biospecimen")
-      fishers_results_df <- RaMP::runEnrichPathways(
-        db = rampDB,
-        analytes = analytes,
-        background = background,
-        backgroundType= "biospecimen"
-      )
-    }
-  }
-   else {
-    print("run with background file")
-    bg <- gsub("\r\n", ",", backgroundFile)
-       file <- unlist(strsplit(bg, ','))
-       if(length(file) > length(analytes)) {
-      fishers_results_df <- RaMP::runEnrichPathways(
-        db = rampDB,
-        analytes = analytes,
-        background = file,
-        backgroundType= "list"
-      )
-    } else {
-      error <- function(cond) {
-        print(cond)
-        return(data.frame(stringsAsFactors = FALSE))
-      }
-  }
-  }
-  analytes <- paste(analytes, collapse = ", ")
-  return(list(
-    data = fishers_results_df,
-    function_call = paste0("RaMP::runEnrichPathways()")
-  ))
-}
-
-#####
-#' Return filtered Fisher's test results
-#' from given list of Fisher's test results
-#' @param fishers_results output of runEnrichPathways
-#' @param pValType one of "fdr" or "holm" or "pval"
-#' @param pValCutoff p value threshold below which results are considered significant
-#' @post /api/filter-enrichment-results
-#' @serializer json list(digits = 6)
-function(fishers_results,  pValType = 'fdr', pValCutoff = 0.1) {
-  filtered_results <- RaMP::filterEnrichResults(
-    enrichResults = fishers_results,
-    pValType = pValType,
-    pValCutoff = pValCutoff
-  )
-  fishers_results <- paste(fishers_results, collapse = ", ")
-  return(list(
-    data = filtered_results,
-    function_call = paste0("RaMP::filterEnrichResults()")
-  ))
-}
-
-#####
-#' from given list of Fisher's test results using the findCluster method from the R package (see documentation for further details)
-#' @param fishers_results Output of Fisher's enrichment
-#' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
-#' @param percPathwayOverlap Minimum overlap for clusters to merge
-#' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
-#' @post /api/cluster-enrichment-results
-#' @serializer json list(digits = 6)
-function(
-  fishers_results,
-  #analyte_source_id,
-  percAnalyteOverlap = 0.5,
-  percPathwayOverlap = 0.5,
-  minPathwayToCluster = 2
-) {
-  if (typeof(minPathwayToCluster) == "character") {
-    minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
-  }
-  clustering_results <- RaMP::findCluster(
-    db = rampDB,
-    fishersDf = fishers_results,
-    percAnalyteOverlap = percAnalyteOverlap,
-    minPathwayToCluster = minPathwayToCluster,
-    percPathwayOverlap = percPathwayOverlap
-  )
-  return(
-    list(
-      data = clustering_results,
-       function_call = paste0("RaMP::runEnrichChemClass())")
-      #numFoundIds = length(unique(chemical_enrichment_df$chem_props$chem_source_id))
-    )
-  )
-}
-
-#####
-#' Return lollipop plot for clustered Fisher's test results
-#' from given list of Fisher's test results using the findCluster method from the R package (see documentation for further details)
-#' @param fishers_results Output of Fisher's enrichment
-#' @param percAnalyteOverlap Minimum overlap for pathways to be considered similar
-#' @param percPathwayOverlap Minimum overlap for clusters to merge
-#' @param minPathwayToCluster Minimum number of 'similar' pathways required to start a cluster (medoid)
-#' @param filename
-#' @post /api/cluster-plot
-#' @serializer contentType list(type='image/svg')
-#'
-function(
-  fishers_results,
-  percAnalyteOverlap = 0.5,
-  percPathwayOverlap = 0.5,
-  minPathwayToCluster=2,
-  filename
-) {
-  if (typeof(minPathwayToCluster) == "character") {
-    minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
-  }
-
-  clustered_plot <- RaMP::plotPathwayResults(
-    db = rampDB,
-    pathwaysSig = fishers_results,
-    textSize = 8,
-    percAnalyteOverlap = percAnalyteOverlap,
-    minPathwayToCluster = minPathwayToCluster,
-    percPathwayOverlap = percPathwayOverlap,
-  )
-  file <- ggsave(filename,clustered_plot, width = 10, height = 10)
-  r <- readBin(file,'raw',n = file.info(file)$size)
-  unlink(filename)
-  return(r)
-}
-
 #####
 #' Perform chemical enrichment on given metabolites
 #' @param metabolites Input for chemical enrichment
@@ -525,7 +796,7 @@ function(
 #' @parser multi
 #' @parser text
 #' @parser json
-#' @post /api/chemical-enrichment
+#' @post /api/chemical-class-enrichment
 function(metabolites = '', backgroundFile = '', background = '', backgroundType = "database") {
   chemical_enrichment_df <- ''
   if(backgroundFile == "") {
@@ -574,142 +845,7 @@ function(metabolites = '', backgroundFile = '', background = '', backgroundType 
   }
 
 
-###########
-########### Reaction endpoints
-###########
 
-
-
-#' Returns reactions associated with input analytes, metabolites and/or genes/proteins.
-#' @param analytes
-#' @param onlyHumanMets
-#' @param humanProtein
-#' @param includeTransportRxns
-#' @param rxnDirs
-#' @param includeRxnURLs
-#' @post /api/reactions-from-analytes
-#' @serializer json list(digits = 6)
-function(
-    analytes,
-    onlyHumanMets = FALSE,
-    humanProtein = TRUE,
-    includeTransportRxns = TRUE,
-    rxnDirs = 'UN',
-    includeRxnURLs = FALSE
-) {
-
-  result = RaMP::getReactionsForAnalytes(
-    db=rampDB,
-    analytes=analytes,
-    onlyHumanMets = onlyHumanMets,
-    humanProtein = humanProtein,
-    includeTransportRxns = includeTransportRxns,
-    rxnDirs = rxnDirs,
-    includeRxnURLs = includeRxnURLs
-  )
-
-plot<- RaMP:::buildAnalyteOverlapPerRxnLevelUpsetDataframe(result)
-  analyteStr = RaMP:::listToQueryString(analytes)
-  rxnDirs = RaMP:::listToQueryString(rxnDirs)
-
-  return(
-    list(
-      data = result,
-      plot = plot,
-     # function_call = paste0("RaMP::getReactionsForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), onlyHumanMets=",onlyHumanMets,", humanProtein=",humanProtein,", includeTransportRxns=",includeTransportRxns,", rxnDirs=c(",rxnDirs,"), includeRxnURLs=",includeRxnURLs,"")
-      function_call = makeFunctionCall(analyteStr, "getReactionsForAnalytes")
-    )
-  )
-}
-
-
-#' getReactionClassesForAnalytes returns reactions class and EC numbers for a collection of input compound ids
-#'
-#' @param analytes
-#' @param multiRxnParticipantCount
-#' @param humanProtein
-#' @param concatResults
-#' @post /api/reaction-classes-from-analytes
-#' @serializer json list(digits = 6)
-function(
-    analytes,
-    multiRxnParticipantCount = 1,
-    humanProtein = TRUE,
-    concatResults = TRUE,
-    includeReactionIDs = FALSE,
-    useIdMapping = FALSE
-) {
-  result <- RaMP::getReactionClassesForAnalytes(
-    db=rampDB,
-    analytes=analytes,
-    multiRxnParticipantCount = multiRxnParticipantCount,
-    humanProtein=humanProtein,
-    concatResults=concatResults,
-    includeReactionIDs=includeReactionIDs,
-    useIdMapping = useIdMapping
-  )
-
-  analyteStr = RaMP:::listToQueryString(analytes)
-
-  return(
-    list(
-      data = result,
-     # function_call = paste0("RaMP::getReactionClassesForAnalytes(db=RaMPDB, analytes=c(",analyteStr,"), multiRxnParticipantCount=",multiRxnParticipantCount,", humanProtein=",humanProtein,", concatResults=",concatResults,")")
-      function_call = makeFunctionCall(analytes,"getReactionClassesForAnalyes")
-    )
-  )
-}
-
-
-#' getReactionParticipants returns protein information for a list of reaction ids.
-#' This utility method can help extend information from previous queries.
-#' For instance, if a user queries for reactions related to a list of metabolites,
-#' this method can be used to return proteins on some subset of reaction ids to find related proteins.
-#'
-#' @param reactionList Rhea reactions ids, such as rhea:38747
-#' @post /api/get-reaction-participants
-#' @serializer json list(digits = 6)
-function(
-  reactionList
-) {
-  result = getReactionParticipants(db=rampDB, reactionList=reactionList)
-
-  rxnStr = RaMP:::listToQueryString(reactionList)
-
-  return(
-    list(
-      data = result,
-     # function_call = paste0("RaMP::getReactionParticipants(db=RaMPDB, reactionList=c(",rxnStr,"))")
-      function_call = makeFunctionCall(rxnStr,"getReactionParticipants"),
-    )
-  )
-}
-
-
-#' getReactionDetails returns general reaction information for a list of reaction ids.
-#' This utility methed can help extend information from previous queries.
-#' For instance, if a user queries for reactions related to a list of analytes, or filtered on reactions,
-#' this method can be used to return general reaction info on some subset of reaction ids of interest.
-#'
-#' @param reactionList list of reaction ids
-#' @post /api/get-reaction-details
-#' @serializer json list(digits = 6)
-function(
-    reactionList
-) {
-  result = getReactionDetails(db=rampDB, reactionList=reactionList)
-
-  rxnStr = RaMP:::listToQueryString(reactionList)
-
-  return(
-    list(
-      data = result,
-    #  function_call = paste0("RaMP::getReactionDetails(db=RaMPDB, reactionList=c(",rxnStr,"))")
-      function_call = makeFunctionCall(rxnStr,"getReactionDetails"),
-
-    )
-  )
-}
 
 
 

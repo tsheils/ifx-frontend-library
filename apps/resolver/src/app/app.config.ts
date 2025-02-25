@@ -1,10 +1,15 @@
-import { APP_BASE_HREF, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   provideHttpClient,
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ApplicationConfig, inject, PLATFORM_ID, provideAppInitializer } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  PLATFORM_ID,
+  provideAppInitializer,
+} from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
@@ -29,11 +34,14 @@ import {
 } from 'resolver-store';
 import { environment } from '../environments/environment';
 import { appRoutes } from './app.routes';
-import { BrowserModule, provideClientHydration } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  provideClientHydration,
+} from '@angular/platform-browser';
 
 export function load_resolver(
   resolverService: ResolverService,
-  store = inject(Store),
+  store = inject(Store)
 ) {
   return () => {
     resolverService._setOptionsUrl(environment.resolverOptionsUrl);
@@ -45,7 +53,7 @@ export function load_resolver(
 
 export function load_from_local_storage(
   platformId = inject(PLATFORM_ID),
-  store = inject(Store),
+  store = inject(Store)
 ) {
   return () => {
     if (isPlatformBrowser(platformId)) {
@@ -55,11 +63,11 @@ export function load_from_local_storage(
         );
         if (temp) {
           const filterOptionsList = JSON.parse(temp);
-          if(filterOptionsList && filterOptionsList.length) {
+          if (filterOptionsList && filterOptionsList.length) {
             store.dispatch(
               LoadResolverOptionsActions.setPreviousFilters({
                 filters: filterOptionsList,
-              }),
+              })
             );
           }
         }
@@ -72,13 +80,13 @@ export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
     provideAppInitializer(() => {
-        const initializerFn = (load_from_local_storage)();
-        return initializerFn();
-      }),
+      const initializerFn = load_from_local_storage();
+      return initializerFn();
+    }),
     provideAppInitializer(() => {
-        const initializerFn = (load_resolver)(inject(ResolverService));
-        return initializerFn();
-      }),
+      const initializerFn = load_resolver(inject(ResolverService));
+      return initializerFn();
+    }),
     provideClientHydration(),
     provideRouter(
       appRoutes,
@@ -89,7 +97,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules),
+      withPreloading(PreloadAllModules)
     ),
     provideStore({
       router: routerReducer,

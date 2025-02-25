@@ -39,7 +39,7 @@ export function securePassword(): ValidatorFn {
  */
 export function matchPassword(testInput: AbstractControl): ValidatorFn {
   return (
-    control: AbstractControl,
+    control: AbstractControl
   ): { passwordsMatch: { value: string } } | null => {
     const matching = control.value === testInput.value;
     return matching ? null : { passwordsMatch: { value: control.value } };
@@ -47,19 +47,19 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
 }
 
 @Component({
-    selector: 'ncats-frontend-library-register-modal',
-    templateUrl: './register-modal.component.html',
-    styleUrls: ['./register-modal.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        FormsModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'ncats-frontend-library-register-modal',
+  templateUrl: './register-modal.component.html',
+  styleUrls: ['./register-modal.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegisterModalComponent implements OnInit {
   store = inject(Store);
@@ -75,13 +75,13 @@ export class RegisterModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<RegisterModalComponent>,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
     //  this.registerForm.controls['pw'].addValidators(matchPassword(this.registerForm.controls['pwVerify']))
     this.registerForm.controls['pwVerify'].addValidators(
-      matchPassword(this.registerForm.controls['pw']),
+      matchPassword(this.registerForm.controls['pw'])
     );
   }
 
@@ -121,7 +121,7 @@ export class RegisterModalComponent implements OnInit {
   register() {
     if (this.registerForm.status === 'VALID') {
       this.store.dispatch(
-        RegisterEmailUserActions.registerEmailUser(this.registerForm.value),
+        RegisterEmailUserActions.registerEmailUser(this.registerForm.value)
       );
     }
   }

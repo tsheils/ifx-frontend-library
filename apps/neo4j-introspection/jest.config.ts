@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'neo4j-introspection',
   preset: '../../jest.preset.js',

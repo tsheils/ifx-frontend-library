@@ -5,7 +5,6 @@ import {
   input,
   ViewEncapsulation,
 } from '@angular/core';
-import { MatButton } from '@angular/material/button';
 import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
 
 @Component({

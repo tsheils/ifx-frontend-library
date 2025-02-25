@@ -10,11 +10,11 @@ import { MatIconModule } from '@angular/material/icon';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 
 @Component({
-    selector: 'lib-filter-download-button',
-    imports: [CommonModule, MatIconModule, MatButtonModule],
-    templateUrl: './filter-download-button.component.html',
-    styleUrl: './filter-download-button.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-filter-download-button',
+  imports: [CommonModule, MatIconModule, MatButtonModule],
+  templateUrl: './filter-download-button.component.html',
+  styleUrl: './filter-download-button.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDownloadButtonComponent {
   selectedFilter = input<FilterCategory>();
@@ -24,7 +24,9 @@ export class FilterDownloadButtonComponent {
     if (this.selectedFilter) {
       this._downloadFile(
         this._toTSV(this.selectedFilter()),
-        `${this.selectedFilter()?.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
+        `${this.selectedFilter()
+          ?.label.replaceAll(' ', '-')
+          .toLocaleLowerCase()}.tsv`
       );
     }
   }
@@ -43,7 +45,7 @@ export class FilterDownloadButtonComponent {
 
           // finally joining each row with a line break
         },
-        [headings],
+        [headings]
       );
       return rows.join('\n');
     } else return '';

@@ -6,7 +6,6 @@ import {
   computed,
   inject,
   input,
-  OnInit,
   ViewEncapsulation,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
@@ -14,7 +13,6 @@ import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
 import { DomSanitizer } from '@angular/platform-browser';
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
-import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/clinical-trials-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-details',
@@ -27,7 +25,7 @@ import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/cl
 })
 export class ClinicalTrialsDetailsComponent {
   breakpointObserver = inject(BreakpointObserver);
-
+  showFullSummary = false;
   trial = input<ClinicalTrial>();
   truncatedSummary = computed(() => {
     const t = this.trial();

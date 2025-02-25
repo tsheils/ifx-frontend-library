@@ -28,18 +28,18 @@ import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 @Component({
-    selector: 'ncats-frontend-library-forgot-password-modal',
-    templateUrl: './forgot-password-modal.component.html',
-    styleUrls: ['./forgot-password-modal.component.scss'],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatCardModule,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'ncats-frontend-library-forgot-password-modal',
+  templateUrl: './forgot-password-modal.component.html',
+  styleUrls: ['./forgot-password-modal.component.scss'],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatCardModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
@@ -54,7 +54,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<ForgotPasswordModalComponent>,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -66,7 +66,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
           if (res) {
             this.loginError = res;
           }
-        }),
+        })
       )
       .subscribe();
 
@@ -79,7 +79,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
             this.emailSent = true;
             this.signOnForm.reset();
           }
-        }),
+        })
       )
       .subscribe();
   }
@@ -96,7 +96,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   send() {
     if (this.signOnForm.valid) {
       this.store.dispatch(
-        ResetPasswordEmailActions.resetPasswordEmail(this.signOnForm.value),
+        ResetPasswordEmailActions.resetPasswordEmail(this.signOnForm.value)
       );
     }
   }

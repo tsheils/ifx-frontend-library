@@ -7,7 +7,7 @@ import { Inject, Injectable, InjectionToken, PLATFORM_ID } from '@angular/core';
 export class LocalStorageService {
   constructor(
     @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
+    private platformId: InjectionToken<NonNullable<unknown>>
   ) {}
 
   clearLocalStorage() {

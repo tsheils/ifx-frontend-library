@@ -38,7 +38,7 @@ export class DataPanelComponent {
   noDataArr = computed(
     () =>
       !this.dataAsDataProperty()?.length ||
-      this.dataAsDataProperty()?.length === 0,
+      this.dataAsDataProperty()?.length === 0
   );
   fileName = input<string>();
   filters = input<Map<string, QuestionBase<string>[]>>();

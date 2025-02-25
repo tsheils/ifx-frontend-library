@@ -1,46 +1,43 @@
 <div class="scroll-container">
   <div class="disease-display-panel" id="overview" #overview #scrollSection>
     @if (!mobile) {
-      <mat-expansion-panel [expanded]="true" class="disease-display-panel">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <span class="disease-accordion-title bottom-border-primary"
-              >Overview</span
-            >
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="row space-around-row top-align">
-          @if (!mobile) {
-            @if (staticFilterMap() && staticFilterMap().has('articles')) {
-              <div class="width-30">
-                <lib-chart-wrapper
-                  [chartType]="'bar'"
-                  [filters]="staticFilterMap().get('articles')!"
-                ></lib-chart-wrapper>
-                <br />
-              </div>
-            }
-            @if (staticFilterMap() && staticFilterMap().has('projects')) {
-              <div class="width-30">
-                <lib-chart-wrapper
-                  [chartType]="'bar'"
-                  [filters]="staticFilterMap().get('projects')!"
-                ></lib-chart-wrapper>
-                <br />
-              </div>
-            }
-            @if (staticFilterMap() && staticFilterMap().has('trials')) {
-              <div class="width-30">
-                <lib-chart-wrapper
-                  [chartType]="'pie'"
-                  [filters]="staticFilterMap().get('trials')!"
-                ></lib-chart-wrapper>
-                <br />
-              </div>
-            }
-          }
+    <mat-expansion-panel [expanded]="true" class="disease-display-panel">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <span class="disease-accordion-title bottom-border-primary"
+            >Overview</span
+          >
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <div class="row space-around-row top-align">
+        @if (!mobile) { @if (staticFilterMap() &&
+        staticFilterMap().has('articles')) {
+        <div class="width-30">
+          <lib-chart-wrapper
+            [chartType]="'bar'"
+            [filters]="staticFilterMap().get('articles')!"
+          ></lib-chart-wrapper>
+          <br />
         </div>
-      </mat-expansion-panel>
+        } @if (staticFilterMap() && staticFilterMap().has('projects')) {
+        <div class="width-30">
+          <lib-chart-wrapper
+            [chartType]="'bar'"
+            [filters]="staticFilterMap().get('projects')!"
+          ></lib-chart-wrapper>
+          <br />
+        </div>
+        } @if (staticFilterMap() && staticFilterMap().has('trials')) {
+        <div class="width-30">
+          <lib-chart-wrapper
+            [chartType]="'pie'"
+            [filters]="staticFilterMap().get('trials')!"
+          ></lib-chart-wrapper>
+          <br />
+        </div>
+        } }
+      </div>
+    </mat-expansion-panel>
     }
   </div>
   <div class="disease-display-panel" id="genes" #genes #scrollSection>
@@ -109,16 +106,15 @@
         [message]="'No Articles Found'"
         (listChange)="fetchList($event, 'articles')"
       >
-          <div class="data-list">
-            <ncats-frontend-library-article-list
-              [articles]="articlesList()"
-            ></ncats-frontend-library-article-list>
-          </div>
-
+        <div class="data-list">
+          <ncats-frontend-library-article-list
+            [articles]="articlesList()"
+          ></ncats-frontend-library-article-list>
+        </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>
- <!-- <div
+  <!-- <div
     class="disease-display-panel"
     id="epiArticles"
     #epiArticles
@@ -171,20 +167,16 @@
         [message]="'No NIH Funded Projects Available'"
         (listChange)="fetchList($event, 'projects')"
       >
-          <div class="data-list">
-            <ncats-frontend-library-project-list
-              [projects]="projectsList()"
-            ></ncats-frontend-library-project-list>
-          </div>
-
+        <div class="data-list">
+          <ncats-frontend-library-project-list
+            [projects]="projectsList()"
+          ></ncats-frontend-library-project-list>
+        </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>
   <div class="disease-display-panel" id="trials" #trials #scrollSection>
-    <mat-expansion-panel
-      [disabled]="!trialsCount()"
-      [expanded]="trialsCount()"
-    >
+    <mat-expansion-panel [disabled]="!trialsCount()" [expanded]="trialsCount()">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
@@ -201,12 +193,11 @@
         [message]="'No Clinical Trial Data Available'"
         (listChange)="fetchList($event, 'trials')"
       >
-          <div class="data-list">
-            <ncats-frontend-library-clinical-trials-list
-              [trials]="trialsList()"
-            ></ncats-frontend-library-clinical-trials-list>
-          </div>
-
+        <div class="data-list">
+          <ncats-frontend-library-clinical-trials-list
+            [trials]="trialsList()"
+          ></ncats-frontend-library-clinical-trials-list>
+        </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>

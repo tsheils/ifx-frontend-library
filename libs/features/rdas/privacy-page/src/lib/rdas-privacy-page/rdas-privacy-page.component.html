@@ -22,7 +22,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(statement)"
+            (keydown.enter)="scroll(statement)"
             [activated]="isActive('statement')"
           >
             Privacy Statement
@@ -30,7 +33,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(infoCollected)"
+            (keydown.enter)="scroll(infoCollected)"
             [activated]="isActive('infoCollected')"
           >
             Types of Information Collected
@@ -38,7 +44,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(collection)"
+            (keydown.enter)="scroll(collection)"
             [activated]="isActive('collection')"
           >
             How information is collected by NCATS
@@ -46,7 +55,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(cookies)"
+            (keydown.enter)="scroll(cookies)"
             [activated]="isActive('cookies')"
           >
             How NCATS Uses Cookies
@@ -54,7 +66,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(consent)"
+            (keydown.enter)="scroll(consent)"
             [activated]="isActive('consent')"
           >
             Consent
@@ -62,7 +77,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(protection)"
+            (keydown.enter)="scroll(protection)"
             [activated]="isActive('protection')"
           >
             How Is Information Protected
@@ -70,7 +88,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(disclosure)"
+            (keydown.enter)="scroll(disclosure)"
             [activated]="isActive('disclosure')"
           >
             Disclosure
@@ -78,7 +99,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(security)"
+            (keydown.enter)="scroll(security)"
             [activated]="isActive('security')"
           >
             Security/Site Security
@@ -86,7 +110,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(nonFederal)"
+            (keydown.enter)="scroll(nonFederal)"
             [activated]="isActive('nonFederal')"
           >
             Use of Third-Party Website and Applications & non-Federal sites
@@ -94,7 +121,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(endorsement)"
+            (keydown.enter)="scroll(endorsement)"
             [activated]="isActive('endorsement')"
           >
             Endorsement Disclaimer
@@ -102,7 +132,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(information)"
+            (keydown.enter)="scroll(information)"
             [activated]="isActive('information')"
           >
             Information Disclaimer
@@ -110,7 +143,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(advertisements)"
+            (keydown.enter)="scroll(advertisements)"
             [activated]="isActive('advertisements')"
           >
             Pop-Up Advertisement Disclaimer
@@ -118,7 +154,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(contact)"
+            (keydown.enter)="scroll(contact)"
             [activated]="isActive('contact')"
           >
             Contact the Rare Disease Alerting System (RDAS)
@@ -129,17 +168,17 @@
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
     @if (!navigationsidenav.opened) {
-      <div class="row">
-        <button
-          [color]="'primary'"
-          mat-stroked-button
-          class="menu-button"
-          aria-label="menu button"
-          (click)="navigationsidenav.toggle()"
-        >
-          Jump to...<mat-icon>bookmark</mat-icon>
-        </button>
-      </div>
+    <div class="row">
+      <button
+        [color]="'primary'"
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="navigationsidenav.toggle()"
+      >
+        Jump to...<mat-icon>bookmark</mat-icon>
+      </button>
+    </div>
     }
     <div class="row centered-row">
       <div

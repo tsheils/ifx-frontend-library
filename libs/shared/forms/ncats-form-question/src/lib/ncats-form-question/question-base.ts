@@ -24,7 +24,7 @@ export class QuestionBase<T> {
       options?: { key: string; value: string }[];
       min?: number;
       max?: number;
-    } = {},
+    } = {}
   ) {
     this.value = options.value;
     this.min = options.min || 0;

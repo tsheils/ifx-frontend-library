@@ -14,7 +14,7 @@ export class CoreProject {
 
     if (obj.clinicalStudies) {
       this.clinicalStudies = obj.clinicalStudies.map(
-        (data) => new ClinicalStudy(data),
+        (data) => new ClinicalStudy(data)
       );
     }
 
@@ -89,13 +89,13 @@ export class Project {
 
     if (obj.principalInvestigators) {
       this.principalInvestigators = obj.principalInvestigators.map(
-        (data) => new Investigator(data),
+        (data) => new Investigator(data)
       );
     }
 
     if (obj.researchedDiseases) {
       this.researchedDiseases = obj.researchedDiseases.map(
-        (data) => new Disease(data),
+        (data) => new Disease(data)
       );
     }
   }

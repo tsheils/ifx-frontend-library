@@ -1,15 +1,14 @@
 <div class="pie-chart-container">
-  <h2>{{dataSignal()?.label}}</h2>
+  <h2>{{ dataSignal()?.label }}</h2>
   <div id="pie-chart" class="pie-chart" #chartElement>
-    @defer (when dataSignal() && svg) {
-    } @placeholder {
-      <img
-        class="placeholder-image"
-        ngSrc="/assets/charts/placeholders/chart-placeholder.webp"
-        alt="chart placeholder"
-        priority
-        fill
-      />
+    @defer (when dataSignal() && svg) { } @placeholder {
+    <img
+      class="placeholder-image"
+      ngSrc="/assets/charts/placeholders/chart-placeholder.webp"
+      alt="chart placeholder"
+      priority
+      fill
+    />
     }
   </div>
 </div>

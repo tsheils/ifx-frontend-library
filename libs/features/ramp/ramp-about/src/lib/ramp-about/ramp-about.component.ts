@@ -2,16 +2,14 @@ import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { OverlayModule, ScrollDispatcher } from '@angular/cdk/overlay';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
   ElementRef,
   inject,
   OnInit,
-  QueryList,
   signal,
-  ViewChildren,
+  viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,12 +17,12 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 import {
   DataProperty,
   UpsetData,
   UpsetPlot,
 } from '@ncats-frontend-library/models/utils';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { Store } from '@ngrx/store';
 import { NcatsDatatableComponent } from 'ncats-datatable';
 import { EntityCount } from 'ramp';
@@ -53,13 +51,14 @@ import { UpsetComponent } from 'upset-chart';
     MatIconModule,
     MatSidenavModule,
     MatButtonModule,
+    RouterLink,
   ],
 })
 export class AboutComponent implements OnInit {
   private readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
 
-  @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
+  scrollSections = viewChildren<ElementRef>('scrollSection');
   mobile = signal(false);
 
   activeElement = signal('about');
@@ -69,7 +68,7 @@ export class AboutComponent implements OnInit {
   genesData = computed(() => {
     if (this.allRamp() && this.allRamp().geneIntersects) {
       const upset = new UpsetPlot(
-        this.allRamp()!.geneIntersects!.map((g) => new UpsetData(g)),
+        this.allRamp()!.geneIntersects!.map((g) => new UpsetData(g))
       );
       return upset;
     } else return {} as UpsetPlot;
@@ -77,7 +76,7 @@ export class AboutComponent implements OnInit {
   compoundsData = computed(() => {
     if (this.allRamp() && this.allRamp().metaboliteIntersects) {
       return new UpsetPlot(
-        this.allRamp()!.metaboliteIntersects!.map((g) => new UpsetData(g)),
+        this.allRamp()!.metaboliteIntersects!.map((g) => new UpsetData(g))
       );
     } else return {} as UpsetPlot;
   });
@@ -93,7 +92,7 @@ export class AboutComponent implements OnInit {
         });
       });
       return newObj;
-    }),
+    })
   );
 
   entityCountsColumns: DataProperty[] = [
@@ -139,10 +138,9 @@ export class AboutComponent implements OnInit {
   dbUpdated = computed(() => this.sourceVersions()![0]?.db_mod_date);
 
   constructor(
-    private changeRef: ChangeDetectorRef,
     private scrollDispatcher: ScrollDispatcher,
     public scroller: ViewportScroller,
-    private breakpointObserver: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {
@@ -161,7 +159,7 @@ export class AboutComponent implements OnInit {
         if (scrollTop === 0) {
           this.activeElement.set('about');
         } else {
-          this.scrollSections.forEach((section) => {
+          this.scrollSections().forEach((section: ElementRef) => {
             scrollTop = scrollTop - section.nativeElement?.scrollHeight;
             if (scrollTop >= 0) {
               this.activeElement.set(section.nativeElement.nextSibling.id);
@@ -169,15 +167,6 @@ export class AboutComponent implements OnInit {
           });
         }
       });
-  }
-
-  public scroll(el: HTMLElement): void {
-    el.scrollIntoView({
-      behavior: 'smooth',
-      block: 'start',
-      inline: 'nearest',
-    });
-    this.activeElement.set(el.id);
   }
 
   isActive(check: string): boolean {

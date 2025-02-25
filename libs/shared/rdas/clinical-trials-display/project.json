@@ -4,6 +4,7 @@
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/clinical-trials-display/src",
   "prefix": "ncats-frontend-library",
+  "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
@@ -17,6 +18,5 @@
     "lint": {
       "executor": "@nx/eslint:lint"
     }
-  },
-  "tags": []
+  }
 }

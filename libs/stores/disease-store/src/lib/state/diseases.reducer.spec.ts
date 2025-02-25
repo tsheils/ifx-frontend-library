@@ -11,7 +11,6 @@ describe('Diseases Reducer', () => {
       gardId,
       name: name || `name-${gardId}`,
       epiCount: 0,
-      nonEpiCount: 0,
       projectCount: 0,
       clinicalTrialCount: 0,
     });

@@ -271,11 +271,11 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   analytes = this.store.selectSignal(RampSelectors.getAnalytes);
   pathways = this.store.selectSignal(RampSelectors.getPathways);
   enrichedPathways = this.store.selectSignal(
-    RampSelectors.getPathwayEnrichment,
+    RampSelectors.getPathwayEnrichment
   );
   clusterPlot = this.store.selectSignal(RampSelectors.getClusterPlot);
   filteredDataframe = this.store.selectSignal(
-    RampSelectors.getFilteredFishersDataframe,
+    RampSelectors.getFilteredFishersDataframe
   );
 
   previousValues!: { [key: string]: unknown };
@@ -309,17 +309,14 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             loaded: !!analytesData,
           } as DataMap);
         }
-        if (returnDataMap.size) {
-          ret = { [field]: returnDataMap };
-        }
         break;
       }
-      case 'biochemical-pathway-analysis': {
+      case 'pathway-enrichment': {
         const enrichedPathwaysData =
           this.enrichedPathways()?.dataAsDataProperty;
         if (enrichedPathwaysData) {
           returnDataMap.set('Enriched Pathways', {
-            data: this.enrichedPathways()?.dataAsDataProperty,
+            data: enrichedPathwaysData,
             fields: this.computedDataColumns(),
             fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
             filters: this.filtersMap(),
@@ -354,7 +351,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
           data: {
             message: sizeMessage,
             image: this.sanitizer.bypassSecurityTrustHtml(
-              <string>this.clusterPlot(),
+              <string>this.clusterPlot()
             ),
           },
           loaded: !!this.clusterPlot(),
@@ -403,13 +400,13 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         }
         break;
       }
-      case 'biochemical-pathway-analysis': {
-        if (this.pathways()?.data) {
+      case 'pathway-enrichment': {
+        if (this.enrichedPathways()?.data) {
           ret = {
             [field]: {
               matches: this.pathways()?.query?.matches,
               noMatches: this.pathways()?.query?.noMatches,
-              count: this.pathways()?.data.length,
+              count: this.enrichedPathways()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
             } as QueryResultsData,
@@ -442,14 +439,14 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string,
+    origin: string
   ): void {
     this.activeTab.set(origin);
     switch (origin) {
       case 'analytes-from-pathways': {
         if (formData['pathway']) {
           this.inputList = this._parseInput(
-            formData['pathway'] as string | string[],
+            formData['pathway'] as string | string[]
           );
         }
         formData['pathway'] = this.inputList;
@@ -458,14 +455,14 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
           AnalyteFromPathwayActions.fetchAnalytesFromPathways({
             pathways: this.inputList,
             analyteType: <string>formData['analyteType'],
-          }),
+          })
         );
         break;
       }
       case 'pathways-from-analytes': {
         if (formData['analytes']) {
           this.inputList = this._parseInput(
-            formData['analytes'] as string | string[],
+            formData['analytes'] as string | string[]
           );
         }
         formData['analytes'] = this.inputList;
@@ -473,14 +470,14 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         this.store.dispatch(
           PathwayEnrichmentsActions.fetchPathwaysFromAnalytes({
             analytes: this.inputList,
-          }),
+          })
         );
         break;
       }
-      case 'biochemical-pathway-analysis': {
+      case 'pathway-enrichment': {
         if (formData['analytes']) {
           this.inputList = this._parseInput(
-            formData['analytes'] as string | string[],
+            formData['analytes'] as string | string[]
           );
         }
         const event = { ...this.previousValues, ...formData };
@@ -497,7 +494,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               Number(<number>event['minPathwayToCluster']) || undefined,
             percPathwayOverlap:
               <number>event['percPathwayOverlap'] || undefined,
-          }),
+          })
         );
         this.previousValues = event;
         break;

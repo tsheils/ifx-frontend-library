@@ -19,6 +19,7 @@ import SwaggerUI from 'swagger-ui';
   styleUrls: ['./epi-api.component.scss'],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class EpiApiComponent {
   @ViewChild('documentation') el!: ElementRef;
@@ -26,7 +27,7 @@ export class EpiApiComponent {
 
   constructor(
     @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
+    private platformId: InjectionToken<NonNullable<unknown>>
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     afterNextRender(() => {

@@ -35,6 +35,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   templateUrl: './features-rdas-rdas-about.component.html',
   styleUrls: ['./features-rdas-rdas-about.component.scss'],
   encapsulation: ViewEncapsulation.None,
+  standalone: true,
 })
 export class FeaturesRdasRdasAboutComponent implements OnInit {
   @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
@@ -48,7 +49,7 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
     private changeRef: ChangeDetectorRef,
     private scrollDispatcher: ScrollDispatcher,
     public scroller: ViewportScroller,
-    private breakpointObserver: BreakpointObserver,
+    private breakpointObserver: BreakpointObserver
   ) {}
 
   ngOnInit(): void {

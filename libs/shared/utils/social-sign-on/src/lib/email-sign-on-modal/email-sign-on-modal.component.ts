@@ -29,17 +29,17 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-    selector: 'ncats-frontend-library-email-sign-on-modal',
-    templateUrl: './email-sign-on-modal.component.html',
-    styleUrls: ['./email-sign-on-modal.component.scss'],
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-    ],
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'ncats-frontend-library-email-sign-on-modal',
+  templateUrl: './email-sign-on-modal.component.html',
+  styleUrls: ['./email-sign-on-modal.component.scss'],
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailSignOnModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
@@ -54,7 +54,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
 
   constructor(
     public dialogRef: MatDialogRef<EmailSignOnModalComponent>,
-    public dialog: MatDialog,
+    public dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -66,7 +66,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
           if (res) {
             this.loginError = res;
           }
-        }),
+        })
       )
       .subscribe();
 
@@ -78,12 +78,12 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
           if (res) {
             this.closeModal();
           }
-        }),
+        })
       )
       .subscribe();
 
     this.signOnForm.controls['pw'].valueChanges.subscribe(
-      () => (this.loginError = ''),
+      () => (this.loginError = '')
     );
   }
 
@@ -107,7 +107,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
     this.loginError = '';
     if (this.signOnForm.valid) {
       this.store.dispatch(
-        LoginEmailUserActions.loginEmailUser(this.signOnForm.value),
+        LoginEmailUserActions.loginEmailUser(this.signOnForm.value)
       );
     }
   }

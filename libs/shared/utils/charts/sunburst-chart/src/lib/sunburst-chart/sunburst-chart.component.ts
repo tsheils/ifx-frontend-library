@@ -41,17 +41,16 @@ import { SunburstChartService } from './sunburst-chart.service';
 })
 export class SunburstChartComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID,
+    PLATFORM_ID
   ) as InjectionToken<NonNullable<unknown>>;
 
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
 
-  sunburstChartService = inject(SunburstChartService);
-  chartElement: Signal<ElementRef | undefined> = viewChild(
-    'sunburstChartElement',
-  );
+  chartElement: Signal<ElementRef> = viewChild.required('sunburstChartElement');
   _injector = inject(Injector);
   componentPortal?: ComponentPortal<unknown>;
+
+  sunburstChartService = inject(SunburstChartService);
 
   context = computed(() => {
     if (this.isBrowser()) {
@@ -64,18 +63,15 @@ export class SunburstChartComponent implements OnInit {
 
   width = computed(
     () =>
-      this.chartElement()?.nativeElement.offsetWidth -
+      this.chartElement().nativeElement.offsetWidth -
       this.margins.left -
-      this.margins.right,
+      this.margins.right
   );
 
   height = computed(() => {
-    if (
-      this.chartElement() &&
-      this.chartElement()?.nativeElement.offsetHeight > 200
-    ) {
+    if (this.chartElement().nativeElement.offsetHeight > 200) {
       return (
-        this.chartElement()?.nativeElement.offsetHeight -
+        this.chartElement().nativeElement.offsetHeight -
         this.margins.top -
         this.margins.bottom
       );
@@ -86,7 +82,7 @@ export class SunburstChartComponent implements OnInit {
 
   radius = computed(() => Math.min(this.width(), this.height() * 2) / 6);
   color = computed(() =>
-    scaleOrdinal(quantize(interpolateRainbow, this.data().length + 1)),
+    scaleOrdinal(quantize(interpolateRainbow, this.data().length + 1))
   );
 
   hierarchy = computed(() => {
@@ -94,14 +90,14 @@ export class SunburstChartComponent implements OnInit {
       term: 'main',
       children: this.data(),
     } as HierarchyNode)
-      .sum((d) => d.count || 0)
+      .sum((d) => (d.children ? 0 : d.count))
       .sort((a, b) => b.count - a.count);
   });
 
   root = computed(() =>
     partition()
       .size([2 * Math.PI, this.hierarchy().height + 1])(this.hierarchy())
-      .each((d) => (d['current'] = d)),
+      .each((d) => (d['current'] = d))
   );
 
   arc = computed(() =>
@@ -112,8 +108,8 @@ export class SunburstChartComponent implements OnInit {
       .padRadius(this.radius() * 1.5)
       .innerRadius((d) => d['y0'] * this.radius())
       .outerRadius((d) =>
-        Math.max(d['y0'] * this.radius(), d['y1'] * this.radius() - 1),
-      ),
+        Math.max(d['y0'] * this.radius(), d['y1'] * this.radius() - 1)
+      )
   );
 
   svg = computed(() => {
@@ -182,10 +178,10 @@ export class SunburstChartComponent implements OnInit {
         return d.data.color ? d.data.color : this.color()(d.data.term);
       })
       .attr('fill-opacity', (d) =>
-        this._arcVisible(d['current']) ? 1 / d.depth + 0.25 : 0,
+        this._arcVisible(d['current']) ? 1 / d.depth + 0.25 : 0
       )
       .attr('pointer-events', (d) =>
-        this._arcVisible(d['current']) ? 'auto' : 'none',
+        this._arcVisible(d['current']) ? 'auto' : 'none'
       )
       .attr('d', (d) => this.arc()(d['current']))
       .on('mouseover', (event: Event, d) => {
@@ -193,13 +189,13 @@ export class SunburstChartComponent implements OnInit {
           event: event,
           node: d.data as HierarchyNode,
         });
-      }),
+      })
   );
   svgExport = computed(
     () =>
       select(this.chartElement()?.nativeElement)
         .select('svg')
-        .node() as SVGElement,
+        .node() as SVGElement
   );
 
   ngOnInit() {
@@ -217,14 +213,13 @@ export class SunburstChartComponent implements OnInit {
       this.sunburstChartService.customComponent
     ) {
       const comp = this._injector.get<Type<unknown>>(
-        this.sunburstChartService.customComponent,
+        this.sunburstChartService.customComponent
       );
       this.componentPortal = new ComponentPortal(comp);
     }
   }
 
   makeChart() {
-    // Make them clickable if they have children.
     this.path()
       .filter((d) => d.children)
       .style('cursor', 'pointer')
@@ -262,7 +257,7 @@ export class SunburstChartComponent implements OnInit {
             Math.PI,
           y0: Math.max(0, d.y0 - p.depth),
           y1: Math.max(0, d.y1 - p.depth),
-        }),
+        })
     );
 
     const t = this.svg().transition().duration(750);
@@ -287,7 +282,7 @@ export class SunburstChartComponent implements OnInit {
         return this._arcVisible(d['target']) ? 1 / d['depth'] + 0.25 : 0;
       })
       .attr('pointer-events', (d) =>
-        this._arcVisible(d['target']) ? 'auto' : 'none',
+        this._arcVisible(d['target']) ? 'auto' : 'none'
       )
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -309,15 +304,15 @@ export class SunburstChartComponent implements OnInit {
         'fill-opacity',
         (d) =>
           +this._labelVisible(
-            d['target'] as { x0: number; y0: number; x1: number; y1: number },
-          ),
+            d['target'] as { x0: number; y0: number; x1: number; y1: number }
+          )
       )
       .attrTween(
         'transform',
         (d) => () =>
           this._labelTransform(
-            d['current'] as { x0: number; y0: number; x1: number; y1: number },
-          ),
+            d['current'] as { x0: number; y0: number; x1: number; y1: number }
+          )
       );
   }
 

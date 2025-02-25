@@ -14,11 +14,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApolloSandbox } from '@apollo/sandbox';
 
 @Component({
-    selector: 'ncats-frontend-library-graphql-sandbox',
-    imports: [],
-    template: `<div id="embedded-sandbox" #embeddedsandbox></div>`,
-    styleUrls: ['./graphql-sandbox.component.scss'],
-    encapsulation: ViewEncapsulation.None
+  selector: 'ncats-frontend-library-graphql-sandbox',
+  imports: [],
+  template: ` <div id="embedded-sandbox" #embeddedsandbox></div>`,
+  styleUrls: ['./graphql-sandbox.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  standalone: true,
 })
 export class GraphqlSandboxComponent {
   @ViewChild('embeddedsandbox', { static: true }) embeddedsandbox!: ElementRef;
@@ -29,7 +30,7 @@ export class GraphqlSandboxComponent {
     private platformId: InjectionToken<NonNullable<unknown>>,
     private router: Router,
     private route: ActivatedRoute,
-    private changeRef: ChangeDetectorRef,
+    private changeRef: ChangeDetectorRef
   ) {
     afterNextRender(() => {
       if (isPlatformBrowser(platformId)) {

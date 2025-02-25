@@ -42,7 +42,7 @@ export class PhenotypeListComponent {
   sort = viewChild<MatSort>(MatSort);
 
   phenotypes = input<PhenotypeAssociation[] | undefined>(
-    [] as PhenotypeAssociation[],
+    [] as PhenotypeAssociation[]
   );
   showTab = input<boolean>(true);
   protected dom = inject(DOCUMENT);
@@ -89,7 +89,7 @@ export class PhenotypeListComponent {
     if (this.phenotypes()) {
       this._downloadFile(
         this._toTSV(this.phenotypes()!),
-        'rdas-phenotypes-download.tsv',
+        'rdas-phenotypes-download.tsv'
       );
     }
   }
@@ -115,7 +115,7 @@ export class PhenotypeListComponent {
 
           // finally joining each row with a line break
         },
-        [headings],
+        [headings]
       )
       .join('\n');
     return rows;

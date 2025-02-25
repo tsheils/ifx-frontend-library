@@ -2,8 +2,8 @@
   <div class="row space-around-row top-align">
     <div class="width-20">
       <h2>Input</h2>
-      Enter a drug name or structure (e.g., glycine), one per line and click the 'Resolve'
-      button
+      Enter a drug name or structure (e.g., glycine), one per line and click the
+      'Resolve' button
       <br />
       <mat-form-field [appearance]="'outline'">
         <textarea
@@ -12,6 +12,7 @@
           [rows]="15"
           placeholder="glycine"
           [formControl]="inputCtrl"
+          class="textarea-input"
         >
         </textarea>
       </mat-form-field>
@@ -39,74 +40,75 @@
 
       <mat-autocomplete #auto="matAutocomplete">
         @for (filter of filteredSearchOptions(); track filter.label) {
-          <mat-optgroup [label]="filter.label" multiple>
-            @for (value of filter.values; track value.value) {
-              <mat-option (click)="selectValue(value)">
-                <mat-checkbox
-                  (change)="$event ? subscriptionSelectionSignal().toggle(value.value) : null"
-                  [checked]="subscriptionSelectionSignal().isSelected(value.value)"
-                  (click)="$event.stopPropagation()"
-                >
-                  <span
-                    class="main-value"
-                    [innerHTML]="value.term | highlight: filterSearchCtrl.value"
-                  ></span>
-                </mat-checkbox>
-                @if (value.description) {
-                  <div class="space-between-row filter-description">
-                    <span
-                      class="main-value"
-                      [innerHTML]="
-                        value.description | highlight: filterSearchCtrl.value
-                      "
-                    ></span>
-                  </div>
-                }
-              </mat-option>
+        <mat-optgroup [label]="filter.label" multiple>
+          @for (value of filter.values; track value.value) {
+          <mat-option (click)="selectValue(value)">
+            <mat-checkbox
+              (change)="
+                $event
+                  ? subscriptionSelectionSignal().toggle(value.value)
+                  : null
+              "
+              [checked]="subscriptionSelectionSignal().isSelected(value.value)"
+              (click)="$event.stopPropagation()"
+            >
+              <span
+                class="main-value"
+                [innerHTML]="value.term | highlight : filterSearchCtrl.value"
+              ></span>
+            </mat-checkbox>
+            @if (value.description) {
+            <div class="space-between-row filter-description">
+              <span
+                class="main-value"
+                [innerHTML]="
+                  value.description | highlight : filterSearchCtrl.value
+                "
+              ></span>
+            </div>
             }
-          </mat-optgroup>
+          </mat-option>
+          }
+        </mat-optgroup>
         }
       </mat-autocomplete>
     </div>
     <div class="width-30">
-        <h2>Selected Filters</h2>
-        <div class="row space-around-row">
-          <div class="width-90 right-text">
-            <button mat-flat-button class="remove-button" [disabled]="subscriptionSelectionSignal().isEmpty()"  (click)="clearParams()">
-              Remove All
-            </button>
-          </div>
+      <h2>Selected Filters</h2>
+      <div class="row space-around-row">
+        <div class="width-90 right-text">
+          <button
+            mat-flat-button
+            class="remove-button"
+            [disabled]="subscriptionSelectionSignal().isEmpty()"
+            (click)="clearParams()"
+          >
+            Remove All
+          </button>
         </div>
-        <div class="chip-list-wrapper">
-          @for (
-            filterCategory of selectedFiltersSignal() | keyvalue;
-            track filterCategory.key
-          ) {
-            @if (filterCategory.value.length) {
-              <div class="row">
-                <h3>{{ filterCategory.key }}</h3>
-              </div>
-              <mat-chip-listbox>
-                @for (filter of filterCategory.value; track filter.term) {
-                  <mat-chip (click)="removeChip(filter)">
-                    {{ filter.term }}
-                    <mat-icon class="mat-chip-remove">cancel</mat-icon>
-                  </mat-chip>
-                }
-              </mat-chip-listbox>
-              <br />
-            }
+      </div>
+      <div class="chip-list-wrapper">
+        @for ( filterCategory of selectedFiltersSignal() | keyvalue; track
+        filterCategory.key ) { @if (filterCategory.value.length) {
+        <div class="row">
+          <h3>{{ filterCategory.key }}</h3>
+        </div>
+        <mat-chip-listbox>
+          @for (filter of filterCategory.value; track filter.term) {
+          <mat-chip (click)="removeChip(filter)">
+            {{ filter.term }}
+            <mat-icon class="mat-chip-remove">cancel</mat-icon>
+          </mat-chip>
           }
-        </div>
+        </mat-chip-listbox>
+        <br />
+        } }
+      </div>
     </div>
   </div>
   <div class="row space-around-row">
     <div class="width-5">
-      <button
-        mat-flat-button
-        (click)="resolve()"
-        [disabled]="searchDisabled()"
-      >
+      <button mat-flat-button (click)="resolve()" [disabled]="searchDisabled()">
         Resolve
       </button>
     </div>
@@ -118,26 +120,27 @@
     </div>
   </div>
   @if(clicked() && !loading()){
-    <ncats-frontend-library-loading-spinner [isLoaded]="false"></ncats-frontend-library-loading-spinner>
+  <ncats-frontend-library-loading-spinner
+    [isLoaded]="false"
+  ></ncats-frontend-library-loading-spinner>
   }
 
   <div class="row space-around-row top-align">
     <div class="width-90">
       @if (badData() && badData().length) {
-       <h2>Failed to Resolve</h2>
-          @for(inputStr of badData(); track inputStr.input){
-            {{inputStr.input}}<br>
-          }
-      }
+      <h2>Failed to Resolve</h2>
+      @for(inputStr of badData(); track inputStr.input){
+      {{ inputStr.input }}<br />
+      } }
     </div>
   </div>
   <div class="row space-around-row top-align">
     <div class="width-90">
       @if (resolvedData() && resolvedData().length) {
-        <lib-resolver-data-viewer
-          [data]="filteredResolvedData()"
-          [params]="sortedSelection()"
-        ></lib-resolver-data-viewer>
+      <lib-resolver-data-viewer
+        [data]="filteredResolvedData()"
+        [params]="sortedSelection()"
+      ></lib-resolver-data-viewer>
       }
     </div>
   </div>

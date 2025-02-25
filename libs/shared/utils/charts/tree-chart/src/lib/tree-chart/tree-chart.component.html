@@ -1,25 +1,30 @@
-<mat-card>
-  <ncats-frontend-library-loading-spinner
-    [isLoaded]="loaded"
-  ></ncats-frontend-library-loading-spinner>
-  <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
-    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-      <button mat-icon-button disabled></button>
-      {{ node.term }}
-    </mat-tree-node>
-    <mat-tree-node
-      *matTreeNodeDef="let node; when: hasChild"
-      matTreeNodePadding
-      (click)="selectNode(node)"
-      class="clickable-area"
+<mat-tree
+  #tree
+  [dataSource]="dataSource()"
+  [childrenAccessor]="childrenAccessor"
+>
+  <!-- This is the tree node template for leaf nodes -->
+  <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
+    <!-- use a disabled button to provide padding for tree leaf -->
+    <div mat-icon-button disabled></div>
+    {{ node.term }}
+  </mat-tree-node>
+  <!-- This is the tree node template for expandable nodes -->
+  <mat-tree-node
+    *matTreeNodeDef="let node; when: hasChild"
+    matTreeNodePadding
+    matTreeNodeToggle
+    [cdkTreeNodeTypeaheadLabel]="node.term"
+  >
+    <button
+      mat-icon-button
       matTreeNodeToggle
+      [attr.aria-label]="'Toggle ' + node.term"
     >
-      <button mat-icon-button [attr.aria-label]="'Toggle ' + node.item">
-        <mat-icon class="mat-icon-rtl-mirror">
-          {{ treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
-        </mat-icon>
-      </button>
-      {{ node.term }}
-    </mat-tree-node>
-  </mat-tree>
-</mat-card>
+      <mat-icon class="mat-icon-rtl-mirror">
+        {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
+      </mat-icon>
+    </button>
+    {{ node.term }}
+  </mat-tree-node>
+</mat-tree>

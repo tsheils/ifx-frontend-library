@@ -25,10 +25,10 @@ export const loadArticle$ = createEffect(
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/articles') &&
-          r.payload.routerState.url.startsWith('/article'),
+          r.payload.routerState.url.startsWith('/article')
       ),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
       ),
       mergeMap((params: { pmid?: string }) => {
         ARTICLEDETAILSVARIABLES.articleWhere.pubmed_id = params.pmid;
@@ -48,12 +48,12 @@ export const loadArticle$ = createEffect(
                 return FetchArticleActions.fetchArticleFailure({
                   error: 'No Disease found',
                 });
-            }),
+            })
           );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 export const loadArticlesList$ = createEffect(
@@ -84,7 +84,7 @@ export const loadArticlesList$ = createEffect(
               };
               const data = articlesDataArray.articlesData[0];
               const articlesList = data.articlesList.map(
-                (article: Partial<Article>) => new Article(article),
+                (article: Partial<Article>) => new Article(article)
               );
               if (articlesList) {
                 return FetchArticlesListActions.fetchArticlesListSuccess({
@@ -98,12 +98,12 @@ export const loadArticlesList$ = createEffect(
                 return FetchArticlesListActions.fetchArticlesListFailure({
                   error: 'No articles found',
                 });
-            }),
+            })
           );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 function _setArticlesOptions(options: {

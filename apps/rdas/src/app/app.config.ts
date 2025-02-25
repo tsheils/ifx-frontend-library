@@ -3,7 +3,12 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ApplicationConfig, importProvidersFrom, inject, provideAppInitializer } from '@angular/core';
+import {
+  ApplicationConfig,
+  importProvidersFrom,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
@@ -73,9 +78,9 @@ export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
     provideAppInitializer(() => {
-        const initializerFn = (rdasInit)();
-        return initializerFn();
-      }),
+      const initializerFn = rdasInit();
+      return initializerFn();
+    }),
     provideRouter(
       routes,
       withViewTransitions(),
@@ -85,7 +90,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules),
+      withPreloading(PreloadAllModules)
     ),
     provideStore({
       router: routerReducer,

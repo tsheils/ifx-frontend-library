@@ -25,7 +25,7 @@ $_palettes: (
     99: #fafcff,
     100: #ffffff,
   ),
- /* secondary: (
+  /* secondary: (
     0: #000000,
     10: #350040,
     20: #50145b,
@@ -43,24 +43,25 @@ $_palettes: (
     99: #fffbff,
     100: #ffffff,
   ),*/
-  tertiary: (
-    0: #000000,
-    10: #181837,
-    20: #2d2d4d,
-    25: #393858,
-    30: #444465,
-    35: #504f71,
-    40: #5c5b7e,
-    50: #757498,
-    60: #8e8db2,
-    70: #a9a8ce,
-    80: #c5c3ea,
-    90: #e2dfff,
-    95: #f2efff,
-    98: #fcf8ff,
-    99: #fffbff,
-    100: #ffffff,
-  ),
+    tertiary:
+    (
+      0: #000000,
+      10: #181837,
+      20: #2d2d4d,
+      25: #393858,
+      30: #444465,
+      35: #504f71,
+      40: #5c5b7e,
+      50: #757498,
+      60: #8e8db2,
+      70: #a9a8ce,
+      80: #c5c3ea,
+      90: #e2dfff,
+      95: #f2efff,
+      98: #fcf8ff,
+      99: #fffbff,
+      100: #ffffff,
+    ),
   neutral: (
     0: #000000,
     10: #191c1e,
@@ -142,6 +143,7 @@ $light-theme: mat.define-theme(
       theme-type: light,
       primary: $_primary,
       tertiary: $_tertiary,
+      use-system-variables: true,
     ),
     typography: (
       use-system-variables: true,
@@ -154,6 +156,7 @@ $dark-theme: mat.define-theme(
       theme-type: dark,
       primary: $_primary,
       tertiary: $_tertiary,
+      use-system-variables: true,
     ),
     typography: (
       use-system-variables: true,

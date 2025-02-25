@@ -11,7 +11,7 @@ export class FilterService {
 
   fetchDiseases(
     query: DocumentNode,
-    variables: object = {},
+    variables: object = {}
   ): Observable<ApolloQueryResult<unknown>> {
     return this.apollo
       .use('diseases')

@@ -25,7 +25,7 @@ export class HistoryApiComponent {
 
   constructor(
     @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
+    private platformId: InjectionToken<NonNullable<unknown>>
   ) {
     this.isBrowser = isPlatformBrowser(platformId);
     afterNextRender(() => {

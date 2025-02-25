@@ -35,7 +35,7 @@ export class GeneAssociation {
 
     if (obj.properties && obj.properties._reference) {
       this.reference = obj.properties._reference.map(
-        (ref) => new Reference({ code: ref }),
+        (ref) => new Reference({ code: ref })
       );
       delete this._reference;
     }

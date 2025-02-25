@@ -9,7 +9,7 @@ describe('Pathway', () => {
         pathwayId: 'WP5402',
         inputId: 'hmdb:HMDB0000148',
         commonName: 'Glutamate; L-Glutamic acid',
-      }),
+      })
     ).toBeTruthy();
   });
 });

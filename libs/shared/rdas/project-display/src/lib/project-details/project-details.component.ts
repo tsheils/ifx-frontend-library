@@ -12,7 +12,6 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CoreProject, Project } from '@ncats-frontend-library/models/rdas';
 import { AnnotationsDisplayComponent } from '../annotations-display/annotations-display.component';
-import { ProjectListCardComponent } from '../project-list-card/project-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-project-details',

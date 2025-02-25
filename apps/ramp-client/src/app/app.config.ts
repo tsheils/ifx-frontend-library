@@ -3,7 +3,11 @@ import {
   withFetch,
   withInterceptorsFromDi,
 } from '@angular/common/http';
-import { ApplicationConfig, inject, provideAppInitializer } from '@angular/core';
+import {
+  ApplicationConfig,
+  inject,
+  provideAppInitializer,
+} from '@angular/core';
 import {
   BrowserModule,
   provideClientHydration,
@@ -47,7 +51,7 @@ export function rampInit(store = inject(Store)) {
     store.dispatch(
       LoadRampActions.loadRampApi({
         url: '/assets/data/ramp-api.json',
-      }),
+      })
     );
     store.dispatch(LoadRampActions.loadRampStats());
   };
@@ -57,13 +61,13 @@ export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
     provideAppInitializer(() => {
-        const initializerFn = (set_url)(inject(RampService));
-        return initializerFn();
-      }),
+      const initializerFn = set_url(inject(RampService));
+      return initializerFn();
+    }),
     provideAppInitializer(() => {
-        const initializerFn = (rampInit)();
-        return initializerFn();
-      }),
+      const initializerFn = rampInit();
+      return initializerFn();
+    }),
     provideRouter(
       routes,
       withViewTransitions(),
@@ -73,7 +77,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules),
+      withPreloading(PreloadAllModules)
     ),
     provideStore({ rampStore: rampReducer }),
     provideRouterStore(),

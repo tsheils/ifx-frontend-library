@@ -45,3 +45,40 @@ export class Ontology extends RampDataGeneric {
     }
   }
 }
+
+export class OntologyEnrichment extends RampDataGeneric {
+  ontology!: string;
+  HMDBOntologyType!: string;
+  Pval?: number;
+  OR?: number;
+  Num_In_Ontology?: number;
+  Total_In_Ontology?: number;
+  Pval_FDR?: number;
+  Pval_Holm?: number;
+  analytes?: string;
+  source!: string;
+  ontologyAverage!: string;
+
+  constructor(obj: { [key: string]: unknown }) {
+    super();
+    Object.assign(this, obj);
+    if (obj['HMDBOntologyType']) {
+      this.HMDBOntologyType = <string>obj['HMDBOntologyType'];
+      this.source = <string>obj['HMDBOntologyType'];
+    }
+
+    if (obj['Ontology']) {
+      this.ontology = <string>obj['Ontology'];
+    }
+
+    if (obj['analytes']) {
+      const analyteString = <string>obj['analytes'];
+      this.analytes = analyteString.replaceAll('|', ' | ');
+    }
+
+    if (obj['Num_In_Ontology'] && obj['Total_In_Ontology']) {
+      this.ontologyAverage =
+        this.Num_In_Ontology + '/' + this.Total_In_Ontology;
+    }
+  }
+}

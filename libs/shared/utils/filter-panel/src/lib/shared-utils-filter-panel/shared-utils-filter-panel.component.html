@@ -9,14 +9,14 @@
       [value]="filter().query ? filter().query : null"
     />
     @if (searchCtl.value) {
-      <button
-        matSuffix
-        mat-icon-button
-        aria-label="close"
-        (click)="clearSearch()"
-      >
-        <mat-icon [color]="'primary'">backspace</mat-icon>
-      </button>
+    <button
+      matSuffix
+      mat-icon-button
+      aria-label="close"
+      (click)="clearSearch()"
+    >
+      <mat-icon [color]="'primary'">backspace</mat-icon>
+    </button>
     }
   </mat-form-field>
   <div>
@@ -39,11 +39,14 @@
       >
         <div class="filter-cell checkbox">
           <mat-checkbox
+            id="filter-checkbox"
             (click)="$event.stopPropagation()"
             aria-label="Select filter option"
             (change)="$event ? filterSelection.toggle(field['term']) : null"
             [checked]="filterSelection.isSelected(field['term'])"
-            ><label class="hidden">Select filter option</label>
+            ><label class="hidden" for="filter-checkbox"
+              >Select filter option</label
+            >
           </mat-checkbox>
         </div>
         <div class="filter-cell name">
@@ -51,7 +54,7 @@
             <span
               [innerHTML]="
                 field['term']
-                  | highlight: (filter().query ? filter().query : '')
+                  | highlight : (filter().query ? filter().query : '')
               "
             ></span>
           </span>
@@ -62,12 +65,11 @@
           </span>
         </div>
         @if (last) {
-          <br />
-        }
-        @if (!fullList() && last && filter().values.length >= 200) {
-          <button mat-stroked-button (click)="loadMore()" class="full-width">
-            see more
-          </button>
+        <br />
+        } @if (!fullList() && last && filter().values.length >= 200) {
+        <button mat-stroked-button (click)="loadMore()" class="full-width">
+          see more
+        </button>
         }
       </div>
     </cdk-virtual-scroll-viewport>

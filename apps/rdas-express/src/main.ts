@@ -16,8 +16,8 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.printf(
-      (info) => `${info.timestamp} ${info.level}: ${info.message}`,
-    ),
+      (info) => `${info.timestamp} ${info.level}: ${info.message}`
+    )
   ),
   transports: [
     new winston.transports.Console(),
@@ -32,7 +32,7 @@ const app: Express = express();
 const httpServer = http.createServer(app);
 const driver = neo4j.driver(
   environment.url,
-  neo4j.auth.basic(environment.neo4jUser, environment.neo4jPassword),
+  neo4j.auth.basic(environment.neo4jUser, environment.neo4jPassword)
 );
 const instances = environment.instances;
 
@@ -70,7 +70,7 @@ function startSchema(instance) {
         (req, res, next) => {
           logger.info(`Received a ${req.method} request for ${req.url}`);
           next();
-        },
+        }
       );
     } catch (e) {
       console.log(e);
@@ -81,7 +81,7 @@ function startSchema(instance) {
       const port = instance.port;
       const server = app.listen(port, () => {
         logger.info(
-          `${instance.name} API listening to port ${port} at ${environment.url}`,
+          `${instance.name} API listening to port ${port} at ${environment.url}`
         );
       });
     } catch (e) {

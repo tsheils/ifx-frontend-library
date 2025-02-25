@@ -12,16 +12,16 @@ import { BehaviorSubject } from 'rxjs';
 import { NgClass } from '@angular/common';
 
 export const STRUCTURE_VIEWER_COMPONENT = new InjectionToken<string>(
-  'StructureViewerComponent',
+  'StructureViewerComponent'
 );
 
 @Component({
-    selector: 'lib-structure-viewer',
-    templateUrl: './structure-viewer.component.html',
-    styleUrls: ['./structure-viewer.component.scss'],
-    encapsulation: ViewEncapsulation.None,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [NgClass]
+  selector: 'lib-structure-viewer',
+  templateUrl: './structure-viewer.component.html',
+  styleUrls: ['./structure-viewer.component.scss'],
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgClass],
 })
 export class StructureViewerComponent implements OnInit {
   url = '';

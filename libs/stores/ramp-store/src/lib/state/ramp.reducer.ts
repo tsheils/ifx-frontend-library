@@ -8,20 +8,20 @@ import {
   Analyte,
   Classes,
   EntityCount,
-  FisherResult,
   FishersDataframe,
   Metabolite,
   Ontology,
   Pathway,
   Properties,
   RampResponse,
-  RampQuery,
   Reaction,
   SourceVersion,
   RampChemicalEnrichmentResponse,
   CommonAnalyte,
   ReactionClass,
   RampPathwayEnrichmentResponse,
+  RampReactionClassEnrichmentResponse,
+  RampOntologyEnrichmentResponse,
 } from 'ramp';
 
 import {
@@ -31,10 +31,12 @@ import {
   LoadRampActions,
   MetaboliteEnrichmentsActions,
   MetaboliteFromOntologyActions,
+  OntologyEnrichmentsActions,
   OntologyFromMetaboliteActions,
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
+  ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
   ReactionsFromAnalytesActions,
 } from './ramp.actions';
@@ -70,10 +72,11 @@ export interface State extends EntityState<RampEntity> {
   metabolitesFromOntologies?: RampResponse<Metabolite>;
   ontologiesList?: FilterCategory[];
   ontologies?: RampResponse<Ontology>;
-
+  ontologyEnrichments?: RampOntologyEnrichmentResponse;
   metClasses?: RampResponse<Classes>;
   properties?: RampResponse<Properties>;
   chemicalEnrichments?: RampChemicalEnrichmentResponse;
+  reactionClassEnrichments?: RampReactionClassEnrichmentResponse;
 
   api?: Map<string, OpenApiPath[]>;
 }
@@ -114,16 +117,22 @@ export const rampReducer = createReducer(
     PathwayEnrichmentsActions.fetchPathwaysFromAnalytes,
     PathwayFromAnalyteActions.fetchPathwaysFromAnalytes,
     MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies,
+    OntologyEnrichmentsActions.fetchOntologyEnrichment,
     CommonReactionAnalyteActions.fetchCommonReactionAnalytes,
+    ReactionsFromAnalytesActions.fetchReactionsFromAnalytes,
+    ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes,
+    ReactionClassEnrichmentsActions.fetchReactionClassEnrichment,
+    ReactionClassEnrichmentsActions.filterReactionClassEnrichment,
     ClassesFromMetabolitesActions.fetchClassesFromMetabolites,
     PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolites,
+    MetaboliteEnrichmentsActions.fetchClassesFromMetabolites,
     MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites,
     PathwayEnrichmentsActions.fetchEnrichmentFromPathways,
     (state) => ({
       ...state,
       loading: true,
       error: null,
-    }),
+    })
   ),
 
   on(LoadRampActions.loadRampStatsSuccess, (state, { data }) => ({
@@ -169,7 +178,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       ontologies: { data, query, dataAsDataProperty },
-    }),
+    })
   ),
 
   on(
@@ -178,7 +187,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       analytes: { data, query, dataAsDataProperty },
-    }),
+    })
   ),
 
   on(
@@ -190,7 +199,7 @@ export const rampReducer = createReducer(
         loading: false,
         pathways: { data, query, dataAsDataProperty },
       };
-    },
+    }
   ),
 
   on(
@@ -199,7 +208,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       commonReactions: { data, query, dataAsDataProperty },
-    }),
+    })
   ),
 
   on(
@@ -208,7 +217,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       reactions: { data, query, dataAsDataProperty, plot },
-    }),
+    })
   ),
 
   on(
@@ -217,7 +226,31 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       reactionClasses: { data, query, dataAsDataProperty },
-    }),
+    })
+  ),
+
+  on(
+    ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess,
+    // ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess,
+    (state, { data }) => {
+      return {
+        ...state,
+        loading: false,
+        reactionClassEnrichments: data,
+      };
+    }
+  ),
+
+  on(
+    OntologyEnrichmentsActions.fetchOntologyEnrichmentSuccess,
+    // OntologyEnrichmentsActions.filterOntologyEnrichmentSuccess,
+    (state, { data }) => {
+      return {
+        ...state,
+        loading: false,
+        ontologyEnrichments: data,
+      };
+    }
   ),
 
   on(
@@ -226,7 +259,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       metabolitesFromOntologies: { data, query, dataAsDataProperty },
-    }),
+    })
   ),
 
   on(
@@ -235,7 +268,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       ontologiesList: data,
-    }),
+    })
   ),
 
   on(
@@ -245,7 +278,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       metClasses: { data, query, dataAsDataProperty },
-    }),
+    })
   ),
 
   on(
@@ -254,7 +287,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       properties: { data, query, dataAsDataProperty },
-    }),
+    })
   ),
 
   on(
@@ -266,7 +299,7 @@ export const rampReducer = createReducer(
         loading: false,
         chemicalEnrichments: data,
       };
-    },
+    }
   ),
 
   on(
@@ -281,7 +314,7 @@ export const rampReducer = createReducer(
         clusterPlot: '',
         dataAsDataProperty: dataAsDataProperty,
       };
-    },
+    }
   ),
 
   on(
@@ -299,7 +332,7 @@ export const rampReducer = createReducer(
         clusterPlot: '',
         dataAsDataProperty: dataAsDataProperty,
       };
-    },
+    }
   ),
 
   on(
@@ -311,7 +344,7 @@ export const rampReducer = createReducer(
         pathwayEnrichments: { data, query, dataAsDataProperty },
         clusterPlot: clusterImage,
       };
-    },
+    }
   ),
 
   on(
@@ -323,9 +356,12 @@ export const rampReducer = createReducer(
     OntologyFromMetaboliteActions.fetchOntologiesFromMetabolitesFailure,
     MetaboliteFromOntologyActions.fetchMetaboliteFromOntologiesFailure,
     MetaboliteFromOntologyActions.fetchOntologiesFailure,
+    OntologyEnrichmentsActions.fetchOntologyEnrichmentFailure,
     CommonReactionAnalyteActions.fetchCommonReactionAnalytesFailure,
     ReactionsFromAnalytesActions.fetchReactionsFromAnalytesFailure,
     ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteFailure,
+    ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentFailure,
+    ReactionClassEnrichmentsActions.filterReactionClassEnrichmentFailure,
     ClassesFromMetabolitesActions.fetchClassesFromMetabolitesFailure,
     PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolitesFailure,
     MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolitesFailure,
@@ -340,8 +376,8 @@ export const rampReducer = createReducer(
         loading: false,
         error,
       };
-    },
-  ),
+    }
+  )
 );
 
 export function reducer(state: State | undefined, action: Action) {

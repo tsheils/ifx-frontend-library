@@ -7,8 +7,9 @@ import {
 import { QuestionBase } from 'ncats-form-question';
 import { ChemicalEnrichment } from './chemical-enrichment';
 import { FisherResult, FishersDataframe } from './fisher-result';
+import { OntologyEnrichment } from './ontology';
 import { RampQuery } from './ramp-query';
-import { Reaction } from './reaction';
+import { Reaction, ReactionClass } from './reaction';
 
 export class RampDataGeneric {
   id!: string;
@@ -69,6 +70,40 @@ export interface RampPathwayEnrichmentResponse
   clusterImage?: string;
   filteredFishersDataframe?: FishersDataframe;
   combinedFishersDataframe?: FishersDataframe;
+}
+
+export interface RampReactionClassEnrichmentAPIResponse {
+  data: {
+    EC_Level1Stats: ReactionClass[];
+    EC_Level2Stats: ReactionClass[];
+    analyteType: string[];
+    result_type?: string[];
+  };
+  function_call?: string[];
+}
+export interface RampOntologyEnrichmentAPIResponse {
+  data: {
+    fishertresults: OntologyEnrichment[];
+  };
+  function_call?: string[];
+}
+
+export interface RampOntologyEnrichmentResponse {
+  data: OntologyEnrichment[];
+  function_call?: string[];
+  query?: RampQuery;
+  dataAsDataProperty?: { [p: string]: DataProperty }[];
+}
+
+export interface RampReactionClassEnrichmentResponse {
+  data: {
+    EC_Level1Stats: ReactionClass[];
+    EC_Level2Stats: ReactionClass[];
+    analyteType: string[];
+    result_type?: string[];
+  };
+  query?: RampQuery;
+  dataAsDataProperty?: { [p: string]: DataProperty }[];
 }
 
 export interface RampChemicalEnrichmentAPIResponse {

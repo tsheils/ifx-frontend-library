@@ -169,36 +169,29 @@
       "@ramp/features/ramp/ramp-home": [
         "libs/features/ramp/ramp-home/src/index.ts"
       ],
-      "adme-store": ["libs/stores/adme-store/src/index.ts"],
       "biochemical-pathways-page": [
         "libs/features/ramp/biochemical-pathways-page/src/index.ts"
       ],
       "chemical-descriptors-page": [
         "libs/features/ramp/chemical-descriptors-page/src/index.ts"
       ],
-      "chemkit": ["libs/features/ifx/chemkit/src/index.ts"],
       "complete-dialog": ["libs/shared/utils/complete-dialog/src/index.ts"],
       "data-download-button": [
         "libs/shared/utils/data-download-button/src/index.ts"
       ],
       "data-panel": ["libs/shared/ramp/panels/data-panel/src/index.ts"],
-      "default-tool": ["libs/features/ifx/default-tool/src/index.ts"],
       "filter-download-button": [
         "libs/shared/utils/filter-download-button/src/index.ts"
       ],
       "full-banner": ["libs/shared/ramp/full-banner/src/index.ts"],
       "generic-chart": ["libs/shared/utils/charts/generic-chart/src/index.ts"],
       "ifx": ["libs/models/ifx/src/index.ts"],
-      "ifx-tool-store": ["libs/stores/ifx-tool-store/src/index.ts"],
       "image-download": ["libs/shared/utils/image-download/src/index.ts"],
       "input-panel": ["libs/shared/ramp/panels/input-panel/src/index.ts"],
-      "iqc-convert": ["libs/features/ifx/IQC-convert/src/index.ts"],
-      "java-webstart": ["libs/shared/ifx/java-webstart/src/index.ts"],
       "markdown-viewer": ["libs/shared/utils/markdown-viewer/src/index.ts"],
       "ncats-datatable": [
         "libs/shared/utils/charts/ncats-datatable/src/index.ts"
       ],
-      "ncats-find-excel": ["libs/features/ifx/ncats-find-excel/src/index.ts"],
       "ncats-form": ["libs/shared/forms/ncats-form/src/index.ts"],
       "ncats-form-question": [
         "libs/shared/forms/ncats-form-question/src/index.ts"
@@ -206,19 +199,8 @@
       "ncats-header": ["libs/shared/utils/ncats-header/src/index.ts"],
       "ontologies-page": ["libs/features/ramp/ontologies-page/src/index.ts"],
       "ontology-panel": ["libs/shared/ramp/panels/ontology-panel/src/index.ts"],
-      "options-panel": ["libs/shared/ifx/options-panel/src/index.ts"],
       "panel-accordion": [
         "libs/shared/ramp/panels/panel-accordion/src/index.ts"
-      ],
-      "qhts-data-browser": ["libs/features/ifx/qhts-data-browser/src/index.ts"],
-      "qhts-heatmap-browser": [
-        "libs/features/ifx/qhts-heatmap-browser/src/index.ts"
-      ],
-      "qhts-plate-browser": [
-        "libs/features/ifx/qhts-plate-browser/src/index.ts"
-      ],
-      "qhts-sample-client": [
-        "libs/features/ifx/qhts-sample-client/src/index.ts"
       ],
       "ramp": ["libs/models/ramp/src/index.ts"],
       "ramp-core-page": ["libs/shared/ramp/ramp-core-page/src/index.ts"],
@@ -239,16 +221,10 @@
       "resolver-main": ["libs/features/ifx/resolver-main/src/index.ts"],
       "resolver-store": ["libs/stores/resolver-store/src/index.ts"],
       "results-panel": ["libs/shared/ramp/panels/results-panel/src/index.ts"],
-      "scaffold-hopper": ["libs/features/ifx/scaffold-hopper/src/index.ts"],
-      "screenshot-display": ["libs/shared/ifx/screenshot-display/src/index.ts"],
       "structure-viewer": ["libs/shared/utils/structure-viewer/src/index.ts"],
       "sunburst-chart": [
         "libs/shared/utils/charts/sunburst-chart/src/index.ts"
       ],
-      "tool-browse": ["libs/features/ifx/tool-browse/src/index.ts"],
-      "tool-card": ["libs/shared/ifx/tool-card/src/index.ts"],
-      "tool-details": ["libs/shared/ifx/tool-details/src/index.ts"],
-      "tool-list": ["libs/shared/ifx/tool-list/src/index.ts"],
       "tree-chart": ["libs/shared/utils/charts/tree-chart/src/index.ts"],
       "upset-chart": ["libs/shared/utils/charts/upset-chart/src/index.ts"],
       "utils-animated-force-directed-graph": [

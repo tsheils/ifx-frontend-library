@@ -1,11 +1,11 @@
 import { CoreProject } from '@ncats-frontend-library/models/rdas';
 import { Action } from '@ngrx/store';
-import { FetchGrantsListActions } from './grants.actions';
+import { FetchProjectsListActions } from './grants.actions';
 
 import {
-  GrantsState,
-  initialGrantsState,
-  grantsReducer,
+  ProjectsState,
+  initialProjectsState,
+  projectsReducer,
 } from './grants.reducer';
 
 describe('Grants Reducer', () => {
@@ -20,9 +20,16 @@ describe('Grants Reducer', () => {
         createGrantsEntity('PRODUCT-AAA'),
         createGrantsEntity('PRODUCT-zzz'),
       ];
-      const action = FetchGrantsListActions.FetchGrantsListSuccess({ grants });
+      const action = FetchProjectsListActions.fetchProjectsListSuccess({
+        projects: grants,
+        projectsCount: 2,
+        allProjectsCount: 2,
+      });
 
-      const result: GrantsState = grantsReducer(initialGrantsState, action);
+      const result: ProjectsState = projectsReducer(
+        initialProjectsState,
+        action
+      );
 
       expect(result.loaded).toBe(true);
       expect(result.ids.length).toBe(2);
@@ -33,9 +40,9 @@ describe('Grants Reducer', () => {
     it('should return the previous state', () => {
       const action = {} as Action;
 
-      const result = grantsReducer(initialGrantsState, action);
+      const result = projectsReducer(initialProjectsState, action);
 
-      expect(result).toBe(initialGrantsState);
+      expect(result).toBe(initialProjectsState);
     });
   });
 });

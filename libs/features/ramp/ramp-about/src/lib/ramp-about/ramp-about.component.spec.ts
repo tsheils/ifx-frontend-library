@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { ActivatedRoute } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
@@ -15,6 +16,7 @@ describe('AboutComponent', () => {
       declarations: [],
       imports: [NoopAnimationsModule, AboutComponent],
       providers: [
+        { provide: ActivatedRoute, useValue: {} as ActivatedRoute },
         provideStore({
           rampStore: rampReducer,
         }),

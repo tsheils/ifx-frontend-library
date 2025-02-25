@@ -20,7 +20,6 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDivider } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
@@ -86,7 +85,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
             label: this.filter().label,
             term: term,
           });
-        }),
+        })
       )
       .subscribe();
 
@@ -101,7 +100,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         takeUntilDestroyed(this.destroyRef),
         map((range: ListRange) => {
           this.range = range;
-        }),
+        })
       )
       .subscribe();
   }
@@ -110,7 +109,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
     this.filterSelection.select(
       ...this.filter()
         .values.filter((val) => val.selected)
-        .map((val) => val.term),
+        .map((val) => val.term)
     );
   }
 

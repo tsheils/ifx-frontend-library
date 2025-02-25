@@ -7,11 +7,9 @@ import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
-  DiseaseService,
   reducer,
 } from '@ncats-frontend-library/stores/disease-store';
 import { StoreModule } from '@ngrx/store';
-import { Apollo } from 'apollo-angular';
 
 import { RdasSearchComponent } from './rdas-search.component';
 

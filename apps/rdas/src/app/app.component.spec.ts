@@ -4,6 +4,11 @@ import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
 } from '@ncats-frontend-library/stores/disease-store';
+import {
+  USERS_FEATURE_KEY,
+  UserService,
+  usersReducer,
+} from '@ncats-frontend-library/stores/user-store';
 import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 
@@ -16,8 +21,9 @@ describe('AppComponent', () => {
         RouterModule,
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
+        StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
-      providers: [],
+      providers: [UserService],
     }).compileComponents();
   });
 

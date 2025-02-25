@@ -1,4 +1,4 @@
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
+import { ScrollDispatcher } from '@angular/cdk/overlay';
 import {
   LowerCasePipe,
   NgOptimizedImage,
@@ -14,7 +14,6 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { MatIconModule } from '@angular/material/icon';
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
@@ -53,9 +52,9 @@ export class DiseaseHeaderComponent implements OnInit {
   });
 
   ngOnInit() {
-    this.scrollDispatcher.scrolled().subscribe((res) => {
+    this.scrollDispatcher.scrolled().subscribe(() => {
       this.animationState.set(
-        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
+        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in'
       );
     });
   }

@@ -13,15 +13,15 @@ import { NcatsDatatableComponent } from 'ncats-datatable';
 import { ForceDirectedGraphService } from 'utils-force-directed-graph';
 
 export const GRAPH_LEGEND = new InjectionToken<string>(
-  'RampGraphLegendComponent',
+  'RampGraphLegendComponent'
 );
 
 @Component({
-    selector: 'lib-ramp-graph-legend',
-    imports: [CommonModule, NcatsDatatableComponent, MatExpansionModule],
-    templateUrl: './ramp-graph-legend.component.html',
-    styleUrl: './ramp-graph-legend.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-ramp-graph-legend',
+  imports: [CommonModule, NcatsDatatableComponent, MatExpansionModule],
+  templateUrl: './ramp-graph-legend.component.html',
+  styleUrl: './ramp-graph-legend.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampGraphLegendComponent implements OnInit {
   forceDirectedGraphService = inject(ForceDirectedGraphService);
@@ -34,7 +34,7 @@ export class RampGraphLegendComponent implements OnInit {
       this.hoveredNode.set(res);
     });
     this.forceDirectedGraphService.nodeClicked.subscribe((res) =>
-      this.clickedNode.set(res),
+      this.clickedNode.set(res)
     );
   }
 }

@@ -14,7 +14,6 @@ import {
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { SharedUtilsListFilterRowComponent } from '@ncats-frontend-library/shared/utils/list-filter-row';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 
 @Component({
   selector: 'lib-rdas-panel-template',
@@ -43,7 +42,7 @@ export class RdasPanelTemplateComponent {
     const retObj: { [key: string]: string[] } = {};
     Object.entries(event).forEach(
       ([key, filters]) =>
-        (retObj[key] = [...filters.map((filter) => filter.term)]),
+        (retObj[key] = [...filters.map((filter) => filter.term)])
     );
     this.listChange.emit(retObj);
   }

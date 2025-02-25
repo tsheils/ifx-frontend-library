@@ -59,7 +59,7 @@ export class UserService {
   doEmailLogin(email: string, pw: string) {
     const auth: Auth = getAuth();
     return from(
-      signInWithEmailAndPassword(auth, email, pw).catch((error) => error),
+      signInWithEmailAndPassword(auth, email, pw).catch((error) => error)
     );
   }
 
@@ -77,8 +77,8 @@ export class UserService {
     const auth: Auth = getAuth();
     return from(
       sendPasswordResetEmail(auth, email, this.actionCodeSettings).catch(
-        (error) => error,
-      ),
+        (error) => error
+      )
     );
   }
 

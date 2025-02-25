@@ -22,7 +22,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(about)"
+            (keydown.enter)="scroll(about)"
             [activated]="isActive('about')"
           >
             About
@@ -30,7 +33,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(citation)"
+            (keydown.enter)="scroll(citation)"
             [activated]="isActive('citation')"
           >
             Citation
@@ -38,7 +44,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(publications)"
+            (keydown.enter)="scroll(publications)"
             [activated]="isActive('publications')"
           >
             Additional Publications
@@ -46,7 +55,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(contact)"
+            (keydown.enter)="scroll(contact)"
             [activated]="isActive('contact')"
           >
             RDAS Team and Contact
@@ -54,7 +66,10 @@
           <a
             mat-list-item
             class="list-button"
+            role="button"
+            tabindex="0"
             (click)="scroll(code)"
+            (keydown.enter)="scroll(code)"
             [activated]="isActive('code')"
           >
             Code
@@ -73,16 +88,16 @@
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
     @if (!navigationsidenav.opened) {
-      <div class="row">
-        <button
-          mat-stroked-button
-          class="menu-button"
-          aria-label="menu button"
-          (click)="navigationsidenav.toggle()"
-        >
-          Jump to...<mat-icon>bookmark</mat-icon>
-        </button>
-      </div>
+    <div class="row">
+      <button
+        mat-stroked-button
+        class="menu-button"
+        aria-label="menu button"
+        (click)="navigationsidenav.toggle()"
+      >
+        Jump to...<mat-icon>bookmark</mat-icon>
+      </button>
+    </div>
     }
     <div class="row centered-row">
       <div

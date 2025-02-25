@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { Disease } from '@ncats-frontend-library/models/rdas';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,

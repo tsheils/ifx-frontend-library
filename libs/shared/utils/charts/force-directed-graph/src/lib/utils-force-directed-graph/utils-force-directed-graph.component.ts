@@ -52,7 +52,7 @@ import { ForceDirectedGraphService } from './force-directed-graph.service';
 })
 export class UtilsForceDirectedGraphComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID,
+    PLATFORM_ID
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   chartElement = viewChild<ElementRef>('graphElement');
@@ -60,26 +60,26 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
     () =>
       this.chartElement()?.nativeElement.offsetWidth -
       this.margins().left -
-      this.margins().right,
+      this.margins().right
   );
   height = computed(
     () =>
       this.chartElement()?.nativeElement.offsetHeight +
       this.margins().top +
-      this.margins().bottom,
+      this.margins().bottom
   );
   margins = signal({ top: 10, bottom: 10, left: 10, right: 10 });
   svgExport = computed(
     () =>
       <SVGElement>(
         select(this.chartElement()?.nativeElement).select('svg').node()
-      ),
+      )
   );
   data = input<GraphData>({ graph: { nodes: [], links: [] } });
 
   graphChartService = inject(ForceDirectedGraphService);
   graphLegendElement: Signal<ElementRef | undefined> = viewChild(
-    'forceDirectedGraphElement',
+    'forceDirectedGraphElement'
   );
   _injector = inject(Injector);
   componentPortal?: ComponentPortal<unknown>;
@@ -100,7 +100,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
             [this.width(), this.height()],
           ])
           .scaleExtent([-1, 8])
-          .on('zoom', (event) => this.zoomed(event)),
+          .on('zoom', (event) => this.zoomed(event))
       );
   });
 
@@ -115,13 +115,13 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
     forceSimulation(this.nodes())
       .force(
         'link',
-        forceLink(this.links()).id((d) => d.id),
+        forceLink(this.links()).id((d) => d.id)
       )
       .force('charge', forceManyBody())
       .force('center', forceCenter(this.width() / 2, this.height() / 2))
       .force('x', forceX())
       .force('y', forceY())
-      .on('tick', () => this.ticked()),
+      .on('tick', () => this.ticked())
   );
 
   link = computed(() =>
@@ -133,7 +133,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .classed('edgeLinks', true)
       .attr('stroke-width', 1)
       .attr('stroke', (d) => d.color || '#ffffff')
-      .attr('opacity', 0.2),
+      .attr('opacity', 0.2)
   );
   // Add a drag behavior.;
   // Add a line for each link, and a circle for each node.
@@ -161,8 +161,8 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
         drag()
           .on('start', (event) => this.dragStarted(event))
           .on('drag', (event) => this.dragged(event))
-          .on('end', (event) => this.dragEnded(event)),
-      ),
+          .on('end', (event) => this.dragEnded(event))
+      )
   );
 
   circleNode = computed(() =>
@@ -187,8 +187,8 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
         drag()
           .on('start', (event) => this.dragStarted(event))
           .on('drag', (event) => this.dragged(event))
-          .on('end', (event) => this.dragEnded(event)),
-      ),
+          .on('end', (event) => this.dragEnded(event))
+      )
   );
 
   allNodes = computed(() => selectAll('.dataNode'));
@@ -211,7 +211,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
     if (this.graphChartService && this.graphChartService.customComponent) {
       const comp = this._injector.get<Type<unknown>>(
-        this.graphChartService.customComponent,
+        this.graphChartService.customComponent
       );
       this.componentPortal = new ComponentPortal(comp);
     }
@@ -219,18 +219,18 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
   clicked(event, d) {
     const filterList = this.links().filter(
-      (l) => l.target['id'] === d.id || l.source['id'] === d.id,
+      (l) => l.target['id'] === d.id || l.source['id'] === d.id
     );
     const nodes = Array.from(
       new Set([
         ...filterList.map((l) => l.target['id']),
         ...filterList.map((l) => l.source['id']),
-      ]),
+      ])
     );
     selectAll(this.link())
       .classed(
         'clickedEdge',
-        (l) => l.target['id'] === d.id || l.source['id'] === d.id,
+        (l) => l.target['id'] === d.id || l.source['id'] === d.id
       )
       .transition()
       .duration(100);
@@ -245,18 +245,18 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
   hovered(event, d) {
     const filterList = this.links().filter(
-      (l) => l.target['id'] === d.id || l.source['id'] === d.id,
+      (l) => l.target['id'] === d.id || l.source['id'] === d.id
     );
     const nodes = Array.from(
       new Set([
         ...filterList.map((l) => l.target['id']),
         ...filterList.map((l) => l.source['id']),
-      ]),
+      ])
     );
     selectAll(this.link())
       .classed(
         'hoveredEdge',
-        (l) => l.target['id'] === d.id || l.source['id'] === d.id,
+        (l) => l.target['id'] === d.id || l.source['id'] === d.id
       )
       .transition()
       .duration(100);

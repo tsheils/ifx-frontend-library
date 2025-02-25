@@ -13,7 +13,7 @@ describe('Analyte', () => {
         pathwayId: 'WP5299',
         pathwayCategory: '',
         pathwayType: 'wiki',
-      }),
+      })
     ).toBeTruthy();
   });
 });

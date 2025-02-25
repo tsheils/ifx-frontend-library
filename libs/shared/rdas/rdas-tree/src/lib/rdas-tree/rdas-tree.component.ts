@@ -73,25 +73,22 @@ export class RdasTreeComponent implements OnInit {
     return flatNode;
   };
 
-  constructor(
-    private changeRef: ChangeDetectorRef,
-    private router: Router,
-  ) {
+  constructor(private changeRef: ChangeDetectorRef, private router: Router) {
     this.treeControl = new FlatTreeControl<FlatDiseaseNode>(
       (node) => node.level,
-      (node) => node.expandable,
+      (node) => node.expandable
     );
 
     this.treeFlattener = new MatTreeFlattener(
       this._transformer,
       (node) => node.level,
       (node) => node.expandable,
-      (node) => node.children,
+      (node) => node.children
     );
 
     this.dataSource = new MatTreeFlatDataSource(
       this.treeControl,
-      this.treeFlattener,
+      this.treeFlattener
     );
   }
 
@@ -101,7 +98,7 @@ export class RdasTreeComponent implements OnInit {
         this.dataSource.data = res;
         this.treeControl.expansionModel.selected.forEach((node) => {
           const n = this.treeControl.dataNodes.find(
-            (d) => d.gardId === node.gardId,
+            (d) => d.gardId === node.gardId
           );
           if (n) {
             this.treeControl.expand(n);

@@ -16,7 +16,6 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import { GeneAssociation } from '@ncats-frontend-library/models/rdas';
-import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
 import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
 
 @Component({
@@ -110,7 +109,7 @@ export class GeneListComponent {
 
           // finally joining each row with a line break
         },
-        [headings],
+        [headings]
       )
       .join('\n');
     return rows;

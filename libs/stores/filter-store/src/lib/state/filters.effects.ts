@@ -59,7 +59,7 @@ const filterMap: Map<
 
 function parseFilterResponse(
   res: FilterResponse,
-  currentFilter?: FilterCategory,
+  currentFilter?: FilterCategory
 ): FilterCategory[] {
   const filters: FilterCategory[] = [];
   if (Object.keys(res).length) {
@@ -76,7 +76,7 @@ function parseFilterResponse(
             new Filter({
               ...obj,
               selected: true,
-            }),
+            })
           );
         });
       }
@@ -91,7 +91,7 @@ function parseFilterResponse(
               <string>obj.term,
               new Filter({
                 ...obj,
-              }),
+              })
             );
           }
         });
@@ -113,7 +113,7 @@ function parseFilterResponse(
               <string>obj.term,
               new Filter({
                 ...obj,
-              }),
+              })
             );
           }
         });
@@ -140,10 +140,10 @@ export const loadFilters$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseases'),
+        r.payload.routerState.url.startsWith('/diseases')
       ),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
       ),
       mergeMap((params: Params) => {
         const queries: { [key: string]: ObservableInput<unknown> } = {};
@@ -159,7 +159,7 @@ export const loadFilters$ = createEffect(
               }
               queries[selectedFilter] = filterService.fetchDiseases(
                 queryParams.query,
-                queryParams.parameters,
+                queryParams.parameters
               );
             }
           }
@@ -177,19 +177,19 @@ export const loadFilters$ = createEffect(
                 error: 'No Disease found',
               });
             }
-          }),
+          })
         );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
 
 export const searchFilters$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    filterService = inject(FilterService),
+    filterService = inject(FilterService)
   ) => {
     return actions$.pipe(
       ofType(FetchFiltersActions.fetchFilters),
@@ -205,11 +205,11 @@ export const searchFilters$ = createEffect(
           FilterCategory
         >();
         currentFilters.forEach((filter: FilterCategory) =>
-          currentFiltersMap.set(filter.label, filter),
+          currentFiltersMap.set(filter.label, filter)
         );
         //get current searched/paged/selected filter, mainly for the current values
         let filterMatch: FilterCategory | undefined = currentFiltersMap.get(
-          action.label,
+          action.label
         );
         if (!filterMatch) {
           filterMatch = new FilterCategory({
@@ -250,7 +250,7 @@ export const searchFilters$ = createEffect(
           if (params.query) {
             queries[action.label] = filterService.fetchDiseases(
               params.query,
-              params.parameters,
+              params.parameters
             );
           }
         }
@@ -264,7 +264,7 @@ export const searchFilters$ = createEffect(
               });
               const filter = parseFilterResponse(
                 res as FilterResponse,
-                tempFilter,
+                tempFilter
               );
               return FetchFiltersActions.fetchFiltersSuccess({
                 filters: filter,
@@ -273,10 +273,10 @@ export const searchFilters$ = createEffect(
               return FetchFiltersActions.fetchFiltersFailure({
                 error: 'No Disease found',
               });
-          }),
+          })
         );
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );

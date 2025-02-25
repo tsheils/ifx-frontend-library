@@ -185,7 +185,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
   chemicalProperties = this.store.selectSignal(RampSelectors.getProperties);
   chemicalClasses = this.store.selectSignal(RampSelectors.getClasses);
   chemicalEnrichment = this.store.selectSignal(
-    RampSelectors.getChemicalEnrichment,
+    RampSelectors.getChemicalEnrichment
   );
 
   override dataMap = computed(() => {
@@ -206,7 +206,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
         }
         break;
       }
-      case 'chemical-class-enrichment': {
+      case 'chemical-classes': {
         const chemicalClassesData = this.chemicalClasses()?.dataAsDataProperty;
         if (chemicalClassesData) {
           returnDataMap.set('Chemical Classes', {
@@ -217,7 +217,9 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
             loaded: !!chemicalClassesData,
           });
         }
-
+        break;
+      }
+      case 'chemical-class-enrichment': {
         const chemicalEnrichmentData =
           this.chemicalEnrichment()?.dataAsDataProperty;
         if (chemicalEnrichmentData) {
@@ -256,7 +258,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
         }
         break;
       }
-      case 'chemical-class-enrichment': {
+      case 'chemical-classes': {
         if (this.chemicalClasses()?.data) {
           ret = {
             [field]: {
@@ -265,10 +267,22 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
               count: this.chemicalClasses()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
-              function: [
-                this.chemicalClasses()?.query?.functionCall,
-                this.chemicalEnrichment()?.query?.functionCall,
-              ],
+              function: [this.chemicalClasses()?.query?.functionCall],
+            } as QueryResultsData,
+          };
+        }
+        break;
+      }
+      case 'chemical-class-enrichment': {
+        if (this.chemicalEnrichment()?.data) {
+          ret = {
+            [field]: {
+              matches: this.chemicalEnrichment()?.query?.matches,
+              noMatches: this.chemicalEnrichment()?.query?.noMatches,
+              // count: this.chemicalEnrichment()?.data.length,
+              inputLength: this.inputList.length,
+              inputType: 'analytes',
+              function: [this.chemicalEnrichment()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -284,39 +298,42 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string,
+    origin: string
   ): void {
     this.activeTab.set(origin);
     switch (origin) {
       case 'chemical-properties': {
         this.inputList = this._parseInput(
-          formData['metabolites'] as string | string[],
+          formData['metabolites'] as string | string[]
         );
         this.store.dispatch(
           PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolites({
             metabolites: this.inputList,
-          }),
+          })
         );
         break;
       }
 
-      case 'chemical-class-enrichment': {
+      case 'chemical-classes': {
         this.inputList = this._parseInput(
-          formData['metabolites'] as string | string[],
+          formData['metabolites'] as string | string[]
         );
         this.store.dispatch(
           MetaboliteEnrichmentsActions.fetchClassesFromMetabolites({
             metabolites: this.inputList,
             background: <string>formData['background'],
             backgroundFile: formData['backgroundFile'] as File,
-          }),
+          })
         );
+        break;
+      }
+      case 'chemical-class-enrichment': {
         this.store.dispatch(
           MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolites({
             metabolites: this.inputList,
             background: <string>formData['background'],
             backgroundFile: formData['backgroundFile'] as File,
-          }),
+          })
         );
         break;
       }

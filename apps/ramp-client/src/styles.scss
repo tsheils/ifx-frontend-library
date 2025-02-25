@@ -44,16 +44,12 @@
 
 html,
 body {
-   height: 100%;
+  height: 100%;
   margin: 0 !important;
-  font-family:
-    Roboto,
-    Helvetica Neue Light,
-    Helvetica Neue,
-    Helvetica,
-    Arial,
-    Lucida Grande,
-    sans-serif;
+  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
+    Lucida Grande, sans-serif;
+  scroll-behavior: smooth;
+  @include mat.system-level-colors(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
   @include footer.theme(theme.$light-theme);
   @include upset.theme(theme.$light-theme);
@@ -63,6 +59,15 @@ body {
 a {
   color: mat.get-theme-color(theme.$light-theme, primary);
   font-weight: bold;
+}
+
+.info-card {
+  @include mat.card-overrides(
+    (
+      outlined-container-color:
+        mat.get-theme-color(theme.$light-theme, surface-container),
+    )
+  );
 }
 
 .main {
@@ -94,7 +99,7 @@ a {
   color: #ffffff;
   border: solid 1px;
   border-radius: 5px;
- // padding: 10px;
+  // padding: 10px;
   max-width: 100%;
 }
 
@@ -121,14 +126,58 @@ a {
   border: none !important;
 }
 
-.active-rail-button {
-  background-color: white;
+.main-rail {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+  width: 80px;
+  position: fixed;
+  left: 80px;
+  padding-top: 20px;
+  height: 100%;
+}
+
+.rail-button {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+  margin-bottom: 6px;
+  margin-top: 6px;
+  height: 56px;
+  padding-bottom: 12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  width: 100%;
+  border: none;
+}
+
+.drawer-container-content {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-container);
+}
+
+.ramp-main > .rail-button {
+  background-color: mat.get-theme-color(theme.$light-theme, primary);
+}
+
+.ramp-main > .active-rail-button {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+  color: mat.get-theme-color(theme.$light-theme, surface-dim);
   width: 103%;
 }
 
 .active-rail-button .rail-label,
 .active-rail-button .rail-icon {
   color: mat.get-theme-color(theme.$light-theme, primary) !important;
+}
+
+.rail-label-primary {
+  color: mat.get-theme-color(theme.$light-theme, primary) !important;
+}
+
+.page-content {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-container);
+}
+
+.tabs-section {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-bright);
 }
 
 .active-sidemenu {
@@ -161,6 +210,26 @@ a {
   padding: 20px;
 }
 
+.home-button {
+  height: 68px;
+  width: 100px;
+  padding-bottom: 18px;
+  padding-top: 12px;
+  display: grid;
+  justify-content: center;
+  justify-items: center;
+  text-align: center;
+  border: #265668 2px solid;
+  border-radius: 10%;
+  background-color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.hovered-home-button :hover {
+  background-color: rgba(255, 255, 255);
+}
+
 .centered {
   display: flex;
   align-items: center;
@@ -172,6 +241,32 @@ a {
   flex-flow: row wrap;
   box-sizing: border-box;
   padding-top: 1vh;
+}
+
+.column {
+  display: flex;
+  flex-flow: column wrap;
+  box-sizing: border-box;
+}
+
+.ramp-home-card {
+  background-color: mat.get-theme-color(theme.$dark-theme, primary);
+  color: #000000;
+  padding: 0 2vw;
+  margin-bottom: 2vh;
+}
+
+.ramp-home-card:hover {
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.accordion-holder {
+  @include mat.expansion-overrides(
+    (
+      container-shape: square,
+    )
+  );
 }
 
 .centered-row {
@@ -232,9 +327,15 @@ a {
 }
 
 .icon-button-image {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   position: sticky;
+}
+
+.icon-button-image > mat-icon {
+  font-size: 48px;
+  width: 48px;
+  height: 48px;
 }
 
 ncats-frontend-library-loading-spinner {

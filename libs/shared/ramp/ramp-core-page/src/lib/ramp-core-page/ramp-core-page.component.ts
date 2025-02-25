@@ -13,7 +13,7 @@ import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import {
   DataMap,
   OpenApiPath,
@@ -36,7 +36,6 @@ import { FormSubsection, RampPage } from 'ramp';
 export class RampCorePageComponent {
   protected readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
-  private router = inject(Router);
   private titleService = inject(Title);
   private route = inject(ActivatedRoute);
   changeRef = inject(ChangeDetectorRef);
@@ -57,7 +56,7 @@ export class RampCorePageComponent {
   inputMap = input<Map<string, FormSubsection[]>>();
   filtersMap = input<Map<string, QuestionBase<string>[]>>();
   overviewMap = computed<{ [p: string]: QueryResultsData } | undefined>(
-    () => undefined,
+    () => undefined
   );
   visualizationsMap = computed<
     { [p: string]: Map<string, VisualizationMap[]> } | undefined
@@ -69,7 +68,8 @@ export class RampCorePageComponent {
   activePath = computed(() => {
     const tabString =
       this.activeTab() || Array.from(this.inputMap()!.keys())[0];
-    return this.paths()?.filter((path) => path.child === tabString);
+    const ret = this.paths()?.filter((path) => path.title === tabString);
+    return ret;
   });
   activeTab = signal(<string>this._getActiveTab());
 

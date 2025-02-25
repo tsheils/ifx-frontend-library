@@ -3,14 +3,20 @@
 }
 
 .reactions-from-analytes {
-  width: 25%;
+  width: 40%;
 }
 
 .reaction-classes-from-analytes {
-  padding-left: 5vw;
-  width: 25%;
+  width: 40%;
 }
 
+.reaction-class-enrichment {
+  width: 40%;
+}
+
+.filter-enrichment-results {
+  width: 25%;
+}
 
 .dataNode {
   fill: #e6f1f9;
@@ -54,7 +60,6 @@ line.edgeLinks.clickedEdge {
 
 .legend-input {
   background-color: #000000;
-
 }
 
 .legend-output {

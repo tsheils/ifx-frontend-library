@@ -25,7 +25,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Disease } from '@ncats-frontend-library/models/rdas';
@@ -36,14 +35,11 @@ import { GeneListComponent } from '@ncats-frontend-library/shared/rdas/gene-disp
 import { PhenotypeListComponent } from '@ncats-frontend-library/shared/rdas/phenotype-display';
 import { ProjectListComponent } from '@ncats-frontend-library/shared/rdas/project-display';
 import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
-import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { RdasPanelTemplateComponent } from '@ncats-frontend-library/shared/utils/rdas-panel-template';
 import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
 import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
 import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
 import { Store } from '@ngrx/store';
-import { DiseaseHeaderComponent } from '../disease-header/disease-header.component';
 
 @Component({
   selector: 'ncats-frontend-library-disease-display',
@@ -86,7 +82,7 @@ export class DiseaseDisplayComponent
   projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
   articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
   projectsCount = this.store.selectSignal(
-    ProjectSelectors.selectAllProjectsCount,
+    ProjectSelectors.selectAllProjectsCount
   );
   trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
   articlesList = this.store.selectSignal(ArticleSelectors.selectAllArticles);
@@ -161,7 +157,7 @@ export class DiseaseDisplayComponent
   setPage() {
     const template: RdasPanelTemplateComponent[] = this.templates.filter(
       (template: RdasPanelTemplateComponent) =>
-        template._id() === this.route?.snapshot?.fragment,
+        template._id() === this.route?.snapshot?.fragment
     );
     if (template && template.length) {
       if (
@@ -183,7 +179,7 @@ export class DiseaseDisplayComponent
       filtersL.forEach((filterCat) => {
         if (filterCat.parent) {
           let filterCats: FilterCategory[] | undefined = map.get(
-            filterCat.parent,
+            filterCat.parent
           );
           if (filterCats) {
             filterCats.push(filterCat);

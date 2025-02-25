@@ -23,7 +23,7 @@ export class GraphNode implements SimulationNodeDatum {
   }
 }
 
-export class GraphLink implements SimulationLinkDatum<GraphNode>{
+export class GraphLink implements SimulationLinkDatum<GraphNode> {
   source!: string;
   target!: string;
   label?: string;
@@ -33,7 +33,6 @@ export class GraphLink implements SimulationLinkDatum<GraphNode>{
   color?: string;
   hovered?: boolean;
   clicked?: boolean;
-
 
   constructor(obj: Partial<GraphLink>) {
     Object.assign(this, obj);

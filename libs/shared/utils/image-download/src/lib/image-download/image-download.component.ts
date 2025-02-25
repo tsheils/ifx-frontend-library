@@ -31,7 +31,7 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        <SVGElement>this.chartComponent()?.svgExport(),
+        <SVGElement>this.chartComponent()?.svgExport()
       );
     }
     this._downloadFile(this._makeBlob(svgString, 'image/svg+xml'), 'data.svg');
@@ -43,7 +43,7 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        <SVGElement>this.chartComponent()?.svgExport(),
+        <SVGElement>this.chartComponent()?.svgExport()
       );
     }
     this.svgString2Image(svgString); // passes Blob and filesize String to the callback
@@ -54,7 +54,7 @@ export class ImageDownloadComponent {
     if (data) {
       this._downloadFile(
         this._makeBlob(this._toTSV(data)),
-        `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
+        `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`
       );
     }
   }
@@ -161,7 +161,7 @@ export class ImageDownloadComponent {
 
           // finally joining each row with a line break
         },
-        [headings],
+        [headings]
       );
       return rows.join('\n');
     } else return '';

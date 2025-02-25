@@ -3,6 +3,7 @@ const nxPreset = require('@nx/jest/preset').default;
 module.exports = {
   ...nxPreset,
   setupFiles: ['./jest.polyfills.js'],
+  setupFilesAfterEnv: ['./jest.setup.ts'],
   testPathIgnorePatterns: ['<rootDir>/src/environments/'],
   transformIgnorePatterns: [
     'node_modules/?!d3-(selection|axis|scale|format|array|shape)',

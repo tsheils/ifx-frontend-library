@@ -1,6 +1,5 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
-import { NgClass } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,7 +20,6 @@ import {
 import { Disease } from '@ncats-frontend-library/models/rdas';
 import { LinkTemplateProperty } from '@ncats-frontend-library/models/utils';
 import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/header-template';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { MobileHeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/mobile-header-template';
 import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
 import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
@@ -54,7 +52,7 @@ export class AppComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
   header = viewChild<MobileHeaderTemplateComponent>(
-    MobileHeaderTemplateComponent,
+    MobileHeaderTemplateComponent
   );
 
   title = 'rdas';
@@ -71,8 +69,8 @@ export class AppComponent {
 
   displayLinks = computed(() =>
     this.links.filter(
-      (link) => !(link.hideMobile && link.hideMobile === this.mobile()),
-    ),
+      (link) => !(link.hideMobile && link.hideMobile === this.mobile())
+    )
   );
   links: LinkTemplateProperty[] = [
     {

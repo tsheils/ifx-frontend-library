@@ -7,25 +7,25 @@
 />
 <div class="file-upload">
   @if (fileName()) {
-    <span>{{ fileName() }}</span
-    >&nbsp;
-    <button
-      mat-mini-fab
-      color="accent"
-      class="upload-btn"
-      (click)="cancelUpload()"
-    >
-      <mat-icon>cancel</mat-icon>
-    </button>
+  <span>{{ fileName() }}</span
+  >&nbsp;
+  <button
+    mat-mini-fab
+    color="accent"
+    class="upload-btn"
+    (click)="cancelUpload()"
+  >
+    <mat-icon>cancel</mat-icon>
+  </button>
   } @else {
-    <span class="mat-h4">Upload File</span> &nbsp;
-    <button
-      mat-mini-fab
-      color="accent"
-      class="upload-btn"
-      (click)="fileUpload.click()"
-    >
-      <mat-icon>attach_file</mat-icon>
-    </button>
+  <span class="mat-h4">Upload File</span> &nbsp;
+  <button
+    mat-mini-fab
+    color="accent"
+    class="upload-btn"
+    (click)="fileUpload.click()"
+  >
+    <mat-icon>attach_file</mat-icon>
+  </button>
   }
 </div>

@@ -1,12 +1,13 @@
 import { Article } from '@ncats-frontend-library/models/rdas';
 import { Action } from '@ngrx/store';
-import { LoadArticlesActions } from './articles.actions';
-
+import {
+  FetchArticleActions,
+  FetchArticlesListActions,
+} from './articles.actions';
 import * as ArticleStoreActions from './articles.actions';
 import {
   articlesReducer,
   ArticleState,
-  ArticleStorePartialState,
   initialState,
 } from './articles.reducer';
 
@@ -23,14 +24,14 @@ describe('ArticleStore Reducer', () => {
         createArticleStoreEntity('PRODUCT-AAA'),
         createArticleStoreEntity('PRODUCT-zzz'),
       ];
-      const action = LoadArticlesActions.loadArticlesSuccess({
+      const action = FetchArticlesListActions.fetchArticlesListSuccess({
         articles: articleStore,
       });
 
       const result: ArticleState = articlesReducer(initialState, action);
 
-      expect(result.loaded).toBe(false);
-      expect(result.ids.length).toBe(0);
+      expect(result.loaded).toBe(true);
+      expect(result.ids.length).toBe(2);
     });
   });
 

@@ -1,12 +1,9 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   inject,
   input,
-  Input,
-  OnChanges,
 } from '@angular/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NavigationExtras, Router } from '@angular/router';

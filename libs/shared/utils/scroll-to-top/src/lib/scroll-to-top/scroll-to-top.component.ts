@@ -19,10 +19,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { Subject, takeUntil } from 'rxjs';
 
-/**
- * Component that contains a ui button that appears after scrolling past the top menu, on click, it scrolls the user back
- * to the top of the page
- */
 @Component({
   selector: 'ncats-frontend-library-scroll-to-top',
   imports: [
@@ -53,7 +49,7 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
     private platformId: InjectionToken<NonNullable<unknown>>,
     private scrollDispatcher: ScrollDispatcher,
     private changeRef: ChangeDetectorRef,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngAfterViewInit() {

@@ -7,36 +7,36 @@ import {
 
 // Lookup the 'ArticleStore' feature state managed by NgRx
 export const selectArticleStoreState = createFeatureSelector<ArticleState>(
-  ARTICLE_STORE_FEATURE_KEY,
+  ARTICLE_STORE_FEATURE_KEY
 );
 
 const { selectAll, selectEntities } = articlesAdapter.getSelectors();
 
 export const selectArticleStoreLoaded = createSelector(
   selectArticleStoreState,
-  (state: ArticleState) => state.loaded,
+  (state: ArticleState) => state.loaded
 );
 
 export const selectArticleStoreError = createSelector(
   selectArticleStoreState,
-  (state: ArticleState) => state.error,
+  (state: ArticleState) => state.error
 );
 
 export const selectAllArticles = createSelector(
   selectArticleStoreState,
-  (state: ArticleState) => selectAll(state),
+  (state: ArticleState) => selectAll(state)
 );
 
 export const selectArticleStoreEntities = createSelector(
   selectArticleStoreState,
   (state: ArticleState) => {
     return selectEntities(state);
-  },
+  }
 );
 
 export const selectSelectedId = createSelector(
   selectArticleStoreState,
-  (state: ArticleState) => state.selectedId,
+  (state: ArticleState) => state.selectedId
 );
 
 export const getArticleCount = createSelector(
@@ -48,11 +48,11 @@ export const getArticleCount = createSelector(
       nhsArticlesCount: state.nhsArticlesCount,
       currentArticlesCount: state.articlesCount,
     };
-  },
+  }
 );
 
 export const selectEntity = createSelector(
   selectArticleStoreEntities,
   selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
+  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
 );

@@ -228,7 +228,7 @@ export const DISEASEQUERYPARAMETERS: {
         associatedWithGeneGenes_SOME?: {
           GeneSymbol_IN?: string[];
         };
-      },
+      }
     ];
   };
 } = {

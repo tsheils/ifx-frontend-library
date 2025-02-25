@@ -12,7 +12,7 @@ const sessionFactory = () =>
   driver.session({
     defaultAccessMode: neo4j.session.READ,
     bookmarks: null,
-    database: ',
+    database: '',
   });
 
 // We create a async function here until "top level await" has landed

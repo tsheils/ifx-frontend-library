@@ -9,11 +9,11 @@ import {
 import { MatIcon } from '@angular/material/icon';
 
 @Component({
-    selector: 'lib-complete-dialog',
-    imports: [CommonModule, MatIcon, MatDialogContent, MatRipple],
-    templateUrl: './complete-dialog.component.html',
-    styleUrl: './complete-dialog.component.scss',
-    changeDetection: ChangeDetectionStrategy.OnPush
+  selector: 'lib-complete-dialog',
+  imports: [CommonModule, MatIcon, MatDialogContent, MatRipple],
+  templateUrl: './complete-dialog.component.html',
+  styleUrl: './complete-dialog.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompleteDialogComponent {
   readonly data: {
@@ -21,7 +21,7 @@ export class CompleteDialogComponent {
     message?: string;
   } = inject(MAT_DIALOG_DATA);
   readonly dialogRef: MatDialogRef<CompleteDialogComponent> = inject(
-    MatDialogRef<CompleteDialogComponent>,
+    MatDialogRef<CompleteDialogComponent>
   );
 
   close(tab?: number): void {

@@ -53,7 +53,7 @@ export class PanelAccordionComponent {
   paths = input<OpenApiPath[]>();
   inputTab = input<FormSubsection[]>();
   visualizationTabs = input<Map<string, VisualizationMap[]> | undefined>(
-    new Map<string, VisualizationMap[]>(),
+    new Map<string, VisualizationMap[]>()
   );
   dataTabs = input<Map<string, DataMap> | undefined>(undefined);
   overviewTabs = input<QueryResultsData | undefined>(new QueryResultsData());

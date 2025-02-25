@@ -3,7 +3,6 @@ import {
   Component,
   inject,
   input,
-  Input,
 } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';

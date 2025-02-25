@@ -25,7 +25,7 @@ import { select, Selection } from 'd3-selection';
 })
 export class GenericChartComponent {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID,
+    PLATFORM_ID
   ) as InjectionToken<NonNullable<unknown>>;
 
   readonly clickElement = output<Filter>();
@@ -37,7 +37,7 @@ export class GenericChartComponent {
     () =>
       this.chartElement()!.nativeElement?.offsetWidth -
       this.margins().left -
-      this.margins().right,
+      this.margins().right
   );
 
   height = computed(() => {
@@ -59,7 +59,7 @@ export class GenericChartComponent {
     () =>
       <SVGElement>(
         select(this.chartElement()!.nativeElement).select('svg').node()
-      ),
+      )
   );
 
   dataSignal = input<FilterCategory>();

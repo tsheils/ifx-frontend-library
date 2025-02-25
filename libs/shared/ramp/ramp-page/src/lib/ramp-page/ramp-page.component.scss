@@ -1,35 +1,8 @@
-.main-rail {
-  width: 80px;
-  background-color: #ffffff;
-  position: fixed;
-  left:80px;
-  padding-top: 20px;
-  height:100%;
-}
-
 .ramp-rail {
   position: fixed;
   width: 80px;
   display: grid;
   justify-items: center;
-}
-
-.ramp-sub {
-  background-color: white !important;
-}
-
-.rail-button {
-  margin-bottom: 6px;
-  margin-top: 6px;
-  height: 56px;
-  padding-bottom: 12px;
-  display: grid;
-  justify-content: center;
-  justify-items: center;
-  text-align: center;
-  width: 100%;
-  border: none;
-  background-color: #ffffff;
 }
 
 .rail-label {
@@ -41,4 +14,3 @@
 .rail-icon {
   font-size: 24px;
 }
-

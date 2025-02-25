@@ -8,12 +8,12 @@ const { selectAll, selectEntities } = usersAdapter.getSelectors();
 
 export const getUsersLoaded = createSelector(
   getUsersState,
-  (state: UserState) => state.loaded,
+  (state: UserState) => state.loaded
 );
 
 export const getUsersError = createSelector(
   getUsersState,
-  (state: UserState) => state.error,
+  (state: UserState) => state.error
 );
 
 export const getEmail = createSelector(getUsersState, (state: UserState) => {
@@ -21,28 +21,25 @@ export const getEmail = createSelector(getUsersState, (state: UserState) => {
 });
 
 export const getAllUsers = createSelector(getUsersState, (state: UserState) =>
-  selectAll(state),
+  selectAll(state)
 );
 
-export const getUser = createSelector(
-  getUsersState,
-  (state: UserState) => {
-    return selectAll(state)[0]
-  },
-);
+export const getUser = createSelector(getUsersState, (state: UserState) => {
+  return selectAll(state)[0];
+});
 
 export const getUsersEntities = createSelector(
   getUsersState,
-  (state: UserState) => selectEntities(state),
+  (state: UserState) => selectEntities(state)
 );
 
 export const getSelectedId = createSelector(
   getUsersState,
-  (state: UserState) => state.selectedId,
+  (state: UserState) => state.selectedId
 );
 
 export const getSelected = createSelector(
   getUsersEntities,
   getSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
+  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
 );

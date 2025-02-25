@@ -130,7 +130,7 @@ export const PROJECTVARIABLES: {
     sort?: [
       {
         funding_year?: string | null;
-      },
+      }
     ];
   };
 } = {
