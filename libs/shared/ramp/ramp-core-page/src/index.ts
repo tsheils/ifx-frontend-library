@@ -1,1 +1,1 @@
-export * from './lib/ramp-core-page/ramp-core-page.component'
+export * from './lib/ramp-core-page/ramp-core-page.component';

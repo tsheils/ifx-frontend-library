@@ -1,28 +1,28 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { DataProperty } from '@ncats-frontend-library/models/utils'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
 
-import { StructureViewerComponent } from './structure-viewer.component'
+import { StructureViewerComponent } from './structure-viewer.component';
 
 describe('StructureViewerComponent', () => {
-  let component: StructureViewerComponent
-  let fixture: ComponentFixture<StructureViewerComponent>
+  let component: StructureViewerComponent;
+  let fixture: ComponentFixture<StructureViewerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [StructureViewerComponent],
-    }).compileComponents()
-  })
+    }).compileComponents();
+  });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StructureViewerComponent)
-    component = fixture.componentInstance
-    component.data = new DataProperty({ value: 'c1ccc2CCCc2c1' })
+    fixture = TestBed.createComponent(StructureViewerComponent);
+    component = fixture.componentInstance;
+    component.data = new DataProperty({ value: 'c1ccc2CCCc2c1' });
     component.url =
-      'https://pharos.ncats.nih.gov/idg/api/v1/render/c1ccc2CCCc2c1?size=150'
-    fixture.detectChanges()
-  })
+      'https://pharos.ncats.nih.gov/idg/api/v1/render/c1ccc2CCCc2c1?size=150';
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

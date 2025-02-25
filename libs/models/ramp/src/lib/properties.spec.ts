@@ -1,4 +1,4 @@
-import { Properties } from './properties'
+import { Properties } from './properties';
 
 describe('Properties', () => {
   it('should create an instance', () => {
@@ -6,6 +6,6 @@ describe('Properties', () => {
       new Properties({
         iso_smiles: 'dsfdsfsfsdfsf',
       })
-    ).toBeTruthy()
-  })
-})
+    ).toBeTruthy();
+  });
+});

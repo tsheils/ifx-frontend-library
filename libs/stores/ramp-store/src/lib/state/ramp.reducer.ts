@@ -1,9 +1,9 @@
 import {
   FilterCategory,
   OpenApiPath,
-} from '@ncats-frontend-library/models/utils'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
-import { createReducer, on, Action } from '@ngrx/store'
+} from '@ncats-frontend-library/models/utils';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, on, Action } from '@ngrx/store';
 import {
   Analyte,
   Classes,
@@ -20,7 +20,8 @@ import {
   CommonAnalyte,
   ReactionClass,
   RampPathwayEnrichmentResponse,
-  RampReactionClassEnrichmentResponse, RampOntologyEnrichmentResponse
+  RampReactionClassEnrichmentResponse,
+  RampOntologyEnrichmentResponse,
 } from 'ramp';
 
 import {
@@ -29,62 +30,63 @@ import {
   CommonReactionAnalyteActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
-  MetaboliteFromOntologyActions, OntologyEnrichmentsActions,
+  MetaboliteFromOntologyActions,
+  OntologyEnrichmentsActions,
   OntologyFromMetaboliteActions,
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions
+  ReactionsFromAnalytesActions,
 } from './ramp.actions';
 
-export const RAMP_STORE_FEATURE_KEY = 'rampStore'
+export const RAMP_STORE_FEATURE_KEY = 'rampStore';
 
 export interface RampEntity {
-  loading: false
+  loading: false;
 }
 
 export interface State extends EntityState<RampEntity> {
-  selectedId?: string | number // which RampStore record has been selected
-  loading: boolean // has the RampStore list been loaded
-  error?: string | null // last known error (if any)
-  supportedIds?: { analyteType: string; idTypes: string[] }[]
-  sourceVersions: SourceVersion[]
-  entityCounts: EntityCount[]
-  metaboliteIntersects: { id: string; sets: string[]; size: number }[]
-  geneIntersects: { id: string; sets: string[]; size: number }[]
-  databaseUrl?: string
+  selectedId?: string | number; // which RampStore record has been selected
+  loading: boolean; // has the RampStore list been loaded
+  error?: string | null; // last known error (if any)
+  supportedIds?: { analyteType: string; idTypes: string[] }[];
+  sourceVersions: SourceVersion[];
+  entityCounts: EntityCount[];
+  metaboliteIntersects: { id: string; sets: string[]; size: number }[];
+  geneIntersects: { id: string; sets: string[]; size: number }[];
+  databaseUrl?: string;
 
-  pathwayEnrichments?: RampPathwayEnrichmentResponse
-  filteredFishersDataframe?: FishersDataframe
-  combinedFishersDataframe?: FishersDataframe
-  analytes?: RampResponse<Analyte>
-  pathways?: RampResponse<Pathway>
-  clusterPlot?: string
+  pathwayEnrichments?: RampPathwayEnrichmentResponse;
+  filteredFishersDataframe?: FishersDataframe;
+  combinedFishersDataframe?: FishersDataframe;
+  analytes?: RampResponse<Analyte>;
+  pathways?: RampResponse<Pathway>;
+  clusterPlot?: string;
 
-  commonReactions?: RampResponse<CommonAnalyte>
-  reactions?: RampResponse<Reaction>
-  reactionClasses?: RampResponse<ReactionClass>
+  commonReactions?: RampResponse<CommonAnalyte>;
+  reactions?: RampResponse<Reaction>;
+  reactionClasses?: RampResponse<ReactionClass>;
 
-  metabolitesFromOntologies?: RampResponse<Metabolite>
-  ontologiesList?: FilterCategory[]
-  ontologies?: RampResponse<Ontology>
-  ontologyEnrichments?: RampOntologyEnrichmentResponse
-  metClasses?: RampResponse<Classes>
-  properties?: RampResponse<Properties>
-  chemicalEnrichments?: RampChemicalEnrichmentResponse
-  reactionClassEnrichments?: RampReactionClassEnrichmentResponse
+  metabolitesFromOntologies?: RampResponse<Metabolite>;
+  ontologiesList?: FilterCategory[];
+  ontologies?: RampResponse<Ontology>;
+  ontologyEnrichments?: RampOntologyEnrichmentResponse;
+  metClasses?: RampResponse<Classes>;
+  properties?: RampResponse<Properties>;
+  chemicalEnrichments?: RampChemicalEnrichmentResponse;
+  reactionClassEnrichments?: RampReactionClassEnrichmentResponse;
 
-  api?: Map<string, OpenApiPath[]>
+  api?: Map<string, OpenApiPath[]>;
 }
 
 export interface RampPartialState {
-  readonly [RAMP_STORE_FEATURE_KEY]: State
+  readonly [RAMP_STORE_FEATURE_KEY]: State;
 }
 
 export const rampAdapter: EntityAdapter<RampEntity> =
-  createEntityAdapter<RampEntity>()
+  createEntityAdapter<RampEntity>();
 
 export const initialState: State = rampAdapter.getInitialState({
   // set initial required properties
@@ -93,7 +95,7 @@ export const initialState: State = rampAdapter.getInitialState({
   sourceVersions: [],
   geneIntersects: [] as { id: string; sets: string[]; size: number }[],
   metaboliteIntersects: [] as { id: string; sets: string[]; size: number }[],
-})
+});
 
 export const rampReducer = createReducer(
   initialState,
@@ -196,7 +198,7 @@ export const rampReducer = createReducer(
         ...state,
         loading: false,
         pathways: { data, query, dataAsDataProperty },
-      }
+      };
     }
   ),
 
@@ -235,7 +237,7 @@ export const rampReducer = createReducer(
         ...state,
         loading: false,
         reactionClassEnrichments: data,
-      }
+      };
     }
   ),
 
@@ -247,7 +249,7 @@ export const rampReducer = createReducer(
         ...state,
         loading: false,
         ontologyEnrichments: data,
-      }
+      };
     }
   ),
 
@@ -296,7 +298,7 @@ export const rampReducer = createReducer(
         ...state,
         loading: false,
         chemicalEnrichments: data,
-      }
+      };
     }
   ),
 
@@ -311,7 +313,7 @@ export const rampReducer = createReducer(
         filteredFishersDataframe: undefined,
         clusterPlot: '',
         dataAsDataProperty: dataAsDataProperty,
-      }
+      };
     }
   ),
 
@@ -329,7 +331,7 @@ export const rampReducer = createReducer(
         filteredFishersDataframe: filteredFishersDataframe,
         clusterPlot: '',
         dataAsDataProperty: dataAsDataProperty,
-      }
+      };
     }
   ),
 
@@ -341,7 +343,7 @@ export const rampReducer = createReducer(
         loading: false,
         pathwayEnrichments: { data, query, dataAsDataProperty },
         clusterPlot: clusterImage,
-      }
+      };
     }
   ),
 
@@ -373,11 +375,11 @@ export const rampReducer = createReducer(
         ...state,
         loading: false,
         error,
-      }
+      };
     }
   )
-)
+);
 
 export function reducer(state: State | undefined, action: Action) {
-  return rampReducer(state, action)
+  return rampReducer(state, action);
 }

@@ -1,12 +1,16 @@
-import { TestBed } from '@angular/core/testing'
-import { RouterModule } from '@angular/router'
+import { TestBed } from '@angular/core/testing';
+import { RouterModule } from '@angular/router';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store'
-import { USERS_FEATURE_KEY, UserService, usersReducer } from '@ncats-frontend-library/stores/user-store';
-import { StoreModule } from '@ngrx/store'
-import { AppComponent } from './app.component'
+} from '@ncats-frontend-library/stores/disease-store';
+import {
+  USERS_FEATURE_KEY,
+  UserService,
+  usersReducer,
+} from '@ncats-frontend-library/stores/user-store';
+import { StoreModule } from '@ngrx/store';
+import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
@@ -20,18 +24,18 @@ describe('AppComponent', () => {
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
       providers: [UserService],
-    }).compileComponents()
-  })
+    }).compileComponents();
+  });
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent)
-    const app = fixture.componentInstance
-    expect(app).toBeTruthy()
-  })
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
 
   it(`should have as title 'rdas'`, () => {
-    const fixture = TestBed.createComponent(AppComponent)
-    const app = fixture.componentInstance
-    expect(app.title).toEqual('rdas')
-  })
-})
+    const fixture = TestBed.createComponent(AppComponent);
+    const app = fixture.componentInstance;
+    expect(app.title).toEqual('rdas');
+  });
+});

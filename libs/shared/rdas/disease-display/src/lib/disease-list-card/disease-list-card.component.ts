@@ -1,12 +1,12 @@
-import { CommonModule } from '@angular/common'
-import { Component, inject, input } from '@angular/core'
-import { MatCardModule } from '@angular/material/card'
-import { MatIconModule } from '@angular/material/icon'
-import { NavigationExtras, Router } from '@angular/router'
-import { Disease } from '@ncats-frontend-library/models/rdas'
-import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button'
-import { BrowseDiseaseListActions } from '@ncats-frontend-library/stores/disease-store'
-import { Store } from '@ngrx/store'
+import { CommonModule } from '@angular/common';
+import { Component, inject, input } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { NavigationExtras, Router } from '@angular/router';
+import { Disease } from '@ncats-frontend-library/models/rdas';
+import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
+import { BrowseDiseaseListActions } from '@ncats-frontend-library/stores/disease-store';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'ncats-frontend-library-disease-list-card',
@@ -21,9 +21,9 @@ import { Store } from '@ngrx/store'
   ],
 })
 export class DiseaseListCardComponent {
-  private readonly store = inject(Store)
-  router = inject(Router)
-  disease = input<Disease>()
+  private readonly store = inject(Store);
+  router = inject(Router);
+  disease = input<Disease>();
 
   navigate(id: string | undefined): void {
     if (id) {
@@ -31,13 +31,13 @@ export class DiseaseListCardComponent {
         BrowseDiseaseListActions.setDisease({
           disease: this.disease() as Disease,
         })
-      )
+      );
       const navigationExtras: NavigationExtras = {
         queryParams: {
           id: id,
         },
-      }
-      this.router.navigate(['/disease'], navigationExtras)
+      };
+      this.router.navigate(['/disease'], navigationExtras);
     }
   }
 }

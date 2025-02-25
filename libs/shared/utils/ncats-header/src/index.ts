@@ -1,1 +1,1 @@
-export * from './lib/ncats-header/ncats-header.component'
+export * from './lib/ncats-header/ncats-header.component';

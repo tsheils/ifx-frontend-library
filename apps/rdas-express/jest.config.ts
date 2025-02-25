@@ -14,4 +14,4 @@ export default {
   transformIgnorePatterns: ['node_modules/(?!.*\\.mjs$)', '/environment.*'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/rdas-express',
-}
+};

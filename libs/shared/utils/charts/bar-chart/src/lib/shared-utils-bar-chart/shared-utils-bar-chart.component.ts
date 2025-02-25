@@ -1,6 +1,6 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CommonModule, NgOptimizedImage } from '@angular/common'
+import { CommonModule, NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,8 +12,8 @@ import {
   OnInit,
   output,
   ViewEncapsulation,
-} from '@angular/core'
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils'
+} from '@angular/core';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import {
   axisBottom,
   axisLeft,
@@ -27,16 +27,16 @@ import {
   SeriesPoint,
   stack,
   union,
-} from 'd3'
-import { max } from 'd3-array'
-import { scaleLinear } from 'd3-scale'
-import { select, Selection } from 'd3-selection'
-import { Series, Stack } from 'd3-shape'
-import { GenericChartComponent } from 'generic-chart'
-import { ImageDownloadComponent } from 'image-download'
+} from 'd3';
+import { max } from 'd3-array';
+import { scaleLinear } from 'd3-scale';
+import { select, Selection } from 'd3-selection';
+import { Series, Stack } from 'd3-shape';
+import { GenericChartComponent } from 'generic-chart';
+import { ImageDownloadComponent } from 'image-download';
 
 interface ChartPoint extends SeriesPoint<{ [key: string]: number }> {
-  key?: string
+  key?: string;
 }
 
 @Component({
@@ -55,31 +55,31 @@ export class SharedUtilsBarChartComponent
   placeholderUrl = computed(() => {
     return `assets/charts/placeholders/chart${Math.floor(
       Math.random() * 2
-    )}.webp`
-  })
+    )}.webp`;
+  });
 
   // override dataSignal = input<FilterCategory>();
   // readonly clickElement = output<Filter>();
-  bars!: unknown
-  series!: Stack<never, { [key: string]: number }, string>
-  xScale!: ScaleBand<string>
-  yScale!: ScaleLinear<number, number, never>
+  bars!: unknown;
+  series!: Stack<never, { [key: string]: number }, string>;
+  xScale!: ScaleBand<string>;
+  yScale!: ScaleLinear<number, number, never>;
 
   constructor() {
-    super()
-    this.margins.set({ top: 20, bottom: 50, right: 30, left: 10 })
+    super();
+    this.margins.set({ top: 20, bottom: 50, right: 30, left: 10 });
   }
 
   @HostListener('window:resize', [])
   onResize() {
-    this.makeChart()
+    this.makeChart();
   }
 
   ngOnInit() {
     if (this.chartElement() && this.isBrowser()) {
-      const element = this.chartElement().nativeElement
+      const element = this.chartElement().nativeElement;
 
-      select(element).select('svg').remove()
+      select(element).select('svg').remove();
 
       this.svg = select(element)
         .append('svg:svg')
@@ -93,19 +93,19 @@ export class SharedUtilsBarChartComponent
           'style',
           'max-width: 100%; height: auto; height: intrinsic; overflow: visible;'
         )
-        .on('touchstart', (event) => event.preventDefault())
+        .on('touchstart', (event) => event.preventDefault());
 
       if (this.dataSignal()) {
-        this.makeChart()
+        this.makeChart();
       }
     }
   }
 
   ngOnChanges() {
     if (this.dataSignal() && this.svg) {
-      this.svg.selectAll('*').remove()
+      this.svg.selectAll('*').remove();
       if (this.dataSignal()) {
-        this.makeChart()
+        this.makeChart();
       }
     }
   }
@@ -114,35 +114,35 @@ export class SharedUtilsBarChartComponent
     // Determine the series that need to be stacked.
     this.keys = [...new Set(this.dataSignal().values.map((d) => d.term))].sort(
       (a: string, b: string) => a?.localeCompare(b)
-    )
+    );
     const seriesIndex: InternMap = index(
       this.dataSignal().values,
       (d: Filter) => d.term,
       (d: Filter) => d.label
-    ) as InternMap
+    ) as InternMap;
     this.series = (<unknown>stack()
       .keys(union(this.dataSignal().values.map((d) => d.label))) // distinct series keys, in input order
       .value((D: [string, InternMap<string, Filter>], key: string) => {
-        const dKey = D[1].get(key)
+        const dKey = D[1].get(key);
         if (dKey) {
-          return dKey.count
-        } else return 0
+          return dKey.count;
+        } else return 0;
       })(
       // get value for each series key and stack
       seriesIndex as Iterable<{ [key: string]: number }>
-    )) as Stack<never, { [key: string]: number }, string> // group by stack then series key
+    )) as Stack<never, { [key: string]: number }, string>; // group by stack then series key
     // Prepare the scales for positional and color encodings.
     this.xScale = scaleBand()
       .domain(this.keys)
       .range([this.margins().left, this.width() - this.margins().right])
-      .padding(0.1)
+      .padding(0.1);
 
     const yMax: unknown = max(this.series, (d) =>
       max(d, (d: ChartPoint) => d[1])
-    )
+    );
     this.yScale = scaleLinear()
       .domain([0, <number>yMax])
-      .rangeRound([this.height() - this.margins().bottom, this.margins().top])
+      .rangeRound([this.height() - this.margins().bottom, this.margins().top]);
 
     // Append a group for each series, and a rect for each element in the series.
     this.bars = this.svg
@@ -167,7 +167,7 @@ export class SharedUtilsBarChartComponent
       .on('mouseover', (event: Event, d: ChartPoint) =>
         this.pointerMoved(event, d)
       )
-      .on('mouseout', (event: Event) => this.pointerLeft(event))
+      .on('mouseout', (event: Event) => this.pointerLeft(event));
 
     // Append the horizontal axis.
     this.svg
@@ -179,7 +179,7 @@ export class SharedUtilsBarChartComponent
       .call(
         axisBottom(this.xScale).tickValues(
           this.xScale.domain().filter(function (d, i) {
-            return !(i % 4)
+            return !(i % 4);
           })
         )
       )
@@ -187,45 +187,45 @@ export class SharedUtilsBarChartComponent
       .style('text-anchor', 'end')
       .attr('dx', '-.8em')
       .attr('dy', '.15em')
-      .attr('transform', 'rotate(-65)')
+      .attr('transform', 'rotate(-65)');
 
     // Append the vertical axis.
     this.svg
       .append('g')
       .attr('transform', `translate(${this.margins().left},0)`)
-      .call(axisLeft(this.yScale)) //.ticks(null, "s"))
+      .call(axisLeft(this.yScale)); //.ticks(null, "s"))
 
     // add tooltip last
     this.tooltip = this.svg
       .append('g')
       .attr('class', 'tooltip')
-      .style('pointer-events', 'none')
+      .style('pointer-events', 'none');
   }
 
   pointerLeft(event: Event) {
-    const bars = this.bars.nodes()
-    const i = bars.indexOf(event.currentTarget)
-    select(bars[i]).classed('hovered', false)
-    this.tooltip.style('display', 'none')
+    const bars = this.bars.nodes();
+    const i = bars.indexOf(event.currentTarget);
+    select(bars[i]).classed('hovered', false);
+    this.tooltip.style('display', 'none');
   }
 
   pointerMoved(event: Event, d: ChartPoint) {
-    const bars = this.bars.nodes()
-    const i = bars.indexOf(event.currentTarget)
-    select(bars[i]).classed('hovered', true)
+    const bars = this.bars.nodes();
+    const i = bars.indexOf(event.currentTarget);
+    select(bars[i]).classed('hovered', true);
 
-    const dataString: string[] = (<unknown>[d.data[0]]) as string[]
+    const dataString: string[] = (<unknown>[d.data[0]]) as string[];
     Array.from(d.data[1].entries()).forEach(
       (value: [string, { [key: string]: unknown }]) => {
         dataString.push(
           (value[1]['label'] + ': ' + value[1]['count']) as string
-        )
+        );
       }
-    )
+    );
 
-    this.tooltip.style('display', null)
-    const [mx, my] = pointer(event)
-    this.tooltip.attr('transform', `translate(${mx}, ${my})`)
+    this.tooltip.style('display', null);
+    const [mx, my] = pointer(event);
+    this.tooltip.attr('transform', `translate(${mx}, ${my})`);
 
     const path: Selection<
       BaseType | SVGPathElement,
@@ -238,7 +238,7 @@ export class SharedUtilsBarChartComponent
       .data([,])
       .join('path')
       .attr('fill', 'white')
-      .attr('stroke', 'black')
+      .attr('stroke', 'black');
 
     const text: Selection<
       BaseType | SVGTextElement,
@@ -259,11 +259,11 @@ export class SharedUtilsBarChartComponent
           .attr('y', (_, i) => `${i * 1.1}em`)
           .attr('font-weight', (_, i) => (i ? null : 'bold'))
           .text((d) => d)
-      )
+      );
 
-    this.tooltip.transition().duration(100).style('opacity', 0.9)
+    this.tooltip.transition().duration(100).style('opacity', 0.9);
 
-    this.size(text, path)
+    this.size(text, path);
   }
 
   // Wraps the text with a callout path of the correct size, as measured in the page.
@@ -273,12 +273,12 @@ export class SharedUtilsBarChartComponent
   ) {
     if (text.node()) {
       //@ts-expect-error dumb
-      const { x, y, width: w, height: h } = text.node().getBBox()
-      text.attr('transform', `translate(${-w / 2},${15 - y})`)
+      const { x, y, width: w, height: h } = text.node().getBBox();
+      text.attr('transform', `translate(${-w / 2},${15 - y})`);
       path.attr(
         'd',
         `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`
-      )
+      );
     }
   }
 }

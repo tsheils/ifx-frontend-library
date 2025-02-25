@@ -5,7 +5,7 @@ setupZoneTestEnv({
   errorOnUnknownProperties: true,
 });
 
- const yo = [
+const yo = [
   {
     rxnClass: 'Ligases.',
     rxnClassHierarcy: 'Ligases.',
@@ -2884,4 +2884,4 @@ setupZoneTestEnv({
     metCountAverage: '1/6',
     totalReactionAverage: '1/1',
   },
-]
+];

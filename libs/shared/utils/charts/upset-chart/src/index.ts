@@ -1,1 +1,1 @@
-export * from './lib/upset-chart/upset-chart.component'
+export * from './lib/upset-chart/upset-chart.component';

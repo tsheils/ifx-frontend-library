@@ -1,18 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { MatDialogModule } from '@angular/material/dialog'
-import { MatMenuModule } from '@angular/material/menu'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatMenuModule } from '@angular/material/menu';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store'
-import { StoreModule } from '@ngrx/store'
+} from '@ncats-frontend-library/stores/user-store';
+import { StoreModule } from '@ngrx/store';
 
-import { SocialSignOnButtonComponent } from './social-sign-on-button.component'
+import { SocialSignOnButtonComponent } from './social-sign-on-button.component';
 
 describe('SocialSignOnButtonComponent', () => {
-  let component: SocialSignOnButtonComponent
-  let fixture: ComponentFixture<SocialSignOnButtonComponent>
+  let component: SocialSignOnButtonComponent;
+  let fixture: ComponentFixture<SocialSignOnButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -25,14 +25,14 @@ describe('SocialSignOnButtonComponent', () => {
         StoreModule.forRoot({}),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(SocialSignOnButtonComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(SocialSignOnButtonComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

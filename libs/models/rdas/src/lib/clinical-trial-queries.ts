@@ -1,4 +1,4 @@
-import { gql } from 'apollo-angular'
+import { gql } from 'apollo-angular';
 
 export const TRIALFIELDS = `
 fragment trialFields on ClinicalTrial {
@@ -49,7 +49,7 @@ fragment trialFields on ClinicalTrial {
       }
 
 }
-`
+`;
 
 export const FETCHTRIALDETAILS = gql`
   query ClinicalTrials($ctwhere: ClinicalTrialWhere) {
@@ -58,7 +58,7 @@ export const FETCHTRIALDETAILS = gql`
     }
   }
   ${TRIALFIELDS}
-`
+`;
 export const FETCHTRIALSQUERY = gql`
   query ClinicalTrialsList(
     $ctwhere: ClinicalTrialWhere
@@ -76,39 +76,39 @@ export const FETCHTRIALSQUERY = gql`
     }
   }
   ${TRIALFIELDS}
-`
+`;
 
 export const TRIALDETAILSVARIABLES: {
   ctwhere: {
-    NCTId: null | undefined | string
-  }
+    NCTId: null | undefined | string;
+  };
 } = {
   ctwhere: {
     NCTId: '',
   },
-}
+};
 
 export const FETCHTRIALSVARIABLES: {
   ctwhere: {
     mappedToGardGards_SOME: {
-      GardId: string | null | undefined
-    }
-    StudyType_IN?: unknown
-    OverallStatus_IN?: unknown
-    Phase_IN?: unknown
-  }
+      GardId: string | null | undefined;
+    };
+    StudyType_IN?: unknown;
+    OverallStatus_IN?: unknown;
+    Phase_IN?: unknown;
+  };
   ctfilters: {
     mappedToGardGards_SOME: {
-      GardId: string | null | undefined
-    }
-    StudyType_IN?: unknown
-    OverallStatus_IN?: unknown
-    Phase_IN?: unknown
-  }
+      GardId: string | null | undefined;
+    };
+    StudyType_IN?: unknown;
+    OverallStatus_IN?: unknown;
+    Phase_IN?: unknown;
+  };
   ctoptions: {
-    limit: number
-    offset: number
-  }
+    limit: number;
+    offset: number;
+  };
 } = {
   ctwhere: {
     mappedToGardGards_SOME: {
@@ -124,7 +124,7 @@ export const FETCHTRIALSVARIABLES: {
       GardId: undefined,
     },
   },
-}
+};
 
 export const TRIALTYPEFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
@@ -134,7 +134,7 @@ export const TRIALTYPEFILTERS = gql`
       term
     }
   }
-`
+`;
 
 export const TRIALPHASEFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
@@ -144,7 +144,7 @@ export const TRIALPHASEFILTERS = gql`
       term
     }
   }
-`
+`;
 
 export const TRIALSTATUSFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
@@ -154,7 +154,7 @@ export const TRIALSTATUSFILTERS = gql`
       term
     }
   }
-`
+`;
 
 export const TRIALFILTERS = gql`
   query TrialFilters($ctfilters: ClinicalTrialWhere) {
@@ -176,7 +176,7 @@ export const TRIALFILTERS = gql`
       }
     }
   }
-`
+`;
 
 export const ALLTRIALFILTERS = gql`
   query AllDiseasesClinicalTrialsFilters {
@@ -198,4 +198,4 @@ export const ALLTRIALFILTERS = gql`
       }
     }
   }
-`
+`;

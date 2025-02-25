@@ -3,22 +3,23 @@ import {
   Component,
   computed,
   ViewEncapsulation,
-} from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs'
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import {
   DataMap,
   DataProperty,
   QueryResultsData,
-} from '@ncats-frontend-library/models/utils'
-import { OntologyPanelComponent } from 'ontology-panel'
-import { PanelAccordionComponent } from 'panel-accordion'
-import { RampPage } from 'ramp'
-import { RampCorePageComponent } from 'ramp-core-page'
+} from '@ncats-frontend-library/models/utils';
+import { OntologyPanelComponent } from 'ontology-panel';
+import { PanelAccordionComponent } from 'panel-accordion';
+import { RampPage } from 'ramp';
+import { RampCorePageComponent } from 'ramp-core-page';
 import {
-  MetaboliteFromOntologyActions, OntologyEnrichmentsActions,
+  MetaboliteFromOntologyActions,
+  OntologyEnrichmentsActions,
   OntologyFromMetaboliteActions,
-  RampSelectors
+  RampSelectors,
 } from 'ramp-store';
 
 @Component({
@@ -59,7 +60,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
       field: 'metIds',
       sortable: true,
     }),
-  ]
+  ];
   ontologyDataColumns: DataProperty[] = [
     new DataProperty({
       label: 'Metabolites',
@@ -81,7 +82,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
       field: 'sourceId',
       sortable: true,
     }),
-  ]
+  ];
   ontologyEnrichmentDataColumns: DataProperty[] = [
     new DataProperty({
       label: 'Analytes',
@@ -96,12 +97,12 @@ export class OntologiesPageComponent extends RampCorePageComponent {
     new DataProperty({
       label: 'Pval',
       field: 'Pval',
-      sortable: true
+      sortable: true,
     }),
     new DataProperty({
       label: 'FDR Pval',
       field: 'Pval_FDR',
-      sortable: true
+      sortable: true,
     }),
     new DataProperty({
       label: 'Holm Pval',
@@ -111,35 +112,35 @@ export class OntologiesPageComponent extends RampCorePageComponent {
     new DataProperty({
       label: 'Metabolite Odds Ratio',
       field: 'OR',
-      sortable: true
+      sortable: true,
     }),
     new DataProperty({
       label: 'Ontology Ratio',
       field: 'ontologyAverage',
-      sortable: true
-    })
-  ]
+      sortable: true,
+    }),
+  ];
 
-  ontologies = this.store.selectSignal(RampSelectors.getontologiesList)
+  ontologies = this.store.selectSignal(RampSelectors.getontologiesList);
   ontologiesFromMetabolites = this.store.selectSignal(
     RampSelectors.getOntologies
-  )
+  );
   metabolitesFromOntologies = this.store.selectSignal(
     RampSelectors.getMetabolites
-  )
+  );
 
   ontologyEnrichment = this.store.selectSignal(
     RampSelectors.getOntologyEnrichment
-  )
+  );
 
   override dataMap = computed(() => {
-    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>()
-    const field = <string>this.activeTab()
-    let ret!: { [p: string]: Map<string, DataMap> }
-    switch(field) {
-      case 'ontologies-from-metabolites':{
+    const returnDataMap: Map<string, DataMap> = new Map<string, DataMap>();
+    const field = <string>this.activeTab();
+    let ret!: { [p: string]: Map<string, DataMap> };
+    switch (field) {
+      case 'ontologies-from-metabolites': {
         const ontologiesFromMetabolitesData =
-          this.ontologiesFromMetabolites()?.data
+          this.ontologiesFromMetabolites()?.data;
         if (ontologiesFromMetabolitesData) {
           returnDataMap.set('Ontologies from Metabolites', {
             data: this.ontologiesFromMetabolites()?.dataAsDataProperty,
@@ -147,13 +148,13 @@ export class OntologiesPageComponent extends RampCorePageComponent {
             dataframe: ontologiesFromMetabolitesData,
             fileName: 'fetchOntologiesFromMetabolites-download.tsv',
             loaded: !!ontologiesFromMetabolitesData,
-          } as DataMap)
+          } as DataMap);
         }
         break;
       }
-      case 'metabolites-from-ontologies':{
+      case 'metabolites-from-ontologies': {
         const metabolitesFromOntologiesData =
-          this.metabolitesFromOntologies()?.data
+          this.metabolitesFromOntologies()?.data;
         if (metabolitesFromOntologiesData) {
           returnDataMap.set('Metabolites from Ontologies', {
             data: this.metabolitesFromOntologies()?.dataAsDataProperty,
@@ -161,13 +162,13 @@ export class OntologiesPageComponent extends RampCorePageComponent {
             dataframe: metabolitesFromOntologiesData,
             fileName: 'fetchMetabolitesFromOntologies-download.tsv',
             loaded: !!metabolitesFromOntologiesData,
-          } as DataMap)
+          } as DataMap);
         }
         break;
       }
-      case 'ontology-enrichment':{
+      case 'ontology-enrichment': {
         const ontologiesEnrichmentData =
-          this.ontologyEnrichment()?.dataAsDataProperty
+          this.ontologyEnrichment()?.dataAsDataProperty;
         if (ontologiesEnrichmentData) {
           returnDataMap.set('Ontology Enrichment', {
             data: ontologiesEnrichmentData,
@@ -175,22 +176,22 @@ export class OntologiesPageComponent extends RampCorePageComponent {
             dataframe: this.ontologyEnrichment()?.data,
             fileName: 'fetchOntologiesEnrichment-download.tsv',
             loaded: !!ontologiesEnrichmentData,
-          } as DataMap)
+          } as DataMap);
         }
         break;
       }
     }
 
     if (returnDataMap.size) {
-      ret = { [field]: returnDataMap }
+      ret = { [field]: returnDataMap };
     }
-    return ret
-  })
+    return ret;
+  });
 
   override overviewMap = computed(() => {
-    const field = <string>this.activeTab()
-    let ret!: { [p: string]: QueryResultsData }
-    switch(field) {
+    const field = <string>this.activeTab();
+    let ret!: { [p: string]: QueryResultsData };
+    switch (field) {
       case 'ontologies-from-metabolites': {
         if (this.ontologiesFromMetabolites()?.data) {
           ret = {
@@ -202,9 +203,9 @@ export class OntologiesPageComponent extends RampCorePageComponent {
               inputType: 'metabolites',
               fuzzy: true,
             } as QueryResultsData,
-          }
+          };
         }
-          break;
+        break;
       }
       case 'metabolites-from-ontologies': {
         if (this.metabolitesFromOntologies()?.data) {
@@ -217,34 +218,34 @@ export class OntologiesPageComponent extends RampCorePageComponent {
               inputType: 'ontologies',
               fuzzy: true,
             } as QueryResultsData,
-          }
+          };
         }
         break;
       }
       case 'ontology-enrichment': {
         if (this.ontologyEnrichment()?.data) {
-        ret = {
-          [field]: {
-            matches: [],
-            noMatches: [],
-            count: this.ontologyEnrichment()?.data.length,
-            inputLength: this.inputList.length,
-            inputType: 'metabolites',
-          } as QueryResultsData,
+          ret = {
+            [field]: {
+              matches: [],
+              noMatches: [],
+              count: this.ontologyEnrichment()?.data.length,
+              inputLength: this.inputList.length,
+              inputType: 'metabolites',
+            } as QueryResultsData,
+          };
         }
-      }
         break;
       }
     }
-    return ret
-  })
+    return ret;
+  });
 
   constructor() {
-    super()
+    super();
   }
 
   _getMapField(field: string): RampPage {
-    return this.mainPageMap()!.get(field) as RampPage
+    return this.mainPageMap()!.get(field) as RampPage;
   }
 
   downloadOntologyData(event: { [key: string]: unknown }) {
@@ -253,21 +254,21 @@ export class OntologiesPageComponent extends RampCorePageComponent {
         format: 'tsv',
         ontologies: event['ontologies'] as string[],
       })
-    )
+    );
   }
 
   override fetchData(
     formData: { [key: string]: unknown },
     origin: string
   ): void {
-    this.activeTab.set(origin)
-    switch(origin) {
+    this.activeTab.set(origin);
+    switch (origin) {
       case 'metabolites-from-ontologies': {
         this.store.dispatch(
           MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies({
             ontologies: formData['ontology'] as string[],
           })
-        )
+        );
         break;
       }
       case 'ontologies-from-metabolites': {
@@ -275,7 +276,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
           OntologyFromMetaboliteActions.fetchOntologiesFromMetabolites({
             metabolites: formData['metabolites'] as string[],
           })
-        )
+        );
         break;
       }
       case 'ontology-enrichment': {
@@ -283,7 +284,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
           OntologyEnrichmentsActions.fetchOntologyEnrichment({
             metabolites: formData['metabolites'] as string[],
           })
-        )
+        );
         break;
       }
     }

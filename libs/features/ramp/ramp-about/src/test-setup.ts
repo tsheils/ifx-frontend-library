@@ -8,7 +8,7 @@ setupZoneTestEnv({
 // Mock the IntersectionObserver, see https://developer.mozilla.org/en-US/docs/Web/API/Intersection_Observer_API
 export class IntersectionObserver {
   root = null;
-  rootMargin = "";
+  rootMargin = '';
   thresholds = [];
 
   disconnect() {

@@ -4,5 +4,4 @@ setupZoneTestEnv({
   errorOnUnknownElements: true,
   errorOnUnknownProperties: true,
 });
-HTMLCanvasElement.prototype.getContext = jest.fn()
-
+HTMLCanvasElement.prototype.getContext = jest.fn();

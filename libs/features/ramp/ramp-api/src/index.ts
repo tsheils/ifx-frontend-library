@@ -1,1 +1,1 @@
-export * from './lib/ramp-api/ramp-api.component'
+export * from './lib/ramp-api/ramp-api.component';

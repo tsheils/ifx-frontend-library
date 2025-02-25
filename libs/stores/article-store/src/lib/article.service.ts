@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core'
-import { Apollo } from 'apollo-angular'
-import { DocumentNode } from 'graphql'
+import { Injectable } from '@angular/core';
+import { Apollo } from 'apollo-angular';
+import { DocumentNode } from 'graphql';
 
 @Injectable({
   providedIn: 'root',
@@ -15,6 +15,6 @@ export class ArticleService {
         query,
         variables,
       })
-      .valueChanges.pipe()
+      .valueChanges.pipe();
   }
 }

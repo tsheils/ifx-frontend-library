@@ -1,4 +1,4 @@
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout'
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -6,20 +6,20 @@ import {
   DestroyRef,
   inject,
   OnInit,
-} from '@angular/core'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
-import { MatButtonModule } from '@angular/material/button'
-import { MatDialog, MatDialogModule } from '@angular/material/dialog'
-import { MatIconModule } from '@angular/material/icon'
-import { MatMenuModule } from '@angular/material/menu'
-import { MatSnackBar } from '@angular/material/snack-bar'
-import { RouterLink } from '@angular/router'
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterLink } from '@angular/router';
 import {
   UserLoginActions,
   UserSelectors,
-} from '@ncats-frontend-library/stores/user-store'
-import { Store } from '@ngrx/store'
-import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-on-modal.component'
+} from '@ncats-frontend-library/stores/user-store';
+import { Store } from '@ngrx/store';
+import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-on-modal.component';
 
 @Component({
   selector: 'ncats-frontend-library-social-sign-on-button',
@@ -37,24 +37,24 @@ import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-
 })
 //, OnChanges
 export class SocialSignOnButtonComponent implements OnInit {
-  private readonly store = inject(Store)
-  destroyRef = inject(DestroyRef)
-  public dialog = inject(MatDialog)
-  private _snackBar = inject(MatSnackBar)
-  private changeRef = inject(ChangeDetectorRef)
-  private breakpointObserver = inject(BreakpointObserver)
-  user = this.store.selectSignal(UserSelectors.getUser)
+  private readonly store = inject(Store);
+  destroyRef = inject(DestroyRef);
+  public dialog = inject(MatDialog);
+  private _snackBar = inject(MatSnackBar);
+  private changeRef = inject(ChangeDetectorRef);
+  private breakpointObserver = inject(BreakpointObserver);
+  user = this.store.selectSignal(UserSelectors.getUser);
 
-  mobile = false
+  mobile = false;
 
   ngOnInit() {
     this.breakpointObserver
       .observe([Breakpoints.XSmall, Breakpoints.Small])
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((result) => {
-        this.mobile = result.matches
-        this.changeRef.markForCheck()
-      })
+        this.mobile = result.matches;
+        this.changeRef.markForCheck();
+      });
 
     /*this.store
       .select(UserSelectors.getUser)
@@ -78,13 +78,13 @@ export class SocialSignOnButtonComponent implements OnInit {
     this.dialog.open(SocialSignOnModalComponent, {
       height: '45vh',
       width: this.mobile ? '90vw' : '35vw',
-    })
+    });
   }
 
   /**
    * sign out user
    */
   signOut(): void {
-    this.store.dispatch(UserLoginActions.logoutUser())
+    this.store.dispatch(UserLoginActions.logoutUser());
   }
 }

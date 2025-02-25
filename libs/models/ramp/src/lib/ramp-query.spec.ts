@@ -1,7 +1,7 @@
-import { RampQuery } from './ramp-query'
+import { RampQuery } from './ramp-query';
 
 describe('RampQuery', () => {
   it('should create an instance', () => {
-    expect({} as RampQuery).toBeTruthy()
-  })
-})
+    expect({} as RampQuery).toBeTruthy();
+  });
+});

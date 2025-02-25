@@ -1,4 +1,4 @@
-import { Ontology } from './ontology'
+import { Ontology } from './ontology';
 
 describe('Ontology', () => {
   it('should create an instance', () => {
@@ -10,6 +10,6 @@ describe('Ontology', () => {
         ontology: 'tim',
         sourceId: 'tim',
       })
-    ).toBeTruthy()
-  })
-})
+    ).toBeTruthy();
+  });
+});

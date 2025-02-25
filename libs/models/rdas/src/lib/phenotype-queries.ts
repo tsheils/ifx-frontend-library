@@ -1,16 +1,16 @@
-import { gql } from 'apollo-angular'
+import { gql } from 'apollo-angular';
 
 export const PHENOTYPEFILTERPARAMETERS: {
-  skip?: number
-  limit?: number
-  term?: string
-  terms?: string[]
+  skip?: number;
+  limit?: number;
+  term?: string;
+  terms?: string[];
 } = {
   skip: 0,
   limit: 200,
   term: '""',
   terms: [],
-}
+};
 
 export const PHENOTYPEFILTERS = gql`
   query PhenotypeFilters(
@@ -32,4 +32,4 @@ export const PHENOTYPEFILTERS = gql`
       count
     }
   }
-`
+`;

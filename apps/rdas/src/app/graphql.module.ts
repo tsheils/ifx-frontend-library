@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core'
+import { NgModule } from '@angular/core';
 import {
   ApolloModule,
   APOLLO_NAMED_OPTIONS,
   NamedOptions,
-} from 'apollo-angular'
-import { InMemoryCache } from '@apollo/client/core'
-import { HttpLink } from 'apollo-angular/http'
-import { environment } from '../environments/environment'
-
+} from 'apollo-angular';
+import { InMemoryCache } from '@apollo/client/core';
+import { HttpLink } from 'apollo-angular/http';
+import { environment } from '../environments/environment';
 
 @NgModule({
   exports: [ApolloModule],
@@ -48,7 +47,7 @@ import { environment } from '../environments/environment'
               }api/trials`,
             }),
           },
-        }
+        };
       },
       deps: [HttpLink],
     },

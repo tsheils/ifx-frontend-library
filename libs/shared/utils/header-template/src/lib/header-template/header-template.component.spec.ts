@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { MatIconModule } from '@angular/material/icon'
-import { MatSidenavModule } from '@angular/material/sidenav'
-import { MatToolbarModule } from '@angular/material/toolbar'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatIconModule } from '@angular/material/icon';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { HeaderTemplateComponent } from './header-template.component'
+import { HeaderTemplateComponent } from './header-template.component';
 
 describe('HeaderTemplateComponent', () => {
-  let component: HeaderTemplateComponent
-  let fixture: ComponentFixture<HeaderTemplateComponent>
+  let component: HeaderTemplateComponent;
+  let fixture: ComponentFixture<HeaderTemplateComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,14 +20,14 @@ describe('HeaderTemplateComponent', () => {
         MatToolbarModule,
         MatIconModule,
       ],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(HeaderTemplateComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(HeaderTemplateComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

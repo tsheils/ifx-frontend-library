@@ -6,14 +6,14 @@ import {
   Input,
   OnInit,
   ViewEncapsulation,
-} from '@angular/core'
-import { DataProperty } from '@ncats-frontend-library/models/utils'
-import { BehaviorSubject } from 'rxjs'
-import { NgClass } from '@angular/common'
+} from '@angular/core';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
+import { BehaviorSubject } from 'rxjs';
+import { NgClass } from '@angular/common';
 
 export const STRUCTURE_VIEWER_COMPONENT = new InjectionToken<string>(
   'StructureViewerComponent'
-)
+);
 
 @Component({
   selector: 'lib-structure-viewer',
@@ -24,20 +24,20 @@ export const STRUCTURE_VIEWER_COMPONENT = new InjectionToken<string>(
   imports: [NgClass],
 })
 export class StructureViewerComponent implements OnInit {
-  url = ''
+  url = '';
 
-  @Input() smiles!: string
+  @Input() smiles!: string;
 
-  @Input() size = 150
+  @Input() size = 150;
 
-  @Input() rounded = false
+  @Input() rounded = false;
 
-  @Input() ligandName!: string
+  @Input() ligandName!: string;
 
   /**
    *   initialize a private variable _data, it's a BehaviorSubject
    */
-  private _data = new BehaviorSubject<DataProperty | null>(null)
+  private _data = new BehaviorSubject<DataProperty | null>(null);
 
   /**
    * set the value of the data on change
@@ -46,7 +46,7 @@ export class StructureViewerComponent implements OnInit {
   @Input()
   set data(value: DataProperty | null) {
     // set the latest value for _data BehaviorSubject
-    this._data.next(value)
+    this._data.next(value);
   }
 
   /**
@@ -55,7 +55,7 @@ export class StructureViewerComponent implements OnInit {
    */
   get data(): DataProperty | null {
     // get the latest value from _data BehaviorSubject
-    return this._data.getValue()
+    return this._data.getValue();
   }
 
   /**
@@ -71,10 +71,10 @@ export class StructureViewerComponent implements OnInit {
   ngOnInit() {
     this._data.subscribe((data) => {
       if (data && data.url) {
-        this.url = data.url
-        this.ligandName = data.value
-        this.ref.detectChanges()
+        this.url = data.url;
+        this.ligandName = data.value;
+        this.ref.detectChanges();
       }
-    })
+    });
   }
 }

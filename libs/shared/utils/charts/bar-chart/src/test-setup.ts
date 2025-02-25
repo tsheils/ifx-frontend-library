@@ -4,7 +4,7 @@ setupZoneTestEnv({
   errorOnUnknownElements: true,
   errorOnUnknownProperties: true,
 });
-import { FilterCategory } from '@ncats-frontend-library/models/utils'
+import { FilterCategory } from '@ncats-frontend-library/models/utils';
 
 export const BARDATA: FilterCategory = new FilterCategory({
   field: '',
@@ -28,4 +28,4 @@ export const BARDATA: FilterCategory = new FilterCategory({
       selected: false,
     },
   ],
-})
+});

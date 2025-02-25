@@ -1,1 +1,1 @@
-export const getHeadline = () => cy.get('.rdas-headline')
+export const getHeadline = () => cy.get('.rdas-headline');

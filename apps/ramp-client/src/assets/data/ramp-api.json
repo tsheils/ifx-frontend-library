@@ -28,28 +28,37 @@
       "name": "biochemical-pathways",
       "description": "Users can retrieve analytes from input pathways, retrieve pathways from input analytes, as well as perform multi-omic pathway enrichment. RaMP-DB pulls from pathway information from multiple resources, including HMDB, Reactome, WikiPathways, and PFOCR.",
       "sections": [
-        "pathways-from-analytes", "analytes-from-pathways", "pathway-enrichment"
+        "pathways-from-analytes",
+        "analytes-from-pathways",
+        "pathway-enrichment"
       ]
     },
     {
       "name": "ontologies",
       "description": "RaMP-DB contains ontology annotations, obtained from HMDB, which include the following categories: Biofluid and excreta, Organ and components, Subcellular location, Industrial applications, Source (e.g. plant/animal/microbial), Health Condition, Tissue and substructures. Search for information on ontologies and perform enrichment analysis.  Ontologies included describe metabolites only.",
       "sections": [
-        "ontologies-from-metabolites", "metabolites-from-ontologies", "ontology-enrichment"
+        "ontologies-from-metabolites",
+        "metabolites-from-ontologies",
+        "ontology-enrichment"
       ]
     },
     {
       "name": "reactions",
       "description": "RaMP-DB pulls reaction information from the curated resource Rhea and HMDB. Only human reactions are retrieved. The information retrieved includes reaction classes, information on substrates and products, their enzymes (if any) as well as directionality. Both enzymatic and spontaneous biotransformations are represented.\nThe following analytes involving reactions can be performed: retrieving analytes involved in the same reaction and visualizing associated networks, retrieve and interactively explore reaction classes and perform enrichment.",
       "sections": [
-        "common-reaction-analytes", "reactions-from-analytes", "reaction-classes-from-analytes", "reaction-class-enrichment"
+        "common-reaction-analytes",
+        "reactions-from-analytes",
+        "reaction-classes-from-analytes",
+        "reaction-class-enrichment"
       ]
     },
     {
       "name": "chemical-descriptors",
       "description": "Retrieve chemical classes (Classyfire and lipidMAPS) and chemical property information from input metabolites, as well as perform chemical class enrichment.",
       "sections": [
-        "chemical-classes", "chemical-class-enrichment", "chemical-properties"
+        "chemical-classes",
+        "chemical-class-enrichment",
+        "chemical-properties"
       ]
     },
     {
@@ -444,7 +453,10 @@
       "post": {
         "tags": ["biochemical-pathways"],
         "x-section-title": "biochemical-pathway-analysis",
-        "x-subsections": ["filter-enrichment-results", "cluster-enrichment-results" ],
+        "x-subsections": [
+          "filter-enrichment-results",
+          "cluster-enrichment-results"
+        ],
         "summary": "Run Pathway Enrichment Analysis",
         "x-allowedTypes": {
           "metabolites": [
@@ -679,7 +691,7 @@
     "/api/ontology-enrichment": {
       "post": {
         "tags": ["ontologies"],
-        "x-subsections": ["filter-enrichment-results" ],
+        "x-subsections": ["filter-enrichment-results"],
         "summary": "Perform ontology enrichment analysis",
         "x-allowedTypes": {
           "metabolites": [
@@ -726,11 +738,29 @@
                 },
                 "example": {
                   "metabolites": [
-                    "hmdb:HMDB0000033","hmdb:HMDB0000052","hmdb:HMDB0000094",
-                    "hmdb:HMDB0000161","hmdb:HMDB0000168","hmdb:HMDB0000191","hmdb:HMDB0000201","chemspider:10026",
-                    "hmdb:HMDB0006059", "Chemspider:6405", "CAS:5657-19-2","hmdb:HMDB0002511", "chemspider:20171375",
-                    "CAS:133-32-4", "CAS:5746-90-7", "CAS:477251-67-5", "hmdb:HMDB0000695", "chebi:15934", "CAS:838-07-3",
-                    "hmdb:HMDBP00789", "hmdb:HMDBP00283", "hmdb:HMDBP00284", "hmdb:HMDBP00850"
+                    "hmdb:HMDB0000033",
+                    "hmdb:HMDB0000052",
+                    "hmdb:HMDB0000094",
+                    "hmdb:HMDB0000161",
+                    "hmdb:HMDB0000168",
+                    "hmdb:HMDB0000191",
+                    "hmdb:HMDB0000201",
+                    "chemspider:10026",
+                    "hmdb:HMDB0006059",
+                    "Chemspider:6405",
+                    "CAS:5657-19-2",
+                    "hmdb:HMDB0002511",
+                    "chemspider:20171375",
+                    "CAS:133-32-4",
+                    "CAS:5746-90-7",
+                    "CAS:477251-67-5",
+                    "hmdb:HMDB0000695",
+                    "chebi:15934",
+                    "CAS:838-07-3",
+                    "hmdb:HMDBP00789",
+                    "hmdb:HMDBP00283",
+                    "hmdb:HMDBP00284",
+                    "hmdb:HMDBP00850"
                   ]
                 }
               }
@@ -1016,7 +1046,7 @@
     "/api/reaction-class-enrichment": {
       "post": {
         "tags": ["reactions"],
-        "x-subsections": ["filter-enrichment-results" ],
+        "x-subsections": ["filter-enrichment-results"],
         "summary": "Perform reaction class enrichment analysis",
         "x-allowedTypes": {
           "metabolites": ["chebi"],
@@ -1130,7 +1160,7 @@
     "/api/chemical-class-enrichment": {
       "post": {
         "tags": ["chemical-descriptors"],
-        "x-subsections": ["filter-enrichment-results" ],
+        "x-subsections": ["filter-enrichment-results"],
         "summary": "Run Chemical Class Enrichment",
         "x-allowedTypes": {
           "metabolites": [

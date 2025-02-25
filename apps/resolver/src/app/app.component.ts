@@ -1,6 +1,6 @@
-import { Component } from '@angular/core'
-import { RouterModule } from '@angular/router'
-import { NcatsHeaderComponent } from 'ncats-header'
+import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { NcatsHeaderComponent } from 'ncats-header';
 
 @Component({
   imports: [RouterModule, NcatsHeaderComponent],
@@ -9,5 +9,5 @@ import { NcatsHeaderComponent } from 'ncats-header'
   styleUrl: './app.component.scss',
 })
 export class AppComponent {
-  title = 'NCATSFind Resolver'
+  title = 'NCATSFind Resolver';
 }

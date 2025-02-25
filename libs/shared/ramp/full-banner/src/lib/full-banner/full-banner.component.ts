@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { MatButtonModule } from '@angular/material/button'
-import { MatCardModule } from '@angular/material/card'
-import { MatIconModule } from '@angular/material/icon'
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'ramp-full-banner',
@@ -13,9 +13,9 @@ import { MatIconModule } from '@angular/material/icon'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampFullBannerComponent {
-  @Input() showBanner = true
+  @Input() showBanner = true;
 
   closeBanner() {
-    this.showBanner = false
+    this.showBanner = false;
   }
 }

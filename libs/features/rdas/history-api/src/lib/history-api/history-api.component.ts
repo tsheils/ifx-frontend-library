@@ -7,9 +7,9 @@ import {
   PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
-} from '@angular/core'
-import { CommonModule, isPlatformBrowser } from '@angular/common'
-import SwaggerUI from 'swagger-ui'
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import SwaggerUI from 'swagger-ui';
 
 @Component({
   selector: 'lib-history-api',
@@ -20,21 +20,21 @@ import SwaggerUI from 'swagger-ui'
   encapsulation: ViewEncapsulation.None,
 })
 export class HistoryApiComponent {
-  @ViewChild('documentation') el!: ElementRef
-  isBrowser: boolean
+  @ViewChild('documentation') el!: ElementRef;
+  isBrowser: boolean;
 
   constructor(
     @Inject(PLATFORM_ID)
     private platformId: InjectionToken<NonNullable<unknown>>
   ) {
-    this.isBrowser = isPlatformBrowser(platformId)
+    this.isBrowser = isPlatformBrowser(platformId);
     afterNextRender(() => {
       if (this.isBrowser) {
         SwaggerUI({
           url: '/assets/history-api/nhs_swagger.json',
           domNode: this.el.nativeElement,
-        })
+        });
       }
-    })
+    });
   }
 }

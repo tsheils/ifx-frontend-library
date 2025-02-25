@@ -7,4 +7,3 @@ export interface HierarchyNode {
   children?: HierarchyNode[];
   color?: string;
 }
-

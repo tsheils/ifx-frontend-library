@@ -10,25 +10,21 @@
         <h2 class="centered"><b>Get Started:</b></h2>
         <div class="row space-around-row">
           @for(path of api() | keyvalue: _originalOrder; track path.key) {
-            <a class="hovered-home-button">
-              <div
-                matRipple
-                class="home-button"
-                routerLink="/{{ path.key }}"
-              >
-                <div class="icon-button-image">
-                  <img
-                    ngSrc="/assets/icons/{{ path.key }}.svg"
-                    alt="{{ cleanLabel(path.key) | titlecase }} icon"
-                    priority
-                    fill
-                  />
-                </div>
-                <div class="rail-label">
-                  {{ cleanLabel(path.key) | titlecase }}
-                </div>
+          <a class="hovered-home-button">
+            <div matRipple class="home-button" routerLink="/{{ path.key }}">
+              <div class="icon-button-image">
+                <img
+                  ngSrc="/assets/icons/{{ path.key }}.svg"
+                  alt="{{ cleanLabel(path.key) | titlecase }} icon"
+                  priority
+                  fill
+                />
               </div>
-            </a>
+              <div class="rail-label">
+                {{ cleanLabel(path.key) | titlecase }}
+              </div>
+            </div>
+          </a>
           }
         </div>
       </div>
@@ -37,10 +33,12 @@
 </div>
 <div class="primary-background learn-more">
   <div class="row centered-row no-padding learn-more-text">
-    <a mat-flat-button
-       role="button" tabindex="0"
-       (click)="goToDetails()"
-       (keydown.enter)="goToDetails()"
+    <a
+      mat-flat-button
+      role="button"
+      tabindex="0"
+      (click)="goToDetails()"
+      (keydown.enter)="goToDetails()"
     >
       <p>Learn More</p>
       <mat-icon>expand_more</mat-icon>

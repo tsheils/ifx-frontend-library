@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common'
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   input,
   ViewEncapsulation,
-} from '@angular/core'
-import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button'
+} from '@angular/core';
+import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
 
 @Component({
   selector: 'ncats-frontend-library-shared-utils-data-not-found',
@@ -17,10 +17,10 @@ import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/su
   encapsulation: ViewEncapsulation.None,
 })
 export class SharedUtilsDataNotFoundComponent {
-  message = input<string>()
-  subscribed = false
+  message = input<string>();
+  subscribed = false;
 
   setSub(sub: boolean) {
-    this.subscribed = sub
+    this.subscribed = sub;
   }
 }

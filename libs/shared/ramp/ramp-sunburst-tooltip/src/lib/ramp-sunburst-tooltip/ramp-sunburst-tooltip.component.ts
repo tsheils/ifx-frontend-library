@@ -4,14 +4,14 @@ import {
   computed,
   inject,
   InjectionToken,
-} from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { MatIcon } from '@angular/material/icon'
-import { SunburstChartService } from 'sunburst-chart'
+} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatIcon } from '@angular/material/icon';
+import { SunburstChartService } from 'sunburst-chart';
 
 export const SUNBURST_TOOLTIP = new InjectionToken<string>(
   'SunburstTooltipComponent'
-)
+);
 @Component({
   selector: 'lib-ramp-sunburst-tooltip',
   imports: [CommonModule, MatIcon],
@@ -20,6 +20,6 @@ export const SUNBURST_TOOLTIP = new InjectionToken<string>(
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampSunburstTooltipComponent {
-  sunburstChartService = inject(SunburstChartService)
-  hoveredNode = computed(() => this.sunburstChartService.reactionNode())
+  sunburstChartService = inject(SunburstChartService);
+  hoveredNode = computed(() => this.sunburstChartService.reactionNode());
 }

@@ -62,9 +62,12 @@ a {
 }
 
 .info-card {
-  @include mat.card-overrides((
-    outlined-container-color: mat.get-theme-color(theme.$light-theme, surface-container)
-  ));
+  @include mat.card-overrides(
+    (
+      outlined-container-color:
+        mat.get-theme-color(theme.$light-theme, surface-container),
+    )
+  );
 }
 
 .main {
@@ -156,7 +159,7 @@ a {
 
 .ramp-main > .active-rail-button {
   background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
-  color:  mat.get-theme-color(theme.$light-theme, surface-dim);
+  color: mat.get-theme-color(theme.$light-theme, surface-dim);
   width: 103%;
 }
 
@@ -259,9 +262,11 @@ a {
 }
 
 .accordion-holder {
-  @include mat.expansion-overrides((
-    container-shape: square
-  ));
+  @include mat.expansion-overrides(
+    (
+      container-shape: square,
+    )
+  );
 }
 
 .centered-row {

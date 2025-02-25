@@ -1,7 +1,7 @@
-import { NgPlural, NgPluralCase } from '@angular/common'
-import { ChangeDetectionStrategy, Component, input } from '@angular/core'
-import { MatTabsModule } from '@angular/material/tabs'
-import { QueryResultsData } from '@ncats-frontend-library/models/utils'
+import { NgPlural, NgPluralCase } from '@angular/common';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { MatTabsModule } from '@angular/material/tabs';
+import { QueryResultsData } from '@ncats-frontend-library/models/utils';
 
 @Component({
   selector: 'lib-results-panel',
@@ -12,5 +12,5 @@ import { QueryResultsData } from '@ncats-frontend-library/models/utils'
   standalone: true,
 })
 export class ResultsPanelComponent {
-  results = input<QueryResultsData>()
+  results = input<QueryResultsData>();
 }

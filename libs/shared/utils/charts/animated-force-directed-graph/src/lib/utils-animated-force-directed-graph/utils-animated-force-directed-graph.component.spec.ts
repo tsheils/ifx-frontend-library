@@ -1,21 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { UtilsAnimatedForceDirectedGraphComponent } from './utils-animated-force-directed-graph.component'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { UtilsAnimatedForceDirectedGraphComponent } from './utils-animated-force-directed-graph.component';
 
 describe('UtilsAnimatedForceDirectedGraphComponent', () => {
-  let component: UtilsAnimatedForceDirectedGraphComponent
-  let fixture: ComponentFixture<UtilsAnimatedForceDirectedGraphComponent>
+  let component: UtilsAnimatedForceDirectedGraphComponent;
+  let fixture: ComponentFixture<UtilsAnimatedForceDirectedGraphComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [UtilsAnimatedForceDirectedGraphComponent],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(UtilsAnimatedForceDirectedGraphComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(UtilsAnimatedForceDirectedGraphComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

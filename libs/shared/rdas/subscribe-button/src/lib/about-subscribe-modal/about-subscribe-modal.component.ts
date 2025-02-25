@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core'
-import { MatButtonModule } from '@angular/material/button'
-import { MatCheckboxModule } from '@angular/material/checkbox'
-import { MatDialogModule } from '@angular/material/dialog'
-import { MatIconModule } from '@angular/material/icon'
-import { MatMenuModule } from '@angular/material/menu'
-import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
 
 @Component({
   selector: 'ncats-frontend-library-about-subscribe-modal',
@@ -16,11 +16,11 @@ import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/util
     MatCheckboxModule,
     MatIconModule,
     MatButtonModule,
-    SocialSignOnButtonComponent
+    SocialSignOnButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true
+  standalone: true,
 })
 export class AboutSubscribeModalComponent {
-  userExists = input<boolean>(false)
+  userExists = input<boolean>(false);
 }

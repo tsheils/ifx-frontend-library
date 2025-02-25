@@ -1,39 +1,39 @@
-import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas'
-import { FilterCategory, Page } from '@ncats-frontend-library/models/utils'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
-import { createReducer, on, Action } from '@ngrx/store'
+import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
+import { FilterCategory, Page } from '@ncats-frontend-library/models/utils';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, on, Action } from '@ngrx/store';
 import {
   BrowseDiseaseListActions,
   FetchDiseaseActions,
   FetchDiseaseListActions,
   SearchDiseasesActions,
-} from './diseases.actions'
+} from './diseases.actions';
 
-export const DISEASES_FEATURE_KEY = 'diseases'
+export const DISEASES_FEATURE_KEY = 'diseases';
 
 export interface State extends EntityState<Disease> {
-  selectedId?: string | number // which Diseases record has been selected
-  loaded: boolean | undefined // has the Diseases list been loaded
-  error?: string | null // last known error (if any)
-  typeahead?: Disease[]
-  disease?: Disease
-  page?: Page
-  diseases?: Disease[]
-  tree?: DiseaseNode[]
-  subscriptions?: Disease[]
-  diseaseFilters?: FilterCategory[]
-  staticDiseaseFilters?: FilterCategory[]
-  allDiseaseFilters?: FilterCategory[]
+  selectedId?: string | number; // which Diseases record has been selected
+  loaded: boolean | undefined; // has the Diseases list been loaded
+  error?: string | null; // last known error (if any)
+  typeahead?: Disease[];
+  disease?: Disease;
+  page?: Page;
+  diseases?: Disease[];
+  tree?: DiseaseNode[];
+  subscriptions?: Disease[];
+  diseaseFilters?: FilterCategory[];
+  staticDiseaseFilters?: FilterCategory[];
+  allDiseaseFilters?: FilterCategory[];
 }
 
 export interface DiseasesPartialState {
-  readonly [DISEASES_FEATURE_KEY]: State
+  readonly [DISEASES_FEATURE_KEY]: State;
 }
 
 export const diseasesAdapter: EntityAdapter<Disease> =
   createEntityAdapter<Disease>({
     selectId: (disease) => disease.gardId,
-  })
+  });
 
 export const initialState: State = diseasesAdapter.getInitialState({
   // set initial required properties
@@ -41,7 +41,7 @@ export const initialState: State = diseasesAdapter.getInitialState({
   error: 'No Error Available',
   typeahead: [],
   subscriptions: [],
-})
+});
 
 export const reducer = createReducer(
   initialState,
@@ -50,7 +50,7 @@ export const reducer = createReducer(
     BrowseDiseaseListActions.setLoading,
     FetchDiseaseActions.fetchDisease,
     (state) => {
-      return { ...state, loaded: false, error: null }
+      return { ...state, loaded: false, error: null };
     }
   ),
 
@@ -145,8 +145,8 @@ export const reducer = createReducer(
       error,
     })
   )
-)
+);
 
 export function diseasesReducer(state: State | undefined, action: Action) {
-  return reducer(state, action)
+  return reducer(state, action);
 }

@@ -1,1 +1,1 @@
-export * from './lib/chemical-descriptors-page/chemical-descriptors-page.component'
+export * from './lib/chemical-descriptors-page/chemical-descriptors-page.component';

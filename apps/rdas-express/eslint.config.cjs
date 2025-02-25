@@ -1,4 +1,4 @@
-const baseConfig = require('../../eslint.config.cjs')
+const baseConfig = require('../../eslint.config.cjs');
 
 module.exports = [
   {
@@ -20,4 +20,4 @@ module.exports = [
     // Override or add rules here
     rules: {},
   },
-]
+];

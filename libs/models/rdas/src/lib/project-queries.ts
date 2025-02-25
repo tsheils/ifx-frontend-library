@@ -1,4 +1,4 @@
-import { gql } from 'apollo-angular'
+import { gql } from 'apollo-angular';
 
 export const FETCHGRANTDETAILS = gql`
   query CoreProjects($coreProjectsWhere: CoreProjectWhere) {
@@ -45,7 +45,7 @@ export const FETCHGRANTDETAILS = gql`
       }
     }
   }
-`
+`;
 
 export const FETCHPROJECTSQUERY = gql`
   query CoreProjects(
@@ -102,37 +102,37 @@ export const FETCHPROJECTSQUERY = gql`
       count
     }
   }
-`
+`;
 
 export const GRANTDETAILSVARIABLES: {
   coreProjectsWhere: {
-    core_project_num: null | undefined | string
-  }
+    core_project_num: null | undefined | string;
+  };
 } = {
   coreProjectsWhere: {
     core_project_num: '',
   },
-}
+};
 
 export const PROJECTVARIABLES: {
   coreProjectsWhere: {
     projectsUnderCore_SOME: {
       gardsresearchedBy_SOME: {
-        GardId?: string | null
-      }
-    }
-  }
+        GardId?: string | null;
+      };
+    };
+  };
   coreProjectsOptions: {
-    limit?: number
-    offset?: number
-  }
+    limit?: number;
+    offset?: number;
+  };
   projectsUnderCoreOptions?: {
     sort?: [
       {
-        funding_year?: string | null
+        funding_year?: string | null;
       }
-    ]
-  }
+    ];
+  };
 } = {
   coreProjectsWhere: {
     projectsUnderCore_SOME: {
@@ -151,7 +151,7 @@ export const PROJECTVARIABLES: {
       },
     ],
   },
-}
+};
 
 export const PROJECTFILTERS = gql`
   query ProjectFilters($gardId: String) {
@@ -166,7 +166,7 @@ export const PROJECTFILTERS = gql`
       label
     }
   }
-`
+`;
 
 export const ALLPROJECTFILTERS = gql`
   query AllProjectFilters {
@@ -183,4 +183,4 @@ export const ALLPROJECTFILTERS = gql`
       }
     }
   }
-`
+`;

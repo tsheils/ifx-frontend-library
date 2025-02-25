@@ -78,7 +78,7 @@ export const SUBSCRIPTIONLISTMOCK = {
       gardID: 'GARD:0017890',
     },
   ],
-}
+};
 
 export const DISEASELISTMOCK = {
   diseases: [
@@ -271,4 +271,4 @@ export const DISEASELISTMOCK = {
       },
     },
   ],
-}
+};

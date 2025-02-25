@@ -1,4 +1,4 @@
-import { CommonModule, DOCUMENT } from '@angular/common'
+import { CommonModule, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,16 +7,16 @@ import {
   input,
   viewChild,
   ViewEncapsulation,
-} from '@angular/core'
-import { MatButtonModule } from '@angular/material/button'
-import { MatIconModule } from '@angular/material/icon'
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator'
-import { MatSort, MatSortModule, Sort } from '@angular/material/sort'
-import { MatTableDataSource, MatTableModule } from '@angular/material/table'
-import { MatTooltip } from '@angular/material/tooltip'
-import { PhenotypeAssociation } from '@ncats-frontend-library/models/rdas'
-import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found'
-import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link'
+} from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTooltip } from '@angular/material/tooltip';
+import { PhenotypeAssociation } from '@ncats-frontend-library/models/rdas';
+import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
+import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
 
 @Component({
   selector: 'ncats-frontend-library-phenotype-list',
@@ -38,50 +38,50 @@ import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/exte
   encapsulation: ViewEncapsulation.None,
 })
 export class PhenotypeListComponent {
-  paginator = viewChild<MatPaginator>(MatPaginator)
-  sort = viewChild<MatSort>(MatSort)
+  paginator = viewChild<MatPaginator>(MatPaginator);
+  sort = viewChild<MatSort>(MatSort);
 
   phenotypes = input<PhenotypeAssociation[] | undefined>(
     [] as PhenotypeAssociation[]
-  )
-  showTab = input<boolean>(true)
-  protected dom = inject(DOCUMENT)
+  );
+  showTab = input<boolean>(true);
+  protected dom = inject(DOCUMENT);
 
-  count = computed(() => this.phenotypes()?.length)
+  count = computed(() => this.phenotypes()?.length);
 
   dataSource = computed(() => {
-    const ds = new MatTableDataSource<PhenotypeAssociation>(this.phenotypes())
-    ds.paginator = this.paginator() as MatPaginator
-    ds.sort = this.sort() as MatSort
-    return ds
-  })
+    const ds = new MatTableDataSource<PhenotypeAssociation>(this.phenotypes());
+    ds.paginator = this.paginator() as MatPaginator;
+    ds.sort = this.sort() as MatSort;
+    return ds;
+  });
 
-  displayColumns = ['Phenotype', 'Frequency', 'Evidence', 'Reference']
+  displayColumns = ['Phenotype', 'Frequency', 'Evidence', 'Reference'];
 
   sortData(sort: Sort) {
     if (this.phenotypes()) {
-      const data = this.phenotypes()!.slice()
+      const data = this.phenotypes()!.slice();
       if (!sort.active || sort.direction === '') {
-        this.dataSource().data = data
-        return
+        this.dataSource().data = data;
+        return;
       }
 
       this.dataSource().data = data.sort((a, b) => {
-        const isAsc = sort.direction === 'asc'
+        const isAsc = sort.direction === 'asc';
         switch (sort.active) {
           case 'Phenotype':
-            return compare(a.phenotype.hpoTerm, b.phenotype.hpoTerm, isAsc)
+            return compare(a.phenotype.hpoTerm, b.phenotype.hpoTerm, isAsc);
           case 'Frequency':
-            return compare(a.frequencyRank, b.frequencyRank, isAsc)
+            return compare(a.frequencyRank, b.frequencyRank, isAsc);
           case 'Validated':
-            return compare(+a.validationStatus, +b.validationStatus, isAsc)
+            return compare(+a.validationStatus, +b.validationStatus, isAsc);
           case 'Evidence':
-            return compare(a.evidence.code, b.evidence.code, isAsc)
+            return compare(a.evidence.code, b.evidence.code, isAsc);
           default:
-            return 0
+            return 0;
         }
-      })
-      this.dataSource()!.paginator!.firstPage()
+      });
+      this.dataSource()!.paginator!.firstPage();
     }
   }
 
@@ -90,7 +90,7 @@ export class PhenotypeListComponent {
       this._downloadFile(
         this._toTSV(this.phenotypes()!),
         'rdas-phenotypes-download.tsv'
-      )
+      );
     }
   }
 
@@ -102,7 +102,7 @@ export class PhenotypeListComponent {
       'validationStatus',
       'evidence',
       'references',
-    ].join('\t')
+    ].join('\t');
 
     // iterate over the data
     const rows: string = data
@@ -111,35 +111,35 @@ export class PhenotypeListComponent {
           // for each row object get its values and add tabs between them
           // then add them as a new array to the outgoing array
 
-          return acc.concat([c._toString()])
+          return acc.concat([c._toString()]);
 
           // finally joining each row with a line break
         },
         [headings]
       )
-      .join('\n')
-    return rows
+      .join('\n');
+    return rows;
   }
 
   _downloadFile(data: string, name: string, type = 'text/tsv') {
     if (this.dom) {
-      const file = new Blob([data], { type: type })
-      const link = this.dom.createElement('a')
+      const file = new Blob([data], { type: type });
+      const link = this.dom.createElement('a');
       if (link.download !== undefined) {
         // feature detection
         // Browsers that support HTML5 download attribute
-        const url = URL.createObjectURL(file)
-        link.setAttribute('href', url)
-        link.setAttribute('download', `${name}`)
-        link.style.visibility = 'hidden'
-        this.dom.body.appendChild(link)
-        link.click()
-        this.dom.body.removeChild(link)
+        const url = URL.createObjectURL(file);
+        link.setAttribute('href', url);
+        link.setAttribute('download', `${name}`);
+        link.style.visibility = 'hidden';
+        this.dom.body.appendChild(link);
+        link.click();
+        this.dom.body.removeChild(link);
       }
     }
   }
 }
 
 function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1)
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
 }

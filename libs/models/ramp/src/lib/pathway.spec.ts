@@ -1,4 +1,4 @@
-import { Pathway } from './pathway'
+import { Pathway } from './pathway';
 
 describe('Pathway', () => {
   it('should create an instance', () => {
@@ -10,6 +10,6 @@ describe('Pathway', () => {
         inputId: 'hmdb:HMDB0000148',
         commonName: 'Glutamate; L-Glutamic acid',
       })
-    ).toBeTruthy()
-  })
-})
+    ).toBeTruthy();
+  });
+});

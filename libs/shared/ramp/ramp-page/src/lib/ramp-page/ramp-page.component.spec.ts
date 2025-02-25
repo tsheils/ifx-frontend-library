@@ -1,18 +1,18 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   MatSidenavContainer,
   MatSidenavModule,
-} from '@angular/material/sidenav'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
-import { provideRouter, RouterOutlet } from '@angular/router'
-import { StoreModule } from '@ngrx/store'
-import { RampCorePageComponent } from 'ramp-core-page'
-import { RAMP_STORE_FEATURE_KEY, rampReducer } from 'ramp-store'
-import { RampPageComponent } from './ramp-page.component'
+} from '@angular/material/sidenav';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+import { provideRouter, RouterOutlet } from '@angular/router';
+import { StoreModule } from '@ngrx/store';
+import { RampCorePageComponent } from 'ramp-core-page';
+import { RAMP_STORE_FEATURE_KEY, rampReducer } from 'ramp-store';
+import { RampPageComponent } from './ramp-page.component';
 
 describe('RampPageComponent', () => {
-  let component: RampPageComponent<RampCorePageComponent>
-  let fixture: ComponentFixture<RampPageComponent<RampCorePageComponent>>
+  let component: RampPageComponent<RampCorePageComponent>;
+  let fixture: ComponentFixture<RampPageComponent<RampCorePageComponent>>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -29,14 +29,14 @@ describe('RampPageComponent', () => {
         { provide: MatSidenavContainer, useValue: {} },
         provideRouter([]),
       ],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(RampPageComponent)
-    component = fixture.componentInstance
+    fixture = TestBed.createComponent(RampPageComponent);
+    component = fixture.componentInstance;
     // fixture.detectChanges();
-  })
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

@@ -1,1 +1,1 @@
-export * from './lib/history-api/history-api.component'
+export * from './lib/history-api/history-api.component';

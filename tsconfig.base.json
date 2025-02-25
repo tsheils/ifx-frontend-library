@@ -235,8 +235,7 @@
       ],
       "visualization-panel": [
         "libs/shared/ramp/panels/visualization-panel/src/index.ts"
-      ],
-
+      ]
     },
     "allowSyntheticDefaultImports": true
   },

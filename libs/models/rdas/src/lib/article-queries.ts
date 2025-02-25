@@ -1,4 +1,4 @@
-import { gql } from 'apollo-angular'
+import { gql } from 'apollo-angular';
 
 //pubType
 
@@ -23,7 +23,7 @@ export const ARTICLEFIELDS = `
         }
       }
   }
-`
+`;
 
 export const FETCHARTICLESQUERY = gql`
   query Articles(
@@ -58,25 +58,25 @@ export const FETCHARTICLESQUERY = gql`
     }
   }
   ${ARTICLEFIELDS}
-`
+`;
 
 class ARTICLEVARIABLES {
-  gardWhere!: { GardId: undefined | string }
+  gardWhere!: { GardId: undefined | string };
   articleWhere!: {
-    isEpi?: null | boolean
-    isNHS?: null | boolean
-  }
+    isEpi?: null | boolean;
+    isNHS?: null | boolean;
+  };
   articleFilter!: {
-    isEpi?: null | boolean
-    isNHS?: null | boolean
-    publicationYear_IN?: undefined | string[] | string
-  }
+    isEpi?: null | boolean;
+    isNHS?: null | boolean;
+    publicationYear_IN?: undefined | string[] | string;
+  };
   articleOptions!: {
-    limit: number
-    offset?: number
-    sort: [{ firstPublicationDate?: string }]
-  }
-  meshTermsMeshTermForArticleOptions?: { limit?: number }
+    limit: number;
+    offset?: number;
+    sort: [{ firstPublicationDate?: string }];
+  };
+  meshTermsMeshTermForArticleOptions?: { limit?: number };
 }
 
 export const EPIARTICLES: ARTICLEVARIABLES = {
@@ -95,7 +95,7 @@ export const EPIARTICLES: ARTICLEVARIABLES = {
       },
     ],
   },
-}
+};
 
 export const NHSARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
@@ -113,7 +113,7 @@ export const NHSARTICLES: ARTICLEVARIABLES = {
       },
     ],
   },
-}
+};
 
 export const ALLARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
@@ -129,7 +129,7 @@ export const ALLARTICLES: ARTICLEVARIABLES = {
       },
     ],
   },
-}
+};
 
 export const NONEPIARTICLES: ARTICLEVARIABLES = {
   gardWhere: { GardId: undefined },
@@ -148,7 +148,7 @@ export const NONEPIARTICLES: ARTICLEVARIABLES = {
       },
     ],
   },
-}
+};
 
 export const FETCHARTICLEDETAILS = gql`
   query ArticleDetails($articleWhere: ArticleWhere) {
@@ -208,17 +208,17 @@ export const FETCHARTICLEDETAILS = gql`
     }
   }
   ${ARTICLEFIELDS}
-`
+`;
 
 export const ARTICLEDETAILSVARIABLES: {
   articleWhere: {
-    pubmed_id: null | undefined | string
-  }
+    pubmed_id: null | undefined | string;
+  };
 } = {
   articleWhere: {
     pubmed_id: '',
   },
-}
+};
 
 export const ARTICLEFILTERS = gql`
   query ArticleFilters($gardId: String) {
@@ -238,7 +238,7 @@ export const ARTICLEFILTERS = gql`
       label
     }
   }
-`
+`;
 
 export const ALLARTICLEFILTERS = gql`
   query AllDiseaseFilters {
@@ -248,4 +248,4 @@ export const ALLARTICLEFILTERS = gql`
       term
     }
   }
-`
+`;

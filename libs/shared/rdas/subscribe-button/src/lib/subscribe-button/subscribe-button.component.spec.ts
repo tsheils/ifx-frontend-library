@@ -1,26 +1,26 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { MatButtonModule } from '@angular/material/button'
-import { MatCheckboxModule } from '@angular/material/checkbox'
-import { MatDialogModule } from '@angular/material/dialog'
-import { MatIconModule } from '@angular/material/icon'
-import { MatMenuModule } from '@angular/material/menu'
-import { MatSnackBarModule } from '@angular/material/snack-bar'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store'
+} from '@ncats-frontend-library/stores/disease-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store'
-import { StoreModule } from '@ngrx/store'
+} from '@ncats-frontend-library/stores/user-store';
+import { StoreModule } from '@ngrx/store';
 
-import { SubscribeButtonComponent } from './subscribe-button.component'
+import { SubscribeButtonComponent } from './subscribe-button.component';
 
 describe('SubscribeButtonComponent', () => {
-  let component: SubscribeButtonComponent
-  let fixture: ComponentFixture<SubscribeButtonComponent>
+  let component: SubscribeButtonComponent;
+  let fixture: ComponentFixture<SubscribeButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -39,14 +39,14 @@ describe('SubscribeButtonComponent', () => {
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],
       providers: [],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(SubscribeButtonComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(SubscribeButtonComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

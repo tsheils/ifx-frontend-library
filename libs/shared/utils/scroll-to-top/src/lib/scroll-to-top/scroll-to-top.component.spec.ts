@@ -1,13 +1,13 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { MatButtonModule } from '@angular/material/button'
-import { MatIconModule } from '@angular/material/icon'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
-import { ScrollToTopComponent } from './scroll-to-top.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { ScrollToTopComponent } from './scroll-to-top.component';
+import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ScrollToTopComponent', () => {
-  let component: ScrollToTopComponent
-  let fixture: ComponentFixture<ScrollToTopComponent>
+  let component: ScrollToTopComponent;
+  let fixture: ComponentFixture<ScrollToTopComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -18,16 +18,16 @@ describe('ScrollToTopComponent', () => {
         ScrollToTopComponent,
       ],
       declarations: [],
-    }).compileComponents()
-  }))
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ScrollToTopComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(ScrollToTopComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

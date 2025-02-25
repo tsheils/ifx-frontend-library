@@ -1,28 +1,28 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { NcatsDatatableComponent } from './ncats-datatable.component'
+import { NcatsDatatableComponent } from './ncats-datatable.component';
 
 describe('NcatsDatatableComponent', () => {
-  let component: NcatsDatatableComponent
-  let fixture: ComponentFixture<NcatsDatatableComponent>
+  let component: NcatsDatatableComponent;
+  let fixture: ComponentFixture<NcatsDatatableComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [],
       imports: [NoopAnimationsModule, NcatsDatatableComponent],
-    }).compileComponents()
-  }))
+    }).compileComponents();
+  }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(NcatsDatatableComponent)
-    component = fixture.componentInstance
+    fixture = TestBed.createComponent(NcatsDatatableComponent);
+    component = fixture.componentInstance;
     // component.data = [];
     //  component.fieldsConfig = [] as DataProperty[];
-    fixture.detectChanges()
-  })
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

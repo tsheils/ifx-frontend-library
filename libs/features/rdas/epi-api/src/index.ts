@@ -1,1 +1,1 @@
-export * from './lib/epi-api/epi-api.component'
+export * from './lib/epi-api/epi-api.component';

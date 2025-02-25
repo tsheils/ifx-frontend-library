@@ -3,19 +3,21 @@
   <div class="width-70">
     <span class="filter-row-title">Selected Filters:</span>
   </div>
-  <div class="width-30 right-text"
-       role="button" tabindex="0"
-       (click)="removeAll()"
-       (keydown.enter)="removeAll()">
-    <mat-chip
-      (click)="removeAll()"
-      (keydown.enter)="removeAll()"
-    >
+  <div
+    class="width-30 right-text"
+    role="button"
+    tabindex="0"
+    (click)="removeAll()"
+    (keydown.enter)="removeAll()"
+  >
+    <mat-chip (click)="removeAll()" (keydown.enter)="removeAll()">
       <span
         >Clear All
-        <mat-icon matChipRemove class="removeIcon"
-                  (click)="removeAll()"
-                  (keydown.enter)="removeAll()"
+        <mat-icon
+          matChipRemove
+          class="removeIcon"
+          (click)="removeAll()"
+          (keydown.enter)="removeAll()"
           >cancel</mat-icon
         ></span
       >
@@ -42,7 +44,8 @@
     @for (value of filter.value; track value) {
     <div>
       <div
-        role="button" tabindex="0"
+        role="button"
+        tabindex="0"
         class="primary-chip full-width space-between-row"
         (click)="removeField(filter.key, value)"
         (keydown.enter)="removeField(filter.key, value)"

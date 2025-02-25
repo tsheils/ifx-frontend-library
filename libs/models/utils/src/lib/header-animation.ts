@@ -5,7 +5,7 @@ import {
   transition,
   animate,
   group,
-} from '@angular/animations'
+} from '@angular/animations';
 
 export const slideInOutAnimation = [
   trigger('slideInOut', [
@@ -26,4 +26,4 @@ export const slideInOutAnimation = [
     transition('in => out', [group([animate('300ms ease-out')])]),
     transition('out => in', [group([animate('300ms ease-in')])]),
   ]),
-]
+];

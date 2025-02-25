@@ -1,1 +1,1 @@
-export * from './lib/full-banner/full-banner.component'
+export * from './lib/full-banner/full-banner.component';

@@ -1,35 +1,35 @@
-import { Article } from '@ncats-frontend-library/models/rdas'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
-import { createReducer, on, Action } from '@ngrx/store'
+import { Article } from '@ncats-frontend-library/models/rdas';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, on, Action } from '@ngrx/store';
 import {
   FetchArticleActions,
   FetchArticlesListActions,
-} from './articles.actions'
+} from './articles.actions';
 
-import * as ArticleActions from './articles.actions'
+import * as ArticleActions from './articles.actions';
 
-export const ARTICLE_STORE_FEATURE_KEY = 'articles'
+export const ARTICLE_STORE_FEATURE_KEY = 'articles';
 
 export interface ArticleState extends EntityState<Article> {
-  selectedId?: string | number // which ArticleStore record has been selected
-  loaded: boolean // has the ArticleStore list been loaded
-  error?: string | null // last known error (if any)
-  article?: Article
-  articles?: Article[]
-  allArticlesCount: number
-  articlesCount: number
-  epiArticlesCount: number
-  nhsArticlesCount: number
+  selectedId?: string | number; // which ArticleStore record has been selected
+  loaded: boolean; // has the ArticleStore list been loaded
+  error?: string | null; // last known error (if any)
+  article?: Article;
+  articles?: Article[];
+  allArticlesCount: number;
+  articlesCount: number;
+  epiArticlesCount: number;
+  nhsArticlesCount: number;
 }
 
 export interface ArticleStorePartialState {
-  readonly [ARTICLE_STORE_FEATURE_KEY]: ArticleState
+  readonly [ARTICLE_STORE_FEATURE_KEY]: ArticleState;
 }
 
 export const articlesAdapter: EntityAdapter<Article> =
   createEntityAdapter<Article>({
     selectId: (article) => article.pubmed_id,
-  })
+  });
 
 export const initialState: ArticleState = articlesAdapter.getInitialState({
   // set initial required properties
@@ -39,7 +39,7 @@ export const initialState: ArticleState = articlesAdapter.getInitialState({
   articlesCount: 0,
   epiArticlesCount: 0,
   nhsArticlesCount: 0,
-})
+});
 
 const reducer = createReducer(
   initialState,
@@ -77,11 +77,11 @@ const reducer = createReducer(
     ...state,
     error,
   }))
-)
+);
 
 export function articlesReducer(
   state: ArticleState | undefined,
   action: Action
 ) {
-  return reducer(state, action)
+  return reducer(state, action);
 }

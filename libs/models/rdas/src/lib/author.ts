@@ -1,10 +1,10 @@
 export class Author {
-  firstName!: string
-  fullName!: string
-  lastName!: string
+  firstName!: string;
+  fullName!: string;
+  lastName!: string;
 
   constructor(obj: { [key: string]: string }) {
-    Object.assign(this, obj)
+    Object.assign(this, obj);
   }
 }
 
@@ -14,4 +14,4 @@ export const AUTHORFIELDS = `
     lastName
     fullName
   }
-`
+`;

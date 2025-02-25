@@ -1,33 +1,33 @@
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
-import { createReducer, on, Action } from '@ngrx/store'
-import { FetchTrialActions, FetchTrialsListActions } from './trials.actions'
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, on, Action } from '@ngrx/store';
+import { FetchTrialActions, FetchTrialsListActions } from './trials.actions';
 
-export const TRIALS_FEATURE_KEY = 'trials'
+export const TRIALS_FEATURE_KEY = 'trials';
 
 export interface TrialsState extends EntityState<ClinicalTrial> {
-  selectedId?: string | number // which Trials record has been selected
-  loaded: boolean // has the Trials list been loaded
-  error?: string | null // last known error (if any)
-  trial?: ClinicalTrial
-  trials?: ClinicalTrial[]
-  allTrialCount: number
+  selectedId?: string | number; // which Trials record has been selected
+  loaded: boolean; // has the Trials list been loaded
+  error?: string | null; // last known error (if any)
+  trial?: ClinicalTrial;
+  trials?: ClinicalTrial[];
+  allTrialCount: number;
 }
 
 export interface TrialsPartialState {
-  readonly [TRIALS_FEATURE_KEY]: TrialsState
+  readonly [TRIALS_FEATURE_KEY]: TrialsState;
 }
 
 export const trialsAdapter: EntityAdapter<ClinicalTrial> =
   createEntityAdapter<ClinicalTrial>({
     selectId: (trial) => trial.NCTId,
-  })
+  });
 
 export const initialTrialsState: TrialsState = trialsAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   allTrialCount: 0,
-})
+});
 
 const reducer = createReducer(
   initialTrialsState,
@@ -57,8 +57,8 @@ const reducer = createReducer(
       error,
     })
   )
-)
+);
 
 export function trialsReducer(state: TrialsState | undefined, action: Action) {
-  return reducer(state, action)
+  return reducer(state, action);
 }

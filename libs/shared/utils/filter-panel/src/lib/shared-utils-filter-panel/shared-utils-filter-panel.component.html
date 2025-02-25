@@ -38,12 +38,15 @@
         class="filter-grid"
       >
         <div class="filter-cell checkbox">
-          <mat-checkbox id="filter-checkbox"
+          <mat-checkbox
+            id="filter-checkbox"
             (click)="$event.stopPropagation()"
             aria-label="Select filter option"
             (change)="$event ? filterSelection.toggle(field['term']) : null"
             [checked]="filterSelection.isSelected(field['term'])"
-            ><label class="hidden" for="filter-checkbox">Select filter option</label>
+            ><label class="hidden" for="filter-checkbox"
+              >Select filter option</label
+            >
           </mat-checkbox>
         </div>
         <div class="filter-cell name">

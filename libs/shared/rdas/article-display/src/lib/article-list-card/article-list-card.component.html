@@ -1,14 +1,13 @@
 <div class="row space-between-row top-align article-list-card">
   <div class="width-sm-100 width-75">
     <div class="rdas-article-title">{{ article()?.title }}</div>
-    @if(article()?.journals && article()?.journals!.length){
-    @for (journal of article()!.journals; track journal.title) {
+    @if(article()?.journals && article()?.journals!.length){ @for (journal of
+    article()!.journals; track journal.title) {
     <div>
       <i>{{ journal.title }}, </i>
       {{ journal.dateOfPublication || journal.printPublicationDate }}
     </div>
-    }
-    }
+    } }
   </div>
   <div class="width-sm-100 width-25 right-text">
     <div class="mat-h3 right-text">

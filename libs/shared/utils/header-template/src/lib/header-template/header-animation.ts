@@ -5,7 +5,7 @@ import {
   transition,
   animate,
   group,
-} from '@angular/animations'
+} from '@angular/animations';
 
 /**
  * animation object than animates the header menu changing background color and pharos logo
@@ -29,4 +29,4 @@ export const slideInOutAnimation = [
     transition('in => out', [group([animate('300ms ease-out')])]),
     transition('out => in', [group([animate('300ms ease-in')])]),
   ]),
-]
+];

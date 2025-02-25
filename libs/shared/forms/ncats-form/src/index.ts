@@ -1,1 +1,1 @@
-export * from './lib/ncats-form/ncats-form.component'
+export * from './lib/ncats-form/ncats-form.component';

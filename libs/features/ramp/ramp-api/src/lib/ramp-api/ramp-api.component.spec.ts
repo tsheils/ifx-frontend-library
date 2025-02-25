@@ -1,4 +1,4 @@
-import { TestBed } from '@angular/core/testing'
+import { TestBed } from '@angular/core/testing';
 
 //import { RampApiComponent } from './ramp-api.component';
 
@@ -9,17 +9,17 @@ describe.skip('RampApiComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       //    declarations: [RampApiComponent],
-    }).compileComponents()
-  })
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     //  fixture = TestBed.createComponent(RampApiComponent);
     // component = fixture.componentInstance;
     //  component.isBrowser = false;
     // fixture.detectChanges();
-  })
+  });
 
   it('should create', () => {
     //  expect(component).toBeTruthy();
-  })
-})
+  });
+});

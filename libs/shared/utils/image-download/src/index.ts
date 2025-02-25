@@ -1,1 +1,1 @@
-export * from './lib/image-download/image-download.component'
+export * from './lib/image-download/image-download.component';

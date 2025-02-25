@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs'
+import { BehaviorSubject } from 'rxjs';
 
 export const COMMON_CONFIG = {
   apiKey: 'AIzaSyAeMmLhQqFbvzlP9kQfpCAteynu8Boo4qs',
@@ -8,7 +8,7 @@ export const COMMON_CONFIG = {
   storageBucket: 'ncats-summer-interns.appspot.com',
   messagingSenderId: '528718212509',
   appId: '1:528718212509:web:028a64c1993f8441f81374',
-}
+};
 
 export const FIRESTORESTUB = {
   collection: () => ({
@@ -20,4 +20,4 @@ export const FIRESTORESTUB = {
     valueChanges: () => new BehaviorSubject({ foo: 'bar' }),
   }),
   valueChanges: () => new BehaviorSubject({ foo: 'bar' }),
-}
+};

@@ -1,6 +1,6 @@
-import { Component, Input, ViewEncapsulation } from '@angular/core'
-import { MatCardModule } from '@angular/material/card'
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas'
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
+import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 
 @Component({
   selector: 'ncats-frontend-library-clinical-trials-list-card',
@@ -11,5 +11,5 @@ import { ClinicalTrial } from '@ncats-frontend-library/models/rdas'
   imports: [MatCardModule],
 })
 export class ClinicalTrialsListCardComponent {
-  @Input() trial!: ClinicalTrial
+  @Input() trial!: ClinicalTrial;
 }

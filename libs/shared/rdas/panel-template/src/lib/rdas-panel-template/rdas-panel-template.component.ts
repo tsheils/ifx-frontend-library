@@ -1,19 +1,19 @@
-import { CommonModule } from '@angular/common'
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   input,
   output,
   viewChild,
-} from '@angular/core'
+} from '@angular/core';
 import {
   MatPaginator,
   MatPaginatorModule,
   PageEvent,
-} from '@angular/material/paginator'
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils'
-import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found'
-import { SharedUtilsListFilterRowComponent } from '@ncats-frontend-library/shared/utils/list-filter-row'
+} from '@angular/material/paginator';
+import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
+import { SharedUtilsListFilterRowComponent } from '@ncats-frontend-library/shared/utils/list-filter-row';
 
 @Component({
   selector: 'lib-rdas-panel-template',
@@ -29,28 +29,28 @@ import { SharedUtilsListFilterRowComponent } from '@ncats-frontend-library/share
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdasPanelTemplateComponent {
-  filters = input<FilterCategory[]>()
-  _id = input<string>()
-  loaded = input<boolean | undefined>()
-  message = input<string>()
-  count = input<number>(0)
-  showPagination = input<boolean>(true)
-  listChange = output<{ [key: string]: unknown }>()
-  paginator = viewChild<MatPaginator>(MatPaginator)
+  filters = input<FilterCategory[]>();
+  _id = input<string>();
+  loaded = input<boolean | undefined>();
+  message = input<string>();
+  count = input<number>(0);
+  showPagination = input<boolean>(true);
+  listChange = output<{ [key: string]: unknown }>();
+  paginator = viewChild<MatPaginator>(MatPaginator);
 
   fetchList(event: { [key: string]: Filter[] }) {
-    const retObj: { [key: string]: string[] } = {}
+    const retObj: { [key: string]: string[] } = {};
     Object.entries(event).forEach(
       ([key, filters]) =>
         (retObj[key] = [...filters.map((filter) => filter.term)])
-    )
-    this.listChange.emit(retObj)
+    );
+    this.listChange.emit(retObj);
   }
 
   pageList(event: PageEvent) {
     const pageOptions = {
       offset: <number>event.pageIndex * <number>event.pageSize,
-    }
-    this.listChange.emit(pageOptions)
+    };
+    this.listChange.emit(pageOptions);
   }
 }

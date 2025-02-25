@@ -1,11 +1,11 @@
-import { CommonModule } from '@angular/common'
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
-} from '@angular/core'
-import { MatListModule } from '@angular/material/list'
-import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link'
+} from '@angular/core';
+import { MatListModule } from '@angular/material/list';
+import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
 
 @Component({
   selector: 'ncats-frontend-library-footer-template',

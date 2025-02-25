@@ -1,12 +1,17 @@
-import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas'
+import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
 import {
   Filter,
   FilterCategory,
   Page,
-} from '@ncats-frontend-library/models/utils'
-import { createAction, createActionGroup, emptyProps, props } from '@ngrx/store'
+} from '@ncats-frontend-library/models/utils';
+import {
+  createAction,
+  createActionGroup,
+  emptyProps,
+  props,
+} from '@ngrx/store';
 
-export const init = createAction('[Diseases Page] Init')
+export const init = createAction('[Diseases Page] Init');
 
 export const BrowseDiseaseListActions = createActionGroup({
   source: 'Browse Disease List',
@@ -20,7 +25,7 @@ export const BrowseDiseaseListActions = createActionGroup({
     fetchDiseaseTreeSuccess: props<{ diseases: DiseaseNode[] }>(),
     fetchDiseaseTreeFailure: props<{ error: string }>(),
   },
-})
+});
 
 export const SearchDiseasesActions = createActionGroup({
   source: 'Search Diseases',
@@ -30,15 +35,15 @@ export const SearchDiseasesActions = createActionGroup({
     searchDiseasesFailure: props<{ error: string }>(),
     clearTypeahead: emptyProps(),
   },
-})
+});
 
 export const FetchDiseaseActions = createActionGroup({
   source: 'Fetch Disease',
   events: {
     fetchDisease: props<{
-      gardId: string
-      source: string
-      options?: { [key: string]: string }
+      gardId: string;
+      source: string;
+      options?: { [key: string]: string };
     }>(),
     fetchDiseaseSuccess: props<{ disease: Disease }>(),
     fetchDiseaseFailure: props<{ error: string }>(),
@@ -51,7 +56,7 @@ export const FetchDiseaseActions = createActionGroup({
     clearStaticDiseaseFilters: emptyProps(),
     clearDisease: emptyProps(),
   },
-})
+});
 
 export const FetchDiseaseListActions = createActionGroup({
   source: 'Fetch Disease List',
@@ -63,4 +68,4 @@ export const FetchDiseaseListActions = createActionGroup({
     fetchAllDiseaseFiltersSuccess: props<{ filters: FilterCategory[] }>(),
     fetchAllDiseaseFiltersFailure: props<{ error: string }>(),
   },
-})
+});

@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { MarkdownComponent } from 'ngx-markdown'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   selector: 'lib-markdown-viewer',
@@ -11,5 +11,5 @@ import { MarkdownComponent } from 'ngx-markdown'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkdownViewerComponent {
-  mkdwnString = input<string>()
+  mkdwnString = input<string>();
 }

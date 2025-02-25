@@ -1,17 +1,17 @@
-import { isPlatformBrowser } from '@angular/common'
+import { isPlatformBrowser } from '@angular/common';
 import {
   provideHttpClient,
   withFetch,
   withInterceptorsFromDi,
-} from '@angular/common/http'
+} from '@angular/common/http';
 import {
   ApplicationConfig,
   inject,
   PLATFORM_ID,
   provideAppInitializer,
-} from '@angular/core'
-import { provideAnimations } from '@angular/platform-browser/animations'
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async'
+} from '@angular/core';
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   PreloadAllModules,
   provideRouter,
@@ -20,35 +20,35 @@ import {
   withInMemoryScrolling,
   withPreloading,
   withViewTransitions,
-} from '@angular/router'
-import { provideEffects } from '@ngrx/effects'
-import { provideRouterStore, routerReducer } from '@ngrx/router-store'
-import { provideState, provideStore, Store } from '@ngrx/store'
-import { provideStoreDevtools } from '@ngrx/store-devtools'
+} from '@angular/router';
+import { provideEffects } from '@ngrx/effects';
+import { provideRouterStore, routerReducer } from '@ngrx/router-store';
+import { provideState, provideStore, Store } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 import {
   ResolverEffects,
   LoadResolverOptionsActions,
   RESOLVER_FEATURE_KEY,
   resolverReducer,
   ResolverService,
-} from 'resolver-store'
-import { environment } from '../environments/environment'
-import { appRoutes } from './app.routes'
+} from 'resolver-store';
+import { environment } from '../environments/environment';
+import { appRoutes } from './app.routes';
 import {
   BrowserModule,
   provideClientHydration,
-} from '@angular/platform-browser'
+} from '@angular/platform-browser';
 
 export function load_resolver(
   resolverService: ResolverService,
   store = inject(Store)
 ) {
   return () => {
-    resolverService._setOptionsUrl(environment.resolverOptionsUrl)
-    resolverService._setResolverUrl(environment.resolverUrl)
-    resolverService._setextraString(environment.extraString)
-    store.dispatch(LoadResolverOptionsActions.loadResolverOptions())
-  }
+    resolverService._setOptionsUrl(environment.resolverOptionsUrl);
+    resolverService._setResolverUrl(environment.resolverUrl);
+    resolverService._setextraString(environment.extraString);
+    store.dispatch(LoadResolverOptionsActions.loadResolverOptions());
+  };
 }
 
 export function load_from_local_storage(
@@ -60,32 +60,32 @@ export function load_from_local_storage(
       if (localStorage && localStorage.getItem('previouslyUsedOptions')) {
         const temp: string = <string>(
           localStorage.getItem('previouslyUsedOptions')
-        )
+        );
         if (temp) {
-          const filterOptionsList = JSON.parse(temp)
+          const filterOptionsList = JSON.parse(temp);
           if (filterOptionsList && filterOptionsList.length) {
             store.dispatch(
               LoadResolverOptionsActions.setPreviousFilters({
                 filters: filterOptionsList,
               })
-            )
+            );
           }
         }
       }
     }
-  }
+  };
 }
 
 export const appConfig: ApplicationConfig = {
   providers: [
     BrowserModule,
     provideAppInitializer(() => {
-      const initializerFn = load_from_local_storage()
-      return initializerFn()
+      const initializerFn = load_from_local_storage();
+      return initializerFn();
     }),
     provideAppInitializer(() => {
-      const initializerFn = load_resolver(inject(ResolverService))
-      return initializerFn()
+      const initializerFn = load_resolver(inject(ResolverService));
+      return initializerFn();
     }),
     provideClientHydration(),
     provideRouter(
@@ -111,4 +111,4 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
   ],
-}
+};

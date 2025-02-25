@@ -1,30 +1,33 @@
-import { CoreProject } from '@ncats-frontend-library/models/rdas'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
-import { createReducer, on, Action } from '@ngrx/store'
-import { FetchProjectActions, FetchProjectsListActions } from './grants.actions'
+import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, on, Action } from '@ngrx/store';
+import {
+  FetchProjectActions,
+  FetchProjectsListActions,
+} from './grants.actions';
 
-import * as ProjectsActions from './grants.actions'
+import * as ProjectsActions from './grants.actions';
 
-export const PROJECTS_FEATURE_KEY = 'projects'
+export const PROJECTS_FEATURE_KEY = 'projects';
 
 export interface ProjectsState extends EntityState<CoreProject> {
-  selectedId?: string | number // which Projects record has been selected
-  loaded: boolean // has the Projects list been loaded
-  error?: string | null // last known error (if any)
-  project?: CoreProject
-  projects?: CoreProject[]
-  allProjectsCount: number
-  projectsCount: number
+  selectedId?: string | number; // which Projects record has been selected
+  loaded: boolean; // has the Projects list been loaded
+  error?: string | null; // last known error (if any)
+  project?: CoreProject;
+  projects?: CoreProject[];
+  allProjectsCount: number;
+  projectsCount: number;
 }
 
 export interface ProjectsPartialState {
-  readonly [PROJECTS_FEATURE_KEY]: ProjectsState
+  readonly [PROJECTS_FEATURE_KEY]: ProjectsState;
 }
 
 export const projectsAdapter: EntityAdapter<CoreProject> =
   createEntityAdapter<CoreProject>({
     selectId: (project) => project.core_project_num,
-  })
+  });
 
 export const initialProjectsState: ProjectsState =
   projectsAdapter.getInitialState({
@@ -32,7 +35,7 @@ export const initialProjectsState: ProjectsState =
     loaded: false,
     allProjectsCount: 0,
     projectsCount: 0,
-  })
+  });
 
 const reducer = createReducer(
   initialProjectsState,
@@ -62,11 +65,11 @@ const reducer = createReducer(
       error,
     })
   )
-)
+);
 
 export function projectsReducer(
   state: ProjectsState | undefined,
   action: Action
 ) {
-  return reducer(state, action)
+  return reducer(state, action);
 }

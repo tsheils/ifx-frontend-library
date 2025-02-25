@@ -1,12 +1,12 @@
-import { HttpClient, provideHttpClient } from '@angular/common/http'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { provideMarkdown } from 'ngx-markdown'
-import { MarkdownViewerComponent } from './markdown-viewer.component'
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideMarkdown } from 'ngx-markdown';
+import { MarkdownViewerComponent } from './markdown-viewer.component';
 
 describe('MarkdownViewerComponent', () => {
-  let component: MarkdownViewerComponent
-  let fixture: ComponentFixture<MarkdownViewerComponent>
+  let component: MarkdownViewerComponent;
+  let fixture: ComponentFixture<MarkdownViewerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -16,14 +16,14 @@ describe('MarkdownViewerComponent', () => {
         provideHttpClient(),
         provideMarkdown({ loader: HttpClient }),
       ],
-    }).compileComponents()
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(MarkdownViewerComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+    fixture = TestBed.createComponent(MarkdownViewerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
 
   it('should create', () => {
-    expect(component).toBeTruthy()
-  })
-})
+    expect(component).toBeTruthy();
+  });
+});

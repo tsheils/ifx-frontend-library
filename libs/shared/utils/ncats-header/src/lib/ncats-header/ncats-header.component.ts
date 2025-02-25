@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core'
-import { CommonModule, NgOptimizedImage } from '@angular/common'
-import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar'
-import { RouterLink } from '@angular/router'
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { MatToolbar, MatToolbarRow } from '@angular/material/toolbar';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'lib-ncats-header',
@@ -17,5 +17,5 @@ import { RouterLink } from '@angular/router'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NcatsHeaderComponent {
-  title = input<string>()
+  title = input<string>();
 }

@@ -1,17 +1,18 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ElementRef, inject,
-  viewChild
+  ElementRef,
+  inject,
+  viewChild,
 } from '@angular/core';
-import { CommonModule, NgOptimizedImage } from '@angular/common'
-import { MatAnchor } from '@angular/material/button'
-import { MatCard } from '@angular/material/card'
-import { MatRipple } from '@angular/material/core'
-import { MatIcon } from '@angular/material/icon'
-import { RouterLink } from '@angular/router'
+import { CommonModule, NgOptimizedImage } from '@angular/common';
+import { MatAnchor } from '@angular/material/button';
+import { MatCard } from '@angular/material/card';
+import { MatRipple } from '@angular/material/core';
+import { MatIcon } from '@angular/material/icon';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { RampSelectors } from 'ramp-store'
+import { RampSelectors } from 'ramp-store';
 
 @Component({
   selector: 'lib-ramp-home',
@@ -30,21 +31,21 @@ import { RampSelectors } from 'ramp-store'
   standalone: true,
 })
 export class RampHomeComponent {
-  private readonly store = inject(Store)
-  elemRef = viewChild<ElementRef>('details')
-  api = this.store.selectSignal(RampSelectors.getRampApi)
+  private readonly store = inject(Store);
+  elemRef = viewChild<ElementRef>('details');
+  api = this.store.selectSignal(RampSelectors.getRampApi);
 
   goToDetails(): void {
     this.elemRef()?.nativeElement.scrollIntoView({
       behavior: 'smooth',
       block: 'start',
       inline: 'nearest',
-    })
+    });
   }
 
   cleanLabel(label: string): string {
-    return label.replace(/-/g, ' ')
+    return label.replace(/-/g, ' ');
   }
 
-  _originalOrder = () => 0
+  _originalOrder = () => 0;
 }

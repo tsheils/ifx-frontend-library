@@ -5,28 +5,28 @@ import {
   inject,
   OnDestroy,
   OnInit,
-} from '@angular/core'
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
+} from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
   FormControl,
   FormGroup,
   Validators,
   ReactiveFormsModule,
-} from '@angular/forms'
-import { MatDialog, MatDialogRef } from '@angular/material/dialog'
+} from '@angular/forms';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   LoginEmailUserActions,
   UserSelectors,
-} from '@ncats-frontend-library/stores/user-store'
-import { select, Store } from '@ngrx/store'
-import { map } from 'rxjs'
-import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component'
-import { RegisterModalComponent } from '../register-modal/register-modal.component'
+} from '@ncats-frontend-library/stores/user-store';
+import { select, Store } from '@ngrx/store';
+import { map } from 'rxjs';
+import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
+import { RegisterModalComponent } from '../register-modal/register-modal.component';
 
-import { MatInputModule } from '@angular/material/input'
-import { MatFormFieldModule } from '@angular/material/form-field'
-import { MatIconModule } from '@angular/material/icon'
-import { MatButtonModule } from '@angular/material/button'
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'ncats-frontend-library-email-sign-on-modal',
@@ -42,15 +42,15 @@ import { MatButtonModule } from '@angular/material/button'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailSignOnModalComponent implements OnInit, OnDestroy {
-  private readonly store = inject(Store)
-  destroyRef = inject(DestroyRef)
+  private readonly store = inject(Store);
+  destroyRef = inject(DestroyRef);
 
-  loginError = ''
+  loginError = '';
 
   signOnForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     pw: new FormControl('', [Validators.required]),
-  })
+  });
 
   constructor(
     public dialogRef: MatDialogRef<EmailSignOnModalComponent>,
@@ -64,11 +64,11 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef),
         map((res: string | null | undefined) => {
           if (res) {
-            this.loginError = res
+            this.loginError = res;
           }
         })
       )
-      .subscribe()
+      .subscribe();
 
     this.store
       .pipe(
@@ -76,39 +76,39 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
         takeUntilDestroyed(this.destroyRef),
         map((res: unknown) => {
           if (res) {
-            this.closeModal()
+            this.closeModal();
           }
         })
       )
-      .subscribe()
+      .subscribe();
 
     this.signOnForm.controls['pw'].valueChanges.subscribe(
       () => (this.loginError = '')
-    )
+    );
   }
 
   getEmailErrorMessage() {
     if (this.signOnForm.controls['email'].hasError('required')) {
-      return 'Email address required'
+      return 'Email address required';
     }
     return this.signOnForm.controls['email'].hasError('email')
       ? 'Not a valid email'
-      : ''
+      : '';
   }
 
   getPasswordErrorMessage() {
     if (this.signOnForm.controls['pw'].hasError('required')) {
-      return 'Password required'
+      return 'Password required';
     }
-    return ''
+    return '';
   }
 
   login() {
-    this.loginError = ''
+    this.loginError = '';
     if (this.signOnForm.valid) {
       this.store.dispatch(
         LoginEmailUserActions.loginEmailUser(this.signOnForm.value)
-      )
+      );
     }
   }
 
@@ -119,25 +119,25 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
         width: '35vw',
       })
       .afterClosed()
-      .subscribe(() => (this.loginError = ''))
+      .subscribe(() => (this.loginError = ''));
   }
 
   forgotPassword() {
-    this.loginError = ''
+    this.loginError = '';
     this.dialog
       .open(ForgotPasswordModalComponent, {
         height: '55vh',
         width: '35vw',
       })
       .afterClosed()
-      .subscribe(() => (this.loginError = ''))
+      .subscribe(() => (this.loginError = ''));
   }
 
   closeModal(): void {
-    this.dialogRef.close()
+    this.dialogRef.close();
   }
 
   ngOnDestroy() {
-    this.loginError = ''
+    this.loginError = '';
   }
 }

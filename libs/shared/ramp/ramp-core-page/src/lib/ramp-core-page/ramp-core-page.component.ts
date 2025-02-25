@@ -8,22 +8,22 @@ import {
   signal,
   input,
   Signal,
-} from '@angular/core'
-import { CommonModule, DOCUMENT } from '@angular/common'
-import { MatDialog } from '@angular/material/dialog'
-import { MatTabChangeEvent } from '@angular/material/tabs'
-import { DomSanitizer, Title } from '@angular/platform-browser'
+} from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
+import { MatDialog } from '@angular/material/dialog';
+import { MatTabChangeEvent } from '@angular/material/tabs';
+import { DomSanitizer, Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 import {
   DataMap,
   OpenApiPath,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils'
-import { Store } from '@ngrx/store'
-import { DataProperty } from '@ncats-frontend-library/models/utils'
-import { QuestionBase } from 'ncats-form-question'
-import { FormSubsection, RampPage } from 'ramp'
+} from '@ncats-frontend-library/models/utils';
+import { Store } from '@ngrx/store';
+import { DataProperty } from '@ncats-frontend-library/models/utils';
+import { QuestionBase } from 'ncats-form-question';
+import { FormSubsection, RampPage } from 'ramp';
 
 @Component({
   selector: 'lib-ramp-core-page',
@@ -34,49 +34,50 @@ import { FormSubsection, RampPage } from 'ramp'
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RampCorePageComponent {
-  protected readonly store = inject(Store)
-  destroyRef = inject(DestroyRef)
-  private titleService = inject(Title)
-  private route = inject(ActivatedRoute)
-  changeRef = inject(ChangeDetectorRef)
-  protected dom = inject(DOCUMENT)
-  readonly dialog = inject(MatDialog)
-  readonly sanitizer: DomSanitizer = inject(DomSanitizer)
+  protected readonly store = inject(Store);
+  destroyRef = inject(DestroyRef);
+  private titleService = inject(Title);
+  private route = inject(ActivatedRoute);
+  changeRef = inject(ChangeDetectorRef);
+  protected dom = inject(DOCUMENT);
+  readonly dialog = inject(MatDialog);
+  readonly sanitizer: DomSanitizer = inject(DomSanitizer);
 
   loadedTracker = computed(() => {
     return {
       resultsLoaded: !!this.overviewMap(),
       dataLoaded: !!this.dataMap(),
       visualizationsLoaded: !!this.visualizationsMap(),
-    }
-  })
+    };
+  });
 
-  title = input<string>()
-  paths = input<OpenApiPath[]>()
-  inputMap = input<Map<string, FormSubsection[]>>()
-  filtersMap = input<Map<string, QuestionBase<string>[]>>()
+  title = input<string>();
+  paths = input<OpenApiPath[]>();
+  inputMap = input<Map<string, FormSubsection[]>>();
+  filtersMap = input<Map<string, QuestionBase<string>[]>>();
   overviewMap = computed<{ [p: string]: QueryResultsData } | undefined>(
     () => undefined
-  )
+  );
   visualizationsMap = computed<
     { [p: string]: Map<string, VisualizationMap[]> } | undefined
-  >(() => undefined)
+  >(() => undefined);
   dataMap: Signal<{ [p: string]: Map<string, DataMap> } | undefined> = computed<
     { [p: string]: Map<string, DataMap> } | undefined
-  >(() => this.component?.dataMap() as { [p: string]: Map<string, DataMap> })
+  >(() => this.component?.dataMap() as { [p: string]: Map<string, DataMap> });
 
   activePath = computed(() => {
-    const tabString = this.activeTab() || Array.from(this.inputMap()!.keys())[0]
-    const ret =  this.paths()?.filter((path) => path.title === tabString)
+    const tabString =
+      this.activeTab() || Array.from(this.inputMap()!.keys())[0];
+    const ret = this.paths()?.filter((path) => path.title === tabString);
     return ret;
-  })
-  activeTab = signal(<string>this._getActiveTab())
+  });
+  activeTab = signal(<string>this._getActiveTab());
 
   mainPageMap = computed(() => {
-    const fullMap: Map<string, RampPage> = new Map<string, RampPage>()
+    const fullMap: Map<string, RampPage> = new Map<string, RampPage>();
     if (this.inputMap() && this.inputMap()!.size) {
       const tabString =
-        this.activeTab() || Array.from(this.inputMap()!.keys())[0]
+        this.activeTab() || Array.from(this.inputMap()!.keys())[0];
       if (tabString != null) {
         Array.from(this.inputMap()!.entries()).forEach((keyValue) => {
           fullMap.set(keyValue[0], {
@@ -94,54 +95,54 @@ export class RampCorePageComponent {
               this.dataMap() && this.dataMap()![<string>(<unknown>tabString)]
                 ? this.dataMap()![<string>(<unknown>tabString)]
                 : undefined,
-          } as RampPage)
-        })
+          } as RampPage);
+        });
       }
     }
-    return fullMap
-  })
+    return fullMap;
+  });
 
-  component!: RampCorePageComponent
+  component!: RampCorePageComponent;
 
-  inputList: string[] = []
-  dataColumns!: DataProperty[]
+  inputList: string[] = [];
+  dataColumns!: DataProperty[];
 
   fetchData(event: { [key: string]: unknown }, origin: string) {
-    console.log(origin)
+    console.log(origin);
   }
 
   cleanLabel(label: string): string {
-    return label.replace(/-/g, ' ')
+    return label.replace(/-/g, ' ');
   }
 
   _parseInput(input: string | string[]) {
-    let retArr: string[] = []
+    let retArr: string[] = [];
     if (input && input.length > 0) {
       if (Array.isArray(input)) {
-        retArr = input.map((val: string) => (val = val.trim()))
+        retArr = input.map((val: string) => (val = val.trim()));
       } else {
         retArr = input
           .trim()
           .split(/[\t\n,;]+/)
-          .map((val: string) => val.trim())
+          .map((val: string) => val.trim());
       }
     }
-    return retArr
+    return retArr;
   }
 
   tabChanged(tab: MatTabChangeEvent) {
-    const activeTab = <string>this._getActiveTab(tab.index)
-    const title = this.route.snapshot.title
-    const newTitle = title + ' - ' + activeTab.replaceAll('-', ' ')
-    this.titleService.setTitle(newTitle)
-    this.activeTab.set(activeTab)
+    const activeTab = <string>this._getActiveTab(tab.index);
+    const title = this.route.snapshot.title;
+    const newTitle = title + ' - ' + activeTab.replaceAll('-', ' ');
+    this.titleService.setTitle(newTitle);
+    this.activeTab.set(activeTab);
   }
 
   protected _getActiveTab(index = 0) {
     if (this.inputMap() && this.inputMap()!.size) {
-      return Array.from(this.inputMap()!.keys())[index] as string
-    } else return null
+      return Array.from(this.inputMap()!.keys())[index] as string;
+    } else return null;
   }
 
-  protected _originalOrder = () => 0
+  protected _originalOrder = () => 0;
 }

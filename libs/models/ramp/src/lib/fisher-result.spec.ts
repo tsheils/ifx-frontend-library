@@ -1,4 +1,4 @@
-import { FisherResult } from './fisher-result'
+import { FisherResult } from './fisher-result';
 
 describe('FisherResult', () => {
   it('should create an instance', () => {
@@ -15,6 +15,6 @@ describe('FisherResult', () => {
         pathwaySource: 'kegg',
         pathwayId: 'map00260',
       })
-    ).toBeTruthy()
-  })
-})
+    ).toBeTruthy();
+  });
+});

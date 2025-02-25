@@ -18,8 +18,7 @@
           </span>
           }
         </div>
-        }
-        @if (article()?.epidemiologies && article()?.epidemiologies?.length) {
+        } @if (article()?.epidemiologies && article()?.epidemiologies?.length) {
         <mat-card [appearance]="'outlined'">
           <div class="project-sub-header bottom-border-accent">
             Epidemiologies: {{ article()?.epidemiologies?.length }}
@@ -101,15 +100,14 @@
         </div>
         }
         <div class="project-content-wrapper">
-
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Other Diseases Mentioned:
               {{ article()?.diseases ? article()?.diseases?.length : 0 }}
             </div>
             <br />
-            @if(article()?.diseases && article()?.diseases!.length){
-            @for (disease of article()!.diseases; track disease.gardId) {
+            @if(article()?.diseases && article()?.diseases!.length){ @for
+            (disease of article()!.diseases; track disease.gardId) {
             <div>
               @if (disease.gardId) {
               <div #link>
@@ -128,18 +126,16 @@
               <br />
               <br />
             </div>
-            }
-            }
+            } }
           </mat-card>
           <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Annotations:
               {{ article()?.annotations ? article()?.annotations?.length : 0 }}
             </div>
-            @if(article()?.annotations && article()?.annotations!.length){
-              @if (article()?.annotations && article()?.annotations?.length) {
-            @for ( annotation of annotationsMap() | keyvalue; track
-            annotation.key ) {
+            @if(article()?.annotations && article()?.annotations!.length){ @if
+            (article()?.annotations && article()?.annotations?.length) { @for (
+            annotation of annotationsMap() | keyvalue; track annotation.key ) {
             <div>
               <div class="primary-chip-outlined">{{ annotation.key }}</div>
               @for (term of annotation.value; track term) {
@@ -153,8 +149,7 @@
             <!--
             <div class="list-item-content">Found In: {{annotation.type}}</div>
     -->
-            }
-            }
+            } }
           </mat-card>
 
           <mat-card [appearance]="'outlined'">
@@ -162,16 +157,15 @@
               Mesh Terms:
               {{ article()?.meshTerms ? article()?.meshTerms?.length : 0 }}
             </div>
-            @if(article()?.meshTerms && article()?.meshTerms!.length){
-              @if (article()?.meshTerms && article()?.meshTerms?.length) { @for
-            (term of article()!.meshTerms; track term) {
+            @if(article()?.meshTerms && article()?.meshTerms!.length){ @if
+            (article()?.meshTerms && article()?.meshTerms?.length) { @for (term
+            of article()!.meshTerms; track term) {
             <div>
               <div class="list-item-content">{{ term.qualifierName }}</div>
               <div class="list-item-content">{{ term.abbreviation }}</div>
               <div class="list-item-content">{{ term.descriptorName }}</div>
             </div>
-            } }
-            }
+            } } }
           </mat-card>
         </div>
       </mat-card-content>

@@ -1,1 +1,1 @@
-export * from './lib/generic-chart/generic-chart.component'
+export * from './lib/generic-chart/generic-chart.component';

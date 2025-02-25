@@ -29,10 +29,14 @@
           <span class="mat-subtitle-2">{{ latestGrant().abstract }}</span>
           @if (fullAbstract && truncatedAbstract()) {
           <a
-            role="button" tabindex="0"
+            role="button"
+            tabindex="0"
             (click)="fullAbstract = false"
             (keydown.enter)="fullAbstract = false"
-            class="expand-link"> ...less</a>
+            class="expand-link"
+          >
+            ...less</a
+          >
           }
         </div>
         } @else {
@@ -40,10 +44,14 @@
           <span class="mat-subtitle-2">{{ truncatedAbstract() }}</span>
           @if (!fullAbstract) {
           <a
-            role="button" tabindex="0"
+            role="button"
+            tabindex="0"
             (click)="fullAbstract = true"
             (keydown.enter)="fullAbstract = true"
-            class="expand-link"> ...more</a>
+            class="expand-link"
+          >
+            ...more</a
+          >
           }
         </div>
         }

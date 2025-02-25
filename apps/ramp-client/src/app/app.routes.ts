@@ -1,8 +1,8 @@
-import { Routes } from '@angular/router'
+import { Routes } from '@angular/router';
 import {
   STRUCTURE_VIEWER_COMPONENT,
   StructureViewerComponent,
-} from 'structure-viewer'
+} from 'structure-viewer';
 
 export const routes: Routes = [
   {
@@ -102,4 +102,4 @@ export const routes: Routes = [
     loadComponent: () =>
       import('@ramp/features/ramp/ramp-api').then((m) => m.RampApiComponent),
   },
-]
+];

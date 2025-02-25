@@ -1,12 +1,12 @@
-import { inject } from '@angular/core'
+import { inject } from '@angular/core';
 import {
   FilterCategory,
   OpenApiPath,
-} from '@ncats-frontend-library/models/utils'
-import { Actions, createEffect, ofType } from '@ngrx/effects'
-import { concatLatestFrom } from '@ngrx/operators'
-import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store'
-import { Store } from '@ngrx/store'
+} from '@ncats-frontend-library/models/utils';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { concatLatestFrom } from '@ngrx/operators';
+import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
+import { Store } from '@ngrx/store';
 import {
   Analyte,
   Classes,
@@ -15,13 +15,14 @@ import {
   Ontology,
   Pathway,
   Properties,
-  RampChemicalEnrichmentResponse, RampOntologyEnrichmentResponse,
+  RampChemicalEnrichmentResponse,
+  RampOntologyEnrichmentResponse,
   RampPathwayEnrichmentResponse,
   RampReactionClassEnrichmentResponse,
   RampResponse,
   Reaction,
   ReactionClass,
-  Stats
+  Stats,
 } from 'ramp';
 import {
   AnalyteFromPathwayActions,
@@ -29,25 +30,27 @@ import {
   CommonReactionAnalyteActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
-  MetaboliteFromOntologyActions, OntologyEnrichmentsActions,
+  MetaboliteFromOntologyActions,
+  OntologyEnrichmentsActions,
   OntologyFromMetaboliteActions,
   PathwayEnrichmentsActions,
   PathwayFromAnalyteActions,
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions
+  ReactionsFromAnalytesActions,
 } from './ramp.actions';
-import { RampService } from '../ramp.service'
-import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { RampService } from '../ramp.service';
+import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import {
   getChemicalEnrichment,
   getClusterPlot,
   getCombinedFishersDataframe,
   // getEnrichedChemicalClass,
-  getFilteredFishersDataframe, getOntologyEnrichment,
-  getReactionClassEnrichment
+  getFilteredFishersDataframe,
+  getOntologyEnrichment,
+  getReactionClassEnrichment,
 } from './ramp.selectors';
 
 export const init$ = createEffect(
@@ -58,18 +61,18 @@ export const init$ = createEffect(
         return rampService.fetchSupportedIds().pipe(
           map(
             (ret: { analyteType: string; idTypes: string[] }[]) => {
-              return LoadRampActions.loadRampSuccess({ supportedIds: ret })
+              return LoadRampActions.loadRampSuccess({ supportedIds: ret });
             },
             catchError((error: ErrorEvent) =>
               of(LoadRampActions.loadRampFailure({ error: error.message }))
             )
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const loadApi$ = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -79,70 +82,84 @@ export const loadApi$ = createEffect(
         return rampService.fetchApi(action.url).pipe(
           map(
             (ret: {
-              tags: { name: string; description: string, sections?: string[] }[]
-              paths: { [key: string]: { post?: { [key: string]: unknown } } }
+              tags: {
+                name: string;
+                description: string;
+                sections?: string[];
+              }[];
+              paths: { [key: string]: { post?: { [key: string]: unknown } } };
             }) => {
               const tempMap: Map<string, OpenApiPath[]> = new Map<
                 string,
                 OpenApiPath[]
-              >()
-              ret.tags.forEach((tag: { name: string; description: string, sections?: string[] }) => {
-                let tempArr: OpenApiPath[] = [] as OpenApiPath[];
-                if (tempMap.has(tag.name)) {
-                  tempArr = tempMap.get(tag.name) as OpenApiPath[];
-                }
+              >();
+              ret.tags.forEach(
+                (tag: {
+                  name: string;
+                  description: string;
+                  sections?: string[];
+                }) => {
+                  let tempArr: OpenApiPath[] = [] as OpenApiPath[];
+                  if (tempMap.has(tag.name)) {
+                    tempArr = tempMap.get(tag.name) as OpenApiPath[];
+                  }
 
-                Object.entries(ret.paths).forEach(([pathKey, pathValue]) => {
-                  const title = pathKey.split('/api/')[1]
-                  if (tag.sections?.includes(title)) {
-                    let subsections: string[] = [];
-                    if (pathValue.post && pathValue.post['x-subsections']) {
-                      subsections = pathValue.post['x-subsections'] as string[];
-                    }
-                    tempArr.push(
-                      new OpenApiPath({
-                        ...pathValue.post,
-                        title: title,
-                        pageDescription: tag.description,
-                      })
-                    )
-                    subsections.forEach(subsection => {
-                      let path: {
-                        [key: string]: { post?: { [key: string]: unknown } }
-                      } = {}
-                      Object.entries(ret.paths).forEach(([pathKey, pathValue]) => {
-                        const splitPathName = pathKey.split('/api/')[1];
-                        if (splitPathName === subsection) {
-                          path = pathValue;
-                        }
-                      })
+                  Object.entries(ret.paths).forEach(([pathKey, pathValue]) => {
+                    const title = pathKey.split('/api/')[1];
+                    if (tag.sections?.includes(title)) {
+                      let subsections: string[] = [];
+                      if (pathValue.post && pathValue.post['x-subsections']) {
+                        subsections = pathValue.post[
+                          'x-subsections'
+                        ] as string[];
+                      }
                       tempArr.push(
                         new OpenApiPath({
-                          ...path['post'],
+                          ...pathValue.post,
                           title: title,
-                          subtitle: subsection,
                           pageDescription: tag.description,
                         })
-                      )
-                    })
-                  }
-                  if(tempArr.length) {
-                    tempMap.set(tag.name, tempArr)
-                  }
-                })
-              })
-              return LoadRampActions.loadRampApiSuccess({ api: tempMap })
+                      );
+                      subsections.forEach((subsection) => {
+                        let path: {
+                          [key: string]: { post?: { [key: string]: unknown } };
+                        } = {};
+                        Object.entries(ret.paths).forEach(
+                          ([pathKey, pathValue]) => {
+                            const splitPathName = pathKey.split('/api/')[1];
+                            if (splitPathName === subsection) {
+                              path = pathValue;
+                            }
+                          }
+                        );
+                        tempArr.push(
+                          new OpenApiPath({
+                            ...path['post'],
+                            title: title,
+                            subtitle: subsection,
+                            pageDescription: tag.description,
+                          })
+                        );
+                      });
+                    }
+                    if (tempArr.length) {
+                      tempMap.set(tag.name, tempArr);
+                    }
+                  });
+                }
+              );
+              return LoadRampActions.loadRampApiSuccess({ api: tempMap });
             },
             catchError((error: ErrorEvent) =>
               of(LoadRampActions.loadRampApiFailure({ error: error.message }))
             )
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchStats = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -152,25 +169,25 @@ export const fetchStats = createEffect(
         return rampService.loadAboutData().pipe(
           map(
             (ret: Stats) => {
-              const data: Stats = ret as Stats
+              const data: Stats = ret as Stats;
               if (data) {
-                return LoadRampActions.loadRampStatsSuccess({ data: data })
+                return LoadRampActions.loadRampStatsSuccess({ data: data });
               } else {
                 return LoadRampActions.loadRampStatsFailure({
                   error: 'No Stats Available',
-                })
+                });
               }
             },
             catchError((error: ErrorEvent) =>
               of(LoadRampActions.loadRampStatsFailure({ error: error.message }))
             )
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchPathwaysFromAnalytes = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -183,31 +200,31 @@ export const fetchPathwaysFromAnalytes = createEffect(
         return rampService.fetchPathwaysFromAnalytes(action.analytes).pipe(
           map(
             (ret: RampResponse<Pathway>) => {
-              ret.background = action.background
-              ret.backgroundFile = action.backgroundFile
-              ret.pValType = action.pValType
-              ret.pValCutoff = action.pValCutoff
-              ret.percAnalyteOverlap = action.percAnalyteOverlap
-              ret.minPathwayToCluster = action.minPathwayToCluster
-              ret.percPathwayOverlap = action.percPathwayOverlap
+              ret.background = action.background;
+              ret.backgroundFile = action.backgroundFile;
+              ret.pValType = action.pValType;
+              ret.pValCutoff = action.pValCutoff;
+              ret.percAnalyteOverlap = action.percAnalyteOverlap;
+              ret.minPathwayToCluster = action.minPathwayToCluster;
+              ret.percPathwayOverlap = action.percPathwayOverlap;
               return PathwayFromAnalyteActions.fetchPathwaysFromAnalytesSuccess(
                 ret
-              )
+              );
             },
             catchError((error: ErrorEvent) => {
               return of(
                 PathwayFromAnalyteActions.fetchPathwaysFromAnalytesFailure({
                   error: error.message,
                 })
-              )
+              );
             })
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchAnalytesFromPathways = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -219,7 +236,7 @@ export const fetchAnalytesFromPathways = createEffect(
             (ret: RampResponse<Analyte>) => {
               return AnalyteFromPathwayActions.fetchAnalytesFromPathwaysSuccess(
                 { ...ret }
-              )
+              );
             },
             catchError((error: ErrorEvent) =>
               of(
@@ -229,12 +246,12 @@ export const fetchAnalytesFromPathways = createEffect(
               )
             )
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchOntologiesFromMetabolites = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -248,7 +265,7 @@ export const fetchOntologiesFromMetabolites = createEffect(
               (ret: RampResponse<Ontology>) => {
                 return OntologyFromMetaboliteActions.fetchOntologiesFromMetabolitesSuccess(
                   { ...ret }
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
@@ -258,12 +275,12 @@ export const fetchOntologiesFromMetabolites = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchOntologies = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -276,7 +293,7 @@ export const fetchOntologies = createEffect(
         return rampService.fetchOntologies().pipe(
           map(
             (ret: { data: FilterCategory[] }) => {
-              return MetaboliteFromOntologyActions.fetchOntologiesSuccess(ret)
+              return MetaboliteFromOntologyActions.fetchOntologiesSuccess(ret);
             },
             catchError((error: ErrorEvent) =>
               of(
@@ -286,12 +303,12 @@ export const fetchOntologies = createEffect(
               )
             )
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchMetabolitesFromOntologies = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -314,12 +331,12 @@ export const fetchMetabolitesFromOntologies = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchOntologyEnrichment = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -339,22 +356,22 @@ export const fetchOntologyEnrichment = createEffect(
                   {
                     data: ret,
                   }
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
-                  OntologyEnrichmentsActions.fetchOntologyEnrichmentFailure(
-                    { error: error.message }
-                  )
+                  OntologyEnrichmentsActions.fetchOntologyEnrichmentFailure({
+                    error: error.message,
+                  })
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 /*
 export const filterOntologyEnrichment = createEffect(
@@ -421,10 +438,10 @@ export const fetchOntologyEnrichmentFile = createEffect(
           //     rampService.fetchOntologyEnrichmentFile(dataframe.data);
         }
       })
-    )
+    );
   },
   { functional: true, dispatch: false }
-)
+);
 
 export const fetchMetabolitesFromOntologiesFile = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -436,10 +453,10 @@ export const fetchMetabolitesFromOntologiesFile = createEffect(
           action.format
         )
       )
-    )
+    );
   },
   { functional: true, dispatch: false }
-)
+);
 
 export const fetchClassesFromMetabolites = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -469,12 +486,12 @@ export const fetchClassesFromMetabolites = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchPropertiesFromMetabolites = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -497,12 +514,12 @@ export const fetchPropertiesFromMetabolites = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchCommonReactionAnalytes = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -523,12 +540,12 @@ export const fetchCommonReactionAnalytes = createEffect(
               )
             )
           )
-        )
+        );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchReactionsFromAnalytes = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -551,7 +568,7 @@ export const fetchReactionsFromAnalytes = createEffect(
                   {
                     ...ret,
                   }
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
@@ -561,12 +578,12 @@ export const fetchReactionsFromAnalytes = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchReactionClassesFromAnalytes = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -591,7 +608,7 @@ export const fetchReactionClassesFromAnalytes = createEffect(
                   {
                     ...ret,
                   }
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
@@ -601,12 +618,12 @@ export const fetchReactionClassesFromAnalytes = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchReactionClassEnrichment = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -626,7 +643,7 @@ export const fetchReactionClassEnrichment = createEffect(
                   {
                     data: ret,
                   }
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
@@ -636,12 +653,12 @@ export const fetchReactionClassEnrichment = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 /*
 export const filterReactionClassEnrichment = createEffect(
@@ -708,10 +725,10 @@ export const fetchReactionClassEnrichmentFile = createEffect(
           //     rampService.fetchReactionClassEnrichmentFile(dataframe.data);
         }
       })
-    )
+    );
   },
   { functional: true, dispatch: false }
-)
+);
 
 export const fetchPathwayAnalysis = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -727,16 +744,16 @@ export const fetchPathwayAnalysis = createEffect(
           .pipe(
             map(
               (ret: RampPathwayEnrichmentResponse) => {
-                ret.background = action.background
-                ret.backgroundFile = action.backgroundFile
-                ret.pValType = action.pValType
-                ret.pValCutoff = Number(action.pValCutoff)
-                ret.percAnalyteOverlap = Number(action.percAnalyteOverlap)
-                ret.minPathwayToCluster = Number(action.minPathwayToCluster)
-                ret.percPathwayOverlap = Number(action.percPathwayOverlap)
+                ret.background = action.background;
+                ret.backgroundFile = action.backgroundFile;
+                ret.pValType = action.pValType;
+                ret.pValCutoff = Number(action.pValCutoff);
+                ret.percAnalyteOverlap = Number(action.percAnalyteOverlap);
+                ret.minPathwayToCluster = Number(action.minPathwayToCluster);
+                ret.percPathwayOverlap = Number(action.percPathwayOverlap);
                 return PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess(
                   ret
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
@@ -746,12 +763,12 @@ export const fetchPathwayAnalysis = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const filterEnrichedPathways = createEffect(
   (
@@ -784,7 +801,7 @@ export const filterEnrichedPathways = createEffect(
                       filteredFishersDataframe: ret.data,
                       ...ret,
                     } as RampPathwayEnrichmentResponse
-                  )
+                  );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
@@ -794,19 +811,19 @@ export const filterEnrichedPathways = createEffect(
                   )
                 )
               )
-            )
+            );
         } else {
           return of(
             PathwayEnrichmentsActions.filterEnrichmentFromPathwaysFailure({
               error: 'no dataframe available',
             })
-          )
+          );
         }
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchPathwayCluster = createEffect(
   (
@@ -832,8 +849,8 @@ export const fetchPathwayCluster = createEffect(
             .pipe(
               map(
                 (ret: {
-                  data: RampPathwayEnrichmentResponse
-                  plot: string
+                  data: RampPathwayEnrichmentResponse;
+                  plot: string;
                 }) => {
                   return PathwayEnrichmentsActions.fetchClusterFromEnrichmentSuccess(
                     {
@@ -843,7 +860,7 @@ export const fetchPathwayCluster = createEffect(
                       //                    dataframe: ret.data.combinedFishersDataframe as unknown[],
                       dataAsDataProperty: ret.data.dataAsDataProperty,
                     }
-                  )
+                  );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
@@ -853,18 +870,18 @@ export const fetchPathwayCluster = createEffect(
                   )
                 )
               )
-            )
+            );
         } else
           return of(
             PathwayEnrichmentsActions.fetchClusterFromEnrichmentFailure({
               error: 'no dataframe available',
             })
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchClusterImageFile = createEffect(
   (
@@ -877,13 +894,13 @@ export const fetchClusterImageFile = createEffect(
       concatLatestFrom(() => store.select(getClusterPlot)),
       tap(([action, plot]) => {
         if (plot && action) {
-          return rampService.fetchClusterImageFile(plot)
+          return rampService.fetchClusterImageFile(plot);
         }
       })
-    )
+    );
   },
   { functional: true, dispatch: false }
-)
+);
 
 export const fetchChemicalAnalysis = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -903,7 +920,7 @@ export const fetchChemicalAnalysis = createEffect(
                   {
                     data: ret,
                   }
-                )
+                );
               },
               catchError((error: ErrorEvent) =>
                 of(
@@ -913,12 +930,12 @@ export const fetchChemicalAnalysis = createEffect(
                 )
               )
             )
-          )
+          );
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const filterEnrichedChemicalClasses = createEffect(
   (
@@ -945,7 +962,7 @@ export const filterEnrichedChemicalClasses = createEffect(
                 (ret: RampChemicalEnrichmentResponse) => {
                   return MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesSuccess(
                     { data: ret }
-                  )
+                  );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
@@ -955,19 +972,19 @@ export const filterEnrichedChemicalClasses = createEffect(
                   )
                 )
               )
-            )
+            );
         } else {
           return of(
             MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesFailure(
               { error: 'No dataframe available' }
             )
-          )
+          );
         }
       })
-    )
+    );
   },
   { functional: true }
-)
+);
 
 export const fetchEnrichmentFromMetabolitesFile = createEffect(
   (
@@ -982,10 +999,10 @@ export const fetchEnrichmentFromMetabolitesFile = createEffect(
         if (action && dataframe) {
           rampService.fetchEnrichmentFromMetabolitesFile(
             dataframe.enriched_chemical_class_list
-          )
+          );
         }
       })
-    )
+    );
   },
   { functional: true, dispatch: false }
-)
+);

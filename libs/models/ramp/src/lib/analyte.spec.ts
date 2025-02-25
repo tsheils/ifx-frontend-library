@@ -1,4 +1,4 @@
-import { Analyte } from './analyte'
+import { Analyte } from './analyte';
 
 describe('Analyte', () => {
   it('should create an instance', () => {
@@ -14,6 +14,6 @@ describe('Analyte', () => {
         pathwayCategory: '',
         pathwayType: 'wiki',
       })
-    ).toBeTruthy()
-  })
-})
+    ).toBeTruthy();
+  });
+});

@@ -2,24 +2,36 @@
   <div class="row centered-row">
     <mat-list class="buttons-list">
       <mat-list-item>
-        <div matRipple
-             role="button" tabindex="0"
-             (click)="login('google')"
-             (keydown.enter)="login('google')"
-             class="login-button google">
-          <img src="./assets/social-sign-on/ggl.png" class="login-icon"  alt="Google sign in"/>
+        <div
+          matRipple
+          role="button"
+          tabindex="0"
+          (click)="login('google')"
+          (keydown.enter)="login('google')"
+          class="login-button google"
+        >
+          <img
+            src="./assets/social-sign-on/ggl.png"
+            class="login-icon"
+            alt="Google sign in"
+          />
           &nbsp; &nbsp; Sign In with Google
         </div>
       </mat-list-item>
       <mat-list-item>
         <div
-          role="button" tabindex="0"
+          role="button"
+          tabindex="0"
           matRipple
           (click)="login('facebook')"
           (keydown.enter)="login('facebook')"
           class="login-button facebook"
         >
-          <img src="./assets/social-sign-on/fbk.png" class="login-icon" alt="Facebook sign in" />
+          <img
+            src="./assets/social-sign-on/fbk.png"
+            class="login-icon"
+            alt="Facebook sign in"
+          />
           &nbsp; &nbsp; Sign In with Facebook
         </div>
       </mat-list-item>
@@ -50,7 +62,8 @@
       <mat-list-item>
         <div
           matRipple
-          role="button" tabindex="0"
+          role="button"
+          tabindex="0"
           (click)="loginEmail()"
           (keydown.enter)="loginEmail()"
           class="login-button primary-background"

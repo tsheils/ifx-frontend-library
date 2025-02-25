@@ -1,7 +1,7 @@
-import { Sponsor } from './sponsor'
+import { Sponsor } from './sponsor';
 
 describe('Sponsor', () => {
   it('should create an instance', () => {
-    expect(new Sponsor()).toBeTruthy()
-  })
-})
+    expect(new Sponsor()).toBeTruthy();
+  });
+});

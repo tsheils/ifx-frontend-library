@@ -1,6 +1,6 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
-import { CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal'
+import { CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,21 +15,21 @@ import {
   Signal,
   Type,
   viewChild,
-} from '@angular/core'
-import { CommonModule, isPlatformBrowser } from '@angular/common'
+} from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   interpolate,
   hierarchy,
   partition,
   quantize,
   interpolateRainbow,
-} from 'd3'
-import { scaleOrdinal } from 'd3-scale'
-import { select } from 'd3-selection'
-import { arc } from 'd3-shape'
-import { HierarchyNode } from '@ncats-frontend-library/models/utils'
-import { ImageDownloadComponent } from 'image-download'
-import { SunburstChartService } from './sunburst-chart.service'
+} from 'd3';
+import { scaleOrdinal } from 'd3-scale';
+import { select } from 'd3-selection';
+import { arc } from 'd3-shape';
+import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { ImageDownloadComponent } from 'image-download';
+import { SunburstChartService } from './sunburst-chart.service';
 
 @Component({
   selector: 'lib-sunburst-chart',
@@ -42,31 +42,31 @@ import { SunburstChartService } from './sunburst-chart.service'
 export class SunburstChartComponent implements OnInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
     PLATFORM_ID
-  ) as InjectionToken<NonNullable<unknown>>
+  ) as InjectionToken<NonNullable<unknown>>;
 
-  isBrowser = computed(() => isPlatformBrowser(this.platformId))
+  isBrowser = computed(() => isPlatformBrowser(this.platformId));
 
-  chartElement: Signal<ElementRef> = viewChild.required('sunburstChartElement')
-  _injector = inject(Injector)
-  componentPortal?: ComponentPortal<unknown>
+  chartElement: Signal<ElementRef> = viewChild.required('sunburstChartElement');
+  _injector = inject(Injector);
+  componentPortal?: ComponentPortal<unknown>;
 
-  sunburstChartService = inject(SunburstChartService)
+  sunburstChartService = inject(SunburstChartService);
 
   context = computed(() => {
     if (this.isBrowser()) {
-      const canvas = document.createElement('canvas')
-      return canvas.getContext('2d')
+      const canvas = document.createElement('canvas');
+      return canvas.getContext('2d');
     }
-  })
+  });
 
-  margins = { top: 20, bottom: 20, right: 30, left: 30 }
+  margins = { top: 20, bottom: 20, right: 30, left: 30 };
 
   width = computed(
     () =>
       this.chartElement().nativeElement.offsetWidth -
       this.margins.left -
       this.margins.right
-  )
+  );
 
   height = computed(() => {
     if (this.chartElement().nativeElement.offsetHeight > 200) {
@@ -74,31 +74,31 @@ export class SunburstChartComponent implements OnInit {
         this.chartElement().nativeElement.offsetHeight -
         this.margins.top -
         this.margins.bottom
-      )
-    } else return 500
-  })
+      );
+    } else return 500;
+  });
 
-  data = input<HierarchyNode[]>()
+  data = input<HierarchyNode[]>();
 
-  radius = computed(() => Math.min(this.width(), this.height() * 2) / 6)
+  radius = computed(() => Math.min(this.width(), this.height() * 2) / 6);
   color = computed(() =>
     scaleOrdinal(quantize(interpolateRainbow, this.data().length + 1))
-  )
+  );
 
   hierarchy = computed(() => {
     return hierarchy({
       term: 'main',
       children: this.data(),
     } as HierarchyNode)
-      .sum((d) => d.children ? 0 : d.count)
-      .sort((a, b) => b.count - a.count)
-  })
+      .sum((d) => (d.children ? 0 : d.count))
+      .sort((a, b) => b.count - a.count);
+  });
 
   root = computed(() =>
     partition()
       .size([2 * Math.PI, this.hierarchy().height + 1])(this.hierarchy())
       .each((d) => (d['current'] = d))
-  )
+  );
 
   arc = computed(() =>
     arc()
@@ -108,12 +108,12 @@ export class SunburstChartComponent implements OnInit {
       .padRadius(this.radius() * 1.5)
       .innerRadius((d) => d['y0'] * this.radius())
       .outerRadius((d) =>
-        Math.max(d['y0'] * this.radius(), d['y1'] * this.radius() - 1 )
+        Math.max(d['y0'] * this.radius(), d['y1'] * this.radius() - 1)
       )
-  )
+  );
 
   svg = computed(() => {
-    const element = this.chartElement()?.nativeElement
+    const element = this.chartElement()?.nativeElement;
     return (
       select(element)
         .append('svg:svg')
@@ -129,8 +129,8 @@ export class SunburstChartComponent implements OnInit {
         ])
         .attr('style', 'max-width: 100%; height: 100%;')
         .style('font', '16px sans-serif')
-    )
-  })
+    );
+  });
 
   chart = computed(() => {
     return this.svg()
@@ -140,9 +140,9 @@ export class SunburstChartComponent implements OnInit {
       .attr('fill', 'none')
       .attr('pointer-events', 'all')
       .on('click', (event: Event, d: { [key: string]: unknown }) => {
-        this._clicked(event, d)
-      })
-  })
+        this._clicked(event, d);
+      });
+  });
 
   label = computed(() => {
     return this.svg()
@@ -158,14 +158,14 @@ export class SunburstChartComponent implements OnInit {
       .attr('fill-opacity', (d) => +this._labelVisible(d['current']))
       .attr('transform', (d) => this._labelTransform(d['current']))
       .text((d) => {
-        let label = d.data.term
-        const characterSize = this._getWidth(label) / label.length
+        let label = d.data.term;
+        const characterSize = this._getWidth(label) / label.length;
         if (this._getWidth(label) > this.radius()) {
-          label = label.slice(0, this.radius() / characterSize - 3) + '...'
+          label = label.slice(0, this.radius() / characterSize - 3) + '...';
         }
-        return label
-      })
-  })
+        return label;
+      });
+  });
 
   path = computed(() =>
     this.svg()
@@ -174,8 +174,8 @@ export class SunburstChartComponent implements OnInit {
       .data(this.root().descendants().slice(1))
       .join('path')
       .attr('fill', (d) => {
-        while (d.depth > 1) d = d.parent
-        return d.data.color ? d.data.color : this.color()(d.data.term)
+        while (d.depth > 1) d = d.parent;
+        return d.data.color ? d.data.color : this.color()(d.data.term);
       })
       .attr('fill-opacity', (d) =>
         this._arcVisible(d['current']) ? 1 / d.depth + 0.25 : 0
@@ -188,25 +188,25 @@ export class SunburstChartComponent implements OnInit {
         this.sunburstChartService.nodeHovered.emit({
           event: event,
           node: d.data as HierarchyNode,
-        })
+        });
       })
-  )
+  );
   svgExport = computed(
     () =>
       select(this.chartElement()?.nativeElement)
         .select('svg')
         .node() as SVGElement
-  )
+  );
 
   ngOnInit() {
-     if (this.chartElement() && this.isBrowser()) {
+    if (this.chartElement() && this.isBrowser()) {
       if (this.context()) {
-        this.context().font = '16px Roboto'
+        this.context().font = '16px Roboto';
       }
-      const element = this.chartElement()?.nativeElement
-      select(element).select('svg').remove()
-      this.makeChart()
-      this.label()
+      const element = this.chartElement()?.nativeElement;
+      select(element).select('svg').remove();
+      this.makeChart();
+      this.label();
     }
     if (
       this.sunburstChartService &&
@@ -214,35 +214,35 @@ export class SunburstChartComponent implements OnInit {
     ) {
       const comp = this._injector.get<Type<unknown>>(
         this.sunburstChartService.customComponent
-      )
-      this.componentPortal = new ComponentPortal(comp)
+      );
+      this.componentPortal = new ComponentPortal(comp);
     }
   }
 
   makeChart() {
-      this.path()
+    this.path()
       .filter((d) => d.children)
       .style('cursor', 'pointer')
       .on('click', (event: Event, d) => {
-        this._clicked(event, d)
+        this._clicked(event, d);
         this.sunburstChartService.nodeClicked.emit({
           event: event,
           node: d.data as HierarchyNode,
-        })
-      })
+        });
+      });
 
     const t = this.path()
       .append('title')
-      .html((d) => (d.data.label ? d.data.label : d.data.term))
+      .html((d) => (d.data.label ? d.data.label : d.data.term));
 
     if (t !== null && t['classList']) {
-      t.classed('.title-text')
+      t.classed('.title-text');
     }
   }
 
   // Handle zoom on click.
   _clicked(event, p) {
-    this.chart().datum(p.parent || this.root())
+    this.chart().datum(p.parent || this.root());
 
     this.root().each(
       (d) =>
@@ -258,17 +258,17 @@ export class SunburstChartComponent implements OnInit {
           y0: Math.max(0, d.y0 - p.depth),
           y1: Math.max(0, d.y1 - p.depth),
         })
-    )
+    );
 
-    const t = this.svg().transition().duration(750)
+    const t = this.svg().transition().duration(750);
     // Transition the data on all arcs, even the ones that aren’t visible,
     // so that if this transition is interrupted, entering arcs will start
     // the next transition from the desired position.
     this.path()
       .transition(t)
       .tween('data', (d: { [key: string]: unknown }) => {
-        const i = interpolate(d['current'], d['target'])
-        return (t) => (d['current'] = i(t))
+        const i = interpolate(d['current'], d['target']);
+        return (t) => (d['current'] = i(t));
       })
       .filter(function (d) {
         return (
@@ -276,10 +276,10 @@ export class SunburstChartComponent implements OnInit {
           (d['target'].y1 <= 3 &&
             d['target'].y0 >= 1 &&
             d['target'].x1 > d['target'].x0)
-        )
+        );
       })
       .attr('fill-opacity', (d) => {
-        return this._arcVisible(d['target']) ? 1 / d['depth'] + 0.25 : 0
+        return this._arcVisible(d['target']) ? 1 / d['depth'] + 0.25 : 0;
       })
       .attr('pointer-events', (d) =>
         this._arcVisible(d['target']) ? 'auto' : 'none'
@@ -287,7 +287,7 @@ export class SunburstChartComponent implements OnInit {
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       //@ts-expect-error
-      .attrTween('d', (d) => () => this.arc()(d['current']))
+      .attrTween('d', (d) => () => this.arc()(d['current']));
 
     this.label()
       .filter(function (d) {
@@ -296,7 +296,7 @@ export class SunburstChartComponent implements OnInit {
           (d['target'].y1 <= 3 &&
             d['target'].y0 >= 1 &&
             d['target'].x1 > d['target'].x0)
-        )
+        );
         //  this._arcVisible(d['target']);
       })
       .transition(t)
@@ -313,21 +313,21 @@ export class SunburstChartComponent implements OnInit {
           this._labelTransform(
             d['current'] as { x0: number; y0: number; x1: number; y1: number }
           )
-      )
+      );
   }
 
   _arcVisible(d: { x0: number; y0: number; x1: number; y1: number }) {
-    return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0
+    return d.y1 <= 3 && d.y0 >= 1 && d.x1 > d.x0;
   }
 
   _labelVisible(d: { x0: number; y0: number; x1: number; y1: number }) {
-    return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03
+    return d.y1 <= 3 && d.y0 >= 1 && (d.y1 - d.y0) * (d.x1 - d.x0) > 0.03;
   }
 
   _labelTransform(d: { x0: number; y0: number; x1: number; y1: number }) {
-    const x = (((d['x0'] + d['x1']) / 2) * 180) / Math.PI
-    const y = ((d['y0'] + d['y1']) / 2) * this.radius()
-    return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`
+    const x = (((d['x0'] + d['x1']) / 2) * 180) / Math.PI;
+    const y = ((d['y0'] + d['y1']) / 2) * this.radius();
+    return `rotate(${x - 90}) translate(${y},0) rotate(${x < 180 ? 0 : 180})`;
   }
 
   /**
@@ -338,6 +338,6 @@ export class SunburstChartComponent implements OnInit {
    * @returns {number} The width of the text
    **/
   _getWidth(text: string) {
-    return this.context()?.measureText(text).width
+    return this.context()?.measureText(text).width;
   }
 }

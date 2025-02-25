@@ -1,6 +1,6 @@
-import { Filter } from '@ncats-frontend-library/models/utils'
-import { createActionGroup, emptyProps, props } from '@ngrx/store'
-import { ResolverForm, ResolverResponse } from 'ifx'
+import { Filter } from '@ncats-frontend-library/models/utils';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
+import { ResolverForm, ResolverResponse } from 'ifx';
 
 export const LoadResolverOptionsActions = createActionGroup({
   source: 'Load Resolver Options',
@@ -10,7 +10,7 @@ export const LoadResolverOptionsActions = createActionGroup({
     loadResolverOptionsSuccess: props<{ options: Filter[] }>(),
     loadResolverOptionsFailure: props<{ error: string }>(),
   },
-})
+});
 
 export const ResolveQueryActions = createActionGroup({
   source: 'Resolve Query',
@@ -19,4 +19,4 @@ export const ResolveQueryActions = createActionGroup({
     resolveQuerySuccess: props<{ data: ResolverResponse[] }>(),
     resolveQueryFailure: props<{ error: string }>(),
   },
-})
+});

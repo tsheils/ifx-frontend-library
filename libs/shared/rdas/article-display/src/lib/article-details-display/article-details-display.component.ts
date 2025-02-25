@@ -1,15 +1,15 @@
-import { BreakpointObserver } from '@angular/cdk/layout'
-import { Component, computed, input, ViewEncapsulation } from '@angular/core'
-import { CommonModule } from '@angular/common'
-import { MatButtonModule } from '@angular/material/button'
-import { MatCardModule } from '@angular/material/card'
-import { MatIconModule } from '@angular/material/icon'
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser'
+import { BreakpointObserver } from '@angular/cdk/layout';
+import { Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import {
   Article,
   PubtatorAnnotation,
-} from '@ncats-frontend-library/models/rdas'
-import { ArticleListCardComponent } from '../article-list-card/article-list-card.component'
+} from '@ncats-frontend-library/models/rdas';
+import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';
 
 @Component({
   selector: 'ncats-frontend-library-article-details-display',
@@ -18,39 +18,39 @@ import { ArticleListCardComponent } from '../article-list-card/article-list-card
     MatCardModule,
     MatIconModule,
     MatButtonModule,
-    ArticleListCardComponent
+    ArticleListCardComponent,
   ],
   templateUrl: './article-details-display.component.html',
   styleUrls: ['./article-details-display.component.scss'],
   encapsulation: ViewEncapsulation.None,
-  standalone: true
+  standalone: true,
 })
 export class ArticleDetailsDisplayComponent {
-  article = input<Article>()
+  article = input<Article>();
   annotationsMap = computed<Map<string, string[]>>(() => {
-    const aMap: Map<string, string[]> = new Map<string, string[]>()
-    const art = this.article()
+    const aMap: Map<string, string[]> = new Map<string, string[]>();
+    const art = this.article();
     if (art && art.annotations) {
       art.annotations.forEach((annotation: PubtatorAnnotation) => {
         if (annotation.text) {
           if (aMap.has(annotation.infons_type)) {
-            let types = aMap.get(annotation.infons_type)
+            let types = aMap.get(annotation.infons_type);
             if (types) {
-              types = [...types, ...annotation.text]
+              types = [...types, ...annotation.text];
             } else {
-              types = annotation.text
+              types = annotation.text;
             }
-            aMap.set(annotation.infons_type, [...new Set(types)])
+            aMap.set(annotation.infons_type, [...new Set(types)]);
           } else {
-            aMap.set(annotation.infons_type, annotation.text)
+            aMap.set(annotation.infons_type, annotation.text);
           }
         }
-      })
+      });
     }
-    return aMap
-  })
+    return aMap;
+  });
 
-  showAbstract = false
+  showAbstract = false;
 
   constructor(
     private breakpointObserver: BreakpointObserver,
@@ -58,11 +58,11 @@ export class ArticleDetailsDisplayComponent {
   ) {}
 
   getArticleAbstract(): SafeHtml | undefined {
-    const text = this.article()?.abstractText
+    const text = this.article()?.abstractText;
     if (text) {
-      return this.sanitizer.bypassSecurityTrustHtml(text)
+      return this.sanitizer.bypassSecurityTrustHtml(text);
     } else {
-      return undefined
+      return undefined;
     }
   }
 }

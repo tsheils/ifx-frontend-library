@@ -1,11 +1,11 @@
-import { DOCUMENT } from '@angular/common'
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Inject, Injectable } from '@angular/core'
+import { DOCUMENT } from '@angular/common';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Inject, Injectable } from '@angular/core';
 import {
   DataProperty,
   Filter,
   FilterCategory,
-} from '@ncats-frontend-library/models/utils'
+} from '@ncats-frontend-library/models/utils';
 import {
   Analyte,
   ChemicalEnrichment,
@@ -15,13 +15,16 @@ import {
   FisherResult,
   FishersDataframe,
   Metabolite,
-  Ontology, OntologyEnrichment,
+  Ontology,
+  OntologyEnrichment,
   Pathway,
   Properties,
   RampAPIResponse,
   RampChemicalEnrichmentAPIResponse,
   RampChemicalEnrichmentResponse,
-  RampDataGeneric, RampOntologyEnrichmentAPIResponse, RampOntologyEnrichmentResponse,
+  RampDataGeneric,
+  RampOntologyEnrichmentAPIResponse,
+  RampOntologyEnrichmentResponse,
   RampPathwayEnrichmentAPIResponse,
   RampPathwayEnrichmentResponse,
   RampReactionAPIResponse,
@@ -30,27 +33,27 @@ import {
   RampResponse,
   Reaction,
   ReactionClass,
-  SourceVersion
+  SourceVersion,
 } from 'ramp';
-import { forkJoin, Observable, of } from 'rxjs'
-import { catchError, map } from 'rxjs/operators'
+import { forkJoin, Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 const HTTP_OPTIONS = {
   headers: new HttpHeaders(),
   responseType: 'blob' as 'json',
-}
+};
 
 const HTTP_TEXT_OPTIONS = {
   headers: new HttpHeaders(),
   responseType: 'text' as const,
-}
+};
 
 @Injectable({
   providedIn: 'root',
 })
 export class RampService {
-  private url!: string
-  private renderUrl!: string
+  private url!: string;
+  private renderUrl!: string;
 
   constructor(
     private http: HttpClient,
@@ -65,38 +68,38 @@ export class RampService {
       geneIntersects: this.fetchGeneIntersects(),
       supportedIds: this.fetchSupportedIds(),
       databaseUrl: this.fetchDatabaseUrl(),
-    })
+    });
   }
 
   fetchApi(url: string): Observable<{
-    tags: { name: string; description: string }[]
-    paths: { [key: string]: { post?: { [key: string]: unknown } | undefined } }
+    tags: { name: string; description: string }[];
+    paths: { [key: string]: { post?: { [key: string]: unknown } | undefined } };
   }> {
     return this.http
       .get<{
-        tags: { name: string; description: string }[]
+        tags: { name: string; description: string }[];
         paths: {
-          [key: string]: { post?: { [key: string]: unknown } | undefined }
-        }
+          [key: string]: { post?: { [key: string]: unknown } | undefined };
+        };
       }>(url)
       .pipe(
         map(
           (response: {
-            tags: { name: string; description: string }[]
+            tags: { name: string; description: string }[];
             paths: {
-              [key: string]: { post?: { [key: string]: unknown } | undefined }
-            }
+              [key: string]: { post?: { [key: string]: unknown } | undefined };
+            };
           }) => {
-            return response
+            return response;
           }
         )
-      )
+      );
   }
 
   fetchSourceVersions(): Observable<SourceVersion[]> {
     return this.http
       .get<{ data: SourceVersion[] }>(`${this.url}source-versions`)
-      .pipe(map((response) => response.data))
+      .pipe(map((response) => response.data));
   }
 
   fetchEntityCounts() {
@@ -109,7 +112,7 @@ export class RampService {
           )
         ),
         catchError(this.handleError('fetchEntityCounts', []))
-      )
+      );
   }
 
   fetchSupportedIds(): Observable<
@@ -117,44 +120,44 @@ export class RampService {
   > {
     return this.http
       .get<{
-        data: { analyteType: string; idTypes: string[] }[]
+        data: { analyteType: string; idTypes: string[] }[];
       }>(`${this.url}id-types`)
       .pipe(
         map((response) => {
-          return response.data
+          return response.data;
         })
-      )
+      );
   }
 
   fetchDatabaseUrl() {
     return this.http
       .get<{ data: string }>(`${this.url}current-db-file-url`)
-      .pipe(map((response: { data: string }) => response.data))
+      .pipe(map((response: { data: string }) => response.data));
   }
 
   fetchMetaboliteIntersects() {
-    return this.fetchAnalyteIntersects('metabolites')
+    return this.fetchAnalyteIntersects('metabolites');
   }
 
   fetchGeneIntersects() {
-    return this.fetchAnalyteIntersects('genes')
+    return this.fetchAnalyteIntersects('genes');
   }
 
   fetchAnalyteIntersects(param: string) {
     return this.http
       .get<{
-        data: { id: string; sets: string[]; size: number }[]
+        data: { id: string; sets: string[]; size: number }[];
       }>(
         `${this.url}analyte-intersects?analytetype=${param}&query_scope=global`
       )
       .pipe(
         map(
           (response: {
-            data: { id: string; sets: string[]; size: number }[]
+            data: { id: string; sets: string[]; size: number }[];
           }) => response.data
         ),
         catchError(this.handleError('fetchAnalyteIntersects', []))
-      )
+      );
   }
 
   fetchPathwaysFromAnalytes(
@@ -162,7 +165,7 @@ export class RampService {
   ): Observable<RampResponse<Pathway>> {
     const options = {
       analytes: analytes,
-    }
+    };
     return this.http
       .post<RampAPIResponse<Pathway>>(
         `${this.url}pathways-from-analytes`,
@@ -172,20 +175,20 @@ export class RampService {
         map((response: RampAPIResponse<Pathway>) => {
           const pathwayList: Pathway[] = response.data.map(
             (obj: Pathway) => new Pathway(obj)
-          )
-          return this._makeRampResponse(response, pathwayList, analytes)
+          );
+          return this._makeRampResponse(response, pathwayList, analytes);
         })
-      )
+      );
   }
 
   fetchAnalytesFromPathways(action: {
-    pathways: string[]
-    analyteType: string
+    pathways: string[];
+    analyteType: string;
   }): Observable<RampResponse<Analyte>> {
     const options = {
       pathway: action.pathways,
       analyteType: action.analyteType,
-    }
+    };
     return this.http
       .post<RampAPIResponse<Analyte>>(
         `${this.url}analytes-from-pathways`,
@@ -195,10 +198,10 @@ export class RampService {
         map((response: RampAPIResponse<Analyte>) => {
           const analyteList = response.data.map(
             (obj: Partial<Analyte>) => new Analyte(obj)
-          )
-          return this._makeRampResponse(response, analyteList, action.pathways)
+          );
+          return this._makeRampResponse(response, analyteList, action.pathways);
         })
-      )
+      );
   }
 
   fetchOntologiesFromMetabolites(
@@ -206,7 +209,7 @@ export class RampService {
   ): Observable<RampResponse<Ontology>> {
     const options = {
       metabolites: analytes,
-    }
+    };
     return this.http
       .post<RampAPIResponse<Ontology>>(
         `${this.url}ontologies-from-metabolites`,
@@ -216,10 +219,10 @@ export class RampService {
         map((response: RampAPIResponse<Ontology>) => {
           const ontologyList = response.data.map(
             (obj: unknown) => new Ontology(obj as { [key: string]: unknown })
-          )
-          return this._makeRampResponse(response, ontologyList, analytes)
+          );
+          return this._makeRampResponse(response, ontologyList, analytes);
         })
-      )
+      );
   }
 
   fetchMetabolitesFromOntologies(
@@ -227,7 +230,7 @@ export class RampService {
   ): Observable<RampResponse<Metabolite>> {
     const options = {
       ontology: ontologies,
-    }
+    };
     return this.http
       .post<RampAPIResponse<Metabolite>>(
         `${this.url}metabolites-from-ontologies`,
@@ -237,31 +240,31 @@ export class RampService {
         map((response: RampAPIResponse<Metabolite>) => {
           const metaboliteList = response.data.map(
             (obj: Partial<Metabolite>) => new Metabolite(obj)
-          )
-          return this._makeRampResponse(response, metaboliteList, ontologies)
+          );
+          return this._makeRampResponse(response, metaboliteList, ontologies);
         })
-      )
+      );
   }
 
   fetchOntologies(): Observable<{ data: FilterCategory[] }> {
     return this.http
       .get<{
-        uniq_ontology_types: string[]
-        data: Ontology[]
+        uniq_ontology_types: string[];
+        data: Ontology[];
       }>(`${this.url}ontology-types`)
       .pipe(
         map((response: { uniq_ontology_types: string[]; data: Ontology[] }) => {
           const ontoMap: Map<string, FilterCategory> = new Map<
             string,
             FilterCategory
-          >()
+          >();
           response.uniq_ontology_types.forEach((onto: string) =>
             ontoMap.set(onto, new FilterCategory({ label: onto, values: [] }))
-          )
+          );
           response.data.forEach((ontoType: Ontology) => {
             let cl: FilterCategory | undefined = ontoMap.get(
               ontoType.HMDBOntologyType
-            )
+            );
             if (cl) {
               cl.values.push(
                 new Filter({
@@ -270,7 +273,7 @@ export class RampService {
                   value: ontoType.commonName,
                   count: ontoType.metCount,
                 })
-              )
+              );
             } else {
               cl = new FilterCategory({
                 label: ontoType.HMDBOntologyType,
@@ -282,15 +285,15 @@ export class RampService {
                     count: ontoType.metCount,
                   }),
                 ],
-              })
+              });
             }
-            ontoMap.set(ontoType.HMDBOntologyType, cl)
-          })
+            ontoMap.set(ontoType.HMDBOntologyType, cl);
+          });
           return {
             data: [...ontoMap.values()].map((fc) => new FilterCategory(fc)),
-          }
+          };
         })
-      )
+      );
   }
 
   fetchEnrichmentFromOntologies(
@@ -298,13 +301,13 @@ export class RampService {
     background?: string,
     backgroundFile?: File
   ): Observable<RampOntologyEnrichmentResponse> {
-    const formData = new FormData()
-    formData.set('metabolites', JSON.stringify(metabolites))
+    const formData = new FormData();
+    formData.set('metabolites', JSON.stringify(metabolites));
     if (background) {
-      formData.set('background', JSON.stringify([background]))
+      formData.set('background', JSON.stringify([background]));
     }
     if (backgroundFile) {
-      formData.set('backgroundFile', backgroundFile, backgroundFile.name)
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampOntologyEnrichmentAPIResponse>(
@@ -313,9 +316,14 @@ export class RampService {
       )
       .pipe(
         map((response: RampOntologyEnrichmentAPIResponse) => {
-          const enrichedOntologyList: OntologyEnrichment[] = response.data.fishertresults.map((enrichedOntology: Partial<OntologyEnrichment>) => new OntologyEnrichment(enrichedOntology))
+          const enrichedOntologyList: OntologyEnrichment[] =
+            response.data.fishertresults.map(
+              (enrichedOntology: Partial<OntologyEnrichment>) =>
+                new OntologyEnrichment(enrichedOntology)
+            );
 
-          const dataAsDataProperties = this._mapDataToDataProperty(enrichedOntologyList)
+          const dataAsDataProperties =
+            this._mapDataToDataProperty(enrichedOntologyList);
           return <RampOntologyEnrichmentResponse>{
             data: response.data.fishertresults,
             dataAsDataProperty: dataAsDataProperties,
@@ -324,16 +332,16 @@ export class RampService {
                 ? response.function_call[0]
                 : undefined,
             },
-          }
+          };
         })
-      )
+      );
   }
 
   fetchMetabolitesFromOntologiesFile(ontologies: string[], format: string) {
     const params = {
       ontology: ontologies.join(','),
       format: format,
-    }
+    };
     this.http
       .post<string[]>(
         `${this.url}metabolites-from-ontologies`,
@@ -344,8 +352,8 @@ export class RampService {
         this._downloadFile(
           response as Blob,
           'fetchMetabolitesFromOntologies-download.tsv'
-        )
-      })
+        );
+      });
   }
 
   fetchChemicalClass(
@@ -353,13 +361,13 @@ export class RampService {
     background?: string,
     backgroundFile?: File
   ): Observable<RampResponse<Classes>> {
-    const formData = new FormData()
-    formData.set('metabolites', JSON.stringify(metabolites))
+    const formData = new FormData();
+    formData.set('metabolites', JSON.stringify(metabolites));
     if (background) {
-      formData.set('background', JSON.stringify([background]))
+      formData.set('background', JSON.stringify([background]));
     }
     if (backgroundFile) {
-      formData.set('backgroundFile', backgroundFile, backgroundFile.name)
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampAPIResponse<Classes>>(`${this.url}chemical-classes`, formData)
@@ -367,33 +375,33 @@ export class RampService {
         map((response: RampAPIResponse<Classes>) => {
           const tempResponse: { [key: string]: unknown }[] = (<unknown>(
             response.data
-          )) as { [key: string]: unknown }[]
-          let metClasses: Classes[] = []
+          )) as { [key: string]: unknown }[];
+          let metClasses: Classes[] = [];
           const metabMap: Map<string, { [key: string]: unknown }> = new Map<
             string,
             { [key: string]: unknown }
-          >()
+          >();
           if (response.data && response.data.length) {
             tempResponse.forEach((chClass: { [key: string]: unknown }) => {
-              let cl = metabMap.get(<string>chClass['sourceId'])
+              let cl = metabMap.get(<string>chClass['sourceId']);
               if (cl) {
                 const clArr: { [key: string]: unknown }[] = cl[
                   'levels'
-                ] as Array<{ [key: string]: unknown }>
-                clArr.push(chClass)
-                cl['levels'] = clArr
+                ] as Array<{ [key: string]: unknown }>;
+                clArr.push(chClass);
+                cl['levels'] = clArr;
               } else {
-                cl = { sourceId: chClass['sourceId'], levels: [chClass] }
+                cl = { sourceId: chClass['sourceId'], levels: [chClass] };
               }
-              metabMap.set(<string>chClass['sourceId'], cl)
-            })
+              metabMap.set(<string>chClass['sourceId'], cl);
+            });
             metClasses = [...metabMap.values()].map(
               (obj: { [key: string]: unknown }) => new Classes(obj)
-            )
+            );
           }
-          return this._makeRampResponse(response, metClasses, metabolites)
+          return this._makeRampResponse(response, metClasses, metabolites);
         })
-      )
+      );
   }
 
   fetchPropertiesFromMetabolites(
@@ -401,7 +409,7 @@ export class RampService {
   ): Observable<RampResponse<Properties>> {
     const options = {
       metabolites: metabolites,
-    }
+    };
     return this.http
       .post<RampAPIResponse<Properties>>(
         `${this.url}chemical-properties`,
@@ -411,22 +419,22 @@ export class RampService {
         map((response: RampAPIResponse<Properties>) => {
           const propertyList = response.data.map(
             (obj: Partial<Properties>) => new Properties(obj)
-          )
+          );
           const propertyListAsDataProperty = this._makeRampResponse(
             response,
             propertyList,
             metabolites
-          )
+          );
           propertyListAsDataProperty?.dataAsDataProperty?.map((prop) => {
             prop['imageUrl'].url = `${this.renderUrl}(${encodeURIComponent(
               prop['iso_smiles'].value
-            )})?size=150`
-            prop['imageUrl'].label = prop['common_name'].value
-            return prop
-          })
-          return propertyListAsDataProperty
+            )})?size=150`;
+            prop['imageUrl'].label = prop['common_name'].value;
+            return prop;
+          });
+          return propertyListAsDataProperty;
         })
-      )
+      );
   }
 
   fetchCommonReactionAnalytes(
@@ -434,7 +442,7 @@ export class RampService {
   ): Observable<RampResponse<CommonAnalyte>> {
     const options = {
       analytes: analytes,
-    }
+    };
     return this.http
       .post<RampAPIResponse<CommonAnalyte>>(
         `${this.url}common-reaction-analytes`,
@@ -445,10 +453,10 @@ export class RampService {
           const commonAnalyteList = response.data.map(
             (obj: unknown) =>
               new CommonAnalyte(obj as { [key: string]: unknown })
-          )
-          return this._makeRampResponse(response, commonAnalyteList, analytes)
+          );
+          return this._makeRampResponse(response, commonAnalyteList, analytes);
         })
-      )
+      );
   }
 
   fetchReactionsFromAnalytes(
@@ -466,36 +474,36 @@ export class RampService {
       includeTransportRxns: includeTransportRxns,
       rxnDirs: rxnDirs,
       includeRxnURLs: includeRxnURLs,
-    }
+    };
     return this.http
       .post<{
         data: {
-          met2rxn: Reaction[]
-          prot2rxn: Reaction[]
-          metProteinCommonReactions: Reaction[]
-        }
-        function_call: string[]
-        plot: { [key: string]: string[] }
+          met2rxn: Reaction[];
+          prot2rxn: Reaction[];
+          metProteinCommonReactions: Reaction[];
+        };
+        function_call: string[];
+        plot: { [key: string]: string[] };
       }>(`${this.url}reactions-from-analytes`, options)
       .pipe(
         map((response: RampReactionAPIResponse) => {
           const reactionList = response.data.met2rxn.map(
             (obj: unknown) => new Reaction(obj as Partial<Reaction>)
-          )
+          );
           const plot = Object.keys(response.plot).map((level: string) => {
-            const t = response.plot[level as keyof typeof response.plot]
-            let r = []
+            const t = response.plot[level as keyof typeof response.plot];
+            let r = [];
             if (Object.is(t, {})) {
-              r = Array.from([])
+              r = Array.from([]);
             } else {
-              r = Array.from(t as [])
+              r = Array.from(t as []);
             }
             return {
               id: level,
               sets: [...new Set(r)],
               size: [...r].length,
-            }
-          })
+            };
+          });
           return this._makeRampResponse(
             {
               function_call: response.function_call,
@@ -504,9 +512,9 @@ export class RampService {
             reactionList,
             analytes,
             plot
-          )
+          );
         })
-      )
+      );
   }
 
   fetchReactionClassesFromAnalytes(
@@ -524,20 +532,20 @@ export class RampService {
       concatResults: concatResults,
       includeReactionIDs: includeReactionIDs,
       useIdMapping: useIdMapping,
-    }
+    };
     return this.http
       .post<{
-        data: ReactionClass[]
-        function_call: string[]
+        data: ReactionClass[];
+        function_call: string[];
       }>(`${this.url}reaction-classes-from-analytes`, options)
       .pipe(
         map((response: RampAPIResponse<ReactionClass>) => {
           const reactionClassList = response.data.map(
             (obj: unknown) => new ReactionClass(obj as Partial<ReactionClass>)
-          )
-          return this._makeRampResponse(response, reactionClassList, analytes)
+          );
+          return this._makeRampResponse(response, reactionClassList, analytes);
         })
-      )
+      );
   }
 
   fetchEnrichmentFromReactionClasses(
@@ -545,13 +553,13 @@ export class RampService {
     background?: string,
     backgroundFile?: File
   ): Observable<RampReactionClassEnrichmentResponse> {
-    const formData = new FormData()
-    formData.set('analytes', JSON.stringify(analytes))
+    const formData = new FormData();
+    formData.set('analytes', JSON.stringify(analytes));
     if (background) {
-      formData.set('background', JSON.stringify([background]))
+      formData.set('background', JSON.stringify([background]));
     }
     if (backgroundFile) {
-      formData.set('backgroundFile', backgroundFile, backgroundFile.name)
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampReactionClassEnrichmentAPIResponse>(
@@ -560,14 +568,15 @@ export class RampService {
       )
       .pipe(
         map((response: RampReactionClassEnrichmentAPIResponse) => {
-          const reactionList: ReactionClass[] = []
+          const reactionList: ReactionClass[] = [];
           response.data.EC_Level1Stats.forEach((reaction) =>
             reactionList.push(new ReactionClass(reaction))
-          )
+          );
           response.data.EC_Level2Stats.forEach((reaction) =>
             reactionList.push(new ReactionClass(reaction))
-          )
-          const dataAsDataProperties = this._mapDataToDataProperty(reactionList)
+          );
+          const dataAsDataProperties =
+            this._mapDataToDataProperty(reactionList);
           return <RampReactionClassEnrichmentResponse>{
             data: response.data,
             dataAsDataProperty: dataAsDataProperties,
@@ -576,9 +585,9 @@ export class RampService {
                 ? response.function_call[0]
                 : undefined,
             },
-          }
+          };
         })
-      )
+      );
   }
 
   filterReactionClassEnrichment(
@@ -594,7 +603,7 @@ export class RampService {
       })
       .pipe(
         map((response) => {
-          console.log(response)
+          console.log(response);
           //   const reactionList = response
           //   const dataAsDataProperties = this._mapDataToDataProperty(response.data);
           /*        return {
@@ -607,16 +616,16 @@ export class RampService {
                 : undefined,
             },
           }*/
-          return {} as RampChemicalEnrichmentResponse
+          return {} as RampChemicalEnrichmentResponse;
         })
-      )
+      );
   }
 
   fetchReactionClassEnrichmentFile(data: ReactionClass[]) {
     this._downloadFile(
       this._makeBlob(this._toTSV(data)),
       'fetchReactionClassEnrichment-download.tsv'
-    )
+    );
   }
 
   fetchEnrichmentFromMetabolites(
@@ -624,13 +633,13 @@ export class RampService {
     background?: string,
     backgroundFile?: File
   ): Observable<RampChemicalEnrichmentResponse> {
-    const formData = new FormData()
-    formData.set('metabolites', JSON.stringify(metabolites))
+    const formData = new FormData();
+    formData.set('metabolites', JSON.stringify(metabolites));
     if (background) {
-      formData.set('background', JSON.stringify([background]))
+      formData.set('background', JSON.stringify([background]));
     }
     if (backgroundFile) {
-      formData.set('backgroundFile', backgroundFile, backgroundFile.name)
+      formData.set('backgroundFile', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampChemicalEnrichmentAPIResponse>(
@@ -639,19 +648,19 @@ export class RampService {
       )
       .pipe(
         map((response: RampChemicalEnrichmentAPIResponse) => {
-          const retList: ChemicalEnrichment[] = []
-          const responseClone = response.data
+          const retList: ChemicalEnrichment[] = [];
+          const responseClone = response.data;
           //  delete responseClone.result_type;
-          ;[...Object.values(responseClone)].forEach((val: unknown[]) => {
+          [...Object.values(responseClone)].forEach((val: unknown[]) => {
             if (typeof val[0] !== 'string') {
               val.forEach((cc: unknown) => {
                 retList.push(
                   new ChemicalEnrichment(cc as { [key: string]: unknown })
-                )
-              })
+                );
+              });
             }
-          })
-          const dataAsDataProperties = this._mapDataToDataProperty(retList)
+          });
+          const dataAsDataProperties = this._mapDataToDataProperty(retList);
           return {
             data: response,
             enriched_chemical_class_list: retList,
@@ -661,9 +670,9 @@ export class RampService {
                 ? response.function_call[0]
                 : undefined,
             },
-          } as RampChemicalEnrichmentResponse
+          } as RampChemicalEnrichmentResponse;
         })
-      )
+      );
   }
 
   filterMetaboliteEnrichment(
@@ -682,16 +691,16 @@ export class RampService {
       )
       .pipe(
         map((response: RampChemicalEnrichmentAPIResponse) => {
-          const retList: ChemicalEnrichment[] = []
-          ;[...Object.values(response.data)].forEach((val: unknown[]) => {
+          const retList: ChemicalEnrichment[] = [];
+          [...Object.values(response.data)].forEach((val: unknown[]) => {
             return val.forEach((cc: unknown) => {
               if (cc != 'chemical_class_enrichment')
                 retList.push(
                   new ChemicalEnrichment(cc as { [key: string]: unknown })
-                )
-            })
-          })
-          const dataAsDataProperties = this._mapDataToDataProperty(retList)
+                );
+            });
+          });
+          const dataAsDataProperties = this._mapDataToDataProperty(retList);
           return {
             data: response.data,
             enriched_chemical_class_list: retList,
@@ -701,16 +710,16 @@ export class RampService {
                 ? response.function_call[0]
                 : undefined,
             },
-          } as RampChemicalEnrichmentResponse
+          } as RampChemicalEnrichmentResponse;
         })
-      )
+      );
   }
 
   fetchEnrichmentFromMetabolitesFile(data: ChemicalEnrichment[]) {
     this._downloadFile(
       this._makeBlob(this._toTSV(data)),
       'fetchEnrichmentFromMetabolites-download.tsv'
-    )
+    );
   }
 
   fetchEnrichmentFromPathways(
@@ -718,13 +727,13 @@ export class RampService {
     background?: string,
     backgroundFile?: File
   ): Observable<RampPathwayEnrichmentResponse> {
-    const formData = new FormData()
-    formData.set('analytes', JSON.stringify(analytes))
+    const formData = new FormData();
+    formData.set('analytes', JSON.stringify(analytes));
     if (background) {
-      formData.set('background', JSON.stringify([background]))
+      formData.set('background', JSON.stringify([background]));
     }
     if (backgroundFile) {
-      formData.set('file', backgroundFile, backgroundFile.name)
+      formData.set('file', backgroundFile, backgroundFile.name);
     }
     return this.http
       .post<RampPathwayEnrichmentAPIResponse>(
@@ -735,7 +744,7 @@ export class RampService {
         map((response: RampPathwayEnrichmentAPIResponse) =>
           this._makeRampPathwayEnrichmentResponse(response)
         )
-      )
+      );
   }
 
   filterPathwayEnrichment(
@@ -756,7 +765,7 @@ export class RampService {
         map((response: RampPathwayEnrichmentAPIResponse) =>
           this._makeRampPathwayEnrichmentResponse(response)
         )
-      )
+      );
   }
 
   getClusteredData(
@@ -778,7 +787,7 @@ export class RampService {
         minPathwayToCluster,
         percPathwayOverlap
       ),
-    })
+    });
   }
 
   clusterPathwayEnrichment(
@@ -801,7 +810,7 @@ export class RampService {
         map((response: RampPathwayEnrichmentAPIResponse) =>
           this._makeRampPathwayEnrichmentResponse(response)
         )
-      )
+      );
   }
 
   fetchClusterPlot(
@@ -811,7 +820,7 @@ export class RampService {
     percPathwayOverlap?: number
   ): Observable<string> {
     if (!dataframe.fishresults || dataframe.fishresults.length >= 105) {
-      return of(<string>'')
+      return of(<string>'');
     } else {
       const body = {
         fishers_results: dataframe,
@@ -820,14 +829,14 @@ export class RampService {
         minPathwayToCluster: minPathwayToCluster,
         percPathwayOverlap: percPathwayOverlap,
         filename: Date.now() + '.svg',
-      }
+      };
       return this.http
         .post(`${this.url}cluster-plot`, body, HTTP_TEXT_OPTIONS)
         .pipe(
           map((response: unknown) => {
-            return <string>response
+            return <string>response;
           })
-        )
+        );
     }
   }
 
@@ -835,22 +844,22 @@ export class RampService {
     this._downloadFile(
       this._makeBlob([data], 'image/svg+xml'),
       'fetchClusterImageFile-download.svg'
-    )
+    );
   }
 
   private _mapDataToDataProperty<T extends RampDataGeneric>(
     data: T[]
   ): { [p: string]: DataProperty }[] {
     return data.map((obj: T) => {
-      const newObj: { [key: string]: DataProperty } = {}
+      const newObj: { [key: string]: DataProperty } = {};
       Object.entries(obj).map((value: string[]) => {
         newObj[value[0]] = new DataProperty({
           label: value[0],
           value: value[1],
-        })
-      })
-      return newObj
-    })
+        });
+      });
+      return newObj;
+    });
   }
 
   _makeRampResponse<T extends RampDataGeneric>(
@@ -861,10 +870,10 @@ export class RampService {
   ) {
     const matches = Array.from(
       new Set(dataList.map((data) => data.id.toLocaleLowerCase()))
-    )
+    );
     const noMatches = inputList.filter(
       (p: string) => !matches.includes(p.toLocaleLowerCase())
-    )
+    );
     return {
       data: dataList,
       query: {
@@ -875,7 +884,7 @@ export class RampService {
       },
       plot: plot,
       dataAsDataProperty: this._mapDataToDataProperty(dataList),
-    } as RampResponse<T>
+    } as RampResponse<T>;
   }
 
   _makeRampPathwayEnrichmentResponse(
@@ -883,12 +892,14 @@ export class RampService {
   ) {
     const enrichedPathwayList = apiResponse.data.fishresults.map(
       (obj: Partial<FisherResult>) => new FisherResult(obj)
-    )
+    );
 
     const matches = Array.from(
-      new Set(enrichedPathwayList.map((data) => data.pathwayId.toLocaleLowerCase()))
-    )
- /*   const noMatches = inputList.filter(
+      new Set(
+        enrichedPathwayList.map((data) => data.pathwayId.toLocaleLowerCase())
+      )
+    );
+    /*   const noMatches = inputList.filter(
       (p: string) => !matches.includes(p.toLocaleLowerCase())
     )*/
 
@@ -900,56 +911,56 @@ export class RampService {
         functionCall: apiResponse.function_call
           ? apiResponse.function_call[0]
           : undefined,
-        matches: matches.length
+        matches: matches.length,
       },
       dataAsDataProperty: this._mapDataToDataProperty(enrichedPathwayList),
-    } as RampPathwayEnrichmentResponse
+    } as RampPathwayEnrichmentResponse;
   }
 
   private _toTSV<T extends RampDataGeneric>(data: unknown[]): string[] {
-    const headings: string = Object.keys(data[0] as string[]).join('\t')
+    const headings: string = Object.keys(data[0] as string[]).join('\t');
     const rows: string[] = <string[]>(<unknown>data
       .reduce(
         (acc: string[], c: unknown) => {
-          const vals = Object.values(c as T)
-          const row = vals.join('\t')
-          return acc.concat(row)
+          const vals = Object.values(c as T);
+          const row = vals.join('\t');
+          return acc.concat(row);
         },
         [headings]
       )
-      .join('\n'))
-    return rows
+      .join('\n'));
+    return rows;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: ErrorEvent): Observable<T> => {
-      console.log(`${operation} failed: ${error.message}`)
-      return of(result as T)
-    }
+      console.log(`${operation} failed: ${error.message}`);
+      return of(result as T);
+    };
   }
 
   _setUrl(url: string): void {
-    this.url = url
+    this.url = url;
   }
 
   _setRendererUrl(url: string): void {
-    this.renderUrl = url
+    this.renderUrl = url;
   }
 
   private _makeBlob(data: string[], type = 'text/tsv'): Blob {
-    return new Blob([...data], { type: type })
+    return new Blob([...data], { type: type });
   }
 
   private _downloadFile(blob: Blob, name: string) {
-    const link = this.dom.createElement('a')
+    const link = this.dom.createElement('a');
     if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob)
-      link.setAttribute('href', url)
-      link.setAttribute('download', `${name}`)
-      link.style.visibility = 'hidden'
-      this.dom.body.appendChild(link)
-      link.click()
-      this.dom.body.removeChild(link)
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${name}`);
+      link.style.visibility = 'hidden';
+      this.dom.body.appendChild(link);
+      link.click();
+      this.dom.body.removeChild(link);
     }
   }
 }

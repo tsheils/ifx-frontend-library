@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'neo4j-introspection',
   preset: '../../jest.preset.js',
@@ -8,4 +7,4 @@ export default {
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/neo4j-introspection',
-}
+};

@@ -1,4 +1,4 @@
-const nxPreset = require('@nx/jest/preset').default
+const nxPreset = require('@nx/jest/preset').default;
 
 module.exports = {
   ...nxPreset,
@@ -13,6 +13,6 @@ module.exports = {
     d3: 'node_modules/d3/dist/d3.min.js',
   },
   async setup() {
-    await super.setup()
+    await super.setup();
   },
-}
+};

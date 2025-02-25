@@ -1,6 +1,6 @@
-import { User } from '@ncats-frontend-library/models/utils'
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity'
-import { createReducer, on, Action } from '@ngrx/store'
+import { User } from '@ncats-frontend-library/models/utils';
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, on, Action } from '@ngrx/store';
 import {
   LoginEmailUserActions,
   LoginLinkActions,
@@ -9,29 +9,29 @@ import {
   ResetPasswordEmailActions,
   UpdateUserActions,
   UserLoginActions,
-} from './users.actions'
+} from './users.actions';
 
-export const USERS_FEATURE_KEY = 'user'
+export const USERS_FEATURE_KEY = 'user';
 
 export interface UserState extends EntityState<User> {
-  selectedId?: string | number // which Users record has been selected
-  loaded: boolean // has the Users list been loaded
-  error?: string | null // last known error (if any)
-  email?: string | null
+  selectedId?: string | number; // which Users record has been selected
+  loaded: boolean; // has the Users list been loaded
+  error?: string | null; // last known error (if any)
+  email?: string | null;
 }
 
 export interface UsersPartialState {
-  readonly [USERS_FEATURE_KEY]: UserState
+  readonly [USERS_FEATURE_KEY]: UserState;
 }
 
 export const usersAdapter: EntityAdapter<User> = createEntityAdapter<User>({
   selectId: (user) => user.uid,
-})
+});
 
 export const initialState: UserState = usersAdapter.getInitialState({
   // set initial required properties
   loaded: false,
-})
+});
 
 const reducer = createReducer(
   initialState,
@@ -50,14 +50,14 @@ const reducer = createReducer(
       })
   ),
   on(ResetPasswordEmailActions.resetPasswordEmailSuccess, (state) => {
-    return { ...state, email: 'reset' }
+    return { ...state, email: 'reset' };
   }),
   on(LoginLinkActions.loginLinkUserSuccess, (state, { email }) => ({
     ...state,
     email: email,
   })),
   on(UserLoginActions.logoutUserSuccess, (state) => {
-    return usersAdapter.removeAll(state)
+    return usersAdapter.removeAll(state);
   }),
 
   on(
@@ -69,8 +69,8 @@ const reducer = createReducer(
     LoginLinkActions.loginLinkUserFailure,
     (state, { error }) => ({ ...state, error })
   )
-)
+);
 
 export function usersReducer(state: UserState | undefined, action: Action) {
-  return reducer(state, action)
+  return reducer(state, action);
 }
