@@ -62,7 +62,7 @@ export class GenericChartComponent {
       )
   );
 
-  dataSignal = input<FilterCategory>();
+  dataSignal = input<FilterCategory>({} as FilterCategory);
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];
@@ -73,5 +73,13 @@ export class GenericChartComponent {
       mainHeight = 500;
     }
     return mainHeight + this.margins().top + this.margins().bottom;
+  }
+
+  getWidth() {
+    let mainWidth = this.chartElement()!.nativeElement.offsetWidth;
+    if (!mainWidth) {
+      mainWidth = 500;
+    }
+    return mainWidth + this.margins().left + this.margins().right;
   }
 }

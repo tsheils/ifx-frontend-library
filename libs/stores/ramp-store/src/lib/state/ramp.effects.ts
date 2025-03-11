@@ -137,6 +137,7 @@ export const loadApi$ = createEffect(
                             ...path['post'],
                             title: title,
                             subtitle: subsection,
+                            filter: true,
                             pageDescription: tag.description,
                           })
                         );

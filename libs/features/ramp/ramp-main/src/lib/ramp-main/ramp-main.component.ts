@@ -54,35 +54,28 @@ export class RampMainComponent {
   title = computed(() => this.fragment()?.replace(/-/g, ' '));
 
   filtersMap = computed(() => {
-    const questionMap: Map<string, QuestionBase<string>[]> = new Map<
+    const filterMap: Map<string, FormSubsection[]> = new Map<
       string,
-      QuestionBase<string>[]
+      FormSubsection[]
     >();
-    /*
-    Array.from(this.inputMap().entries()).forEach(([key, value]) => {
-      const prop = value.properties.filter((prop) => (prop['field'] = key))[0];
-      if (prop['filter']) {
-        if (this.inputFields().has(<string>prop['parent'])) {
-          const form: QuestionBase<string>[] = this.inputFields().get(
-            <string>prop['parent'],
-          ) as QuestionBase<string>[];
-          const filters = form.filter(
-            (question) => question.key === <string>prop['field'],
-          )[0];
-          if (filters) {
-            const filterList = questionMap.get(<string>prop['parent']);
-            if (filterList) {
-              filterList.push(filters);
-              questionMap.set(<string>prop['parent'], filterList);
+    const pathsValue = this.paths();
+    if (pathsValue) {
+      const separatedPaths = this._separateInputTabs(pathsValue);
+      separatedPaths.forEach((inputTab, formKey) => {
+        const filteredInputTab = inputTab.filter((tab) => tab.filter)
+        filteredInputTab.forEach((parsedPath) => {
+            const mappedSubform = this._pathToQuestionObject(parsedPath);
+            if (filterMap.has(formKey)) {
+              const tabQuestionsList = filterMap.get(formKey) as FormSubsection[];
+              tabQuestionsList.push(mappedSubform);
+              filterMap.set(formKey, tabQuestionsList);
             } else {
-              questionMap.set(<string>prop['parent'], [filters]);
+              filterMap.set(formKey, [mappedSubform]);
             }
-          }
-        }
-      }
-    });
-*/
-    return questionMap;
+        });
+      });
+    }
+    return filterMap;
   });
 
   inputMap = computed(() => {

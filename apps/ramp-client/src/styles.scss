@@ -70,6 +70,16 @@ a {
   );
 }
 
+.ramp-body {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
+}
+.navigation-menu-panel {
+  @include mat.sidenav-overrides((
+    container-background-color: mat.get-theme-color(theme.$light-theme, surface-dim),
+    container-shape: square,
+  ));
+}
+
 .main {
   display: flex;
   min-height: 100vh;
@@ -173,6 +183,10 @@ a {
 }
 
 .page-content {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-container);
+}
+
+.ramp-main-page {
   background-color: mat.get-theme-color(theme.$light-theme, surface-container);
 }
 
@@ -317,8 +331,6 @@ a {
 
 .navigation-menu-panel {
   width: 25%;
-  position: fixed !important;
-  top: calc(60px + 17vh) !important;
 }
 
 .banner-title {

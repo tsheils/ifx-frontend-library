@@ -227,9 +227,6 @@
       ],
       "tree-chart": ["libs/shared/utils/charts/tree-chart/src/index.ts"],
       "upset-chart": ["libs/shared/utils/charts/upset-chart/src/index.ts"],
-      "utils-animated-force-directed-graph": [
-        "libs/shared/utils/charts/animated-force-directed-graph/src/index.ts"
-      ],
       "utils-force-directed-graph": [
         "libs/shared/utils/charts/force-directed-graph/src/index.ts"
       ],

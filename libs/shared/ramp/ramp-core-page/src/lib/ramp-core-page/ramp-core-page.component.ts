@@ -54,7 +54,7 @@ export class RampCorePageComponent {
   title = input<string>();
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, FormSubsection[]>>();
-  filtersMap = input<Map<string, QuestionBase<string>[]>>();
+  filtersMap = input<Map<string, FormSubsection[]>>();
   overviewMap = computed<{ [p: string]: QueryResultsData } | undefined>(
     () => undefined
   );
@@ -85,6 +85,10 @@ export class RampCorePageComponent {
             overviewMap:
               this.overviewMap() && this.overviewMap()![<string>tabString]
                 ? this.overviewMap()![<string>tabString]
+                : undefined,
+            filterMap:
+              this.filtersMap() && this.filtersMap()!.has(<string>tabString)
+                ? this.filtersMap()!.get(<string>tabString)
                 : undefined,
             visualizationsMap:
               this.visualizationsMap() &&

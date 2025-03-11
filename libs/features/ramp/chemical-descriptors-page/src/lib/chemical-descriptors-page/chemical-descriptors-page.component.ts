@@ -213,7 +213,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
             data: chemicalClassesData,
             fields: this.classesColumns,
             fileName: 'fetchChemicalClass-download.tsv',
-            filters: this.filtersMap(),
+            //filters: this.filtersMap(),
             loaded: !!chemicalClassesData,
           });
         }
@@ -227,7 +227,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
             data: chemicalEnrichmentData,
             fields: this.enrichmentColumns,
             fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
-            filters: this.filtersMap(),
+            //filters: this.filtersMap(),
             loaded: !!chemicalEnrichmentData,
           });
         }

@@ -12,7 +12,6 @@ import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
 import { OpenApiPath } from '@ncats-frontend-library/models/utils';
-import { QuestionBase } from 'ncats-form-question';
 import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 
@@ -38,7 +37,7 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   title = input<string>();
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, FormSubsection[]>>();
-  filterMap = input<Map<string, QuestionBase<string>[]>>();
+  filterMap = input<Map<string,  FormSubsection[]>>();
   loadedTracker = computed(() => {
     return {
       resultsLoaded: false,

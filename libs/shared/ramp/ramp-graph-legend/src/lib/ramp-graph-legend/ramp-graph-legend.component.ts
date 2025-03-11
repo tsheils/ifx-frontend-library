@@ -22,6 +22,7 @@ export const GRAPH_LEGEND = new InjectionToken<string>(
   templateUrl: './ramp-graph-legend.component.html',
   styleUrl: './ramp-graph-legend.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true
 })
 export class RampGraphLegendComponent implements OnInit {
   forceDirectedGraphService = inject(ForceDirectedGraphService);

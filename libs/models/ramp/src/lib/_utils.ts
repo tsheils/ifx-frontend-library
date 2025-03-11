@@ -17,6 +17,7 @@ export class RampDataGeneric {
 
 export class RampPage {
   inputMap?: FormSubsection[];
+  filterMap?: FormSubsection[];
   overviewMap?: QueryResultsData;
   visualizationsMap?: Map<string, VisualizationMap[]>;
   dataMap?: Map<string, DataMap>;
