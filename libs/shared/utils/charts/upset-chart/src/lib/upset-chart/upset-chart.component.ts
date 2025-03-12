@@ -53,13 +53,14 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     let intersectionScale;
     if (this.scale() === 'log') {
       intersectionScale = scaleLog()
-        .domain([1, this._getMax()])
+        .domain([1, this._getMax()]).nice()
         .range([this.topRowHeight(), 0]);
     } else {
       intersectionScale = scaleLinear()
-        .domain([0, this._getMax()])
+        .domain([0, this._getMax()]).nice()
         .range([this.topRowHeight(), 0]);
     }
+    console.log(intersectionScale)
     return intersectionScale;
   });
 
@@ -154,7 +155,9 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .attr(
           'transform',
           `translate(${this.leftColWidth()}, 0)`
-        );
+        )
+
+         ;
 
       const bottomRow = svg
         .append('svg:g')
@@ -391,12 +394,14 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .classed('intersection-size-scale', true)
         .call(
           axisLeft(this.intersectionSizeScale())
-            .scale(this.intersectionSizeScale())
+           .scale(this.intersectionSizeScale())
             .tickFormat((d, i) => {
-              return (i % 5 === 0 && format(',d')(Number(d))) || '';
+              const divisor = this.scale() === 'log' ? 5 : 2
+              return (i % divisor === 0 && format(',d')(Number(d))) || '';
             })
             .tickSize(5)
         )
+        .attr("height", this.topRowHeight())
         chart
         .append('g')
         .classed('intersection-size-label', true)
@@ -519,12 +524,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       const combinationMatrix =
         bottomRowRightColumn.append('svg:g')
           .classed('combination-matrix', true)
-          /*.attr(
-            'transform',
-            `translate(${this.leftColWidth()}, ${
-              this.topRowHeight()
-            })`
-          )*/
 
        combinationMatrix.selectAll('.combination')
          .data(this.chartData()!.data)
