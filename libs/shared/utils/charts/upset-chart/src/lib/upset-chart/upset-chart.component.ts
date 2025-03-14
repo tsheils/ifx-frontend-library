@@ -149,9 +149,17 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               `translate(0, ${this.topRowHeight()-this.margins().top + this.margins().bottom})`
             );
 
+        const scrollHolder =
+          topRow.append("div")
+            .style("overflow-x", "scroll")
+            .style("-webkit-overflow-scrolling", "touch");
+
          topRow.append('svg:g')
         .attr('id', 'top-row-right-column')
         .classed('top-row-right-column', true)
+           .attr("width", this.getWidth())
+           .attr("height", this.height())
+           .style("display", "block")
         .attr(
           'transform',
           `translate(${this.leftColWidth()}, 0)`
