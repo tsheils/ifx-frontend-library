@@ -7,7 +7,6 @@ export class DataMap {
   fields!: DataProperty[];
   dataframe?: unknown[];
   fileName?: string;
-  filters?: Map<string, QuestionBase<string>[]>;
   loaded? = false;
 }
 

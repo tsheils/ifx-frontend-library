@@ -1,13 +1,10 @@
-.about-page {
-  margin-top: 60px;
-}
+
 
 .toc-wrapper {
   padding-left: 0.2vw;
 }
 
 .navigation-menu-panel {
-  top: calc(60px + 1vh) !important;
 }
 
 .ramp-list {
@@ -78,9 +75,19 @@
 .upset-holder {
   display: block;
   height: 45vh;
-  width: 100%;
+  max-width: 60vw;
+  overflow-x: auto;
 }
 
 .metabolite-upset {
-  height: 55vh;
+  height: 65vh;
+}
+
+
+.upset{
+  padding-top: 10vh;
+  padding-bottom: 20vh;
+  padding-left:10vw;
+  height: 65vh;
+  width:60vw;
 }

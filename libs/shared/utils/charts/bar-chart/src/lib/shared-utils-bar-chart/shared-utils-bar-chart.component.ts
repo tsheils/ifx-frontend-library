@@ -6,14 +6,11 @@ import {
   Component,
   computed,
   HostListener,
-  input,
-  Input,
   OnChanges,
   OnInit,
-  output,
   ViewEncapsulation,
 } from '@angular/core';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter } from '@ncats-frontend-library/models/utils';
 import {
   axisBottom,
   axisLeft,
@@ -33,7 +30,6 @@ import { scaleLinear } from 'd3-scale';
 import { select, Selection } from 'd3-selection';
 import { Series, Stack } from 'd3-shape';
 import { GenericChartComponent } from 'generic-chart';
-import { ImageDownloadComponent } from 'image-download';
 
 interface ChartPoint extends SeriesPoint<{ [key: string]: number }> {
   key?: string;
@@ -58,10 +54,8 @@ export class SharedUtilsBarChartComponent
     )}.webp`;
   });
 
-  // override dataSignal = input<FilterCategory>();
-  // readonly clickElement = output<Filter>();
   bars!: unknown;
-  series!: Stack<never, { [key: string]: number }, string>;
+  series!: Series<unknown, unknown>//Stack<never, { [key: string]: number }, string>;
   xScale!: ScaleBand<string>;
   yScale!: ScaleLinear<number, number, never>;
 
@@ -122,15 +116,16 @@ export class SharedUtilsBarChartComponent
     ) as InternMap;
     this.series = (<unknown>stack()
       .keys(union(this.dataSignal().values.map((d) => d.label))) // distinct series keys, in input order
-      .value((D: [string, InternMap<string, Filter>], key: string) => {
-        const dKey = D[1].get(key);
+      .value((D, key: string) => {
+     //   const dataMap = D[1] as Map<string, Filter>
+        const dKey: Filter = D[1].get(key);
         if (dKey) {
-          return dKey.count;
+          return <number>dKey.count;
         } else return 0;
       })(
       // get value for each series key and stack
       seriesIndex as Iterable<{ [key: string]: number }>
-    )) as Stack<never, { [key: string]: number }, string>; // group by stack then series key
+    )) as Series<unknown, unknown>//as Stack<never, { [key: string]: number }, string>; // group by stack then series key
     // Prepare the scales for positional and color encodings.
     this.xScale = scaleBand()
       .domain(this.keys)
@@ -247,8 +242,7 @@ export class SharedUtilsBarChartComponent
       undefined
     > = this.tooltip
       .selectAll('text')
-      // eslint-disable-next-line no-sparse-arrays
-      .data([,])
+      .data([undefined,])
       .join('text')
       .call((text) =>
         text
@@ -272,8 +266,8 @@ export class SharedUtilsBarChartComponent
     path: Selection<BaseType | SVGPathElement, undefined, null, undefined>
   ) {
     if (text.node()) {
-      //@ts-expect-error dumb
-      const { x, y, width: w, height: h } = text.node().getBBox();
+      const node = text.node() as SVGGraphicsElement
+      const { y, width: w, height: h } = node.getBBox();
       text.attr('transform', `translate(${-w / 2},${15 - y})`);
       path.attr(
         'd',

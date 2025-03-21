@@ -319,7 +319,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             data: enrichedPathwaysData,
             fields: this.computedDataColumns(),
             fileName: 'fetchEnrichedPathwaysFromAnalytes-download.tsv',
-            filters: this.filtersMap(),
+            dataframe: this.enrichedPathways()?.data,
             loaded: !!enrichedPathwaysData,
           });
         }
@@ -501,4 +501,5 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       }
     }
   }
+
 }

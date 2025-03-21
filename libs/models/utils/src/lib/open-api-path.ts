@@ -10,6 +10,7 @@ export class OpenApiPath {
   properties: { [key: string]: unknown }[] = [];
   content: unknown;
   hideSection = false;
+  filter = false;
 
   constructor(obj: { [key: string]: any }) {
     Object.assign(this, obj['requestBody']);
@@ -28,6 +29,10 @@ export class OpenApiPath {
 
     if (obj['title']) {
       this.title = <string>obj['title'];
+    }
+
+    if (obj['filter']) {
+      this.filter = <boolean>obj['filter'];
     }
 
     if (obj['subtitle']) {

@@ -22,7 +22,7 @@
       <div class="width-95">
         There were no matches for the following
         {{ results()!.inputType }}:
-        {{ results()!.noMatches!.join(', ') }}
+        {{ results()!.noMatches?.join(', ') }}
       </div>
     </div>
     } } @if (results()?.function) {

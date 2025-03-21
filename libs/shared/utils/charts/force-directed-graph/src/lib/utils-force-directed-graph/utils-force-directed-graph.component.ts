@@ -2,7 +2,6 @@
 // @ts-nocheck
 
 import {
-  CdkPortal,
   CdkPortalOutlet,
   ComponentPortal,
 } from '@angular/cdk/portal';
@@ -22,7 +21,7 @@ import {
   signal,
   Type,
   viewChild,
-  ViewEncapsulation,
+  ViewEncapsulation
 } from '@angular/core';
 import { GraphData, GraphNode } from '@ncats-frontend-library/models/utils';
 import {
@@ -91,7 +90,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .append('svg:svg')
       .attr('width', this.width())
       .attr('height', 750)
-      .attr('viewBox', [0, 0, this.width(), 750])
+      .attr('viewBox', [0, -375, this.width(), 750])
       .attr('style', 'max-width: 100%; height: auto;')
       .call(
         zoom()
@@ -193,7 +192,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
 
   allNodes = computed(() => selectAll('.dataNode'));
 
-  /*labels = computed(() =>
+  labels = computed(() =>
     this.gZoom()
       .append('g')
       .attr('pointer-events', 'none')
@@ -205,10 +204,9 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .classed('graph-label-text', true)
       .text((d) => d.id),
   );
-*/
-  ngAfterViewInit(): void {
-    this.simulation().restart();
 
+  ngOnInit(): void {
+    this.simulation().restart();
     if (this.graphChartService && this.graphChartService.customComponent) {
       const comp = this._injector.get<Type<unknown>>(
         this.graphChartService.customComponent
@@ -266,17 +264,17 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .transition()
       .duration(100);
 
-    /*    selectAll(this.labels())
+        selectAll(this.labels())
       .classed('hoveredLabel', (n) => nodes.includes(n.id))
       .transition()
-      .duration(100);*/
+      .duration(100);
 
     this.graphChartService.nodeHovered.emit(d as GraphNode);
   }
 
   hoveredOff(event, d) {
-    /*  select(event.target)
-       .attr('fill', d.color)*/
+      select(event.target)
+       .attr('fill', d.color)
     this.graphChartService.nodeHovered.emit(null);
   }
 
@@ -297,9 +295,9 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
     this.circleNode()
       .attr('cx', (d) => d.x)
       .attr('cy', (d) => d.y);
-    /*  this.labels()
+      this.labels()
       .attr('x', (d) => d.x + 10)
-      .attr('y', (d) => d.y + 10);*/
+      .attr('y', (d) => d.y + 10);
   }
 
   // Reheat the simulation when drag starts, and fix the subject position.

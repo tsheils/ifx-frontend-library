@@ -33,24 +33,23 @@ export class GenericChartComponent {
 
   chartElement =
     viewChild.required<ElementRef<HTMLInputElement>>('chartElement');
+
   width = computed(
-    () =>
-      this.chartElement()!.nativeElement?.offsetWidth -
-      this.margins().left -
-      this.margins().right
+    () => {
+      let mainWidth = this.chartElement()!.nativeElement.offsetWidth;
+      if (!mainWidth) {
+        mainWidth = 500;
+      }
+      return mainWidth + this.margins().left + this.margins().right;
+    }
   );
 
   height = computed(() => {
-    if (
-      this.chartElement() &&
-      this.chartElement()?.nativeElement.offsetHeight > 200
-    ) {
-      return (
-        this.chartElement()?.nativeElement.offsetHeight -
-        this.margins().top -
-        this.margins().bottom
-      );
-    } else return 500;
+    let mainHeight = this.chartElement()!.nativeElement.offsetHeight;
+    if (!mainHeight) {
+      mainHeight = 500;
+    }
+    return mainHeight;
   });
 
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
@@ -62,16 +61,9 @@ export class GenericChartComponent {
       )
   );
 
-  dataSignal = input<FilterCategory>();
+  dataSignal = input<FilterCategory>({} as FilterCategory);
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];
 
-  getHeight() {
-    let mainHeight = this.chartElement()!.nativeElement.offsetHeight;
-    if (!mainHeight) {
-      mainHeight = 500;
-    }
-    return mainHeight + this.margins().top + this.margins().bottom;
-  }
 }

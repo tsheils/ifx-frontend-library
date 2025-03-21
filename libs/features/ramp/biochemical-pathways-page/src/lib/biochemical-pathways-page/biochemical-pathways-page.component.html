@@ -15,6 +15,7 @@
       [inputTab]="mainTab.value.inputMap"
       [overviewTabs]="mainTab.value.overviewMap"
       [visualizationTabs]="mainTab.value.visualizationsMap"
+      [filterTab] = "mainTab.value.filterMap"
       [dataTabs]="mainTab.value.dataMap"
       (dataSearch)="fetchData($event, mainTab.key)"
     ></lib-panel-accordion>

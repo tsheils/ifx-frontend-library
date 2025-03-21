@@ -293,8 +293,8 @@ export class ReactionsPageComponent
           returnDataMap.set('Reaction Classes', {
             data: this.reactionClasses()?.dataAsDataProperty,
             fields: this.reactionClassColumns,
+            dataframe: this.reactionClasses()?.data,
             fileName: 'fetchreactionClassesFromAnalytes-download.tsv',
-            filters: this.filtersMap(),
             loaded: !!reactionClassesData,
           });
         }
@@ -306,8 +306,8 @@ export class ReactionsPageComponent
           returnDataMap.set('Common Reactions', {
             data: this.commonReactions()?.dataAsDataProperty,
             fields: this.dataColumns,
+            dataframe: this.commonReactions()?.data,
             fileName: 'fetchcommonReactionsFromAnalytes-download.tsv',
-            filters: this.filtersMap(),
             loaded: !!commonReactionsData,
           });
         }
@@ -320,8 +320,8 @@ export class ReactionsPageComponent
           returnDataMap.set('Reaction Class Enrichment', {
             data: this.reactionClassEnrichment()?.dataAsDataProperty,
             fields: this.reactionClassEnrichmentColumns,
+          //  dataframe: this.reactionClassEnrichment()?.data,
             fileName: 'reactionClassEnrichment-download.tsv',
-            filters: this.filtersMap(),
             loaded: !!reactionClassEnrichmentData,
           });
         }

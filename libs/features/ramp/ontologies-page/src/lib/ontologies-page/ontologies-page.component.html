@@ -1,6 +1,6 @@
-@let ontoFromMeta = _getMapField('ontologies-from-metabolites'); @let
-ontoEnrichment = _getMapField('ontology-enrichment'); @if (mainPageMap() &&
-mainPageMap().size){
+@let ontoFromMeta = _getMapField('ontologies-from-metabolites');
+@let ontoEnrichment = _getMapField('ontology-enrichment');
+@if (mainPageMap() && mainPageMap().size){
 <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
   <mat-tab [bodyClass]="'body-tabs'">
     <ng-template mat-tab-label> Ontologies from Metabolites </ng-template>
@@ -30,6 +30,7 @@ mainPageMap().size){
       [inputTab]="ontoEnrichment.inputMap"
       [overviewTabs]="ontoEnrichment.overviewMap"
       [visualizationTabs]="ontoEnrichment.visualizationsMap"
+      [filterTab] = "ontoEnrichment.filterMap"
       [dataTabs]="ontoEnrichment.dataMap"
       (dataSearch)="fetchData($event, 'ontology-enrichment')"
     ></lib-panel-accordion>
