@@ -314,7 +314,6 @@ export class ReactionsPageComponent
         break;
       }
       case 'reaction-class-enrichment': {
-        console.log(this.reactionClassEnrichment())
         const reactionClassEnrichmentData =
           this.reactionClassEnrichment()?.dataAsDataProperty;
         if (reactionClassEnrichmentData) {

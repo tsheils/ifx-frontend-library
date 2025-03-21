@@ -4,7 +4,6 @@
     class="navigation-menu-panel"
     [opened]="true"
     [mode]="'side'"
-    [fixedTopGap]="60"
   >
     <div class="toc-wrapper" cdkScrollable>
       <div class="toc">
@@ -384,54 +383,54 @@
           #summaryStatistics
           #scrollSection
         >
-          <div
+         <div
             class="section-header"
             [ngClass]="{ 'active-header': isActive('summaryStatistics') }"
           >
             Summary Statistics
           </div>
-          <div class="section-content">
-            <p>
-              Because RaMP draws from multiple sources, its information content
-              exceeds that of each individual resource. The following UpSet
-              plots highlight the common and unique metabolites and genes
-              covered for each resource.
-            </p>
-            @if(compoundsData() && compoundsData().data.length){
-            <div class="row">
-              <div class="width-90 width-sm-100">
-                <h3>Metabolite Overlap</h3>
-                <div class="upset-holder metabolite-upset">
-                  <lib-shared-utils-upset-chart
-                    [title]="'Metabolite Overlap'"
-                    [chartData]="compoundsData()"
-                    [scale]="'log'"
-                  >
-                  </lib-shared-utils-upset-chart>
+              <div class="section-content">
+                <p>
+                  Because RaMP draws from multiple sources, its information content
+                  exceeds that of each individual resource. The following UpSet
+                  plots highlight the common and unique metabolites and genes
+                  covered for each resource.
+                </p>
+                @if(compoundsData() && compoundsData().data.length){
+                <div class="row">
+                  <div class="width-90 width-sm-100">
+                    <h3>Metabolite Overlap</h3>
+                    <div class="upset-holder metabolite-upset">
+                      <lib-shared-utils-upset-chart
+                        [title]="'Metabolite Overlap'"
+                        [chartData]="compoundsData()"
+                        [scale]="'log'"
+                      >
+                      </lib-shared-utils-upset-chart>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            } @if(genesData() && genesData().data.length){
-            <div class="row">
-              <div class="width-75 width-md-90 width-sm-100">
-                <h3>Gene Overlap</h3>
-                <div class="upset-holder">
-                  @defer (on viewport) {
-                  <lib-shared-utils-upset-chart
-                    [title]="'Gene Overlap'"
-                    [chartData]="genesData()"
-                    scale="log"
-                  >
-                  </lib-shared-utils-upset-chart>
-                  } @placeholder (){
-                  <div class="upset-holder metabolite-upset"></div>
+                } @if(genesData() && genesData().data.length){
+                <div class="row">
+                  <div class="width-75 width-md-90 width-sm-100">
+                    <h3>Gene Overlap</h3>
+                    <div class="upset-holder">
+                      @defer (on viewport) {
+                      <lib-shared-utils-upset-chart
+                        [title]="'Gene Overlap'"
+                        [chartData]="genesData()"
+                        scale="log"
+                      >
+                      </lib-shared-utils-upset-chart>
+                      } @placeholder (){
+                      <div class="upset-holder metabolite-upset"></div>
 
-                  }
+                      }
+                    </div>
+                  </div>
                 </div>
+                }
               </div>
-            </div>
-            }
-          </div>
         </div>
         <div class="row" id="citation" #citation #scrollSection>
           <div

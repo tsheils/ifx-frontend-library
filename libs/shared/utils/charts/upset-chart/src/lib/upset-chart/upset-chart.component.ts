@@ -10,9 +10,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
-import { axisBottom, axisTop } from 'd3';
+import { axisBottom, min } from 'd3';
 import { GenericChartComponent } from 'generic-chart';
-import { select, selectAll } from 'd3-selection';
+import { select } from 'd3-selection';
 import { axisLeft } from 'd3-axis';
 import { scaleBand, scaleLinear, scaleLog } from 'd3-scale';
 import { format } from 'd3-format';
@@ -34,33 +34,29 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
 
   innerMargin = 10;
 
-  leftColWidth = computed(() => this.width() * 0.33);
-  rightColWidth = computed(
-    () => this.width() - this.leftColWidth() - this.innerMargin
-  );
+  leftColWidth = computed(() => this.width() * 0.4);
 
-  topRowHeight = computed(() => this.getHeight() * 0.7 - this.margins().top - this.margins().bottom);
+  topRowHeight = computed(() => this.height() * 0.6);
   bottomRowHeight = computed(
     () =>
-      this.getHeight() -
-      this.topRowHeight() -
-      this.innerMargin -
-      this.margins().bottom * 2
+      this.height() -
+      this.topRowHeight()
   );
+
+  minimumWidth = computed(()=> <number>this.chartData()?.data.length * 50)
 
   // scale for intersection bar height
   intersectionSizeScale = computed(() => {
     let intersectionScale;
     if (this.scale() === 'log') {
       intersectionScale = scaleLog()
-        .domain([1, this._getMax()]).nice()
+        .domain([1, this._getMax()])
         .range([this.topRowHeight(), 0]);
     } else {
       intersectionScale = scaleLinear()
         .domain([0, this._getMax()]).nice()
         .range([this.topRowHeight(), 0]);
     }
-    console.log(intersectionScale)
     return intersectionScale;
   });
 
@@ -70,6 +66,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     if (this.scale() === 'log') {
       setScale = scaleLog()
         .domain([
+          1,
           <number>(
             max(
               this.chartData()!.allSetIds,
@@ -78,9 +75,9 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               }
             )
           ),
-          1,
-        ])
-        .range([0, this.leftColWidth()*.70]);
+
+        ]).nice()
+        .range([0, this.leftColWidth()*.60])
     } else {
       setScale = scaleLinear()
         .domain([
@@ -94,7 +91,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             )
           ),
         ])
-        .range([0, this.leftColWidth()*.70]);
+        .range([0, this.leftColWidth()*.60]);
     }
     return setScale;
   });
@@ -103,7 +100,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   xScale = computed(() =>
     scaleBand()
       .domain(this.chartData()!.data.map((d) => d.id))
-      .range([0, this.rightColWidth()])
+      .range([0, <number>this.minimumWidth()])
       .paddingInner(0.2)
   );
 
@@ -112,98 +109,122 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     scaleBand()
       .domain(this.chartData()!.allSetIds.map((set) => set.id))
       .range([0, this.bottomRowHeight()])
-      .paddingInner(0.2)
+      .paddingInner(-1.5)
   );
 
   // Prepare the overall layout
   override svg = computed(() => {
-    if (this.chartElement()?.nativeElement) {
-      const svg = select(this.chartElement()!.nativeElement)
+    const svg = select(this.chartElement()!.nativeElement)
+    if (svg) {
+     const svg2 = svg
         .append('svg:svg')
         .attr('width', this.width())
-        .attr('height', this.getHeight())
-        .attr('viewBox', [0, 0, this.width(), this.getHeight()])
-        .attr('style', 'max-width: 100%; height: auto;')
+        .attr('height', this.height())
+        .attr('viewBox', [0, 0, this.width(), this.height()])
+        .style("position", "absolute")
+       .style("pointer-events", "none")
+       .style("z-index", 1)
 
-       const topRow = svg.append('svg:g')
-        .classed('top-row', true)
-         .attr(
-           'transform',
-           `translate(0, ${this.margins().top + this.margins().bottom})`
-         );
+        svg2.append('svg:rect')
+        .attr('width', this.leftColWidth())
+        .attr('height', this.height())
+        .classed("svg-rectangle-fill", true)
 
-        const tlc =  topRow.append('svg:g')
+        svg2.append("svg:g")
+          .classed('left-column', true)
+
+      const rightColumnHolder = svg
+        .append("div")
+        .style("overflow-x", "scroll")
+        .style("-webkit-overflow-scrolling", "touch")
+        .attr(
+          'transform',
+          `translate(${this.leftColWidth() - this.margins().left}, 0)`
+        );
+
+      const rc = rightColumnHolder
+        .append("svg:svg")
+        .attr("width", this.minimumWidth() + this.leftColWidth() + this.margins().left + this.margins().right)
+        .attr("height", this.height())
+        .style("display", "block")
+        .attr('viewBox', [0, 0, this.minimumWidth() + this.leftColWidth() + this.margins().left + this.margins().right, this.height()])
+        .append('svg:g')
+        .classed('right-column', true)
+        .attr(
+          'transform',
+          `translate(${this.leftColWidth() + this.margins().left}, ${this.margins().top})`
+        );
+
+      return svg
+    } else return undefined
+    })
+
+
+  staticSvg = computed(() => {
+      const leftColumn = this.svg()!.select('.left-column')
+      if (leftColumn) {
+      const tlc =  leftColumn
+        .append('svg:g')
         .classed('top-row-left-column', true)
 
-            tlc.append('svg:g')
-            .classed('intersection-size', true)
-            .attr(
-              'transform',
-              `translate(${this.leftColWidth()-this.margins().left}, 0)`
-            );
 
-        tlc.append('svg:g')
-            .classed('set-size', true)
-          .attr(
-              'transform',
-              `translate(0, ${this.topRowHeight()-this.margins().top + this.margins().bottom})`
-            );
-
-        const scrollHolder =
-          topRow.append("div")
-            .style("overflow-x", "scroll")
-            .style("-webkit-overflow-scrolling", "touch");
-
-         topRow.append('svg:g')
-        .attr('id', 'top-row-right-column')
-        .classed('top-row-right-column', true)
-           .attr("width", this.getWidth())
-           .attr("height", this.height())
-           .style("display", "block")
+      tlc.append('svg:g')
+        .classed('set-size', true)
         .attr(
           'transform',
-          `translate(${this.leftColWidth()}, 0)`
-        )
+          `translate(0, ${this.topRowHeight()})`
+        );
 
-         ;
-
-      const bottomRow = svg
-        .append('svg:g')
-        .classed('bottom-row', true)
-        .attr(
-          'transform',
-          `translate(0, ${this.topRowHeight() + ((this.margins().top + this.margins().bottom)*2)})`
-        )
-
-     const lc =  bottomRow.append('svg:g')
+      const lc =  leftColumn.append('svg:g')
         .classed('bottom-row-left-column', true)
-       .attr(
-         'transform',
-         `translate(0, -${this.margins().top + this.margins().bottom})`
-       );
+        .attr(
+          'transform',
+          `translate(0, ${this.topRowHeight() + this.margins().top})`
+        );
 
-       lc.append('svg:g')
+      lc.append('svg:g')
         .classed('set-size-chart', true)
+        .attr(
+          'transform',
+          `translate(${this.margins().left}, ${this.margins().top/2})`
+        );
       lc.append('svg:g')
         .classed('set-names', true)
         .attr(
           'transform',
-          `translate(${this.leftColWidth()*.70 - this.margins().right - this.margins().left}, 0)`
+          `translate(0, ${this.margins().top /2})`
         );
-      bottomRow.append('svg:g')
-        .classed('bottom-row-right-column', true)
-        .attr(
-          'transform',
-          `translate(${this.leftColWidth()}, 0)`
-        );
-      return svg
+      return leftColumn
     } else return undefined;
   });
 
+  scrollSvg = computed(() => {
+    const rightColumn = this.svg()!.select('.right-column')
+    if(rightColumn) {
+      rightColumn.append('svg:g')
+        .attr('id', 'top-row-right-column')
+        .classed('top-row-right-column', true)
+              .style("display", "block")
+        .attr(
+          'transform',
+          `translate(0, 0)`
+        );
+
+      rightColumn
+        .append('svg:g')
+        .classed('bottom-row-right-column', true)
+        .attr(
+          'transform',
+          `translate(0, ${this.topRowHeight() + this.margins().top + this.margins().bottom})`
+        )
+
+      return rightColumn
+    } else return undefined;
+  });
 
   setCountBarChart = computed(() => {
-    if (this.svg()) {
-      const setSizeChart = this.svg()!.select('.set-size-chart')
+    if (this.staticSvg()) {
+      const setSizeChart = this.staticSvg()!.select('.set-size-chart')
       const barChart = setSizeChart
         .append('svg:g')
         .classed('set-name-bar-chart', true)
@@ -214,30 +235,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         })
         .join((enter) => {
           const group = enter.append('g').classed('set-bar-group', true);
-          group
-            .append('text')
-            .classed('set-bar-labels', true)
-            .attr('text-anchor', (d) => (d.count < 0 ? 'end' : 'start'))
-            .attr('font-size', '1em')
-            .attr(
-              'x',
-              (d: { count: number; id: string }) => {
-                let ret = this.setSizeScale()(<number>d.count);
-                if (!ret) {
-                  ret = this.leftColWidth() * 0.6;
-                }
-
-                return this.leftColWidth() * 0.6 - ret
-              }
-            )
-            .attr('y', (d) => {
-              let ret = this.yCombinationScale()(d.id);
-              if (!ret) {
-                ret = 0;
-              }
-              return ret + ((this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1)) / 2) //+ this.innerMargin *2;
-            })
-            .text((d) => format(',d')(Number(d.count)));
           group
             .append('rect')
             .attr('class', 'bar')
@@ -250,7 +247,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             })
             .attr(
               'height',
-              this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1)
+              <number>min([20, <number>(this.bottomRowHeight() / this.chartData()!.allSetIds.length)])
             )
             .attr('x', (d) => {
               let ret = this.setSizeScale()(<number>d.count);
@@ -267,6 +264,30 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               }
               return ret;
             });
+          group
+            .append('text')
+            .classed('set-bar-labels', true)
+            .attr('text-anchor', 'end')
+            .attr('font-size', '.8em')
+            .attr(
+              'x',
+              (d: { count: number; id: string }) => {
+                let ret = this.setSizeScale()(<number>d.count);
+                if (!ret) {
+                  ret = this.leftColWidth() * 0.6
+                }
+
+                return this.leftColWidth() * 0.6 - ret
+              }
+            )
+            .attr('y', (d) => {
+              let ret = this.yCombinationScale()(d.id);
+              if (!ret) {
+                ret = 0;
+              }
+              return ret + (<number>min([20, <number>(this.bottomRowHeight() / this.chartData()!.allSetIds.length)])/2);
+            })
+            .text((d) => format(',d')(Number(d.count)));
 
            group
              .append('rect')
@@ -283,7 +304,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
              )
              .attr(
                'height',
-               this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1)
+               <number>min([20, <number>(this.bottomRowHeight() / this.chartData()!.allSetIds.length)])
              )
              .attr('x', (d) => {
                let ret = this.setSizeScale()(<number>d.count);
@@ -316,11 +337,12 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               .duration(300);
             this.rowHoveredOff();
           });
+          console.log(group)
           return group;
         });
 
 
-      const setNames = this.svg()!.select('.set-names')
+      const setNames = this.staticSvg()!.select('.set-names')
       setNames
         .append('svg:g')
         .classed('set-name-list', true)
@@ -330,20 +352,19 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           return chartData.allSetIds;
         })
         .join((enter) => {
-          console.log(enter)
           const group = enter.append('g').classed('set-name-group', true);
           group
             .append('text')
             .classed('set-name', true)
-            .attr('text-anchor', 'start')
+            .attr('text-anchor', 'end')
             .attr('font-size', '1em')
-            .attr('x', 0)
+            .attr('x', this.leftColWidth())
             .attr('y', (d) => {
               let ret = this.yCombinationScale()(d.id);
               if (!ret) {
                 ret = 0;
               }
-              return ret + ((this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1)) / 2) //+ this.innerMargin *2;
+              return ret + ((this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1)) / 2)
             })
             .text((d) => d.id);
           return group
@@ -351,34 +372,31 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
 
       const scaleCopy = this.setSizeScale().copy()
       scaleCopy.domain(scaleCopy.domain().reverse())
+
       const setSizeScale =
        setSizeChart
         .append('g')
         .classed('set-size-scale', true)
           .attr(
             'transform',
-            `translate(-${(this.leftColWidth()/10) - this.margins().left - this.margins().right}, 0)`
+            `translate(${this.innerMargin}, -${this.margins().top})`
           )
         .call(
-          axisTop(scaleCopy)
+          axisBottom(scaleCopy)
             .tickFormat((d, i) => {
-              return (i % 5 === 0 && format(',d')(Number(d))) || '';
+              const divisor = this.scale() === 'log' ? 10 : 2
+              return (i % divisor === 0 && format(',d')(Number(d))) || '';
             })
-            .tickSize(5)
-            .ticks(4)
         );
 
       setSizeChart.append('g')
         .classed('set-size-label', true)
         .attr(
           'transform',
-          () =>
-            ` translate(${
-              setSizeScale.node()!.getBBox().width -
-              this.leftColWidth() * 0.4
-            }, 0)`
+          `translate(${this.innerMargin}, -${this.margins().top + this.innerMargin})`
         )
         .append('text')
+
         .text(() => {
           if (this.chartData() && this.chartData()!.rowLabel) {
             return <string>this.chartData()!.rowLabel;
@@ -394,9 +412,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   });
 
   intersectionSizeChartScale = computed(() => {
-    if (this.svg()) {
-      const chart = this.svg()!.select('.intersection-size')
-      console.log(chart)
+    if (this.staticSvg()) {
+      const chart = this.staticSvg()!.select('.top-row-left-column')
       chart
       .append('g')
         .classed('intersection-size-scale', true)
@@ -410,19 +427,12 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             .tickSize(5)
         )
         .attr("height", this.topRowHeight())
-        chart
+        .attr('transform', `translate(${this.leftColWidth()}, ${this.margins().top})`)
+
+      chart
         .append('g')
         .classed('intersection-size-label', true)
-        .attr('transform', () => {
-          let chartScaleNodeBBox = 0;
-          const chartScaleNode = <unknown>chart.node() as SVGElement;
-          if (chartScaleNode && chartScaleNode.getBoundingClientRect()) {
-            chartScaleNodeBBox = chartScaleNode.getBoundingClientRect().width;
-          }
-          return ` translate( ${
-            -chartScaleNodeBBox - this.innerMargin * 2
-          }, ${this.topRowHeight()})`;
-        })
+        .attr('transform', () => ` translate( ${this.leftColWidth()-this.margins().left}, ${this.topRowHeight()})`)
         .append('text')
         .text(() => {
           if (this.chartData() && this.chartData()!.columnLabel) {
@@ -439,7 +449,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   });
 
   intersectionSizeChartBars = computed(() => {
-    const svg = this.svg()
+    const svg = this.scrollSvg()
     if(svg) {
       const topRowRightColumn = svg.select('.top-row-right-column')
         topRowRightColumn
@@ -496,7 +506,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               .attr('class', 'hover-column')
               .attr(
                 'height',
-                this.getHeight() - this.margins().top - this.margins().bottom
+                this.height()
               )
               .attr('width', this.xScale().bandwidth())
               .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
@@ -525,7 +535,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   });
 
   combinationMatrix = computed(() => {
-    const svg = this.svg()
+    const svg = this.scrollSvg()
     if(svg) {
       const bottomRowRightColumn = svg.select('.bottom-row-right-column')
 
@@ -553,10 +563,9 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
          .attr(
            'cy',
            (d) =>
-             (this.yCombinationScale()(<string>d.setId) as number) -
-             this.innerMargin
+             (this.yCombinationScale()(<string>d.setId) as number) - this.margins().top
          )
-         .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1)
+         .attr('r', () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1]))
 
       combinationMatrix.selectAll('.combination')
         .data(this.chartData()!.data)
@@ -572,7 +581,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
                     this.chartData()!.allSetIds[<number>d.connectorIndices[0]].id
                   )
                 )
-              ) - this.innerMargin
+              ) - this.margins().top
             );
           } else {
             return 0;
@@ -585,7 +594,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
                 this.yCombinationScale()(
                   <string>this.chartData()!.allSetIds[d.connectorIndices[1]].id
                 )
-              ) - this.innerMargin
+              ) - this.margins().top
             );
           } else {
             return 0;
@@ -601,10 +610,9 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .attr(
           'cy',
           (d) =>
-            (this.yCombinationScale()(<string>d.setId) as number) -
-            this.innerMargin
+            (this.yCombinationScale()(<string>d.setId) as number) -this.margins().top
         )
-        .attr('r', () => this.yCombinationScale().bandwidth() / 4 + 1);
+        .attr('r', () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1]))
 
 
 
@@ -629,7 +637,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.margins.set({ top: 20, bottom: 20, left: 5, right: 5 });
+    this.margins.set({ top: 20, bottom: 20, left: 30, right: 40 });
     if (this.isBrowser()) {
       if (this.chartData() && this.chartData()!.data.length > 0) {
         this.drawContainer();
@@ -638,14 +646,19 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   drawContainer(): void {
-    if (this.svg()) {
-      this.svg()!.select('svg').remove();
+    if (this.staticSvg()) {
+      this.staticSvg()!.select('svg').remove();
+    }
+    if (this.scrollSvg()) {
+      this.scrollSvg()!.select('svg').remove();
     }
     // computed signals aren't run unless they are called. This is a cheater method to call them and assign them.
     const svgObject = {
       chartElement: this.chartElement(),
-      height: this.getHeight(),
+      height: this.height(),
       svg: this.svg(),
+      scrollSvg: this.scrollSvg(),
+      staticSvg: this.staticSvg(),
       intersectionSizeChartBars: this.intersectionSizeChartBars(),
       intersectionSizeChartScale: this.intersectionSizeChartScale(),
       combinationMatrix: this.combinationMatrix(),
@@ -654,7 +667,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   rowHovered(setName: string) {
-    this.svg()!
+    this.scrollSvg()!
       .selectAll('.set-circle')
       .classed('hovered-circle', (datum) => {
         const r = datum as { setId: string };
@@ -665,7 +678,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   rowHoveredOff() {
-    this.svg()!.selectAll('.set-circle')
+    this.scrollSvg()!.selectAll('.set-circle')
       .classed('hovered-circle', false)
       .classed('hovered-row', false)
       .transition()
@@ -673,7 +686,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   columnHovered(d: UpsetData) {
-    this.svg()!.selectAll('.combination')
+    this.scrollSvg()!.selectAll('.combination')
       .classed('hovered', (datum) => {
         const r: UpsetData = datum as UpsetData;
         return d.id === r.id;
@@ -683,7 +696,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   columnHoveredOff() {
-    this.svg()!.selectAll('.combination')
+    this.scrollSvg()!.selectAll('.combination')
       .classed('hovered', false)
       .classed('hovered-row', false)
       .transition()
