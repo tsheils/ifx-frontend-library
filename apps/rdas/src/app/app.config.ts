@@ -28,6 +28,7 @@ import {
   withPreloading,
   withViewTransitions,
 } from '@angular/router';
+import { InMemoryCache } from '@apollo/client/core';
 import {
   ARTICLE_STORE_FEATURE_KEY,
   ArticleEffects,
@@ -63,10 +64,11 @@ import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideState, provideStore, Store } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
+import { provideApollo, provideNamedApollo } from 'apollo-angular';
+import { HttpLink } from 'apollo-angular/http';
 import { environment } from '../environments/environment';
 
 import { routes } from './app.routes';
-import { GraphQLModule } from './graphql.module';
 
 export function rdasInit(store = inject(Store)) {
   return () => {
@@ -119,12 +121,48 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    importProvidersFrom(GraphQLModule),
     provideAnimations(),
     provideAnimationsAsync(),
     provideRouterStore(),
     provideStoreDevtools(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideClientHydration(),
+    provideNamedApollo(() => {
+      const httpLink = inject(HttpLink);
+      return {
+        diseases: {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: `${environment.baseUrl}${
+              environment.production ? '/' : ':7687/'
+            }api/diseases`,
+          }),
+        },
+        articles: {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: `${environment.baseUrl}${
+              environment.production ? '/' : ':7690/'
+            }api/articles`,
+          }),
+        },
+        projects: {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: `${environment.baseUrl}${
+              environment.production ? '/' : ':7689/'
+            }api/projects`,
+          }),
+        },
+        trials: {
+          cache: new InMemoryCache(),
+          link: httpLink.create({
+            uri: `${environment.baseUrl}${
+              environment.production ? '/' : ':7688/'
+            }api/trials`,
+          }),
+        }
+      };
+    })
   ],
 };

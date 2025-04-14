@@ -1,10 +1,19 @@
 <div class="row space-between-row">
   <div class="width-75">
-    <span class="mat-card-title"> {{ latestGrant.title }}</span>
+    <span class="mat-card-title"> {{ grant()?.title }}</span>
   </div>
-  @if (grant.core_project_num) {
+  @if (grant()?.core_project_num) {
   <div class="mat-h3">
-    {{ grant.core_project_num }}
+    {{ grant()!.core_project_num }}
   </div>
   }
+</div>
+<div class="row">
+  <div class="width-25">
+    <span>Total Cost: {{ grant()?.rd_total_cost | currency: 'USD'}}</span>
+  </div>
+  <div class="width-25">
+    <span>Sub Projects: {{ grant()?.projectCount }}</span>
+  </div>
+
 </div>

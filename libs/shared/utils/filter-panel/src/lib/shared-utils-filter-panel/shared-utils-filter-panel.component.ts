@@ -50,6 +50,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 })
 export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   destroyRef = inject(DestroyRef);
+  showSearch = input(true)
   searchInput = viewChild<MatInput>(MatInput);
   cdkViewport = viewChild<CdkVirtualScrollViewport>(CdkVirtualScrollViewport);
   filter = input<FilterCategory>({} as FilterCategory);
@@ -114,18 +115,18 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   }
 
   scrollDetected() {
-    if (this.filter().page != 1) {
+    /*if (this.filter().page != 1) {
       if (this.range.end < this.filter().values.length / this.filter()!.page) {
         this.cdkViewport()!.scrollToIndex((this.filter()!.page - 1) * 200);
       }
-    }
+    }*/
   }
 
   loadMore() {
     this.loading = true;
     this.filterChange.emit({
       label: this.filter()!.label,
-      page: this.filter()!.page,
+      page: this.filter()!.page + 1,
     });
   }
   clearSearch() {

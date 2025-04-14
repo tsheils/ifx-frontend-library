@@ -28,7 +28,7 @@ export const fetchTrial$ = createEffect(
         (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
       ),
       mergeMap((params: { nctid?: string }) => {
-        TRIALDETAILSVARIABLES.ctwhere.NCTId = params.nctid;
+        TRIALDETAILSVARIABLES.ctfilters.NCTId_EQ = params.nctid;
         return trialService
           .fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
           .pipe(
@@ -57,13 +57,12 @@ export const fetchTrialList$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => {
-        return r.payload.routerState.url.startsWith('/disease');
+       return !r.payload.routerState.url.includes('/diseases') &&
+         r.payload.routerState.url.startsWith('/disease');
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        FETCHTRIALSVARIABLES.ctwhere.mappedToGardGards_SOME.GardId =
-          root.queryParams['id'];
-        FETCHTRIALSVARIABLES.ctfilters.mappedToGardGards_SOME.GardId =
+        FETCHTRIALSVARIABLES.gardWhere.GardId =
           root.queryParams['id'];
         if (root.fragment === 'trials') {
           _setTrialsOptions(root.queryParams);
@@ -72,16 +71,18 @@ export const fetchTrialList$ = createEffect(
           .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
           .pipe(
             map((trialsData: ApolloQueryResult<unknown>) => {
+              const trialsObj = trialsData.data as {
+                trialsData: [{
+                  clinicalTrials: ClinicalTrial[];
+                  count: { count: number };
+                  allCount: { count: number };
+                }]}
               const trials: {
                 clinicalTrials: ClinicalTrial[];
                 count: { count: number };
                 allCount: { count: number };
-              } = trialsData.data as {
-                clinicalTrials: ClinicalTrial[];
-                count: { count: number };
-                allCount: { count: number };
-              };
-              const trialsList = trials.clinicalTrials.map(
+              } = trialsObj.trialsData[0];
+              const trialsList = trials?.clinicalTrials?.map(
                 (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial)
               );
               if (trialsList) {
@@ -119,7 +120,7 @@ function _setTrialsOptions(options: {
     FETCHTRIALSVARIABLES.ctoptions.offset = 0;
   }
   if (options['GardId']) {
-    FETCHTRIALSVARIABLES.ctwhere.mappedToGardGards_SOME.GardId = <string>(
+    FETCHTRIALSVARIABLES.gardWhere.GardId = <string>(
       options['GardId']
     );
   }

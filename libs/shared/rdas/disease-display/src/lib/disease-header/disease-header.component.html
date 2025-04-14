@@ -1,12 +1,11 @@
 <div class="disease-header-section" [@shrinkOnScroll]="animationState()">
-  @defer (when disease()) {
   <div class="header-background">
     <img
       ngSrc="/assets/disease-display/graph-background-crop.webp"
       alt="disease header image"
       fill
       priority
-    />
+    /></div>
     <div class="disease-header">
       <div class="row space-around-row link-row">
         <div class="width-sm-95 width-75">
@@ -54,15 +53,4 @@
       </div>
       }
     </div>
-  </div>
-  } @placeholder {
-  <div class="header-background">
-    <img
-      ngSrc="/assets/disease-display/graph-background-crop.webp"
-      alt="disease header image"
-      fill
-      priority
-    />
-  </div>
-  }
 </div>

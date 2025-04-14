@@ -90,88 +90,73 @@ type Phenotype {
     )
 }
 
-type UserTesting {
-  Approved: Boolean!
-  LastApprovedRDAS: String!
+type Query {
+  treeParent: [JSON]
+  @cypher(
+    statement: """
+    match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
+    WITH COUNT(s) as childrenCount, l
+    WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
+    return collect(DISTINCT(parents)) as treeParents
+    """
+    columnName: "treeParents"
+  )
+}
+
+type Query {
+  treeBranch(searchString: String): [JSON]
+  @cypher(
+    statement: """
+    match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
+    WITH COUNT(s) as childrenCount, l
+    WITH {gardId: l.GardId, name: l.GardName, _childrenCount:childrenCount} as parents
+    match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
+    return {paths: collect(distinct(p)), nodes: collect(distinct(parents))} as data
+    """
+    columnName: "data"
+  )
+}
+
+
+type Query {
+  filteredDiseases(where: GARDWhere, limit: Int, offset: Int, sort: [GARDSort]): [GARD]
+  @cypher(
+    statement: """
+    Match (n:GARD)
+    MATCH (n)-[:associated_with_gene]->(g:Gene)
+    WHERE (g.GeneSymbol IN $where.associatedWithGeneGenes_SOME.GeneSymbol_IN OR $where.associatedWithGeneGenes_SOME.GeneSymbol_IN IS NULL)
+    OPTIONAL MATCH (n)-[:has_phenotype]->(p:Phenotype)
+    WHERE (p.HPOTerm IN $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN OR $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN IS NULL)
+    RETURN distinct(n) as retNode
+    """
+    columnName: "retNode"
+  )
+}
+
+type Query {
+  filteredDiseasesCount(where: GARDWhere): JSON
+  @cypher(
+    statement: """
+    Match (n:GARD)
+    MATCH (n)-[:associated_with_gene]->(g:Gene)
+    WHERE (g.GeneSymbol IN $where.associatedWithGeneGenes_SOME.GeneSymbol_IN OR $where.associatedWithGeneGenes_SOME.GeneSymbol_IN IS NULL)
+    OPTIONAL MATCH (n)-[:has_phenotype]->(p:Phenotype)
+    WHERE (p.HPOTerm IN $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN OR $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN IS NULL)
+    RETURN count(distinct(n)) as count
+    """
+    columnName: "count"
+  )
 }
 
 type Query {
   diseaseSearch(searchString: String, limit: Int): [GARD]
     @cypher(
       statement: """
-       CALL text_search.search("diseaseNode", $searchString)
-       YIELD node RETURN node AS node LIMIT $limit
+      MATCH(g:GARD)
+      WHERE (toUpper(g.GardName) CONTAINS toUpper($searchString) or $searchString is null)
+      return g as gard
       """
-      columnName: "node"
-    )
-}
-
-type Query {
-  treeParent: [JSON]
-    @cypher(
-      statement: """
-      match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
-      WITH COUNT(s) as childrenCount, l
-      WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
-      return collect(DISTINCT(parents)) as treeParents
-      """
-      columnName: "treeParents"
-    )
-}
-
-type Query {
-  treeBranch(searchString: String): [JSON]
-    @cypher(
-      statement: """
-      match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
-          WITH COUNT(s) as childrenCount, l
-      WITH {gardId: l.GardId, name: l.GardName, _childrenCount:childrenCount} as parents
-        match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
-         return {paths: collect(distinct(p)), nodes: collect(distinct(parents))} as data
-      """
-      columnName: "data"
-    )
-}
-
-type Query {
-  treeBranchNew(searchString: String): [JSON]
-    @cypher(
-      statement: """
-      MATCH (p:GARD {GardId: $searchString})
-      CALL apoc.path.spanningTree(p, {
-          relationshipFilter: "<subClassOf",
-          labelFilter: "GARD"
-      })
-      YIELD path
-      return {paths: collect(distinct(path)), nodes: collect(distinct(nodes(path)))} as data
-      """
-      columnName: "data"
-    )
-}
-
-type Query {
-  hierarchyDiseases(searchString: String, limit: Int, skip: Int): [GARD]
-    @cypher(
-      statement: """
-      match (d)-[*0..]->(e) WHERE e.GardId = $searchString
-      with distinct(d) as ds
-      SKIP $skip
-      LIMIT $limit
-      return ds as data
-      """
-      columnName: "data"
-    )
-}
-
-type Query {
-  hierarchyDiseasesCount(searchString: String, limit: Int, skip: Int): Int
-    @cypher(
-      statement: """
-      match (d)-[*0..]->(e) WHERE e.GardId = $searchString
-      with count(distinct d) as counts
-      return counts
-      """
-      columnName: "counts"
+      columnName: "gard"
     )
 }
 
@@ -185,6 +170,7 @@ type Query {
     @cypher(
       statement: """
       MATCH(n:Phenotype)-[]-(g:GARD)
+      WHERE (toUpper(n.HPOTerm) CONTAINS toUpper($term) or $term is null)
       WITH count(distinct(g)) as nCount, n
       with {term: n.HPOTerm, count: nCount } as ret
       ORDER BY ret.count DESC
@@ -232,9 +218,10 @@ type Query {
   geneSearch(skip: Int, limit: Int, term: String): [FilterCount]
     @cypher(
       statement: """
-      MATCH(gene:Gene)-[]-(g:GARD)
-      WITH count(distinct(g)) as nCount, gene
-      WITH {term: gene.GeneSymbol, count: nCount} as ret
+      MATCH(n:Gene)-[]-(g:GARD)
+      WHERE (toUpper(n.GeneSymbol) CONTAINS toUpper($term) or $term is null)
+      WITH count(distinct(g)) as nCount, n
+      with {term: n.GeneSymbol, count: nCount } as ret
       ORDER BY ret.count DESC
       SKIP $skip
       LIMIT $limit

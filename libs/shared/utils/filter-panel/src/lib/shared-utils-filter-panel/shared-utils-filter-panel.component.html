@@ -1,5 +1,6 @@
 <mat-card class="filter-card" [appearance]="'outlined'">
   <mat-card-title>{{ filter().label | titlecase }}</mat-card-title>
+@if(showSearch()) {
   <mat-form-field class="table-search">
     <input
       matInput
@@ -19,10 +20,11 @@
     </button>
     }
   </mat-form-field>
+}
   <div>
-    <ncats-frontend-library-loading-spinner
+  <!--  <ncats-frontend-library-loading-spinner
       [isLoaded]="!loading"
-    ></ncats-frontend-library-loading-spinner>
+    ></ncats-frontend-library-loading-spinner>-->
     <cdk-virtual-scroll-viewport
       appendOnly
       itemSize="10"
@@ -38,14 +40,12 @@
         class="filter-grid"
       >
         <div class="filter-cell checkbox">
-          <mat-checkbox
-            id="filter-checkbox"
+            <mat-checkbox
+            [id] = field.term
             (click)="$event.stopPropagation()"
-            aria-label="Select filter option"
+            [aria-label]= field.term
             (change)="$event ? filterSelection.toggle(field['term']) : null"
             [checked]="filterSelection.isSelected(field['term'])"
-            ><label class="hidden" for="filter-checkbox"
-              >Select filter option</label
             >
           </mat-checkbox>
         </div>

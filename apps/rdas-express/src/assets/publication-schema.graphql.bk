@@ -1,5 +1,3 @@
-scalar JSON
-extend schema @mutation(operations: [])
 
 type Article @node {
   abstractText: String
@@ -200,7 +198,6 @@ type Query {
     @cypher(
       statement: """
       match (d:GARD {GardId: $gardId})-[]-(a:Article)
-      WHERE a.publicationYear IS NOT NULL
       WITH a.publicationYear as year
       with count(year) as ct, year
       RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
@@ -235,16 +232,4 @@ type Query {
     )
 }
 
-type Query {
-  allCountsByYear: [FilterCount]
-  @cypher(
-    statement: """
-    match (a:Article)
-    WHERE (a)<-[:MENTIONED_IN]-(:GARD)
-    WITH a.publicationYear as year
-    with count(year) as ct, year
-    RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
-    """
-    columnName: "yearCounts"
-  )
-}
+

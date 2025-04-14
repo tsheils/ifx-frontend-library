@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, input, Input, ViewEncapsulation } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { CoreProject, Project } from '@ncats-frontend-library/models/rdas';
+import { CoreProject } from '@ncats-frontend-library/models/rdas';
 
 @Component({
   selector: 'ncats-frontend-library-project-list-card',
@@ -11,12 +11,6 @@ import { CoreProject, Project } from '@ncats-frontend-library/models/rdas';
   standalone: true,
   encapsulation: ViewEncapsulation.None,
 })
-export class ProjectListCardComponent implements OnInit {
-  @Input() grant!: CoreProject;
-  latestGrant!: Project;
-  ngOnInit(): void {
-    if (this.grant.projects && this.grant.projects.length > 0) {
-      this.latestGrant = this.grant.projects[0];
-    }
-  }
+export class ProjectListCardComponent {
+  grant=  input<CoreProject>();
 }

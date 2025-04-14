@@ -5,7 +5,6 @@ import {
   ALLARTICLES,
   Article,
   ARTICLEDETAILSVARIABLES,
-  ClinicalTrial,
   FETCHARTICLEDETAILS,
   FETCHARTICLESQUERY,
 } from '@ncats-frontend-library/models/rdas';
@@ -61,7 +60,8 @@ export const loadArticlesList$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => {
-        return r.payload.routerState.url.includes('/disease');
+       return !r.payload.routerState.url.includes('/diseases') &&
+         r.payload.routerState.url.includes('/disease');
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
@@ -69,6 +69,7 @@ export const loadArticlesList$ = createEffect(
         if (root.fragment === 'articles') {
           _setArticlesOptions(root.queryParams);
         }
+
         return articleService
           .fetchArticles(FETCHARTICLESQUERY, ALLARTICLES)
           .pipe(
@@ -77,7 +78,7 @@ export const loadArticlesList$ = createEffect(
                 articlesData: {
                   articlesList: Article[];
                   _count: { count: number };
-                  allCount: { count: number };
+                //  allCount: { count: number };
                   epiCount: { count: number };
                   nhsCount: { count: number };
                 }[];
@@ -89,10 +90,11 @@ export const loadArticlesList$ = createEffect(
               if (articlesList) {
                 return FetchArticlesListActions.fetchArticlesListSuccess({
                   articles: articlesList,
-                  allArticlesCount: data.allCount.count,
-                  articlesCount: data._count.count,
+                  //allArticlesCount: data.allCount.count,
+                  allArticlesCount: data._count.count,
+                 articlesCount: data._count.count,
                   epiArticlesCount: data.epiCount.count,
-                  nhsArticlesCount: data.nhsCount.count,
+                 nhsArticlesCount: data.nhsCount.count,
                 });
               } else
                 return FetchArticlesListActions.fetchArticlesListFailure({
