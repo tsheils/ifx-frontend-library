@@ -151,6 +151,7 @@ export class RampMainComponent {
           });
         } else if (prop['format']) {
           q = new FileUploadQuestion();
+          q.multiple = prop['multiple'] ? <boolean>prop['multiple'] : false
         } else {
           q = new TextboxQuestion({});
         }
@@ -188,7 +189,6 @@ export class RampMainComponent {
     if (prop['value']) {
       q.value = <string>prop['value'];
     }
-
     return q;
   }
 

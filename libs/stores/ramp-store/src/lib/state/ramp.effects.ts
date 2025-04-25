@@ -27,7 +27,7 @@ import {
 import {
   AnalyteFromPathwayActions,
   ClassesFromMetabolitesActions,
-  CommonReactionAnalyteActions,
+  CommonReactionAnalyteActions, IdentifierHarmonizationActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
   MetaboliteFromOntologyActions,
@@ -38,7 +38,7 @@ import {
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions,
+  ReactionsFromAnalytesActions
 } from './ramp.actions';
 import { RampService } from '../ramp.service';
 import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs';
@@ -1006,4 +1006,34 @@ export const fetchEnrichmentFromMetabolitesFile = createEffect(
     );
   },
   { functional: true, dispatch: false }
+);
+
+export const runIdentifierHarmonization = createEffect(
+  (actions$ = inject(Actions), rampService = inject(RampService)) => {
+    return actions$.pipe(
+      ofType(IdentifierHarmonizationActions.runIdentifierHarmonization),
+      exhaustMap((action) => {
+        return rampService
+          .runIdentifierHarmonization(action.files, action.manifest)
+          .pipe(
+            map(
+              (ret) => {
+                console.log(ret)
+                return IdentifierHarmonizationActions.runIdentifierHarmonizationSuccess(
+
+                );
+              },
+              catchError((error: ErrorEvent) =>
+                of(
+                  IdentifierHarmonizationActions.runIdentifierHarmonizationFailure(
+                    { error: error.message }
+                  )
+                )
+              )
+            )
+          );
+      })
+    );
+  },
+  { functional: true }
 );

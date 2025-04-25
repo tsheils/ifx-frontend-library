@@ -482,6 +482,11 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
         }
         const event = { ...this.previousValues, ...formData };
         this.store.dispatch(
+          PathwayEnrichmentsActions.fetchPathwaysFromAnalytes({
+            analytes: this.inputList,
+          })
+        );
+        this.store.dispatch(
           PathwayEnrichmentsActions.fetchEnrichmentFromPathways({
             analytes: this.inputList,
             background: <string>event['background'],

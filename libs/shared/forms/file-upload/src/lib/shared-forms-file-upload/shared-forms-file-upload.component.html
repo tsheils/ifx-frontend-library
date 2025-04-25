@@ -1,27 +1,27 @@
 <input
   type="file"
   class="file-input"
-  accept="text/tab-separated-values, .xlsx"
+  [multiple] = multiple()
+  accept="text/tab-separated-values, .xlsx, .csv"
   (change)="writeValue($event)"
   #fileUpload
 />
 <div class="file-upload">
-  @if (fileName()) {
-  <span>{{ fileName() }}</span
-  >&nbsp;
+  @if(files()){
+  @for(file of files(); track file.name; let idx = $index) {
+  <span>{{ file.name }} ({{file.size}})</span>
   <button
-    mat-mini-fab
-    color="accent"
-    class="upload-btn"
-    (click)="cancelUpload()"
+    mat-icon-button
+    class="cancel-btn"
+    (click)="removeFile(idx)"
   >
     <mat-icon>cancel</mat-icon>
-  </button>
+  </button> <br>
+  }
   } @else {
   <span class="mat-h4">Upload File</span> &nbsp;
   <button
     mat-mini-fab
-    color="accent"
     class="upload-btn"
     (click)="fileUpload.click()"
   >

@@ -1,4 +1,5 @@
 library(plumber)
+library(metLinkR)
 library(sqldf)
 library(config)
 library(R.cache)
@@ -9,6 +10,11 @@ library(svglite)
 ###########
 ########### Utils
 ###########
+
+require(parallel)
+available_cores <- parallel::detectCores()
+## For maximum speed, we reserve all cores minus one, so the machine can still perform some background tasks
+n_cores <- available_cores - 1
 
 
 rampDB <<- RaMP:::RaMP(branch='ramp3.0') # pre-load sqlite database to the container
@@ -844,6 +850,37 @@ function(metabolites = '', backgroundFile = '', background = '', backgroundType 
     )
   }
 
+
+#####
+#' Perform reaction class enrichment on given analytes
+#' @param inputFiles: [File]
+#' @param manifestFile: File
+#' @parser multi
+#' @parser text
+#' @parser json
+#' @post /api/metlinkr
+function(inputFiles = '', manifestFile) {
+  print(names(inputFiles))
+  d <- getwd()
+  path <- paste0(d,'/',names(manifestFile))
+  print(d)
+  print(path)
+  n_cores <- parallel::detectCores() - 1
+  metLinkR_output <- harmonizeInputSheets(inputcsv= path,
+                                          n_cores = n_cores,
+                                          mapping_library_format="both",
+                                          remove_parentheses_for_synonym_search = TRUE,
+                                          use_metabolon_parsers = TRUE,
+                                          majority_vote = TRUE)
+
+      print(metLinkR_output)
+  unlink(names[manifestFile])
+
+
+  return(
+    metLinkR_output
+  )
+}
 
 
 

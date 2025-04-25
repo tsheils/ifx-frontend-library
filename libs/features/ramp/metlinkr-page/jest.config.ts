@@ -1,9 +1,8 @@
-/* eslint-disable */
 export default {
-  displayName: 'shared-rdas-rdas-tree',
+  displayName: 'metlinkr-page',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/rdas/rdas-tree',
+  coverageDirectory: '../../../../coverage/libs/features/ramp/metlinkr-page',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
@@ -20,4 +19,3 @@ export default {
     'jest-preset-angular/build/serializers/html-comment',
   ],
 };
-git add libs

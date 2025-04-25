@@ -189,6 +189,7 @@
       "image-download": ["libs/shared/utils/image-download/src/index.ts"],
       "input-panel": ["libs/shared/ramp/panels/input-panel/src/index.ts"],
       "markdown-viewer": ["libs/shared/utils/markdown-viewer/src/index.ts"],
+      "metlinkr-page": ["libs/features/ramp/metlinkr-page/src/index.ts"],
       "ncats-datatable": [
         "libs/shared/utils/charts/ncats-datatable/src/index.ts"
       ],

@@ -1,10 +1,10 @@
 import {
   Component,
   computed,
-  ElementRef,
+  ElementRef, input,
   output,
   signal,
-  viewChild,
+  viewChild
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -36,13 +36,13 @@ import { MatInputModule } from '@angular/material/input';
 export class SharedFormsFileUploadComponent implements ControlValueAccessor {
   fileUpload = viewChild(ElementRef);
   fileSelect = output<File | null>();
-  fileName = computed(() => this.file()?.name || null);
-  file = signal<File | null>(null);
+  //fileName = computed(() => this.files()?[0].name || null);
+  files = signal<File[] | undefined>(undefined);
   touched = false;
-  disabled = false;
+  multiple =input<boolean | undefined>(false);
 
   //eslint-disable-next-line @typescript-eslint/no-empty-function
-  onChange = (file: File | null) => {};
+  onChange = (files: File[] | undefined) => {};
 
   //eslint-disable-next-line @typescript-eslint/no-empty-function
   onTouched = () => {};
@@ -51,16 +51,16 @@ export class SharedFormsFileUploadComponent implements ControlValueAccessor {
     if (this.fileUpload()) {
       const nativeElement = this.fileUpload()?.nativeElement;
       nativeElement.value = '';
-      this.file.set(null);
-      this.onChange(this.file());
+      this.files.set(undefined);
+      this.onChange(this.files());
     }
   }
 
   writeValue(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target && target?.files?.length) {
-      this.file.set(target?.files[0]);
-      this.onChange(this.file());
+      this.files.set(<unknown>target?.files as File[]);
+      this.onChange(this.files());
     }
   }
 
@@ -79,7 +79,9 @@ export class SharedFormsFileUploadComponent implements ControlValueAccessor {
     }
   }
 
-  setDisabledState(disabled: boolean) {
-    this.disabled = disabled;
+  removeFile(index: number) {
+    const currentFiles = Array.from(this.files()!) as File[];
+    const retArr: File[] = currentFiles.filter((file,idx) =>  idx !== index)
+    this.files.set(retArr)
   }
 }

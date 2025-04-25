@@ -1,0 +1,51 @@
+@let identifierHarmonization = _getMapField('identifier-harmonization');
+@if (mainPageMap() && mainPageMap().size){
+  <mat-tab-group
+    mat-align-tabs="start"
+    class="tabs-section"
+    [dynamicHeight]="true"
+  >
+    <mat-tab [bodyClass]="'body-tabs'">
+    <ng-template mat-tab-label>Identifier Harmonization </ng-template>
+      <div class="row  file-upload-row">
+        <div class="width-50">
+        <input
+          type="file"
+          class="file-input"
+          [multiple] = true
+          accept="text/tab-separated-values, .xlsx, .csv"
+          (change)="writeValue($event)"
+          #fileUpload
+        />
+        <div class="file-upload">
+          <span class="mat-h4">Upload File</span> &nbsp;
+          <button
+            mat-mini-fab
+            class="upload-btn"
+            (click)="fileUpload.click()"
+          >
+            <mat-icon>attach_file</mat-icon>
+          </button>
+        </div>
+        </div>
+        <div class = "width-5">
+        <button mat-flat-button (click)="submit()">Submit</button>
+        </div>
+      </div>
+          @if(files() && files()!.length){
+            <div class="row">
+            <h2>Build Manifest</h2>
+            </div>
+            <div class = "row space-around-row">
+            @for (element of ManifestFormMap() | keyvalue; track element.key; let idx = $index){
+              <lib-ncats-form
+                [questions]="element.value.questions"
+                [direction]="'row'"
+                (formCreated)="setForm($event, element.key)"
+              ></lib-ncats-form>
+            }
+            </div>
+         }
+    </mat-tab>
+  </mat-tab-group>
+}
