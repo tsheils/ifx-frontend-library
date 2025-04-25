@@ -47,13 +47,12 @@ fragment trialFields on ClinicalTrial {
         referenceType: ReferenceType
         citation: Citation
       }
-
 }
 `;
 
 export const FETCHTRIALDETAILS = gql`
-  query ClinicalTrials($ctwhere: ClinicalTrialWhere) {
-    clinicalTrials(where: $ctwhere) {
+  query ClinicalTrials($ctfilters: ClinicalTrialWhere) {
+    clinicalTrials(where: $ctfilters) {
       ...trialFields
     }
   }
@@ -61,46 +60,38 @@ export const FETCHTRIALDETAILS = gql`
 `;
 export const FETCHTRIALSQUERY = gql`
   query ClinicalTrialsList(
-    $ctwhere: ClinicalTrialWhere
+    $gardWhere: GARDWhere
     $ctfilters: ClinicalTrialWhere
     $ctoptions: ClinicalTrialOptions
   ) {
-    clinicalTrials(where: $ctfilters, options: $ctoptions) {
-      ...trialFields
-    }
-    count: clinicalTrialsAggregate(where: $ctfilters) {
-      count
-    }
-    allCount: clinicalTrialsAggregate(where: $ctwhere) {
-      count
+    trialsData: gards(where: $gardWhere) {
+      clinicalTrials: clinicalTrialsmappedToGard(where: $ctfilters, options: $ctoptions) {
+        ...trialFields
+      }
+      count: clinicalTrialsmappedToGardAggregate(where: $ctfilters) {
+        count
+      }
+      allCount: clinicalTrialsmappedToGardAggregate {
+        count
+      }
     }
   }
   ${TRIALFIELDS}
 `;
 
 export const TRIALDETAILSVARIABLES: {
-  ctwhere: {
-    NCTId: null | undefined | string;
+  ctfilters: {
+    NCTId_EQ: null | undefined | string;
   };
 } = {
-  ctwhere: {
-    NCTId: '',
+  ctfilters: {
+    NCTId_EQ: undefined,
   },
 };
 
 export const FETCHTRIALSVARIABLES: {
-  ctwhere: {
-    mappedToGardGards_SOME: {
-      GardId: string | null | undefined;
-    };
-    StudyType_IN?: unknown;
-    OverallStatus_IN?: unknown;
-    Phase_IN?: unknown;
-  };
+  gardWhere: { GardId: undefined | string };
   ctfilters: {
-    mappedToGardGards_SOME: {
-      GardId: string | null | undefined;
-    };
     StudyType_IN?: unknown;
     OverallStatus_IN?: unknown;
     Phase_IN?: unknown;
@@ -110,19 +101,13 @@ export const FETCHTRIALSVARIABLES: {
     offset: number;
   };
 } = {
-  ctwhere: {
-    mappedToGardGards_SOME: {
-      GardId: undefined,
-    },
-  },
-  ctoptions: {
+  gardWhere: { GardId: undefined },
+ctoptions: {
     limit: 10,
     offset: 0,
   },
   ctfilters: {
-    mappedToGardGards_SOME: {
-      GardId: undefined,
-    },
+
   },
 };
 

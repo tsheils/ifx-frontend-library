@@ -68,7 +68,8 @@ export const fetchProjectList$ = createEffect(
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
+    //    PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
+        PROJECTVARIABLES.gardId =
           root.queryParams['id'];
         if (root.fragment === 'projects') {
           _setProjectsOptions(root.queryParams);
@@ -79,16 +80,16 @@ export const fetchProjectList$ = createEffect(
             map((projectsData: ApolloQueryResult<unknown>) => {
               const projects: {
                 coreProjects: CoreProject[];
-                count: { count: number };
+                count:  number;
               } = projectsData.data as {
                 coreProjects: CoreProject[];
-                count: { count: number };
+                count: number;
               };
               const projectsList = projects.coreProjects.map(
                 (proj: Partial<CoreProject>) => new CoreProject(proj)
               );
-              const projectCount = projects.count.count;
-              const allProjectCount = projects.count.count;
+              const projectCount = projects.count;
+              const allProjectCount = projects.count;
               if (projectsList) {
                 return FetchProjectsListActions.fetchProjectsListSuccess({
                   projects: projectsList,
@@ -112,10 +113,10 @@ function _setProjectsOptions(options: {
   limit?: number;
   offset?: number;
 }) {
-  PROJECTVARIABLES.coreProjectsOptions.limit = <number>options['limit']
+  PROJECTVARIABLES.limit = <number>options['limit']
     ? <number>options['limit']
     : 10;
   if (<number>options['offset']) {
-    PROJECTVARIABLES.coreProjectsOptions.offset = <number>options['offset'] * 1;
+    PROJECTVARIABLES.offset = <number>options['offset'] * 1;
   }
 }

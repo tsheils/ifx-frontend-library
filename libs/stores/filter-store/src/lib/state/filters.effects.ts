@@ -121,7 +121,7 @@ function parseFilterResponse(
       const filterCategory: FilterCategory = new FilterCategory({
         label: key,
         //  values: [...retMap.values()],
-        page: currentFilter?.page,
+        page: currentFilter?.page || 0,
         query: currentFilter?.query,
       });
       filterCategory.values = [...retMap.values()];
@@ -230,12 +230,8 @@ export const searchFilters$ = createEffect(
             params.parameters['limit'] = action.limit;
           }
           if (action.term) {
-            if (action.term == '') {
-              params.parameters['term'] = action.term;
-            } else {
-              params.parameters['term'] = action.term + '*';
-            }
-            nextPage = 0;
+            params.parameters['term'] = action.term;
+            nextPage = 1;
           }
           if (action.terms) {
             params.parameters['terms'] = action.terms;

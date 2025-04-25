@@ -30,15 +30,17 @@ const app: Express = express();
 // Below, we tell Apollo Server to "drain" this httpServer,
 // enabling our servers to shut down gracefully.
 const httpServer = http.createServer(app);
-const driver = neo4j.driver(
-  environment.url,
-  neo4j.auth.basic(environment.neo4jUser, environment.neo4jPassword)
-);
+
 const instances = environment.instances;
 
 instances.forEach((instance) => startSchema(instance));
 
 function startSchema(instance) {
+  const driver = neo4j.driver(
+    environment.memgraphUrl + ':' + instance.port,
+    neo4j.auth.basic(environment.memgraphUser, environment.memgraphKey)
+  );
+
   fs.readFile(instance.schema, 'utf8', async (err, data) => {
     if (err) {
       console.error(err);
@@ -48,6 +50,7 @@ function startSchema(instance) {
     const neoSchema: Neo4jGraphQL = new Neo4jGraphQL({
       typeDefs,
       driver,
+      //debug: true,
     });
 
     try {
@@ -68,6 +71,8 @@ function startSchema(instance) {
           }),
         }),
         (req, res, next) => {
+         // apolloServer.logger.info(req)
+       //   console.log(req);
           logger.info(`Received a ${req.method} request for ${req.url}`);
           next();
         }
@@ -81,7 +86,7 @@ function startSchema(instance) {
       const port = instance.port;
       const server = app.listen(port, () => {
         logger.info(
-          `${instance.name} API listening to port ${port} at ${environment.url}`
+          `${instance.name} API listening to port ${port} at ${environment.memgraphUrl}`
         );
       });
     } catch (e) {

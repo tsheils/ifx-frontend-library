@@ -847,6 +847,21 @@ export class RampService {
     );
   }
 
+  runIdentifierHarmonization(files: FileList, manifest: File){
+    const formData: FormData = new FormData();
+    Array.from( Object.values(files)).forEach(file => {
+      formData.append('inputFiles', file, file.name)
+    })
+    formData.append('manifestFile', manifest, manifest.name);
+    return this.http
+      .post(`${this.url}metlinkr`, formData)
+      .pipe(
+        map((response: unknown) => {
+          return <string>response;
+        })
+      );
+  }
+
   private _mapDataToDataProperty<T extends RampDataGeneric>(
     data: T[]
   ): { [p: string]: DataProperty }[] {

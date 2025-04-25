@@ -337,7 +337,6 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               .duration(300);
             this.rowHoveredOff();
           });
-          console.log(group)
           return group;
         });
 

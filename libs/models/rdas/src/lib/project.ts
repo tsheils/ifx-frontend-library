@@ -2,12 +2,15 @@ import { Disease } from './disease';
 
 export class CoreProject {
   core_project_num!: string;
-  rd_total_cost?: number;
+  rd_total_cost!: number | string;
   fundedByAgents?: { name: string }[];
   clinicalStudies?: ClinicalStudy[];
   patents?: Patent[];
   projects?: Project[];
   projectCount?: number;
+  title?: string;
+  _projectCount?: {low?: number, high?: number};
+  _rd_total_cost?: {low?: number, high?: number};
 
   constructor(obj: Partial<CoreProject> = {}) {
     Object.assign(this, obj);
@@ -16,6 +19,14 @@ export class CoreProject {
       this.clinicalStudies = obj.clinicalStudies.map(
         (data) => new ClinicalStudy(data)
       );
+    }
+
+    if (obj?._rd_total_cost && obj._rd_total_cost.low) {
+      this.rd_total_cost = obj._rd_total_cost.low;
+    }
+
+    if (obj?._projectCount && obj._projectCount.low) {
+      this.projectCount = obj._projectCount.low;
     }
 
     if (obj.patents) {

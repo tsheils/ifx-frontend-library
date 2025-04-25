@@ -88,7 +88,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
       instance: `${environment.baseUrl}${
-        environment.production ? '/' : ':4000/'
+        environment.production ? '/' : ':7687/'
       }api/diseases`,
     },
     loadComponent: () =>
@@ -102,7 +102,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
       instance: `${environment.baseUrl}${
-        environment.production ? '/' : ':4001/'
+        environment.production ? '/' : ':7690/'
       }api/articles`,
     },
     loadComponent: () =>
@@ -116,8 +116,8 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
       instance: `${environment.baseUrl}${
-        environment.production ? '/' : ':4002/'
-      }api/grants`,
+        environment.production ? '/' : ':7689/'
+      }api/projects`,
     },
     loadComponent: () =>
       import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
@@ -130,7 +130,7 @@ export const routes: Routes = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     data: {
       instance: `${environment.baseUrl}${
-        environment.production ? '/' : ':4003/'
+        environment.production ? '/' : ':7688/'
       }api/trials`,
     },
     loadComponent: () =>

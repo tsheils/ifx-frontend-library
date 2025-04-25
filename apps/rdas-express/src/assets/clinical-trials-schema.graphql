@@ -1,43 +1,43 @@
 extend schema @mutation(operations: [])
 scalar JSON
 
-type AssociatedEntity {
-  EntityClass: String!
-  EntityName: String!
-  EntityType: String!
+type AssociatedEntity @node {
+  EntityClass: String
+  EntityName: String
+  EntityType: String
   associatedWithClinicalTrials: [ClinicalTrial!]!
     @relationship(type: "associated_with", direction: OUT)
 }
 
-type ClinicalTrial {
-  Acronym: String!
-  BriefSummary: String!
-  BriefTitle: String!
-  CompletionDate: String!
-  CompletionDateType: String!
-  DateCreatedRDAS: String!
-  IPDSharing: String!
-  IPDSharingAccessCriteria: String!
-  IPDSharingDescription: String!
-  IPDSharingTimeFrame: String!
-  LastKnownStatus: String!
-  LastUpdatePostDate: String!
-  LastUpdatePostDateType: String!
-  LastUpdateSubmitDate: String!
-  LastUpdatedRDAS: String!
-  NCTId: String!
-  OfficialTitle: String!
-  OverallStatus: String!
-  PatientRegistry: Boolean!
+type ClinicalTrial @node {
+  Acronym: String
+  BriefSummary: String
+  BriefTitle: String
+  CompletionDate: String
+  CompletionDateType: String
+  DateCreatedRDAS: String
+  IPDSharing: String
+  IPDSharingAccessCriteria: String
+  IPDSharingDescription: String
+  IPDSharingTimeFrame: String
+  LastKnownStatus: String
+  LastUpdatePostDate: String
+  LastUpdatePostDateType: String
+  LastUpdateSubmitDate: String
+  LastUpdatedRDAS: String
+  NCTId: String
+  OfficialTitle: String
+  OverallStatus: String
+  PatientRegistry: Boolean
   Phase: String
-  PrimaryCompletionDate: String!
-  PrimaryCompletionDateType: String!
-  ResultsFirstPostDate: String!
-  ResultsFirstPostDateType: String!
-  ResultsFirstPostedQCCommentsDate: String!
-  StartDate: String!
-  StartDateType: String!
-  StudyType: String!
+  PrimaryCompletionDate: String
+  PrimaryCompletionDateType: String
+  ResultsFirstPostDate: String
+  ResultsFirstPostDateType: String
+  ResultsFirstPostedQCCommentsDate: String
+  StartDate: String
+  StartDateType: String
+  StudyType: String
   associatedEntitiesassociatedWith: [AssociatedEntity!]!
     @relationship(type: "associated_with", direction: IN)
   hasContactContacts: [Contact!]!
@@ -67,7 +67,7 @@ type ClinicalTrial {
 }
 
 type Condition {
-  Condition: String!
+  Condition: String
   clinicalTrialsinvestigatesCondition: [ClinicalTrial!]!
     @relationship(type: "investigates_condition", direction: IN)
   mappedToGardGards: [GARD!]!
@@ -79,12 +79,12 @@ type Condition {
 }
 
 type Contact {
-  ContactEmail: String!
-  ContactName: String!
-  ContactPhone: String!
-  ContactPhoneExt: String!
-  ContactRole: String!
-  ContactScope: String!
+  ContactEmail: String
+  ContactName: String
+  ContactPhone: String
+  ContactPhoneExt: String
+  ContactRole: String
+  ContactScope: String
   clinicalTrialshasContact: [ClinicalTrial!]!
     @relationship(type: "has_contact", direction: IN)
   contactForLocationLocations: [Location!]!
@@ -115,18 +115,18 @@ type Drug {
   PrescribableSynonym: [String]
   QUANTITY: [String]
   RXNAV_HUMAN_DRUG: [String]
-  RXNAV_STR: [String]!
+  RXNAV_STR: [String]
   RXNAV_VET_DRUG: [String]
-  RxCUI: [String]!
-  RxNormID: BigInt!
-  RxNormName: [String]!
+  RxCUI: [String]
+  RxNormID: BigInt
+  RxNormName: [String]
   RxNormSynonym: [String]
   SCHEDULE: [String]
   SNOMEDCT: [String]
   SPL_SET_ID: [String]
   STRENGTH: [String]
   Source: [String]
-  TTY: [String]!
+  TTY: [String]
   TallmanSynonym: [String]
   UNII_CODE: [String]
   USP: [String]
@@ -141,9 +141,9 @@ type Drug {
 }
 
 type GARD {
-  GardId: String!
-  GardName: String!
-  Synonyms: [String]!
+  GardId: String
+  GardName: String
+  Synonyms: [String]
   clinicalTrialsmappedToGard: [ClinicalTrial!]!
     @relationship(
       type: "mapped_to_gard"
@@ -158,9 +158,9 @@ type GARD {
     )
 }
 type Intervention {
-  InterventionDescription: String!
-  InterventionName: String!
-  InterventionType: String!
+  InterventionDescription: String
+  InterventionName: String
+  InterventionType: String
   clinicalTrialshasIntervention: [ClinicalTrial!]!
     @relationship(type: "has_intervention", direction: IN)
   mappedToRxnormDrugs: [Drug!]!
@@ -172,9 +172,9 @@ type Intervention {
 }
 
 type Investigator {
-  OfficialAffiliation: String!
-  OfficialName: String!
-  OfficialRole: String!
+  OfficialAffiliation: String
+  OfficialName: String
+  OfficialRole: String
   hasContactContacts: [Contact!]!
     @relationship(type: "has_contact", direction: OUT)
   investigatesClinicalTrials: [ClinicalTrial!]!
@@ -182,12 +182,12 @@ type Investigator {
 }
 
 type Location {
-  LocationCity: String!
-  LocationCountry: String!
-  LocationFacility: String!
-  LocationState: String!
-  LocationStatus: String!
-  LocationZip: String!
+  LocationCity: String
+  LocationCountry: String
+  LocationFacility: String
+  LocationState: String
+  LocationStatus: String
+  LocationZip: String
   clinicalTrialsinLocations: [ClinicalTrial!]!
     @relationship(type: "in_locations", direction: IN)
   contactscontactForLocation: [Contact!]!
@@ -199,45 +199,45 @@ type MappedToGardProperties @relationshipProperties {
 }
 
 type MappedToRxnormProperties @relationshipProperties {
-  WITH_SPACY: Boolean!
+  WITH_SPACY: Boolean
 }
 
 type Participant {
-  EligibilityCriteria: String!
-  EnrollmentType: String!
-  Gender: String!
-  MaximumAge: String!
-  MinimumAge: String!
-  StdAge: [String]!
+  EligibilityCriteria: String
+  EnrollmentType: String
+  Gender: String
+  MaximumAge: String
+  MinimumAge: String
+  StdAge: [String]
   clinicalTrialshasParticipantInfo: [ClinicalTrial!]!
     @relationship(type: "has_participant_info", direction: IN)
 }
 
 type PrimaryOutcome {
-  PrimaryOutcomeDescription: String!
-  PrimaryOutcomeMeasure: String!
-  PrimaryOutcomeTimeFrame: String!
+  PrimaryOutcomeDescription: String
+  PrimaryOutcomeMeasure: String
+  PrimaryOutcomeTimeFrame: String
   clinicalTrialshasOutcome: [ClinicalTrial!]!
     @relationship(type: "has_outcome", direction: IN)
 }
 
 type Reference {
-  Citation: String!
-  ReferencePMID: String!
-  ReferenceType: String!
+  Citation: String
+  ReferencePMID: String
+  ReferenceType: String
   isAboutClinicalTrials: [ClinicalTrial!]!
     @relationship(type: "is_about", direction: OUT)
 }
 
 type StudyDesign {
-  DesignAllocation: String!
-  DesignInterventionModel: String!
-  DesignInterventionModelDescription: String!
-  DesignMasking: String!
-  DesignObservationalModel: String!
-  DesignPrimaryPurpose: String!
-  DesignTimePerspective: String!
-  DetailedDescription: String!
+  DesignAllocation: String
+  DesignInterventionModel: String
+  DesignInterventionModelDescription: String
+  DesignMasking: String
+  DesignObservationalModel: String
+  DesignPrimaryPurpose: String
+  DesignTimePerspective: String
+  DetailedDescription: String
   clinicalTrialshasStudyDesign: [ClinicalTrial!]!
     @relationship(type: "has_study_design", direction: IN)
 }
@@ -305,63 +305,3 @@ type Query {
     )
 }
 
-type Query {
-  allClinicalTrialsFilters(where: ClinicalTrialWhere): CTFilters
-    @cypher(
-      statement: """
-      MATCH (n:GARD)
-      WHERE n.GardId = $where.mappedToGardGards_SOME.GardId
-      MATCH (n)-[m:mapped_to_gard]-(cl:ClinicalTrial)
-                 WHERE (cl.StudyType IN $where.StudyType_IN OR $where.StudyType_IN IS NULL)
-                 AND (cl.OverallStatus IN $where.OverallStatus_IN OR $where.OverallStatus_IN IS NULL)
-                 AND (cl.Phase IN $where.Phase_IN OR $where.Phase_IN IS NULL)
-                 with collect(distinct(cl)) as trials
-                  with
-                  collect {
-                  unwind trials as tr
-                  WITH tr.OverallStatus as status, count(distinct(tr)) as statusCT
-                  return {term: status, count:statusCT, label: 'OverallStatus'}
-                  } as statuses,
-                  collect {
-                  unwind trials as tr
-                  WITH tr.Phase as phase, count(distinct(tr)) as phaseCT
-                  return {term: phase, count:phaseCT, label: 'Phase'}
-                  } as phases,
-                  collect {
-                  unwind trials as tr
-                  WITH tr.StudyType as studyType, count(distinct(tr)) as studyTypeCT
-                  return {term: studyType, count:studyTypeCT, label: 'StudyType'}
-                  } as studyTypes
-                return {trialsByStatus: statuses, trialsByPhase: phases, trialsByType: studyTypes} as data
-      """
-      columnName: "data"
-    )
-}
-
-type Query {
-  allDiseaseClinicalTrialsFilters: CTFilters
-    @cypher(
-      statement: """
-      match (cl: ClinicalTrial)
-             with collect(distinct(cl)) as trials
-                        with
-                        collect {
-                        unwind trials as tr
-                        WITH tr.OverallStatus as status, count(distinct(tr)) as statusCT
-                        return {term: status, count:statusCT, label: 'OverallStatus'}
-                        } as statuses,
-                        collect {
-                        unwind trials as tr
-                        WITH tr.Phase as phase, count(distinct(tr)) as phaseCT
-                        return {term: phase, count:phaseCT, label: 'Phase'}
-                        } as phases,
-                        collect {
-                        unwind trials as tr
-                        WITH tr.StudyType as studyType, count(distinct(tr)) as studyTypeCT
-                        return {term: studyType, count:studyTypeCT, label: 'StudyType'}
-                        } as studyTypes
-                      return {trialsByStatus: statuses, trialsByPhase: phases, trialsByType: studyTypes} as data
-      """
-      columnName: "data"
-    )
-}

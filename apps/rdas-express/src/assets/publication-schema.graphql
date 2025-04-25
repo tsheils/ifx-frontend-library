@@ -1,25 +1,40 @@
 scalar JSON
 extend schema @mutation(operations: [])
 
-type Article {
-  DateCreatedRDAS: String
-  LastUpdatedRDAS: String
-  ReferenceOrigin: [String]
+type Article @node {
   abstractText: String
   affiliation: String
+  citedByCount: BigInt
+  DateCreatedRDAS: String
+  doi: String
+  epi_processed: Boolean
+  firstPublicationDate: String
+  hasPDF: Boolean
+  hasPubtatorAnnotation: Boolean
+  inEPMC: Boolean
+  inPMC: Boolean
+  isEpi: Boolean
+  isNHS: Boolean
+  is_genereview: Boolean
+  isOpenAccess: Boolean
+  LastUpdatedRDAS: String
+  publicationYear: String
+  pubmed_id: String
+  pubType: [String]
+  ReferenceOrigin: [String]
+  source: String
+  title: String
+
+
   appearsInJournalVolumes: [JournalVolume!]!
     @relationship(type: "APPEARS_IN", direction: OUT)
   authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
-  citedByCount: BigInt
-  doi: String
-  epi_processed: Boolean
   epidemiologyAnnotationsEpidemiologyAnnotationFor: [EpidemiologyAnnotation!]!
     @relationship(
       type: "EPIDEMIOLOGY_ANNOTATION_FOR"
       direction: IN
       properties: "EpidemiologyAnnotationForProperties"
     )
-  firstPublicationDate: String
   fullTextUrlsContentFor: [FullTextUrl!]!
     @relationship(type: "CONTENT_FOR", direction: IN)
   gardsmentionedIn: [GARD!]!
@@ -30,22 +45,14 @@ type Article {
     )
   hasOmimRefomimRefs: [OMIMRef!]!
     @relationship(type: "HAS_OMIM_REF", direction: OUT)
-  hasPubtatorAnnotation: Boolean
-  isEpi: Boolean
-  isNHS: Boolean
   keywordsKeywordFor: [Keyword!]!
     @relationship(type: "KEYWORD_FOR", direction: IN)
   meshTermsMeshTermFor: [MeshTerm!]!
     @relationship(type: "MESH_TERM_FOR", direction: IN)
-  pubType: [String]
-  publicationYear: String
-  pubmed_id: String
   pubtatorAnnotationsAnnotationFor: [PubtatorAnnotation!]!
     @relationship(type: "ANNOTATION_FOR", direction: IN)
-  source: String
   substancesSubstanceAnnotatedByPubmed: [Substance!]!
     @relationship(type: "SUBSTANCE_ANNOTATED_BY_PUBMED", direction: IN)
-  title: String
 }
 
 type Author {
@@ -55,7 +62,7 @@ type Author {
   wroteArticles: [Article!]! @relationship(type: "WROTE", direction: OUT)
 }
 
-type EpidemiologyAnnotation {
+type EpidemiologyAnnotation @node {
   DateCreatedRDAS: String
   LastUpdatedRDAS: String
   date: [String]
@@ -193,6 +200,7 @@ type Query {
     @cypher(
       statement: """
       match (d:GARD {GardId: $gardId})-[]-(a:Article)
+      WHERE a.publicationYear IS NOT NULL
       WITH a.publicationYear as year
       with count(year) as ct, year
       RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
@@ -229,14 +237,14 @@ type Query {
 
 type Query {
   allCountsByYear: [FilterCount]
-    @cypher(
-      statement: """
-      match (a:Article)
-             WHERE (a)<-[:MENTIONED_IN]-(:GARD)
-             WITH a.publicationYear as year
-             with count(year) as ct, year
-             RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
-      """
-      columnName: "yearCounts"
-    )
+  @cypher(
+    statement: """
+    match (a:Article)
+    WHERE (a)<-[:MENTIONED_IN]-(:GARD)
+    WITH a.publicationYear as year
+    with count(year) as ct, year
+    RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
+    """
+    columnName: "yearCounts"
+  )
 }

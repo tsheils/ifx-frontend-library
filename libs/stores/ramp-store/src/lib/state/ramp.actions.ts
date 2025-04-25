@@ -298,3 +298,12 @@ export const MetaboliteEnrichmentsActions = createActionGroup({
     filterEnrichmentFromMetabolitesFailure: props<{ error: string }>(),
   },
 });
+
+export const IdentifierHarmonizationActions = createActionGroup({
+  source: 'Harmonize Identifiers',
+  events: {
+    runIdentifierHarmonization: props<{ files: FileList, manifest: File }>(),
+    runIdentifierHarmonizationSuccess: emptyProps(),
+    runIdentifierHarmonizationFailure: props<{ error: string }>(),
+  },
+});

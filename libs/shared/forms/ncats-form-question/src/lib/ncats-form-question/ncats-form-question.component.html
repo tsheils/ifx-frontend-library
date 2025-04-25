@@ -1,8 +1,8 @@
 <div [formGroup]="form">
   @switch (question.controlType) { @case ('textbox') {
-  <mat-form-field class="full-width" color="accent">
+  <mat-form-field class="full-width" color="accent" >
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
-    <input matInput [id]="question.key" [type]="question.type" />
+    <input matInput [formControlName]="question.key" [id]="question.key" [type]="question.type" />
   </mat-form-field>
   } @case ('number') {
   <mat-form-field class="full-width" color="accent">
@@ -15,6 +15,7 @@
       [step]="question.step"
       [min]="question.min"
       [max]="question.max"
+
     />
   </mat-form-field>
   } @case ('textarea') {
@@ -66,6 +67,7 @@
   <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
   <lib-shared-forms-file-upload
     [formControlName]="question.key"
+    [multiple]="question.multiple"
   ></lib-shared-forms-file-upload>
   } } @if (question.description) {
   <div class="help-text">{{ question.description }}</div>

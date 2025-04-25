@@ -1,4 +1,5 @@
 extend schema @mutation(operations: [])
+scalar JSON
 
 type Agent {
   coreProjectsFundedBy: [CoreProject!]!
@@ -137,12 +138,8 @@ type PublishedInProperties @relationshipProperties {
 }
 
 type ResearchedByProperties @relationshipProperties {
-  confidence_score: Float!
-  semantic_similarity: Float!
-}
-
-type UserTesting {
-  Approved: Boolean!
+  confidence_score: Float
+  semantic_similarity: Float
 }
 
 type ProjectFilters {
@@ -154,6 +151,39 @@ type FilterCount {
   term: String
   count: BigInt
   label: String
+}
+
+type Query {
+  paginatedProjects(gardId: String, limit: Int, offset: Int): JSON
+    @cypher(
+      statement: """
+      MATCH (n:GARD)
+      WHERE n.GardId = $gardId
+      MATCH (n)-[:RESEARCHED_BY]-(p:Project)-[:UNDER_CORE]-(c:CoreProject)
+      with  count(p) as total, collect(p)[0] as titles, c.core_project_num as proj, c.rd_total_cost as cost
+      with {core_project_num: proj, _projectCount: total, _rd_total_cost: cost, title: titles.title} as projList
+      ORDER by projList.total desc
+      skip $offset
+      limit $limit
+      return collect(projList) as ret
+
+      """
+      columnName: "ret"
+    )
+}
+
+type Query {
+  coreProjectsCount(gardId: String): Int
+    @cypher(
+      statement: """
+      MATCH (n:GARD)
+      WHERE n.GardId = $gardId
+      MATCH (n)-[:RESEARCHED_BY]-(p:Project)-[:UNDER_CORE]-(c:CoreProject)
+      WITH count(distinct(c)) as coreCount
+      return coreCount
+      """
+      columnName: "coreCount"
+    )
 }
 
 type Query {

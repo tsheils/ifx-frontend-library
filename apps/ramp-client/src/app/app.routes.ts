@@ -87,6 +87,20 @@ export const routes: Routes = [
     ],
   },
   {
+    path: 'identifier-harmonization',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Identifier Harmonization',
+    loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('metlinkr-page').then((m) => m.MetlinkrPageComponent),
+      },
+    ],
+  },
+  {
     path: 'about',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',

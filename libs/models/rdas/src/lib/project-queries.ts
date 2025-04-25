@@ -48,6 +48,14 @@ export const FETCHGRANTDETAILS = gql`
 `;
 
 export const FETCHPROJECTSQUERY = gql`
+  query Query($gardId: String, $limit: Int, $offset: Int) {
+    count: coreProjectsCount(gardId: $gardId)
+    coreProjects: paginatedProjects(gardId: $gardId, limit: $limit, offset: $offset)
+  }
+`;
+
+/*
+export const FETCHPROJECTSQUERY = gql`
   query CoreProjects(
     $coreProjectsWhere: CoreProjectWhere
     $coreProjectsOptions: CoreProjectOptions
@@ -98,11 +106,9 @@ export const FETCHPROJECTSQUERY = gql`
     count: coreProjectsAggregate(where: $coreProjectsWhere) {
       count
     }
-    allCount: coreProjectsAggregate(where: $coreProjectsWhere) {
-      count
-    }
   }
 `;
+*/
 
 export const GRANTDETAILSVARIABLES: {
   coreProjectsWhere: {
@@ -114,7 +120,19 @@ export const GRANTDETAILSVARIABLES: {
   },
 };
 
+
+
 export const PROJECTVARIABLES: {
+  gardId?: string | null;
+  limit?: number;
+  offset?: number;
+} = {
+  limit: 10,
+  offset: 0
+}
+
+
+/*  export const PROJECTVARIABLES: {
   coreProjectsWhere: {
     projectsUnderCore_SOME: {
       gardsresearchedBy_SOME: {
@@ -151,7 +169,7 @@ export const PROJECTVARIABLES: {
       },
     ],
   },
-};
+};*/
 
 export const PROJECTFILTERS = gql`
   query ProjectFilters($gardId: String) {

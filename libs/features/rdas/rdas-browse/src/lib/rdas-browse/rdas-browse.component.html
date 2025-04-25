@@ -22,6 +22,7 @@
         @for (filter of filters(); track filter.label) {
         <ncats-frontend-library-shared-utils-filter-panel
           [filter]="filter"
+          [showSearch] = true
           (filterSelectionChange)="filterSelectionChange($event)"
           (filterChange)="filterChange($event)"
         ></ncats-frontend-library-shared-utils-filter-panel>

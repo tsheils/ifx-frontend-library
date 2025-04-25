@@ -37,7 +37,7 @@
           "fileReplacements": [
             {
               "replace": "apps/rdas-express/src/environments/environment.ts",
-              "with": "apps/rdas-express/src/environments/environment.test.ts"
+              "with": "apps/rdas-express/src/environments/environment.ci.ts"
             }
           ]
         },

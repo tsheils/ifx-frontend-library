@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatIconButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
@@ -32,6 +31,10 @@ export class NcatsFormQuestionComponent {
   @Input() question!: QuestionBase<string>;
   @Input() form!: FormGroup;
   get isValid() {
-    return this.form.controls[this.question.key]?.valid;
+    return this.form.controls[this.question.key]?.disabled || this.form.controls[this.question.key]?.valid;
+  }
+
+  getWidth(question: QuestionBase<string>) {
+    return question.width ? `width-${question.width}` : 'width-95'
   }
 }

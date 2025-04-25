@@ -28,16 +28,12 @@ export const ARTICLEFIELDS = `
 export const FETCHARTICLESQUERY = gql`
   query Articles(
     $gardWhere: GARDWhere
-    $articleWhere: ArticleWhere
     $articleFilter: ArticleWhere
     $articleOptions: ArticleOptions
   ) {
     articlesData: gards(where: $gardWhere) {
+      GardId
       _count: mentionedInArticlesAggregate(where: $articleFilter) {
-        count
-      }
-
-      allCount: mentionedInArticlesAggregate(where: $articleWhere) {
         count
       }
 
@@ -62,7 +58,7 @@ export const FETCHARTICLESQUERY = gql`
 
 class ARTICLEVARIABLES {
   gardWhere!: { GardId: undefined | string };
-  articleWhere!: {
+  articleWhere?: {
     isEpi?: null | boolean;
     isNHS?: null | boolean;
   };

@@ -1,4 +1,124 @@
+import { Params } from '@angular/router';
+import { TypedDocumentNode } from '@apollo/client';
 import { gql } from 'apollo-angular';
+
+//todo see if i can keep using router params obj
+export class QueryParameters {
+    pageSize?: number;
+    pageIndex?: number;
+    parentId?: string; //hierarchy tree
+    sort?: string;
+    direction?: string;
+    phenotypes?: string;
+    genes?: string;
+    q?: string;
+}
+
+export enum DIRECTION {
+  ASC = 'ASC',
+  DESC = 'DESC'
+}
+
+export class PhenotypeParameter {
+  HPOTerm_IN!: string[]
+}
+
+export class GeneParameter {
+  GeneSymbol_IN!: string[]
+}
+
+export class DiseaseQueryFactory {
+  query!: TypedDocumentNode<unknown, unknown>;
+  params: {
+    limit?: number,
+    offset?: number,
+    sort?: [{ [key: string]: DIRECTION }],
+    where?: {
+      GardName_CONTAINS? : string,
+      hasPhenotypePhenotypes_SOME?: PhenotypeParameter,
+      associatedWithGeneGenes_SOME?: GeneParameter
+    }
+  } = {
+    limit: 10,
+    offset: 0,
+    sort: [{COUNT_ARTICLES : DIRECTION.DESC}]
+  };
+
+  getQuery(params :Params) {
+    this.query = this._buildQuery(params);
+    this._buildParams(params);
+    return {query: this.query, params: this.params}
+  }
+
+  private _buildQuery(params: Params) {
+    let query = gql`
+      query DiseaseQuery($limit: Int, $offset: Int, $sort: [GARDSort!], $where: GARDWhere) {
+        diseases: gards(limit: $limit, offset: $offset, sort: $sort, where: $where) {
+          ...diseaseListFields
+        }
+        total: gardsAggregate(where: $where) {
+          count
+        }
+      }
+      ${DISEASELISTFIELDS}
+    `;
+
+    if (params['phenotypes'] || params['genes']) {
+query = gql`
+  query DiseaseQuery($limit: Int, $offset: Int, $sort: [GARDSort!], $where: GARDWhere) {
+    diseases: filteredDiseases(limit: $limit, offset: $offset, sort: $sort, where: $where) {
+      ...diseaseListFields
+    }
+    total: filteredDiseasesCount(where: $where)
+  }
+  ${DISEASELISTFIELDS}
+`;
+    }
+    return query;
+  }
+
+  //todo: should there be text search for q instead of contains? =-- change query
+  private _buildParams(params: Params) {
+    this.params['limit'] = params['pageSize'] ? +(params['pageSize'] as number) : 10;
+    this.params['offset'] = params['pageIndex'] ? +((params['pageIndex'] - 1) * +this.params['limit']) : 0;
+    if (params['sort']) {
+      this.params['sort'] = [{ [params['sort']]: params['direction'] ? params['direction'] as DIRECTION : DIRECTION.DESC },
+      ];
+    }
+
+    if (params['q']) {
+      if (!this.params.where) {
+        this.params.where = { GardName_CONTAINS: params['q'] };
+      } else {
+        this.params.where['GardName_CONTAINS' as keyof typeof this.params.where] = params['q'];
+      }
+    }
+    if(params['phenotypes']){
+      if (!this.params.where) {
+        this.params.where = {
+          hasPhenotypePhenotypes_SOME: {
+            HPOTerm_IN: params['phenotypes'].split('&'),
+          }
+        };
+      } else {
+        this.params.where.hasPhenotypePhenotypes_SOME
+           = {HPOTerm_IN: params['phenotypes'].split('&')};
+      }
+    }
+    if(params['genes']){
+      if (!this.params.where) {
+        this.params.where = {
+          associatedWithGeneGenes_SOME: {
+            GeneSymbol_IN: params['genes'].split('&'),
+          }
+        };
+      } else {
+        this.params.where.associatedWithGeneGenes_SOME =
+          {GeneSymbol_IN: params['genes'].split('&')};
+      }
+    }
+  }
+}
 
 export const DISEASELISTFIELDS = `
         fragment diseaseListFields on GARD {

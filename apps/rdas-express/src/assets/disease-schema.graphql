@@ -99,9 +99,8 @@ type Query {
   diseaseSearch(searchString: String, limit: Int): [GARD]
     @cypher(
       statement: """
-      CALL db.index.fulltext.queryNodes(
-        'allNameIndex', $searchString)
-      YIELD node RETURN node as node LIMIT $limit
+       CALL text_search.search("diseaseNode", $searchString)
+       YIELD node RETURN node AS node LIMIT $limit
       """
       columnName: "node"
     )
@@ -169,10 +168,10 @@ type Query {
     @cypher(
       statement: """
       match (d)-[*0..]->(e) WHERE e.GardId = $searchString
-      with count(distinct d) as count
-      return count
+      with count(distinct d) as counts
+      return counts
       """
-      columnName: "count"
+      columnName: "counts"
     )
 }
 
@@ -185,11 +184,9 @@ type Query {
   phenotypeSearch(skip: Int, limit: Int, term: String): [FilterCount]
     @cypher(
       statement: """
-      CALL db.index.fulltext.queryNodes('phenotypeTermIndex', $term)
-      YIELD node
-      MATCH(node)-[]-(g:GARD)
-      WITH count(distinct(g)) as nCount, node
-      with {term: node.HPOTerm, count: nCount } as ret
+      MATCH(n:Phenotype)-[]-(g:GARD)
+      WITH count(distinct(g)) as nCount, n
+      with {term: n.HPOTerm, count: nCount } as ret
       ORDER BY ret.count DESC
       SKIP $skip
       LIMIT $limit
@@ -235,11 +232,9 @@ type Query {
   geneSearch(skip: Int, limit: Int, term: String): [FilterCount]
     @cypher(
       statement: """
-      CALL db.index.fulltext.queryNodes('geneTermIndex', $term)
-      YIELD node
-      MATCH(node)-[]-(g:GARD)
-      WITH count(distinct(g)) as nCount, node
-      WITH {term: node.GeneSymbol, count: nCount} as ret
+      MATCH(gene:Gene)-[]-(g:GARD)
+      WITH count(distinct(g)) as nCount, gene
+      WITH {term: gene.GeneSymbol, count: nCount} as ret
       ORDER BY ret.count DESC
       SKIP $skip
       LIMIT $limit

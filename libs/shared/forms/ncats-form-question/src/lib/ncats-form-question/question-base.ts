@@ -3,6 +3,8 @@ export class QuestionBase<T> {
   key: string;
   label: string;
   required: boolean;
+  multiple?: boolean;
+  disabled: boolean;
   description?: string;
   order: number;
   controlType: string;
@@ -11,12 +13,15 @@ export class QuestionBase<T> {
   step?: string;
   min?: number;
   max?: number;
+  width?: number;
   constructor(
     options: {
       value?: T;
       key?: string;
       label?: string;
       required?: boolean;
+      multiple?: boolean;
+      disabled?: boolean;
       description?: string;
       order?: number;
       controlType?: string;
@@ -24,11 +29,13 @@ export class QuestionBase<T> {
       options?: { key: string; value: string }[];
       min?: number;
       max?: number;
+      width?: number;
     } = {}
   ) {
     this.value = options.value;
     this.min = options.min || 0;
     this.max = options.max || 1;
+    this.width = options.width;
     this.key = options.key || '';
     this.description = options.description || '';
     this.label = options.label || '';
@@ -37,6 +44,8 @@ export class QuestionBase<T> {
     this.controlType = options.controlType || '';
     this.type = options.type || '';
     this.options = options.options || [];
+    this.multiple = options.multiple || false;
+    this.disabled = options.disabled || false;
   }
 }
 
