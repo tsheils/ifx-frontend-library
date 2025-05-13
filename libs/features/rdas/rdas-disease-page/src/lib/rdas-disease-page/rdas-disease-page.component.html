@@ -65,8 +65,8 @@
             class="sub-list-button"
             role="button"
             tabindex="0"
-            (click)="scroll('epiArticles')"
-            (keydown.enter)="scroll('epiArticles')"
+            (click)="setUrl({fragment: 'articles', params: {isEpi: true, isNHS: null}})"
+            (keydown.enter)="setUrl({fragment: 'articles', params: {isEpi: true, isNHS: null}})"
             [activated]="isActive('epiArticles')"
           >
             <div class="row space-between-row">
@@ -79,8 +79,8 @@
             class="sub-list-button"
             role="button"
             tabindex="0"
-            (click)="scroll('nhsArticles')"
-            (keydown.enter)="scroll('nhsArticles')"
+            (click)="setUrl({fragment: 'articles', params: {isNHS: true, isEpi: null}})"
+            (keydown.enter)="setUrl({fragment: 'articles', params: {isNHS: true, isEpi: null}})"
             [activated]="isActive('nhsArticles')"
           >
             <div class="row space-between-row">
@@ -113,7 +113,7 @@
           >
             <div class="row space-between-row">
               <div>Clinical Trials</div>
-              <div>{{ trialsCount() }}</div>
+              <div>{{ trialsCount().allTrialCount }}</div>
             </div>
           </a>
         </mat-nav-list>

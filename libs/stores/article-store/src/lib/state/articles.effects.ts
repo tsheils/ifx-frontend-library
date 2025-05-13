@@ -78,7 +78,7 @@ export const loadArticlesList$ = createEffect(
                 articlesData: {
                   articlesList: Article[];
                   _count: { count: number };
-                //  allCount: { count: number };
+                  allCount: { count: number };
                   epiCount: { count: number };
                   nhsCount: { count: number };
                 }[];
@@ -90,11 +90,10 @@ export const loadArticlesList$ = createEffect(
               if (articlesList) {
                 return FetchArticlesListActions.fetchArticlesListSuccess({
                   articles: articlesList,
-                  //allArticlesCount: data.allCount.count,
-                  allArticlesCount: data._count.count,
-                 articlesCount: data._count.count,
+                  allArticlesCount: data.allCount.count,
+                  articlesCount: data._count.count,
                   epiArticlesCount: data.epiCount.count,
-                 nhsArticlesCount: data.nhsCount.count,
+                  nhsArticlesCount: data.nhsCount.count,
                 });
               } else
                 return FetchArticlesListActions.fetchArticlesListFailure({
@@ -112,16 +111,23 @@ function _setArticlesOptions(options: {
   limit?: number;
   offset?: number;
   id?: string;
-  isEpi?: boolean;
-  isNHS?: boolean;
+  isEpi?: string;
+  isNHS?: string;
   year?: string[];
 }) {
-  ALLARTICLES.articleFilter.isEpi = options.isEpi
-    ? <boolean>!!options.isEpi
-    : false;
-  ALLARTICLES.articleFilter.isNHS = options.isNHS
-    ? <boolean>!!options.isNHS
-    : false;
+  if (options['isEpi']) {
+    ALLARTICLES.articleFilter.isEpi = <boolean>(options.isEpi === 'true')
+    if(!options['isNHS']) {
+      ALLARTICLES.articleFilter.isNHS = undefined
+    }
+  }
+  if (options['isNHS']) {
+    ALLARTICLES.articleFilter.isNHS = <boolean>(options.isNHS === 'true')
+    if(!options['isEpi']) {
+      ALLARTICLES.articleFilter.isEpi = undefined
+    }
+  }
+
   ALLARTICLES.articleOptions.limit = <number>options['limit']
     ? <number>options['limit']
     : 10;

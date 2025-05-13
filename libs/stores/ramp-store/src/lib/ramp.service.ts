@@ -819,7 +819,7 @@ export class RampService {
     minPathwayToCluster?: number,
     percPathwayOverlap?: number
   ): Observable<string> {
-    if (!dataframe.fishresults || dataframe.fishresults.length >= 105) {
+    if (!dataframe.fishresults || dataframe.fishresults.length >= 125) {
       return of(<string>'');
     } else {
       const body = {
@@ -847,9 +847,9 @@ export class RampService {
     );
   }
 
-  runIdentifierHarmonization(files: FileList, manifest: File){
+  runIdentifierHarmonization(files: File[], manifest: File){
     const formData: FormData = new FormData();
-    Array.from( Object.values(files)).forEach(file => {
+    files.forEach(file => {
       formData.append('inputFiles', file, file.name)
     })
     formData.append('manifestFile', manifest, manifest.name);

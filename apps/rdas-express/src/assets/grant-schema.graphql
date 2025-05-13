@@ -211,24 +211,27 @@ type Query {
 }
 
 type Query {
-  allProjectFilters: ProjectFilters
+  allCountsByYear: [FilterCount]
     @cypher(
       statement: """
-      match (p: Project)
-             with collect(distinct(p)) as projects
-                        with
-                        collect {
-                        unwind projects as pr
-                        WITH toString(pr.funding_year) as year, count(pr) as yearCT
-                        return {term: year, count:yearCT, label: 'Project Counts by Year'}
-                        } as counts,
-                        collect {
-                        unwind projects as pr
-                        WITH toString(pr.funding_year) as year, toString(sum(pr.total_cost)) as fundingCT
-                        return {term: year, count:fundingCT, label: 'Project Funding by Year'}
-                        } as funding
-                      return {countsByYear: counts, fundingByYear: funding} as data
+      MATCH (d:GARD)-[]-(p:Project)
+      WITH toString(p.funding_year) as year, count(distinct(p)) as ct
+      return {term: year, count:ct, label: 'Project Counts by Year'} as yearCounts order by year DESC
       """
-      columnName: "data"
+      columnName: "yearCounts"
     )
 }
+
+type Query {
+  allFundingByYear: [FilterCount]
+    @cypher(
+      statement: """
+      MATCH (d:GARD)-[]-(p:Project)
+      WITH toString(p.funding_year) as year, sum(p.total_cost) as ct
+      return {term: year, count:ct, label: 'Project Funding by Year'} as yearCounts order by year DESC
+      """
+      columnName: "yearCounts"
+    )
+}
+
+

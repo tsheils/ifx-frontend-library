@@ -13,7 +13,10 @@
 <div class="row">
   @if (!chart.data?.message) {
   <div class="width-10">
-    <button
+<!--
+    <lib-image-download [showTSV]="false"  [svg]="svgExport()"></lib-image-download>
+-->
+<!--    <button
       mat-stroked-button
       class="tool-button list-download"
       (click)="downloadImage()"
@@ -21,14 +24,14 @@
       color="accent"
     >
       <span class="hide-small">Save Image</span><mat-icon>download</mat-icon>
-    </button>
+    </button>-->
   </div>
   } @if (chart.data?.message) {
   <div>
     {{ chart.data?.message }}
   </div>
   } @if (!chart.data?.message) {
-  <div [innerHTML]="chart.data!.image"></div>
+  <div [innerHTML]="chart.data!.image" #chartElement></div>
   }
 </div>
 } @case ('sunburst') { @if (chart.data!.values) { @defer(on viewport){

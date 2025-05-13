@@ -180,6 +180,7 @@
         "libs/shared/utils/data-download-button/src/index.ts"
       ],
       "data-panel": ["libs/shared/ramp/panels/data-panel/src/index.ts"],
+      "dnd-file-upload": ["libs/shared/forms/dnd-file-upload/src/index.ts"],
       "filter-download-button": [
         "libs/shared/utils/filter-download-button/src/index.ts"
       ],

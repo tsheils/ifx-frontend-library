@@ -857,29 +857,30 @@ function(metabolites = '', backgroundFile = '', background = '', backgroundType 
 #' @param manifestFile: File
 #' @parser multi
 #' @parser text
+#' @parser csv
 #' @parser json
 #' @post /api/metlinkr
 function(inputFiles = '', manifestFile) {
-  print(names(inputFiles))
-  d <- getwd()
-  path <- paste0(d,'/',names(manifestFile))
-  print(d)
-  print(path)
+#  mp <- mime::parse_multipart(req)
+ # readr::read_csv(mp$file$datapath)
+  manifest_df <- read.csv(manifestFile, header="T")
+  print(manifest_df)
+  input_df <- read.csv(inputFiles, header="T")
+print(input_df)
   n_cores <- parallel::detectCores() - 1
-  metLinkR_output <- harmonizeInputSheets(inputcsv= path,
-                                          n_cores = n_cores,
-                                          mapping_library_format="both",
-                                          remove_parentheses_for_synonym_search = TRUE,
-                                          use_metabolon_parsers = TRUE,
-                                          majority_vote = TRUE)
+#  metLinkR_output <- harmonizeInputSheets(inputcsv= path,
+#                                          n_cores = n_cores,
+#                                          mapping_library_format="both",
+#                                          remove_parentheses_for_synonym_search = TRUE,
+#                                          use_metabolon_parsers = TRUE,
+#                                          majority_vote = TRUE)
+#      print(metLinkR_output)
+#  unlink(names[manifestFile])
 
-      print(metLinkR_output)
-  unlink(names[manifestFile])
 
-
-  return(
-    metLinkR_output
-  )
+ # return(
+ #   metLinkR_output
+ # )
 }
 
 

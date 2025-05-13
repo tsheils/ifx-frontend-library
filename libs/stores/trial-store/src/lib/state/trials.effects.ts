@@ -89,6 +89,7 @@ export const fetchTrialList$ = createEffect(
                 return FetchTrialsListActions.fetchTrialsListSuccess({
                   trials: trialsList,
                   allTrialCount: trials.allCount.count,
+                  count: trials.count.count
                 });
               } else
                 return FetchTrialsListActions.fetchTrialsListFailure({

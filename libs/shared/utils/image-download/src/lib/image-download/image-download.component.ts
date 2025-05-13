@@ -70,7 +70,7 @@ export class ImageDownloadComponent {
   getCSSStyles(parentElement: SVGElement) {
     const selectorTextArr = [];
     // Add Parent element Id and Classes to the list
-    selectorTextArr.push('#' + parentElement.id);
+    selectorTextArr.push('#' + parentElement.id || 'svg-element');
     for (let c = 0; c < parentElement.classList.length; c++)
       if (!this.contains('.' + parentElement.classList[c], selectorTextArr))
         selectorTextArr.push('.' + parentElement.classList[c]);

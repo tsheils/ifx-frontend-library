@@ -1,4 +1,3 @@
-@let identifierHarmonization = _getMapField('identifier-harmonization');
 @if (mainPageMap() && mainPageMap().size){
   <mat-tab-group
     mat-align-tabs="start"
@@ -7,34 +6,28 @@
   >
     <mat-tab [bodyClass]="'body-tabs'">
     <ng-template mat-tab-label>Identifier Harmonization </ng-template>
-      <div class="row  file-upload-row">
-        <div class="width-50">
-        <input
-          type="file"
-          class="file-input"
-          [multiple] = true
-          accept="text/tab-separated-values, .xlsx, .csv"
-          (change)="writeValue($event)"
-          #fileUpload
-        />
-        <div class="file-upload">
-          <span class="mat-h4">Upload File</span> &nbsp;
-          <button
-            mat-mini-fab
-            class="upload-btn"
-            (click)="fileUpload.click()"
-          >
-            <mat-icon>attach_file</mat-icon>
-          </button>
+      <div class="row space-around-row">
+      <div class="width-40">
+        <lib-dnd-file-upload (selectedFiles)="setInputFiles($event)" [label]="'input'" [multiple]="true"></lib-dnd-file-upload>
+      </div>
+        <div class="width-40">
+          <lib-dnd-file-upload (selectedFiles)="setManifestFile($event)" [label]="'optional manifest'"></lib-dnd-file-upload>
         </div>
-        </div>
+      </div>
+
+      <div class="row file-upload-row">
         <div class = "width-5">
         <button mat-flat-button (click)="submit()">Submit</button>
         </div>
       </div>
-          @if(files() && files()!.length){
-            <div class="row">
-            <h2>Build Manifest</h2>
+          @if(ManifestFormMap().size){
+            <div class="row space-between-row">
+              <div class="width-20">
+                <h2>Edit Manifest</h2>
+              </div>
+              <div class="width-20">
+                <button mat-flat-button (click)="_downloadFile()"><mat-icon>download</mat-icon>Download Manifest File</button>
+              </div>
             </div>
             <div class = "row space-around-row">
             @for (element of ManifestFormMap() | keyvalue; track element.key; let idx = $index){

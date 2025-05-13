@@ -305,7 +305,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             data: this.analytes()?.dataAsDataProperty,
             fields: this.analyteColumns,
             dataframe: analytesData,
-            fileName: 'fetchPathwaysFromAnalytes-download.tsv',
+            fileName: 'fetchAnalytesFromPathways-download.tsv',
             loaded: !!analytesData,
           } as DataMap);
         }
@@ -339,7 +339,6 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   override visualizationsMap = computed(() => {
     const visualizationMapComputed = new Map<string, VisualizationMap[]>();
     let sizeMessage = undefined;
-
     if (!(this.clusterPlot() && this.clusterPlot()!.length > 0)) {
       sizeMessage =
         'This website currently does not support clustering over 100 pathways. Please use the RaMP R package for this feature.';
@@ -360,7 +359,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
     }
     if (
       visualizationMapComputed.size &&
-      this.activeTab() === 'biochemical-pathway-analysis'
+      this.activeTab() === 'pathway-enrichment'
     ) {
       const field = <string>this.activeTab();
       return { [field]: visualizationMapComputed };

@@ -239,8 +239,7 @@ type Query {
   allCountsByYear: [FilterCount]
   @cypher(
     statement: """
-    match (a:Article)
-    WHERE (a)<-[:MENTIONED_IN]-(:GARD)
+    match (a:Article)<-[:MENTIONED_IN]-(:GARD)
     WITH a.publicationYear as year
     with count(year) as ct, year
     RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC

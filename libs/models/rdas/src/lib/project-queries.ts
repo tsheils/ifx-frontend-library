@@ -188,17 +188,15 @@ export const PROJECTFILTERS = gql`
 
 export const ALLPROJECTFILTERS = gql`
   query AllProjectFilters {
-    allProjectFilters {
-      countsByYear {
+      allCountsByYear {
         count
         label
         term
       }
-      fundingByYear {
+    allFundingByYear {
         count
         label
         term
       }
-    }
   }
 `;
