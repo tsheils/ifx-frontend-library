@@ -114,41 +114,6 @@
       </lib-rdas-panel-template>
     </mat-expansion-panel>
   </div>
-  <!-- <div
-    class="disease-display-panel"
-    id="epiArticles"
-    #epiArticles
-    #scrollSection
-  >
-    <mat-expansion-panel
-      [disabled]="!disease()?.epiCount"
-      [expanded]="disease()?.epiCount"
-    >
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <span class="disease-accordion-title bottom-border-primary">
-            Epidemiology Articles {{ disease()?.epiCount }}</span
-          >
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-
-      <lib-rdas-panel-template
-        [_id]="'epiArticles'"
-        [count]="disease()?.epiCount!"
-        [filters]="filterMap().get('epiArticles')!"
-        [message]="'No Epidemiology Articles Found'"
-        (listChange)="fetchList($event, 'epiArticles')"
-      >
-        @if (disease() && disease()?.epiArticles) {
-          <div class="data-list">
-            <ncats-frontend-library-article-list
-              [articles]="disease()?.epiArticles"
-            ></ncats-frontend-library-article-list>
-          </div>
-        }
-      </lib-rdas-panel-template>
-    </mat-expansion-panel>
-  </div>-->
   <div class="disease-display-panel" id="projects" #projects #scrollSection>
     <mat-expansion-panel
       [disabled]="!projectsCount()"
@@ -180,14 +145,14 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Clinical Trials {{ trialsCount() }}</span
+            >Clinical Trials {{ trialsCount().allTrialCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <lib-rdas-panel-template
         [_id]="'trials'"
-        [count]="trialsCount()"
+        [count]="trialsCount().count"
         [filters]="filterMap().get('trials')!"
         [loaded]="loaded()"
         [message]="'No Clinical Trial Data Available'"

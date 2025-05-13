@@ -58,6 +58,7 @@ export const FETCHTRIALDETAILS = gql`
   }
   ${TRIALFIELDS}
 `;
+
 export const FETCHTRIALSQUERY = gql`
   query ClinicalTrialsList(
     $gardWhere: GARDWhere
@@ -112,8 +113,8 @@ ctoptions: {
 };
 
 export const TRIALTYPEFILTERS = gql`
-  query TrialFilters($ctfilters: ClinicalTrialWhere) {
-    trialsByType(where: $ctfilters) {
+  query TrialFilters($gardWhere: GARDWhere, $ctfilters: ClinicalTrialWhere) {
+    trialsByType(gardWhere: $gardWhere, where: $ctfilters) {
       count
       label
       term
@@ -122,8 +123,8 @@ export const TRIALTYPEFILTERS = gql`
 `;
 
 export const TRIALPHASEFILTERS = gql`
-  query TrialFilters($ctfilters: ClinicalTrialWhere) {
-    trialsByPhase(where: $ctfilters) {
+  query TrialFilters($gardWhere: GARDWhere, $ctfilters: ClinicalTrialWhere) {
+    trialsByPhase(gardWhere: $gardWhere, where: $ctfilters) {
       count
       label
       term
@@ -132,8 +133,8 @@ export const TRIALPHASEFILTERS = gql`
 `;
 
 export const TRIALSTATUSFILTERS = gql`
-  query TrialFilters($ctfilters: ClinicalTrialWhere) {
-    trialsByStatus(where: $ctfilters) {
+  query TrialFilters($gardWhere: GARDWhere, $ctfilters: ClinicalTrialWhere) {
+    trialsByStatus(gardWhere: $gardWhere, where: $ctfilters) {
       count
       label
       term
@@ -141,46 +142,22 @@ export const TRIALSTATUSFILTERS = gql`
   }
 `;
 
-export const TRIALFILTERS = gql`
-  query TrialFilters($ctfilters: ClinicalTrialWhere) {
-    allClinicalTrialsFilters(where: $ctfilters) {
-      trialsByStatus {
-        count
-        label
-        term
-      }
-      trialsByType {
-        count
-        label
-        term
-      }
-      trialsByPhase {
-        count
-        label
-        term
-      }
-    }
-  }
-`;
-
 export const ALLTRIALFILTERS = gql`
   query AllDiseasesClinicalTrialsFilters {
-    allDiseaseClinicalTrialsFilters {
-      trialsByPhase {
+      allTrialsByPhase {
         count
         label
         term
       }
-      trialsByStatus {
+      allTrialsByStatus {
         count
         label
         term
       }
-      trialsByType {
+      allTrialsByType {
         count
         label
         term
       }
-    }
   }
 `;

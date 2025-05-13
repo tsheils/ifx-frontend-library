@@ -181,6 +181,10 @@ a {
   color: mat.get-theme-color(theme.$light-theme, primary) !important;
 }
 
+.file-drop-boundary {
+  background-color: mat.get-theme-color(theme.$light-theme, surface-container);
+}
+
 .rail-label-primary {
   color: mat.get-theme-color(theme.$light-theme, primary) !important;
 }

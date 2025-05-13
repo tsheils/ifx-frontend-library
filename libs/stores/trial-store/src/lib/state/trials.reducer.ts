@@ -12,6 +12,7 @@ export interface TrialsState extends EntityState<ClinicalTrial> {
   trial?: ClinicalTrial;
   trials?: ClinicalTrial[];
   allTrialCount: number;
+  count: number;
 }
 
 export interface TrialsPartialState {
@@ -27,17 +28,19 @@ export const initialTrialsState: TrialsState = trialsAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   allTrialCount: 0,
+  count: 0
 });
 
 const reducer = createReducer(
   initialTrialsState,
   on(
     FetchTrialsListActions.fetchTrialsListSuccess,
-    (state, { trials, allTrialCount }) =>
+    (state, { trials, allTrialCount, count }) =>
       trialsAdapter.setAll(trials, {
         ...state,
         loaded: true,
         allTrialCount: allTrialCount || 0,
+        count: count || 0,
       })
   ),
 

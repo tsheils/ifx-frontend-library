@@ -858,7 +858,6 @@ export const fetchPathwayCluster = createEffect(
                       data: ret.data.data,
                       clusterImage: ret.plot,
                       query: ret.data.query,
-                      //                    dataframe: ret.data.combinedFishersDataframe as unknown[],
                       dataAsDataProperty: ret.data.dataAsDataProperty,
                     }
                   );
@@ -1018,7 +1017,6 @@ export const runIdentifierHarmonization = createEffect(
           .pipe(
             map(
               (ret) => {
-                console.log(ret)
                 return IdentifierHarmonizationActions.runIdentifierHarmonizationSuccess(
 
                 );

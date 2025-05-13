@@ -38,7 +38,12 @@ export const selectSelectedId = createSelector(
 
 export const getTrialCount = createSelector(
   selectTrialsState,
-  (state: TrialsState) => state.allTrialCount
+  (state: TrialsState) => {
+    return {
+      allTrialCount: state.allTrialCount,
+      count: state.count
+    }
+  }
 );
 
 export const selectEntity = createSelector(

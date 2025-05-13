@@ -1,0 +1,47 @@
+
+.file-input {
+  display: none;
+}
+
+.file-drop-boundary {
+  height: 25vh;
+  border: 1px gray dashed;
+  border-radius: 10px;
+  overflow-y: scroll;
+}
+
+.file-list-element {
+  display: flex;
+  align-items: center;
+  font-size: 0.9rem;
+}
+
+.file-size {
+  font-size: .75rem;
+  font-style: italic;
+}
+
+.file-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: auto;
+  grid-column-gap: 1vw;
+}
+
+.input-file-spinner {
+  height: 100%;
+  width: 100%;
+}
+
+.file-upload {
+  display: block;
+  justify-items: center;
+  align-content: center;
+  text-align: center;
+  padding-top: 6vh;
+}
+
+.drag-drop-text {
+  padding-top: .3rem;
+  padding-bottom: 1rem;
+}

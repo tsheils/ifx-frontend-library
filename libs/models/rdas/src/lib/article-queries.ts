@@ -33,7 +33,10 @@ export const FETCHARTICLESQUERY = gql`
   ) {
     articlesData: gards(where: $gardWhere) {
       GardId
-      _count: mentionedInArticlesAggregate(where: $articleFilter) {
+      allCount: mentionedInArticlesAggregate {
+        count
+      }
+   _count: mentionedInArticlesAggregate(where: $articleFilter) {
         count
       }
 

@@ -23,6 +23,7 @@ export class DataDownloadButtonComponent {
   data = input<unknown[]>();
   fields = input<string[]>();
   fileName = input<string>('data-download.tsv');
+
   dataAsTSV = computed(() => {
     if (this.data() && this.data()?.length) {
       // grab the column headings (separated by tabs)
