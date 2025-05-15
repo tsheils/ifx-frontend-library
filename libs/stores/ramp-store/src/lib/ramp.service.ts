@@ -594,29 +594,34 @@ export class RampService {
     dataframe: RampReactionClassEnrichmentResponse,
     pValType?: string,
     pValCutoff?: number
-  ) {
+  ): Observable<RampReactionClassEnrichmentResponse> {
     return this.http
-      .post(`${this.url}filter-enrichment-results`, {
+      .post<RampReactionClassEnrichmentAPIResponse>
+      (`${this.url}filter-enrichment-results`, {
         fishers_results: dataframe.data,
         pValType: pValType,
         pValCutoff: pValCutoff,
       })
       .pipe(
-        map((response) => {
-          console.log(response);
-          //   const reactionList = response
-          //   const dataAsDataProperties = this._mapDataToDataProperty(response.data);
-          /*        return {
+        map((response: RampReactionClassEnrichmentAPIResponse) => {
+          const reactionList: ReactionClass[] = [];
+          response.data.EC_Level1Stats.forEach((reaction) =>
+            reactionList.push(new ReactionClass(reaction))
+          );
+          response.data.EC_Level2Stats.forEach((reaction) =>
+            reactionList.push(new ReactionClass(reaction))
+          );
+          const dataAsDataProperties =
+            this._mapDataToDataProperty(reactionList);
+          return <RampReactionClassEnrichmentResponse>{
             data: response.data,
-         //   enriched_chemical_class_list: retList,
             dataAsDataProperty: dataAsDataProperties,
             query: {
               functionCall: response.function_call
                 ? response.function_call[0]
                 : undefined,
             },
-          }*/
-          return {} as RampChemicalEnrichmentResponse;
+          };
         })
       );
   }

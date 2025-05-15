@@ -200,8 +200,8 @@ export const ReactionClassEnrichmentsActions = createActionGroup({
     fetchReactionClassEnrichmentFile: emptyProps(),
     fetchReactionClassEnrichmentSuccess: props<{
       data: RampReactionClassEnrichmentResponse;
-      // pValType?: string;
-      //  pValCutoff?: number;
+       pValType?: string;
+       pValCutoff?: number;
     }>(),
     fetchReactionClassEnrichmentFailure: props<{ error: string }>(),
     filterReactionClassEnrichment: props<{
