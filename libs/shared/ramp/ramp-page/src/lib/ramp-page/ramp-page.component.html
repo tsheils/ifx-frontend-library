@@ -13,10 +13,10 @@
       matRipple
       class="rail-button"
       [ngClass]="{
-        'active-rail': isActive('results'),
+        'active-rail': isActive('overview'),
         'disabled-rail': !loadedTracker().resultsLoaded,
       }"
-      (click)="scrollTo('results')"
+      (click)="scrollTo('overview')"
       [disabled]="!loadedTracker().resultsLoaded"
     >
       <div class="rail-icon"><mat-icon>output</mat-icon></div>

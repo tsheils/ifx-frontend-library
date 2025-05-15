@@ -661,7 +661,7 @@ export const fetchReactionClassEnrichment = createEffect(
   { functional: true }
 );
 
-/*
+
 export const filterReactionClassEnrichment = createEffect(
   (
     actions$ = inject(Actions),
@@ -678,13 +678,13 @@ export const filterReactionClassEnrichment = createEffect(
         if (dataframe) {
           return rampService
             .filterReactionClassEnrichment(
-              dataframe.data as RampReactionClassEnrichmentResponse,
+              dataframe,
               action.pValType,
               action.pValCutoff,
             )
             .pipe(
               map(
-                (ret: RampReaction0ClassEnrichmentResponse) => {
+                (ret: RampReactionClassEnrichmentResponse) => {
                   return ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess(
                     { data: ret },
                   );
@@ -710,7 +710,7 @@ export const filterReactionClassEnrichment = createEffect(
   },
   { functional: true },
 );
-*/
+
 
 export const fetchReactionClassEnrichmentFile = createEffect(
   (

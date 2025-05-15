@@ -480,9 +480,11 @@ export class ReactionsPageComponent
     origin: string
   ): void {
     this.activeTab.set(origin);
-    this.inputList = this._parseInput(
-      formData['analytes'] as string | string[]
-    );
+    if(formData['analytes']) {
+      this.inputList = this._parseInput(
+        formData['analytes'] as string | string[]
+      );
+    }
     switch (origin) {
       case 'reactions-from-analytes': {
         this.store.dispatch(
