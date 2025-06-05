@@ -69,7 +69,6 @@ export const loadArticlesList$ = createEffect(
         if (root.fragment === 'articles') {
           _setArticlesOptions(root.queryParams);
         }
-
         return articleService
           .fetchArticles(FETCHARTICLESQUERY, ALLARTICLES)
           .pipe(
@@ -120,20 +119,26 @@ function _setArticlesOptions(options: {
     if(!options['isNHS']) {
       ALLARTICLES.articleFilter.isNHS = undefined
     }
+  } else {
+    ALLARTICLES.articleFilter.isEpi = undefined
   }
   if (options['isNHS']) {
     ALLARTICLES.articleFilter.isNHS = <boolean>(options.isNHS === 'true')
     if(!options['isEpi']) {
       ALLARTICLES.articleFilter.isEpi = undefined
     }
+  }else {
+    ALLARTICLES.articleFilter.isNHS = undefined
   }
 
   ALLARTICLES.articleOptions.limit = <number>options['limit']
     ? <number>options['limit']
     : 10;
+
   if (<number>options['offset']) {
     ALLARTICLES.articleOptions.offset = <number>options['offset'] * 1;
   }
+
   if (options['year'] && options['year'].length > 0) {
     ALLARTICLES.articleFilter.publicationYear_IN = options['year'];
   }

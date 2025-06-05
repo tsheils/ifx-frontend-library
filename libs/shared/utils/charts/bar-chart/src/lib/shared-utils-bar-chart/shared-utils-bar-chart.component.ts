@@ -259,20 +259,4 @@ export class SharedUtilsBarChartComponent
 
     this.size(text, path);
   }
-
-  // Wraps the text with a callout path of the correct size, as measured in the page.
-  size(
-    text: Selection<BaseType | SVGTextElement, undefined, null, undefined>,
-    path: Selection<BaseType | SVGPathElement, undefined, null, undefined>
-  ) {
-    if (text.node()) {
-      const node = text.node() as SVGGraphicsElement
-      const { y, width: w, height: h } = node.getBBox();
-      text.attr('transform', `translate(${-w / 2},${15 - y})`);
-      path.attr(
-        'd',
-        `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`
-      );
-    }
-  }
 }

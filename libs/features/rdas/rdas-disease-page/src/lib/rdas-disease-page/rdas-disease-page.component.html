@@ -51,8 +51,8 @@
             class="list-button"
             role="button"
             tabindex="0"
-            (click)="scroll('articles')"
-            (keydown.enter)="scroll('articles')"
+            (click)="setUrl({fragment: 'articles', params: {isNHS: null, isEpi: null}})"
+            (keydown.enter)="setUrl({fragment: 'articles', params: {isNHS: null, isEpi: null}})"
             [activated]="isActive('articles')"
           >
             <div class="row space-between-row">

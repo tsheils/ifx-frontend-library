@@ -93,6 +93,7 @@ export const initialState: State = rampAdapter.getInitialState({
   loading: false,
   entityCounts: [],
   sourceVersions: [],
+  ontologiesList: [],
   geneIntersects: [] as { id: string; sets: string[]; size: number }[],
   metaboliteIntersects: [] as { id: string; sets: string[]; size: number }[],
 });

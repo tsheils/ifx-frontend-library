@@ -301,11 +301,11 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
     origin: string
   ): void {
     this.activeTab.set(origin);
+    this.inputList = this._parseInput(
+      formData['metabolites'] as string | string[]
+    );
     switch (origin) {
       case 'chemical-properties': {
-        this.inputList = this._parseInput(
-          formData['metabolites'] as string | string[]
-        );
         this.store.dispatch(
           PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolites({
             metabolites: this.inputList,
@@ -315,9 +315,6 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
       }
 
       case 'chemical-classes': {
-        this.inputList = this._parseInput(
-          formData['metabolites'] as string | string[]
-        );
         this.store.dispatch(
           MetaboliteEnrichmentsActions.fetchClassesFromMetabolites({
             metabolites: this.inputList,

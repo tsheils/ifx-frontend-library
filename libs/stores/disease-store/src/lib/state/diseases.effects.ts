@@ -260,9 +260,10 @@ export const loadDiseaseFilters$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
-        (r: RouterNavigationAction) =>
-          !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')
+        (r: RouterNavigationAction) => {
+return (!r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease')) && !r.payload.routerState.root.queryParams['offset']
+        }
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       concatLatestFrom(() =>
@@ -980,12 +981,12 @@ function _setTrialVariables(params: Params, origin: string) {
   if (origin !== 'type' && params['StudyType'] && params['StudyType'].length) {
     FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = params['StudyType'];
   } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
+    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
   }
   if (origin !== 'phase' && params['Phase'] && params['Phase'].length) {
     FETCHTRIALSVARIABLES.ctfilters.Phase_IN = params['Phase'];
   } else {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = null;
+    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = undefined;
   }
   if (
     origin !== 'status' &&
@@ -994,7 +995,7 @@ function _setTrialVariables(params: Params, origin: string) {
   ) {
     FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = params['OverallStatus'];
   } else {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = null;
+    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = undefined;
   }
   return FETCHTRIALSVARIABLES;
 }
@@ -1003,7 +1004,7 @@ function _setArticleVariables(params: Params) {
   if (params['year'] && params['year'].length) {
     // FETCHART.ctfilters.StudyType_IN = params['StudyType']
   } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = null;
+    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
   }
 
   return FETCHTRIALSVARIABLES;

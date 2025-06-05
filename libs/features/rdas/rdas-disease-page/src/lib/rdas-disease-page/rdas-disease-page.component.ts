@@ -154,8 +154,10 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
         fragment: event.fragment,
         queryParams: { ...oldParams, ...event.params },
         onSameUrlNavigation: 'ignore',
+        replaceUrl: true
       });
     } else {
+      //scroll to section
       this.router.navigate(['disease'], {
         fragment: event.fragment,
         queryParams: { id: this.disease()?.gardId, ...event.params },

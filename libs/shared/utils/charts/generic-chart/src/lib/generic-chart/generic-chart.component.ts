@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { BaseType } from 'd3';
 import { select, Selection } from 'd3-selection';
 
 @Component({
@@ -65,5 +66,22 @@ export class GenericChartComponent {
   svg!: any; // Selection<BaseType, unknown, null, undefined>;
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];
+
+
+  // Wraps tooltip text with a callout path of the correct size, as measured in the page.
+  size(
+    text: Selection<BaseType | SVGTextElement, undefined, null, undefined>,
+    path: Selection<BaseType | SVGPathElement, undefined, null, undefined>
+  ) {
+    if (text.node()) {
+      const node = text.node() as SVGGraphicsElement
+      const { y, width: w, height: h } = node.getBBox();
+      text.attr('transform', `translate(${-w / 2},${15 - y})`);
+      path.attr(
+        'd',
+        `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`
+      );
+    }
+  }
 
 }

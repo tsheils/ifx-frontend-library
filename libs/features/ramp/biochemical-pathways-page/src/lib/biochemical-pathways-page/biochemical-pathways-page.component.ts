@@ -341,7 +341,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
     let sizeMessage = undefined;
     if (!(this.clusterPlot() && this.clusterPlot()!.length > 0)) {
       sizeMessage =
-        'This website currently does not support clustering over 100 pathways. Please use the RaMP R package for this feature.';
+        'This website currently does not support clustering over 100 pathways. Please use the RaMP-DB R package for this feature.';
     }
     if (this.clusterPlot()) {
       visualizationMapComputed.set('Cluster Plot', [
@@ -380,6 +380,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               inputLength: this.inputList.length,
               inputType: 'pathways',
               fuzzy: true,
+              function: [this.analytes()?.query?.functionCall]
             } as QueryResultsData,
           };
         }
@@ -394,6 +395,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               count: this.pathways()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
+              function: [this.pathways()?.query?.functionCall]
             } as QueryResultsData,
           };
         }
@@ -408,6 +410,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               count: this.enrichedPathways()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
+              function: [this.enrichedPathways()?.query?.functionCall],
             } as QueryResultsData,
           };
         }

@@ -132,6 +132,21 @@ export class AboutComponent implements OnInit {
       field: 'wiki',
       sortable: true,
     }),
+    new DataProperty({
+      label: 'Rhea',
+      field: 'rhea',
+      sortable: true,
+    }),
+    new DataProperty({
+      label: 'RefMet',
+      field: 'refmet',
+      sortable: true,
+    }),
+    new DataProperty({
+      label: 'PFOCR',
+      field: 'pfocr',
+      sortable: true,
+    }),
   ];
   dbVersion = computed(() => this.sourceVersions()![0]?.ramp_db_version);
 
