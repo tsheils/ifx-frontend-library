@@ -10,9 +10,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
-import { axisBottom, min } from 'd3';
+import { axisBottom, BaseType, min, pointer } from 'd3';
 import { GenericChartComponent } from 'generic-chart';
-import { select } from 'd3-selection';
+import { select, Selection } from 'd3-selection';
 import { axisLeft } from 'd3-axis';
 import { scaleBand, scaleLinear, scaleLog } from 'd3-scale';
 import { format } from 'd3-format';
@@ -155,6 +155,12 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           `translate(${this.leftColWidth() + this.margins().left}, ${this.margins().top})`
         );
 
+      // add tooltip last
+      this.tooltip = svg2
+        .append('svg:g')
+        .attr('class', 'tooltip')
+        .style('pointer-events', 'none') as Selection<null, undefined, null, undefined>
+
       return svg
     } else return undefined
     })
@@ -269,7 +275,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             .classed('set-bar-labels', true)
             .attr('text-anchor', 'end')
             .attr('font-size', '.8em')
-            .attr(
+        .attr(
               'x',
               (d: { count: number; id: string }) => {
                 let ret = this.setSizeScale()(<number>d.count);
@@ -484,7 +490,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               .attr('font-size', '1em')
               .append('text')
               .attr('x', (d: UpsetData) => {
-                return <number>this.xScale()(<string>d.id) + (this.xScale().bandwidth() / 2)
+                return <number>this.xScale()(<string>d.id)
               })
               .attr('y', (d: UpsetData) => {
                 let scale: number = this.margins().top;
@@ -499,7 +505,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
                 }
                 return scale - this.margins().top - 2;
               })
-              .text((d: { size: number }) => format(',d')(Number(d.size)));
+              .text((d: { size: number }) => format(',d')(Number(d.size)))
+            ;
 
             g.append('rect')
               .attr('class', 'hover-column')
@@ -511,12 +518,13 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
               .attr('y', 0);
 
-            g.on('mouseover', (event: Event, d) => {
+            g.on('mouseover', (event: MouseEvent, d) => {
               select((<unknown>event.currentTarget) as string)
                 .classed('hovered', true)
+                .classed('hovered-label', true)
                 .transition()
                 .duration(300);
-              this.columnHovered(d);
+              this.columnHovered(event, d);
             });
 
             g.on('mouseout', (event: Event, d: UpsetData) => {
@@ -684,7 +692,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       .duration(100);
   }
 
-  columnHovered(d: UpsetData) {
+  columnHovered(event: MouseEvent, d: UpsetData) {
     this.scrollSvg()!.selectAll('.combination')
       .classed('hovered', (datum) => {
         const r: UpsetData = datum as UpsetData;
@@ -692,6 +700,46 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       })
       .transition()
       .duration(100);
+
+const textString =  d.size.toLocaleString();
+    this.tooltip.style('display', null);
+   // const [mx, my] = pointer(event);
+    const [mx, my] = [event.offsetX, event.offsetY];
+    this.tooltip.attr('transform', `translate(${mx}, ${my})`);
+
+    const path: Selection<
+      BaseType | SVGPathElement,
+      undefined,
+      null,
+      undefined
+    > = this.tooltip
+      .selectAll('path')
+      // eslint-disable-next-line no-sparse-arrays
+      .data([,])
+      .join('path')
+      .attr('fill', 'white')
+      .attr('stroke', 'black');
+
+    const text: Selection<
+      BaseType | SVGTextElement,
+      undefined,
+      null,
+      undefined
+    > = this.tooltip
+      .selectAll('text')
+      .data([undefined,])
+      .join('text')
+      .call((text) =>
+        text
+          .attr('x', 0)
+          .attr('y', (_, i) => `${i}em`)
+          .attr('font-weight', (_, i) => (i ? null : 'bold'))
+          .text(textString)
+      );
+
+    this.tooltip.transition().duration(100).style('opacity', 0.9);
+
+    this.size(text, path);
   }
 
   columnHoveredOff() {
@@ -700,6 +748,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       .classed('hovered-row', false)
       .transition()
       .duration(100);
+    this.tooltip.style('display', 'none');
+
   }
 
   private _getMax(): number {

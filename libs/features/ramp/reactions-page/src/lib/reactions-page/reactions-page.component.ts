@@ -400,6 +400,7 @@ export class ReactionsPageComponent
               count: this.reactionsFromAnalytes()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
+              function: [this.reactionsFromAnalytes()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -414,6 +415,7 @@ export class ReactionsPageComponent
               count: this.reactionClasses()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
+              function: [this.reactionClasses()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -428,6 +430,7 @@ export class ReactionsPageComponent
               count: this.commonReactions()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
+              function: [this.commonReactions()?.query?.functionCall],
             } as QueryResultsData,
           };
         }

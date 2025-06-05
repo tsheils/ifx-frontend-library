@@ -106,11 +106,11 @@ export class RampService {
     return this.http
       .get<{ data: { [p: string]: string }[] }>(`${this.url}entity-counts`) // ,{responseType: 'text'})
       .pipe(
-        map((response: { data: { [p: string]: string }[] }) =>
-          response.data.map(
-            (obj: { [p: string]: string }) => new EntityCount(obj)
+        map((response: { data: { [p: string]: string }[] }) => {
+          return response.data.map(
+            (obj: { [p: string]: string | number }) => new EntityCount(obj)
           )
-        ),
+        }),
         catchError(this.handleError('fetchEntityCounts', []))
       );
   }

@@ -1,9 +1,9 @@
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, computed,
   ElementRef,
   inject,
-  viewChild,
+  viewChild
 } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MatAnchor } from '@angular/material/button';
@@ -34,6 +34,7 @@ export class RampHomeComponent {
   private readonly store = inject(Store);
   elemRef = viewChild<ElementRef>('details');
   api = this.store.selectSignal(RampSelectors.getRampApi);
+  entityCounts = computed(()=> this.store.selectSignal(RampSelectors.getAllRamp)().entityCounts)
 
   goToDetails(): void {
     this.elemRef()?.nativeElement.scrollIntoView({

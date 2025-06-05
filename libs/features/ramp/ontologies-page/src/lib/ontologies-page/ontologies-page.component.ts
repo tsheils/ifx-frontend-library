@@ -202,6 +202,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
               inputLength: this.inputList.length,
               inputType: 'metabolites',
               fuzzy: true,
+              function: [this.ontologiesFromMetabolites()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -231,6 +232,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
               count: this.ontologyEnrichment()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'metabolites',
+              function: [this.ontologyEnrichment()?.query?.functionCall],
             } as QueryResultsData,
           };
         }

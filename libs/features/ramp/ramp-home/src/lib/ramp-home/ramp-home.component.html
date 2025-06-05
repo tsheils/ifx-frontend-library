@@ -1,6 +1,6 @@
 <div class="main-banner">
   <div class="main-content">
-    <div class="feature-text">RaMP</div>
+    <div class="feature-text">RaMP-DB</div>
     <div class="feature-subtext">
       A Relational Database <br />
       for Multi-Omic Data Interpretation
@@ -50,13 +50,20 @@
   <div class="row space-around-row">
     <div class="width-50">
       <mat-card class="stats-card">
-        <h1>RaMP Contains</h1>
-        <div class="row space-around-row">
-          <div class="width-15 stat-box">
-            <div class="number-count">53,831</div>
-            pathways
+        <h1>RaMP-DB Contains</h1>
+        <div class="count-grid">
+        @for(count of entityCounts(); track count.status_category) {
+
+<!--
+          <div class="row space-around-row">
+-->
+          <div class="stat-box">
+            <div class="number-count">{{ count.total | number }}</div>
+            {{ count.status_category }}
           </div>
-          <div class="stat-box-spacer"></div>
+        }
+        </div>
+         <!-- <div class="stat-box-spacer"></div>
           <div class="width-15 stat-box">
             <div class="number-count">256,086</div>
             metabolites
@@ -81,7 +88,7 @@
             <div class="number-count">1,541,996</div>
             reactions
           </div>
-        </div>
+        </div>-->
       </mat-card>
     </div>
     <div class="width-40"></div>
@@ -89,7 +96,7 @@
 </div>
 
 <div class="sub-content-white">
-  <h1>RaMP Sources</h1>
+  <h1>RaMP-DB Sources</h1>
 
   <div class="row space-around-row centered-row">
     <div class="width-20 centered">
@@ -100,9 +107,9 @@
           height="168"
           alt="HMDB Logo"
         />
-        <br />
       </a>
-      (includes Kegg)
+      <br>
+      <span class = row>(includes Kegg)</span>
     </div>
     <div class="width-20 centered">
       <a
@@ -120,21 +127,35 @@
     </div>
     <div class="width-20 centered">
       <a
-        href="https://www.ebi.ac.uk/chebi/"
-        title="Go to the ChEBI website"
+        href="https://reactome.org/"
+        title="Go to the Reactome website"
         target="_blank"
       >
         <img
-          ngSrc="/assets/ramp-home/logos/ChEBI_logo.png"
-          width="100"
+          ngSrc="/assets/ramp-home/logos/reactome-logo.png"
+          width="344"
+          height="81"
+          alt="Reactome Logo"
+        />
+      </a>
+    </div>
+    <div class="width-20 centered">
+      <a
+        href="https://www.rhea-db.org/"
+        title="Go to the Rhea DB website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/rhea_logo.png"
+          width="200"
           height="100"
-          alt="ChEBI Logo"
-        /><span class="chebi-text">ChEBI</span>
+          alt="Rhea DB Logo"
+        />
       </a>
     </div>
   </div>
-  <div class="row space-around-row centered">
-    <div class="width-50 centered">
+  <div class="row space-around-row">
+    <div class="width-20 centered">
       <a
         href="https://www.wikipathways.org/"
         title="Go to the WikiPathways website"
@@ -148,17 +169,45 @@
         />
       </a>
     </div>
-    <div class="width-50 centered">
+    <div class="width-20 centered">
       <a
-        href="https://reactome.org/"
-        title="Go to the Reactome website"
+        href="https://pfocr.wikipathways.org/"
+        title="Go to the PFOCR website"
         target="_blank"
       >
         <img
-          ngSrc="/assets/ramp-home/logos/reactome-logo.png"
-          width="459"
-          height="108"
-          alt="Reactome Logo"
+          ngSrc="/assets/ramp-home/logos/pfocr_logo_500.png"
+          width="150"
+          height="150"
+          alt="PFOCR Logo"
+        />
+      </a>
+    </div>
+    <div class="width-20 centered">
+      <a
+        href="https://www.ebi.ac.uk/chebi/"
+        title="Go to the ChEBI website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/ChEBI_logo.png"
+          width="100"
+          height="100"
+          alt="ChEBI Logo"
+        /><span class="chebi-text">ChEBI</span>
+      </a>
+    </div>
+    <div class="width-20 centered">
+      <a
+        href="https://https://www.metabolomicsworkbench.org/databases/refmet/index.php"
+        title="Go to the RefMet website"
+        target="_blank"
+      >
+        <img
+          ngSrc="/assets/ramp-home/logos/mw.png"
+          width="200"
+          height="150"
+          alt="Metabolomics Workbench Logo"
         />
       </a>
     </div>
