@@ -1,6 +1,8 @@
 @use 'libs/styles/src/styles/rdas-theme.scss' as theme;
 @use '@angular/material' as mat;
 @use '_utils' as utils;
+@use 'libs/shared/utils/header-template/src/lib/header-template/header-template.theme.scss'
+  as header;
 @use 'libs/shared/utils/footer-template/src/lib/footer-template/_footer-theme.scss'
   as footer;
 @use 'libs/shared/rdas/disease-display/src/lib/disease-header/_disease-header-theme.scss'
@@ -47,6 +49,7 @@
 html {
   @include mat.system-level-colors(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
+  @include header.header-theme(theme.$light-theme);
   @include footer.theme(theme.$light-theme);
   @include disease-header.theme(theme.$light-theme);
   @include social-sign-on.theme(theme.$light-theme);

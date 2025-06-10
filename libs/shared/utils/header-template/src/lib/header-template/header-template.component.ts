@@ -3,6 +3,7 @@ import {
   Component,
   DestroyRef,
   inject,
+  input,
   Input,
   ViewEncapsulation,
 } from '@angular/core';
@@ -37,21 +38,11 @@ import { MatToolbarModule } from '@angular/material/toolbar';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderTemplateComponent {
+  router = inject(Router);
   destroyRef = inject(DestroyRef);
-
-  /**
-   * animation state changed by scrolling
-   * @type {string}
-   */
-  @Input() animationState = 'in';
-
-  @Input() title?: string;
-
-  @Input() links?: LinkTemplateProperty[] = [];
-
-  mobile = false;
-
-  constructor(private router: Router) {}
+  title = input<string>();
+  links = input<LinkTemplateProperty[]>([]);
+  animationState = input<string>('in');
 
   /**
    * sets active section in nav

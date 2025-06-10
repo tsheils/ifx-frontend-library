@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-selected-filter-list',
   preset: '../../../../jest.preset.js',

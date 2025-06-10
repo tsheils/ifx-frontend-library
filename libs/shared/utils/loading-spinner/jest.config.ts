@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-loading-spinner',
   preset: '../../../../jest.preset.js',

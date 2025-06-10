@@ -8,8 +8,7 @@ import {
   ElementRef,
   inject,
   OnInit,
-  QueryList,
-  ViewChildren,
+  viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
@@ -38,19 +37,15 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasPrivacyPageComponent implements OnInit {
-  @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
-
+  scrollSections = viewChildren<ElementRef>('scrollSection');
+  private changeRef = inject(ChangeDetectorRef);
+  private scrollDispatcher = inject(ScrollDispatcher);
+  public scroller = inject(ViewportScroller);
+  private breakpointObserver = inject(BreakpointObserver);
   destroyRef = inject(DestroyRef);
   mobile = false;
 
   activeElement = 'statement';
-
-  constructor(
-    private changeRef: ChangeDetectorRef,
-    private scrollDispatcher: ScrollDispatcher,
-    public scroller: ViewportScroller,
-    private breakpointObserver: BreakpointObserver
-  ) {}
 
   ngOnInit(): void {
     this.scrollDispatcher
@@ -62,7 +57,7 @@ export class RdasPrivacyPageComponent implements OnInit {
           this.activeElement = 'statement';
           this.changeRef.detectChanges();
         } else {
-          this.scrollSections.forEach((section) => {
+          this.scrollSections().forEach((section) => {
             scrollTop = scrollTop - section.nativeElement?.scrollHeight;
             if (scrollTop >= 0) {
               this.activeElement = section.nativeElement.nextSibling.id;

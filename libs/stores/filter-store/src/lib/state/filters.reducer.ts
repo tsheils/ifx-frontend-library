@@ -36,7 +36,7 @@ const reducer = createReducer(
   on(FetchFiltersActions.fetchFiltersSuccess, (state, { filters }) =>
     filtersAdapter.upsertMany(filters, {
       ...state,
-      loaded: true
+      loaded: true,
     })
   ),
   on(FetchFiltersActions.fetchFiltersFailure, (state, { error }) => ({

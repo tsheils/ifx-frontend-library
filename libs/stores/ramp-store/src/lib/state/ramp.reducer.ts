@@ -232,7 +232,7 @@ export const rampReducer = createReducer(
 
   on(
     ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess,
-     ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess,
+    ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess,
     (state, { data }) => {
       return {
         ...state,

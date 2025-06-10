@@ -31,10 +31,13 @@ export class NcatsFormQuestionComponent {
   @Input() question!: QuestionBase<string>;
   @Input() form!: FormGroup;
   get isValid() {
-    return this.form.controls[this.question.key]?.disabled || this.form.controls[this.question.key]?.valid;
+    return (
+      this.form.controls[this.question.key]?.disabled ||
+      this.form.controls[this.question.key]?.valid
+    );
   }
 
   getWidth(question: QuestionBase<string>) {
-    return question.width ? `width-${question.width}` : 'width-95'
+    return question.width ? `width-${question.width}` : 'width-95';
   }
 }

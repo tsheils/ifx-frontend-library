@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'history-api',
   preset: '../../../../jest.preset.js',

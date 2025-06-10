@@ -60,8 +60,10 @@ export const loadArticlesList$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => {
-       return !r.payload.routerState.url.includes('/diseases') &&
-         r.payload.routerState.url.includes('/disease');
+        return (
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.includes('/disease')
+        );
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
@@ -115,20 +117,20 @@ function _setArticlesOptions(options: {
   year?: string[];
 }) {
   if (options['isEpi']) {
-    ALLARTICLES.articleFilter.isEpi = <boolean>(options.isEpi === 'true')
-    if(!options['isNHS']) {
-      ALLARTICLES.articleFilter.isNHS = undefined
+    ALLARTICLES.articleFilter.isEpi = <boolean>(options.isEpi === 'true');
+    if (!options['isNHS']) {
+      ALLARTICLES.articleFilter.isNHS = undefined;
     }
   } else {
-    ALLARTICLES.articleFilter.isEpi = undefined
+    ALLARTICLES.articleFilter.isEpi = undefined;
   }
   if (options['isNHS']) {
-    ALLARTICLES.articleFilter.isNHS = <boolean>(options.isNHS === 'true')
-    if(!options['isEpi']) {
-      ALLARTICLES.articleFilter.isEpi = undefined
+    ALLARTICLES.articleFilter.isNHS = <boolean>(options.isNHS === 'true');
+    if (!options['isEpi']) {
+      ALLARTICLES.articleFilter.isEpi = undefined;
     }
-  }else {
-    ALLARTICLES.articleFilter.isNHS = undefined
+  } else {
+    ALLARTICLES.articleFilter.isNHS = undefined;
   }
 
   ALLARTICLES.articleOptions.limit = <number>options['limit']

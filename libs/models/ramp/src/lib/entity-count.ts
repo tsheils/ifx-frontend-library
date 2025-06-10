@@ -1,15 +1,15 @@
 export class EntityCount {
   status_category!: string;
-  total= 0;
+  total = 0;
   hmdb = 0;
   lipidmaps = 0;
   reactome = 0;
   wiki = 0;
   chebi = 0;
-  kegg= 0;
-  pfocr= 0;
-  refmet= 0;
-  rhea= 0;
+  kegg = 0;
+  pfocr = 0;
+  refmet = 0;
+  rhea = 0;
 
   constructor(obj: { [key: string]: string | number }) {
     if (obj['status_category']) {
@@ -53,6 +53,5 @@ export class EntityCount {
       this.pfocr = parseInt(<string>obj['PFOCR']);
       this.total = this.total + this.pfocr;
     }
-
   }
 }

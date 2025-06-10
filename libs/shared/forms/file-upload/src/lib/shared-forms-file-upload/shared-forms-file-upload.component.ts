@@ -1,10 +1,11 @@
 import {
   Component,
   computed,
-  ElementRef, input,
+  ElementRef,
+  input,
   output,
   signal,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -39,7 +40,7 @@ export class SharedFormsFileUploadComponent implements ControlValueAccessor {
   //fileName = computed(() => this.files()?[0].name || null);
   files = signal<File[] | undefined>(undefined);
   touched = false;
-  multiple =input<boolean | undefined>(false);
+  multiple = input<boolean | undefined>(false);
 
   //eslint-disable-next-line @typescript-eslint/no-empty-function
   onChange = (files: File[] | undefined) => {};
@@ -59,7 +60,7 @@ export class SharedFormsFileUploadComponent implements ControlValueAccessor {
   writeValue(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target && target?.files?.length) {
-      this.files.set(<unknown>target?.files as File[]);
+      this.files.set((<unknown>target?.files) as File[]);
       this.onChange(this.files());
     }
   }
@@ -81,7 +82,7 @@ export class SharedFormsFileUploadComponent implements ControlValueAccessor {
 
   removeFile(index: number) {
     const currentFiles = Array.from(this.files()!) as File[];
-    const retArr: File[] = currentFiles.filter((file,idx) =>  idx !== index)
-    this.files.set(retArr)
+    const retArr: File[] = currentFiles.filter((file, idx) => idx !== index);
+    this.files.set(retArr);
   }
 }

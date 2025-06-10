@@ -380,7 +380,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               inputLength: this.inputList.length,
               inputType: 'pathways',
               fuzzy: true,
-              function: [this.analytes()?.query?.functionCall]
+              function: [this.analytes()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -395,7 +395,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               count: this.pathways()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
-              function: [this.pathways()?.query?.functionCall]
+              function: [this.pathways()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -508,5 +508,4 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       }
     }
   }
-
 }

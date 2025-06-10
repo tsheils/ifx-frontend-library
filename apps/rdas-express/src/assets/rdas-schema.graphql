@@ -92,60 +92,64 @@ type Phenotype {
 
 type Query {
   treeParent: [JSON]
-  @cypher(
-    statement: """
-    match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
-    WITH COUNT(s) as childrenCount, l
-    WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
-    return collect(DISTINCT(parents)) as treeParents
-    """
-    columnName: "treeParents"
-  )
+    @cypher(
+      statement: """
+      match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
+      WITH COUNT(s) as childrenCount, l
+      WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
+      return collect(DISTINCT(parents)) as treeParents
+      """
+      columnName: "treeParents"
+    )
 }
 
 type Query {
   treeBranch(searchString: String): [JSON]
-  @cypher(
-    statement: """
-    match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
-    WITH COUNT(s) as childrenCount, l
-    WITH {gardId: l.GardId, name: l.GardName, _childrenCount:childrenCount} as parents
-    match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
-    return {paths: collect(distinct(p)), nodes: collect(distinct(parents))} as data
-    """
-    columnName: "data"
-  )
+    @cypher(
+      statement: """
+      match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
+      WITH COUNT(s) as childrenCount, l
+      WITH {gardId: l.GardId, name: l.GardName, _childrenCount:childrenCount} as parents
+      match p=(:GARD {GardId: $searchString})-[r:subClassOf*0..]->(n:GARD) WHERE NOT (n:GARD)-[:subClassOf]->(:GARD)
+      return {paths: collect(distinct(p)), nodes: collect(distinct(parents))} as data
+      """
+      columnName: "data"
+    )
 }
 
-
 type Query {
-  filteredDiseases(where: GARDWhere, limit: Int, offset: Int, sort: [GARDSort]): [GARD]
-  @cypher(
-    statement: """
-    Match (n:GARD)
-    MATCH (n)-[:associated_with_gene]->(g:Gene)
-    WHERE (g.GeneSymbol IN $where.associatedWithGeneGenes_SOME.GeneSymbol_IN OR $where.associatedWithGeneGenes_SOME.GeneSymbol_IN IS NULL)
-    OPTIONAL MATCH (n)-[:has_phenotype]->(p:Phenotype)
-    WHERE (p.HPOTerm IN $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN OR $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN IS NULL)
-    RETURN distinct(n) as retNode
-    """
-    columnName: "retNode"
-  )
+  filteredDiseases(
+    where: GARDWhere
+    limit: Int
+    offset: Int
+    sort: [GARDSort]
+  ): [GARD]
+    @cypher(
+      statement: """
+      Match (n:GARD)
+      MATCH (n)-[:associated_with_gene]->(g:Gene)
+      WHERE (g.GeneSymbol IN $where.associatedWithGeneGenes_SOME.GeneSymbol_IN OR $where.associatedWithGeneGenes_SOME.GeneSymbol_IN IS NULL)
+      OPTIONAL MATCH (n)-[:has_phenotype]->(p:Phenotype)
+      WHERE (p.HPOTerm IN $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN OR $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN IS NULL)
+      RETURN distinct(n) as retNode
+      """
+      columnName: "retNode"
+    )
 }
 
 type Query {
   filteredDiseasesCount(where: GARDWhere): JSON
-  @cypher(
-    statement: """
-    Match (n:GARD)
-    MATCH (n)-[:associated_with_gene]->(g:Gene)
-    WHERE (g.GeneSymbol IN $where.associatedWithGeneGenes_SOME.GeneSymbol_IN OR $where.associatedWithGeneGenes_SOME.GeneSymbol_IN IS NULL)
-    OPTIONAL MATCH (n)-[:has_phenotype]->(p:Phenotype)
-    WHERE (p.HPOTerm IN $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN OR $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN IS NULL)
-    RETURN count(distinct(n)) as count
-    """
-    columnName: "count"
-  )
+    @cypher(
+      statement: """
+      Match (n:GARD)
+      MATCH (n)-[:associated_with_gene]->(g:Gene)
+      WHERE (g.GeneSymbol IN $where.associatedWithGeneGenes_SOME.GeneSymbol_IN OR $where.associatedWithGeneGenes_SOME.GeneSymbol_IN IS NULL)
+      OPTIONAL MATCH (n)-[:has_phenotype]->(p:Phenotype)
+      WHERE (p.HPOTerm IN $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN OR $where.hasPhenotypePhenotypes_SOME.HPOTerm_IN IS NULL)
+      RETURN count(distinct(n)) as count
+      """
+      columnName: "count"
+    )
 }
 
 type Query {

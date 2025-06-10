@@ -68,9 +68,8 @@ export const fetchProjectList$ = createEffect(
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-    //    PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
-        PROJECTVARIABLES.gardId =
-          root.queryParams['id'];
+        //    PROJECTVARIABLES.coreProjectsWhere.projectsUnderCore_SOME.gardsresearchedBy_SOME.GardId =
+        PROJECTVARIABLES.gardId = root.queryParams['id'];
         if (root.fragment === 'projects') {
           _setProjectsOptions(root.queryParams);
         }
@@ -80,7 +79,7 @@ export const fetchProjectList$ = createEffect(
             map((projectsData: ApolloQueryResult<unknown>) => {
               const projects: {
                 coreProjects: CoreProject[];
-                count:  number;
+                count: number;
               } = projectsData.data as {
                 coreProjects: CoreProject[];
                 count: number;

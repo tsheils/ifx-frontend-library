@@ -161,8 +161,8 @@ export const appConfig: ApplicationConfig = {
               environment.production ? '/' : ':7688/'
             }api/trials`,
           }),
-        }
+        },
       };
-    })
+    }),
   ],
 };

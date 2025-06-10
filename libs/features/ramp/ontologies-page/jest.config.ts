@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ontologies-page',
   preset: '../../../../jest.preset.js',

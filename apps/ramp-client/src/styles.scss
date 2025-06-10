@@ -78,10 +78,13 @@ a {
 }
 
 .navigation-menu-panel {
-  @include mat.sidenav-overrides((
-    container-background-color: mat.get-theme-color(theme.$light-theme, surface-dim),
-    container-shape: square,
-  ));
+  @include mat.sidenav-overrides(
+    (
+      container-background-color:
+        mat.get-theme-color(theme.$light-theme, surface-dim),
+      container-shape: square,
+    )
+  );
 }
 
 .main {

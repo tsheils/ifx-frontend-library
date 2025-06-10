@@ -166,7 +166,6 @@ type Query {
       skip $offset
       limit $limit
       return collect(projList) as ret
-
       """
       columnName: "ret"
     )
@@ -233,5 +232,3 @@ type Query {
       columnName: "yearCounts"
     )
 }
-
-

@@ -24,9 +24,8 @@ import { Store } from '@ngrx/store';
 export class FeaturesRdasRdasArticlePageComponent implements OnInit {
   private readonly articleStore = inject(Store);
   destroyRef = inject(DestroyRef);
+  private changeRef = inject(ChangeDetectorRef);
   @Input() article!: Article;
-
-  constructor(private changeRef: ChangeDetectorRef) {}
 
   ngOnInit() {
     this.articleStore.select(ArticleSelectors.selectEntity).subscribe((res) => {

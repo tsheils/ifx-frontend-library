@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-bar-chart',
   preset: '../../../../../jest.preset.js',

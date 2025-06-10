@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'markdown-viewer',
   preset: '../../../../jest.preset.js',

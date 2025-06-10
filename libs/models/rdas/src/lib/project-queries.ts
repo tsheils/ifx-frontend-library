@@ -50,7 +50,11 @@ export const FETCHGRANTDETAILS = gql`
 export const FETCHPROJECTSQUERY = gql`
   query Query($gardId: String, $limit: Int, $offset: Int) {
     count: coreProjectsCount(gardId: $gardId)
-    coreProjects: paginatedProjects(gardId: $gardId, limit: $limit, offset: $offset)
+    coreProjects: paginatedProjects(
+      gardId: $gardId
+      limit: $limit
+      offset: $offset
+    )
   }
 `;
 
@@ -120,17 +124,14 @@ export const GRANTDETAILSVARIABLES: {
   },
 };
 
-
-
 export const PROJECTVARIABLES: {
   gardId?: string | null;
   limit?: number;
   offset?: number;
 } = {
   limit: 10,
-  offset: 0
-}
-
+  offset: 0,
+};
 
 /*  export const PROJECTVARIABLES: {
   coreProjectsWhere: {
@@ -188,15 +189,15 @@ export const PROJECTFILTERS = gql`
 
 export const ALLPROJECTFILTERS = gql`
   query AllProjectFilters {
-      allCountsByYear {
-        count
-        label
-        term
-      }
+    allCountsByYear {
+      count
+      label
+      term
+    }
     allFundingByYear {
-        count
-        label
-        term
-      }
+      count
+      label
+      term
+    }
   }
 `;

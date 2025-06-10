@@ -255,7 +255,10 @@ type FilterCount {
 }
 
 type Query {
-  trialsByStatus(gardWhere: GARDWhere, where: ClinicalTrialWhere): [FilterCount]
+  trialsByStatus(
+    gardWhere: GARDWhere
+    where: ClinicalTrialWhere
+  ): [FilterCount]
     @cypher(
       statement: """
       MATCH (n:GARD {GardId: $gardWhere.GardId})-[m:mapped_to_gard]-(cl:ClinicalTrial)
@@ -334,4 +337,3 @@ type Query {
       columnName: "data"
     )
 }
-

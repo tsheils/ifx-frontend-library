@@ -54,11 +54,7 @@
 
         <div class="row space-between-row">
           @if (article()?.abstractText && article()?.abstractText?.length) {
-          <button
-            mat-flat-button
-            [color]="'accent'"
-            (click)="showAbstract = !showAbstract"
-          >
+          <button mat-flat-button (click)="showAbstract = !showAbstract">
             {{ showAbstract ? 'Hide ' : 'Show ' }}Abstract
           </button>
           } @if (showAbstract) {

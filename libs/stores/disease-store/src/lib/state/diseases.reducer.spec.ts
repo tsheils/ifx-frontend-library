@@ -2,7 +2,6 @@ import { Disease } from '@ncats-frontend-library/models/rdas';
 import { Action } from '@ngrx/store';
 import { BrowseDiseaseListActions } from './diseases.actions';
 
-import * as DiseasesActions from './diseases.actions';
 import { State, initialState, diseasesReducer } from './diseases.reducer';
 
 describe('Diseases Reducer', () => {

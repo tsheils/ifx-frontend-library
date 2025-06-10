@@ -1,9 +1,4 @@
-import {
-  Component,
-  computed,
-  input,
-  output
-} from '@angular/core';
+import { Component, computed, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormControl,
@@ -22,10 +17,12 @@ import { NcatsFormQuestionComponent, QuestionBase } from 'ncats-form-question';
 })
 export class NcatsFormComponent {
   questions = input<QuestionBase<string>[] | null>([]);
-  direction = input<"row" | "column">('column')
+  direction = input<'row' | 'column'>('column');
   formCreated = output<FormGroup>();
   form = computed(() => {
-    const retForm = this.toFormGroup(this.questions() as QuestionBase<string>[]);
+    const retForm = this.toFormGroup(
+      this.questions() as QuestionBase<string>[]
+    );
     this.formCreated.emit(retForm);
     return retForm;
   });
@@ -34,17 +31,23 @@ export class NcatsFormComponent {
     const group: { [key: string]: FormControl } = {};
     questions?.forEach((question) => {
       group[question.key] = question.required
-        ? new FormControl({ value: question.value || '', disabled: question.disabled }, Validators.required)
-        : new FormControl({ value: question.value || '', disabled: question.disabled });
+        ? new FormControl(
+            { value: question.value || '', disabled: question.disabled },
+            Validators.required
+          )
+        : new FormControl({
+            value: question.value || '',
+            disabled: question.disabled,
+          });
     });
     return new FormGroup(group);
   }
 
   getDirection() {
-    return this.direction() === 'row'
+    return this.direction() === 'row';
   }
 
   getWidth(question: QuestionBase<string>) {
-    return question.width ? `width-${question.width}` : 'width-95'
+    return question.width ? `width-${question.width}` : 'width-95';
   }
 }

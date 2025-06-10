@@ -320,7 +320,7 @@ export class ReactionsPageComponent
           returnDataMap.set('Reaction Class Enrichment', {
             data: this.reactionClassEnrichment()?.dataAsDataProperty,
             fields: this.reactionClassEnrichmentColumns,
-          //  dataframe: this.reactionClassEnrichment()?.data,
+            //  dataframe: this.reactionClassEnrichment()?.data,
             fileName: 'reactionClassEnrichment-download.tsv',
             loaded: !!reactionClassEnrichmentData,
           });
@@ -483,7 +483,7 @@ export class ReactionsPageComponent
     origin: string
   ): void {
     this.activeTab.set(origin);
-    if(formData['analytes']) {
+    if (formData['analytes']) {
       this.inputList = this._parseInput(
         formData['analytes'] as string | string[]
       );

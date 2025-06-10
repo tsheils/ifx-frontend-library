@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-forms-file-upload',
   preset: '../../../../jest.preset.js',

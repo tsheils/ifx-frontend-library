@@ -11,7 +11,6 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { DomSanitizer } from '@angular/platform-browser';
 import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
 
 @Component({
@@ -51,8 +50,6 @@ export class ClinicalTrialsDetailsComponent {
       } else return !(t.briefSummary && t.briefSummary?.length > 800);
     } else return false;
   });
-
-  constructor(private sanitizer: DomSanitizer) {}
 
   getLabel(objType: string, plural = true): string {
     let ret: string = objType;

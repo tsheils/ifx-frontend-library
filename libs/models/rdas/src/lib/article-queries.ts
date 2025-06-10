@@ -36,7 +36,7 @@ export const FETCHARTICLESQUERY = gql`
       allCount: mentionedInArticlesAggregate {
         count
       }
-   _count: mentionedInArticlesAggregate(where: $articleFilter) {
+      _count: mentionedInArticlesAggregate(where: $articleFilter) {
         count
       }
 

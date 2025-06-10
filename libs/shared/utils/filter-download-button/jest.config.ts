@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'filter-download-button',
   preset: '../../../../jest.preset.js',

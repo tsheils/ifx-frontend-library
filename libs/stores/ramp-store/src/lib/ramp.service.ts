@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { inject, Inject, Injectable } from '@angular/core';
 import {
   DataProperty,
   Filter,
@@ -54,11 +54,8 @@ const HTTP_TEXT_OPTIONS = {
 export class RampService {
   private url!: string;
   private renderUrl!: string;
-
-  constructor(
-    private http: HttpClient,
-    @Inject(DOCUMENT) private dom: Document
-  ) {}
+  private http = inject(HttpClient);
+  private dom = inject(DOCUMENT);
 
   loadAboutData() {
     return forkJoin({
@@ -109,7 +106,7 @@ export class RampService {
         map((response: { data: { [p: string]: string }[] }) => {
           return response.data.map(
             (obj: { [p: string]: string | number }) => new EntityCount(obj)
-          )
+          );
         }),
         catchError(this.handleError('fetchEntityCounts', []))
       );
@@ -596,12 +593,14 @@ export class RampService {
     pValCutoff?: number
   ): Observable<RampReactionClassEnrichmentResponse> {
     return this.http
-      .post<RampReactionClassEnrichmentAPIResponse>
-      (`${this.url}filter-enrichment-results`, {
-        fishers_results: dataframe.data,
-        pValType: pValType,
-        pValCutoff: pValCutoff,
-      })
+      .post<RampReactionClassEnrichmentAPIResponse>(
+        `${this.url}filter-enrichment-results`,
+        {
+          fishers_results: dataframe.data,
+          pValType: pValType,
+          pValCutoff: pValCutoff,
+        }
+      )
       .pipe(
         map((response: RampReactionClassEnrichmentAPIResponse) => {
           const reactionList: ReactionClass[] = [];
@@ -852,19 +851,17 @@ export class RampService {
     );
   }
 
-  runIdentifierHarmonization(files: File[], manifest: File){
+  runIdentifierHarmonization(files: File[], manifest: File) {
     const formData: FormData = new FormData();
-    files.forEach(file => {
-      formData.append('inputFiles', file, file.name)
-    })
+    files.forEach((file) => {
+      formData.append('inputFiles', file, file.name);
+    });
     formData.append('manifestFile', manifest, manifest.name);
-    return this.http
-      .post(`${this.url}metlinkr`, formData)
-      .pipe(
-        map((response: unknown) => {
-          return <string>response;
-        })
-      );
+    return this.http.post(`${this.url}metlinkr`, formData).pipe(
+      map((response: unknown) => {
+        return <string>response;
+      })
+    );
   }
 
   private _mapDataToDataProperty<T extends RampDataGeneric>(

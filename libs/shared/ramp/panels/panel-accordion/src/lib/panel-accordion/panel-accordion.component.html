@@ -40,7 +40,7 @@
       <mat-panel-title><h2>Overview</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (overviewTabs()) {
-    <lib-results-panel [results]="overviewTabs()"></lib-results-panel>
+    <lib-results-panel [results]="overviewTabs()!"></lib-results-panel>
     }
   </mat-expansion-panel>
   <mat-expansion-panel
@@ -83,42 +83,40 @@
       <mat-tab [label]="tab.key + ' (' + tab.value['data']?.length + ')'">
         <ng-template matTabContent>
           @if (filterTab() || tab.value['dataframe']) {
-            <div class="row right-justified-row">
-              <div class="width-15">
-                @if (filterTab()){
-                  @if (!showFilters()) {
-                    <button
-                      mat-stroked-button
-                      matTooltip="Show Filters"
-                      (click)="showFilters.set(true)"
-                    >
-      <span class="hide-small">Show Filters </span
-      ><mat-icon>filter_list</mat-icon>
-                    </button>
-                  } @else {
-                    <button
-                      mat-stroked-button
-                      matTooltip="Hide Filters"
-                      (click)="showFilters.set(false)"
-                    >
-                      <span class="hide-small">Hide Filters </span><mat-icon>close</mat-icon>
-                    </button>
-                  }
-                }
-                @if (tab.value['dataframe']) { &nbsp; &nbsp; &nbsp;
-                  <lib-data-download-button
-                    [data]="tab.value['dataframe']"
-                    [fileName]="tab.value['fileName']!"
-                  ></lib-data-download-button>
-                }
-              </div>
+          <div class="row right-justified-row">
+            <div class="width-15">
+              @if (filterTab()){ @if (!showFilters()) {
+              <button
+                mat-stroked-button
+                matTooltip="Show Filters"
+                (click)="showFilters.set(true)"
+              >
+                <span class="hide-small">Show Filters </span
+                ><mat-icon>filter_list</mat-icon>
+              </button>
+              } @else {
+              <button
+                mat-stroked-button
+                matTooltip="Hide Filters"
+                (click)="showFilters.set(false)"
+              >
+                <span class="hide-small">Hide Filters </span
+                ><mat-icon>close</mat-icon>
+              </button>
+              } } @if (tab.value['dataframe']) { &nbsp; &nbsp; &nbsp;
+              <lib-data-download-button
+                [data]="tab.value['dataframe']"
+                [fileName]="tab.value['fileName']!"
+              ></lib-data-download-button>
+              }
             </div>
+          </div>
           } @if (filterTab() && showFilters()) {
-           <lib-input-panel
-                [inputQuestions]="filterTab()"
-                (dataSearch)="searchData($event)"
-              ></lib-input-panel>
-        }
+          <lib-input-panel
+            [inputQuestions]="filterTab()"
+            (dataSearch)="searchData($event)"
+          ></lib-input-panel>
+          }
 
           <lib-data-panel
             [dataAsDataProperty]="tab.value['data']"

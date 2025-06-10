@@ -1,6 +1,5 @@
 import { ComponentRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { UpsetData } from '@ncats-frontend-library/models/utils';
 import { UpsetComponent } from './upset-chart.component';
 
 Object.defineProperty(global.SVGElement.prototype, 'getBBox', {

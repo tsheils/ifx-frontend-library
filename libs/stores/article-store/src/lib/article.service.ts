@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { DocumentNode } from 'graphql';
 
@@ -6,7 +6,7 @@ import { DocumentNode } from 'graphql';
   providedIn: 'root',
 })
 export class ArticleService {
-  constructor(private apollo: Apollo) {}
+  private apollo = inject(Apollo);
 
   fetchArticles(query: DocumentNode, variables: object = {}) {
     return this.apollo

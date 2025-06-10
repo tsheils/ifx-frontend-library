@@ -12,5 +12,5 @@ import { QueryResultsData } from '@ncats-frontend-library/models/utils';
   standalone: true,
 })
 export class ResultsPanelComponent {
-  results = input<QueryResultsData>();
+  results = input<QueryResultsData>(new QueryResultsData());
 }

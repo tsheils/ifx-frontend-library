@@ -7,8 +7,6 @@ import {
   ResolveQueryActions,
 } from './resolver.actions';
 
-import * as ResolverActions from './resolver.actions';
-
 export const RESOLVER_FEATURE_KEY = 'resolver';
 
 export interface ResolverState extends EntityState<ResolverResponse> {

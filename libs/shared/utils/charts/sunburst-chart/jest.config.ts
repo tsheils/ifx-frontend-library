@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'sunburst-chart',
   preset: '../../../../../jest.preset.js',

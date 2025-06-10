@@ -8,7 +8,6 @@
   >
     <div class="row right-justified-row">
       <button
-        [color]="'primary'"
         mat-icon-button
         class="close-button"
         aria-label="close filters"
@@ -22,7 +21,7 @@
         @for (filter of filters(); track filter.label) {
         <ncats-frontend-library-shared-utils-filter-panel
           [filter]="filter"
-          [showSearch] = true
+          [showSearch]="true"
           (filterSelectionChange)="filterSelectionChange($event)"
           (filterChange)="filterChange($event)"
         ></ncats-frontend-library-shared-utils-filter-panel>
@@ -45,7 +44,6 @@
     @if (!filtersidenav.opened) {
     <div class="row">
       <button
-        [color]="'primary'"
         mat-stroked-button
         class="menu-button"
         aria-label="menu button"
@@ -154,9 +152,7 @@
         class="browse-paginator"
       ></mat-paginator>
       }
-      <ncats-frontend-library-scroll-to-top
-        [color]="'accent'"
-      ></ncats-frontend-library-scroll-to-top>
+      <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
     </div>
     } @placeholder {
     <ncats-frontend-library-loading-spinner

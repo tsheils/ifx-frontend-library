@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-scroll-to-top',
   preset: '../../../../jest.preset.js',

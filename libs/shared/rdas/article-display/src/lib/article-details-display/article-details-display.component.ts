@@ -1,5 +1,10 @@
-import { BreakpointObserver } from '@angular/cdk/layout';
-import { Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -26,6 +31,7 @@ import { ArticleListCardComponent } from '../article-list-card/article-list-card
   standalone: true,
 })
 export class ArticleDetailsDisplayComponent {
+  private sanitizer = inject(DomSanitizer);
   article = input<Article>();
   annotationsMap = computed<Map<string, string[]>>(() => {
     const aMap: Map<string, string[]> = new Map<string, string[]>();
@@ -49,13 +55,7 @@ export class ArticleDetailsDisplayComponent {
     }
     return aMap;
   });
-
   showAbstract = false;
-
-  constructor(
-    private breakpointObserver: BreakpointObserver,
-    private sanitizer: DomSanitizer
-  ) {}
 
   getArticleAbstract(): SafeHtml | undefined {
     const text = this.article()?.abstractText;

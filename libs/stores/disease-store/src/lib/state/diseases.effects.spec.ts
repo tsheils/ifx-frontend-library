@@ -8,7 +8,6 @@ import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { BrowseDiseaseListActions } from './diseases.actions';
 
-import * as DiseasesActions from './diseases.actions';
 import * as DiseasesEffects from './diseases.effects';
 
 describe('DiseasesEffects', () => {

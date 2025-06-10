@@ -7,4 +7,8 @@
   // Extract the palettes you need from the theme definition.
   $primary: map-get($theme, primary);
   $accent: map-get($theme, accent);
+  .menu-button,
+  .header-link-button {
+    color: mat.get-theme-color($theme, primary, 40) !important;
+  }
 }

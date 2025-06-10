@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ramp-sunburst-tooltip',
   preset: '../../../../jest.preset.js',

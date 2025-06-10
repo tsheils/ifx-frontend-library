@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'complete-dialog',
   preset: '../../../../jest.preset.js',

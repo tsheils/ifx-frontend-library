@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'upset-chart',
   preset: '../../../../../jest.preset.js',

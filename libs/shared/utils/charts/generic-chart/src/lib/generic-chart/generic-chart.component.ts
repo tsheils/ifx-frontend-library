@@ -35,15 +35,13 @@ export class GenericChartComponent {
   chartElement =
     viewChild.required<ElementRef<HTMLInputElement>>('chartElement');
 
-  width = computed(
-    () => {
-      let mainWidth = this.chartElement()!.nativeElement.offsetWidth;
-      if (!mainWidth) {
-        mainWidth = 500;
-      }
-      return mainWidth + this.margins().left + this.margins().right;
+  width = computed(() => {
+    let mainWidth = this.chartElement()!.nativeElement.offsetWidth;
+    if (!mainWidth) {
+      mainWidth = 500;
     }
-  );
+    return mainWidth + this.margins().left + this.margins().right;
+  });
 
   height = computed(() => {
     let mainHeight = this.chartElement()!.nativeElement.offsetHeight;
@@ -67,14 +65,13 @@ export class GenericChartComponent {
   tooltip!: Selection<null, undefined, null, undefined>;
   keys!: string[];
 
-
   // Wraps tooltip text with a callout path of the correct size, as measured in the page.
   size(
     text: Selection<BaseType | SVGTextElement, undefined, null, undefined>,
     path: Selection<BaseType | SVGPathElement, undefined, null, undefined>
   ) {
     if (text.node()) {
-      const node = text.node() as SVGGraphicsElement
+      const node = text.node() as SVGGraphicsElement;
       const { y, width: w, height: h } = node.getBBox();
       text.attr('transform', `translate(${-w / 2},${15 - y})`);
       path.attr(
@@ -83,5 +80,4 @@ export class GenericChartComponent {
       );
     }
   }
-
 }

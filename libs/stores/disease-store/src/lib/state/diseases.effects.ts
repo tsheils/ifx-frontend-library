@@ -3,21 +3,14 @@ import { ActivatedRouteSnapshot, Params } from '@angular/router';
 import { ApolloQueryResult } from '@apollo/client';
 import {
   Article,
-  CATEGORYTREEBRANCH,
   ClinicalTrial,
   CoreProject,
   Disease,
   DiseaseNode,
-  DISEASEBRANCHPARAMETERS,
   DISEASEQUERYPARAMETERS,
   DISEASETYPEAHEAD,
   FETCHDISEASEQUERY,
-  FETCHDISEASESLISTQUERY,
-  FETCHPATH,
-  FETCHPATHDISEASES,
-  LISTQUERYPARAMETERS,
   PROJECTVARIABLES,
-  FETCHROOT,
   FETCHTRIALSVARIABLES,
   EPIARTICLES,
   DISEASELIST,
@@ -29,7 +22,8 @@ import {
   TRIALTYPEFILTERS,
   TRIALSTATUSFILTERS,
   TRIALPHASEFILTERS,
-  ALLARTICLES, DiseaseQueryFactory
+  ALLARTICLES,
+  DiseaseQueryFactory,
 } from '@ncats-frontend-library/models/rdas';
 import {
   Filter,
@@ -76,7 +70,7 @@ export const fetchDiseasesList$ = createEffect(
           q?: string;
         }) => {
           const queryFactory = new DiseaseQueryFactory();
-          const query = queryFactory.getQuery(params)
+          const query = queryFactory.getQuery(params);
 
           const pageSize: number = params.pageSize
             ? (params.pageSize as number)
@@ -192,12 +186,12 @@ export const loadStaticDiseaseFilters$ = createEffect(
         ).pipe(
           map(
             ([
-               articleFilterData,
-               projectFilterData,
-               trialTypeFilterData,
-               trialStatusFilterData,
-               trialPhaseFilterData,
-             ]: [
+              articleFilterData,
+              projectFilterData,
+              trialTypeFilterData,
+              trialStatusFilterData,
+              trialPhaseFilterData,
+            ]: [
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
@@ -259,12 +253,13 @@ export const loadDiseaseFilters$ = createEffect(
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter(
-        (r: RouterNavigationAction) => {
-return (!r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')) && !r.payload.routerState.root.queryParams['offset']
-        }
-      ),
+      filter((r: RouterNavigationAction) => {
+        return (
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease') &&
+          !r.payload.routerState.root.queryParams['offset']
+        );
+      }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       concatLatestFrom(() =>
         store.select(DiseaseSelectors.getStaticDiseaseFilters)
@@ -376,7 +371,7 @@ return (!r.payload.routerState.url.includes('/diseases') &&
 );
 
 export const loadDisease$ = createEffect(
-  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) =>   {
+  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
@@ -570,8 +565,6 @@ export const fetchTreeBranch$ = createEffect(
 );
 */
 
-
-
 // gets all filter for disease/trials/projects to show charts on browse page
 export const loadAllDiseaseFilters$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
@@ -650,11 +643,11 @@ export const loadAllDiseaseFilters$ = createEffect(
                 }
                 if (projectFilterData) {
                   const projectFilterDataList: {
-                      allCountsByYear: Filter[];
-                      allFundingByYear: Filter[];
+                    allCountsByYear: Filter[];
+                    allFundingByYear: Filter[];
                   } = projectFilterData.data as {
-                      allCountsByYear: Filter[];
-                      allFundingByYear: Filter[];
+                    allCountsByYear: Filter[];
+                    allFundingByYear: Filter[];
                   };
 
                   if (projectFilterDataList.allCountsByYear.length) {
@@ -684,8 +677,8 @@ export const loadAllDiseaseFilters$ = createEffect(
                 }
                 if (trialFilterData) {
                   const trialFilterDataList: {
-                      allTrialsByStatus: Filter[];
-                      allTrialsByType: Filter[];
+                    allTrialsByStatus: Filter[];
+                    allTrialsByType: Filter[];
                     allTrialsByPhase: Filter[];
                   } = trialFilterData.data as {
                     allTrialsByStatus: Filter[];
@@ -759,7 +752,6 @@ export const loadAllDiseaseFilters$ = createEffect(
   },
   { functional: true }
 );
-
 
 function _makeDiseaseObj(
   diseaseData: ApolloQueryResult<unknown>,
@@ -883,14 +875,14 @@ function _setFragment(
     year?: string | string[];
     GardId?: string;
     isEpi?: string | string[];
-    isNHS?: string  | string[];
+    isNHS?: string | string[];
     OverallStatus?: string[];
     StudyType?: string[];
     Phase?: string[];
   }
 ) {
   switch (origin) {
-/*    case 'epiArticles': {
+    /*    case 'epiArticles': {
       EPIARTICLES.articleOptions.limit = <number>options['limit']
         ? <number>options['limit']
         : 10;
@@ -928,8 +920,7 @@ function _setFragment(
         ? <number>options['limit']
         : 10;
       if (<number>options['offset']) {
-        PROJECTVARIABLES.offset =
-          <number>options['offset'] * 1;
+        PROJECTVARIABLES.offset = <number>options['offset'] * 1;
       }
       break;
     }
@@ -943,9 +934,7 @@ function _setFragment(
         FETCHTRIALSVARIABLES.ctoptions.offset = 0;
       }
       if (options['GardId']) {
-        FETCHTRIALSVARIABLES.gardWhere.GardId = <string>(
-          options['GardId']
-        );
+        FETCHTRIALSVARIABLES.gardWhere.GardId = <string>options['GardId'];
       }
       if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
         FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN =
@@ -972,8 +961,7 @@ function _setGardId(gardid: string) {
   DISEASEQUERYPARAMETERS.where = { GardId: gardid };
   EPIARTICLES.gardWhere.GardId = gardid;
   ALLARTICLES.gardWhere.GardId = gardid;
-  PROJECTVARIABLES.gardId =
-    gardid;
+  PROJECTVARIABLES.gardId = gardid;
   FETCHTRIALSVARIABLES.gardWhere.GardId = gardid;
 }
 

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ontology-panel',
   preset: '../../../../../jest.preset.js',

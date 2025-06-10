@@ -64,9 +64,7 @@
     {
       "name": "identifier-harmonization",
       "description": "Retrieve chemical classes (Classyfire and lipidMAPS) and chemical property information from input metabolites, as well as perform chemical class enrichment.",
-      "sections": [
-        "identifier-harmonization"
-      ]
+      "sections": ["identifier-harmonization"]
     },
     {
       "name": "enrichment-results-tools",

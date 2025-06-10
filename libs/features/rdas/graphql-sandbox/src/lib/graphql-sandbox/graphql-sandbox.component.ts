@@ -1,12 +1,17 @@
-import { isPlatformBrowser } from '@angular/common';
+import { ScrollDispatcher } from '@angular/cdk/overlay';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
   ChangeDetectorRef,
   Component,
+  computed,
+  DestroyRef,
   ElementRef,
+  inject,
   Inject,
   InjectionToken,
   PLATFORM_ID,
+  viewChild,
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -22,23 +27,25 @@ import { ApolloSandbox } from '@apollo/sandbox';
   standalone: true,
 })
 export class GraphqlSandboxComponent {
-  @ViewChild('embeddedsandbox', { static: true }) embeddedsandbox!: ElementRef;
+  platformId: InjectionToken<NonNullable<unknown>> = inject(
+    PLATFORM_ID
+  ) as InjectionToken<NonNullable<unknown>>;
+  isBrowser = computed(() => isPlatformBrowser(this.platformId));
+  destroyRef = inject(DestroyRef);
+  private changeRef = inject(ChangeDetectorRef);
+  private route = inject(ActivatedRoute);
+
+  embeddedsandbox = viewChild<ElementRef>('embeddedsandbox');
   url!: string;
 
-  constructor(
-    @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
-    private router: Router,
-    private route: ActivatedRoute,
-    private changeRef: ChangeDetectorRef
-  ) {
+  constructor() {
     afterNextRender(() => {
-      if (isPlatformBrowser(platformId)) {
+      if (this.isBrowser()) {
         this.route.data.subscribe((data) => {
           this.url = data['instance'];
           this.changeRef.markForCheck();
           new ApolloSandbox({
-            target: this.embeddedsandbox.nativeElement,
+            target: this.embeddedsandbox()?.nativeElement,
             initialEndpoint: this.url,
           });
         });

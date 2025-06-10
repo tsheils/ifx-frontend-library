@@ -5,9 +5,6 @@ import { provideMockStore } from '@ngrx/store/testing';
 import { hot } from 'jasmine-marbles';
 import { Observable } from 'rxjs';
 import { LoadResolverOptionsActions } from './resolver.actions';
-
-import * as ResolverActions from './resolver.actions';
-import { init$ } from './resolver.effects';
 import * as ResolverEffects from './resolver.effects';
 
 describe('ResolverEffects', () => {

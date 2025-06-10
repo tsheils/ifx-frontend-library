@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-footer-template',
   preset: '../../../../jest.preset.js',

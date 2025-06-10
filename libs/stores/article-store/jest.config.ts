@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'stores-article-store',
   preset: '../../../jest.preset.js',

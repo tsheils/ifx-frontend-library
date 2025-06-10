@@ -55,7 +55,7 @@ export class SharedUtilsBarChartComponent
   });
 
   bars!: unknown;
-  series!: Series<unknown, unknown>//Stack<never, { [key: string]: number }, string>;
+  series!: Series<unknown, unknown>; //Stack<never, { [key: string]: number }, string>;
   xScale!: ScaleBand<string>;
   yScale!: ScaleLinear<number, number, never>;
 
@@ -117,7 +117,7 @@ export class SharedUtilsBarChartComponent
     this.series = (<unknown>stack()
       .keys(union(this.dataSignal().values.map((d) => d.label))) // distinct series keys, in input order
       .value((D, key: string) => {
-     //   const dataMap = D[1] as Map<string, Filter>
+        //   const dataMap = D[1] as Map<string, Filter>
         const dKey: Filter = D[1].get(key);
         if (dKey) {
           return <number>dKey.count;
@@ -125,7 +125,7 @@ export class SharedUtilsBarChartComponent
       })(
       // get value for each series key and stack
       seriesIndex as Iterable<{ [key: string]: number }>
-    )) as Series<unknown, unknown>//as Stack<never, { [key: string]: number }, string>; // group by stack then series key
+    )) as Series<unknown, unknown>; //as Stack<never, { [key: string]: number }, string>; // group by stack then series key
     // Prepare the scales for positional and color encodings.
     this.xScale = scaleBand()
       .domain(this.keys)
@@ -242,7 +242,7 @@ export class SharedUtilsBarChartComponent
       undefined
     > = this.tooltip
       .selectAll('text')
-      .data([undefined,])
+      .data([undefined])
       .join('text')
       .call((text) =>
         text

@@ -37,7 +37,7 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   title = input<string>();
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, FormSubsection[]>>();
-  filterMap = input<Map<string,  FormSubsection[]>>();
+  filterMap = input<Map<string, FormSubsection[]>>();
   loadedTracker = computed(() => {
     return {
       resultsLoaded: false,

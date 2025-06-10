@@ -1,10 +1,7 @@
 // eslint-disable-next-line  @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 
-import {
-  CdkPortalOutlet,
-  ComponentPortal,
-} from '@angular/cdk/portal';
+import { CdkPortalOutlet, ComponentPortal } from '@angular/cdk/portal';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
@@ -21,7 +18,7 @@ import {
   signal,
   Type,
   viewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { GraphData, GraphNode } from '@ncats-frontend-library/models/utils';
 import {
@@ -202,7 +199,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .data(this.nodes())
       .join('text')
       .classed('graph-label-text', true)
-      .text((d) => d.id),
+      .text((d) => d.id)
   );
 
   ngOnInit(): void {
@@ -264,7 +261,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
       .transition()
       .duration(100);
 
-        selectAll(this.labels())
+    selectAll(this.labels())
       .classed('hoveredLabel', (n) => nodes.includes(n.id))
       .transition()
       .duration(100);
@@ -273,8 +270,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
   }
 
   hoveredOff(event, d) {
-      select(event.target)
-       .attr('fill', d.color)
+    select(event.target).attr('fill', d.color);
     this.graphChartService.nodeHovered.emit(null);
   }
 
@@ -295,7 +291,7 @@ export class UtilsForceDirectedGraphComponent implements OnInit {
     this.circleNode()
       .attr('cx', (d) => d.x)
       .attr('cy', (d) => d.y);
-      this.labels()
+    this.labels()
       .attr('x', (d) => d.x + 10)
       .attr('y', (d) => d.y + 10);
   }

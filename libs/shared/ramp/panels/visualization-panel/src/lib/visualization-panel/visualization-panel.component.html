@@ -13,10 +13,10 @@
 <div class="row">
   @if (!chart.data?.message) {
   <div class="width-10">
-<!--
+    <!--
     <lib-image-download [showTSV]="false"  [svg]="svgExport()"></lib-image-download>
 -->
-<!--    <button
+    <!--    <button
       mat-stroked-button
       class="tool-button list-download"
       (click)="downloadImage()"
@@ -34,19 +34,19 @@
   <div [innerHTML]="chart.data!.image" #chartElement></div>
   }
 </div>
-} @case ('sunburst') { @if (chart.data!.values) { @defer(on viewport){
+} @case ('sunburst') { @if (chart.data!.values) { @defer{
 <lib-sunburst-chart [data]="chart.data!.values"></lib-sunburst-chart>
 } @placeholder {
 <div></div>
 } } } @case ('tree') { @if (chart.data!.values) {
 <lib-tree-chart [data]="chart.data!.values"></lib-tree-chart>
-} } @case ('graph') { @if (chart.data!.graph) { @defer(on viewport){
+} } @case ('graph') { @if (chart.data!.graph) { @defer{
 <lib-utils-force-directed-graph
   [data]="chart.data!"
 ></lib-utils-force-directed-graph>
 } @placeholder {
 <div></div>
-} } } @case ('upset') { @if (chart.data!.plot) { @defer(on viewport){
+} } } @case ('upset') { @if (chart.data!.plot) { @defer{
 <lib-shared-utils-upset-chart
   [chartData]="chart.data!.plot"
   [scale]="'linear'"

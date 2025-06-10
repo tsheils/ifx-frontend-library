@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'features-rdas-rdas-subscriptions',
   preset: '../../../../jest.preset.js',

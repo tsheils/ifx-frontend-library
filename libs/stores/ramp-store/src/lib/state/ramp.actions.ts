@@ -200,8 +200,8 @@ export const ReactionClassEnrichmentsActions = createActionGroup({
     fetchReactionClassEnrichmentFile: emptyProps(),
     fetchReactionClassEnrichmentSuccess: props<{
       data: RampReactionClassEnrichmentResponse;
-       pValType?: string;
-       pValCutoff?: number;
+      pValType?: string;
+      pValCutoff?: number;
     }>(),
     fetchReactionClassEnrichmentFailure: props<{ error: string }>(),
     filterReactionClassEnrichment: props<{
@@ -302,7 +302,7 @@ export const MetaboliteEnrichmentsActions = createActionGroup({
 export const IdentifierHarmonizationActions = createActionGroup({
   source: 'Harmonize Identifiers',
   events: {
-    runIdentifierHarmonization: props<{ files: File[], manifest: File }>(),
+    runIdentifierHarmonization: props<{ files: File[]; manifest: File }>(),
     runIdentifierHarmonizationSuccess: emptyProps(),
     runIdentifierHarmonizationFailure: props<{ error: string }>(),
   },

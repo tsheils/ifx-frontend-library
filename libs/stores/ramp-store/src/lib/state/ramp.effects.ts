@@ -27,7 +27,8 @@ import {
 import {
   AnalyteFromPathwayActions,
   ClassesFromMetabolitesActions,
-  CommonReactionAnalyteActions, IdentifierHarmonizationActions,
+  CommonReactionAnalyteActions,
+  IdentifierHarmonizationActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
   MetaboliteFromOntologyActions,
@@ -38,7 +39,7 @@ import {
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions
+  ReactionsFromAnalytesActions,
 } from './ramp.actions';
 import { RampService } from '../ramp.service';
 import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs';
@@ -661,17 +662,16 @@ export const fetchReactionClassEnrichment = createEffect(
   { functional: true }
 );
 
-
 export const filterReactionClassEnrichment = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store),
+    store = inject(Store)
   ) => {
     return actions$.pipe(
       ofType(
         ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess,
-        ReactionClassEnrichmentsActions.filterReactionClassEnrichment,
+        ReactionClassEnrichmentsActions.filterReactionClassEnrichment
       ),
       concatLatestFrom(() => store.select(getReactionClassEnrichment)),
       mergeMap(([action, dataframe]) => {
@@ -680,37 +680,36 @@ export const filterReactionClassEnrichment = createEffect(
             .filterReactionClassEnrichment(
               dataframe,
               action.pValType,
-              action.pValCutoff,
+              action.pValCutoff
             )
             .pipe(
               map(
                 (ret: RampReactionClassEnrichmentResponse) => {
                   return ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess(
-                    { data: ret },
+                    { data: ret }
                   );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
                     ReactionClassEnrichmentsActions.filterReactionClassEnrichmentFailure(
-                      { error: error.message },
-                    ),
-                  ),
-                ),
-              ),
+                      { error: error.message }
+                    )
+                  )
+                )
+              )
             );
         } else {
           return of(
             MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesFailure(
-              { error: 'No dataframe available' },
-            ),
+              { error: 'No dataframe available' }
+            )
           );
         }
-      }),
+      })
     );
   },
-  { functional: true },
+  { functional: true }
 );
-
 
 export const fetchReactionClassEnrichmentFile = createEffect(
   (
@@ -1017,9 +1016,7 @@ export const runIdentifierHarmonization = createEffect(
           .pipe(
             map(
               (ret) => {
-                return IdentifierHarmonizationActions.runIdentifierHarmonizationSuccess(
-
-                );
+                return IdentifierHarmonizationActions.runIdentifierHarmonizationSuccess();
               },
               catchError((error: ErrorEvent) =>
                 of(

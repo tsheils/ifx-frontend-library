@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ncats-datatable',
   preset: '../../../../../jest.preset.js',

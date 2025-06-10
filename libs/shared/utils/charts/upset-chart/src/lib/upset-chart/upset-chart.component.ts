@@ -10,7 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
-import { axisBottom, BaseType, min, pointer } from 'd3';
+import { axisBottom, BaseType, min } from 'd3';
 import { GenericChartComponent } from 'generic-chart';
 import { select, Selection } from 'd3-selection';
 import { axisLeft } from 'd3-axis';
@@ -30,20 +30,16 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   upSetBarClicked = output();
   scale = input<'linear' | 'log'>('linear');
   title = input<string>();
-  chartData = input<UpsetPlot>();
+  chartData = input<UpsetPlot>({} as UpsetPlot);
 
   innerMargin = 10;
 
   leftColWidth = computed(() => this.width() * 0.4);
 
   topRowHeight = computed(() => this.height() * 0.6);
-  bottomRowHeight = computed(
-    () =>
-      this.height() -
-      this.topRowHeight()
-  );
+  bottomRowHeight = computed(() => this.height() - this.topRowHeight());
 
-  minimumWidth = computed(()=> <number>this.chartData()?.data.length * 50)
+  minimumWidth = computed(() => <number>this.chartData()?.data.length * 50);
 
   // scale for intersection bar height
   intersectionSizeScale = computed(() => {
@@ -54,7 +50,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .range([this.topRowHeight(), 0]);
     } else {
       intersectionScale = scaleLinear()
-        .domain([0, this._getMax()]).nice()
+        .domain([0, this._getMax()])
+        .nice()
         .range([this.topRowHeight(), 0]);
     }
     return intersectionScale;
@@ -69,29 +66,29 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           1,
           <number>(
             max(
-              this.chartData()!.allSetIds,
-              (d: { id: string; count: number }) => {
-                return d.count;
-              }
-            )
-          ),
-
-        ]).nice()
-        .range([0, this.leftColWidth()*.60])
-    } else {
-      setScale = scaleLinear()
-        .domain([
-          0,
-          <number>(
-            max(
-              this.chartData()!.allSetIds,
+              this.chartData().allSetIds,
               (d: { id: string; count: number }) => {
                 return d.count;
               }
             )
           ),
         ])
-        .range([0, this.leftColWidth()*.60]);
+        .nice()
+        .range([0, this.leftColWidth() * 0.6]);
+    } else {
+      setScale = scaleLinear()
+        .domain([
+          0,
+          <number>(
+            max(
+              this.chartData().allSetIds,
+              (d: { id: string; count: number }) => {
+                return d.count;
+              }
+            )
+          ),
+        ])
+        .range([0, this.leftColWidth() * 0.6]);
     }
     return setScale;
   });
@@ -99,7 +96,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   // scale for intersection bar width
   xScale = computed(() =>
     scaleBand()
-      .domain(this.chartData()!.data.map((d) => d.id))
+      .domain(this.chartData().data.map((d) => d.id))
       .range([0, <number>this.minimumWidth()])
       .paddingInner(0.2)
   );
@@ -107,81 +104,99 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   // scale for set row height
   yCombinationScale = computed(() =>
     scaleBand()
-      .domain(this.chartData()!.allSetIds.map((set) => set.id))
+      .domain(this.chartData().allSetIds.map((set) => set.id))
       .range([0, this.bottomRowHeight()])
       .paddingInner(-1.5)
   );
 
   // Prepare the overall layout
   override svg = computed(() => {
-    const svg = select(this.chartElement()!.nativeElement)
+    const svg = select(this.chartElement()?.nativeElement);
     if (svg) {
-     const svg2 = svg
+      const svg2 = svg
         .append('svg:svg')
         .attr('width', this.width())
         .attr('height', this.height())
         .attr('viewBox', [0, 0, this.width(), this.height()])
-        .style("position", "absolute")
-       .style("pointer-events", "none")
-       .style("z-index", 1)
+        .style('position', 'absolute')
+        .style('pointer-events', 'none')
+        .style('z-index', 1);
 
-        svg2.append('svg:rect')
+      svg2
+        .append('svg:rect')
         .attr('width', this.leftColWidth())
         .attr('height', this.height())
-        .classed("svg-rectangle-fill", true)
+        .classed('svg-rectangle-fill', true);
 
-        svg2.append("svg:g")
-          .classed('left-column', true)
+      svg2.append('svg:g').classed('left-column', true);
 
       const rightColumnHolder = svg
-        .append("div")
-        .style("overflow-x", "scroll")
-        .style("-webkit-overflow-scrolling", "touch")
+        .append('div')
+        .style('overflow-x', 'scroll')
+        .style('-webkit-overflow-scrolling', 'touch')
         .attr(
           'transform',
           `translate(${this.leftColWidth() - this.margins().left}, 0)`
         );
 
       const rc = rightColumnHolder
-        .append("svg:svg")
-        .attr("width", this.minimumWidth() + this.leftColWidth() + this.margins().left + this.margins().right)
-        .attr("height", this.height())
-        .style("display", "block")
-        .attr('viewBox', [0, 0, this.minimumWidth() + this.leftColWidth() + this.margins().left + this.margins().right, this.height()])
+        .append('svg:svg')
+        .attr(
+          'width',
+          this.minimumWidth() +
+            this.leftColWidth() +
+            this.margins().left +
+            this.margins().right
+        )
+        .attr('height', this.height())
+        .style('display', 'block')
+        .attr('viewBox', [
+          0,
+          0,
+          this.minimumWidth() +
+            this.leftColWidth() +
+            this.margins().left +
+            this.margins().right,
+          this.height(),
+        ])
         .append('svg:g')
         .classed('right-column', true)
         .attr(
           'transform',
-          `translate(${this.leftColWidth() + this.margins().left}, ${this.margins().top})`
+          `translate(${this.leftColWidth() + this.margins().left}, ${
+            this.margins().top
+          })`
         );
 
       // add tooltip last
       this.tooltip = svg2
         .append('svg:g')
         .attr('class', 'tooltip')
-        .style('pointer-events', 'none') as Selection<null, undefined, null, undefined>
+        .style('pointer-events', 'none') as Selection<
+        null,
+        undefined,
+        null,
+        undefined
+      >;
 
-      return svg
-    } else return undefined
-    })
-
+      return svg;
+    } else return undefined;
+  });
 
   staticSvg = computed(() => {
-      const leftColumn = this.svg()!.select('.left-column')
-      if (leftColumn) {
-      const tlc =  leftColumn
+    const leftColumn = this.svg()?.select('.left-column');
+    if (leftColumn) {
+      const tlc = leftColumn
         .append('svg:g')
-        .classed('top-row-left-column', true)
+        .classed('top-row-left-column', true);
 
-
-      tlc.append('svg:g')
+      tlc
+        .append('svg:g')
         .classed('set-size', true)
-        .attr(
-          'transform',
-          `translate(0, ${this.topRowHeight()})`
-        );
+        .attr('transform', `translate(0, ${this.topRowHeight()})`);
 
-      const lc =  leftColumn.append('svg:g')
+      const lc = leftColumn
+        .append('svg:g')
         .classed('bottom-row-left-column', true)
         .attr(
           'transform',
@@ -192,45 +207,42 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .classed('set-size-chart', true)
         .attr(
           'transform',
-          `translate(${this.margins().left}, ${this.margins().top/2})`
+          `translate(${this.margins().left}, ${this.margins().top / 2})`
         );
       lc.append('svg:g')
         .classed('set-names', true)
-        .attr(
-          'transform',
-          `translate(0, ${this.margins().top /2})`
-        );
-      return leftColumn
+        .attr('transform', `translate(0, ${this.margins().top / 2})`);
+      return leftColumn;
     } else return undefined;
   });
 
   scrollSvg = computed(() => {
-    const rightColumn = this.svg()!.select('.right-column')
-    if(rightColumn) {
-      rightColumn.append('svg:g')
+    const rightColumn = this.svg()?.select('.right-column');
+    if (rightColumn) {
+      rightColumn
+        .append('svg:g')
         .attr('id', 'top-row-right-column')
         .classed('top-row-right-column', true)
-              .style("display", "block")
-        .attr(
-          'transform',
-          `translate(0, 0)`
-        );
+        .style('display', 'block')
+        .attr('transform', `translate(0, 0)`);
 
       rightColumn
         .append('svg:g')
         .classed('bottom-row-right-column', true)
         .attr(
           'transform',
-          `translate(0, ${this.topRowHeight() + this.margins().top + this.margins().bottom})`
-        )
+          `translate(0, ${
+            this.topRowHeight() + this.margins().top + this.margins().bottom
+          })`
+        );
 
-      return rightColumn
+      return rightColumn;
     } else return undefined;
   });
 
   setCountBarChart = computed(() => {
     if (this.staticSvg()) {
-      const setSizeChart = this.staticSvg()!.select('.set-size-chart')
+      const setSizeChart = this.staticSvg()!.select('.set-size-chart');
       const barChart = setSizeChart
         .append('svg:g')
         .classed('set-name-bar-chart', true)
@@ -247,13 +259,21 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             .attr('width', (d) => {
               let ret = this.setSizeScale()(<number>d.count);
               if (!ret) {
-                ret = 0
+                ret = 0;
               }
               return ret;
             })
             .attr(
               'height',
-              <number>min([20, <number>(this.bottomRowHeight() / this.chartData()!.allSetIds.length)])
+              <number>(
+                min([
+                  20,
+                  <number>(
+                    (this.bottomRowHeight() /
+                      this.chartData()!.allSetIds.length)
+                  ),
+                ])
+              )
             )
             .attr('x', (d) => {
               let ret = this.setSizeScale()(<number>d.count);
@@ -275,58 +295,74 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             .classed('set-bar-labels', true)
             .attr('text-anchor', 'end')
             .attr('font-size', '.8em')
-        .attr(
-              'x',
-              (d: { count: number; id: string }) => {
-                let ret = this.setSizeScale()(<number>d.count);
-                if (!ret) {
-                  ret = this.leftColWidth() * 0.6
-                }
-
-                return this.leftColWidth() * 0.6 - ret
+            .attr('x', (d: { count: number; id: string }) => {
+              let ret = this.setSizeScale()(<number>d.count);
+              if (!ret) {
+                ret = this.leftColWidth() * 0.6;
               }
-            )
+
+              return this.leftColWidth() * 0.6 - ret;
+            })
             .attr('y', (d) => {
               let ret = this.yCombinationScale()(d.id);
               if (!ret) {
                 ret = 0;
               }
-              return ret + (<number>min([20, <number>(this.bottomRowHeight() / this.chartData()!.allSetIds.length)])/2);
+              return (
+                ret +
+                <number>(
+                  min([
+                    20,
+                    <number>(
+                      (this.bottomRowHeight() /
+                        this.chartData()!.allSetIds.length)
+                    ),
+                  ])
+                ) /
+                  2
+              );
             })
             .text((d) => format(',d')(Number(d.count)));
 
-           group
-             .append('rect')
-             .attr('class', 'hover-row')
-             .attr(
-               'width', ((d) => {
-                 let ret = this.setSizeScale()(<number>d.count);
-                 if (!ret) {
-                   ret = this.leftColWidth() * 0.6;
-                 }
-                 const barWidth = this.leftColWidth() * 0.6 - ret + this.innerMargin + 2;
-                 return this.width() - barWidth
-               })
-             )
-             .attr(
-               'height',
-               <number>min([20, <number>(this.bottomRowHeight() / this.chartData()!.allSetIds.length)])
-             )
-             .attr('x', (d) => {
-               let ret = this.setSizeScale()(<number>d.count);
-               if (!ret) {
-                 ret = this.leftColWidth() * 0.6;
-               }
+          group
+            .append('rect')
+            .attr('class', 'hover-row')
+            .attr('width', (d) => {
+              let ret = this.setSizeScale()(<number>d.count);
+              if (!ret) {
+                ret = this.leftColWidth() * 0.6;
+              }
+              const barWidth =
+                this.leftColWidth() * 0.6 - ret + this.innerMargin + 2;
+              return this.width() - barWidth;
+            })
+            .attr(
+              'height',
+              <number>(
+                min([
+                  20,
+                  <number>(
+                    (this.bottomRowHeight() /
+                      this.chartData()!.allSetIds.length)
+                  ),
+                ])
+              )
+            )
+            .attr('x', (d) => {
+              let ret = this.setSizeScale()(<number>d.count);
+              if (!ret) {
+                ret = this.leftColWidth() * 0.6;
+              }
 
-               return this.leftColWidth() * 0.6 - ret + this.innerMargin + 2;
-             })
-             .attr('y', (d) => {
-               let ret = this.yCombinationScale()(d.id);
-               if (!ret) {
-                 ret = 0;
-               }
-               return ret;
-             });
+              return this.leftColWidth() * 0.6 - ret + this.innerMargin + 2;
+            })
+            .attr('y', (d) => {
+              let ret = this.yCombinationScale()(d.id);
+              if (!ret) {
+                ret = 0;
+              }
+              return ret;
+            });
 
           group.on('mouseover', (event: Event, d) => {
             select((<unknown>event.currentTarget) as string)
@@ -346,8 +382,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           return group;
         });
 
-
-      const setNames = this.staticSvg()!.select('.set-names')
+      const setNames = this.staticSvg()!.select('.set-names');
       setNames
         .append('svg:g')
         .classed('set-name-list', true)
@@ -369,36 +404,42 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               if (!ret) {
                 ret = 0;
               }
-              return ret + ((this.bottomRowHeight() / (this.chartData()!.allSetIds.length + 1)) / 2)
+              return (
+                ret +
+                this.bottomRowHeight() /
+                  (this.chartData()!.allSetIds.length + 1) /
+                  2
+              );
             })
             .text((d) => d.id);
-          return group
+          return group;
         });
 
-      const scaleCopy = this.setSizeScale().copy()
-      scaleCopy.domain(scaleCopy.domain().reverse())
+      const scaleCopy = this.setSizeScale().copy();
+      scaleCopy.domain(scaleCopy.domain().reverse());
 
-      const setSizeScale =
-       setSizeChart
+      const setSizeScale = setSizeChart
         .append('g')
         .classed('set-size-scale', true)
-          .attr(
-            'transform',
-            `translate(${this.innerMargin}, -${this.margins().top})`
-          )
+        .attr(
+          'transform',
+          `translate(${this.innerMargin}, -${this.margins().top})`
+        )
         .call(
-          axisBottom(scaleCopy)
-            .tickFormat((d, i) => {
-              const divisor = this.scale() === 'log' ? 10 : 2
-              return (i % divisor === 0 && format(',d')(Number(d))) || '';
-            })
+          axisBottom(scaleCopy).tickFormat((d, i) => {
+            const divisor = this.scale() === 'log' ? 10 : 2;
+            return (i % divisor === 0 && format(',d')(Number(d))) || '';
+          })
         );
 
-      setSizeChart.append('g')
+      setSizeChart
+        .append('g')
         .classed('set-size-label', true)
         .attr(
           'transform',
-          `translate(${this.innerMargin}, -${this.margins().top + this.innerMargin})`
+          `translate(${this.innerMargin}, -${
+            this.margins().top + this.innerMargin
+          })`
         )
         .append('text')
 
@@ -411,33 +452,41 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             return defaultLabel + scale;
           }
         });
-      return setSizeChart
-    }
-    else return undefined
+      return setSizeChart;
+    } else return undefined;
   });
 
   intersectionSizeChartScale = computed(() => {
     if (this.staticSvg()) {
-      const chart = this.staticSvg()!.select('.top-row-left-column')
+      const chart = this.staticSvg()!.select('.top-row-left-column');
       chart
-      .append('g')
+        .append('g')
         .classed('intersection-size-scale', true)
         .call(
           axisLeft(this.intersectionSizeScale())
-           .scale(this.intersectionSizeScale())
+            .scale(this.intersectionSizeScale())
             .tickFormat((d, i) => {
-              const divisor = this.scale() === 'log' ? 5 : 2
+              const divisor = this.scale() === 'log' ? 5 : 2;
               return (i % divisor === 0 && format(',d')(Number(d))) || '';
             })
             .tickSize(5)
         )
-        .attr("height", this.topRowHeight())
-        .attr('transform', `translate(${this.leftColWidth()}, ${this.margins().top})`)
+        .attr('height', this.topRowHeight())
+        .attr(
+          'transform',
+          `translate(${this.leftColWidth()}, ${this.margins().top})`
+        );
 
       chart
         .append('g')
         .classed('intersection-size-label', true)
-        .attr('transform', () => ` translate( ${this.leftColWidth()-this.margins().left}, ${this.topRowHeight()})`)
+        .attr(
+          'transform',
+          () =>
+            ` translate( ${
+              this.leftColWidth() - this.margins().left
+            }, ${this.topRowHeight()})`
+        )
         .append('text')
         .text(() => {
           if (this.chartData() && this.chartData()!.columnLabel) {
@@ -454,129 +503,133 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   });
 
   intersectionSizeChartBars = computed(() => {
-    const svg = this.scrollSvg()
-    if(svg) {
-      const topRowRightColumn = svg.select('.top-row-right-column')
-        topRowRightColumn
-          .append('svg:g')
-          .classed('intersection-size', true)
-          .selectAll('.bar-group')
-          .data(this.chartData()!.data)
-          .join((enter) => {
-            const g = enter.append('g').classed('bar-group', true);
+    const svg = this.scrollSvg();
+    if (svg) {
+      const topRowRightColumn = svg.select('.top-row-right-column');
+      topRowRightColumn
+        .append('svg:g')
+        .classed('intersection-size', true)
+        .selectAll('.bar-group')
+        .data(this.chartData()!.data)
+        .join((enter) => {
+          const g = enter.append('g').classed('bar-group', true);
 
-            g.append('rect')
-              .attr('class', 'bar')
-              .attr('height', (d) => {
-                let ret = this.intersectionSizeScale()(d.size);
-                if (!ret) {
-                  ret = 0;
-                }
-                return this.topRowHeight() - ret;
-              })
-              .attr('width', this.xScale().bandwidth())
-              .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
-              .attr('y', (d) => {
-                let ret = this.intersectionSizeScale()(d.size);
-                if (!ret) {
-                  ret = 0;
-                }
-                return ret;
-              });
-
-            g.append('g')
-              .classed('bar-labels', true)
-              .attr('text-anchor', (d) => (d.size < 0 ? 'end' : 'start'))
-              .attr('font-size', '1em')
-              .append('text')
-              .attr('x', (d: UpsetData) => {
-                return <number>this.xScale()(<string>d.id)
-              })
-              .attr('y', (d: UpsetData) => {
-                let scale: number = this.margins().top;
-                let ret;
-                if (d.size > 0) {
-                  ret = this.intersectionSizeScale()(d.size);
-                } else {
-                  ret = this.intersectionSizeScale()(1);
-                }
-                if (ret) {
-                  scale = scale + ret;
-                }
-                return scale - this.margins().top - 2;
-              })
-              .text((d: { size: number }) => format(',d')(Number(d.size)))
-            ;
-
-            g.append('rect')
-              .attr('class', 'hover-column')
-              .attr(
-                'height',
-                this.height()
-              )
-              .attr('width', this.xScale().bandwidth())
-              .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
-              .attr('y', 0);
-
-            g.on('mouseover', (event: MouseEvent, d) => {
-              select((<unknown>event.currentTarget) as string)
-                .classed('hovered', true)
-                .classed('hovered-label', true)
-                .transition()
-                .duration(300);
-              this.columnHovered(event, d);
+          g.append('rect')
+            .attr('class', 'bar')
+            .attr('height', (d) => {
+              let ret = this.intersectionSizeScale()(d.size);
+              if (!ret) {
+                ret = 0;
+              }
+              return this.topRowHeight() - ret;
+            })
+            .attr('width', this.xScale().bandwidth())
+            .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
+            .attr('y', (d) => {
+              let ret = this.intersectionSizeScale()(d.size);
+              if (!ret) {
+                ret = 0;
+              }
+              return ret;
             });
 
-            g.on('mouseout', (event: Event, d: UpsetData) => {
-              select((<unknown>event.currentTarget) as string)
-                .classed('hovered', false)
-                .transition()
-                .duration(300);
-              this.columnHoveredOff();
-            });
+          g.append('g')
+            .classed('bar-labels', true)
+            .attr('text-anchor', (d) => (d.size < 0 ? 'end' : 'start'))
+            .attr('font-size', '1em')
+            .append('text')
+            .attr('x', (d: UpsetData) => {
+              return <number>this.xScale()(<string>d.id);
+            })
+            .attr('y', (d: UpsetData) => {
+              let scale: number = this.margins().top;
+              let ret;
+              if (d.size > 0) {
+                ret = this.intersectionSizeScale()(d.size);
+              } else {
+                ret = this.intersectionSizeScale()(1);
+              }
+              if (ret) {
+                scale = scale + ret;
+              }
+              return scale - this.margins().top - 2;
+            })
+            .text((d: { size: number }) => format(',d')(Number(d.size)));
 
-            return g;
+          g.append('rect')
+            .attr('class', 'hover-column')
+            .attr('height', this.height())
+            .attr('width', this.xScale().bandwidth())
+            .attr('x', (d: UpsetData) => <number>this.xScale()(<string>d.id))
+            .attr('y', 0);
+
+          g.on('mouseover', (event: MouseEvent, d) => {
+            select((<unknown>event.currentTarget) as string)
+              .classed('hovered', true)
+              .classed('hovered-label', true)
+              .transition()
+              .duration(300);
+            this.columnHovered(event, d);
           });
+
+          g.on('mouseout', (event: Event, d: UpsetData) => {
+            select((<unknown>event.currentTarget) as string)
+              .classed('hovered', false)
+              .transition()
+              .duration(300);
+            this.columnHoveredOff();
+          });
+
+          return g;
+        });
       return svg;
-    }else return undefined;
+    } else return undefined;
   });
 
   combinationMatrix = computed(() => {
-    const svg = this.scrollSvg()
-    if(svg) {
-      const bottomRowRightColumn = svg.select('.bottom-row-right-column')
+    const svg = this.scrollSvg();
+    if (svg) {
+      const bottomRowRightColumn = svg.select('.bottom-row-right-column');
 
-      const combinationMatrix =
-        bottomRowRightColumn.append('svg:g')
-          .classed('combination-matrix', true)
+      const combinationMatrix = bottomRowRightColumn
+        .append('svg:g')
+        .classed('combination-matrix', true);
 
-       combinationMatrix.selectAll('.combination')
-         .data(this.chartData()!.data)
-                  .join('svg:g')
-         .attr('class', 'combination')
-         .attr('transform', (d: UpsetData) => {
-           let ret = this.xScale()(d.id);
-           if (!ret) {
-             ret = 0;
-           }
-           return `translate(${ret + this.xScale().bandwidth() / 2}, 0)`;
-         })
-
-       .selectAll('.non-set-circle')
-         .enter()
-         .data((combination) => combination.combinations.filter((d) => !d.member))
-         .join('circle')
-         .classed('non-set-circle', true)
-         .attr(
-           'cy',
-           (d) =>
-             (this.yCombinationScale()(<string>d.setId) as number) - this.margins().top
-         )
-         .attr('r', () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1]))
-
-      combinationMatrix.selectAll('.combination')
+      combinationMatrix
+        .selectAll('.combination')
         .data(this.chartData()!.data)
-    .filter((d) => d.connectorIndices.length > 0)
+        .join('svg:g')
+        .attr('class', 'combination')
+        .attr('transform', (d: UpsetData) => {
+          let ret = this.xScale()(d.id);
+          if (!ret) {
+            ret = 0;
+          }
+          return `translate(${ret + this.xScale().bandwidth() / 2}, 0)`;
+        })
+
+        .selectAll('.non-set-circle')
+        .enter()
+        .data((combination) =>
+          combination.combinations.filter((d) => !d.member)
+        )
+        .join('circle')
+        .classed('non-set-circle', true)
+        .attr(
+          'cy',
+          (d) =>
+            (this.yCombinationScale()(<string>d.setId) as number) -
+            this.margins().top
+        )
+        .attr(
+          'r',
+          () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1])
+        );
+
+      combinationMatrix
+        .selectAll('.combination')
+        .data(this.chartData()!.data)
+        .filter((d) => d.connectorIndices.length > 0)
         .append('svg:line')
         .classed('connector', true)
         .attr('y1', (d) => {
@@ -585,7 +638,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               <number>(
                 this.yCombinationScale()(
                   <string>(
-                    this.chartData()!.allSetIds[<number>d.connectorIndices[0]].id
+                    this.chartData()!.allSetIds[<number>d.connectorIndices[0]]
+                      .id
                   )
                 )
               ) - this.margins().top
@@ -606,9 +660,10 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           } else {
             return 0;
           }
-        })
+        });
 
-      combinationMatrix.selectAll('.combination')
+      combinationMatrix
+        .selectAll('.combination')
         .data(this.chartData()!.data)
         .selectAll('.set-circle')
         .data((combination) => combination.combinations.filter((d) => d.member))
@@ -617,16 +672,17 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .attr(
           'cy',
           (d) =>
-            (this.yCombinationScale()(<string>d.setId) as number) -this.margins().top
+            (this.yCombinationScale()(<string>d.setId) as number) -
+            this.margins().top
         )
-        .attr('r', () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1]))
-
-
+        .attr(
+          'r',
+          () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1])
+        );
 
       return combinationMatrix;
     } else return undefined;
   });
-
 
   /**
    * function to redraw/scale the graph on window resize
@@ -685,7 +741,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   rowHoveredOff() {
-    this.scrollSvg()!.selectAll('.set-circle')
+    this.scrollSvg()!
+      .selectAll('.set-circle')
       .classed('hovered-circle', false)
       .classed('hovered-row', false)
       .transition()
@@ -693,7 +750,8 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   }
 
   columnHovered(event: MouseEvent, d: UpsetData) {
-    this.scrollSvg()!.selectAll('.combination')
+    this.scrollSvg()!
+      .selectAll('.combination')
       .classed('hovered', (datum) => {
         const r: UpsetData = datum as UpsetData;
         return d.id === r.id;
@@ -701,9 +759,9 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
       .transition()
       .duration(100);
 
-const textString =  d.size.toLocaleString();
+    const textString = d.size.toLocaleString();
     this.tooltip.style('display', null);
-   // const [mx, my] = pointer(event);
+    // const [mx, my] = pointer(event);
     const [mx, my] = [event.offsetX, event.offsetY];
     this.tooltip.attr('transform', `translate(${mx}, ${my})`);
 
@@ -727,7 +785,7 @@ const textString =  d.size.toLocaleString();
       undefined
     > = this.tooltip
       .selectAll('text')
-      .data([undefined,])
+      .data([undefined])
       .join('text')
       .call((text) =>
         text
@@ -743,13 +801,13 @@ const textString =  d.size.toLocaleString();
   }
 
   columnHoveredOff() {
-    this.scrollSvg()!.selectAll('.combination')
+    this.scrollSvg()!
+      .selectAll('.combination')
       .classed('hovered', false)
       .classed('hovered-row', false)
       .transition()
       .duration(100);
     this.tooltip.style('display', 'none');
-
   }
 
   private _getMax(): number {

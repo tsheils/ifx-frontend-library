@@ -1,4 +1,4 @@
-import { CdkScrollable, ScrollDispatcher } from '@angular/cdk/overlay';
+import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { CdkScrollableModule, ScrollingModule } from '@angular/cdk/scrolling';
 import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
@@ -6,18 +6,18 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Inject,
+  computed,
+  DestroyRef,
+  inject,
   InjectionToken,
-  Input,
-  OnDestroy,
+  input,
   PLATFORM_ID,
-  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
-import { Subject, takeUntil } from 'rxjs';
 
 @Component({
   selector: 'ncats-frontend-library-scroll-to-top',
@@ -34,30 +34,25 @@ import { Subject, takeUntil } from 'rxjs';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
-  @ViewChild(CdkScrollable, { static: false }) scrollable!: CdkScrollable;
+export class ScrollToTopComponent implements AfterViewInit {
+  platformId: InjectionToken<NonNullable<unknown>> = inject(
+    PLATFORM_ID
+  ) as InjectionToken<NonNullable<unknown>>;
+  isBrowser = computed(() => isPlatformBrowser(this.platformId));
+  destroyRef = inject(DestroyRef);
+  private changeRef = inject(ChangeDetectorRef);
+  private router = inject(Router);
+  private scrollDispatcher = inject(ScrollDispatcher);
+  protected document = inject(DOCUMENT);
 
   navIsFixed!: boolean;
-
-  protected ngUnsubscribe: Subject<string> = new Subject();
-
-  @Input() color: 'primary' | 'accent' = 'primary';
-
-  constructor(
-    @Inject(DOCUMENT) private document: Document,
-    @Inject(PLATFORM_ID)
-    private platformId: InjectionToken<NonNullable<unknown>>,
-    private scrollDispatcher: ScrollDispatcher,
-    private changeRef: ChangeDetectorRef,
-    private router: Router
-  ) {}
 
   ngAfterViewInit() {
     this.scrollDispatcher
       .scrolled()
-      .pipe(takeUntil(this.ngUnsubscribe))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => {
-        if (isPlatformBrowser(this.platformId)) {
+        if (this.isBrowser()) {
           if (
             window.pageYOffset > 100 ||
             this.document.documentElement.scrollTop > 100 ||
@@ -77,7 +72,7 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
   }
 
   scrollToTop(): void {
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.isBrowser()) {
       (function smoothscroll() {
         const currentScroll =
           document.documentElement.scrollTop || document.body.scrollTop;
@@ -88,10 +83,5 @@ export class ScrollToTopComponent implements AfterViewInit, OnDestroy {
       })();
       this.router.navigate([], { queryParamsHandling: 'merge' });
     }
-  }
-
-  ngOnDestroy() {
-    this.ngUnsubscribe.next('bye-bye');
-    this.ngUnsubscribe.complete();
   }
 }

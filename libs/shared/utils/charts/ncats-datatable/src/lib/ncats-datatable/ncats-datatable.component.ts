@@ -151,10 +151,6 @@ export class NcatsDatatableComponent implements OnInit {
    */
   expandedElement: unknown | null;
 
-  /**
-   * main table datasource
-   * @type {MatTableDataSource<any>}
-   */
   dataSource = computed(() => {
     const ds = new MatTableDataSource<{ [key: string]: DataProperty }>(
       this.data()

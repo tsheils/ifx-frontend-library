@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'resolver-store',
   preset: '../../../jest.preset.js',
