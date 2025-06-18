@@ -110,9 +110,11 @@ type Query {
   treeParent: [JSON]
     @cypher(
       statement: """
-      match (l:GARD)<-[s:subClassOf]-(:GARD) WHERE NOT (l:GARD)-[:subClassOf]->(:GARD)
-      WITH COUNT(s) as childrenCount, l
-      WITH {gardId: l.GardId, name: l.GardName, _childrenCount: childrenCount } as parents
+      MATCH (g:GARD)-[s:subClassOf]->(n:GARD)
+      WHERE NOT EXISTS ((n)-[:subClassOf]->(z:GARD))
+      WITH COUNT(s) as childrenCount, n
+      WITH {gardId: n.GardId, name: n.GardName, _childrenCount: childrenCount } as parents
+      ORDER by parents._childrenCount DESC
       return collect(DISTINCT(parents)) as treeParents
       """
       columnName: "treeParents"

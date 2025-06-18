@@ -1,3 +1,4 @@
+import { HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { Article } from './article';
 import { ClinicalTrial } from './clinical-trial';
 import { Gene, GeneAssociation } from './gene';
@@ -134,31 +135,36 @@ export class Disease {
   }
 }
 
-export class DiseaseNode {
+export class DiseaseNode implements HierarchyNode {
   classificationLevel?: string;
   disorderType?: string[];
   name?: string;
   gardId!: string;
-  childrenCount = 0;
-  children!: DiseaseNode[];
   _childrenCount?: { count: 0; low: 0 };
+  count = 0;
+  children?: DiseaseNode[];
+  label?: string;
 
   constructor(obj: Partial<DiseaseNode>) {
     Object.assign(this, obj);
+    this.label = this.name;
+    this.term = this.gardId;
 
     if (obj?._childrenCount && obj._childrenCount.count) {
-      this.childrenCount = obj._childrenCount.count;
+      this.count = obj._childrenCount.count;
     }
 
     if (obj?._childrenCount && obj._childrenCount.low) {
-      this.childrenCount = obj._childrenCount.low;
+      this.count = obj._childrenCount.low;
     }
 
     if (obj?.children) {
       this.children = obj.children
         .map((c) => new DiseaseNode(c))
-        .sort((a, b) => b.childrenCount - a.childrenCount);
-      this.childrenCount = obj.children.length;
+        .sort((a, b) => b.count - a.count);
+      this.count = obj.children.length;
     }
   }
+
+  term: string;
 }

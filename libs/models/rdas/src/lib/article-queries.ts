@@ -246,5 +246,15 @@ export const ALLARTICLEFILTERS = gql`
       label
       term
     }
+    allCountsByEpi {
+      term
+      count
+      label
+    }
+    allCountsByNHS {
+      term
+      count
+      label
+    }
   }
 `;

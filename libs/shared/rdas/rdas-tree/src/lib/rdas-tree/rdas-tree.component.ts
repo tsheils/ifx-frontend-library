@@ -42,8 +42,8 @@ export class FlatDiseaseNode extends DiseaseNode {
 export class RdasTreeComponent {
   private changeRef = inject(ChangeDetectorRef);
   private router = inject(Router);
-  data = input<Disease[]>([]);
-  hasChild = (_: number, node: DiseaseNode) => !!node.childrenCount;
+  data = input<DiseaseNode[] | undefined>([]);
+  hasChild = (_: number, node: DiseaseNode) => !!node.count;
   childrenAccessor = (node: DiseaseNode) => node.children ?? [];
 
   leafExpand = output<DiseaseNode>();
@@ -54,7 +54,7 @@ export class RdasTreeComponent {
     const flatNode = new FlatDiseaseNode(node);
     flatNode.expandable =
       (node.children && node.children.length > 0) ||
-      !!(node.childrenCount && node.childrenCount > 0);
+      !!(node.count && node.count > 0);
     flatNode.level = level;
     return flatNode;
   };
@@ -77,12 +77,12 @@ export class RdasTreeComponent {
       this.treeFlattener
     );
 
-    dataSource.data = this.data().map((disease) => {
+    dataSource.data = this.data()!.map((disease) => {
       const node = disease as Partial<DiseaseNode>;
       const flatNode = new FlatDiseaseNode(node);
       flatNode.expandable =
         (node.children && node.children.length > 0) ||
-        !!(node.childrenCount && node.childrenCount > 0);
+        !!(node.count && node.count > 0);
       //todo: fix this
       flatNode.level = 1;
       return flatNode;

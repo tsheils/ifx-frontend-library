@@ -37,6 +37,7 @@ export class DiseaseQueryFactory {
       GardName_CONTAINS?: string;
       hasPhenotypePhenotypes_SOME?: PhenotypeParameter;
       associatedWithGeneGenes_SOME?: GeneParameter;
+      GardId_EQ?: string;
     };
   } = {
     limit: 10,
@@ -124,6 +125,15 @@ export class DiseaseQueryFactory {
         ] = params['q'];
       }
     }
+    if (params['parentId']) {
+      if (!this.params.where) {
+        this.params.where = { GardId_EQ: params['parentId'] };
+      } else {
+        this.params.where[
+          'GardName_CONTAINS' as keyof typeof this.params.where
+        ] = params['q'];
+      }
+    }
     if (params['phenotypes']) {
       if (!this.params.where) {
         this.params.where = {
@@ -175,7 +185,7 @@ export const TREEROOTPARAMETERS = {
     },
     AND: [
       {
-        DisorderType_NOT: 'Disease',
+        DisorderType_EQ: "Category"
       },
     ],
   },

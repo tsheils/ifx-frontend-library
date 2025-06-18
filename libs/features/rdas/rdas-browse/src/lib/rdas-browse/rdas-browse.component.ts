@@ -37,7 +37,7 @@ import {
   DiseaseNode,
   GeneAssociation,
 } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { FilterCategory, HierarchyNode } from '@ncats-frontend-library/models/utils';
 import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
 import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree';
 import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
@@ -54,6 +54,7 @@ import {
   DiseaseSelectors,
 } from '@ncats-frontend-library/stores/disease-store';
 import { Store } from '@ngrx/store';
+import { TreeChartComponent } from 'tree-chart';
 
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge',
@@ -80,6 +81,7 @@ const navigationExtras: NavigationExtras = {
     ChartWrapperComponent,
     MatTooltip,
     DiseaseListCardComponent,
+    TreeChartComponent
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -143,7 +145,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.selectedValues.clear();
     this.fetchParameters();
-
+console.log(this.diseaseTree())
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
@@ -229,10 +231,12 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     this.router.navigate(['/diseases'], navigationExtras);
   }
 
-  treeExpand(event: DiseaseNode): void {
+  treeExpand(event: HierarchyNode): void {
+    const ev = event as DiseaseNode
+    console.log(ev)
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        parentId: event.gardId,
+        parentId: ev.gardId,
       },
     };
     this.router.navigate(['/diseases'], navigationExtras);

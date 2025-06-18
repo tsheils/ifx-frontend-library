@@ -246,3 +246,30 @@ type Query {
       columnName: "yearCounts"
     )
 }
+
+type Query {
+  allCountsByEpi: [FilterCount]
+  @cypher(
+    statement: """
+    match (a:Article {isEpi: TRUE})<-[:MENTIONED_IN]-(:GARD)
+    WITH a.publicationYear as year, a
+    with count(a) as ct, year
+    RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as epiCounts order by year DESC
+    """
+    columnName: "epiCounts"
+  )
+}
+
+type Query {
+  allCountsByNHS: [FilterCount]
+  @cypher(
+    statement: """
+    match (a:Article {isNHS: TRUE})<-[:MENTIONED_IN]-(:GARD)
+    WITH a.publicationYear as year, a
+    with count(a) as ct, year
+    RETURN {term: year, count: ct, label: 'Natural Health Study Articles'} as nhsCounts order by year DESC
+    """
+    columnName: "nhsCounts"
+  )
+}
+

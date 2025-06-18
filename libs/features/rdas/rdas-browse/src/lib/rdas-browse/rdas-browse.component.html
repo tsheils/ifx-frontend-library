@@ -31,10 +31,14 @@
       <mat-tab label="Hierarchy">
         <ng-template matTabContent>
           @if (diseaseTree()) {
-          <ncats-frontend-library-rdas-tree
+            <lib-tree-chart
+              (leafExpand)="treeExpand($event)"
+              [data]="diseaseTree()">
+            </lib-tree-chart>
+          <!--<ncats-frontend-library-rdas-tree
             (leafExpand)="treeExpand($event)"
-            [data]="diseaseTree()!"
-          ></ncats-frontend-library-rdas-tree>
+            [data]="diseaseTree()"
+          ></ncats-frontend-library-rdas-tree>-->
           }
         </ng-template>
       </mat-tab>

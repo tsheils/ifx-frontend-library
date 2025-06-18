@@ -6,7 +6,8 @@
   <!-- This is the tree node template for leaf nodes -->
   <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
     <!-- use a disabled button to provide padding for tree leaf -->
-    <div mat-icon-button disabled></div>
+    <button matIconButton disabled></button>
+    {{ node.label }}
     {{ node.term }}
   </mat-tree-node>
   <!-- This is the tree node template for expandable nodes -->
@@ -15,6 +16,7 @@
     matTreeNodePadding
     matTreeNodeToggle
     [cdkTreeNodeTypeaheadLabel]="node.term"
+    (click)="selectNode(node)"
   >
     <button
       mat-icon-button
@@ -25,6 +27,7 @@
         {{ tree.isExpanded(node) ? 'expand_more' : 'chevron_right' }}
       </mat-icon>
     </button>
+    {{ node.label }}
     {{ node.term }}
   </mat-tree-node>
 </mat-tree>
