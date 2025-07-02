@@ -1,3 +1,4 @@
+@if(!question.hidden){
 <div [formGroup]="form">
   @switch (question.controlType) { @case ('textbox') {
   <mat-form-field class="full-width" color="accent">
@@ -80,3 +81,4 @@
   <div class="errorMessage">{{ question.label }} is required</div>
   }
 </div>
+}

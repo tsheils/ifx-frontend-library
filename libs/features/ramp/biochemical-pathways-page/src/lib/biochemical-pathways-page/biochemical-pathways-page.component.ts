@@ -13,9 +13,8 @@ import {
   QueryResultsData,
   VisualizationMap,
 } from '@ncats-frontend-library/models/utils';
-import { CompleteDialogComponent } from 'complete-dialog';
+import { DialogModalComponent } from 'dialog-modal';
 import { PanelAccordionComponent } from 'panel-accordion';
-import { Pathway } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import {
   AnalyteFromPathwayActions,
@@ -324,7 +323,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
           });
         }
         const noEnrichedPathwaysModalRef:
-          | MatDialogRef<CompleteDialogComponent>
+          | MatDialogRef<DialogModalComponent>
           | undefined = this.noEnrichedPathwaysModal();
         break;
       }
@@ -426,7 +425,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       this.enrichedPathways()?.data &&
       !this.enrichedPathways()?.data.length
     ) {
-      return this.dialog.open(CompleteDialogComponent, {
+      return this.dialog.open(DialogModalComponent, {
         data: {
           title: 'Pathway',
           message: 'No enriched pathways found.',

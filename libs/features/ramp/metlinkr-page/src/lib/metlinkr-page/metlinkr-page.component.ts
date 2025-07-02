@@ -15,6 +15,7 @@ import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { DataDownloadButtonComponent } from 'data-download-button';
+import { DialogModalComponent } from 'dialog-modal';
 import { DndFileUploadComponent } from 'dnd-file-upload';
 import { NcatsFormComponent } from 'ncats-form';
 import { QuestionBase, TextboxQuestion } from 'ncats-form-question';
@@ -25,10 +26,10 @@ import { from } from 'rxjs';
 
 class ManifestRow {
   FileNames!: string;
-  shortFileName!: string;
+  ShortFileName!: string;
   HMDB!: string;
   Metabolite_Name!: string;
-  PubChemCID?: string;
+  PubChem_CID?: string;
   KEGG?: string;
   LIPIDMAPS?: string;
   chebi?: string;
@@ -41,10 +42,11 @@ class ManifestQuestionsService {
         label: 'File Name',
         key: 'FileNames',
         disabled: true,
+        hidden: true
       }),
       new TextboxQuestion({
         label: 'Short File Name',
-        key: 'shortFileName',
+        key: 'ShortFileName',
       }),
       new TextboxQuestion({
         label: 'HMDB',
@@ -107,10 +109,10 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
   );
   displayedColumns: string[] = [
     'FileNames',
-    'shortFileName',
+    'ShortFileName',
     'HMDB',
     'Metabolite_Name',
-    'PubChemCID',
+    'PubChem_CID',
     'KEGG',
     'LIPIDMAPS',
     'chebi',
@@ -119,6 +121,57 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
   constructor() {
     super();
   }
+
+  setForm($event: FormGroup, key: string) {
+    this.formMap.set(key, $event);
+  }
+
+  submit() {
+    console.log(this.files())
+    const manifest = Array.from(this.formMap.values()).map((form) => {
+      return form.getRawValue() as ManifestRow;
+    });
+    console.log(manifest)
+   // if( manifest.length !== this.files().length){
+      console.log("yo")
+
+      const manifestNames = manifest.map(file => file.FileNames)
+      const fileNames = this.files().map(file => file.name)
+
+      console.log(manifestNames)
+      console.log(fileNames)
+
+    const overlap = Array.from(new Set(manifestNames.concat(fileNames)))
+    console.log(this._makeHTMLString(overlap))
+    if(manifestNames.length > fileNames.length){
+      this.dialog.open(DialogModalComponent, {
+        data: {
+          title: 'Warning',
+          message: `The number of files in the manifest list is greater than the number of files uploaded.
+          Missing:`,
+          htmlString: this._makeHTMLString(overlap)
+        },
+      });
+    }
+    if(fileNames.length > manifestNames.length) {
+      this.dialog.open(DialogModalComponent, {
+        data: {
+          title: 'Warning',
+          message: 'The number of files uploaded is greater than the number of files in the manifest list.',
+          htmlString: this._makeHTMLString(overlap)
+        },
+      });
+    }
+
+  //  }
+    this.store.dispatch(
+      IdentifierHarmonizationActions.runIdentifierHarmonization({
+        files: this.files() as File[],
+        manifest: this.formMapToCSVFile()
+      })
+    );
+  }
+
   private _createManifestForm() {
     const inputMap: Map<string, FormSubsection> = new Map<
       string,
@@ -130,19 +183,6 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
       inputMap.set(file.name, { section: file.name, questions: questions });
     });
     this.ManifestFormMap.set(inputMap);
-  }
-
-  setForm($event: FormGroup, key: string) {
-    this.formMap.set(key, $event);
-  }
-
-  submit() {
-    this.store.dispatch(
-      IdentifierHarmonizationActions.runIdentifierHarmonization({
-        files: this.files() as File[],
-        manifest: this.manifestFile()!,
-      })
-    );
   }
 
   _toCSV(data: ManifestRow[]): string {
@@ -192,7 +232,7 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
         question.value = file.name;
         question.width = 15;
       }
-      if (question.key === 'shortFileName') {
+      if (question.key === 'ShortFileName') {
         question.value = file.name.split('.')[0];
       }
       mappedSubform.push(question);
@@ -236,5 +276,21 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
   setManifestFile(event: File[]) {
     this.manifestFile.set(event[0]);
     this._manifestToJson();
+  }
+
+  formMapToCSVFile(){
+    const manifest = Array.from(this.formMap.values()).map((form) => {
+      return form.getRawValue() as ManifestRow;
+    });
+    const data = this._toCSV(manifest);
+    return new File([data], 'manifest.csv', { type: 'text/csv' })
+  }
+
+  private _makeHTMLString(values: string[]) {
+    let string = `<div>`
+    values.forEach(value => string = string +'<div>' + value + "</div>")
+    string = string + '</div>'
+    console.log(string)
+    return this.sanitizer.bypassSecurityTrustHtml(string);
   }
 }

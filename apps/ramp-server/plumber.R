@@ -2,6 +2,7 @@ library(plumber)
 library(metLinkR)
 library(sqldf)
 library(config)
+library(future)
 library(R.cache)
 library(readr)
 library(ggplot2)
@@ -860,30 +861,53 @@ function(metabolites = '', backgroundFile = '', background = '', backgroundType 
 #' @parser csv
 #' @parser json
 #' @post /api/metlinkr
-function(inputFiles = '', manifestFile) {
-#  mp <- mime::parse_multipart(req)
- # readr::read_csv(mp$file$datapath)
-  manifest_df <- read.csv(manifestFile, header="T")
-  print(manifest_df)
-  input_df <- read.csv(inputFiles, header="T")
-print(input_df)
-  n_cores <- parallel::detectCores() - 1
-#  metLinkR_output <- harmonizeInputSheets(inputcsv= path,
-#                                          n_cores = n_cores,
-#                                          mapping_library_format="both",
-#                                          remove_parentheses_for_synonym_search = TRUE,
-#                                          use_metabolon_parsers = TRUE,
-#                                          majority_vote = TRUE)
-#      print(metLinkR_output)
-#  unlink(names[manifestFile])
+function(req, res) {
+  id <- plumber::random_cookie_key()
+  # create temporary session folder
+  sessionFolder <- file.path("temp", id)
+  dir.create( sessionFolder, id, recursive = T)
+  for (property in req$body){
+      # write input file to session folder
+      inputFilePath <- file.path(sessionFolder, property$filename)
+      if (property$filename == "manifest.csv") {
+        tempData <- req$body$manifestFile$parsed
+        tempData$FileNames <- paste(getwd(), sessionFolder, tempData$FileNames, sep = "/")
+        manifestPath <- inputFilePath
+        write.csv(tempData, inputFilePath)
+      } else {
+        writeBin(property$value, inputFilePath)
+      }
+  }
+  future({
+    print("inside future")
+    metLinkR_output <- harmonizeInputSheets(inputcsv=manifestPath,
+                                            n_cores = n_cores,
+                                            mapping_library_format="both",
+                                            remove_parentheses_for_synonym_search = TRUE,
+                                            use_metabolon_parsers = TRUE,
+                                            majority_vote = TRUE)
+#    print(metLinkR_output)
 
 
- # return(
- #   metLinkR_output
- # )
+    # return errors if present
+ #   if (length(metLinkR_output$errors)) {
+ #     unlink(sessionFolder, recursive = T)
+ #     logger$error(results$capturedOutput)
+ #     logger$error(results$errors)
+ #     res$status <- 500
+  #    return(metLinkR_output)
+  #  }
+
+ #   writeBin(metLinkR_output, file.path(sessionFolder, "output.zip"))
+
+
+    outputFile <- file.path(sessionFolder, id, "output.zip")
+    res$setHeader("Content-Disposition", 'attachment; filename="metlinkR_results.zip"')
+  #  readBin(outputFile, "raw", n = file.info(outputFile)$size)
+
+    return(
+      metLinkR_output
+    )
+  })
 }
-
-
-
-
 

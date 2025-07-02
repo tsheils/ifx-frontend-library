@@ -854,7 +854,7 @@ export class RampService {
   runIdentifierHarmonization(files: File[], manifest: File) {
     const formData: FormData = new FormData();
     files.forEach((file) => {
-      formData.append('inputFiles', file, file.name);
+      formData.append('inputFiles', file);
     });
     formData.append('manifestFile', manifest, manifest.name);
     return this.http.post(`${this.url}metlinkr`, formData).pipe(

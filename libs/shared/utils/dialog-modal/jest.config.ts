@@ -1,8 +1,8 @@
 export default {
-  displayName: 'complete-dialog',
+  displayName: 'dialog-modal',
   preset: '../../../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  coverageDirectory: '../../../../coverage/libs/shared/utils/complete-dialog',
+  coverageDirectory: '../../../../coverage/libs/shared/utils/dialog-modal',
   transform: {
     '^.+\\.(ts|mjs|js|html)$': [
       'jest-preset-angular',
