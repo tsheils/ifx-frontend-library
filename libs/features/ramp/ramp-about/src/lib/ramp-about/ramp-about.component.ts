@@ -1,7 +1,10 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { OverlayModule, ScrollDispatcher } from '@angular/cdk/overlay';
+import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
+import { NgClass, ViewportScroller } from '@angular/common';
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   DestroyRef,
@@ -15,9 +18,10 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import {
   DataProperty,
   UpsetData,
@@ -27,9 +31,6 @@ import { Store } from '@ngrx/store';
 import { NcatsDatatableComponent } from 'ncats-datatable';
 import { EntityCount } from 'ramp';
 import { RampSelectors } from 'ramp-store';
-import { CdkScrollable, ScrollingModule } from '@angular/cdk/scrolling';
-import { NgClass, ViewportScroller } from '@angular/common';
-import { MatListModule } from '@angular/material/list';
 import { UpsetComponent } from 'upset-chart';
 
 @Component({
@@ -57,8 +58,11 @@ import { UpsetComponent } from 'upset-chart';
 export class AboutComponent implements OnInit {
   private readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
-
   scrollSections = viewChildren<ElementRef>('scrollSection');
+  private changeRef = inject(ChangeDetectorRef);
+  private scrollDispatcher = inject(ScrollDispatcher);
+  public scroller = inject(ViewportScroller);
+  private breakpointObserver = inject(BreakpointObserver);
   mobile = signal(false);
 
   activeElement = signal('about');
@@ -67,23 +71,22 @@ export class AboutComponent implements OnInit {
 
   genesData = computed(() => {
     if (this.allRamp() && this.allRamp().geneIntersects) {
-      const upset = new UpsetPlot(
-        this.allRamp()!.geneIntersects!.map((g) => new UpsetData(g))
+      return new UpsetPlot(
+        this.allRamp().geneIntersects.map((g) => new UpsetData(g))
       );
-      return upset;
     } else return {} as UpsetPlot;
   });
   compoundsData = computed(() => {
     if (this.allRamp() && this.allRamp().metaboliteIntersects) {
       return new UpsetPlot(
-        this.allRamp()!.metaboliteIntersects!.map((g) => new UpsetData(g))
+        this.allRamp().metaboliteIntersects.map((g) => new UpsetData(g))
       );
     } else return {} as UpsetPlot;
   });
 
   sourceVersions = computed(() => this.allRamp().sourceVersions);
   entityCounts = computed(() =>
-    this.allRamp()!.entityCounts!.map((count: EntityCount) => {
+    this.allRamp().entityCounts.map((count: EntityCount) => {
       const newObj: { [key: string]: DataProperty } = {};
       Object.entries(count).map((value: string[]) => {
         newObj[<string>value[0]] = new DataProperty({
@@ -148,15 +151,9 @@ export class AboutComponent implements OnInit {
       sortable: true,
     }),
   ];
-  dbVersion = computed(() => this.sourceVersions()![0]?.ramp_db_version);
+  dbVersion = computed(() => this.sourceVersions()[0]?.ramp_db_version);
 
-  dbUpdated = computed(() => this.sourceVersions()![0]?.db_mod_date);
-
-  constructor(
-    private scrollDispatcher: ScrollDispatcher,
-    public scroller: ViewportScroller,
-    private breakpointObserver: BreakpointObserver
-  ) {}
+  dbUpdated = computed(() => this.sourceVersions()[0]?.db_mod_date);
 
   ngOnInit(): void {
     this.breakpointObserver
@@ -174,7 +171,7 @@ export class AboutComponent implements OnInit {
         if (scrollTop === 0) {
           this.activeElement.set('about');
         } else {
-          this.scrollSections().forEach((section: ElementRef) => {
+          this.scrollSections().forEach((section) => {
             scrollTop = scrollTop - section.nativeElement?.scrollHeight;
             if (scrollTop >= 0) {
               this.activeElement.set(section.nativeElement.nextSibling.id);

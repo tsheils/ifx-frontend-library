@@ -36,7 +36,7 @@ export const FETCHARTICLESQUERY = gql`
       allCount: mentionedInArticlesAggregate {
         count
       }
-   _count: mentionedInArticlesAggregate(where: $articleFilter) {
+      _count: mentionedInArticlesAggregate(where: $articleFilter) {
         count
       }
 
@@ -245,6 +245,16 @@ export const ALLARTICLEFILTERS = gql`
       count
       label
       term
+    }
+    allCountsByEpi {
+      term
+      count
+      label
+    }
+    allCountsByNHS {
+      term
+      count
+      label
     }
   }
 `;

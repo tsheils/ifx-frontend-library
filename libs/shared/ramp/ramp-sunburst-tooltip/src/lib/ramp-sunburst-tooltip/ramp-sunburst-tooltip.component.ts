@@ -18,7 +18,7 @@ export const SUNBURST_TOOLTIP = new InjectionToken<string>(
   templateUrl: './ramp-sunburst-tooltip.component.html',
   styleUrl: './ramp-sunburst-tooltip.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true
+  standalone: true,
 })
 export class RampSunburstTooltipComponent {
   sunburstChartService = inject(SunburstChartService);

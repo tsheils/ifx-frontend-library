@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'tree-chart',
   preset: '../../../../../jest.preset.js',

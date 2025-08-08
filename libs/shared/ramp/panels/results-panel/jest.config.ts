@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'results-panel',
   preset: '../../../../../jest.preset.js',

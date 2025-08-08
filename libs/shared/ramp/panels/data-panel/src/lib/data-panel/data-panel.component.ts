@@ -6,9 +6,6 @@ import {
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatTooltip } from '@angular/material/tooltip';
 import { DataProperty } from '@ncats-frontend-library/models/utils';
 import { DataDownloadButtonComponent } from 'data-download-button';
 import { NcatsDatatableComponent } from 'ncats-datatable';
@@ -18,9 +15,6 @@ import { NcatsDatatableComponent } from 'ncats-datatable';
   imports: [
     CommonModule,
     NcatsDatatableComponent,
-    MatButton,
-    MatIcon,
-    MatTooltip,
     DataDownloadButtonComponent,
   ],
   templateUrl: './data-panel.component.html',

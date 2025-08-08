@@ -7,17 +7,6 @@
   >
     <div class="toc-wrapper" cdkScrollable>
       <div class="toc">
-        <!--<div class="row right-justified-row">
-        <button
-          [color]="'accent'"
-          mat-icon-button
-          class="close-button"
-          aria-label="close filters"
-          (click)="navigationsidenav.toggle()"
-          >
-          <mat-icon>close</mat-icon>
-        </button>
-      </div>-->
         <mat-nav-list>
           <a
             mat-list-item
@@ -106,7 +95,6 @@
     @if (!navigationsidenav.opened) {
     <div class="row">
       <button
-        [color]="'accent'"
         mat-stroked-button
         class="menu-button"
         aria-label="menu button"
@@ -383,54 +371,54 @@
           #summaryStatistics
           #scrollSection
         >
-         <div
+          <div
             class="section-header"
             [ngClass]="{ 'active-header': isActive('summaryStatistics') }"
           >
             Summary Statistics
           </div>
-              <div class="section-content">
-                <p>
-                  Because RaMP draws from multiple sources, its information content
-                  exceeds that of each individual resource. The following UpSet
-                  plots highlight the common and unique metabolites and genes
-                  covered for each resource.
-                </p>
-                @if(compoundsData() && compoundsData().data.length){
-                <div class="row">
-                  <div class="width-90 width-sm-100">
-                    <h3>Metabolite Overlap</h3>
-                    <div class="upset-holder metabolite-upset">
-                      <lib-shared-utils-upset-chart
-                        [title]="'Metabolite Overlap'"
-                        [chartData]="compoundsData()"
-                        [scale]="'log'"
-                      >
-                      </lib-shared-utils-upset-chart>
-                    </div>
-                  </div>
+          <div class="section-content">
+            <p>
+              Because RaMP draws from multiple sources, its information content
+              exceeds that of each individual resource. The following UpSet
+              plots highlight the common and unique metabolites and genes
+              covered for each resource.
+            </p>
+            @if(compoundsData() && compoundsData().data.length){
+            <div class="row">
+              <div class="width-90 width-sm-100">
+                <h3>Metabolite Overlap</h3>
+                <div class="upset-holder metabolite-upset">
+                  <lib-shared-utils-upset-chart
+                    [title]="'Metabolite Overlap'"
+                    [chartData]="compoundsData()"
+                    [scale]="'log'"
+                  >
+                  </lib-shared-utils-upset-chart>
                 </div>
-                } @if(genesData() && genesData().data.length){
-                <div class="row">
-                  <div class="width-75 width-md-90 width-sm-100">
-                    <h3>Gene Overlap</h3>
-                    <div class="upset-holder">
-                      @defer (on viewport) {
-                      <lib-shared-utils-upset-chart
-                        [title]="'Gene Overlap'"
-                        [chartData]="genesData()"
-                        scale="log"
-                      >
-                      </lib-shared-utils-upset-chart>
-                      } @placeholder (){
-                      <div class="upset-holder metabolite-upset"></div>
-
-                      }
-                    </div>
-                  </div>
-                </div>
-                }
               </div>
+            </div>
+            } @if(genesData() && genesData().data.length){
+            <div class="row">
+              <div class="width-75 width-md-90 width-sm-100">
+                <h3>Gene Overlap</h3>
+                <div class="upset-holder">
+                  @defer {
+                  <lib-shared-utils-upset-chart
+                    [title]="'Gene Overlap'"
+                    [chartData]="genesData()"
+                    scale="log"
+                  >
+                  </lib-shared-utils-upset-chart>
+                  } @placeholder (){
+                  <div class="upset-holder metabolite-upset"></div>
+
+                  }
+                </div>
+              </div>
+            </div>
+            }
+          </div>
         </div>
         <div class="row" id="citation" #citation #scrollSection>
           <div
@@ -671,7 +659,7 @@
                 </a>
               </li>
               <li>
-          <!--      <a
+                <!--      <a
                   href="https://www.linkedin.com/in/coletindall/"
                   target="_blank"
                   rel="noreferrer"
@@ -680,7 +668,6 @@
                   Adam Tisch
                 </a>-->
                 Adam Tisch
-
               </li>
               <li>
                 <a

@@ -1,5 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ResolverForm, ResolverResponse } from 'ifx';
 import { Observable } from 'rxjs';
 
@@ -16,8 +16,7 @@ export class ResolverService {
   private resolverUrl!: string;
   private optionsUrl!: string;
   private extraString!: string;
-
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
 
   _setOptionsUrl(url: string): void {
     this.optionsUrl = url;
@@ -31,7 +30,7 @@ export class ResolverService {
     this.extraString = key;
   }
 
-  fetchOptions(): Observable<any> {
+  fetchOptions(): Observable<unknown> {
     return this.http.get(this.optionsUrl);
   }
 

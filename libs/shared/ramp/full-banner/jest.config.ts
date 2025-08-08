@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'full-banner',
   preset: '../../../../jest.preset.js',

@@ -64,11 +64,11 @@
 }
 
 .count-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(22%, 2%));
-    grid-gap: 2%;
-     row-gap: 5vh;
-    text-align: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(22%, 2%));
+  grid-gap: 2%;
+  row-gap: 5vh;
+  text-align: center;
   justify-content: center;
   align-content: start;
   justify-items: center;
@@ -78,7 +78,7 @@
 .sub-content-white {
   background-color: #ffffff;
   color: #265668;
-  padding-left:2vw;
+  padding-left: 2vw;
   padding-bottom: 5vh;
 }
 

@@ -40,10 +40,13 @@ import { map } from 'rxjs';
     MatCardModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
+  dialog = inject(MatDialog);
+  public dialogRef = inject(MatDialogRef<ForgotPasswordModalComponent>);
 
   loginError = '';
   emailSent = false;
@@ -51,11 +54,6 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   signOnForm: FormGroup = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
   });
-
-  constructor(
-    public dialogRef: MatDialogRef<ForgotPasswordModalComponent>,
-    public dialog: MatDialog
-  ) {}
 
   ngOnInit() {
     this.store

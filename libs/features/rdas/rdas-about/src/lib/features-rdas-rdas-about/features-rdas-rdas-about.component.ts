@@ -10,6 +10,7 @@ import {
   inject,
   OnInit,
   QueryList,
+  viewChildren,
   ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
@@ -38,19 +39,16 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   standalone: true,
 })
 export class FeaturesRdasRdasAboutComponent implements OnInit {
-  @ViewChildren('scrollSection') scrollSections!: QueryList<ElementRef>;
+  scrollSections = viewChildren<ElementRef>('scrollSection');
+  private changeRef = inject(ChangeDetectorRef);
+  private scrollDispatcher = inject(ScrollDispatcher);
+  public scroller = inject(ViewportScroller);
+  private breakpointObserver = inject(BreakpointObserver);
 
   destroyRef = inject(DestroyRef);
   mobile = false;
 
   activeElement = 'about';
-
-  constructor(
-    private changeRef: ChangeDetectorRef,
-    private scrollDispatcher: ScrollDispatcher,
-    public scroller: ViewportScroller,
-    private breakpointObserver: BreakpointObserver
-  ) {}
 
   ngOnInit(): void {
     this.scrollDispatcher
@@ -62,7 +60,7 @@ export class FeaturesRdasRdasAboutComponent implements OnInit {
           this.activeElement = 'about';
           this.changeRef.detectChanges();
         } else {
-          this.scrollSections.forEach((section) => {
+          this.scrollSections().forEach((section) => {
             scrollTop = scrollTop - section.nativeElement?.scrollHeight;
             if (scrollTop >= 0) {
               this.activeElement = section.nativeElement.nextSibling.id;

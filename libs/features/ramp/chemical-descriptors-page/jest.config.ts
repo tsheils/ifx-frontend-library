@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'chemical-descriptors-page',
   preset: '../../../../jest.preset.js',

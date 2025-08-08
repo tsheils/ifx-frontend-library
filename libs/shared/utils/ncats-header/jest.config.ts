@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ncats-header',
   preset: '../../../../jest.preset.js',

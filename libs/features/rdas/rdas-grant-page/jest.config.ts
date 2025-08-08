@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'features-rdas-rdas-grant-page',
   preset: '../../../../jest.preset.js',

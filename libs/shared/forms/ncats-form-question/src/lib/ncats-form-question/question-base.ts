@@ -14,6 +14,7 @@ export class QuestionBase<T> {
   min?: number;
   max?: number;
   width?: number;
+  hidden = false;
   constructor(
     options: {
       value?: T;
@@ -22,6 +23,7 @@ export class QuestionBase<T> {
       required?: boolean;
       multiple?: boolean;
       disabled?: boolean;
+      hidden?: boolean;
       description?: string;
       order?: number;
       controlType?: string;
@@ -46,6 +48,7 @@ export class QuestionBase<T> {
     this.options = options.options || [];
     this.multiple = options.multiple || false;
     this.disabled = options.disabled || false;
+    this.hidden = options.hidden || false;
   }
 }
 

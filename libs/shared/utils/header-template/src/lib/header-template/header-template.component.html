@@ -1,17 +1,14 @@
 <header>
-  <!--
-<mat-sidenav-container class="mobile-menu-container">
--->
   <nav>
-    <mat-toolbar class="toolbar-template" [@slideInOut]="animationState">
+    <mat-toolbar class="toolbar-template" [@slideInOut]="animationState()">
       <ng-content select=".left-options"></ng-content>
-      @for (link of links; track link.label) {
+      @for (link of links(); track link.label) {
       <div>
         @if (link.children) {
         <div #menu>
           <button
             mat-button
-            [color]="'primary'"
+            class="menu-button"
             [matMenuTriggerFor]="dynamicMenu"
           >
             {{ link.label ? link.label : link.link }}
@@ -19,7 +16,11 @@
           <mat-menu #dynamicMenu="matMenu">
             @for (child of link.children; track child.label) {
             <span>
-              <button mat-menu-item [routerLink]="child.link">
+              <button
+                mat-menu-item
+                class="menu-button"
+                [routerLink]="child.link"
+              >
                 {{ child.label ? child.label : child.link }}
               </button>
             </span>
@@ -30,11 +31,7 @@
         <div #menulink>
           @if (link.external) {
           <div #external>
-            <a
-              mat-button
-              [color]="'primary'"
-              href="{{ link.link }}"
-              class="header-link-button"
+            <a mat-button href="{{ link.link }}" class="header-link-button"
               >{{ link.label ? link.label : link.link }}
               <mat-icon>open_in_new</mat-icon>
             </a>
@@ -43,7 +40,6 @@
           <div #internal>
             <a
               mat-button
-              [color]="'primary'"
               routerLink="/{{ link.link }}"
               [ngClass]="{ active: isActive(link?.link) }"
               class="header-link-button"
@@ -57,15 +53,6 @@
       }
       <span class="fill-remaining-space"></span>
       <ng-content select=".right-options"></ng-content>
-      <!--<button
-        mat-icon-button
-        class="menu-button"
-        aria-label="menu button"
-      >
-        <mat-icon>menu</mat-icon>
-      </button>-->
     </mat-toolbar>
   </nav>
-  <!--
-</mat-sidenav-container>
---></header>
+</header>

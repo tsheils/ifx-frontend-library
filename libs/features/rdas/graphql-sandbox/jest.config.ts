@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'features-rdas-graphql-sandbox',
   preset: '../../../../jest.preset.js',

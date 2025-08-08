@@ -55,9 +55,9 @@ export class RampCorePageComponent {
   paths = input<OpenApiPath[]>();
   inputMap = input<Map<string, FormSubsection[]>>();
   filtersMap = input<Map<string, FormSubsection[]>>();
-  overviewMap = computed<{ [p: string]: QueryResultsData } | undefined>(
-    () => undefined
-  );
+  overviewMap = computed<{ [p: string]: QueryResultsData }>(() => {
+    return {} as { [p: string]: QueryResultsData }
+  });
   visualizationsMap = computed<
     { [p: string]: Map<string, VisualizationMap[]> } | undefined
   >(() => undefined);

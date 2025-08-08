@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-rdas-rdas-tree',
   preset: '../../../../jest.preset.js',

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  inject,
   Inject,
   input,
 } from '@angular/core';
@@ -15,10 +16,11 @@ import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
   templateUrl: './filter-download-button.component.html',
   styleUrl: './filter-download-button.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class FilterDownloadButtonComponent {
   selectedFilter = input<FilterCategory>();
-  constructor(@Inject(DOCUMENT) private dom: Document) {}
+  private dom = inject(DOCUMENT);
 
   downloadData() {
     if (this.selectedFilter) {

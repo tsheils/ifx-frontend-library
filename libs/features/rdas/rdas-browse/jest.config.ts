@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'features-rdas-rdas-browse',
   preset: '../../../../jest.preset.js',

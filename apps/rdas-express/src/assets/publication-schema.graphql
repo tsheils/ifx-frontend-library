@@ -25,7 +25,6 @@ type Article @node {
   source: String
   title: String
 
-
   appearsInJournalVolumes: [JournalVolume!]!
     @relationship(type: "APPEARS_IN", direction: OUT)
   authorsWrote: [Author!]! @relationship(type: "WROTE", direction: IN)
@@ -237,13 +236,40 @@ type Query {
 
 type Query {
   allCountsByYear: [FilterCount]
+    @cypher(
+      statement: """
+      match (a:Article)<-[:MENTIONED_IN]-(:GARD)
+      WITH a.publicationYear as year
+      with count(year) as ct, year
+      RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
+      """
+      columnName: "yearCounts"
+    )
+}
+
+type Query {
+  allCountsByEpi: [FilterCount]
   @cypher(
     statement: """
-    match (a:Article)<-[:MENTIONED_IN]-(:GARD)
-    WITH a.publicationYear as year
-    with count(year) as ct, year
-    RETURN {term: year, count: ct, label: 'Articles'} as yearCounts order by year DESC
+    match (a:Article {isEpi: TRUE})<-[:MENTIONED_IN]-(:GARD)
+    WITH a.publicationYear as year, a
+    with count(a) as ct, year
+    RETURN {term: year, count: ct, label: 'Epidemiology Articles'} as epiCounts order by year DESC
     """
-    columnName: "yearCounts"
+    columnName: "epiCounts"
   )
 }
+
+type Query {
+  allCountsByNHS: [FilterCount]
+  @cypher(
+    statement: """
+    match (a:Article {isNHS: TRUE})<-[:MENTIONED_IN]-(:GARD)
+    WITH a.publicationYear as year, a
+    with count(a) as ct, year
+    RETURN {term: year, count: ct, label: 'Natural Health Study Articles'} as nhsCounts order by year DESC
+    """
+    columnName: "nhsCounts"
+  )
+}
+

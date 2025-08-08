@@ -57,13 +57,14 @@ export const fetchTrialList$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) => {
-       return !r.payload.routerState.url.includes('/diseases') &&
-         r.payload.routerState.url.startsWith('/disease');
+        return (
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease')
+        );
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        FETCHTRIALSVARIABLES.gardWhere.GardId =
-          root.queryParams['id'];
+        FETCHTRIALSVARIABLES.gardWhere.GardId = root.queryParams['id'];
         if (root.fragment === 'trials') {
           _setTrialsOptions(root.queryParams);
         }
@@ -72,11 +73,14 @@ export const fetchTrialList$ = createEffect(
           .pipe(
             map((trialsData: ApolloQueryResult<unknown>) => {
               const trialsObj = trialsData.data as {
-                trialsData: [{
-                  clinicalTrials: ClinicalTrial[];
-                  count: { count: number };
-                  allCount: { count: number };
-                }]}
+                trialsData: [
+                  {
+                    clinicalTrials: ClinicalTrial[];
+                    count: { count: number };
+                    allCount: { count: number };
+                  }
+                ];
+              };
               const trials: {
                 clinicalTrials: ClinicalTrial[];
                 count: { count: number };
@@ -89,7 +93,7 @@ export const fetchTrialList$ = createEffect(
                 return FetchTrialsListActions.fetchTrialsListSuccess({
                   trials: trialsList,
                   allTrialCount: trials.allCount.count,
-                  count: trials.count.count
+                  count: trials.count.count,
                 });
               } else
                 return FetchTrialsListActions.fetchTrialsListFailure({
@@ -121,9 +125,7 @@ function _setTrialsOptions(options: {
     FETCHTRIALSVARIABLES.ctoptions.offset = 0;
   }
   if (options['GardId']) {
-    FETCHTRIALSVARIABLES.gardWhere.GardId = <string>(
-      options['GardId']
-    );
+    FETCHTRIALSVARIABLES.gardWhere.GardId = <string>options['GardId'];
   }
   if (options['OverallStatus'] && options['OverallStatus']?.length > 0) {
     FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = options['OverallStatus'];

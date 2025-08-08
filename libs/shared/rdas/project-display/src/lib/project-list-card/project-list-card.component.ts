@@ -12,5 +12,5 @@ import { CoreProject } from '@ncats-frontend-library/models/rdas';
   encapsulation: ViewEncapsulation.None,
 })
 export class ProjectListCardComponent {
-  grant=  input<CoreProject>();
+  grant = input<CoreProject>();
 }

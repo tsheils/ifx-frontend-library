@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { inject, Pipe, PipeTransform } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Pipe({
@@ -6,7 +6,8 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
   standalone: true,
 })
 export class HighlightPipe implements PipeTransform {
-  constructor(private sanitizer: DomSanitizer) {}
+  readonly sanitizer: DomSanitizer = inject(DomSanitizer);
+
   transform(text: string, search: unknown): SafeHtml | string {
     if (search && text && typeof search == 'string') {
       let pattern = search.replace(/[-[\]/{}()*+?.\\^$|]/g, '\\$&');

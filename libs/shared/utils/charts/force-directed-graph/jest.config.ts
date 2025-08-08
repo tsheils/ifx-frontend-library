@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'utils-force-directed-graph',
   preset: '../../../../../jest.preset.js',

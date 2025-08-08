@@ -9,8 +9,8 @@ export class CoreProject {
   projects?: Project[];
   projectCount?: number;
   title?: string;
-  _projectCount?: {low?: number, high?: number};
-  _rd_total_cost?: {low?: number, high?: number};
+  _projectCount?: { low?: number; high?: number };
+  _rd_total_cost?: { low?: number; high?: number };
 
   constructor(obj: Partial<CoreProject> = {}) {
     Object.assign(this, obj);

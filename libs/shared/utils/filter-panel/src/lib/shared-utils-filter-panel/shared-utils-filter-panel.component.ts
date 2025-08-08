@@ -25,7 +25,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
 import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
 import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
@@ -37,7 +36,6 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
     MatCardModule,
     MatInputModule,
     ReactiveFormsModule,
-    LoadingSpinnerComponent,
     ScrollingModule,
     HighlightPipe,
     MatButtonModule,
@@ -50,7 +48,7 @@ import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 })
 export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   destroyRef = inject(DestroyRef);
-  showSearch = input(true)
+  showSearch = input(true);
   searchInput = viewChild<MatInput>(MatInput);
   cdkViewport = viewChild<CdkVirtualScrollViewport>(CdkVirtualScrollViewport);
   filter = input<FilterCategory>({} as FilterCategory);

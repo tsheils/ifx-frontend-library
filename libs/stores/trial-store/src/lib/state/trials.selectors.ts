@@ -41,8 +41,8 @@ export const getTrialCount = createSelector(
   (state: TrialsState) => {
     return {
       allTrialCount: state.allTrialCount,
-      count: state.count
-    }
+      count: state.count,
+    };
   }
 );
 

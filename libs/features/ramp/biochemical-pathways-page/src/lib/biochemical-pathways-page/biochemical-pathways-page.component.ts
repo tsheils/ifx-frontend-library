@@ -13,9 +13,8 @@ import {
   QueryResultsData,
   VisualizationMap,
 } from '@ncats-frontend-library/models/utils';
-import { CompleteDialogComponent } from 'complete-dialog';
+import { DialogModalComponent } from 'dialog-modal';
 import { PanelAccordionComponent } from 'panel-accordion';
-import { Pathway } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import {
   AnalyteFromPathwayActions,
@@ -324,7 +323,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
           });
         }
         const noEnrichedPathwaysModalRef:
-          | MatDialogRef<CompleteDialogComponent>
+          | MatDialogRef<DialogModalComponent>
           | undefined = this.noEnrichedPathwaysModal();
         break;
       }
@@ -380,7 +379,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               inputLength: this.inputList.length,
               inputType: 'pathways',
               fuzzy: true,
-              function: [this.analytes()?.query?.functionCall]
+              function: [this.analytes()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -395,7 +394,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
               count: this.pathways()?.data.length,
               inputLength: this.inputList.length,
               inputType: 'analytes',
-              function: [this.pathways()?.query?.functionCall]
+              function: [this.pathways()?.query?.functionCall],
             } as QueryResultsData,
           };
         }
@@ -426,7 +425,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       this.enrichedPathways()?.data &&
       !this.enrichedPathways()?.data.length
     ) {
-      return this.dialog.open(CompleteDialogComponent, {
+      return this.dialog.open(DialogModalComponent, {
         data: {
           title: 'Pathway',
           message: 'No enriched pathways found.',
@@ -508,5 +507,4 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
       }
     }
   }
-
 }

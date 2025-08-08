@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-pie-chart',
   preset: '../../../../../jest.preset.js',

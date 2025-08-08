@@ -28,7 +28,7 @@ export const initialTrialsState: TrialsState = trialsAdapter.getInitialState({
   // set initial required properties
   loaded: false,
   allTrialCount: 0,
-  count: 0
+  count: 0,
 });
 
 const reducer = createReducer(

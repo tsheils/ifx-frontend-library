@@ -1,4 +1,3 @@
-import { QuestionBase } from 'ncats-form-question';
 import { DataProperty } from './data-property';
 import { GraphData } from './graph-data';
 

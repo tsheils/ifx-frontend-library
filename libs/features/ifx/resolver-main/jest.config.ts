@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'resolver-main',
   preset: '../../../../jest.preset.js',

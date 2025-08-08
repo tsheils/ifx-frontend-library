@@ -45,50 +45,20 @@
     </a>
   </div>
 </div>
-@defer (on viewport) {
+@defer {
 <div class="sub-content 3d-graph" id="3d-graph" #details>
   <div class="row space-around-row">
     <div class="width-50">
       <mat-card class="stats-card">
         <h1>RaMP-DB Contains</h1>
         <div class="count-grid">
-        @for(count of entityCounts(); track count.status_category) {
-
-<!--
-          <div class="row space-around-row">
--->
+          @for(count of entityCounts(); track count.status_category) {
           <div class="stat-box">
             <div class="number-count">{{ count.total | number }}</div>
             {{ count.status_category }}
           </div>
-        }
+          }
         </div>
-         <!-- <div class="stat-box-spacer"></div>
-          <div class="width-15 stat-box">
-            <div class="number-count">256,086</div>
-            metabolites
-          </div>
-          <div class="stat-box-spacer"></div>
-          <div class="width-15 stat-box">
-            <div class="number-count">15,827</div>
-            genes/enzymes
-          </div>
-          <div class="stat-box-spacer"></div>
-          <div class="width-15 stat-box">
-            <div class="number-count">256,952</div>
-            chemical properties
-          </div>
-          <div class="stat-box-spacer"></div>
-          <div class="width-15 stat-box">
-            <div class="number-count">699</div>
-            ontologies
-          </div>
-          <div class="stat-box-spacer"></div>
-          <div class="width-15 stat-box">
-            <div class="number-count">1,541,996</div>
-            reactions
-          </div>
-        </div>-->
       </mat-card>
     </div>
     <div class="width-40"></div>
@@ -108,8 +78,8 @@
           alt="HMDB Logo"
         />
       </a>
-      <br>
-      <span class = row>(includes Kegg)</span>
+      <br />
+      <span class="row">(includes Kegg)</span>
     </div>
     <div class="width-20 centered">
       <a

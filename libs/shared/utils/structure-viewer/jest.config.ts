@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'structure-viewer',
   preset: '../../../../jest.preset.js',

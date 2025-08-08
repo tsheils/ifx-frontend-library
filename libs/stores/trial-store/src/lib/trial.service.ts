@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { DocumentNode } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
 
@@ -6,7 +6,7 @@ import { Apollo } from 'apollo-angular';
   providedIn: 'root',
 })
 export class TrialService {
-  constructor(private apollo: Apollo) {}
+  private apollo = inject(Apollo);
 
   fetchTrials(query: DocumentNode, variables: object = {}) {
     return this.apollo

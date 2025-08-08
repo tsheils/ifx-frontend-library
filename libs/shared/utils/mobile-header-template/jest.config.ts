@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-mobile-header-template',
   preset: '../../../../jest.preset.js',

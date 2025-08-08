@@ -62,16 +62,16 @@ export class RampMainComponent {
     if (pathsValue) {
       const separatedPaths = this._separateInputTabs(pathsValue);
       separatedPaths.forEach((inputTab, formKey) => {
-        const filteredInputTab = inputTab.filter((tab) => tab.filter)
+        const filteredInputTab = inputTab.filter((tab) => tab.filter);
         filteredInputTab.forEach((parsedPath) => {
-            const mappedSubform = this._pathToQuestionObject(parsedPath);
-            if (filterMap.has(formKey)) {
-              const tabQuestionsList = filterMap.get(formKey) as FormSubsection[];
-              tabQuestionsList.push(mappedSubform);
-              filterMap.set(formKey, tabQuestionsList);
-            } else {
-              filterMap.set(formKey, [mappedSubform]);
-            }
+          const mappedSubform = this._pathToQuestionObject(parsedPath);
+          if (filterMap.has(formKey)) {
+            const tabQuestionsList = filterMap.get(formKey) as FormSubsection[];
+            tabQuestionsList.push(mappedSubform);
+            filterMap.set(formKey, tabQuestionsList);
+          } else {
+            filterMap.set(formKey, [mappedSubform]);
+          }
         });
       });
     }
@@ -151,7 +151,7 @@ export class RampMainComponent {
           });
         } else if (prop['format']) {
           q = new FileUploadQuestion();
-          q.multiple = prop['multiple'] ? <boolean>prop['multiple'] : false
+          q.multiple = prop['multiple'] ? <boolean>prop['multiple'] : false;
         } else {
           q = new TextboxQuestion({});
         }

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'chart-wrapper',
   preset: '../../../../../jest.preset.js',

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-rdas-phenotype-display',
   preset: '../../../../jest.preset.js',

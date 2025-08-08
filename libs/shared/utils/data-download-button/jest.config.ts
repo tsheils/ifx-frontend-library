@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'data-download-button',
   preset: '../../../../jest.preset.js',

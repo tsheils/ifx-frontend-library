@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'panel-accordion',
   preset: '../../../../../jest.preset.js',

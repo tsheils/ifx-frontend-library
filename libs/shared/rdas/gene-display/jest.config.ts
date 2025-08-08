@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-rdas-gene-display',
   preset: '../../../../jest.preset.js',

@@ -40,10 +40,13 @@ import { MatButtonModule } from '@angular/material/button';
     MatInputModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class EmailSignOnModalComponent implements OnInit, OnDestroy {
   private readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
+  dialog = inject(MatDialog);
+  public dialogRef = inject(MatDialogRef<EmailSignOnModalComponent>);
 
   loginError = '';
 
@@ -51,11 +54,6 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
     email: new FormControl('', [Validators.required, Validators.email]),
     pw: new FormControl('', [Validators.required]),
   });
-
-  constructor(
-    public dialogRef: MatDialogRef<EmailSignOnModalComponent>,
-    public dialog: MatDialog
-  ) {}
 
   ngOnInit() {
     this.store

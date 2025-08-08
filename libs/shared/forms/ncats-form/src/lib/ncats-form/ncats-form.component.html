@@ -1,12 +1,12 @@
-  <form [formGroup]="form()">
-    <div class = "form-grid" [ngClass] = "{'form-row': getDirection()}">
+<form [formGroup]="form()">
+  <div class="form-grid" [ngClass]="{ 'form-row': getDirection() }">
     @for (question of questions(); track question.label) {
-      <div class = "question-holder">
+    <div class="question-holder">
       <lib-ncats-form-question
         [question]="question"
         [form]="form()"
       ></lib-ncats-form-question>
-      </div>
-    }
     </div>
-  </form>
+    }
+  </div>
+</form>

@@ -175,11 +175,11 @@
       "chemical-descriptors-page": [
         "libs/features/ramp/chemical-descriptors-page/src/index.ts"
       ],
-      "complete-dialog": ["libs/shared/utils/complete-dialog/src/index.ts"],
       "data-download-button": [
         "libs/shared/utils/data-download-button/src/index.ts"
       ],
       "data-panel": ["libs/shared/ramp/panels/data-panel/src/index.ts"],
+      "dialog-modal": ["libs/shared/utils/dialog-modal/src/index.ts"],
       "dnd-file-upload": ["libs/shared/forms/dnd-file-upload/src/index.ts"],
       "filter-download-button": [
         "libs/shared/utils/filter-download-button/src/index.ts"

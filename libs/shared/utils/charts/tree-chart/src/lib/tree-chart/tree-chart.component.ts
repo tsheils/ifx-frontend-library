@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  effect,
   input,
   output,
 } from '@angular/core';
@@ -11,20 +10,20 @@ import { CommonModule } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import {
-  MatTreeFlatDataSource,
-  MatTreeFlattener,
   MatTreeModule,
 } from '@angular/material/tree';
 import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { FlatDiseaseNode } from '@ncats-frontend-library/shared/rdas/rdas-tree';
 
-export class FlatHierarchyNode implements HierarchyNode {
+/*export class FlatHierarchyNode implements HierarchyNode<unknown> {
   level!: number;
   expandable!: boolean;
   term!: string;
   parent?: string | undefined;
   count?: number;
   children?: HierarchyNode[];
-}
+}*/
+
 @Component({
   selector: 'lib-tree-chart',
   imports: [CommonModule, MatIcon, MatIconButton, MatTreeModule],
@@ -36,13 +35,29 @@ export class FlatHierarchyNode implements HierarchyNode {
 export class TreeChartComponent {
   data = input<HierarchyNode[]>();
   dataSource = computed(() => this.data() as HierarchyNode[]);
-  childrenAccessor = (node: HierarchyNode) => node.children ?? [];
+  leafExpand = output<HierarchyNode>();
+
+  childrenAccessor = (node: HierarchyNode) => node.children ?? [] as HierarchyNode[];
 
   loaded = true;
 
-  hasChild = (_: number, node: HierarchyNode) => !!node.children?.length;
+  hasChild = (_: number, node: HierarchyNode ) => !!node.count;
 
-  selectNode(node: FlatHierarchyNode) {
-    console.log(node);
+  selectNode(event: FlatDiseaseNode): void {
+    this.loaded = false;
+    this.leafExpand.emit(event);
+   /* this.treeControl.toggle(event);
+    if (this.treeControl.isExpanded(event)) {
+      let r = this.treeControl.expansionModel.selected;
+      if (r.length) {
+        r = r.filter((node) => !(node.gardId === event.gardId));
+        this.treeControl.expansionModel.clear();
+        this.treeControl.expansionModel.select(...r);
+      }
+    } else {
+      this.treeControl.expand(event);
+    }*/
+  //  this.loaded = true;
+ //   this.changeRef.detectChanges();
   }
 }

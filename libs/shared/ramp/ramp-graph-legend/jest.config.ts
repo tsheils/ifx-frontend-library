@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ramp-graph-legend',
   preset: '../../../../jest.preset.js',

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ramp-main',
   preset: '../../../../jest.preset.js',

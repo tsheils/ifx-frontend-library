@@ -3,8 +3,11 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   ElementRef,
+  inject,
   Inject,
+  InjectionToken,
   PLATFORM_ID,
   ViewChild,
   ViewEncapsulation,
@@ -22,15 +25,14 @@ import SwaggerUI from 'swagger-ui';
 })
 export class RampApiComponent implements AfterViewInit {
   @ViewChild('documentation') el!: ElementRef;
-
-  isBrowser: boolean;
+  platformId: InjectionToken<NonNullable<unknown>> = inject(
+    PLATFORM_ID
+  ) as InjectionToken<NonNullable<unknown>>;
+  isBrowser = computed(() => isPlatformBrowser(this.platformId));
   url = '/assets/data/ramp-api.json';
 
-  constructor(@Inject(PLATFORM_ID) platformId: object) {
-    this.isBrowser = isPlatformBrowser(platformId);
-  }
   ngAfterViewInit() {
-    if (this.isBrowser) {
+    if (this.isBrowser()) {
       SwaggerUI({
         url: this.url,
         domNode: this.el.nativeElement,

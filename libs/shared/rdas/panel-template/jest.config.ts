@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'rdas-panel-template',
   preset: '../../../../jest.preset.js',

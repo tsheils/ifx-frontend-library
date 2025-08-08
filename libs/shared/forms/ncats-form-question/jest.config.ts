@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'ncats-form-question',
   preset: '../../../../jest.preset.js',

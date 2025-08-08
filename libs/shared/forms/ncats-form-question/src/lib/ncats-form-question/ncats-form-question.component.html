@@ -1,8 +1,14 @@
+@if(!question.hidden){
 <div [formGroup]="form">
   @switch (question.controlType) { @case ('textbox') {
-  <mat-form-field class="full-width" color="accent" >
+  <mat-form-field class="full-width" color="accent">
     <mat-label [attr.for]="question.key">{{ question.label }}</mat-label>
-    <input matInput [formControlName]="question.key" [id]="question.key" [type]="question.type" />
+    <input
+      matInput
+      [formControlName]="question.key"
+      [id]="question.key"
+      [type]="question.type"
+    />
   </mat-form-field>
   } @case ('number') {
   <mat-form-field class="full-width" color="accent">
@@ -15,7 +21,6 @@
       [step]="question.step"
       [min]="question.min"
       [max]="question.max"
-
     />
   </mat-form-field>
   } @case ('textarea') {
@@ -76,3 +81,4 @@
   <div class="errorMessage">{{ question.label }} is required</div>
   }
 </div>
+}

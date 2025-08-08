@@ -2,7 +2,6 @@ import { Action } from '@ngrx/store';
 import { ResolverResponse } from 'ifx';
 import { LoadResolverOptionsActions } from './resolver.actions';
 
-import * as ResolverActions from './resolver.actions';
 import {
   ResolverState,
   initialResolverState,

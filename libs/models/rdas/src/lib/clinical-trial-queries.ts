@@ -66,7 +66,10 @@ export const FETCHTRIALSQUERY = gql`
     $ctoptions: ClinicalTrialOptions
   ) {
     trialsData: gards(where: $gardWhere) {
-      clinicalTrials: clinicalTrialsmappedToGard(where: $ctfilters, options: $ctoptions) {
+      clinicalTrials: clinicalTrialsmappedToGard(
+        where: $ctfilters
+        options: $ctoptions
+      ) {
         ...trialFields
       }
       count: clinicalTrialsmappedToGardAggregate(where: $ctfilters) {
@@ -103,13 +106,11 @@ export const FETCHTRIALSVARIABLES: {
   };
 } = {
   gardWhere: { GardId: undefined },
-ctoptions: {
+  ctoptions: {
     limit: 10,
     offset: 0,
   },
-  ctfilters: {
-
-  },
+  ctfilters: {},
 };
 
 export const TRIALTYPEFILTERS = gql`
@@ -144,20 +145,20 @@ export const TRIALSTATUSFILTERS = gql`
 
 export const ALLTRIALFILTERS = gql`
   query AllDiseasesClinicalTrialsFilters {
-      allTrialsByPhase {
-        count
-        label
-        term
-      }
-      allTrialsByStatus {
-        count
-        label
-        term
-      }
-      allTrialsByType {
-        count
-        label
-        term
-      }
+    allTrialsByPhase {
+      count
+      label
+      term
+    }
+    allTrialsByStatus {
+      count
+      label
+      term
+    }
+    allTrialsByType {
+      count
+      label
+      term
+    }
   }
 `;

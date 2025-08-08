@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-rdas-disease-display',
   preset: '../../../../jest.preset.js',

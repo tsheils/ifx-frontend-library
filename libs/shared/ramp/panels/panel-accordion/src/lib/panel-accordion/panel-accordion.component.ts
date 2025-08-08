@@ -3,8 +3,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   input,
-  output, signal,
-  ViewEncapsulation
+  output,
+  signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { MatButton } from '@angular/material/button';
 import {
@@ -47,7 +48,7 @@ import { VisualizationPanelComponent } from 'visualization-panel';
     DataDownloadButtonComponent,
     MatButton,
     MatIcon,
-    MatTooltip
+    MatTooltip,
   ],
   templateUrl: './panel-accordion.component.html',
   styleUrl: './panel-accordion.component.scss',
@@ -67,7 +68,6 @@ export class PanelAccordionComponent {
   dataTabs = input<Map<string, DataMap> | undefined>(undefined);
   overviewTabs = input<QueryResultsData | undefined>(new QueryResultsData());
   showFilters = signal<boolean>(true);
-
 
   searchData(event: { [key: string]: unknown }) {
     this.dataSearch.emit(event);

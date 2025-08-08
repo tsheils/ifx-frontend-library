@@ -191,3 +191,8 @@ export const getChemicalPropertyResults = createSelector(
     };
   }
 );
+
+export const getMetlinkrStatus = createSelector(
+  getRampState,
+  (state: State) => state.metlinkrFinished
+);

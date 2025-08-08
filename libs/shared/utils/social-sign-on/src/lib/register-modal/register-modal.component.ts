@@ -60,9 +60,12 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
     MatInputModule,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
 })
 export class RegisterModalComponent implements OnInit {
   store = inject(Store);
+  dialog = inject(MatDialog);
+  public dialogRef = inject(MatDialogRef<RegisterModalComponent>);
 
   showPassword = false;
   inputType = 'password';
@@ -73,13 +76,7 @@ export class RegisterModalComponent implements OnInit {
     pwVerify: new FormControl('', [Validators.required, securePassword()]),
   });
 
-  constructor(
-    public dialogRef: MatDialogRef<RegisterModalComponent>,
-    public dialog: MatDialog
-  ) {}
-
   ngOnInit(): void {
-    //  this.registerForm.controls['pw'].addValidators(matchPassword(this.registerForm.controls['pwVerify']))
     this.registerForm.controls['pwVerify'].addValidators(
       matchPassword(this.registerForm.controls['pw'])
     );

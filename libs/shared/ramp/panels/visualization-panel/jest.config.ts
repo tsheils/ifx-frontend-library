@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'visualization-panel',
   preset: '../../../../../jest.preset.js',

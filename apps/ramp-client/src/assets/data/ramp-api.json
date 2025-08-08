@@ -64,9 +64,7 @@
     {
       "name": "identifier-harmonization",
       "description": "Retrieve chemical classes (Classyfire and lipidMAPS) and chemical property information from input metabolites, as well as perform chemical class enrichment.",
-      "sections": [
-        "identifier-harmonization"
-      ]
+      "sections": ["identifier-harmonization"]
     },
     {
       "name": "enrichment-results-tools",
@@ -2257,6 +2255,109 @@
             }
           }
         }
+      }
+    },
+    "/api/identifier-harmonization": {
+      "post": {
+        "tags": ["identifier-harmonization"],
+        "x-section-title": "biochemical-pathway-analysis",
+        "summary": "Run Pathway Enrichment Analysis",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "requestBody": {
+          "description": "Perform pathway enrichment on metabolites or metabolites/genes/proteins.   Prepend IDs by source ID type (e.g. hmdb:HMDB0240254).",
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "backgroundFile": {
+                    "label": "Input Files",
+                    "description": "Supply excel file containing custom pathway definitions. Pathways should be defined in the GMX format. GMX files contain one analyte set per column, with the name of the set in the first row, and constituent analytes in subsequent rows. The first sheet of the excel file should contain metabolite pathway definitions, while the second sheet should contain gene pathway definitions. Take care to ensure that analyte identifiers used to define pathways are the same as the identifiers used in the dataset.",
+                    "type": "string",
+                    "format": "binary",
+                    "multiple": true
+                  },
+                  "manifestFile": {
+                    "label": "Manifest File",
+                    "description": "Supply excel file containing custom pathway definitions. Pathways should be defined in the GMX format. GMX files contain one analyte set per column, with the name of the set in the first row, and constituent analytes in subsequent rows. The first sheet of the excel file should contain metabolite pathway definitions, while the second sheet should contain gene pathway definitions. Take care to ensure that analyte identifiers used to define pathways are the same as the identifiers used in the dataset.",
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "example": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/metlinkr-results/{resultsId}": {
+      "get": {
+        "summary": "Return MerlinkR Hharmonization results",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/g-zip": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+          "in": "path",
+          "name": "resultsId",
+          "schema":
+          {
+            "type": "string",
+            "required": true,
+            "description": "the returned file"
+          }
+          }
+        ]
       }
     }
   }

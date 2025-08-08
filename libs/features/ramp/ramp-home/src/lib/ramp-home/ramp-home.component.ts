@@ -1,12 +1,13 @@
 import {
   ChangeDetectionStrategy,
-  Component, computed,
+  Component,
+  computed,
   ElementRef,
   inject,
-  viewChild
+  viewChild,
 } from '@angular/core';
 import { CommonModule, NgOptimizedImage } from '@angular/common';
-import { MatAnchor } from '@angular/material/button';
+import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatCard } from '@angular/material/card';
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
@@ -24,6 +25,7 @@ import { RampSelectors } from 'ramp-store';
     MatIcon,
     NgOptimizedImage,
     MatAnchor,
+    MatButton,
   ],
   templateUrl: './ramp-home.component.html',
   styleUrl: './ramp-home.component.scss',
@@ -34,7 +36,9 @@ export class RampHomeComponent {
   private readonly store = inject(Store);
   elemRef = viewChild<ElementRef>('details');
   api = this.store.selectSignal(RampSelectors.getRampApi);
-  entityCounts = computed(()=> this.store.selectSignal(RampSelectors.getAllRamp)().entityCounts)
+  entityCounts = computed(
+    () => this.store.selectSignal(RampSelectors.getAllRamp)().entityCounts
+  );
 
   goToDetails(): void {
     this.elemRef()?.nativeElement.scrollIntoView({

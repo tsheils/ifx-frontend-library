@@ -26,11 +26,9 @@ import { map } from 'rxjs';
 export class RdasSubscriptionsComponent implements OnInit {
   private readonly store = inject(Store);
   destroyRef = inject(DestroyRef);
-
+  private changeRef = inject(ChangeDetectorRef);
   subscriptions!: Signal<Disease[] | undefined>;
   loading = true;
-
-  constructor(private changeRef: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.store

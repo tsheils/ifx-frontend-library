@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-highlight-pipe',
   preset: '../../../../jest.preset.js',

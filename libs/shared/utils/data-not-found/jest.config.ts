@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-utils-data-not-found',
   preset: '../../../../jest.preset.js',

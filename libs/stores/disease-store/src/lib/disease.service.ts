@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { ApolloQueryResult, DocumentNode } from '@apollo/client';
 import { Apollo } from 'apollo-angular';
 import { Observable } from 'rxjs';
@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root',
 })
 export class DiseaseService {
-  constructor(private apollo: Apollo) {}
+  private apollo = inject(Apollo);
 
   fetchDiseases(
     query: DocumentNode,

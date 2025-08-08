@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'generic-chart',
   preset: '../../../../../jest.preset.js',

@@ -2,7 +2,6 @@ import { inject } from '@angular/core';
 import { Filter } from '@ncats-frontend-library/models/utils';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
-import { RouterNavigationAction } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
 import { ResolverForm, ResolverResponse } from 'ifx';
 import { catchError, of, exhaustMap, map, mergeMap } from 'rxjs';

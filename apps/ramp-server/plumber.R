@@ -11,11 +11,6 @@ library(svglite)
 ########### Utils
 ###########
 
-require(parallel)
-available_cores <- parallel::detectCores()
-## For maximum speed, we reserve all cores minus one, so the machine can still perform some background tasks
-n_cores <- available_cores - 1
-
 
 rampDB <<- RaMP:::RaMP(branch='ramp3.0') # pre-load sqlite database to the container
 
@@ -215,7 +210,6 @@ function(pathway, analyteType="both", namesOrIds="names", match="fuzzy", maxPath
     RaMP::getAnalyteFromPathway(db = rampDB, pathway = pathway, analyteType=analyteType, match=match, namesOrIds=namesOrIds, maxPathwaySize=maxPathwaySize)
   },
     error = function(cond) {
-      print(cond)
       return(data.frame())
     })
   analytes_df[is.na(analytes_df)] <- ""
@@ -408,7 +402,6 @@ function(metabolites) {
 #' @param format one of "json" or "tsv"
 #' @post /api/metabolites-from-ontologies
 function(ontology, format = "json", res) {
-  print(ontology)
   ontologies_names <- c(ontology)
   ontologies <- RaMP::getMetaFromOnto(db = rampDB, ontology = ontologies_names)
   if (is.null(nrow(ontologies))) {
@@ -859,31 +852,41 @@ function(metabolites = '', backgroundFile = '', background = '', backgroundType 
 #' @parser text
 #' @parser csv
 #' @parser json
+#' #@serializer unboxedJSON
+#' @serializer contentType list(type="application/x-tar")
 #' @post /api/metlinkr
-function(inputFiles = '', manifestFile) {
-#  mp <- mime::parse_multipart(req)
- # readr::read_csv(mp$file$datapath)
-  manifest_df <- read.csv(manifestFile, header="T")
-  print(manifest_df)
-  input_df <- read.csv(inputFiles, header="T")
-print(input_df)
-  n_cores <- parallel::detectCores() - 1
-#  metLinkR_output <- harmonizeInputSheets(inputcsv= path,
-#                                          n_cores = n_cores,
-#                                          mapping_library_format="both",
-#                                          remove_parentheses_for_synonym_search = TRUE,
-#                                          use_metabolon_parsers = TRUE,
-#                                          majority_vote = TRUE)
-#      print(metLinkR_output)
-#  unlink(names[manifestFile])
+function(req, res) {
+  require(parallel)
+  available_cores <- parallel::detectCores()
+  ## For maximum speed, we reserve all cores minus one, so the machine can still perform some background tasks
+  n_cores <- available_cores-1
+    id <- plumber::random_cookie_key()
+    # create temporary session folder
+  mainwd <- getwd()
+    sessionFolder <- file.path("temp", id)
+    dir.create( sessionFolder, id, recursive = T)
+    setwd(sessionFolder)
+     for (property in req$body){
+    # write input file to session folder
+       writeBin(property$value, property$filename)
+     }
+    metLinkR_output <- harmonizeInputSheets(inputcsv="manifest.csv",
+                                            n_cores = n_cores,
+                                            mapping_library_format="both",
+                                            remove_parentheses_for_synonym_search = TRUE,
+                                            use_metabolon_parsers = TRUE,
+                                            majority_vote = TRUE)
 
 
- # return(
- #   metLinkR_output
- # )
+  tar('metlinkR_results.tar.gz',  list.files('metlinkR_output', full.names = T), compression='gzip')
+  res$setHeader("Content-Disposition", 'attachment; filename="metlinkR_results.tar.gz"')
+  # Ensure the file exists
+  if (!file.exists(paste0(getwd(), '/', 'metlinkR_results.tar.gz'))) {
+    res$status <- 404
+    return("File not found.")
+  }
+  res$setHeader("Content-Type", "application/x-tar")
+  on.exit(setwd(mainwd), add = TRUE)
+  on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
+  as_attachment(readBin("metlinkR_results.tar.gz", "raw", n = file.info("metlinkR_results.tar.gz")$size), "metlinkR_results.tar.gz")
 }
-
-
-
-
-

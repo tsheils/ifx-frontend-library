@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'rdas-express',
   preset: '../../jest.preset.js',

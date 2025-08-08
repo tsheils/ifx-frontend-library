@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'resolver-data-viewer',
   preset: '../../../../jest.preset.js',

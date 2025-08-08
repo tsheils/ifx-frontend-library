@@ -1,4 +1,3 @@
-
 .file-input {
   display: none;
 }
@@ -17,7 +16,7 @@
 }
 
 .file-size {
-  font-size: .75rem;
+  font-size: 0.75rem;
   font-style: italic;
 }
 
@@ -29,8 +28,9 @@
 }
 
 .input-file-spinner {
-  height: 100%;
-  width: 100%;
+  left: calc(50% + 100px);
+  top: calc(50% + 50px);
+  position: relative;
 }
 
 .file-upload {
@@ -42,6 +42,6 @@
 }
 
 .drag-drop-text {
-  padding-top: .3rem;
+  padding-top: 0.3rem;
   padding-bottom: 1rem;
 }

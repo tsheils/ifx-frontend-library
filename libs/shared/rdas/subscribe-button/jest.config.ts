@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'shared-rdas-subscribe-button',
   preset: '../../../../jest.preset.js',
