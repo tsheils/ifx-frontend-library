@@ -28,6 +28,10 @@
             "input": "libs/features/ramp/ramp-home/src/assets",
             "glob": "**/*",
             "output": "assets/ramp-home"
+          }, {
+            "input": "libs/features/ramp/metlinkr-page/src/assets",
+            "glob": "**/*",
+            "output": "assets/metlinkr"
           }
         ],
         "stylePreprocessorOptions": {

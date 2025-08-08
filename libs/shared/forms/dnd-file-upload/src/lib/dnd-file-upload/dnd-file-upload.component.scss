@@ -28,8 +28,9 @@
 }
 
 .input-file-spinner {
-  height: 100%;
-  width: 100%;
+  left: calc(50% + 100px);
+  top: calc(50% + 50px);
+  position: relative;
 }
 
 .file-upload {

@@ -8,7 +8,8 @@
   <div class="file-grid">
     @if(this.fileLoading()){
     <mat-spinner class="input-file-spinner"></mat-spinner>
-    } @for(file of files(); let index = $index; track file.name){
+    }
+    @for(file of files(); let index = $index; track file.name){
     <div class="file-list-element">
       <button mat-icon-button (click)="removeFile(index)">
         <mat-icon>close</mat-icon>
@@ -26,7 +27,8 @@
     (change)="writeValue($event)"
     #fileUpload
   />
-  <div class="file-upload">
+  @if(!this.fileLoading()){
+    <div class="file-upload">
     <div><mat-icon class="upload-icon">upload</mat-icon></div>
     <div class="drag-drop-text">
       Drag and drop <br />
@@ -39,4 +41,5 @@
       </button>
     </div>
   </div>
+  }
 </div>

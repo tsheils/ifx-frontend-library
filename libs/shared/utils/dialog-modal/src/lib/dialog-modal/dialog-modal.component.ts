@@ -9,12 +9,11 @@ import {
   MatDialogRef,
   MatDialogTitle
 } from '@angular/material/dialog';
-import { MatIcon } from '@angular/material/icon';
 import { SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'lib-dialog-modal',
-  imports: [CommonModule, MatIcon, MatRipple, MatDialogContent, MatDialogTitle, MatButton, MatDialogClose, MatDialogActions],
+  imports: [CommonModule, MatDialogContent, MatDialogTitle, MatButton, MatDialogClose, MatDialogActions],
   templateUrl: './dialog-modal.component.html',
   styleUrl: './dialog-modal.component.scss',
   standalone: true

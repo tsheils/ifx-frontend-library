@@ -1,16 +1,8 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  input,
-  output,
-  signal,
-  viewChild,
-} from '@angular/core';
+import { Component, computed, ElementRef, input, OnInit, output, signal, viewChild } from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
-import {
-  MatButton
-} from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
+import { MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
@@ -21,8 +13,8 @@ import { NcatsFormComponent } from 'ncats-form';
 import { QuestionBase, TextboxQuestion } from 'ncats-form-question';
 import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
-import { IdentifierHarmonizationActions } from 'ramp-store';
-import { from } from 'rxjs';
+import { IdentifierHarmonizationActions, RampSelectors } from 'ramp-store';
+import { from, map } from 'rxjs';
 
 class ManifestRow {
   FileNames!: string;
@@ -41,8 +33,7 @@ class ManifestQuestionsService {
       new TextboxQuestion({
         label: 'File Name',
         key: 'FileNames',
-        disabled: true,
-        hidden: true
+        disabled: true
       }),
       new TextboxQuestion({
         label: 'Short File Name',
@@ -95,7 +86,7 @@ class ManifestQuestionsService {
   styleUrl: './metlinkr-page.component.scss',
   standalone: true,
 })
-export class MetlinkrPageComponent extends RampCorePageComponent {
+export class MetlinkrPageComponent extends RampCorePageComponent implements OnInit {
   manifestFormService = new ManifestQuestionsService();
   fileUpload = viewChild(ElementRef);
   fileSelect = output<File | null>();
@@ -122,54 +113,61 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
     super();
   }
 
+  ngOnInit() {
+    this.store.select(RampSelectors.getMetlinkrStatus).subscribe((res) => {
+      if (res == true) {
+          this.dialog.closeAll()
+      }
+    });
+  }
+
   setForm($event: FormGroup, key: string) {
     this.formMap.set(key, $event);
   }
 
+  setInputFiles(event: File[]) {
+    this.files.set(event);
+    if (!this.manifestFile()) {
+      this._createManifestForm();
+    }
+  }
+
+  setManifestFile(event: File[]) {
+    this.manifestFile.set(event[0]);
+    this._manifestToJson();
+  }
+
   submit() {
-    console.log(this.files())
     const manifest = Array.from(this.formMap.values()).map((form) => {
       return form.getRawValue() as ManifestRow;
     });
-    console.log(manifest)
-   // if( manifest.length !== this.files().length){
-      console.log("yo")
-
+    if( manifest.length !== this.files().length){
       const manifestNames = manifest.map(file => file.FileNames)
       const fileNames = this.files().map(file => file.name)
-
-      console.log(manifestNames)
-      console.log(fileNames)
-
-    const overlap = Array.from(new Set(manifestNames.concat(fileNames)))
-    console.log(this._makeHTMLString(overlap))
     if(manifestNames.length > fileNames.length){
       this.dialog.open(DialogModalComponent, {
         data: {
           title: 'Warning',
           message: `The number of files in the manifest list is greater than the number of files uploaded.
           Missing:`,
-          htmlString: this._makeHTMLString(overlap)
+          htmlString: this._makeHTMLString(manifestNames.filter(name => !fileNames.includes(name)))
         },
       });
+    } else {
+      this.submitData();
     }
     if(fileNames.length > manifestNames.length) {
       this.dialog.open(DialogModalComponent, {
         data: {
           title: 'Warning',
           message: 'The number of files uploaded is greater than the number of files in the manifest list.',
-          htmlString: this._makeHTMLString(overlap)
+          htmlString: this._makeHTMLString(fileNames.filter(name => !manifestNames.includes(name)))
         },
       });
     }
-
-  //  }
-    this.store.dispatch(
-      IdentifierHarmonizationActions.runIdentifierHarmonization({
-        files: this.files() as File[],
-        manifest: this.formMapToCSVFile()
-      })
-    );
+    } else {
+      this.submitData()
+    }
   }
 
   private _createManifestForm() {
@@ -186,21 +184,19 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
   }
 
   _toCSV(data: ManifestRow[]): string {
-    let ret = '';
     const lines: string[] = [];
     data.forEach((input) => {
       const inputLine: string[] = [];
       this.displayedColumns.forEach((field) => {
         inputLine.push(
           input[field as keyof typeof input]
-            ? <string>input[field as keyof typeof input]
+            ? <string>input[field as keyof typeof input]?.trim()
             : 'NA'
         );
       });
       lines.push(inputLine.join(','));
     });
-    ret = this.displayedColumns.join(',') + ' \n ' + lines.join('\n');
-    return ret;
+    return this.displayedColumns.join(',') + '\n' + lines.join('\n')
   }
 
   _downloadFile() {
@@ -256,7 +252,7 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
         fields.forEach((field, index) => {
           questions.forEach((question) => {
             if (question.key === field) {
-              question.value = lineSplit[index];
+              question.value = lineSplit[index].trim();
             }
           });
         });
@@ -264,18 +260,6 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
       });
       this.ManifestFormMap.set(inputMap);
     });
-  }
-
-  setInputFiles(event: File[]) {
-    this.files.set(event);
-    if (!this.manifestFile()) {
-      this._createManifestForm();
-    }
-  }
-
-  setManifestFile(event: File[]) {
-    this.manifestFile.set(event[0]);
-    this._manifestToJson();
   }
 
   formMapToCSVFile(){
@@ -290,7 +274,21 @@ export class MetlinkrPageComponent extends RampCorePageComponent {
     let string = `<div>`
     values.forEach(value => string = string +'<div>' + value + "</div>")
     string = string + '</div>'
-    console.log(string)
     return this.sanitizer.bypassSecurityTrustHtml(string);
+  }
+
+  private submitData() {
+    this.store.dispatch(
+      IdentifierHarmonizationActions.runIdentifierHarmonization({
+        files: this.files() as File[],
+        manifest: this.formMapToCSVFile()
+      })
+    );
+    this.dialog.open(DialogModalComponent, {
+      data: {
+        title: 'Files submitted',
+        message: 'This may take a few minutes. Do not close or navigate away from this tab. The results will be downloaded when completed.'
+      },
+    })
   }
 }

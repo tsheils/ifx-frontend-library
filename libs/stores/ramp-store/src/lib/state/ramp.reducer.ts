@@ -27,7 +27,7 @@ import {
 import {
   AnalyteFromPathwayActions,
   ClassesFromMetabolitesActions,
-  CommonReactionAnalyteActions,
+  CommonReactionAnalyteActions, IdentifierHarmonizationActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
   MetaboliteFromOntologyActions,
@@ -38,7 +38,7 @@ import {
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions,
+  ReactionsFromAnalytesActions
 } from './ramp.actions';
 
 export const RAMP_STORE_FEATURE_KEY = 'rampStore';
@@ -77,7 +77,7 @@ export interface State extends EntityState<RampEntity> {
   properties?: RampResponse<Properties>;
   chemicalEnrichments?: RampChemicalEnrichmentResponse;
   reactionClassEnrichments?: RampReactionClassEnrichmentResponse;
-
+  metlinkrFinished?: boolean;
   api?: Map<string, OpenApiPath[]>;
 }
 
@@ -96,6 +96,7 @@ export const initialState: State = rampAdapter.getInitialState({
   ontologiesList: [],
   geneIntersects: [] as { id: string; sets: string[]; size: number }[],
   metaboliteIntersects: [] as { id: string; sets: string[]; size: number }[],
+  metlinkrFinished: false
 });
 
 export const rampReducer = createReducer(
@@ -344,6 +345,26 @@ export const rampReducer = createReducer(
         loading: false,
         pathwayEnrichments: { data, query, dataAsDataProperty },
         clusterPlot: clusterImage,
+      };
+    }
+  ),
+
+  on(
+    IdentifierHarmonizationActions.runIdentifierHarmonization,
+    (state) => {
+      return {
+        ...state,
+        metlinkrFinished: false
+      };
+    }
+  ),
+
+  on(
+    IdentifierHarmonizationActions.runIdentifierHarmonizationSuccess,
+    (state) => {
+      return {
+        ...state,
+        metlinkrFinished: true
       };
     }
   ),

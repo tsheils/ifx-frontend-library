@@ -9,7 +9,7 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Directive({
   standalone: true,
@@ -44,7 +44,7 @@ export class DndFileInputDirective {
     CommonModule,
     MatIcon,
     MatIconButton,
-    MatProgressSpinner,
+    MatProgressSpinnerModule,
     DndFileInputDirective,
     MatButton,
   ],
@@ -62,7 +62,7 @@ export class DndFileUploadComponent {
   writeValue(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target && target?.files?.length) {
-      this.files.set((<unknown>target?.files) as File[]);
+      this.files.set(([...<unknown>target?.files as []]) as File[]);
       this.selectedFiles.emit(this.files());
     }
   }

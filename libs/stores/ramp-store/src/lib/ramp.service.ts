@@ -857,9 +857,12 @@ export class RampService {
       formData.append('inputFiles', file);
     });
     formData.append('manifestFile', manifest, manifest.name);
-    return this.http.post(`${this.url}metlinkr`, formData).pipe(
-      map((response: unknown) => {
-        return <string>response;
+    return this.http.post(`${this.url}metlinkr`, formData, { responseType: 'blob' }).pipe(
+      map((response: Blob) => {
+        this._downloadFile(
+          response,
+          'metlinkR_results.tar.gz'
+        );
       })
     );
   }
@@ -975,9 +978,9 @@ export class RampService {
       link.setAttribute('href', url);
       link.setAttribute('download', `${name}`);
       link.style.visibility = 'hidden';
-      this.dom.body.appendChild(link);
-      link.click();
-      this.dom.body.removeChild(link);
+        this.dom.body.appendChild(link);
+        link.click();
+        this.dom.body.removeChild(link);
     }
   }
 }

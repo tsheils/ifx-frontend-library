@@ -44,7 +44,6 @@ export class TreeChartComponent {
   hasChild = (_: number, node: HierarchyNode ) => !!node.count;
 
   selectNode(event: FlatDiseaseNode): void {
-    console.log(event)
     this.loaded = false;
     this.leafExpand.emit(event);
    /* this.treeControl.toggle(event);

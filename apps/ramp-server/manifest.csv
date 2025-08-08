@@ -1,0 +1,3 @@
+FileNames,ShortFileName,HMDB,Metabolite_Name,PubChem_CID,KEGG,LIPIDMAPS,chebi
+DDLPS.csv,file1,Group.HMDB,BIOCHEMICAL,PUBCHEM,KEGG,NA,NA
+annotations.csv,file2,hmdbId,Metabolite,pubChemId,NA,NA,chebiId

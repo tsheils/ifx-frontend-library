@@ -145,7 +145,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.selectedValues.clear();
     this.fetchParameters();
-console.log(this.diseaseTree())
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
@@ -233,7 +232,6 @@ console.log(this.diseaseTree())
 
   treeExpand(event: HierarchyNode): void {
     const ev = event as DiseaseNode
-    console.log(ev)
     const navigationExtras: NavigationExtras = {
       queryParams: {
         parentId: ev.gardId,

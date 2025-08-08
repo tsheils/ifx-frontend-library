@@ -2305,6 +2305,60 @@
           }
         }
       }
+    },
+    "/api/metlinkr-results/{resultsId}": {
+      "get": {
+        "summary": "Return MerlinkR Hharmonization results",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/g-zip": {
+                "schema": {
+                  "type": "object"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Default response.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+          "in": "path",
+          "name": "resultsId",
+          "schema":
+          {
+            "type": "string",
+            "required": true,
+            "description": "the returned file"
+          }
+          }
+        ]
+      }
     }
   }
 }

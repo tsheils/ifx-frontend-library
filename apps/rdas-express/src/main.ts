@@ -71,8 +71,6 @@ function startSchema(instance) {
           }),
         }),
         (req, res, next) => {
-          // apolloServer.logger.info(req)
-          //   console.log(req);
           logger.info(`Received a ${req.method} request for ${req.url}`);
           next();
         }
