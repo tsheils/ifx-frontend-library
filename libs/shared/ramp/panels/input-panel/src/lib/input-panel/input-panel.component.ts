@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component,
+  Component, computed,
   input,
-  output,
-  ViewEncapsulation,
+  output, signal,
+  ViewEncapsulation
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,18 +32,23 @@ import { FormSubsection } from 'ramp';
 export class InputPanelComponent {
   inputQuestions = input<FormSubsection[]>();
   dataSearch = output<{ [key: string]: unknown }>();
-
+  isValid = signal(true)
   formMap: Map<string, FormGroup> = new Map<string, FormGroup>();
 
   setForm(form: FormGroup, key: string) {
+    form.statusChanges.subscribe(change => {
+      if(change === 'INVALID') {
+        this.isValid.set(false)
+      } else {
+        this.isValid.set(true)
+      }
+    })
     this.formMap.set(key, form);
   }
 
   fetchData() {
-    let formValues: { [key: string]: unknown } = {};
-    Array.from(this.formMap.values()).forEach((form) => {
-      formValues = { ...formValues, ...form.value };
-    });
+    const formValues = this.getValuesFromForm()
+    console.log(formValues)
     this.dataSearch.emit(formValues);
   }
 
@@ -51,5 +56,12 @@ export class InputPanelComponent {
     return label.replace(/-/g, ' ');
   }
 
+  getValuesFromForm(): { [key: string]: unknown }{
+    let formValues: { [key: string]: unknown } = {};
+    Array.from(this.formMap.values()).forEach((form) => {
+      formValues = { ...formValues, ...form.value };
+    });
+    return formValues;
+  }
   _originalOrder = () => 0;
 }

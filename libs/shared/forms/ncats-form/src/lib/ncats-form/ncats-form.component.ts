@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import {
   FormControl,
   FormGroup,
-  ReactiveFormsModule,
-  Validators,
+  ReactiveFormsModule, ValidationErrors,
+  Validators
 } from '@angular/forms';
 import { NcatsFormQuestionComponent, QuestionBase } from 'ncats-form-question';
 
