@@ -1260,22 +1260,7 @@
         "tags": ["chemical-descriptors"],
         "summary": "Retrieve Chemical Properties from Input Metabolites",
         "x-allowedTypes": {
-          "metabolites": [
-            "CAS",
-            "chebi",
-            "chemspider",
-            "hmdb",
-            "kegg",
-            "kegg_glycan",
-            "lipidbank",
-            "LIPIDMAPS",
-            "plantfa",
-            "polymer",
-            "pubchem",
-            "rhea-comp",
-            "swisslipids",
-            "wikidata"
-          ],
+          "metabolites": ["hmdb", "LIPIDMAPS"],
           "genes/proteins": []
         },
         "responses": {

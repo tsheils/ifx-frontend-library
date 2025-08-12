@@ -11,7 +11,7 @@
 </div>
 <div class="row centered-row bottom-align">
   <div>
-    <button mat-flat-button color="accent" (click)="fetchData()">
+    <button mat-flat-button color="accent" (click)="fetchData()" [disabled]="!isValid()">
       <span class="hide-small">Search</span><mat-icon>search</mat-icon>
     </button>
   </div>
