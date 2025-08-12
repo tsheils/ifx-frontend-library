@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y build-essential libcurl4-gnutls-dev lib
 
 RUN R javareconf
 
-RUN R -e "install.packages(c('devtools', 'sqldf', 'config', 'R.cache', 'readr', 'svglite'))"
+RUN R -e "install.packages(c('devtools', 'sqldf', 'config', 'R.cache', 'readr', 'svglite', 'rJava'))"
 
 COPY plumber.R /usr/local/lib/R/site-library
 
