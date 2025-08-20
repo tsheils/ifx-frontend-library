@@ -887,7 +887,10 @@ function(req, res) {
     return("File not found.")
   }
   print(sessionFolder)
-  print(list.files(sessionFolder, recursive= TRUE))
+  print(getwd())
+  print(list.files(getwd()))
+  print(paste0(getwd(),'/metlinkR_output'))
+  print(list.files(paste0(getwd(),'/metlinkR_output')))
   res$setHeader("Content-Type", "application/x-tar")
   on.exit(setwd(mainwd), add = TRUE)
  # on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
