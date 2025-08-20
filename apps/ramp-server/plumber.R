@@ -879,7 +879,7 @@ function(req, res) {
                                             majority_vote = TRUE)
 
 
-  tar('metlinkR_results.tar.gz',  list.files('metlinkR_output', full.names = T), compression='gzip')
+  tar('metlinkR_results.tar.gz',  list.files('metLinkR_output', full.names = T), compression='gzip')
   res$setHeader("Content-Disposition", 'attachment; filename="metlinkR_results.tar.gz"')
   # Ensure the file exists
   if (!file.exists(paste0(getwd(), '/', 'metlinkR_results.tar.gz'))) {
