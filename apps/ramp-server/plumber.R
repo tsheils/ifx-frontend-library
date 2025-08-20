@@ -11,6 +11,7 @@ library(svglite)
 ########### Utils
 ###########
 
+print(sessionInfo())
 
 rampDB <<- RaMP:::RaMP(branch='ramp3.0') # pre-load sqlite database to the container
 
@@ -885,6 +886,7 @@ function(req, res) {
     res$status <- 404
     return("File not found.")
   }
+  print(sessionFolder)
   res$setHeader("Content-Type", "application/x-tar")
   on.exit(setwd(mainwd), add = TRUE)
   on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
