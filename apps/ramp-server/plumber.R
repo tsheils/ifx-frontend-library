@@ -887,8 +887,9 @@ function(req, res) {
     return("File not found.")
   }
   print(sessionFolder)
+  print(list.files(sessionFolder, recursive= TRUE))
   res$setHeader("Content-Type", "application/x-tar")
   on.exit(setwd(mainwd), add = TRUE)
-  on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
+ # on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
   as_attachment(readBin("metlinkR_results.tar.gz", "raw", n = file.info("metlinkR_results.tar.gz")$size), "metlinkR_results.tar.gz")
 }
