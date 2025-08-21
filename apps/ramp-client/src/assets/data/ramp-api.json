@@ -63,7 +63,7 @@
     },
     {
       "name": "identifier-harmonization",
-      "description": "Retrieve chemical classes (Classyfire and lipidMAPS) and chemical property information from input metabolites, as well as perform chemical class enrichment.",
+      "description": "MetLinkR automatically cross-links metabolite identifiers across multiple studies and attributes them a common name. MetLinkR runs in minutes and allows for simultaneous querying of 6 commonly reported identifier types. It is recommended that users inspect outputs to ensure that mappings maintain the desired level of chemical structural resolution.",
       "sections": ["identifier-harmonization"]
     },
     {
