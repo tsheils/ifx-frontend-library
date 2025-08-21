@@ -1260,7 +1260,7 @@
         "tags": ["chemical-descriptors"],
         "summary": "Retrieve Chemical Properties from Input Metabolites",
         "x-allowedTypes": {
-          "metabolites": ["hmdb", "LIPIDMAPS"],
+          "metabolites": ["hmdb", "LIPIDMAPS", "chebi"],
           "genes/proteins": []
         },
         "responses": {
@@ -2263,7 +2263,7 @@
           }
         },
         "requestBody": {
-          "description": "Perform pathway enrichment on metabolites or metabolites/genes/proteins.   Prepend IDs by source ID type (e.g. hmdb:HMDB0240254).",
+          "description": "MetLinkR automatically cross-links metabolite identifiers across multiple studies and attributes them a common name. MetLinkR runs in minutes and allows for simultaneous querying of 6 commonly reported identifier types. It is recommended that users inspect outputs to ensure that mappings maintain the desired level of chemical structural resolution.",
           "required": true,
           "content": {
             "multipart/form-data": {
@@ -2279,7 +2279,7 @@
                   },
                   "manifestFile": {
                     "label": "Manifest File",
-                    "description": "Supply excel file containing custom pathway definitions. Pathways should be defined in the GMX format. GMX files contain one analyte set per column, with the name of the set in the first row, and constituent analytes in subsequent rows. The first sheet of the excel file should contain metabolite pathway definitions, while the second sheet should contain gene pathway definitions. Take care to ensure that analyte identifiers used to define pathways are the same as the identifiers used in the dataset.",
+                    "description": "CSV manifest to describe the metadata provided for the metabolite entities from the input files",
                     "type": "string",
                     "format": "binary"
                   }
@@ -2289,60 +2289,6 @@
             }
           }
         }
-      }
-    },
-    "/api/metlinkr-results/{resultsId}": {
-      "get": {
-        "summary": "Return MerlinkR Hharmonization results",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/g-zip": {
-                "schema": {
-                  "type": "object"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Internal Server Error",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "default": {
-            "description": "Default response.",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-          "in": "path",
-          "name": "resultsId",
-          "schema":
-          {
-            "type": "string",
-            "required": true,
-            "description": "the returned file"
-          }
-          }
-        ]
       }
     }
   }
