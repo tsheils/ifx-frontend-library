@@ -223,6 +223,7 @@
       "resolver-main": ["libs/features/ifx/resolver-main/src/index.ts"],
       "resolver-store": ["libs/stores/resolver-store/src/index.ts"],
       "results-panel": ["libs/shared/ramp/panels/results-panel/src/index.ts"],
+      "safe-html-pipe": ["libs/shared/utils/safe-html-pipe/src/index.ts"],
       "structure-viewer": ["libs/shared/utils/structure-viewer/src/index.ts"],
       "sunburst-chart": [
         "libs/shared/utils/charts/sunburst-chart/src/index.ts"

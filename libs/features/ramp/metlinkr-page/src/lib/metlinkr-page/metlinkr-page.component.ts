@@ -1,12 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, ElementRef, input, OnInit, output, signal, viewChild } from '@angular/core';
+import { Component, ElementRef, input, OnInit, output, signal, viewChild } from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
 import { MatIcon } from '@angular/material/icon';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
-import { DataDownloadButtonComponent } from 'data-download-button';
 import { DialogModalComponent } from 'dialog-modal';
 import { DndFileUploadComponent } from 'dnd-file-upload';
 import { NcatsFormComponent } from 'ncats-form';
@@ -14,7 +11,7 @@ import { QuestionBase, TextboxQuestion } from 'ncats-form-question';
 import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { IdentifierHarmonizationActions, RampSelectors } from 'ramp-store';
-import { from, map } from 'rxjs';
+import { from } from 'rxjs';
 
 class ManifestRow {
   FileNames!: string;
@@ -78,9 +75,7 @@ class ManifestQuestionsService {
     FormsModule,
     NcatsFormComponent,
     MatButton,
-    DataDownloadButtonComponent,
-    MatProgressSpinner,
-    DndFileUploadComponent,
+    DndFileUploadComponent
   ],
   templateUrl: './metlinkr-page.component.html',
   styleUrl: './metlinkr-page.component.scss',
@@ -127,9 +122,9 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
 
   setInputFiles(event: File[]) {
     this.files.set(event);
-    if (!this.manifestFile()) {
+   /* if (!this.manifestFile()) {
       this._createManifestForm();
-    }
+    }*/
   }
 
   setManifestFile(event: File[]) {

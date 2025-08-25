@@ -1,3 +1,4 @@
+
 export class OpenApiPath {
   description?: string;
   required?: string;
@@ -5,6 +6,7 @@ export class OpenApiPath {
   allowedTypes?: { metabolites: string[]; 'genes/proteins': string[] };
   tags: string[] = [];
   pageDescription?: string;
+  HTMLDescription?: string;
   summary?: string;
   subtitle?: string;
   properties: { [key: string]: unknown }[] = [];
@@ -41,6 +43,10 @@ export class OpenApiPath {
 
     if (obj['x-hideSection']) {
       this.hideSection = <boolean>obj['x-hideSection'];
+    }
+
+   if (obj['x-HTMLDescription']) {
+      this.HTMLDescription = <string>obj['x-HTMLDescription'];
     }
 
     if (obj['x-allowedTypes']) {
