@@ -48,7 +48,6 @@ export class InputPanelComponent {
 
   fetchData() {
     const formValues = this.getValuesFromForm()
-    console.log(formValues)
     this.dataSearch.emit(formValues);
   }
 

@@ -888,12 +888,7 @@ function(req, res) {
   }
   res$setHeader("Content-Type", "application/x-tar")
   res$status <- 200
-  print(sessionFolder)
-  print(getwd())
-  print(list.files(getwd()))
-  print(paste0(getwd(),'/metlinkR_output'))
-  print(list.files(paste0(getwd(),'/metlinkR_output')))
   on.exit(setwd(mainwd), add = TRUE)
- # on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
+  on.exit(unlink(sessionFolder, recursive= TRUE), add = TRUE)
   as_attachment(readBin("metlinkR_results.tar.gz", "raw", n = file.info("metlinkR_results.tar.gz")$size), "metlinkR_results.tar.gz")
 }

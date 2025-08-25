@@ -63,7 +63,7 @@
     },
     {
       "name": "identifier-harmonization",
-      "description": "MetLinkR automatically cross-links metabolite identifiers across multiple studies and attributes them a common name. MetLinkR runs in minutes and allows for simultaneous querying of 6 commonly reported identifier types. It is recommended that users inspect outputs to ensure that mappings maintain the desired level of chemical structural resolution.",
+      "description": "Uses MetLinkR R package to automatically cross-link metabolite identifiers across multiple studies and attribute them a common name. MetLinkR runs in minutes and allows for simultaneous querying of 6 commonly reported identifier types. It is recommended that users inspect outputs to ensure that mappings maintain the desired level of chemical structural resolution.",
       "sections": ["identifier-harmonization"]
     },
     {
@@ -2245,8 +2245,9 @@
     "/api/identifier-harmonization": {
       "post": {
         "tags": ["identifier-harmonization"],
-        "x-section-title": "biochemical-pathway-analysis",
-        "summary": "Run Pathway Enrichment Analysis",
+        "x-section-title": "identifier-harmonization",
+        "x-HTMLDescription": "The R package and vignette are open-source and freely available at our <a href= 'https://github.com/ncats/MetLinkR' target='_blank'> GitHub site</a>.",
+        "summary": "Run MetLinkr Identifier Harmonization",
         "responses": {
           "200": {
             "description": "OK",
@@ -2279,7 +2280,7 @@
                   },
                   "manifestFile": {
                     "label": "Manifest File",
-                    "description": "CSV manifest to describe the metadata provided for the metabolite entities from the input files",
+                    "description": "CSV file to describe the metadata provided for the metabolite entities from the input files.",
                     "type": "string",
                     "format": "binary"
                   }
