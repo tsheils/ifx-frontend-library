@@ -780,22 +780,11 @@
         "summary": "Retrieve Analytes Involved in the Same Reaction",
         "x-allowedTypes": {
           "metabolites": [
-            "CAS",
-            "chebi",
-            "chemspider",
-            "hmdb",
-            "kegg",
-            "kegg_glycan",
-            "lipidbank",
-            "LIPIDMAPS",
-            "plantfa",
-            "polymer",
-            "pubchem",
-            "rhea-comp",
-            "swisslipids",
-            "wikidata"
+            "chebi"
           ],
-          "genes/proteins": []
+          "genes/proteins": [
+            "uniprot"
+          ]
         },
         "responses": {
           "200": {

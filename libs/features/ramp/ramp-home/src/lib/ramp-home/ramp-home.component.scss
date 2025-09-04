@@ -1,5 +1,6 @@
 .main-banner {
-  height: 100vh;
+  //height: 100vh;
+  height: max(100vh, 830px);
   background-image: url('/assets/ramp-home/background.svg');
   background-position: center;
   background-size: cover;
@@ -37,7 +38,7 @@
 }
 
 .sub-content {
-  height: 50vh;
+ // height: 50vh;
   color: #265668;
   background-color: #265668;
   margin-top: -22px;
@@ -51,7 +52,7 @@
   margin-top: 10vh;
   margin-bottom: 10vh;
   padding: 1vh;
-  height: 35vh;
+  //height: 35vh;
 }
 
 .number-count {

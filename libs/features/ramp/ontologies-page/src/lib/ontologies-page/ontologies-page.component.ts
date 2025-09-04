@@ -264,6 +264,11 @@ export class OntologiesPageComponent extends RampCorePageComponent {
     origin: string
   ): void {
     this.activeTab.set(origin);
+    if (formData['metabolites']) {
+      this.inputList = this._parseInput(
+        formData['metabolites'] as string | string[]
+      );
+  }
     switch (origin) {
       case 'metabolites-from-ontologies': {
         this.store.dispatch(
@@ -276,7 +281,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
       case 'ontologies-from-metabolites': {
         this.store.dispatch(
           OntologyFromMetaboliteActions.fetchOntologiesFromMetabolites({
-            metabolites: formData['metabolites'] as string[],
+            metabolites: this.inputList,
           })
         );
         break;
@@ -284,7 +289,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
       case 'ontology-enrichment': {
         this.store.dispatch(
           OntologyEnrichmentsActions.fetchOntologyEnrichment({
-            metabolites: formData['metabolites'] as string[],
+            metabolites: this.inputList,
           })
         );
         break;
