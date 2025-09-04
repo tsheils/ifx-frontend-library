@@ -44,6 +44,7 @@ import {
 } from './diseases.actions';
 import * as DiseaseSelectors from './diseases.selectors';
 
+//for disease list browsing
 export const fetchDiseasesList$ = createEffect(
   (
     actions$ = inject(Actions),
@@ -93,6 +94,7 @@ export const fetchDiseasesList$ = createEffect(
   { functional: true }
 );
 
+//for disease list in profile
 export const fetchDiseaseListFromIds$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
@@ -124,6 +126,7 @@ export const fetchDiseaseListFromIds$ = createEffect(
   { functional: true }
 );
 
+// bar and pie charts
 export const loadStaticDiseaseFilters$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
@@ -218,6 +221,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
   { functional: true }
 );
 
+//dynamic paged filters list
 export const loadDiseaseFilters$ = createEffect(
   (
     actions$ = inject(Actions),
@@ -343,6 +347,7 @@ export const loadDiseaseFilters$ = createEffect(
   { functional: true }
 );
 
+//specific disease page
 export const loadDisease$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
@@ -381,6 +386,7 @@ export const loadDisease$ = createEffect(
   { functional: true }
 );
 
+//disease search typeahead
 export const searchDiseases$ = createEffect(
   (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
     return actions$.pipe(
@@ -415,8 +421,8 @@ export const searchDiseases$ = createEffect(
   { functional: true }
 );
 
-
-/*export const fetchTreeParent$ = createEffect(
+//load values for first level of hierarchy tree
+export const fetchTreeParent$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
@@ -466,8 +472,9 @@ export const searchDiseases$ = createEffect(
     );
   },
   { functional: true }
-);*/
+);
 
+//get tree branch data
 export const fetchTreeBranch$ = createEffect(
   (
     actions$ = inject(Actions),
