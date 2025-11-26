@@ -6,6 +6,7 @@ library(R.cache)
 library(readr)
 library(ggplot2)
 library(svglite)
+library(dplyr)
 
 ###########
 ########### Utils
@@ -91,8 +92,6 @@ function() {
   ))
 }
 
-
-
 ####
 #' Return valid RaMP-DB database prefixes for genes and metabolites (e.g. 'hmdb:', 'kegg:')
 #' @serializer unboxedJSON
@@ -172,11 +171,9 @@ function() {
   return(classtypes)
 }
 
-
 ###########
 ########### Biochemical Pathway endpoints
 ###########
-
 
 #####
 #' Return pathway mappings from given list of analytes
@@ -233,13 +230,15 @@ function(pathway, analyteType="both", namesOrIds="names", match="fuzzy", maxPath
 #' @param analytes list of analytes of interest for pathway analysis
 #' @param background biospecimen background for Fisher's test
 #' @param backgroundFile: File
+#' @param dataSourceExclusion list
 #' @parser multi
 #' @parser text
 #' @parser json
 #' @post /api/pathway-enrichment
 #' @serializer json list(digits = 6)
-function(analytes, background = '', backgroundFile = '', backgroundType= "database") {
+function(analytes, background = '', backgroundFile = '', backgroundType= "database", dataSourceExclusion = NULL) {
   fishers_results_df <- ''
+  print(analytes)
   if(backgroundFile == "") {
     if(background == "") {
       print("run with database background")
@@ -277,9 +276,20 @@ function(analytes, background = '', backgroundFile = '', backgroundType= "databa
       }
     }
   }
-  analytes <- paste(analytes, collapse = ", ")
+  if(is.null(dataSourceExclusion)){
+    print("no excluded sources")
+    filtered_df <- fishers_results_df
+  } else {
+    print("yo")
+    print(dataSourceExclusion)
+    filtered_df <- fishers_results_df
+ # filtered_df <- fishers_results_df[fishers_results_df$pathwaySource %in% dataSourceExclusion,]
+    filtered_df$fishresults <- filter( fishers_results_df$fishresults, ! pathwaySource %in% dataSourceExclusion)
+  #  filtered_df <- fishers_results_df
+  }
+
   return(list(
-    data = fishers_results_df,
+    data = filtered_df,
     function_call = paste0("RaMP::runEnrichPathways()")
   ))
 }
@@ -351,16 +361,16 @@ function(
 #' @serializer contentType list(type='image/svg')
 #'
 function(
-  fishers_results,
-  percAnalyteOverlap = 0.5,
-  percPathwayOverlap = 0.5,
-  minPathwayToCluster=2,
-  filename
+    fishers_results,
+    percAnalyteOverlap = 0.5,
+    percPathwayOverlap = 0.5,
+    minPathwayToCluster=2,
+    filename
 ) {
   if (typeof(minPathwayToCluster) == "character") {
     minPathwayToCluster <- strtoi(minPathwayToCluster, base = 0L)
   }
-
+  
   clustered_plot <- RaMP::plotPathwayResults(
     db = rampDB,
     pathwaysSig = fishers_results,
@@ -374,6 +384,7 @@ function(
   unlink(filename)
   return(r)
 }
+
 
 ###########
 ########### Ontology endpoints

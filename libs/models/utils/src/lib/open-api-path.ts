@@ -2,7 +2,7 @@
 export class OpenApiPath {
   description?: string;
   required?: string;
-  title?: string;
+  title!: string;
   allowedTypes?: { metabolites: string[]; 'genes/proteins': string[] };
   tags: string[] = [];
   pageDescription?: string;

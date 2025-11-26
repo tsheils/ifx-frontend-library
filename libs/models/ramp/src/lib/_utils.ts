@@ -53,6 +53,7 @@ export interface RampResponse<T extends RampDataGeneric> {
   percAnalyteOverlap?: number;
   minPathwayToCluster?: number;
   percPathwayOverlap?: number;
+  dataSourceExclusion?: string[];
 }
 
 export interface RampPathwayEnrichmentAPIResponse {
@@ -68,7 +69,7 @@ export interface RampPathwayEnrichmentAPIResponse {
 
 export interface RampPathwayEnrichmentResponse
   extends RampResponse<FisherResult> {
-  clusterImage?: string;
+  clusterImageUrl?: string | undefined;
   filteredFishersDataframe?: FishersDataframe;
   combinedFishersDataframe?: FishersDataframe;
 }
@@ -131,5 +132,6 @@ export interface RampChemicalEnrichmentResponse {
 
 export class FormSubsection {
   section!: string;
+  heading?: string;
   questions!: QuestionBase<string>[];
 }

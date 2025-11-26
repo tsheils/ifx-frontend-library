@@ -46,7 +46,7 @@ import { exhaustMap, filter, mergeMap, of, tap } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import {
   getChemicalEnrichment,
-  getClusterPlot,
+  getClusterPlotUrl,
   getCombinedFishersDataframe,
   // getEnrichedChemicalClass,
   getFilteredFishersDataframe,
@@ -739,13 +739,15 @@ export const fetchPathwayAnalysis = createEffect(
           .fetchEnrichmentFromPathways(
             action.analytes,
             action.background,
-            action.backgroundFile
+            action.backgroundFile,
+            action.dataSourceExclusion
           )
           .pipe(
             map(
               (ret: RampPathwayEnrichmentResponse) => {
                 ret.background = action.background;
                 ret.backgroundFile = action.backgroundFile;
+                ret.dataSourceExclusion = action.dataSourceExclusion;
                 ret.pValType = action.pValType;
                 ret.pValCutoff = Number(action.pValCutoff);
                 ret.percAnalyteOverlap = Number(action.percAnalyteOverlap);
@@ -850,12 +852,12 @@ export const fetchPathwayCluster = createEffect(
               map(
                 (ret: {
                   data: RampPathwayEnrichmentResponse;
-                  plot: string;
+                  plotUrl: string | undefined;
                 }) => {
                   return PathwayEnrichmentsActions.fetchClusterFromEnrichmentSuccess(
                     {
                       data: ret.data.data,
-                      clusterImage: ret.plot,
+                      clusterImageUrl: ret.plotUrl,
                       query: ret.data.query,
                       dataAsDataProperty: ret.data.dataAsDataProperty,
                     }
@@ -882,24 +884,6 @@ export const fetchPathwayCluster = createEffect(
   { functional: true }
 );
 
-export const fetchClusterImageFile = createEffect(
-  (
-    actions$ = inject(Actions),
-    rampService = inject(RampService),
-    store = inject(Store)
-  ) => {
-    return actions$.pipe(
-      ofType(PathwayEnrichmentsActions.fetchClusterImageFile),
-      concatLatestFrom(() => store.select(getClusterPlot)),
-      tap(([action, plot]) => {
-        if (plot && action) {
-          return rampService.fetchClusterImageFile(plot);
-        }
-      })
-    );
-  },
-  { functional: true, dispatch: false }
-);
 
 export const fetchChemicalAnalysis = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {

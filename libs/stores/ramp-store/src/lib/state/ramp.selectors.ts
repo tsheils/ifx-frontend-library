@@ -148,20 +148,20 @@ export const getFilteredFishersDataframe = createSelector(
  // (state: State) => state.chemicalEnrichments,
 );*/
 
-export const getClusterPlot = createSelector(
+export const getClusterPlotUrl = createSelector(
   getRampState,
-  (state: State) => state.clusterPlot
+  (state: State) => state.clusterPlotUrl
 );
 
 export const getBiochemicalPathwaysResults = createSelector(
   getPathways,
   getPathwayEnrichment,
-  getClusterPlot,
-  (getPathways, getPathwayEnrichment, getClusterPlot) => {
+  getClusterPlotUrl,
+  (getPathways, getPathwayEnrichment, getClusterPlotUrl) => {
     return {
       pathways: getPathways,
       pathwayEnrichment: getPathwayEnrichment,
-      clusterPlot: getClusterPlot,
+      clusterPlotUrl: getClusterPlotUrl,
     };
   }
 );

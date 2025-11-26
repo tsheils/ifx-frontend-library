@@ -729,12 +729,16 @@ export class RampService {
   fetchEnrichmentFromPathways(
     analytes: string[],
     background?: string,
-    backgroundFile?: File
+    backgroundFile?: File,
+    dataSourceExclusion?: string[]
   ): Observable<RampPathwayEnrichmentResponse> {
     const formData = new FormData();
     formData.set('analytes', JSON.stringify(analytes));
     if (background) {
       formData.set('background', JSON.stringify([background]));
+    }
+    if (dataSourceExclusion) {
+      formData.set('dataSourceExclusion', JSON.stringify(dataSourceExclusion));
     }
     if (backgroundFile) {
       formData.set('file', backgroundFile, backgroundFile.name);
@@ -777,7 +781,7 @@ export class RampService {
     percAnalyteOverlap?: number,
     minPathwayToCluster?: number,
     percPathwayOverlap?: number
-  ): Observable<{ data: RampPathwayEnrichmentResponse; plot: string }> {
+  ): Observable<{ data: RampPathwayEnrichmentResponse; plotUrl: string | undefined }> {
     return forkJoin({
       data: this.clusterPathwayEnrichment(
         dataframe,
@@ -785,7 +789,7 @@ export class RampService {
         minPathwayToCluster,
         percPathwayOverlap
       ),
-      plot: this.fetchClusterPlot(
+      plotUrl: this.fetchClusterPlotUrl(
         dataframe,
         percAnalyteOverlap,
         minPathwayToCluster,
@@ -817,14 +821,14 @@ export class RampService {
       );
   }
 
-  fetchClusterPlot(
+  fetchClusterPlotUrl(
     dataframe: FishersDataframe,
     percAnalyteOverlap?: number,
     minPathwayToCluster?: number,
     percPathwayOverlap?: number
-  ): Observable<string> {
+  ): Observable<string | undefined> {
     if (!dataframe.fishresults || dataframe.fishresults.length >= 125) {
-      return of(<string>'');
+      return of(undefined);
     } else {
       const body = {
         fishers_results: dataframe,
@@ -837,8 +841,8 @@ export class RampService {
       return this.http
         .post(`${this.url}cluster-plot`, body, HTTP_TEXT_OPTIONS)
         .pipe(
-          map((response: unknown) => {
-            return <string>response;
+          map((response: string) => {
+           return URL.createObjectURL(this._makeBlob([<string>response], 'image/svg+xml'));
           })
         );
     }

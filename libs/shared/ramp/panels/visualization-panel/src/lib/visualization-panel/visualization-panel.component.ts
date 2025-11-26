@@ -15,6 +15,7 @@ import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
 import { VisualizationMap } from '@ncats-frontend-library/models/utils';
 import { select } from 'd3-selection';
 import { ImageDownloadComponent } from 'image-download';
+import { ImageFromFile } from 'image-from-file';
 import { SunburstChartComponent } from 'sunburst-chart';
 import { TreeChartComponent } from 'tree-chart';
 import { UpsetComponent } from 'upset-chart';
@@ -33,6 +34,7 @@ import { UtilsForceDirectedGraphComponent } from 'utils-force-directed-graph';
     UtilsForceDirectedGraphComponent,
     UpsetComponent,
     ImageDownloadComponent,
+    ImageFromFile
   ],
   templateUrl: './visualization-panel.component.html',
   styleUrl: './visualization-panel.component.scss',
@@ -52,4 +54,8 @@ export class VisualizationPanelComponent {
       select(this.chartElement()?.nativeElement).select('svg').node()
     );
   });
+
+  ngOnInit() {
+    console.log(this.data())
+  }
 }

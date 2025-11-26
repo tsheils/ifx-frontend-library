@@ -50,7 +50,7 @@ export class RampMainComponent {
   paths = computed(() => {
     return this.api()?.get(this.fragment());
   });
-  fragment = computed(() => this.router.url.split('/')[1]);
+  fragment = computed(() => this.router.url.split('/')[1].split('#')[0]);
   title = computed(() => this.fragment()?.replace(/-/g, ' '));
 
   filtersMap = computed(() => {

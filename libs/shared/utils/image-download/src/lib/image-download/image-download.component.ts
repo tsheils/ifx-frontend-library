@@ -1,7 +1,9 @@
 import { CommonModule, DOCUMENT } from '@angular/common';
+import { HttpClient } from '@angular/common/http';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   input,
 } from '@angular/core';
@@ -23,39 +25,37 @@ export class ImageDownloadComponent {
   chartComponent = input<GenericChartComponent>();
   svg = input<SVGElement>({} as SVGElement);
   showTSV = input(true);
+  dataUrl = input<string>()
   dom = inject(DOCUMENT);
 
+  link = computed(()=> {
+    if(this.dom){
+      return this.dom.createElement('a')
+    } else return null
+  })
+
   downloadSVG() {
-    let svgString;
-    if (this.svg()) {
-      svgString = this.getSVGString(this.svg());
+    const url = this.dataUrl()
+    if(url) {
+      this._downloadFileFromUrl(url, 'data.svg')
     } else {
-      svgString = this.getSVGString(
-        <SVGElement>this.chartComponent()?.svgExport()
-      );
+      const blob = this._makeBlob(this._getSVGElement(), 'image/svg+xml');
+      const url = this._urlFromData(blob)
+      this._downloadFileFromUrl(url, 'data.svg')
     }
-    this._downloadFile(this._makeBlob(svgString, 'image/svg+xml'), 'data.svg');
   }
 
   downloadPNG() {
-    let svgString;
-    if (this.svg()) {
-      svgString = this.getSVGString(this.svg());
-    } else {
-      svgString = this.getSVGString(
-        <SVGElement>this.chartComponent()?.svgExport()
-      );
-    }
-    this.svgString2Image(svgString); // passes Blob and filesize String to the callback
-  }
+      this.svgString2Image(this._getSVGElement()); // passes Blob and filesize String to the callback
+     }
 
   downloadTSV() {
     const data = this.chartComponent()?.dataSignal() as FilterCategory;
     if (data) {
-      this._downloadFile(
-        this._makeBlob(this._toTSV(data)),
-        `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`
-      );
+      const tsv = this._toTSV(data);
+      const blob = this._makeBlob(tsv);
+      const url = this._urlFromData(blob)
+      this._downloadFileFromUrl(url, `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`)
     }
   }
 
@@ -129,18 +129,30 @@ export class ImageDownloadComponent {
     if (context) {
       canvas.width = width;
       canvas.height = height;
-
       const image = new Image();
 
       image.onload = () => {
         context.clearRect(0, 0, width, height);
         context.drawImage(image, 0, 0, width, height);
         canvas.toBlob((blob) => {
-          this._downloadFile(blob as Blob, 'image.png');
+          const url = this._urlFromData(blob as Blob)
+          this._downloadFileFromUrl(url, 'image.png')
         });
       };
       image.src = imgsrc;
     }
+  }
+
+  _getSVGElement() {
+    let svgString;
+    if (this.svg()) {
+      svgString = this.getSVGString(this.svg());
+    } else {
+      svgString = this.getSVGString(
+        <SVGElement>this.chartComponent()?.svgExport()
+      );
+    }
+    return svgString;
   }
 
   _makeBlob(data: string, type = 'text/tsv') {
@@ -167,20 +179,19 @@ export class ImageDownloadComponent {
     } else return '';
   }
 
-  _downloadFile(data: Blob, name: string) {
-    if (this.dom) {
-      const link = this.dom.createElement('a');
-      if (link.download !== undefined) {
-        // feature detection
-        // Browsers that support HTML5 download attribute
-        const url = URL.createObjectURL(data);
-        link.setAttribute('href', url);
-        link.setAttribute('download', `${name}`);
-        link.style.visibility = 'hidden';
-        this.dom.body.appendChild(link);
-        link.click();
-        this.dom.body.removeChild(link);
-      }
+  _urlFromData(data: Blob){
+    return URL.createObjectURL(data)
+  }
+
+  _downloadFileFromUrl(url:string, name: string) {
+    const link = this.link()
+    if(link && link.download !== undefined) {
+      link.setAttribute('href', url);
+      link.setAttribute('download', `${name}`);
+      link.style.visibility = 'hidden';
+      this.dom.body.appendChild(link);
+      link.click();
+      this.dom.body.removeChild(link);
     }
   }
 }

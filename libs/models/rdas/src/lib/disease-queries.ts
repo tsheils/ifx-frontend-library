@@ -133,7 +133,6 @@ export class DiseaseQueryFactory {
           'GardName_CONTAINS' as keyof typeof this.params.where
         ] = params['q'];
       }
-      console.log(params)
     }
     if (params['phenotypes']) {
       if (!this.params.where) {
