@@ -63,7 +63,7 @@ export interface State extends EntityState<RampEntity> {
   combinedFishersDataframe?: FishersDataframe;
   analytes?: RampResponse<Analyte>;
   pathways?: RampResponse<Pathway>;
-  clusterPlot?: string;
+  clusterPlotUrl?: string | undefined;
 
   commonReactions?: RampResponse<CommonAnalyte>;
   reactions?: RampResponse<Reaction>;
@@ -313,7 +313,7 @@ export const rampReducer = createReducer(
         pathwayEnrichments: { data, query, dataAsDataProperty },
         combinedFishersDataframe: combinedFishersDataframe,
         filteredFishersDataframe: undefined,
-        clusterPlot: '',
+        clusterPlotUrl: undefined,
         dataAsDataProperty: dataAsDataProperty,
       };
     }
@@ -331,7 +331,7 @@ export const rampReducer = createReducer(
           dataAsDataProperty,
         },
         filteredFishersDataframe: filteredFishersDataframe,
-        clusterPlot: '',
+        clusterPlotUrl: undefined,
         dataAsDataProperty: dataAsDataProperty,
       };
     }
@@ -339,12 +339,12 @@ export const rampReducer = createReducer(
 
   on(
     PathwayEnrichmentsActions.fetchClusterFromEnrichmentSuccess,
-    (state, { data, clusterImage, query, dataAsDataProperty }) => {
+    (state, { data, clusterImageUrl, query, dataAsDataProperty }) => {
       return {
         ...state,
         loading: false,
         pathwayEnrichments: { data, query, dataAsDataProperty },
-        clusterPlot: clusterImage,
+        clusterPlotUrl: clusterImageUrl,
       };
     }
   ),

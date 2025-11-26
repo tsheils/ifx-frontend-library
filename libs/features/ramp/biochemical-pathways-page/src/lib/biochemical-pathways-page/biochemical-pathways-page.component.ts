@@ -272,7 +272,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   enrichedPathways = this.store.selectSignal(
     RampSelectors.getPathwayEnrichment
   );
-  clusterPlot = this.store.selectSignal(RampSelectors.getClusterPlot);
+  clusterPlotUrl = this.store.selectSignal(RampSelectors.getClusterPlotUrl);
   filteredDataframe = this.store.selectSignal(
     RampSelectors.getFilteredFishersDataframe
   );
@@ -338,21 +338,22 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
   override visualizationsMap = computed(() => {
     const visualizationMapComputed = new Map<string, VisualizationMap[]>();
     let sizeMessage = undefined;
-    if (!(this.clusterPlot() && this.clusterPlot()!.length > 0)) {
+    if (!(this.clusterPlotUrl() && this.clusterPlotUrl()!.length > 0)) {
       sizeMessage =
         'This website currently does not support clustering over 100 pathways. Please use the RaMP-DB R package for this feature.';
     }
-    if (this.clusterPlot()) {
+    if (this.clusterPlotUrl()) {
       visualizationMapComputed.set('Cluster Plot', [
         {
           type: 'cluster',
           data: {
             message: sizeMessage,
-            image: this.sanitizer.bypassSecurityTrustHtml(
+            /*image: this.sanitizer.bypassSecurityTrustHtml(
               <string>this.clusterPlot()
-            ),
+            ),*/
+            image: this.clusterPlotUrl()
           },
-          loaded: !!this.clusterPlot(),
+          loaded: !!this.clusterPlotUrl(),
         },
       ] as VisualizationMap[]);
     }
@@ -438,6 +439,11 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
     super();
   }
 
+  ngOnInit() {
+
+    const tempMap = this.inputMap()?.get('pathway-enrichment')?.filter(a => a.section==='filter-enrichment-results')[0].questions
+  }
+
   override fetchData(
     formData: { [key: string]: unknown },
     origin: string
@@ -492,6 +498,7 @@ export class BiochemicalPathwaysPageComponent extends RampCorePageComponent {
             analytes: this.inputList,
             background: <string>event['background'],
             backgroundFile: event['backgroundFile'] as File,
+            dataSourceExclusion: <string[]>event['dataSourceExclusion'] || undefined,
             pValType: <string>event['pValType'] || undefined,
             pValCutoff: Number(<number>event['pValCutoff']) || undefined,
             percAnalyteOverlap:

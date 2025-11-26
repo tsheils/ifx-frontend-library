@@ -440,7 +440,6 @@ export const fetchTreeParent$ = createEffect(
       mergeMap(([params, tree]) => {
         return diseaseService.fetchDiseases(FETCHROOT, {}).pipe(
           map((res: ApolloQueryResult<unknown>) => {
-            console.log(res)
             const data: {
               treeBranch: { nodes: DiseaseNode[] }[];
               diseases: DiseaseNode[];

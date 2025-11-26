@@ -26,7 +26,7 @@
   "tags": [
     {
       "name": "biochemical-pathways",
-      "description": "Users can retrieve analytes from input pathways, retrieve pathways from input analytes, as well as perform multi-omic pathway enrichment. RaMP-DB pulls from pathway information from multiple resources, including HMDB, Reactome, WikiPathways, and PFOCR.",
+      "description": "Users can retrieve analytes from input pathways, retrieve pathways from input analytes, as well as perform multi-omic pathway enrichment. RaMP-DB pulls from pathway information from multiple resources, including HMDB, Reactome, WikiPathways, and PFOCR. RaMP-DB does not explicitly distinguish between genes and proteins when it comes to pathways.",
       "sections": [
         "pathways-from-analytes",
         "analytes-from-pathways",
@@ -339,7 +339,7 @@
           }
         },
         "requestBody": {
-          "description": " Retrieve pathway(s) from input analyte(s).  Prepend IDs by source ID type (e.g. hmdb:HMDB0240254).",
+          "description": " Retrieve pathway(s) from input analyte(s).  Prepend IDs by source ID type (e.g. hmdb:HMDB0240254). By default, pathways with < 5 or > 150 analytes will not be returned.",
           "required": true,
           "content": {
             "application/json": {
@@ -355,29 +355,10 @@
                 },
                 "example": {
                   "analytes": [
-                    "hmdb:HMDB0000033",
-                    "hmdb:HMDB0000052",
-                    "hmdb:HMDB0000094",
-                    "hmdb:HMDB0000161",
-                    "hmdb:HMDB0000168",
-                    "hmdb:HMDB0000191",
-                    "hmdb:HMDB0000201",
-                    "chemspider:10026",
-                    "hmdb:HMDB0006059",
-                    "Chemspider:6405",
-                    "CAS:5657-19-2",
-                    "hmdb:HMDB0002511",
-                    "chemspider:20171375",
-                    "CAS:133-32-4",
-                    "CAS:5746-90-7",
-                    "CAS:477251-67-5",
-                    "hmdb:HMDB0000695",
-                    "chebi:15934",
-                    "CAS:838-07-3",
-                    "hmdb:HMDBP00789",
-                    "hmdb:HMDBP00283",
-                    "hmdb:HMDBP00284",
-                    "hmdb:HMDBP00850"
+                    "ensembl:ENSG00000135679",
+                    "hmdb:HMDB0000064",
+                    "hmdb:HMDB0000148",
+                    "ensembl:ENSG00000141510"
                   ]
                 }
               }
@@ -400,7 +381,7 @@
           }
         },
         "requestBody": {
-          "description": "Retrieve analytes belonging to input pathways.  Names of pathways can be input.",
+          "description": "Analytes belonging to a pathway can be retrieved by the exact pathway name or part of a pathway name for a fuzzy search. By default, both proteins/genes and metabolites involved are returned.",
           "required": true,
           "content": {
             "application/json": {
@@ -445,7 +426,7 @@
                   }
                 },
                 "example": {
-                  "pathway": ["sphingolipid metabolism"],
+                  "pathway": ["Wnt Signaling Pathway", "sphingolipid metabolism"],
                   "analyteType": "both"
                 }
               }
@@ -535,6 +516,25 @@
                     "description": "Supply excel file containing custom pathway definitions. Pathways should be defined in the GMX format. GMX files contain one analyte set per column, with the name of the set in the first row, and constituent analytes in subsequent rows. The first sheet of the excel file should contain metabolite pathway definitions, while the second sheet should contain gene pathway definitions. Take care to ensure that analyte identifiers used to define pathways are the same as the identifiers used in the dataset.",
                     "type": "string",
                     "format": "binary"
+                  },
+                  "dataSourceExclusion": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "enum": [
+                      "hmdb",
+                      "reactome",
+                      "wiki",
+                      "kegg",
+                      "chebi",
+                      "lipidmaps",
+                      "rhea",
+                      "pfocr",
+                      "refmet"
+                    ],
+                    "label": "Excluded Data Sources",
+                    "description": "An optional list of data sources to exclude (removing pfocr can streamline the enrichment clusters)"
                   }
                 },
                 "example": {
@@ -573,7 +573,7 @@
     "/api/ontologies-from-metabolites": {
       "post": {
         "tags": ["ontologies"],
-        "summary": "Retrieve Ontologies from Input Metabolites ",
+        "summary": "Retrieve Ontologies from Input Metabolites.",
         "x-allowedTypes": {
           "metabolites": [
             "CAS",
@@ -619,10 +619,10 @@
                 },
                 "example": {
                   "metabolites": [
-                    "ensembl:ENSG00000135679",
+                    "chebi:15422",
                     "hmdb:HMDB0000064",
                     "hmdb:HMDB0000148",
-                    "ensembl:ENSG00000141510"
+                    "wikidata:Q426660"
                   ]
                 }
               }
@@ -635,25 +635,6 @@
       "post": {
         "tags": ["ontologies"],
         "summary": "Retrieve Metabolites From Input Ontology names.  The ontologies are derived from HMDB.",
-        "x-allowedTypes": {
-          "metabolites": [
-            "CAS",
-            "chebi",
-            "chemspider",
-            "hmdb",
-            "kegg",
-            "kegg_glycan",
-            "lipidbank",
-            "LIPIDMAPS",
-            "plantfa",
-            "polymer",
-            "pubchem",
-            "rhea-comp",
-            "swisslipids",
-            "wikidata"
-          ],
-          "genes/proteins": []
-        },
         "responses": {
           "200": {
             "description": "OK"
@@ -697,7 +678,7 @@
       "post": {
         "tags": ["ontologies"],
         "x-subsections": ["filter-enrichment-results"],
-        "summary": "Perform ontology enrichment analysis",
+        "summary": "Perform ontology enrichment analysis using Fisher’s tests.",
         "x-allowedTypes": {
           "metabolites": [
             "CAS",
@@ -795,7 +776,8 @@
           }
         },
         "requestBody": {
-          "description": "Input analytes and retrieve analytes all other analytes that belong to the same reaction. IDs should be prepended by ID source (e.g. **hmdb**:C00412).",
+          "description": "Input analytes and retrieve analytes all other analytes that belong to the same reaction. IDs should be prepended by ID source (e.g. hmdb:C00412). Reactions are retrieved from Rhea and HMDB. For Rhea queries, only UniProt (for proteins) and ChEBI (for metabolites) IDs are supported. Other ID types are supported for HMDB queries.",
+
           "required": true,
           "content": {
             "application/json": {
@@ -807,7 +789,7 @@
                     "items": {
                       "type": "string"
                     },
-                    "description": "a vector of analytes that need to be searched"
+                    "description": "input metabolites and proteins"
                   },
                   "nameOrIds": {
                     "type": "string",
@@ -820,22 +802,12 @@
                 },
                 "example": {
                   "analytes": [
-                    "chebi:58115",
-                    "chebi:456215",
-                    "chebi:58245",
-                    "chebi:58450",
-                    "chebi:17596",
-                    "chebi:16335",
-                    "chebi:16750",
-                    "chebi:172878",
-                    "chebi:62286",
-                    "chebi:77897",
-                    "uniprot:P30566",
-                    "uniprot:P30520",
-                    "uniprot:P00568",
-                    "uniprot:P23109",
-                    "uniprot:P22102",
-                    "uniprot:P15531"
+                    "kegg:C00186",
+                    "hmdb:HMDB0000148",
+                    "kegg:C00780",
+                    "hmdb:HMDB0000064",
+                    "ensembl:ENSG00000115850",
+                    "uniprot:Q99259"
                   ]
                 }
               }
@@ -913,12 +885,6 @@
                 },
                 "example": {
                   "analytes": [
-                    "hmdb:HMDB0000033",
-                    "hmdb:HMDB0000052",
-                    "hmdb:HMDB0000094",
-                    "hmdb:HMDBP00789",
-                    "hmdb:HMDBP00283",
-                    "hmdb:HMDBP00284",
                     "chebi:58115",
                     "chebi:456215",
                     "chebi:58245",
@@ -1130,19 +1096,14 @@
                 },
                 "example": {
                   "metabolites": [
-                    "hmdb:HMDB0000056",
-                    "hmdb:HMDB0000439",
-                    "hmdb:HMDB0000479",
-                    "hmdb:HMDB0000532",
-                    "hmdb:HMDB0001015",
+                    "pubchem:64969",
+                    "chebi:16958",
+                    "chemspider:20549",
+                    "kegg:C05598",
+                    "chemspider:388809",
+                    "pubchem:53861142",
                     "hmdb:HMDB0001138",
-                    "hmdb:HMDB0029159",
-                    "hmdb:HMDB0029412",
-                    "hmdb:HMDB0034365",
-                    "hmdb:HMDB0035227",
-                    "hmdb:HMDB0007973",
-                    "hmdb:HMDB0008057",
-                    "hmdb:HMDB0011211"
+                    "hmdb:HMDB0029412"
                   ]
                 }
               }
@@ -1223,19 +1184,14 @@
                 },
                 "example": {
                   "metabolites": [
-                    "hmdb:HMDB0000056",
-                    "hmdb:HMDB0000439",
-                    "hmdb:HMDB0000479",
-                    "hmdb:HMDB0000532",
-                    "hmdb:HMDB0001015",
+                    "pubchem:64969",
+                    "chebi:16958",
+                    "chemspider:20549",
+                    "kegg:C05598",
+                    "chemspider:388809",
+                    "pubchem:53861142",
                     "hmdb:HMDB0001138",
-                    "hmdb:HMDB0029159",
-                    "hmdb:HMDB0029412",
-                    "hmdb:HMDB0034365",
-                    "hmdb:HMDB0035227",
-                    "hmdb:HMDB0007973",
-                    "hmdb:HMDB0008057",
-                    "hmdb:HMDB0011211"
+                    "hmdb:HMDB0029412"
                   ]
                 }
               }
@@ -1298,19 +1254,14 @@
                 },
                 "example": {
                   "metabolites": [
-                    "hmdb:HMDB0000056",
-                    "hmdb:HMDB0000439",
-                    "hmdb:HMDB0000479",
-                    "hmdb:HMDB0000532",
-                    "hmdb:HMDB0001015",
+                    "pubchem:64969",
+                    "chebi:16958",
+                    "chemspider:20549",
+                    "kegg:C05598",
+                    "chemspider:388809",
+                    "pubchem:53861142",
                     "hmdb:HMDB0001138",
-                    "hmdb:HMDB0029159",
-                    "hmdb:HMDB0029412",
-                    "hmdb:HMDB0034365",
-                    "hmdb:HMDB0035227",
-                    "hmdb:HMDB0007973",
-                    "hmdb:HMDB0008057",
-                    "hmdb:HMDB0011211"
+                    "hmdb:HMDB0029412"
                   ]
                 }
               }

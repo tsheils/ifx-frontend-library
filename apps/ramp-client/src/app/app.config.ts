@@ -72,7 +72,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withViewTransitions(),
       withComponentInputBinding(),
-      withEnabledBlockingInitialNavigation(),
+     // s withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',

@@ -13,8 +13,8 @@
 <div class="row">
   @if (!chart.data?.message) {
   <div class="width-10">
-    <!--
-    <lib-image-download [showTSV]="false"  [svg]="svgExport()"></lib-image-download>
+<!--
+    <lib-image-download [showTSV]="false"  [svg]="svgExport()" [dataUrl]="chart.data!.image"></lib-image-download>
 -->
     <!--    <button
       mat-stroked-button
@@ -31,7 +31,10 @@
     {{ chart.data?.message }}
   </div>
   } @if (!chart.data?.message) {
+  <lib-image-from-file [dataUrl]="chart.data!.image"></lib-image-from-file>
+<!--
   <div [innerHTML]="chart.data!.image" #chartElement></div>
+-->
   }
 </div>
 } @case ('sunburst') { @if (chart.data!.values) { @defer{

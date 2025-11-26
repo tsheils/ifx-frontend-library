@@ -234,6 +234,7 @@ export const PathwayEnrichmentsActions = createActionGroup({
       analytes: string[];
       background?: string;
       backgroundFile?: File;
+      dataSourceExclusion?: string[];
       pValType?: string;
       pValCutoff?: number;
       percAnalyteOverlap?: number;
@@ -245,6 +246,7 @@ export const PathwayEnrichmentsActions = createActionGroup({
     filterEnrichmentFromPathways: props<{
       pValType: string;
       pValCutoff: number;
+      dataSourceExclusion?: string[];
       percAnalyteOverlap?: number;
       minPathwayToCluster?: number;
       percPathwayOverlap?: number;

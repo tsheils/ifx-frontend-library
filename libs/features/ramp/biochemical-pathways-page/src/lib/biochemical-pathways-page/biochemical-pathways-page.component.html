@@ -1,6 +1,7 @@
 @if (mainPageMap() && mainPageMap().size){
 <mat-tab-group
   mat-align-tabs="start"
+  [selectedIndex]="activeTabIndex()"
   (selectedTabChange)="tabChanged($event)"
   class="tabs-section"
 >

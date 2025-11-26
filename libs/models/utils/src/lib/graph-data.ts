@@ -5,7 +5,7 @@ import { UpsetPlot } from './upset-data';
 
 export class GraphData {
   message?: string | undefined;
-  image?: SafeHtml;
+  image?: string | undefined;
   values?: HierarchyNode[];
   graph?: {
     nodes: GraphNode[];
