@@ -3,15 +3,15 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import {
   FILTERS_FEATURE_KEY,
   filtersReducer,
-} from '@ncats-frontend-library/stores/filter-store';
+} from 'filter-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { StoreModule } from '@ngrx/store';
 
 import { RdasBrowseComponent } from './rdas-browse.component';

@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import {
   FilterCategory,
   OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';

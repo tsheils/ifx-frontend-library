@@ -20,7 +20,7 @@ import {
   DataProperty,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { CommonAnalyte, RampResponse, ReactionClass } from 'ramp';
 import {
@@ -30,7 +30,7 @@ import {
   HierarchyNode,
   UpsetData,
   UpsetPlot,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { GRAPH_LEGEND, RampGraphLegendComponent } from 'ramp-graph-legend';
 import {

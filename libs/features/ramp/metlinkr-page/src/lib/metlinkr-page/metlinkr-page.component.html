@@ -49,11 +49,11 @@
     <div class="row space-around-row">
       @for (element of ManifestFormMap() | keyvalue; track element.key; let idx
       = $index){
-      <lib-ncats-form
+      <lib-ifx-form
         [questions]="element.value.questions"
         [direction]="'row'"
         (formCreated)="setForm($event, element.key)"
-      ></lib-ncats-form>
+      ></lib-ifx-form>
       }
     </div>
     }

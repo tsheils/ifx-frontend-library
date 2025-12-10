@@ -1,8 +1,8 @@
 @if (!genes()?.length) {
 <!--<div>
-    <ncats-frontend-library-shared-utils-data-not-found
+    <lib-shared-utils-data-not-found
       [message]="'No Gene Data Available'"
-    ></ncats-frontend-library-shared-utils-data-not-found>
+    ></lib-shared-utils-data-not-found>
   </div>-->
 <div class="text-align-center">
   <h2>No Gene Data Available</h2>
@@ -118,7 +118,7 @@
               rel="noreferrer"
               aria-label="Link to reference"
               >{{ ref.code }}</a
-            ><ncats-frontend-library-external-link></ncats-frontend-library-external-link>
+            ><lib-external-link></lib-external-link>
           </span>
           }
           <br />

@@ -2,7 +2,7 @@
   "name": "shared-utils-highlight-pipe",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/utils/highlight-pipe/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -10,12 +10,19 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/utils/highlight-pipe/jest.config.ts"
+        "jestConfig": "libs/shared/utils/highlight-pipe/jest.config.ts",
+        "tsConfig": "libs/shared/utils/highlight-pipe/tsconfig.spec.json"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

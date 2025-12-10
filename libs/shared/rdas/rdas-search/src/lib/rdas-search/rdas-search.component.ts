@@ -19,18 +19,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
+import { Disease } from 'rdas-models';
+import { HighlightPipe } from 'highlight-pipe';
 import {
   DiseaseSelectors,
   FetchDiseaseActions,
   SearchDiseasesActions,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-search',
+  selector: 'lib-rdas-search',
   templateUrl: './rdas-search.component.html',
   imports: [
     CommonModule,

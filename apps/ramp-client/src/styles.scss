@@ -152,6 +152,12 @@ a {
   height: 100%;
 }
 
+.navigation-menu-panel {
+  width: 25%;
+  position: fixed!important;
+  top: 60px !important;
+}
+
 .rail-button {
   background-color: mat.get-theme-color(theme.$light-theme, surface-dim);
   margin-bottom: 6px;
@@ -360,7 +366,7 @@ a {
   height: 48px;
 }
 
-ncats-frontend-library-loading-spinner {
+ifx-loading-spinner {
   .progress-bar-container {
     position: fixed;
     top: 0;

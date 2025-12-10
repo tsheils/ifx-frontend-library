@@ -10,10 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { DataProperty } from 'utils-models';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ResolverResponse } from 'ifx';
-import { NcatsDatatableComponent } from 'ncats-datatable';
+import { IfxDatatableComponent } from 'ifx-datatable';
 
 @Component({
   selector: 'lib-resolver-data-viewer',
@@ -23,7 +23,7 @@ import { NcatsDatatableComponent } from 'ncats-datatable';
     MatIconModule,
     MatSlideToggleModule,
     MatMenuModule,
-    NcatsDatatableComponent,
+    IfxDatatableComponent,
     LoadingSpinnerComponent,
   ],
   templateUrl: './resolver-data-viewer.component.html',

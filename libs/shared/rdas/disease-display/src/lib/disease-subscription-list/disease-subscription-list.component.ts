@@ -2,14 +2,14 @@ import { Component, Input, Signal, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { Subscription } from '@ncats-frontend-library/models/utils';
+import { Disease } from 'rdas-models';
+import { Subscription } from 'utils-models';
 
 import { Subject } from 'rxjs';
 import { DiseaseListCardComponent } from '../disease-list-card/disease-list-card.component';
 
 @Component({
-  selector: 'ncats-frontend-library-disease-subscription-list',
+  selector: 'lib-disease-subscription-list',
   imports: [
     CommonModule,
     MatCardModule,

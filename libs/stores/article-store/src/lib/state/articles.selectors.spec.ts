@@ -1,4 +1,4 @@
-import { Article } from '@ncats-frontend-library/models/rdas';
+import { Article } from 'rdas-models';
 import {
   articlesAdapter,
   ArticleStorePartialState,

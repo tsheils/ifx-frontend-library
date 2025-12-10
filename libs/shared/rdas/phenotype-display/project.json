@@ -2,7 +2,7 @@
   "name": "shared-rdas-phenotype-display",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/rdas/phenotype-display/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "projectType": "library",
   "tags": [],
   "targets": {
@@ -10,12 +10,19 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/rdas/phenotype-display/jest.config.ts"
+        "jestConfig": "libs/shared/rdas/phenotype-display/jest.config.ts",
+        "tsConfig": "libs/shared/rdas/phenotype-display/tsconfig.spec.json"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

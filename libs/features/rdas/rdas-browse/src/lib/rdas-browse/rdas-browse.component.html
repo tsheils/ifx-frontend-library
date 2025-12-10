@@ -19,12 +19,12 @@
     <mat-tab-group>
       <mat-tab label="Filters">
         @for (filter of filters(); track filter.label) {
-        <ncats-frontend-library-shared-utils-filter-panel
+        <lib-shared-utils-filter-panel
           [filter]="filter"
           [showSearch]="true"
           (filterSelectionChange)="filterSelectionChange($event)"
           (filterChange)="filterChange($event)"
-        ></ncats-frontend-library-shared-utils-filter-panel>
+        ></lib-shared-utils-filter-panel>
         <br />
         }
       </mat-tab>
@@ -35,10 +35,10 @@
               (leafExpand)="treeExpand($event)"
               [data]="diseaseTree()">
             </lib-tree-chart>
-         <!-- <ncats-frontend-library-rdas-tree
+         <!-- <lib-rdas-tree
             (leafExpand)="treeExpand($event)"
             [data]="diseaseTree()"
-          ></ncats-frontend-library-rdas-tree>-->
+          ></lib-rdas-tree>-->
           }
         </ng-template>
       </mat-tab>
@@ -86,10 +86,10 @@
       } }
     </div>
     <br />
-    <ncats-frontend-library-shared-utils-selected-filter-list
+    <lib-shared-utils-selected-filter-list
       [filters]="selectedValues"
       (filterChange)="filterSelectionChange($event)"
-    ></ncats-frontend-library-shared-utils-selected-filter-list>
+    ></lib-shared-utils-selected-filter-list>
 
     <div class="row space-between-row">
       <div>
@@ -139,9 +139,9 @@
     @defer (when diseases()) { @for (disease of diseases(); track
     disease.gardId) {
     <div>
-      <ncats-frontend-library-disease-list-card
+      <lib-disease-list-card
         [disease]="disease"
-      ></ncats-frontend-library-disease-list-card>
+      ></lib-disease-list-card>
       <br />
     </div>
     }
@@ -156,12 +156,12 @@
         class="browse-paginator"
       ></mat-paginator>
       }
-      <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+      <lib-scroll-to-top></lib-scroll-to-top>
     </div>
     } @placeholder {
-    <ncats-frontend-library-loading-spinner
+    <lib-loading-spinner
       [isLoaded]="false"
-    ></ncats-frontend-library-loading-spinner>
+    ></lib-loading-spinner>
     }
   </mat-sidenav-content>
 </mat-sidenav-container>

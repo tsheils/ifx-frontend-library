@@ -15,7 +15,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.cjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

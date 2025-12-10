@@ -1,4 +1,4 @@
-import { Disease } from '@ncats-frontend-library/models/rdas';
+import { Disease } from 'rdas-models';
 
 export class User {
   displayName!: string | null | undefined;

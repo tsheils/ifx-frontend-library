@@ -6,16 +6,16 @@ import {
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
+import { IfxDatatableComponent } from 'ifx-datatable';
+import { DataProperty } from 'utils-models';
 import { DataDownloadButtonComponent } from 'data-download-button';
-import { NcatsDatatableComponent } from 'ncats-datatable';
 
 @Component({
   selector: 'lib-data-panel',
   imports: [
     CommonModule,
-    NcatsDatatableComponent,
     DataDownloadButtonComponent,
+    IfxDatatableComponent
   ],
   templateUrl: './data-panel.component.html',
   styleUrl: './data-panel.component.scss',

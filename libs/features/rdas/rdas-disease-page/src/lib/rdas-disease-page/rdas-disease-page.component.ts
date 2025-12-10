@@ -35,24 +35,24 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Disease } from 'rdas-models';
+import { FilterCategory } from 'utils-models';
 import {
   DiseaseDisplayComponent,
   DiseaseHeaderComponent,
-} from '@ncats-frontend-library/shared/rdas/disease-display';
-import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
+} from 'disease-display';
+import { ScrollToTopComponent } from 'scroll-to-top';
 import {
   DiseaseSelectors,
   FetchDiseaseActions,
-} from '@ncats-frontend-library/stores/disease-store';
-import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
-import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
-import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
+} from 'disease-store';
+import { ArticleSelectors } from 'article-store';
+import { ProjectSelectors } from 'grant-store';
+import { TrialSelectors } from 'trial-store';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-disease-page',
+  selector: 'lib-rdas-disease-page',
   templateUrl: './rdas-disease-page.component.html',
   styleUrls: ['./rdas-disease-page.component.scss'],
   animations: [

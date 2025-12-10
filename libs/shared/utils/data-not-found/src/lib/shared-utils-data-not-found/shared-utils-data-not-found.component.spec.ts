@@ -3,11 +3,11 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { StoreModule } from '@ngrx/store';
 import { SharedUtilsDataNotFoundComponent } from './shared-utils-data-not-found.component';
 

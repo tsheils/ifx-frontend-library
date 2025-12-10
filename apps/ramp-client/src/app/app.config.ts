@@ -6,19 +6,16 @@ import {
 import {
   ApplicationConfig,
   inject,
-  provideAppInitializer,
+  provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection
 } from '@angular/core';
 import {
   BrowserModule,
-  provideClientHydration,
+  provideClientHydration, withEventReplay
 } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   PreloadAllModules,
   provideRouter,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withPreloading,
   withViewTransitions,
@@ -84,9 +81,9 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools(),
     provideEffects([RampEffects]),
     provideState(RAMP_STORE_FEATURE_KEY, rampReducer),
-    provideAnimations(),
-    provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    provideClientHydration(),
+    provideClientHydration(withEventReplay()),
+    provideBrowserGlobalErrorListeners(),
+    provideZonelessChangeDetection()
   ],
 };

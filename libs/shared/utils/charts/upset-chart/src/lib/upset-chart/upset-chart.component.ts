@@ -9,7 +9,7 @@ import {
   output,
   ViewEncapsulation,
 } from '@angular/core';
-import { UpsetData, UpsetPlot } from '@ncats-frontend-library/models/utils';
+import { UpsetData, UpsetPlot } from 'utils-models';
 import { axisBottom, BaseType, min } from 'd3';
 import { GenericChartComponent } from 'generic-chart';
 import { select, Selection } from 'd3-selection';

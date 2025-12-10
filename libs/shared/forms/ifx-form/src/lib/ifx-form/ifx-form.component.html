@@ -1,0 +1,12 @@
+<form [formGroup]="form()">
+  <div class="form-grid" [ngClass]="{ 'form-row': getDirection() }">
+    @for (question of questions(); track question.label) {
+    <div class="question-holder">
+      <lib-ifx-form-question
+        [question]="question"
+        [form]="form()"
+      ></lib-ifx-form-question>
+    </div>
+    }
+  </div>
+</form>

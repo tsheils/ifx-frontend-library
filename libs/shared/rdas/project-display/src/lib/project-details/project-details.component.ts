@@ -10,11 +10,11 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatTabsModule } from '@angular/material/tabs';
-import { CoreProject, Project } from '@ncats-frontend-library/models/rdas';
+import { CoreProject, Project } from 'rdas-models';
 import { AnnotationsDisplayComponent } from '../annotations-display/annotations-display.component';
 
 @Component({
-  selector: 'ncats-frontend-library-project-details',
+  selector: 'lib-project-details',
   imports: [
     CommonModule,
     MatCardModule,

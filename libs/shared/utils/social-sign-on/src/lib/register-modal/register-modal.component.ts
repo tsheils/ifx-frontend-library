@@ -15,7 +15,7 @@ import {
   FormsModule,
 } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { RegisterEmailUserActions } from '@ncats-frontend-library/stores/user-store';
+import { RegisterEmailUserActions } from 'user-store';
 
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -47,7 +47,7 @@ export function matchPassword(testInput: AbstractControl): ValidatorFn {
 }
 
 @Component({
-  selector: 'ncats-frontend-library-register-modal',
+  selector: 'lib-register-modal',
   templateUrl: './register-modal.component.html',
   styleUrls: ['./register-modal.component.scss'],
   encapsulation: ViewEncapsulation.None,

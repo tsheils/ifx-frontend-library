@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { NcatsHeaderComponent } from 'ncats-header';
+import { IfxHeaderComponent } from 'ifx-header';
 
 @Component({
-  imports: [RouterModule, NcatsHeaderComponent],
+  imports: [RouterModule, IfxHeaderComponent],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',

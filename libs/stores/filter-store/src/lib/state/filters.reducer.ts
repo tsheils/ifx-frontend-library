@@ -1,4 +1,4 @@
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { FilterCategory } from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import { FetchFiltersActions } from './filters.actions';

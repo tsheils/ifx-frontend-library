@@ -12,7 +12,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from 'utils-models';
 
 @Component({
   selector: 'lib-shared-utils-list-filter-row',

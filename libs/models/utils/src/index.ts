@@ -6,7 +6,6 @@ export * from './lib/user';
 export * from './lib/upset-data';
 export * from './lib/hierarchy-node';
 export * from './lib/link-template';
-export * from './lib/header-animation';
 export * from './lib/open-api-path';
 export * from './lib/query-results-data';
 export * from './lib/force-directed-graph.models';

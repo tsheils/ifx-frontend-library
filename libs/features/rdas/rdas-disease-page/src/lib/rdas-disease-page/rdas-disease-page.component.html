@@ -1,6 +1,6 @@
-<ncats-frontend-library-disease-header
+<lib-disease-header
   [disease]="disease()"
-></ncats-frontend-library-disease-header>
+></lib-disease-header>
 <div class="disease-page row right-justified-row">
   @defer (when !mobile) {
   <div #navigationsidenav class="width-25 navigation-sidenav">
@@ -288,15 +288,15 @@
           <h1>No disease info found</h1>
         </div>
         }
-        <ncats-frontend-library-disease-display
+        <lib-disease-display
           [disease]="disease()"
           [filters]="diseaseFilters()"
           [staticFilters]="staticDiseaseFilters()"
           [loaded]="loaded()"
           (optionsChange)="setUrl($event)"
           (activeElement)="setActiveElement($event)"
-        ></ncats-frontend-library-disease-display>
-        <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+        ></lib-disease-display>
+        <lib-scroll-to-top></lib-scroll-to-top>
       </div>
     </div>
   </div>

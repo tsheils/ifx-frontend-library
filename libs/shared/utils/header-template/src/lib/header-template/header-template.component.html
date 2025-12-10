@@ -1,6 +1,6 @@
 <header>
   <nav>
-    <mat-toolbar class="toolbar-template" [@slideInOut]="animationState()">
+    <mat-toolbar class="toolbar-template">
       <ng-content select=".left-options"></ng-content>
       @for (link of links(); track link.label) {
       <div>

@@ -20,9 +20,9 @@
           "apps/resolver/src/favicon.ico",
           "apps/resolver/src/assets",
           {
-            "input": "libs/shared/utils/ncats-header/src/assets",
+            "input": "libs/shared/utils/ifx-header/src/assets",
             "glob": "**/*",
-            "output": "assets/ncats-header"
+            "output": "assets/ifx-header"
           }
         ],
         "stylePreprocessorOptions": {
@@ -79,10 +79,10 @@
       }
     },
     "test": {
-      "executor": "@nx/jest:jest",
+      "executor": "@nx/vitest:test",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "apps/resolver/jest.config.ts"
+        "config": "vite.config.ts"
       }
     },
     "serve-static": {

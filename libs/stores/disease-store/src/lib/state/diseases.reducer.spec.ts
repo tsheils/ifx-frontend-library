@@ -1,4 +1,4 @@
-import { Disease } from '@ncats-frontend-library/models/rdas';
+import { Disease } from 'rdas-models';
 import { Action } from '@ngrx/store';
 import { BrowseDiseaseListActions } from './diseases.actions';
 

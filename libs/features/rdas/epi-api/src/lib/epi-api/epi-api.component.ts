@@ -14,7 +14,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-  selector: 'ncats-frontend-library-epi-api',
+  selector: 'lib-epi-api',
   imports: [CommonModule],
   templateUrl: './epi-api.component.html',
   styleUrls: ['./epi-api.component.scss'],

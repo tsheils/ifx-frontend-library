@@ -14,12 +14,12 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltip } from '@angular/material/tooltip';
-import { PhenotypeAssociation } from '@ncats-frontend-library/models/rdas';
-import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
-import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
+import { PhenotypeAssociation } from 'rdas-models';
+import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
+import { ExternalLinkComponent } from 'external-link';
 
 @Component({
-  selector: 'ncats-frontend-library-phenotype-list',
+  selector: 'lib-phenotype-list',
   imports: [
     CommonModule,
     MatPaginatorModule,

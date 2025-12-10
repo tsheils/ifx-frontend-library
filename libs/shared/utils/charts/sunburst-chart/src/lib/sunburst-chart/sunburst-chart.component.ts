@@ -27,7 +27,7 @@ import {
 import { scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
 import { arc } from 'd3-shape';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { HierarchyNode } from 'utils-models';
 import { ImageDownloadComponent } from 'image-download';
 import { SunburstChartService } from './sunburst-chart.service';
 

@@ -1,4 +1,4 @@
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { HierarchyNode } from 'utils-models';
 import { Article } from './article';
 import { ClinicalTrial } from './clinical-trial';
 import { Gene, GeneAssociation } from './gene';

@@ -6,8 +6,8 @@ import {
   GENEFILTERS,
   PHENOTYPEFILTERPARAMETERS,
   PHENOTYPEFILTERS,
-} from '@ncats-frontend-library/models/rdas';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+} from 'rdas-models';
+import { Filter, FilterCategory } from 'utils-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';

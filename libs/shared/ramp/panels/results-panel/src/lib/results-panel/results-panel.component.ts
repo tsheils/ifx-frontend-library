@@ -1,7 +1,7 @@
 import { NgPlural, NgPluralCase } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatTabsModule } from '@angular/material/tabs';
-import { QueryResultsData } from '@ncats-frontend-library/models/utils';
+import { QueryResultsData } from 'utils-models';
 
 @Component({
   selector: 'lib-results-panel',

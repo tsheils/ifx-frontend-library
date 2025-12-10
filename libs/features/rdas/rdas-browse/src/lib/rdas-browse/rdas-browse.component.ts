@@ -36,23 +36,23 @@ import {
 import {
   DiseaseNode,
   GeneAssociation,
-} from '@ncats-frontend-library/models/rdas';
-import { FilterCategory, HierarchyNode } from '@ncats-frontend-library/models/utils';
-import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
-import { RdasTreeComponent } from '@ncats-frontend-library/shared/rdas/rdas-tree';
-import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
-import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
-import { ScrollToTopComponent } from '@ncats-frontend-library/shared/utils/scroll-to-top';
-import { SharedUtilsSelectedFilterListComponent } from '@ncats-frontend-library/shared/utils/selected-filter-list';
+} from 'rdas-models';
+import { FilterCategory, HierarchyNode } from 'utils-models';
+import { DiseaseListCardComponent } from 'disease-display';
+import { RdasTreeComponent } from 'rdas-tree';
+import { ChartWrapperComponent } from 'chart-wrapper';
+import { SharedUtilsFilterPanelComponent } from 'filter-panel';
+import { LoadingSpinnerComponent } from 'loading-spinner';
+import { ScrollToTopComponent } from 'scroll-to-top';
+import { SharedUtilsSelectedFilterListComponent } from 'selected-filter-list';
 import {
   FetchFiltersActions,
   FilterSelectors,
-} from '@ncats-frontend-library/stores/filter-store';
+} from 'filter-store';
 import {
   BrowseDiseaseListActions,
   DiseaseSelectors,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import { Store } from '@ngrx/store';
 import { TreeChartComponent } from 'tree-chart';
 
@@ -61,7 +61,7 @@ const navigationExtras: NavigationExtras = {
 };
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-browse',
+  selector: 'lib-rdas-browse',
   templateUrl: './rdas-browse.component.html',
   styleUrls: ['./rdas-browse.component.scss'],
   imports: [

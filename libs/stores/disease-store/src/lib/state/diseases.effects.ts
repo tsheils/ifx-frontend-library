@@ -24,12 +24,12 @@ import {
   TRIALPHASEFILTERS,
   ALLARTICLES,
   DiseaseQueryFactory, FETCHROOT, FETCHPATH, CATEGORYTREEBRANCH
-} from '@ncats-frontend-library/models/rdas';
+} from 'rdas-models';
 import {
   Filter,
   FilterCategory,
   Page,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { Store } from '@ngrx/store';
 import { DiseaseService } from '../disease.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';

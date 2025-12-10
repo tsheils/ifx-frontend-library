@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'ncats-frontend-library-scroll-to-top',
+  selector: 'lib-scroll-to-top',
   imports: [
     CommonModule,
     MatIconModule,

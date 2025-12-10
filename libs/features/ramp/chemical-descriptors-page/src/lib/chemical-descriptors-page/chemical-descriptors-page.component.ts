@@ -10,7 +10,7 @@ import {
   DataMap,
   DataProperty,
   QueryResultsData,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { STRUCTURE_VIEWER_COMPONENT } from 'structure-viewer';

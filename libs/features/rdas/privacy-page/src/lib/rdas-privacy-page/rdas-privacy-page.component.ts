@@ -9,7 +9,6 @@ import {
   inject,
   OnInit,
   viewChildren,
-  ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -33,8 +32,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   ],
   templateUrl: './rdas-privacy-page.component.html',
   styleUrl: './rdas-privacy-page.component.scss',
-  standalone: true,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true
 })
 export class RdasPrivacyPageComponent implements OnInit {
   scrollSections = viewChildren<ElementRef>('scrollSection');

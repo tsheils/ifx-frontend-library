@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import { StoreModule } from '@ngrx/store';
 import { GeneListComponent } from './gene-list.component';
 

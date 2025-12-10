@@ -12,8 +12,8 @@ import { MatIcon } from '@angular/material/icon';
 import {
   MatTreeModule,
 } from '@angular/material/tree';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
-import { FlatDiseaseNode } from '@ncats-frontend-library/shared/rdas/rdas-tree';
+import { HierarchyNode } from 'utils-models';
+import { FlatDiseaseNode } from 'rdas-tree';
 
 /*export class FlatHierarchyNode implements HierarchyNode<unknown> {
   level!: number;

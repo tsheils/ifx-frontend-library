@@ -2,11 +2,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { StoreModule } from '@ngrx/store';
 import { PhenotypeListComponent } from './phenotype-list.component';
 

@@ -8,13 +8,13 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { Article } from '@ncats-frontend-library/models/rdas';
-import { ArticleDetailsDisplayComponent } from '@ncats-frontend-library/shared/rdas/article-display';
-import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
+import { Article } from 'rdas-models';
+import { ArticleDetailsDisplayComponent } from 'article-display';
+import { ArticleSelectors } from 'article-store';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'ncats-frontend-library-features-rdas-rdas-article-page',
+  selector: 'lib-features-rdas-rdas-article-page',
   imports: [CommonModule, ArticleDetailsDisplayComponent],
   templateUrl: './features-rdas-rdas-article-page.component.html',
   styleUrls: ['./features-rdas-rdas-article-page.component.scss'],

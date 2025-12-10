@@ -23,12 +23,12 @@ import { MatButtonModule } from '@angular/material/button';
 import {
   ResetPasswordEmailActions,
   UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'ncats-frontend-library-forgot-password-modal',
+  selector: 'lib-forgot-password-modal',
   templateUrl: './forgot-password-modal.component.html',
   styleUrls: ['./forgot-password-modal.component.scss'],
   imports: [

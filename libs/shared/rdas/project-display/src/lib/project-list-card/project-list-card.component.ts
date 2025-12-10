@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, Input, ViewEncapsulation } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { CoreProject } from 'rdas-models';
 
 @Component({
-  selector: 'ncats-frontend-library-project-list-card',
+  selector: 'lib-project-list-card',
   templateUrl: './project-list-card.component.html',
   styleUrls: ['./project-list-card.component.scss'],
   imports: [CommonModule, MatCardModule],

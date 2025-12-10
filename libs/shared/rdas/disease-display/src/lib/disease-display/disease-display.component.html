@@ -52,11 +52,11 @@
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ncats-frontend-library-gene-list
+      <lib-gene-list
         [genes]="disease()?.geneAssociations"
         [showTab]="false"
       >
-      </ncats-frontend-library-gene-list>
+      </lib-gene-list>
     </mat-expansion-panel>
   </div>
   <div class="disease-display-panel" id="phenotypes" #phenotypes #scrollSection>
@@ -71,11 +71,11 @@
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <ncats-frontend-library-phenotype-list
+      <lib-phenotype-list
         [phenotypes]="disease()?.phenotypeAssociations"
         [showTab]="false"
       >
-      </ncats-frontend-library-phenotype-list>
+      </lib-phenotype-list>
     </mat-expansion-panel>
   </div>
   <div
@@ -107,9 +107,9 @@
         (listChange)="fetchList($event, 'articles')"
       >
         <div class="data-list">
-          <ncats-frontend-library-article-list
+          <lib-article-list
             [articles]="articlesList()"
-          ></ncats-frontend-library-article-list>
+          ></lib-article-list>
         </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>
@@ -133,9 +133,9 @@
         (listChange)="fetchList($event, 'projects')"
       >
         <div class="data-list">
-          <ncats-frontend-library-project-list
+          <lib-project-list
             [projects]="projectsList()"
-          ></ncats-frontend-library-project-list>
+          ></lib-project-list>
         </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>
@@ -159,9 +159,9 @@
         (listChange)="fetchList($event, 'trials')"
       >
         <div class="data-list">
-          <ncats-frontend-library-clinical-trials-list
+          <lib-clinical-trials-list
             [trials]="trialsList()"
-          ></ncats-frontend-library-clinical-trials-list>
+          ></lib-clinical-trials-list>
         </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>

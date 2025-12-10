@@ -1,3 +1,4 @@
+
 import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
@@ -5,7 +6,7 @@ import {
   DataProperty,
   Filter,
   FilterCategory,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import {
   Analyte,
   ChemicalEnrichment,
@@ -96,7 +97,7 @@ export class RampService {
   fetchSourceVersions(): Observable<SourceVersion[]> {
     return this.http
       .get<{ data: SourceVersion[] }>(`${this.url}source-versions`)
-      .pipe(map((response) => response.data));
+      .pipe(map((response : {data: SourceVersion[]}) => response.data));
   }
 
   fetchEntityCounts() {
@@ -760,8 +761,7 @@ export class RampService {
     pValType?: string,
     pValCutoff?: number
   ): Observable<RampPathwayEnrichmentResponse> {
-    return this.http
-      .post<RampPathwayEnrichmentAPIResponse>(
+    return this.http.post<RampPathwayEnrichmentAPIResponse>(
         `${this.url}filter-enrichment-results`,
         {
           fishers_results: dataframe,
@@ -804,8 +804,7 @@ export class RampService {
     minPathwayToCluster?: number,
     percPathwayOverlap?: number
   ): Observable<RampPathwayEnrichmentResponse> {
-    return this.http
-      .post<RampPathwayEnrichmentAPIResponse>(
+    return this.http.post<RampPathwayEnrichmentAPIResponse>(
         `${this.url}cluster-enrichment-results`,
         {
           fishers_results: dataframe,

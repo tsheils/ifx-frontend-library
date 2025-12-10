@@ -18,7 +18,7 @@ import {
   TwitterAuthProvider,
   EmailAuthProvider,
 } from 'firebase/auth';
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { from, Observable } from 'rxjs';
 
 @Injectable({

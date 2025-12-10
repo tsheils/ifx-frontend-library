@@ -3,14 +3,15 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/stores/resolver-store/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/stores/resolver-store/jest.config.ts"
+        "jestConfig": "libs/stores/resolver-store/jest.config.ts",
+        "tsConfig": "libs/stores/resolver-store/tsconfig.spec.json"
       }
     }
   }

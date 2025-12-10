@@ -10,11 +10,19 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/features/rdas/privacy-page/jest.config.ts"
+        "jestConfig": "libs/features/rdas/privacy-page/jest.config.ts",
+        "tsConfig": "libs/features/rdas/privacy-page/tsconfig.spec.json"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

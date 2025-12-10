@@ -1,4 +1,4 @@
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrial } from 'rdas-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import { FetchTrialActions, FetchTrialsListActions } from './trials.actions';

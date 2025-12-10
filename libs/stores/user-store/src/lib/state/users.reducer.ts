@@ -1,4 +1,4 @@
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {

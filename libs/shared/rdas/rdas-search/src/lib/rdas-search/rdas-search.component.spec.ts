@@ -8,7 +8,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   DISEASES_FEATURE_KEY,
   reducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import { StoreModule } from '@ngrx/store';
 
 import { RdasSearchComponent } from './rdas-search.component';

@@ -12,7 +12,7 @@ import {
   DataProperty,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { DialogModalComponent } from 'dialog-modal';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { RampCorePageComponent } from 'ramp-core-page';

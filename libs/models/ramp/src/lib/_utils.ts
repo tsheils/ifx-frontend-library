@@ -3,8 +3,8 @@ import {
   DataProperty,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
-import { QuestionBase } from 'ncats-form-question';
+} from 'utils-models';
+import { QuestionBase } from 'ifx-form-question';
 import { ChemicalEnrichment } from './chemical-enrichment';
 import { FisherResult, FishersDataframe } from './fisher-result';
 import { OntologyEnrichment } from './ontology';

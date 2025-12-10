@@ -1,4 +1,4 @@
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter } from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import { ResolverResponse } from 'ifx';

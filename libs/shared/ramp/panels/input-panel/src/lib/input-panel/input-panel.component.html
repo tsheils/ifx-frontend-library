@@ -2,10 +2,10 @@
   @for (tab of inputQuestions(); track tab.section) {
   <div [ngClass]="tab.section">
     <h3>{{ cleanLabel(tab.section) | titlecase }}</h3>
-    <lib-ncats-form
+    <lib-ifx-form
       [questions]="tab.questions"
       (formCreated)="setForm($event, tab.section)"
-    ></lib-ncats-form>
+    ></lib-ifx-form>
   </div>
   }
 </div>

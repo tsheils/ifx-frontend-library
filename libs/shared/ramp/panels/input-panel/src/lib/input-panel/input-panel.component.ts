@@ -10,7 +10,7 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { NcatsFormComponent } from 'ncats-form';
+import { IfxFormComponent } from 'ifx-form';
 import { FormSubsection } from 'ramp';
 
 @Component({
@@ -21,7 +21,7 @@ import { FormSubsection } from 'ramp';
     MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
-    NcatsFormComponent,
+    IfxFormComponent,
   ],
   templateUrl: './input-panel.component.html',
   styleUrl: './input-panel.component.scss',

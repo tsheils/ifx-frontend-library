@@ -1,4 +1,4 @@
-ncats-frontend-library-header-template {
+lib-header-template {
   .toolbar-template {
     position: fixed;
   }
@@ -15,6 +15,7 @@ ncats-frontend-library-header-template {
   .active {
     text-decoration: underline;
   }
+
 
   @media only screen and (max-width: 768px) {
     .menu-button {

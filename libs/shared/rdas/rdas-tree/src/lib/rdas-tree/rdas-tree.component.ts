@@ -17,8 +17,8 @@ import {
   MatTreeModule,
 } from '@angular/material/tree';
 import { Router } from '@angular/router';
-import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { Disease, DiseaseNode } from 'rdas-models';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 
 export class FlatDiseaseNode extends DiseaseNode {
   level!: number;
@@ -26,7 +26,7 @@ export class FlatDiseaseNode extends DiseaseNode {
 }
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-tree',
+  selector: 'lib-rdas-tree',
   imports: [
     CommonModule,
     MatTreeModule,

@@ -22,7 +22,7 @@ import {
   OpenApiPath,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { DataDownloadButtonComponent } from 'data-download-button';
 import { DataPanelComponent } from 'data-panel';
 import { InputPanelComponent } from 'input-panel';

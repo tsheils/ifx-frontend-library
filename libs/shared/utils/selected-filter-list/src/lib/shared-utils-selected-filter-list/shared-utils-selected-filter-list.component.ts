@@ -11,7 +11,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'ncats-frontend-library-shared-utils-selected-filter-list',
+  selector: 'lib-shared-utils-selected-filter-list',
   imports: [CommonModule, MatChipsModule, MatButtonModule, MatIconModule],
   templateUrl: './shared-utils-selected-filter-list.component.html',
   styleUrls: ['./shared-utils-selected-filter-list.component.scss'],

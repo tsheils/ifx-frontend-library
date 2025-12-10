@@ -15,7 +15,7 @@ import {
   MatDialogContent,
   MatDialogRef,
 } from '@angular/material/dialog';
-import { UserLoginActions } from '@ncats-frontend-library/stores/user-store';
+import { UserLoginActions } from 'user-store';
 import { Store } from '@ngrx/store';
 import { EmailSignOnModalComponent } from '../email-sign-on-modal/email-sign-on-modal.component';
 import { MatListModule } from '@angular/material/list';
@@ -23,7 +23,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-social-sign-on-modal',
+  selector: 'lib-social-sign-on-modal',
   templateUrl: './social-sign-on-modal.component.html',
   styleUrls: ['./social-sign-on-modal.component.scss'],
   imports: [

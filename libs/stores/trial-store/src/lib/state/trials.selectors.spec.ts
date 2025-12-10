@@ -1,4 +1,4 @@
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrial } from 'rdas-models';
 import {
   trialsAdapter,
   TrialsPartialState,

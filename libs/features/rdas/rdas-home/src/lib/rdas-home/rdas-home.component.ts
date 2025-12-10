@@ -10,7 +10,7 @@ import {
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 
 @Component({
   selector: 'rdas-home',

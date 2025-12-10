@@ -10,7 +10,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter } from 'utils-models';
 import {
   axisBottom,
   axisLeft,

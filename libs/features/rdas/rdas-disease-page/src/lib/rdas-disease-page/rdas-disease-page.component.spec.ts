@@ -4,23 +4,23 @@ import { ActivatedRoute } from '@angular/router';
 import {
   ARTICLE_STORE_FEATURE_KEY,
   articlesReducer,
-} from '@ncats-frontend-library/stores/article-store';
+} from 'article-store';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import {
   PROJECTS_FEATURE_KEY,
   projectsReducer,
-} from '@ncats-frontend-library/stores/grant-store';
+} from 'grant-store';
 import {
   TRIALS_FEATURE_KEY,
   trialsReducer,
-} from '@ncats-frontend-library/stores/trial-store';
+} from 'trial-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { StoreModule } from '@ngrx/store';
 
 import { RdasDiseasePageComponent } from './rdas-disease-page.component';

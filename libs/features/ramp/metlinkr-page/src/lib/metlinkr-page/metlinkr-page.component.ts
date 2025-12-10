@@ -6,8 +6,8 @@ import { MatIcon } from '@angular/material/icon';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
 import { DialogModalComponent } from 'dialog-modal';
 import { DndFileUploadComponent } from 'dnd-file-upload';
-import { NcatsFormComponent } from 'ncats-form';
-import { QuestionBase, TextboxQuestion } from 'ncats-form-question';
+import { IfxFormComponent } from 'ifx-form';
+import { QuestionBase, TextboxQuestion } from 'ifx-form-question';
 import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { IdentifierHarmonizationActions, RampSelectors } from 'ramp-store';
@@ -73,7 +73,7 @@ class ManifestQuestionsService {
     MatTabLabel,
     MatIcon,
     FormsModule,
-    NcatsFormComponent,
+    IfxFormComponent,
     MatButton,
     DndFileUploadComponent
   ],

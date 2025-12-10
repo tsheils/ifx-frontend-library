@@ -26,15 +26,15 @@ import {
   DataProperty,
   UpsetData,
   UpsetPlot,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { Store } from '@ngrx/store';
-import { NcatsDatatableComponent } from 'ncats-datatable';
+import { IfxDatatableComponent } from 'ifx-datatable';
 import { EntityCount } from 'ramp';
 import { RampSelectors } from 'ramp-store';
 import { UpsetComponent } from 'upset-chart';
 
 @Component({
-  selector: 'ramp-about',
+  selector: 'lib-ramp-about',
   templateUrl: './ramp-about.component.html',
   styleUrls: ['./ramp-about.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +44,6 @@ import { UpsetComponent } from 'upset-chart';
     MatListModule,
     NgClass,
     CdkScrollable,
-    NcatsDatatableComponent,
     UpsetComponent,
     ScrollingModule,
     OverlayModule,
@@ -53,7 +52,8 @@ import { UpsetComponent } from 'upset-chart';
     MatSidenavModule,
     MatButtonModule,
     RouterLink,
-  ],
+    IfxDatatableComponent
+  ]
 })
 export class AboutComponent implements OnInit {
   private readonly store = inject(Store);

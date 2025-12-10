@@ -14,13 +14,13 @@
       <h2>{{ clickedNode()?.label }}</h2>
       <div class="row space-around-row">
         <div class="width-95">
-          <ncats-datatable
+          <lib-ifx-datatable
             [fieldsConfig]="forceDirectedGraphService.analyteData()?.fields"
             [data]="forceDirectedGraphService.analyteData()?.data"
             [internalSort]="true"
             [useInternalPaginator]="true"
             [hidePageSize]="true"
-          ></ncats-datatable>
+          ></lib-ifx-datatable>
         </div>
       </div>
     </div>

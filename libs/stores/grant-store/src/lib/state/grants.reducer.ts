@@ -1,4 +1,4 @@
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { CoreProject } from 'rdas-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {

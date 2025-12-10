@@ -9,7 +9,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { StoreModule } from '@ngrx/store';
 
 import { ForgotPasswordModalComponent } from './forgot-password-modal.component';

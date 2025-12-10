@@ -13,7 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from 'utils-models';
 import { BaseType } from 'd3';
 import { select, Selection } from 'd3-selection';
 

@@ -3,7 +3,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'ncats-frontend-library-loading-spinner',
+  selector: 'lib-loading-spinner',
   templateUrl: './loading-spinner.component.html',
   styleUrls: ['./loading-spinner.component.scss'],
   imports: [NgClass, MatProgressSpinnerModule],

@@ -17,7 +17,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import {
   LoginEmailUserActions,
   UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
@@ -29,7 +29,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-email-sign-on-modal',
+  selector: 'lib-email-sign-on-modal',
   templateUrl: './email-sign-on-modal.component.html',
   styleUrls: ['./email-sign-on-modal.component.scss'],
   imports: [

@@ -23,8 +23,8 @@ import { MatTooltip } from '@angular/material/tooltip';
 import {
   FilterCategory,
   OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
-import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
+} from 'utils-models';
+import { SharedUtilsFilterPanelComponent } from 'filter-panel';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({

@@ -3,18 +3,26 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/features/rdas/rdas-browse/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/libs/features/rdas/rdas-browse"],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-browse/jest.config.ts"
+        "jestConfig": "libs/features/rdas/rdas-browse/jest.config.ts",
+        "tsConfig": "libs/features/rdas/rdas-browse/tsconfig.spec.json"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

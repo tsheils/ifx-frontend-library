@@ -3,14 +3,15 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/utils/image-download/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/utils/image-download/jest.config.ts"
+        "jestConfig": "libs/shared/utils/image-download/jest.config.ts",
+        "tsConfig": "libs/shared/utils/image-download/tsconfig.spec.json"
       }
     }
   }

@@ -5,10 +5,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
-import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
+import { ExternalLinkComponent } from 'external-link';
 
 @Component({
-  selector: 'ncats-frontend-library-footer-template',
+  selector: 'lib-footer-template',
   imports: [CommonModule, ExternalLinkComponent, MatListModule],
   templateUrl: './footer-template.component.html',
   styleUrls: ['./footer-template.component.scss'],

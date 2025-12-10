@@ -20,7 +20,7 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { GraphData, GraphNode } from '@ncats-frontend-library/models/utils';
+import { GraphData, GraphNode } from 'utils-models';
 import {
   drag,
   forceCenter,

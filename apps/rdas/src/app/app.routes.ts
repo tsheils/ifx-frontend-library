@@ -6,7 +6,7 @@ export const routes: Routes = [
     path: '',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-home').then(
+      import('rdas-home').then(
         (m) => m.RdasHomeComponent
       ),
   },
@@ -15,7 +15,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-browse').then(
+      import('rdas-browse').then(
         (m) => m.RdasBrowseComponent
       ),
   },
@@ -24,7 +24,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'pathParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-disease-page').then(
+      import('rdas-disease-page').then(
         (m) => m.RdasDiseasePageComponent
       ),
   },
@@ -33,7 +33,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-about').then(
+      import('rdas-about').then(
         (m) => m.FeaturesRdasRdasAboutComponent
       ),
   },
@@ -41,17 +41,23 @@ export const routes: Routes = [
     path: 'privacy',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RDAS: Privacy Policy',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/privacy-page').then(
-        (m) => m.RdasPrivacyPageComponent
-      ),
+      import('privacy-page').then((m) => m.PrivacyPage),
+    data: {
+      appFullTitle: 'Rare Disease Alert System',
+      appAcronym: 'RDAS',
+      collectsPii: true,
+      accountRegistration: true,
+      contactEmail: 'ncatsrdas@mail.nih.gov'
+    }
   },
   {
     path: 'article',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-article-page').then(
+      import('rdas-article-page').then(
         (m) => m.FeaturesRdasRdasArticlePageComponent
       ),
   },
@@ -60,7 +66,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-grant-page').then(
+      import('rdas-grant-page').then(
         (m) => m.RdasGrantPageComponent
       ),
   },
@@ -69,7 +75,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-trial-page').then(
+      import('rdas-trial-page').then(
         (m) => m.RdasTrialPageComponent
       ),
   },
@@ -78,7 +84,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/rdas-subscriptions').then(
+      import('rdas-subscriptions').then(
         (m) => m.RdasSubscriptionsComponent
       ),
   },
@@ -92,7 +98,7 @@ export const routes: Routes = [
       }api/diseases`,
     },
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
+      import('graphql-sandbox').then(
         (m) => m.GraphqlSandboxComponent
       ),
   },
@@ -106,7 +112,7 @@ export const routes: Routes = [
       }api/articles`,
     },
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
+      import('graphql-sandbox').then(
         (m) => m.GraphqlSandboxComponent
       ),
   },
@@ -120,7 +126,7 @@ export const routes: Routes = [
       }api/projects`,
     },
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
+      import('graphql-sandbox').then(
         (m) => m.GraphqlSandboxComponent
       ),
   },
@@ -134,7 +140,7 @@ export const routes: Routes = [
       }api/trials`,
     },
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/graphql-sandbox').then(
+      import('graphql-sandbox').then(
         (m) => m.GraphqlSandboxComponent
       ),
   },
@@ -143,7 +149,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/epi-api').then(
+      import('epi-api').then(
         (m) => m.EpiApiComponent
       ),
   },
@@ -152,7 +158,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
-      import('@ncats-frontend-library/features/rdas/history-api').then(
+      import('history-api').then(
         (m) => m.HistoryApiComponent
       ),
   },

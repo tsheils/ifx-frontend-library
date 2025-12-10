@@ -19,10 +19,10 @@ import {
   OpenApiPath,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { Store } from '@ngrx/store';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
-import { QuestionBase } from 'ncats-form-question';
+import { DataProperty } from 'utils-models';
+import { QuestionBase } from 'ifx-form-question';
 import { FormSubsection, RampPage } from 'ramp';
 
 @Component({

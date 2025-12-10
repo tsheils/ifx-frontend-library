@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { DocumentData } from '@angular/fire/compat/firestore';
 import { UserCredential, UserInfo } from '@firebase/auth';
 import { DocumentSnapshot } from '@firebase/firestore';
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';

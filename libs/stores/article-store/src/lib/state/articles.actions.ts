@@ -1,5 +1,5 @@
-import { Article } from '@ncats-frontend-library/models/rdas';
-import { Filter, Page } from '@ncats-frontend-library/models/utils';
+import { Article } from 'rdas-models';
+import { Filter, Page } from 'utils-models';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const FetchArticleActions = createActionGroup({

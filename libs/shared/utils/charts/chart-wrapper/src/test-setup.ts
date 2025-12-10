@@ -4,7 +4,7 @@ setupZoneTestEnv({
   errorOnUnknownElements: true,
   errorOnUnknownProperties: true,
 });
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { FilterCategory } from 'utils-models';
 
 export const PIEFILTERS: FilterCategory = new FilterCategory({
   field: '',

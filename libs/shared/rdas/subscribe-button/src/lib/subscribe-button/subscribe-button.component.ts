@@ -20,19 +20,19 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
-import { Subscription } from '@ncats-frontend-library/models/utils';
-import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
+import { Subscription } from 'utils-models';
+import { SocialSignOnButtonComponent } from 'social-sign-on';
 import {
   UpdateUserActions,
   UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
 import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-modal.component';
 
 @Component({
-  selector: 'ncats-frontend-library-subscribe-button',
+  selector: 'lib-subscribe-button',
   templateUrl: './subscribe-button.component.html',
   styleUrls: ['./subscribe-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

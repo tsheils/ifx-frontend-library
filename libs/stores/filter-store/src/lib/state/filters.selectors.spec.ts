@@ -1,4 +1,4 @@
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { FilterCategory } from 'utils-models';
 import {
   filtersAdapter,
   FiltersPartialState,

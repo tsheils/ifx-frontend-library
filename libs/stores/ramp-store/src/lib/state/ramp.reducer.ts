@@ -1,7 +1,7 @@
 import {
   FilterCategory,
   OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {

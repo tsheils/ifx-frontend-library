@@ -7,7 +7,7 @@ import {
   ARTICLEDETAILSVARIABLES,
   FETCHARTICLEDETAILS,
   FETCHARTICLESQUERY,
-} from '@ncats-frontend-library/models/rdas';
+} from 'rdas-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import { filter, map, mergeMap } from 'rxjs';

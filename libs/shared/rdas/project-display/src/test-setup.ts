@@ -4,7 +4,7 @@ setupZoneTestEnv({
   errorOnUnknownElements: true,
   errorOnUnknownProperties: true,
 });
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { CoreProject } from 'rdas-models';
 
 export const PROJECTMOCK: CoreProject = new CoreProject({
   core_project_num: 'K01OH000018',

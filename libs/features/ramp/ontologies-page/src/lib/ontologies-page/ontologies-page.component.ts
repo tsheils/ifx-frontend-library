@@ -10,7 +10,7 @@ import {
   DataMap,
   DataProperty,
   QueryResultsData,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { OntologyPanelComponent } from 'ontology-panel';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { RampPage } from 'ramp';

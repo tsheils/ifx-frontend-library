@@ -10,11 +10,19 @@
       "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
-        "jestConfig": "libs/shared/utils/charts/sunburst-chart/jest.config.ts"
+        "jestConfig": "libs/shared/utils/charts/sunburst-chart/jest.config.ts",
+        "tsConfig": "libs/shared/utils/charts/sunburst-chart/tsconfig.spec.json"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

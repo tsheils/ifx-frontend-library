@@ -2,11 +2,21 @@
   <mat-sidenav
     #navigationsidenav
     class="navigation-menu-panel"
-    [opened]="true"
+    [opened]="!mobile()"
     [mode]="'side'"
   >
     <div class="toc-wrapper" cdkScrollable>
       <div class="toc">
+        <div class="row right-justified-row">
+          <button
+            mat-icon-button
+            class="close-button"
+            aria-label="close filters"
+            (click)="navigationsidenav.toggle()"
+          >
+            <mat-icon>close</mat-icon>
+          </button>
+        </div>
         <mat-nav-list>
           <a
             mat-list-item
@@ -356,11 +366,11 @@
             Data Sources
           </div>
           <div class="section-content">
-            <ncats-datatable
+            <lib-ifx-datatable
               [fieldsConfig]="entityCountsColumns"
               [data]="entityCounts()"
               [internalSort]="true"
-            ></ncats-datatable>
+            ></lib-ifx-datatable>
           </div>
         </div>
 

@@ -3,12 +3,12 @@ import { RouterModule } from '@angular/router';
 import {
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import {
   USERS_FEATURE_KEY,
   UserService,
   usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 

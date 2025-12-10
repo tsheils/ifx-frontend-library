@@ -4,9 +4,9 @@
 </div>
 } @if (!phenotypes()?.length) {
 <div>
-  <ncats-frontend-library-shared-utils-data-not-found
+  <lib-shared-utils-data-not-found
     [message]="'No Phenotype Data Available'"
-  ></ncats-frontend-library-shared-utils-data-not-found>
+  ></lib-shared-utils-data-not-found>
 </div>
 } @if (phenotypes()?.length) {
 <div>
@@ -57,7 +57,7 @@
           rel="noreferrer"
           aria-label="Link to HPO data"
           >{{ phenotypeAssociation.phenotype.hpoTerm }}</a
-        ><ncats-frontend-library-external-link></ncats-frontend-library-external-link>
+        ><lib-external-link></lib-external-link>
       </td>
     </ng-container>
     <ng-container matColumnDef="Frequency">

@@ -27,22 +27,22 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
-import { ArticleListComponent } from '@ncats-frontend-library/shared/rdas/article-display';
-import { ClinicalTrialsListComponent } from '@ncats-frontend-library/shared/rdas/clinical-trials-display';
-import { GeneListComponent } from '@ncats-frontend-library/shared/rdas/gene-display';
-import { PhenotypeListComponent } from '@ncats-frontend-library/shared/rdas/phenotype-display';
-import { ProjectListComponent } from '@ncats-frontend-library/shared/rdas/project-display';
-import { ChartWrapperComponent } from '@ncats-frontend-library/shared/utils/chart-wrapper';
-import { RdasPanelTemplateComponent } from '@ncats-frontend-library/shared/utils/rdas-panel-template';
-import { ArticleSelectors } from '@ncats-frontend-library/stores/article-store';
-import { ProjectSelectors } from '@ncats-frontend-library/stores/grant-store';
-import { TrialSelectors } from '@ncats-frontend-library/stores/trial-store';
+import { Disease } from 'rdas-models';
+import { FilterCategory } from 'utils-models';
+import { ArticleListComponent } from 'article-display';
+import { ClinicalTrialsListComponent } from 'clinical-trials-display';
+import { GeneListComponent } from 'gene-display';
+import { PhenotypeListComponent } from 'phenotype-display';
+import { ProjectListComponent } from 'project-display';
+import { ChartWrapperComponent } from 'chart-wrapper';
+import { RdasPanelTemplateComponent } from 'rdas-panel-template';
+import { ArticleSelectors } from 'article-store';
+import { ProjectSelectors } from 'grant-store';
+import { TrialSelectors } from 'trial-store';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'ncats-frontend-library-disease-display',
+  selector: 'lib-disease-display',
   templateUrl: './disease-display.component.html',
   styleUrls: ['./disease-display.component.scss'],
   encapsulation: ViewEncapsulation.None,

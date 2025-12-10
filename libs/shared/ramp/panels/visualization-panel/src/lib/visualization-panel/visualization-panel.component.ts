@@ -12,7 +12,7 @@ import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { VisualizationMap } from '@ncats-frontend-library/models/utils';
+import { VisualizationMap } from 'utils-models';
 import { select } from 'd3-selection';
 import { ImageDownloadComponent } from 'image-download';
 import { ImageFromFile } from 'image-from-file';

@@ -1,4 +1,4 @@
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter } from 'utils-models';
 import { Action } from '@ngrx/store';
 import { SearchFiltersActions } from './filters.actions';
 

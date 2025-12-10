@@ -7,17 +7,17 @@ import {
   Signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { User } from '@ncats-frontend-library/models/utils';
-import { FetchDiseaseListActions } from '@ncats-frontend-library/stores/disease-store';
-import { DiseaseListCardComponent } from '@ncats-frontend-library/shared/rdas/disease-display';
-import { DiseaseSelectors } from '@ncats-frontend-library/stores/disease-store';
-import { UserSelectors } from '@ncats-frontend-library/stores/user-store';
+import { Disease } from 'rdas-models';
+import { User } from 'utils-models';
+import { FetchDiseaseListActions } from 'disease-store';
+import { DiseaseListCardComponent } from 'disease-display';
+import { DiseaseSelectors } from 'disease-store';
+import { UserSelectors } from 'user-store';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-subscriptions',
+  selector: 'lib-rdas-subscriptions',
   templateUrl: './rdas-subscriptions.component.html',
   styleUrls: ['./rdas-subscriptions.component.scss'],
   imports: [DiseaseListCardComponent],

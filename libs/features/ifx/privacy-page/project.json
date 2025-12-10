@@ -1,0 +1,28 @@
+{
+  "name": "privacy-page",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/features/ifx/privacy-page/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["privacy"],
+  "targets": {
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/features/ifx/privacy-page/jest.config.ts",
+        "tsConfig": "libs/features/ifx/privacy-page/tsconfig.spec.json"
+      }
+    },
+    "lint": {
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.cjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
+    }
+  }
+}

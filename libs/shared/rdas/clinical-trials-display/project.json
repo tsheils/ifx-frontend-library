@@ -3,7 +3,7 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/clinical-trials-display/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
@@ -12,11 +12,19 @@
         "{workspaceRoot}/coverage/libs/shared/rdas/clinical-trials-display"
       ],
       "options": {
-        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts"
+        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts",
+        "tsConfig": "libs/shared/rdas/clinical-trials-display/tsconfig.spec.json"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

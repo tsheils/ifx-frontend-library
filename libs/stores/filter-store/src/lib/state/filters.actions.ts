@@ -1,9 +1,9 @@
-import { Article } from '@ncats-frontend-library/models/rdas';
+import { Article } from 'rdas-models';
 import {
   Filter,
   FilterCategory,
   Page,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { createAction, createActionGroup, props } from '@ngrx/store';
 
 export const SearchFiltersActions = createActionGroup({
