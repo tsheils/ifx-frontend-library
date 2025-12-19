@@ -12,13 +12,17 @@ import {
   input,
   OnInit,
   viewChildren,
-  ViewEncapsulation
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatListItem, MatNavList } from '@angular/material/list';
-import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/material/sidenav';
+import {
+  MatSidenav,
+  MatSidenavContainer,
+  MatSidenavContent,
+} from '@angular/material/sidenav';
 
 @Component({
   selector: 'lib-privacy-page',
@@ -32,22 +36,22 @@ import { MatSidenav, MatSidenavContainer, MatSidenavContent } from '@angular/mat
     MatSidenav,
     MatSidenavContainer,
     MatSidenavContent,
-    NgClass
+    NgClass,
   ],
   templateUrl: './privacy-page.html',
   styleUrl: './privacy-page.scss',
-  standalone: true
+  standalone: true,
 })
 export class PrivacyPage implements OnInit {
-  appFullTitle = input.required<string>()
-  appAcronym = input<string>('')
-  contactEmail = input.required<string>()
-  collectsPii = input<boolean>()
-  accountRegistration = input<boolean>()
-  fullName = computed(()=> {
-    const acronym = this.appAcronym() ? ' (' + this.appAcronym() + ') ': ' '
-    return this.appFullTitle() + acronym
-  })
+  appFullTitle = input.required<string>();
+  appAcronym = input<string>('');
+  contactEmail = input.required<string>();
+  collectsPii = input<boolean>();
+  accountRegistration = input<boolean>();
+  fullName = computed(() => {
+    const acronym = this.appAcronym() ? ' (' + this.appAcronym() + ') ' : ' ';
+    return this.appFullTitle() + acronym;
+  });
   scrollSections = viewChildren<ElementRef>('scrollSection');
   private changeRef = inject(ChangeDetectorRef);
   private scrollDispatcher = inject(ScrollDispatcher);

@@ -47,12 +47,12 @@ export class ChartWrapperComponent implements OnInit {
   selectedFilter = computed(
     () =>
       this.filters()?.filter(
-        (filter) => filter.label === this.selectedFilterLabel?.()
-      )[0]
+        (filter) => filter.label === this.selectedFilterLabel?.(),
+      )[0],
   );
 
   filterControl: FormControl<string | null> = new FormControl<string | null>(
-    ''
+    '',
   );
 
   ngOnInit() {

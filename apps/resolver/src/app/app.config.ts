@@ -41,7 +41,7 @@ import {
 
 export function load_resolver(
   resolverService: ResolverService,
-  store = inject(Store)
+  store = inject(Store),
 ) {
   return () => {
     resolverService._setOptionsUrl(environment.resolverOptionsUrl);
@@ -53,7 +53,7 @@ export function load_resolver(
 
 export function load_from_local_storage(
   platformId = inject(PLATFORM_ID),
-  store = inject(Store)
+  store = inject(Store),
 ) {
   return () => {
     if (isPlatformBrowser(platformId)) {
@@ -67,7 +67,7 @@ export function load_from_local_storage(
             store.dispatch(
               LoadResolverOptionsActions.setPreviousFilters({
                 filters: filterOptionsList,
-              })
+              }),
             );
           }
         }
@@ -97,7 +97,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideStore({
       router: routerReducer,

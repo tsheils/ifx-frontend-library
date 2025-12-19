@@ -16,15 +16,15 @@ export const init$ = createEffect(
   (
     store = inject(Store),
     actions$ = inject(Actions),
-    resolverService = inject(ResolverService)
+    resolverService = inject(ResolverService),
   ) => {
     return actions$.pipe(
       ofType(
         LoadResolverOptionsActions.loadResolverOptions,
-        LoadResolverOptionsActions.setPreviousFilters
+        LoadResolverOptionsActions.setPreviousFilters,
       ),
       concatLatestFrom(() =>
-        store.select(ResolverSelectors.fetchPreviousFilters)
+        store.select(ResolverSelectors.fetchPreviousFilters),
       ),
       mergeMap(([action, opts]) => {
         return resolverService.fetchOptions().pipe(
@@ -38,7 +38,7 @@ export const init$ = createEffect(
                       .replace('category', '')
                       .replace(/-/g, ' ')
                       .replace('URL', ' URL')
-                      .trim()
+                      .trim(),
                   );
                   return new Filter({
                     ...opt,
@@ -62,15 +62,15 @@ export const init$ = createEffect(
               of(
                 LoadResolverOptionsActions.loadResolverOptionsFailure({
                   error: error.message,
-                })
-              )
-            )
-          )
+                }),
+              ),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const resolveQuery = createEffect(
@@ -89,13 +89,13 @@ export const resolveQuery = createEffect(
               of(
                 ResolveQueryActions.resolveQueryFailure({
                   error: error.message,
-                })
-              )
-            )
-          )
+                }),
+              ),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );

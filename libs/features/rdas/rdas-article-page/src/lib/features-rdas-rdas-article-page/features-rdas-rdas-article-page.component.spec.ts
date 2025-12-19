@@ -1,8 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  ArticleEffects,
-  articlesReducer,
-} from 'article-store';
+import { ArticleEffects, articlesReducer } from 'article-store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStore, StoreModule } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';

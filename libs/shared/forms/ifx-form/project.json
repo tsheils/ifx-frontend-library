@@ -7,12 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/forms/ifx-form/jest.config.ts",
-        "tsConfig": "libs/shared/forms/ifx-form/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/shared/forms/ifx-form"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

@@ -9,22 +9,22 @@
       <div class="width-45">
         <h2 class="centered"><b>Get Started:</b></h2>
         <div class="row space-around-row">
-          @for(path of api() | keyvalue: _originalOrder; track path.key) {
-          <a class="hovered-home-button">
-            <div matRipple class="home-button" routerLink="/{{ path.key }}">
-              <div class="icon-button-image">
-                <img
-                  ngSrc="/assets/icons/{{ path.key }}.svg"
-                  alt="{{ cleanLabel(path.key) | titlecase }} icon"
-                  priority
-                  fill
-                />
+          @for (path of api() | keyvalue: _originalOrder; track path.key) {
+            <a class="hovered-home-button">
+              <div matRipple class="home-button" routerLink="/{{ path.key }}">
+                <div class="icon-button-image">
+                  <img
+                    ngSrc="/assets/icons/{{ path.key }}.svg"
+                    alt="{{ cleanLabel(path.key) | titlecase }} icon"
+                    priority
+                    fill
+                  />
+                </div>
+                <div class="rail-label">
+                  {{ cleanLabel(path.key) | titlecase }}
+                </div>
               </div>
-              <div class="rail-label">
-                {{ cleanLabel(path.key) | titlecase }}
-              </div>
-            </div>
-          </a>
+            </a>
           }
         </div>
       </div>
@@ -46,145 +46,149 @@
   </div>
 </div>
 @defer {
-<div class="sub-content 3d-graph" id="3d-graph" #details>
-  <div class="row space-around-row">
-    <div class="width-50">
-      <mat-card class="stats-card">
-        <h1>RaMP-DB Contains</h1>
-        <div class="count-grid">
-          @for(count of entityCounts(); track count.status_category) {
-          <div class="stat-box">
-            <div class="number-count">{{ count.total | number }}</div>
-            {{ count.status_category }}
+  <div class="sub-content 3d-graph" id="3d-graph" #details>
+    <div class="row space-around-row">
+      <div class="width-50">
+        <mat-card class="stats-card">
+          <h1>RaMP-DB Contains</h1>
+          <div class="count-grid">
+            @for (count of entityCounts(); track count.status_category) {
+              <div class="stat-box">
+                <div class="number-count">{{ count.total | number }}</div>
+                {{ count.status_category }}
+              </div>
+            }
           </div>
-          }
-        </div>
-      </mat-card>
+        </mat-card>
+      </div>
+      <div class="width-40"></div>
     </div>
-    <div class="width-40"></div>
   </div>
-</div>
 
-<div class="sub-content-white">
-  <h1>RaMP-DB Sources</h1>
+  <div class="sub-content-white">
+    <h1>RaMP-DB Sources</h1>
 
-  <div class="row space-around-row centered-row">
-    <div class="width-20 centered">
-      <a href="https://hmdb.ca/" title="Go to the HMDB website" target="_blank">
-        <img
-          ngSrc="/assets/ramp-home/logos/hmdb-logo.png"
-          width="250"
-          height="168"
-          alt="HMDB Logo"
-        />
-      </a>
-      <br />
-      <span class="row">(includes Kegg)</span>
+    <div class="row space-around-row centered-row">
+      <div class="width-20 centered">
+        <a
+          href="https://hmdb.ca/"
+          title="Go to the HMDB website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/hmdb-logo.png"
+            width="250"
+            height="168"
+            alt="HMDB Logo"
+          />
+        </a>
+        <br />
+        <span class="row">(includes Kegg)</span>
+      </div>
+      <div class="width-20 centered">
+        <a
+          href="https://www.lipidmaps.org/"
+          title="Go to the lipid maps website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/lipid-maps-logo.png"
+            width="250"
+            height="168"
+            alt="LipidMaps Logo"
+          />
+        </a>
+      </div>
+      <div class="width-20 centered">
+        <a
+          href="https://reactome.org/"
+          title="Go to the Reactome website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/reactome-logo.png"
+            width="344"
+            height="81"
+            alt="Reactome Logo"
+          />
+        </a>
+      </div>
+      <div class="width-20 centered">
+        <a
+          href="https://www.rhea-db.org/"
+          title="Go to the Rhea DB website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/rhea_logo.png"
+            width="200"
+            height="100"
+            alt="Rhea DB Logo"
+          />
+        </a>
+      </div>
     </div>
-    <div class="width-20 centered">
-      <a
-        href="https://www.lipidmaps.org/"
-        title="Go to the lipid maps website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/lipid-maps-logo.png"
-          width="250"
-          height="168"
-          alt="LipidMaps Logo"
-        />
-      </a>
-    </div>
-    <div class="width-20 centered">
-      <a
-        href="https://reactome.org/"
-        title="Go to the Reactome website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/reactome-logo.png"
-          width="344"
-          height="81"
-          alt="Reactome Logo"
-        />
-      </a>
-    </div>
-    <div class="width-20 centered">
-      <a
-        href="https://www.rhea-db.org/"
-        title="Go to the Rhea DB website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/rhea_logo.png"
-          width="200"
-          height="100"
-          alt="Rhea DB Logo"
-        />
-      </a>
+    <div class="row space-around-row">
+      <div class="width-20 centered">
+        <a
+          href="https://www.wikipathways.org/"
+          title="Go to the WikiPathways website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/wikipathways-logo.svg"
+            width="300"
+            height="91"
+            alt="WikiPathways Logo"
+          />
+        </a>
+      </div>
+      <div class="width-20 centered">
+        <a
+          href="https://pfocr.wikipathways.org/"
+          title="Go to the PFOCR website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/pfocr_logo_500.png"
+            width="150"
+            height="150"
+            alt="PFOCR Logo"
+          />
+        </a>
+      </div>
+      <div class="width-20 centered">
+        <a
+          href="https://www.ebi.ac.uk/chebi/"
+          title="Go to the ChEBI website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/ChEBI_logo.png"
+            width="100"
+            height="100"
+            alt="ChEBI Logo"
+          /><span class="chebi-text">ChEBI</span>
+        </a>
+      </div>
+      <div class="width-20 centered">
+        <a
+          href="https://https://www.metabolomicsworkbench.org/databases/refmet/index.php"
+          title="Go to the RefMet website"
+          target="_blank"
+        >
+          <img
+            ngSrc="/assets/ramp-home/logos/mw.png"
+            width="200"
+            height="150"
+            alt="Metabolomics Workbench Logo"
+          />
+        </a>
+      </div>
     </div>
   </div>
-  <div class="row space-around-row">
-    <div class="width-20 centered">
-      <a
-        href="https://www.wikipathways.org/"
-        title="Go to the WikiPathways website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/wikipathways-logo.svg"
-          width="300"
-          height="91"
-          alt="WikiPathways Logo"
-        />
-      </a>
-    </div>
-    <div class="width-20 centered">
-      <a
-        href="https://pfocr.wikipathways.org/"
-        title="Go to the PFOCR website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/pfocr_logo_500.png"
-          width="150"
-          height="150"
-          alt="PFOCR Logo"
-        />
-      </a>
-    </div>
-    <div class="width-20 centered">
-      <a
-        href="https://www.ebi.ac.uk/chebi/"
-        title="Go to the ChEBI website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/ChEBI_logo.png"
-          width="100"
-          height="100"
-          alt="ChEBI Logo"
-        /><span class="chebi-text">ChEBI</span>
-      </a>
-    </div>
-    <div class="width-20 centered">
-      <a
-        href="https://https://www.metabolomicsworkbench.org/databases/refmet/index.php"
-        title="Go to the RefMet website"
-        target="_blank"
-      >
-        <img
-          ngSrc="/assets/ramp-home/logos/mw.png"
-          width="200"
-          height="150"
-          alt="Metabolomics Workbench Logo"
-        />
-      </a>
-    </div>
-  </div>
-</div>
 } @placeholder {
-<div class="sub-content 3d-graph" #details>
-  <div class="row space-around-row"></div>
-</div>
+  <div class="sub-content 3d-graph" #details>
+    <div class="row space-around-row"></div>
+  </div>
 }

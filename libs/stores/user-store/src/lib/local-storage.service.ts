@@ -13,7 +13,7 @@ import {
 })
 export class LocalStorageService {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
 

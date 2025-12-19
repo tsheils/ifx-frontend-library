@@ -20,10 +20,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import {
-  ResetPasswordEmailActions,
-  UserSelectors,
-} from 'user-store';
+import { ResetPasswordEmailActions, UserSelectors } from 'user-store';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 
@@ -64,7 +61,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
           if (res) {
             this.loginError = res;
           }
-        })
+        }),
       )
       .subscribe();
 
@@ -77,7 +74,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
             this.emailSent = true;
             this.signOnForm.reset();
           }
-        })
+        }),
       )
       .subscribe();
   }
@@ -94,7 +91,7 @@ export class ForgotPasswordModalComponent implements OnInit, OnDestroy {
   send() {
     if (this.signOnForm.valid) {
       this.store.dispatch(
-        ResetPasswordEmailActions.resetPasswordEmail(this.signOnForm.value)
+        ResetPasswordEmailActions.resetPasswordEmail(this.signOnForm.value),
       );
     }
   }

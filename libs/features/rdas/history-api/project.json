@@ -7,12 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/rdas/history-api/jest.config.ts",
-        "tsConfig": "libs/features/rdas/history-api/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/history-api"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

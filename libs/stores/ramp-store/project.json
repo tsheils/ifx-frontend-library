@@ -7,12 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/stores/ramp-store/jest.config.ts",
-        "tsConfig": "libs/stores/ramp-store/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/stores/ramp-store/"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

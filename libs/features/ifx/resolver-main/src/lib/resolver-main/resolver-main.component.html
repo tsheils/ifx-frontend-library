@@ -40,36 +40,38 @@
 
       <mat-autocomplete #auto="matAutocomplete">
         @for (filter of filteredSearchOptions(); track filter.label) {
-        <mat-optgroup [label]="filter.label" multiple>
-          @for (value of filter.values; track value.value) {
-          <mat-option (click)="selectValue(value)">
-            <mat-checkbox
-              (change)="
-                $event
-                  ? subscriptionSelectionSignal().toggle(value.value)
-                  : null
-              "
-              [checked]="subscriptionSelectionSignal().isSelected(value.value)"
-              (click)="$event.stopPropagation()"
-            >
-              <span
-                class="main-value"
-                [innerHTML]="value.term | highlight : filterSearchCtrl.value"
-              ></span>
-            </mat-checkbox>
-            @if (value.description) {
-            <div class="space-between-row filter-description">
-              <span
-                class="main-value"
-                [innerHTML]="
-                  value.description | highlight : filterSearchCtrl.value
-                "
-              ></span>
-            </div>
+          <mat-optgroup [label]="filter.label" multiple>
+            @for (value of filter.values; track value.value) {
+              <mat-option (click)="selectValue(value)">
+                <mat-checkbox
+                  (change)="
+                    $event
+                      ? subscriptionSelectionSignal().toggle(value.value)
+                      : null
+                  "
+                  [checked]="
+                    subscriptionSelectionSignal().isSelected(value.value)
+                  "
+                  (click)="$event.stopPropagation()"
+                >
+                  <span
+                    class="main-value"
+                    [innerHTML]="value.term | highlight: filterSearchCtrl.value"
+                  ></span>
+                </mat-checkbox>
+                @if (value.description) {
+                  <div class="space-between-row filter-description">
+                    <span
+                      class="main-value"
+                      [innerHTML]="
+                        value.description | highlight: filterSearchCtrl.value
+                      "
+                    ></span>
+                  </div>
+                }
+              </mat-option>
             }
-          </mat-option>
-          }
-        </mat-optgroup>
+          </mat-optgroup>
         }
       </mat-autocomplete>
     </div>
@@ -88,21 +90,25 @@
         </div>
       </div>
       <div class="chip-list-wrapper">
-        @for ( filterCategory of selectedFiltersSignal() | keyvalue; track
-        filterCategory.key ) { @if (filterCategory.value.length) {
-        <div class="row">
-          <h3>{{ filterCategory.key }}</h3>
-        </div>
-        <mat-chip-listbox>
-          @for (filter of filterCategory.value; track filter.term) {
-          <mat-chip (click)="removeChip(filter)">
-            {{ filter.term }}
-            <mat-icon class="mat-chip-remove">cancel</mat-icon>
-          </mat-chip>
+        @for (
+          filterCategory of selectedFiltersSignal() | keyvalue;
+          track filterCategory.key
+        ) {
+          @if (filterCategory.value.length) {
+            <div class="row">
+              <h3>{{ filterCategory.key }}</h3>
+            </div>
+            <mat-chip-listbox>
+              @for (filter of filterCategory.value; track filter.term) {
+                <mat-chip (click)="removeChip(filter)">
+                  {{ filter.term }}
+                  <mat-icon class="mat-chip-remove">cancel</mat-icon>
+                </mat-chip>
+              }
+            </mat-chip-listbox>
+            <br />
           }
-        </mat-chip-listbox>
-        <br />
-        } }
+        }
       </div>
     </div>
   </div>
@@ -119,28 +125,27 @@
       <h2>Results</h2>
     </div>
   </div>
-  @if(clicked() && !loading()){
-  <lib-loading-spinner
-    [isLoaded]="false"
-  ></lib-loading-spinner>
+  @if (clicked() && !loading()) {
+    <lib-loading-spinner [isLoaded]="false"></lib-loading-spinner>
   }
 
   <div class="row space-around-row top-align">
     <div class="width-90">
       @if (badData() && badData().length) {
-      <h2>Failed to Resolve</h2>
-      @for(inputStr of badData(); track inputStr.input){
-      {{ inputStr.input }}<br />
-      } }
+        <h2>Failed to Resolve</h2>
+        @for (inputStr of badData(); track inputStr.input) {
+          {{ inputStr.input }}<br />
+        }
+      }
     </div>
   </div>
   <div class="row space-around-row top-align">
     <div class="width-90">
       @if (resolvedData() && resolvedData().length) {
-      <lib-resolver-data-viewer
-        [data]="filteredResolvedData()"
-        [params]="sortedSelection()"
-      ></lib-resolver-data-viewer>
+        <lib-resolver-data-viewer
+          [data]="filteredResolvedData()"
+          [params]="sortedSelection()"
+        ></lib-resolver-data-viewer>
       }
     </div>
   </div>

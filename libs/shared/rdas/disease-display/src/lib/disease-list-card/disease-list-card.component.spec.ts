@@ -1,14 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatCardModule } from '@angular/material/card';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  DISEASES_FEATURE_KEY,
-  diseasesReducer,
-} from 'disease-store';
-import {
-  USERS_FEATURE_KEY,
-  usersReducer,
-} from 'user-store';
+import { DISEASES_FEATURE_KEY, diseasesReducer } from 'disease-store';
+import { USERS_FEATURE_KEY, usersReducer } from 'user-store';
 import { StoreModule } from '@ngrx/store';
 
 import { DiseaseListCardComponent } from './disease-list-card.component';
@@ -23,7 +16,6 @@ describe('DiseaseListCardComponent', () => {
       imports: [
         MatCardModule,
         DiseaseListCardComponent,
-        NoopAnimationsModule,
         StoreModule.forRoot({}),
         StoreModule.forFeature(DISEASES_FEATURE_KEY, diseasesReducer),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),

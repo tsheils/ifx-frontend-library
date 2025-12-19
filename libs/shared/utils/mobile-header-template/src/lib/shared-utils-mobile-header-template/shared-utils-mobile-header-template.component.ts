@@ -12,9 +12,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import {
-  LinkTemplateProperty,
-} from 'utils-models';
+import { LinkTemplateProperty } from 'utils-models';
 
 @Component({
   selector: 'lib-mobile-header-template',

@@ -1,9 +1,5 @@
 import { Article } from 'rdas-models';
-import {
-  Filter,
-  FilterCategory,
-  Page,
-} from 'utils-models';
+import { Filter, FilterCategory, Page } from 'utils-models';
 import { createAction, createActionGroup, props } from '@ngrx/store';
 
 export const SearchFiltersActions = createActionGroup({

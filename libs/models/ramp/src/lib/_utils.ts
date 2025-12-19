@@ -67,8 +67,7 @@ export interface RampPathwayEnrichmentAPIResponse {
   function_call?: string[];
 }
 
-export interface RampPathwayEnrichmentResponse
-  extends RampResponse<FisherResult> {
+export interface RampPathwayEnrichmentResponse extends RampResponse<FisherResult> {
   clusterImageUrl?: string | undefined;
   filteredFishersDataframe?: FishersDataframe;
   combinedFishersDataframe?: FishersDataframe;

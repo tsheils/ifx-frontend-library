@@ -1,17 +1,22 @@
 <div class="row top-align">
   @for (tab of inputQuestions(); track tab.section) {
-  <div [ngClass]="tab.section">
-    <h3>{{ cleanLabel(tab.section) | titlecase }}</h3>
-    <lib-ifx-form
-      [questions]="tab.questions"
-      (formCreated)="setForm($event, tab.section)"
-    ></lib-ifx-form>
-  </div>
+    <div [ngClass]="tab.section">
+      <h3>{{ cleanLabel(tab.section) | titlecase }}</h3>
+      <lib-ifx-form
+        [questions]="tab.questions"
+        (formCreated)="setForm($event, tab.section)"
+      ></lib-ifx-form>
+    </div>
   }
 </div>
 <div class="row centered-row bottom-align">
   <div>
-    <button mat-flat-button color="accent" (click)="fetchData()" [disabled]="!isValid()">
+    <button
+      mat-flat-button
+      color="accent"
+      (click)="fetchData()"
+      [disabled]="!isValid()"
+    >
       <span class="hide-small">Search</span><mat-icon>search</mat-icon>
     </button>
   </div>

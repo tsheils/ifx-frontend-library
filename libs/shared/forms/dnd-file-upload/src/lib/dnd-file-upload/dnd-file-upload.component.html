@@ -1,22 +1,22 @@
 <div
   class="file-drop-boundary"
   id="files-upload"
-  dndFileInput
+  libDndFileInput
   (fileDrop)="dropHandler($event)"
   (fileLoading)="fileLoading.set($event)"
 >
   <div class="file-grid">
-    @if(this.fileLoading()){
-    <mat-spinner class="input-file-spinner"></mat-spinner>
+    @if (this.fileLoading()) {
+      <mat-spinner class="input-file-spinner"></mat-spinner>
     }
-    @for(file of files(); let index = $index; track file.name){
-    <div class="file-list-element">
-      <button mat-icon-button (click)="removeFile(index)">
-        <mat-icon>close</mat-icon>
-      </button>
-      {{ file.name }}
-    </div>
-    <div class="file-size">{{ getSize(file.size) }}</div>
+    @for (file of files(); let index = $index; track file.name) {
+      <div class="file-list-element">
+        <button mat-icon-button (click)="removeFile(index)">
+          <mat-icon>close</mat-icon>
+        </button>
+        {{ file.name }}
+      </div>
+      <div class="file-size">{{ getSize(file.size) }}</div>
     }
   </div>
   <input
@@ -27,19 +27,19 @@
     (change)="writeValue($event)"
     #fileUpload
   />
-  @if(!this.fileLoading()){
+  @if (!this.fileLoading()) {
     <div class="file-upload">
-    <div><mat-icon class="upload-icon">upload</mat-icon></div>
-    <div class="drag-drop-text">
-      Drag and drop <br />
-      {{ label() || '' }} {{ multiple() === true ? 'files' : 'file' }} <br />
-      here to upload. <br />
+      <div><mat-icon class="upload-icon">upload</mat-icon></div>
+      <div class="drag-drop-text">
+        Drag and drop <br />
+        {{ label() || '' }} {{ multiple() === true ? 'files' : 'file' }} <br />
+        here to upload. <br />
+      </div>
+      <div>
+        <button mat-flat-button class="upload-btn" (click)="fileUpload.click()">
+          Browse
+        </button>
+      </div>
     </div>
-    <div>
-      <button mat-flat-button class="upload-btn" (click)="fileUpload.click()">
-        Browse
-      </button>
-    </div>
-  </div>
   }
 </div>

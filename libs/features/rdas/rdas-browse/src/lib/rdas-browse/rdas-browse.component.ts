@@ -33,10 +33,7 @@ import {
   NavigationStart,
   Router,
 } from '@angular/router';
-import {
-  DiseaseNode,
-  GeneAssociation,
-} from 'rdas-models';
+import { DiseaseNode, GeneAssociation } from 'rdas-models';
 import { FilterCategory, HierarchyNode } from 'utils-models';
 import { DiseaseListCardComponent } from 'disease-display';
 import { RdasTreeComponent } from 'rdas-tree';
@@ -45,14 +42,8 @@ import { SharedUtilsFilterPanelComponent } from 'filter-panel';
 import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ScrollToTopComponent } from 'scroll-to-top';
 import { SharedUtilsSelectedFilterListComponent } from 'selected-filter-list';
-import {
-  FetchFiltersActions,
-  FilterSelectors,
-} from 'filter-store';
-import {
-  BrowseDiseaseListActions,
-  DiseaseSelectors,
-} from 'disease-store';
+import { FetchFiltersActions, FilterSelectors } from 'filter-store';
+import { BrowseDiseaseListActions, DiseaseSelectors } from 'disease-store';
 import { Store } from '@ngrx/store';
 import { TreeChartComponent } from 'tree-chart';
 
@@ -81,7 +72,7 @@ const navigationExtras: NavigationExtras = {
     ChartWrapperComponent,
     MatTooltip,
     DiseaseListCardComponent,
-    TreeChartComponent
+    TreeChartComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   standalone: true,
@@ -97,13 +88,13 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
     const map = new Map<string, FilterCategory[]>();
     const filtersL = this.store.selectSignal(
-      DiseaseSelectors.getAllDiseaseFilters
+      DiseaseSelectors.getAllDiseaseFilters,
     );
     if (filtersL() && filtersL()?.length) {
       filtersL()?.forEach((filterCat) => {
         if (filterCat.parent) {
           let filterCats: FilterCategory[] | undefined = map.get(
-            filterCat.parent
+            filterCat.parent,
           );
           if (filterCats) {
             filterCats.push(filterCat);
@@ -195,7 +186,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           term: event.term,
           limit: 200,
           skip: 0,
-        })
+        }),
       );
     } else {
       this.store.dispatch(
@@ -203,7 +194,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           label: event.label,
           limit: 200,
           skip: skip,
-        })
+        }),
       );
     }
   }
@@ -231,7 +222,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   }
 
   treeExpand(event: HierarchyNode): void {
-    const ev = event as DiseaseNode
+    const ev = event as DiseaseNode;
     const navigationExtras: NavigationExtras = {
       queryParams: {
         parentId: ev.gardId,
@@ -243,7 +234,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   fetchParameters(): void {
     const params =
       this.router.routerState.root.snapshot.queryParamMap.keys.filter(
-        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key)
+        (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key),
       );
     if (params && params.length) {
       params.forEach((param) => {
@@ -283,7 +274,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       )
       .join('\n');
     return rows;

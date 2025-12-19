@@ -1,11 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatMenuModule } from '@angular/material/menu';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  USERS_FEATURE_KEY,
-  usersReducer,
-} from 'user-store';
+
+import { USERS_FEATURE_KEY, usersReducer } from 'user-store';
 import { StoreModule } from '@ngrx/store';
 
 import { SocialSignOnButtonComponent } from './social-sign-on-button.component';
@@ -19,7 +16,7 @@ describe('SocialSignOnButtonComponent', () => {
       declarations: [],
       imports: [
         SocialSignOnButtonComponent,
-        NoopAnimationsModule,
+        
         MatDialogModule,
         MatMenuModule,
         StoreModule.forRoot({}),

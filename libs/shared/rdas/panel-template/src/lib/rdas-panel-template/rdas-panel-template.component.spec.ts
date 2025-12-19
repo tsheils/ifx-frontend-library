@@ -1,12 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import {
-  DISEASES_FEATURE_KEY,
-  diseasesReducer,
-} from 'disease-store';
-import {
-  USERS_FEATURE_KEY,
-  usersReducer,
-} from 'user-store';
+import { DISEASES_FEATURE_KEY, diseasesReducer } from 'disease-store';
+import { USERS_FEATURE_KEY, usersReducer } from 'user-store';
 import { StoreModule } from '@ngrx/store';
 import { RdasPanelTemplateComponent } from './rdas-panel-template.component';
 

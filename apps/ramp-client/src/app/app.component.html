@@ -16,16 +16,16 @@
   </header>
   <main role="main" class="ncats-main">
     <div class="main-content">
-      @if(isProd()){
-      <div class="row space-around-row">
-        <div class="width-95">
-          <ramp-full-banner [showBanner]="isProd()"></ramp-full-banner>
+      @if (isProd()) {
+        <div class="row space-around-row">
+          <div class="width-95">
+            <lib-ramp-full-banner
+              [showBanner]="isProd()"
+            ></lib-ramp-full-banner>
+          </div>
         </div>
-      </div>
       }
-      <lib-loading-spinner
-        [isLoaded]="!loading()"
-      ></lib-loading-spinner>
+      <lib-loading-spinner [isLoaded]="!loading()"></lib-loading-spinner>
       <router-outlet></router-outlet>
     </div>
   </main>

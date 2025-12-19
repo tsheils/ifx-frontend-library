@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 import { MobileHeaderTemplateComponent } from './shared-utils-mobile-header-template.component';
 
 describe('MobileHeaderTemplateComponent', () => {
@@ -8,7 +8,7 @@ describe('MobileHeaderTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, MobileHeaderTemplateComponent],
+      imports: [ MobileHeaderTemplateComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(MobileHeaderTemplateComponent);

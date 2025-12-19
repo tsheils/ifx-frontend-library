@@ -2,76 +2,73 @@
   <mat-sidenav-container class="mobile-menu-container">
     <header>
       @if (mobile()) {
-      <lib-mobile-header-template
-        [links]="displayLinks()"
-        #appHeader
-      >
-        <div left-options>
-          <a routerLink="/">
-            <img
-              src="/assets/rdas_final_gradient_no_logo_small.svg"
-              alt="Rare Disease Alert System"
-              class="rdas-logo"
-            />
-          </a>
-        </div>
-        <div icon>
-          <a routerLink="/">
-            <img
-              src="/assets/rdas_final_gradient_no_logo_small.svg"
-              alt="Rare Disease Alert System"
-              class="rdas-logo"
-            />
-          </a>
-        </div>
-        <div class="right-options">
-          <lib-rdas-search
-            class="header-search"
-            (diseaseSelect)="selectDisease($event)"
-            (diseaseSearch)="searchDiseaseString($event)"
-          ></lib-rdas-search>
-          <lib-social-sign-on-button></lib-social-sign-on-button>
-        </div>
-      </lib-mobile-header-template>
-      } @else {
-      <lib-header-template [links]="displayLinks()">
-        <div class="left-options">
-          <a routerLink="/">
-            <picture>
-              <source
-                srcset="/assets/rdas_final_gradient_no_logo_small.webp"
-                type="image/webp"
-              />
-              <source
-                srcset="/assets/rdas_final_gradient_no_logo_small.svg"
-                type="image/svg"
-              />
+        <lib-mobile-header-template [links]="displayLinks()" #appHeader>
+          <div left-options>
+            <a routerLink="/">
               <img
-                src="/assets/rdas_final_gradient_no_logo_small.png"
+                src="/assets/rdas_final_gradient_no_logo_small.svg"
                 alt="Rare Disease Alert System"
                 class="rdas-logo"
               />
-            </picture>
-          </a>
-        </div>
-        <div class="right-options">
-          <lib-rdas-search
-            class="header-search"
-            (diseaseSelect)="selectDisease($event)"
-            (diseaseSearch)="searchDiseaseString($event)"
-          ></lib-rdas-search>
-          <a
-            mat-button
-            class="header-link-button"
-            href="https://forms.gle/sbyWejiekBMMZN6P6"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to Google feedback form"
-            >Feedback <mat-icon>feedback</mat-icon></a
-          >
-          <lib-social-sign-on-button></lib-social-sign-on-button>
-        </div>
-      </lib-header-template>
+            </a>
+          </div>
+          <div icon>
+            <a routerLink="/">
+              <img
+                src="/assets/rdas_final_gradient_no_logo_small.svg"
+                alt="Rare Disease Alert System"
+                class="rdas-logo"
+              />
+            </a>
+          </div>
+          <div class="right-options">
+            <lib-rdas-search
+              class="header-search"
+              (diseaseSelect)="selectDisease($event)"
+              (diseaseSearch)="searchDiseaseString($event)"
+            ></lib-rdas-search>
+            <lib-social-sign-on-button></lib-social-sign-on-button>
+          </div>
+        </lib-mobile-header-template>
+      } @else {
+        <lib-header-template [links]="displayLinks()">
+          <div class="left-options">
+            <a routerLink="/">
+              <picture>
+                <source
+                  srcset="/assets/rdas_final_gradient_no_logo_small.webp"
+                  type="image/webp"
+                />
+                <source
+                  srcset="/assets/rdas_final_gradient_no_logo_small.svg"
+                  type="image/svg"
+                />
+                <img
+                  src="/assets/rdas_final_gradient_no_logo_small.png"
+                  alt="Rare Disease Alert System"
+                  class="rdas-logo"
+                />
+              </picture>
+            </a>
+          </div>
+          <div class="right-options">
+            <lib-rdas-search
+              class="header-search"
+              (diseaseSelect)="selectDisease($event)"
+              (diseaseSearch)="searchDiseaseString($event)"
+            ></lib-rdas-search>
+            <a
+              mat-button
+              class="header-link-button"
+              href="https://forms.gle/sbyWejiekBMMZN6P6"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Link to Google feedback form"
+              >Feedback <mat-icon>feedback</mat-icon></a
+            >
+            <lib-social-sign-on-button></lib-social-sign-on-button>
+          </div>
+        </lib-header-template>
       }
 
       <!-- Custom content -->

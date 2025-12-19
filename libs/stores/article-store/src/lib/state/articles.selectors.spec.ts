@@ -22,7 +22,7 @@ describe('ArticleStore Selectors', () => {
       diseases: [],
       journals: [],
       sources: [],
-    } as Article);
+    }) as Article;
 
   let state: ArticleStorePartialState;
 
@@ -39,7 +39,7 @@ describe('ArticleStore Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

@@ -8,7 +8,7 @@ addEventListener('message', ({ data }) => {
 if (typeof Worker !== 'undefined') {
   // Create a new
   const worker = new Worker(
-    new URL('./rdas-webworker.worker', import.meta.url)
+    new URL('./rdas-webworker.worker', import.meta.url),
   );
   worker.onmessage = ({ data }) => {
     console.log(`page got message ${data}`);

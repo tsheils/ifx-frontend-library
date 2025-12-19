@@ -7,11 +7,14 @@
   "projectType": "library",
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/models/ifx/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/models/ifx"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

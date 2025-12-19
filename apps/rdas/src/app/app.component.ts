@@ -52,7 +52,7 @@ export class AppComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
   header = viewChild<MobileHeaderTemplateComponent>(
-    MobileHeaderTemplateComponent
+    MobileHeaderTemplateComponent,
   );
 
   title = 'rdas';
@@ -69,8 +69,8 @@ export class AppComponent {
 
   displayLinks = computed(() =>
     this.links.filter(
-      (link) => !(link.hideMobile && link.hideMobile === this.mobile())
-    )
+      (link) => !(link.hideMobile && link.hideMobile === this.mobile()),
+    ),
   );
   links: LinkTemplateProperty[] = [
     {

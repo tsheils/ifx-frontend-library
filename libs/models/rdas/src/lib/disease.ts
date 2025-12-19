@@ -59,7 +59,7 @@ export class Disease {
 
     if (obj.allArticles) {
       this.allArticles = obj.allArticles.map(
-        (article: Partial<Article> = {}) => new Article(article)
+        (article: Partial<Article> = {}) => new Article(article),
       );
     }
 
@@ -69,7 +69,7 @@ export class Disease {
     }
     if (obj.epiArticles) {
       this.epiArticles = obj.epiArticles.map(
-        (article: Partial<Article> = {}) => new Article(article)
+        (article: Partial<Article> = {}) => new Article(article),
       );
     }
     if (obj._epiCount) {
@@ -79,7 +79,7 @@ export class Disease {
 
     if (obj.nhsArticles) {
       this.nhsArticles = obj.nhsArticles.map(
-        (article: Partial<Article> = {}) => new Article(article)
+        (article: Partial<Article> = {}) => new Article(article),
       );
     }
 
@@ -96,8 +96,8 @@ export class Disease {
               data as {
                 gene: Partial<Gene>;
                 properties: Partial<GeneAssociation>;
-              }
-            )
+              },
+            ),
         )
         .sort((a, b) => b.associationType.localeCompare(a.associationType));
       delete this._geneAssociations;
@@ -111,8 +111,8 @@ export class Disease {
               data as {
                 phenotype: Partial<Phenotype>;
                 properties: Partial<PhenotypeAssociation>;
-              }
-            )
+              },
+            ),
         )
         .sort((a, b) => b.frequencyRank - a.frequencyRank);
 

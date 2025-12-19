@@ -4,165 +4,81 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "bundler",
+    "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
-    "target": "es2022",
+    "target": "es2015",
     "module": "esnext",
-    "lib": ["es2022", "dom", "esnext.asynciterable"],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "epi-api": [
-        "libs/features/rdas/epi-api/src/index.ts"
-      ],
-      "graphql-sandbox": [
-        "libs/features/rdas/graphql-sandbox/src/index.ts"
-      ],
-      "history-api": [
-        "libs/features/rdas/history-api/src/index.ts"
-      ],
-      "rdas-about": [
-        "libs/features/rdas/rdas-about/src/index.ts"
-      ],
+      "epi-api": ["libs/features/rdas/epi-api/src/index.ts"],
+      "graphql-sandbox": ["libs/features/rdas/graphql-sandbox/src/index.ts"],
+      "history-api": ["libs/features/rdas/history-api/src/index.ts"],
+      "rdas-about": ["libs/features/rdas/rdas-about/src/index.ts"],
       "rdas-article-page": [
         "libs/features/rdas/rdas-article-page/src/index.ts"
       ],
-      "rdas-browse": [
-        "libs/features/rdas/rdas-browse/src/index.ts"
-      ],
+      "rdas-browse": ["libs/features/rdas/rdas-browse/src/index.ts"],
       "rdas-disease-page": [
         "libs/features/rdas/rdas-disease-page/src/index.ts"
       ],
-      "rdas-grant-page": [
-        "libs/features/rdas/rdas-grant-page/src/index.ts"
-      ],
-      "rdas-home": [
-        "libs/features/rdas/rdas-home/src/index.ts"
-      ],
+      "rdas-grant-page": ["libs/features/rdas/rdas-grant-page/src/index.ts"],
+      "rdas-home": ["libs/features/rdas/rdas-home/src/index.ts"],
       "rdas-subscriptions": [
         "libs/features/rdas/rdas-subscriptions/src/index.ts"
       ],
-      "rdas-trial-page": [
-        "libs/features/rdas/rdas-trial-page/src/index.ts"
-      ],
+      "rdas-trial-page": ["libs/features/rdas/rdas-trial-page/src/index.ts"],
       "rdas-models": ["libs/models/rdas/src/index.ts"],
-      "utils-models": [
-        "libs/models/utils/src/index.ts"
-      ],
-      "file-upload": [
-        "libs/shared/forms/file-upload/src/index.ts"
-      ],
-      "article-display": [
-        "libs/shared/rdas/article-display/src/index.ts"
-      ],
+      "utils-models": ["libs/models/utils/src/index.ts"],
+      "file-upload": ["libs/shared/forms/file-upload/src/index.ts"],
+      "article-display": ["libs/shared/rdas/article-display/src/index.ts"],
       "clinical-trials-display": [
         "libs/shared/rdas/clinical-trials-display/src/index.ts"
       ],
-      "disease-display": [
-        "libs/shared/rdas/disease-display/src/index.ts"
-      ],
+      "disease-display": ["libs/shared/rdas/disease-display/src/index.ts"],
       "disease-subscription-list": [
         "libs/shared/rdas/disease-subscription-list/src/disease-subscription-list.component.ts"
       ],
-      "gene-display": [
-        "libs/shared/rdas/gene-display/src/index.ts"
-      ],
-      "phenotype-display": [
-        "libs/shared/rdas/phenotype-display/src/index.ts"
-      ],
-      "project-display": [
-        "libs/shared/rdas/project-display/src/index.ts"
-      ],
-      "rdas-footer": [
-        "libs/shared/rdas/rdas-footer/src/index.ts"
-      ],
-      "rdas-search": [
-        "libs/shared/rdas/rdas-search/src/index.ts"
-      ],
-      "rdas-tree": [
-        "libs/shared/rdas/rdas-tree/src/index.ts"
-      ],
-      "subscribe-button": [
-        "libs/shared/rdas/subscribe-button/src/index.ts"
-      ],
-      "bar-chart": [
-        "libs/shared/utils/charts/bar-chart/src/index.ts"
-      ],
-      "chart-wrapper": [
-        "libs/shared/utils/charts/chart-wrapper/src/index.ts"
-      ],
-      "data-not-found": [
-        "libs/shared/utils/data-not-found/src/index.ts"
-      ],
-      "external-link": [
-        "libs/shared/utils/external-link/src/index.ts"
-      ],
-      "filter-panel": [
-        "libs/shared/utils/filter-panel/src/index.ts"
-      ],
-      "footer-template": [
-        "libs/shared/utils/footer-template/src/index.ts"
-      ],
-      "header-template": [
-        "libs/shared/utils/header-template/src/index.ts"
-      ],
-      "highlight-pipe": [
-        "libs/shared/utils/highlight-pipe/src/index.ts"
-      ],
-      "list-filter-row": [
-        "libs/shared/utils/list-filter-row/src/index.ts"
-      ],
-      "loading-spinner": [
-        "libs/shared/utils/loading-spinner/src/index.ts"
-      ],
+      "gene-display": ["libs/shared/rdas/gene-display/src/index.ts"],
+      "phenotype-display": ["libs/shared/rdas/phenotype-display/src/index.ts"],
+      "project-display": ["libs/shared/rdas/project-display/src/index.ts"],
+      "rdas-footer": ["libs/shared/rdas/rdas-footer/src/index.ts"],
+      "rdas-search": ["libs/shared/rdas/rdas-search/src/index.ts"],
+      "rdas-tree": ["libs/shared/rdas/rdas-tree/src/index.ts"],
+      "subscribe-button": ["libs/shared/rdas/subscribe-button/src/index.ts"],
+      "bar-chart": ["libs/shared/utils/charts/bar-chart/src/index.ts"],
+      "chart-wrapper": ["libs/shared/utils/charts/chart-wrapper/src/index.ts"],
+      "data-not-found": ["libs/shared/utils/data-not-found/src/index.ts"],
+      "external-link": ["libs/shared/utils/external-link/src/index.ts"],
+      "filter-panel": ["libs/shared/utils/filter-panel/src/index.ts"],
+      "footer-template": ["libs/shared/utils/footer-template/src/index.ts"],
+      "header-template": ["libs/shared/utils/header-template/src/index.ts"],
+      "highlight-pipe": ["libs/shared/utils/highlight-pipe/src/index.ts"],
+      "list-filter-row": ["libs/shared/utils/list-filter-row/src/index.ts"],
+      "loading-spinner": ["libs/shared/utils/loading-spinner/src/index.ts"],
       "mobile-header-template": [
         "libs/shared/utils/mobile-header-template/src/index.ts"
       ],
-      "pie-chart": [
-        "libs/shared/utils/charts/pie-chart/src/index.ts"
-      ],
-      "rdas-panel-template": [
-        "libs/shared/rdas/panel-template/src/index.ts"
-      ],
-      "scroll-to-top": [
-        "libs/shared/utils/scroll-to-top/src/index.ts"
-      ],
+      "pie-chart": ["libs/shared/utils/charts/pie-chart/src/index.ts"],
+      "rdas-panel-template": ["libs/shared/rdas/panel-template/src/index.ts"],
+      "scroll-to-top": ["libs/shared/utils/scroll-to-top/src/index.ts"],
       "selected-filter-list": [
         "libs/shared/utils/selected-filter-list/src/index.ts"
       ],
-      "social-sign-on": [
-        "libs/shared/utils/social-sign-on/src/index.ts"
-      ],
-      "article-store": [
-        "libs/stores/article-store/src/index.ts"
-      ],
-      "disease-store": [
-        "libs/stores/disease-store/src/index.ts"
-      ],
-      "filter-store": [
-        "libs/stores/filter-store/src/index.ts"
-      ],
-      "grant-store": [
-        "libs/stores/grant-store/src/index.ts"
-      ],
-      "trial-store": [
-        "libs/stores/trial-store/src/index.ts"
-      ],
-      "user-store": [
-        "libs/stores/user-store/src/index.ts"
-      ],
-      "ramp-about": [
-        "libs/features/ramp/ramp-about/src/index.ts"
-      ],
-      "ramp-api": [
-        "libs/features/ramp/ramp-api/src/index.ts"
-      ],
-      "ramp-home": [
-        "libs/features/ramp/ramp-home/src/index.ts"
-      ],
+      "social-sign-on": ["libs/shared/utils/social-sign-on/src/index.ts"],
+      "article-store": ["libs/stores/article-store/src/index.ts"],
+      "disease-store": ["libs/stores/disease-store/src/index.ts"],
+      "filter-store": ["libs/stores/filter-store/src/index.ts"],
+      "grant-store": ["libs/stores/grant-store/src/index.ts"],
+      "trial-store": ["libs/stores/trial-store/src/index.ts"],
+      "user-store": ["libs/stores/user-store/src/index.ts"],
+      "ramp-about": ["libs/features/ramp/ramp-about/src/index.ts"],
+      "ramp-api": ["libs/features/ramp/ramp-api/src/index.ts"],
+      "ramp-home": ["libs/features/ramp/ramp-home/src/index.ts"],
       "biochemical-pathways-page": [
         "libs/features/ramp/biochemical-pathways-page/src/index.ts"
       ],
@@ -188,13 +104,9 @@
       "input-panel": ["libs/shared/ramp/panels/input-panel/src/index.ts"],
       "markdown-viewer": ["libs/shared/utils/markdown-viewer/src/index.ts"],
       "metlinkr-page": ["libs/features/ramp/metlinkr-page/src/index.ts"],
-      "ifx-datatable": [
-        "libs/shared/utils/charts/ifx-datatable/src/index.ts"
-      ],
+      "ifx-datatable": ["libs/shared/utils/charts/ifx-datatable/src/index.ts"],
       "ifx-form": ["libs/shared/forms/ifx-form/src/index.ts"],
-      "ifx-form-question": [
-        "libs/shared/forms/ifx-form-question/src/index.ts"
-      ],
+      "ifx-form-question": ["libs/shared/forms/ifx-form-question/src/index.ts"],
       "ifx-header": ["libs/shared/utils/ifx-header/src/index.ts"],
       "ontologies-page": ["libs/features/ramp/ontologies-page/src/index.ts"],
       "ontology-panel": ["libs/shared/ramp/panels/ontology-panel/src/index.ts"],

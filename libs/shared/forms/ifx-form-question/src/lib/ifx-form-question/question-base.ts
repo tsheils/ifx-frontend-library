@@ -32,7 +32,7 @@ export class QuestionBase<T> {
       min?: number;
       max?: number;
       width?: number;
-    } = {}
+    } = {},
   ) {
     this.value = options.value;
     this.min = options.min || 0;

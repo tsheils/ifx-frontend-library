@@ -28,7 +28,7 @@ describe('Grants Reducer', () => {
 
       const result: ProjectsState = projectsReducer(
         initialProjectsState,
-        action
+        action,
       );
 
       expect(result.loaded).toBe(true);

@@ -1,4 +1,3 @@
-
 import { APP_BASE_HREF } from '@angular/common';
 import { CommonEngine } from '@angular/ssr/node';
 import { default as express } from 'express';
@@ -26,7 +25,7 @@ export function app(): express.Express {
     '*.*',
     express.static(distFolder, {
       maxAge: '1y',
-    })
+    }),
   );
 
   // All regular routes use the Angular engine

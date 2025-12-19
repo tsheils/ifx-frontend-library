@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { OntologyPanelComponent } from './ontology-panel.component';
 
 describe('OntologyPanelComponent', () => {
@@ -8,7 +7,7 @@ describe('OntologyPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [OntologyPanelComponent, NoopAnimationsModule],
+      imports: [OntologyPanelComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(OntologyPanelComponent);

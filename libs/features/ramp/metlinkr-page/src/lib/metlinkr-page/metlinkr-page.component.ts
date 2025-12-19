@@ -1,5 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, input, OnInit, output, signal, viewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  input,
+  OnInit,
+  output,
+  signal,
+  viewChild,
+} from '@angular/core';
 import { FormGroup, FormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -30,7 +38,7 @@ class ManifestQuestionsService {
       new TextboxQuestion({
         label: 'File Name',
         key: 'FileNames',
-        disabled: true
+        disabled: true,
       }),
       new TextboxQuestion({
         label: 'Short File Name',
@@ -75,13 +83,16 @@ class ManifestQuestionsService {
     FormsModule,
     IfxFormComponent,
     MatButton,
-    DndFileUploadComponent
+    DndFileUploadComponent,
   ],
   templateUrl: './metlinkr-page.component.html',
   styleUrl: './metlinkr-page.component.scss',
   standalone: true,
 })
-export class MetlinkrPageComponent extends RampCorePageComponent implements OnInit {
+export class MetlinkrPageComponent
+  extends RampCorePageComponent
+  implements OnInit
+{
   manifestFormService = new ManifestQuestionsService();
   fileUpload = viewChild(ElementRef);
   fileSelect = output<File | null>();
@@ -91,7 +102,7 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
   multiple = input<boolean | undefined>(false);
   fileLoading = signal<boolean>(false);
   ManifestFormMap = signal<Map<string, FormSubsection>>(
-    new Map<string, FormSubsection>()
+    new Map<string, FormSubsection>(),
   );
   displayedColumns: string[] = [
     'FileNames',
@@ -111,7 +122,7 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
   ngOnInit() {
     this.store.select(RampSelectors.getMetlinkrStatus).subscribe((res) => {
       if (res == true) {
-          this.dialog.closeAll()
+        this.dialog.closeAll();
       }
     });
   }
@@ -122,7 +133,7 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
 
   setInputFiles(event: File[]) {
     this.files.set(event);
-   /* if (!this.manifestFile()) {
+    /* if (!this.manifestFile()) {
       this._createManifestForm();
     }*/
   }
@@ -136,32 +147,37 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
     const manifest = Array.from(this.formMap.values()).map((form) => {
       return form.getRawValue() as ManifestRow;
     });
-    if( manifest.length !== this.files().length){
-      const manifestNames = manifest.map(file => file.FileNames)
-      const fileNames = this.files().map(file => file.name)
-    if(manifestNames.length > fileNames.length){
-      this.dialog.open(DialogModalComponent, {
-        data: {
-          title: 'Warning',
-          message: `The number of files in the manifest list is greater than the number of files uploaded.
+    if (manifest.length !== this.files().length) {
+      const manifestNames = manifest.map((file) => file.FileNames);
+      const fileNames = this.files().map((file) => file.name);
+      if (manifestNames.length > fileNames.length) {
+        this.dialog.open(DialogModalComponent, {
+          data: {
+            title: 'Warning',
+            message: `The number of files in the manifest list is greater than the number of files uploaded.
           Missing:`,
-          htmlString: this._makeHTMLString(manifestNames.filter(name => !fileNames.includes(name)))
-        },
-      });
+            htmlString: this._makeHTMLString(
+              manifestNames.filter((name) => !fileNames.includes(name)),
+            ),
+          },
+        });
+      } else {
+        this.submitData();
+      }
+      if (fileNames.length > manifestNames.length) {
+        this.dialog.open(DialogModalComponent, {
+          data: {
+            title: 'Warning',
+            message:
+              'The number of files uploaded is greater than the number of files in the manifest list.',
+            htmlString: this._makeHTMLString(
+              fileNames.filter((name) => !manifestNames.includes(name)),
+            ),
+          },
+        });
+      }
     } else {
       this.submitData();
-    }
-    if(fileNames.length > manifestNames.length) {
-      this.dialog.open(DialogModalComponent, {
-        data: {
-          title: 'Warning',
-          message: 'The number of files uploaded is greater than the number of files in the manifest list.',
-          htmlString: this._makeHTMLString(fileNames.filter(name => !manifestNames.includes(name)))
-        },
-      });
-    }
-    } else {
-      this.submitData()
     }
   }
 
@@ -186,12 +202,12 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
         inputLine.push(
           input[field as keyof typeof input]
             ? <string>input[field as keyof typeof input]?.trim()
-            : 'NA'
+            : 'NA',
         );
       });
       lines.push(inputLine.join(','));
     });
-    return this.displayedColumns.join(',') + '\n' + lines.join('\n')
+    return this.displayedColumns.join(',') + '\n' + lines.join('\n');
   }
 
   _downloadFile() {
@@ -203,7 +219,7 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
         });
         const data = this._toCSV(manifest);
         const url = URL.createObjectURL(
-          new File([data], 'manifest.csv', { type: 'text/csv' })
+          new File([data], 'manifest.csv', { type: 'text/csv' }),
         );
         link.setAttribute('href', url);
         link.setAttribute('download', `manifest.csv`);
@@ -257,18 +273,18 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
     });
   }
 
-  formMapToCSVFile(){
+  formMapToCSVFile() {
     const manifest = Array.from(this.formMap.values()).map((form) => {
       return form.getRawValue() as ManifestRow;
     });
     const data = this._toCSV(manifest);
-    return new File([data], 'manifest.csv', { type: 'text/csv' })
+    return new File([data], 'manifest.csv', { type: 'text/csv' });
   }
 
   private _makeHTMLString(values: string[]) {
-    let string = `<div>`
-    values.forEach(value => string = string +'<div>' + value + "</div>")
-    string = string + '</div>'
+    let string = `<div>`;
+    values.forEach((value) => (string = string + '<div>' + value + '</div>'));
+    string = string + '</div>';
     return this.sanitizer.bypassSecurityTrustHtml(string);
   }
 
@@ -276,14 +292,15 @@ export class MetlinkrPageComponent extends RampCorePageComponent implements OnIn
     this.store.dispatch(
       IdentifierHarmonizationActions.runIdentifierHarmonization({
         files: this.files() as File[],
-        manifest: this.formMapToCSVFile()
-      })
+        manifest: this.formMapToCSVFile(),
+      }),
     );
     this.dialog.open(DialogModalComponent, {
       data: {
         title: 'Files submitted',
-        message: 'This may take a few minutes. Do not close or navigate away from this tab. The results will be downloaded when completed.'
+        message:
+          'This may take a few minutes. Do not close or navigate away from this tab. The results will be downloaded when completed.',
       },
-    })
+    });
   }
 }

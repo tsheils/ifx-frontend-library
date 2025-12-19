@@ -84,7 +84,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
             label: this.filter().label,
             term: term,
           });
-        })
+        }),
       )
       .subscribe();
 
@@ -99,7 +99,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         takeUntilDestroyed(this.destroyRef),
         map((range: ListRange) => {
           this.range = range;
-        })
+        }),
       )
       .subscribe();
   }
@@ -108,7 +108,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
     this.filterSelection.select(
       ...this.filter()
         .values.filter((val) => val.selected)
-        .map((val) => val.term)
+        .map((val) => val.term),
     );
   }
 

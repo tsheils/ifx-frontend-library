@@ -82,7 +82,7 @@ export class DiseaseDisplayComponent
   projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
   articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
   projectsCount = this.store.selectSignal(
-    ProjectSelectors.selectAllProjectsCount
+    ProjectSelectors.selectAllProjectsCount,
   );
   trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
   articlesList = this.store.selectSignal(ArticleSelectors.selectAllArticles);
@@ -157,7 +157,7 @@ export class DiseaseDisplayComponent
   setPage() {
     const template: RdasPanelTemplateComponent[] = this.templates.filter(
       (template: RdasPanelTemplateComponent) =>
-        template._id() === this.route?.snapshot?.fragment
+        template._id() === this.route?.snapshot?.fragment,
     );
     if (template && template.length) {
       if (
@@ -179,7 +179,7 @@ export class DiseaseDisplayComponent
       filtersL.forEach((filterCat) => {
         if (filterCat.parent) {
           let filterCats: FilterCategory[] | undefined = map.get(
-            filterCat.parent
+            filterCat.parent,
           );
           if (filterCats) {
             filterCats.push(filterCat);

@@ -266,7 +266,7 @@ export class ReactionsPageComponent
   commonReactions = this.store.selectSignal(RampSelectors.getCommonReactions);
   reactionsFromAnalytes = this.store.selectSignal(RampSelectors.getReactions);
   reactionClassEnrichment = this.store.selectSignal(
-    RampSelectors.getReactionClassEnrichment
+    RampSelectors.getReactionClassEnrichment,
   );
 
   override dataMap = computed(() => {
@@ -354,7 +354,7 @@ export class ReactionsPageComponent
       }
       case 'reaction-classes-from-analytes': {
         const reactionClassHierarchyData = this.reactionClasses()?.data.filter(
-          (c) => c.reactionCount > 0
+          (c) => c.reactionCount > 0,
         );
         if (reactionClassHierarchyData) {
           const graphData: GraphData = {
@@ -454,7 +454,7 @@ export class ReactionsPageComponent
         const reactionClasses =
           this.reactionClasses() as RampResponse<ReactionClass>;
         const node = reactionClasses.data.filter(
-          (prop) => prop.rxnClass === term
+          (prop) => prop.rxnClass === term,
         )[0];
         this.hoveredNode.set(node);
         this.sunburstChartService.reactionNode.set(node);
@@ -468,7 +468,7 @@ export class ReactionsPageComponent
         const filteredData = allData?.filter(
           (commonAnalye) =>
             commonAnalye['inputAnalyte'].value === res?.id ||
-            commonAnalye['rxnPartnerCommonName'].value === res?.id
+            commonAnalye['rxnPartnerCommonName'].value === res?.id,
         );
         this.forceDirectedGraphService.analyteData.set({
           data: filteredData,
@@ -480,12 +480,12 @@ export class ReactionsPageComponent
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string
+    origin: string,
   ): void {
     this.activeTab.set(origin);
     if (formData['analytes']) {
       this.inputList = this._parseInput(
-        formData['analytes'] as string | string[]
+        formData['analytes'] as string | string[],
       );
     }
     switch (origin) {
@@ -493,7 +493,7 @@ export class ReactionsPageComponent
         this.store.dispatch(
           ReactionsFromAnalytesActions.fetchReactionsFromAnalytes({
             analytes: this.inputList,
-          })
+          }),
         );
         break;
       }
@@ -501,7 +501,7 @@ export class ReactionsPageComponent
         this.store.dispatch(
           ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes({
             analytes: this.inputList,
-          })
+          }),
         );
         break;
       }
@@ -509,7 +509,7 @@ export class ReactionsPageComponent
         this.store.dispatch(
           CommonReactionAnalyteActions.fetchCommonReactionAnalytes({
             analytes: this.inputList,
-          })
+          }),
         );
         break;
       }
@@ -517,7 +517,7 @@ export class ReactionsPageComponent
         this.store.dispatch(
           ReactionClassEnrichmentsActions.fetchReactionClassEnrichment({
             analytes: this.inputList,
-          })
+          }),
         );
         break;
       }
@@ -533,7 +533,7 @@ export class ReactionsPageComponent
 
     classes.forEach((reactionClass) => {
       const level = sortedClasses.get(
-        reactionClass.classLevel
+        reactionClass.classLevel,
       ) as HierarchyNode[];
       const rxnClass = {
         term: reactionClass.rxnClass,
@@ -640,7 +640,7 @@ export class ReactionsPageComponent
           type: this.edgeTypes[
             analyte.queryRelation as keyof typeof this.edgeTypes
           ],
-        })
+        }),
       );
     });
     nodes = [...sourceNodeMap.values(), ...targetNodeMap.values()];
@@ -648,7 +648,7 @@ export class ReactionsPageComponent
   }
 
   private _mapToUpset(
-    data: { id: string; sets: string[]; size: number }[]
+    data: { id: string; sets: string[]; size: number }[],
   ): UpsetData[] {
     const upsetMap = this._ArrayToUpsetMap(data);
     const upsetData = this._mapToUpsetData(upsetMap);
@@ -657,7 +657,7 @@ export class ReactionsPageComponent
   }
 
   private _ArrayToUpsetMap(
-    data: { id: string; sets: string[]; size: number }[]
+    data: { id: string; sets: string[]; size: number }[],
   ) {
     const setsMap: Map<string, string[]> = new Map<string, string[]>();
     data.forEach((level) => {
@@ -684,7 +684,7 @@ export class ReactionsPageComponent
   }
 
   private _upsetArrayToDistinctSetData(
-    upsetArray: { id: string; sets: string[]; size: number }[]
+    upsetArray: { id: string; sets: string[]; size: number }[],
   ) {
     const distinctMap: Map<string, string[]> = new Map<string, string[]>();
     upsetArray.forEach((set) => {
@@ -702,7 +702,7 @@ export class ReactionsPageComponent
 
     [...distinctMap.entries()].forEach(([key, value]) => {
       retData.push(
-        new UpsetData({ id: key, sets: key.split(', '), size: value.length })
+        new UpsetData({ id: key, sets: key.split(', '), size: value.length }),
       );
     });
     return retData.sort((a, b) => b.size - a.size);

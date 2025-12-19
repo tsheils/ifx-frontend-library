@@ -6,23 +6,19 @@
   "projectType": "library",
   "tags": [],
   "targets": {
-    "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "libs/shared/utils/data-not-found/jest.config.ts",
-        "tsConfig": "libs/shared/utils/data-not-found/tsconfig.spec.json"
-      }
-    },
-    "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        {
-          "externalDependencies": ["eslint"]
+    "targets": {
+      "test": {
+        "executor": "@nx/vitest:test",
+        "outputs": [
+          "{options.reportsDirectory}"
+        ],
+        "options": {
+          "reportsDirectory": "../../../../coverage/libs/shared/utils/data-not-found"
         }
-      ]
+      },
+      "lint": {
+        "executor": "@nx/eslint:lint"
+      }
     }
   }
 }

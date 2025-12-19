@@ -7,22 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/stores/disease-store"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/stores/disease-store/jest.config.ts",
-        "tsConfig": "libs/stores/disease-store/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/stores/disease-store/"
       }
     },
     "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

@@ -1,4 +1,4 @@
-export interface HierarchyNode  {
+export interface HierarchyNode {
   term: string;
   parent?: string | undefined;
   count?: number;

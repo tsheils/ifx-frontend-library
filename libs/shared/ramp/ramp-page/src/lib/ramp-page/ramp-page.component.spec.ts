@@ -3,7 +3,7 @@ import {
   MatSidenavContainer,
   MatSidenavModule,
 } from '@angular/material/sidenav';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 import { provideRouter, RouterOutlet } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { RampCorePageComponent } from 'ramp-core-page';
@@ -18,7 +18,7 @@ describe('RampPageComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         RampPageComponent,
-        NoopAnimationsModule,
+        
         MatSidenavModule,
         MatSidenavContainer,
         RouterOutlet,

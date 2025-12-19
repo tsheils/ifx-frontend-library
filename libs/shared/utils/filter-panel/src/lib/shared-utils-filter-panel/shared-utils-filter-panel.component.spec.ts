@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 import { SharedUtilsFilterPanelComponent } from './shared-utils-filter-panel.component';
 
 describe('SharedUtilsFilterPanelComponent', () => {
@@ -8,7 +8,7 @@ describe('SharedUtilsFilterPanelComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, SharedUtilsFilterPanelComponent],
+      imports: [ SharedUtilsFilterPanelComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SharedUtilsFilterPanelComponent);

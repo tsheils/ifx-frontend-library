@@ -69,7 +69,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               this.chartData().allSetIds,
               (d: { id: string; count: number }) => {
                 return d.count;
-              }
+              },
             )
           ),
         ])
@@ -84,7 +84,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               this.chartData().allSetIds,
               (d: { id: string; count: number }) => {
                 return d.count;
-              }
+              },
             )
           ),
         ])
@@ -98,7 +98,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     scaleBand()
       .domain(this.chartData().data.map((d) => d.id))
       .range([0, <number>this.minimumWidth()])
-      .paddingInner(0.2)
+      .paddingInner(0.2),
   );
 
   // scale for set row height
@@ -106,7 +106,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
     scaleBand()
       .domain(this.chartData().allSetIds.map((set) => set.id))
       .range([0, this.bottomRowHeight()])
-      .paddingInner(-1.5)
+      .paddingInner(-1.5),
   );
 
   // Prepare the overall layout
@@ -136,7 +136,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .style('-webkit-overflow-scrolling', 'touch')
         .attr(
           'transform',
-          `translate(${this.leftColWidth() - this.margins().left}, 0)`
+          `translate(${this.leftColWidth() - this.margins().left}, 0)`,
         );
 
       const rc = rightColumnHolder
@@ -146,7 +146,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           this.minimumWidth() +
             this.leftColWidth() +
             this.margins().left +
-            this.margins().right
+            this.margins().right,
         )
         .attr('height', this.height())
         .style('display', 'block')
@@ -165,7 +165,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           'transform',
           `translate(${this.leftColWidth() + this.margins().left}, ${
             this.margins().top
-          })`
+          })`,
         );
 
       // add tooltip last
@@ -200,14 +200,14 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .classed('bottom-row-left-column', true)
         .attr(
           'transform',
-          `translate(0, ${this.topRowHeight() + this.margins().top})`
+          `translate(0, ${this.topRowHeight() + this.margins().top})`,
         );
 
       lc.append('svg:g')
         .classed('set-size-chart', true)
         .attr(
           'transform',
-          `translate(${this.margins().left}, ${this.margins().top / 2})`
+          `translate(${this.margins().left}, ${this.margins().top / 2})`,
         );
       lc.append('svg:g')
         .classed('set-names', true)
@@ -233,7 +233,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           'transform',
           `translate(0, ${
             this.topRowHeight() + this.margins().top + this.margins().bottom
-          })`
+          })`,
         );
 
       return rightColumn;
@@ -273,7 +273,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
                       this.chartData()!.allSetIds.length)
                   ),
                 ])
-              )
+              ),
             )
             .attr('x', (d) => {
               let ret = this.setSizeScale()(<number>d.count);
@@ -346,7 +346,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
                       this.chartData()!.allSetIds.length)
                   ),
                 ])
-              )
+              ),
             )
             .attr('x', (d) => {
               let ret = this.setSizeScale()(<number>d.count);
@@ -423,13 +423,13 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .classed('set-size-scale', true)
         .attr(
           'transform',
-          `translate(${this.innerMargin}, -${this.margins().top})`
+          `translate(${this.innerMargin}, -${this.margins().top})`,
         )
         .call(
           axisBottom(scaleCopy).tickFormat((d, i) => {
             const divisor = this.scale() === 'log' ? 10 : 2;
             return (i % divisor === 0 && format(',d')(Number(d))) || '';
-          })
+          }),
         );
 
       setSizeChart
@@ -439,7 +439,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           'transform',
           `translate(${this.innerMargin}, -${
             this.margins().top + this.innerMargin
-          })`
+          })`,
         )
         .append('text')
 
@@ -469,12 +469,12 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
               const divisor = this.scale() === 'log' ? 5 : 2;
               return (i % divisor === 0 && format(',d')(Number(d))) || '';
             })
-            .tickSize(5)
+            .tickSize(5),
         )
         .attr('height', this.topRowHeight())
         .attr(
           'transform',
-          `translate(${this.leftColWidth()}, ${this.margins().top})`
+          `translate(${this.leftColWidth()}, ${this.margins().top})`,
         );
 
       chart
@@ -485,7 +485,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           () =>
             ` translate( ${
               this.leftColWidth() - this.margins().left
-            }, ${this.topRowHeight()})`
+            }, ${this.topRowHeight()})`,
         )
         .append('text')
         .text(() => {
@@ -611,7 +611,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
         .selectAll('.non-set-circle')
         .enter()
         .data((combination) =>
-          combination.combinations.filter((d) => !d.member)
+          combination.combinations.filter((d) => !d.member),
         )
         .join('circle')
         .classed('non-set-circle', true)
@@ -619,11 +619,11 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           'cy',
           (d) =>
             (this.yCombinationScale()(<string>d.setId) as number) -
-            this.margins().top
+            this.margins().top,
         )
         .attr(
           'r',
-          () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1])
+          () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1]),
         );
 
       combinationMatrix
@@ -640,7 +640,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
                   <string>(
                     this.chartData()!.allSetIds[<number>d.connectorIndices[0]]
                       .id
-                  )
+                  ),
                 )
               ) - this.margins().top
             );
@@ -653,7 +653,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
             return (
               <number>(
                 this.yCombinationScale()(
-                  <string>this.chartData()!.allSetIds[d.connectorIndices[1]].id
+                  <string>this.chartData()!.allSetIds[d.connectorIndices[1]].id,
                 )
               ) - this.margins().top
             );
@@ -673,11 +673,11 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           'cy',
           (d) =>
             (this.yCombinationScale()(<string>d.setId) as number) -
-            this.margins().top
+            this.margins().top,
         )
         .attr(
           'r',
-          () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1])
+          () => <number>min([7, this.yCombinationScale().bandwidth() / 3 + 1]),
         );
 
       return combinationMatrix;
@@ -792,7 +792,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
           .attr('x', 0)
           .attr('y', (_, i) => `${i}em`)
           .attr('font-weight', (_, i) => (i ? null : 'bold'))
-          .text(textString)
+          .text(textString),
       );
 
     this.tooltip.transition().duration(100).style('opacity', 0.9);
@@ -813,7 +813,7 @@ export class UpsetComponent extends GenericChartComponent implements OnInit {
   private _getMax(): number {
     let maxN: number | undefined = max(
       this.chartData()!.data,
-      (d: UpsetData) => (<number>d.size) as number
+      (d: UpsetData) => (<number>d.size) as number,
     );
     if (!maxN) {
       maxN = 0;

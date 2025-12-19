@@ -1,10 +1,18 @@
-import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+import '@angular/compiler';
+import '@analogjs/vitest-angular/setup-zone';
 
-setupZoneTestEnv({
-  errorOnUnknownElements: true,
-  errorOnUnknownProperties: true,
-});
+import {
+  BrowserTestingModule,
+  platformBrowserTesting,
+} from '@angular/platform-browser/testing';
+import { getTestBed } from '@angular/core/testing';
+
 import { FilterCategory } from 'utils-models';
+
+getTestBed().initTestEnvironment(
+    BrowserTestingModule,
+    platformBrowserTesting(),
+);
 
 export const BARDATA: FilterCategory = new FilterCategory({
   field: '',

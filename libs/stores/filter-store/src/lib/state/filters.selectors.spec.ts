@@ -25,7 +25,7 @@ describe('Filters Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

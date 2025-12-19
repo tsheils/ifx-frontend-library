@@ -20,7 +20,7 @@ export default [
         'error',
         {
           type: 'element',
-          prefix: 'ifx',
+          prefix: 'lib',
           style: 'kebab-case',
         },
       ],

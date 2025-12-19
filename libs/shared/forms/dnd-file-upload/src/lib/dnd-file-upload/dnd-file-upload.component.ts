@@ -13,7 +13,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 @Directive({
   standalone: true,
-  selector: '[dndFileInput]',
+  selector: '[libDndFileInput]',
 })
 export class DndFileInputDirective {
   fileDrop = output<DragEvent>();
@@ -62,7 +62,7 @@ export class DndFileUploadComponent {
   writeValue(event: Event) {
     const target = event.target as HTMLInputElement;
     if (target && target?.files?.length) {
-      this.files.set(([...<unknown>target?.files as []]) as File[]);
+      this.files.set([...((<unknown>target?.files) as [])] as File[]);
       this.selectedFiles.emit(this.files());
     }
   }
@@ -77,7 +77,7 @@ export class DndFileUploadComponent {
   dropHandler(ev: DragEvent) {
     const dataTransfer: DataTransfer = ev.dataTransfer as DataTransfer;
     if (dataTransfer.items) {
-      Array.from(dataTransfer.items).forEach((item: DataTransferItem, i) => {
+      Array.from(dataTransfer.items).forEach((item: DataTransferItem) => {
         if (item.kind === 'file') {
           const file = item.getAsFile() as File;
           this.files.set(this.files()!.concat([file]));
@@ -86,7 +86,7 @@ export class DndFileUploadComponent {
         this.fileLoading.set(false);
       });
     } else {
-      Array.from(dataTransfer.files).forEach((file: File) => {
+      Array.from(dataTransfer.files).forEach(() => {
         this.files.set((<unknown>dataTransfer.files) as File[]);
         this.selectedFiles.emit(this.files());
         this.fileLoading.set(false);
@@ -98,7 +98,7 @@ export class DndFileUploadComponent {
     const units = ['B', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
     const exponent = Math.min(
       Math.floor(Math.log(inputSize) / Math.log(1024)),
-      units.length - 1
+      units.length - 1,
     );
     const approx = inputSize / 1024 ** exponent;
     return exponent === 0

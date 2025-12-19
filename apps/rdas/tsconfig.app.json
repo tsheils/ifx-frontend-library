@@ -7,7 +7,7 @@
   "files": ["src/main.ts", "src/main.server.ts", "server.ts"],
   "include": ["src/**/*.d.ts"],
   "exclude": [
-    "jest.config.ts",
+    "vite.config.mts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "vite.config.ts",

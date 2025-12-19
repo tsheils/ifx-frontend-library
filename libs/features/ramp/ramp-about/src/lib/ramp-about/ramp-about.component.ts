@@ -22,11 +22,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
-import {
-  DataProperty,
-  UpsetData,
-  UpsetPlot,
-} from 'utils-models';
+import { DataProperty, UpsetData, UpsetPlot } from 'utils-models';
 import { Store } from '@ngrx/store';
 import { IfxDatatableComponent } from 'ifx-datatable';
 import { EntityCount } from 'ramp';
@@ -52,8 +48,8 @@ import { UpsetComponent } from 'upset-chart';
     MatSidenavModule,
     MatButtonModule,
     RouterLink,
-    IfxDatatableComponent
-  ]
+    IfxDatatableComponent,
+  ],
 })
 export class AboutComponent implements OnInit {
   private readonly store = inject(Store);
@@ -72,14 +68,14 @@ export class AboutComponent implements OnInit {
   genesData = computed(() => {
     if (this.allRamp() && this.allRamp().geneIntersects) {
       return new UpsetPlot(
-        this.allRamp().geneIntersects.map((g) => new UpsetData(g))
+        this.allRamp().geneIntersects.map((g) => new UpsetData(g)),
       );
     } else return {} as UpsetPlot;
   });
   compoundsData = computed(() => {
     if (this.allRamp() && this.allRamp().metaboliteIntersects) {
       return new UpsetPlot(
-        this.allRamp().metaboliteIntersects.map((g) => new UpsetData(g))
+        this.allRamp().metaboliteIntersects.map((g) => new UpsetData(g)),
       );
     } else return {} as UpsetPlot;
   });
@@ -95,7 +91,7 @@ export class AboutComponent implements OnInit {
         });
       });
       return newObj;
-    })
+    }),
   );
 
   entityCountsColumns: DataProperty[] = [

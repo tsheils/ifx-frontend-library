@@ -1,9 +1,17 @@
-import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+import '@angular/compiler';
+import '@analogjs/vitest-angular/setup-zone';
 
-setupZoneTestEnv({
-  errorOnUnknownElements: true,
-  errorOnUnknownProperties: true,
-});
+import {
+  BrowserTestingModule,
+  platformBrowserTesting,
+} from '@angular/platform-browser/testing';
+import { getTestBed } from '@angular/core/testing';
+
+getTestBed().initTestEnvironment(
+    BrowserTestingModule,
+    platformBrowserTesting(),
+);
+
 import { FilterCategory } from 'utils-models';
 
 export const PIEFILTERS: FilterCategory = new FilterCategory({

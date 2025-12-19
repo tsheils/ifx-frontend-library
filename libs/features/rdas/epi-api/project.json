@@ -7,22 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/rdas/epi-api/jest.config.ts",
-        "tsConfig": "libs/features/rdas/epi-api/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/epi-api"
       }
     },
     "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

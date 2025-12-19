@@ -108,7 +108,7 @@ export class RampMainComponent {
 
   _mapPathToQuestion(
     key: string,
-    prop: { [key: string]: unknown }
+    prop: { [key: string]: unknown },
   ): QuestionBase<string> {
     let q = {} as QuestionBase<string>;
     switch (prop['type']) {

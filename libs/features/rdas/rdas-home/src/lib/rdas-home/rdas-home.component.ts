@@ -13,7 +13,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { LoadingSpinnerComponent } from 'loading-spinner';
 
 @Component({
-  selector: 'rdas-home',
+  selector: 'lib-rdas-home',
   templateUrl: './rdas-home.component.html',
   styleUrls: ['./rdas-home.component.scss'],
   imports: [

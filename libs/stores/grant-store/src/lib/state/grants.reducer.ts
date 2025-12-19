@@ -47,7 +47,7 @@ const reducer = createReducer(
         loaded: true,
         allProjectsCount: allProjectsCount || 0,
         projectsCount: projectsCount || 0,
-      })
+      }),
   ),
 
   on(FetchProjectActions.fetchProjectSuccess, (state, { project }) =>
@@ -55,7 +55,7 @@ const reducer = createReducer(
       ...state,
       selectedId: project.core_project_num,
       loaded: true,
-    })
+    }),
   ),
   on(
     FetchProjectsListActions.fetchProjectsListFailure,
@@ -63,13 +63,13 @@ const reducer = createReducer(
     (state, { error }) => ({
       ...state,
       error,
-    })
-  )
+    }),
+  ),
 );
 
 export function projectsReducer(
   state: ProjectsState | undefined,
-  action: Action
+  action: Action,
 ) {
   return reducer(state, action);
 }

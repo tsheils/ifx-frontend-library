@@ -1,136 +1,137 @@
 @if (!genes()?.length) {
-<!--<div>
+  <!--<div>
     <lib-shared-utils-data-not-found
       [message]="'No Gene Data Available'"
     ></lib-shared-utils-data-not-found>
   </div>-->
-<div class="text-align-center">
-  <h2>No Gene Data Available</h2>
-</div>
-} @if (genes()?.length) {
-<div>
-  <div class="row space-between-row">
-    <div>
-      <button
-        mat-button
-        class="tool-button list-download"
-        (click)="downloadData()"
-        matTooltip="Download Data"
-      >
-        <span>Download </span><mat-icon>download</mat-icon>
-      </button>
-    </div>
-    <div>
-      <mat-paginator
-        #paginator
-        [length]="count()"
-        [pageIndex]="0"
-        [pageSize]="5"
-        [hidePageSize]="true"
-      ></mat-paginator>
-    </div>
+  <div class="text-align-center">
+    <h2>No Gene Data Available</h2>
   </div>
-  <div class="full-width">
-    <table
-      mat-table
-      [dataSource]="dataSource()"
-      matSort
-      (matSortChange)="sortData($event)"
-    >
-      <ng-container matColumnDef="Gene">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by gene symbol"
+}
+@if (genes()?.length) {
+  <div>
+    <div class="row space-between-row">
+      <div>
+        <button
+          mat-button
+          class="tool-button list-download"
+          (click)="downloadData()"
+          matTooltip="Download Data"
         >
-          Gene
-        </th>
-        <td mat-cell *matCellDef="let geneAssociation">
-          <a
-            href="https://pharos.nih.gov/targets/{{
-              geneAssociation.gene.geneSymbol
-            }}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to pharos gene data"
-            >{{ geneAssociation.gene.geneSymbol }}</a
+          <span>Download </span><mat-icon>download</mat-icon>
+        </button>
+      </div>
+      <div>
+        <mat-paginator
+          #paginator
+          [length]="count()"
+          [pageIndex]="0"
+          [pageSize]="5"
+          [hidePageSize]="true"
+        ></mat-paginator>
+      </div>
+    </div>
+    <div class="full-width">
+      <table
+        mat-table
+        [dataSource]="dataSource()"
+        matSort
+        (matSortChange)="sortData($event)"
+      >
+        <ng-container matColumnDef="Gene">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by gene symbol"
           >
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Gene Name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by gene name"
-        >
-          Gene Name
-        </th>
-        <td mat-cell *matCellDef="let geneAssociation">
-          <a
-            href="https://www.omim.org/entry/{{ geneAssociation.gene?.omim }}"
-            target="_blank"
-            rel="noreferrer"
-            aria-label="Link to OMIM gene data"
-            >{{ geneAssociation.gene.geneTitle }}</a
-          >
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Association Type">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Association Type"
-        >
-          Association Type
-        </th>
-        <td mat-cell *matCellDef="let geneAssociation">
-          {{ geneAssociation.associationType }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Association Status">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          sortActionDescription="Sort by Association Status"
-        >
-          Association Status
-        </th>
-        <td mat-cell *matCellDef="let geneAssociation">
-          {{ geneAssociation.associationStatus }}
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="Reference">
-        <th mat-header-cell *matHeaderCellDef>Reference</th>
-        <td mat-cell *matCellDef="let geneAssociation">
-          @for (ref of geneAssociation.reference; track ref) {
-          <span>
+            Gene
+          </th>
+          <td mat-cell *matCellDef="let geneAssociation">
             <a
-              href="{{ ref.url }}"
+              href="https://pharos.nih.gov/targets/{{
+                geneAssociation.gene.geneSymbol
+              }}"
               target="_blank"
               rel="noreferrer"
-              aria-label="Link to reference"
-              >{{ ref.code }}</a
-            ><lib-external-link></lib-external-link>
-          </span>
-          }
-          <br />
-        </td>
-      </ng-container>
+              aria-label="Link to pharos gene data"
+              >{{ geneAssociation.gene.geneSymbol }}</a
+            >
+          </td>
+        </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
-      <tr
-        mat-row
-        *matRowDef="let geneAssociation; columns: displayColumns"
-      ></tr>
-    </table>
+        <ng-container matColumnDef="Gene Name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by gene name"
+          >
+            Gene Name
+          </th>
+          <td mat-cell *matCellDef="let geneAssociation">
+            <a
+              href="https://www.omim.org/entry/{{ geneAssociation.gene?.omim }}"
+              target="_blank"
+              rel="noreferrer"
+              aria-label="Link to OMIM gene data"
+              >{{ geneAssociation.gene.geneTitle }}</a
+            >
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Association Type">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Association Type"
+          >
+            Association Type
+          </th>
+          <td mat-cell *matCellDef="let geneAssociation">
+            {{ geneAssociation.associationType }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Association Status">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by Association Status"
+          >
+            Association Status
+          </th>
+          <td mat-cell *matCellDef="let geneAssociation">
+            {{ geneAssociation.associationStatus }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Reference">
+          <th mat-header-cell *matHeaderCellDef>Reference</th>
+          <td mat-cell *matCellDef="let geneAssociation">
+            @for (ref of geneAssociation.reference; track ref) {
+              <span>
+                <a
+                  href="{{ ref.url }}"
+                  target="_blank"
+                  rel="noreferrer"
+                  aria-label="Link to reference"
+                  >{{ ref.code }}</a
+                ><lib-external-link></lib-external-link>
+              </span>
+            }
+            <br />
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayColumns"></tr>
+        <tr
+          mat-row
+          *matRowDef="let geneAssociation; columns: displayColumns"
+        ></tr>
+      </table>
+    </div>
   </div>
-</div>
 }

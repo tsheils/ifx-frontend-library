@@ -13,7 +13,7 @@ import { GraphNode } from 'utils-models';
 import { ForceDirectedGraphService } from 'utils-force-directed-graph';
 
 export const GRAPH_LEGEND = new InjectionToken<string>(
-  'RampGraphLegendComponent'
+  'RampGraphLegendComponent',
 );
 
 @Component({
@@ -35,7 +35,7 @@ export class RampGraphLegendComponent implements OnInit {
       this.hoveredNode.set(res);
     });
     this.forceDirectedGraphService.nodeClicked.subscribe((res) =>
-      this.clickedNode.set(res)
+      this.clickedNode.set(res),
     );
   }
 }

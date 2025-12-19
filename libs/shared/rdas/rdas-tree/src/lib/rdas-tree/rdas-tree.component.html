@@ -1,10 +1,8 @@
 <mat-card>
-  <lib-loading-spinner
-    [isLoaded]="loaded"
-  ></lib-loading-spinner>
+  <lib-loading-spinner [isLoaded]="loaded"></lib-loading-spinner>
   <mat-tree [dataSource]="dataSource()" [childrenAccessor]="childrenAccessor">
     <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding>
-      <button matIconButton disabled></button>
+      <div matIconButton disabled></div>
       <a
         aria-label="Link to disease details page"
         href="/disease?id={{ node.gardId }}"

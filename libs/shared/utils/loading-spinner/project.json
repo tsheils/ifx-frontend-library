@@ -7,22 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/utils/loading-spinner"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/loading-spinner/jest.config.ts",
-        "tsConfig": "libs/shared/utils/loading-spinner/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/loading-spinner"
       }
     },
     "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

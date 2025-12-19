@@ -6,11 +6,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
-import {
-  DataMap,
-  DataProperty,
-  QueryResultsData,
-} from 'utils-models';
+import { DataMap, DataProperty, QueryResultsData } from 'utils-models';
 import { OntologyPanelComponent } from 'ontology-panel';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { RampPage } from 'ramp';
@@ -123,14 +119,14 @@ export class OntologiesPageComponent extends RampCorePageComponent {
 
   ontologies = this.store.selectSignal(RampSelectors.getontologiesList);
   ontologiesFromMetabolites = this.store.selectSignal(
-    RampSelectors.getOntologies
+    RampSelectors.getOntologies,
   );
   metabolitesFromOntologies = this.store.selectSignal(
-    RampSelectors.getMetabolites
+    RampSelectors.getMetabolites,
   );
 
   ontologyEnrichment = this.store.selectSignal(
-    RampSelectors.getOntologyEnrichment
+    RampSelectors.getOntologyEnrichment,
   );
 
   override dataMap = computed(() => {
@@ -255,26 +251,26 @@ export class OntologiesPageComponent extends RampCorePageComponent {
       MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesFile({
         format: 'tsv',
         ontologies: event['ontologies'] as string[],
-      })
+      }),
     );
   }
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string
+    origin: string,
   ): void {
     this.activeTab.set(origin);
     if (formData['metabolites']) {
       this.inputList = this._parseInput(
-        formData['metabolites'] as string | string[]
+        formData['metabolites'] as string | string[],
       );
-  }
+    }
     switch (origin) {
       case 'metabolites-from-ontologies': {
         this.store.dispatch(
           MetaboliteFromOntologyActions.fetchMetabolitesFromOntologies({
             ontologies: formData['ontology'] as string[],
-          })
+          }),
         );
         break;
       }
@@ -282,7 +278,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
         this.store.dispatch(
           OntologyFromMetaboliteActions.fetchOntologiesFromMetabolites({
             metabolites: this.inputList,
-          })
+          }),
         );
         break;
       }
@@ -290,7 +286,7 @@ export class OntologiesPageComponent extends RampCorePageComponent {
         this.store.dispatch(
           OntologyEnrichmentsActions.fetchOntologyEnrichment({
             metabolites: this.inputList,
-          })
+          }),
         );
         break;
       }

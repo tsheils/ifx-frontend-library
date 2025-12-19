@@ -18,20 +18,20 @@
   </div>
 </div>
 <br />
-@defer(when data()){
-<div class="row space-around-row data-display">
-  <div class="width-95">
-    @if (!showTable) {
-    <pre class="raw-data"
-      >{{ dataAsCSV() }}
+@defer (when data()) {
+  <div class="row space-around-row data-display">
+    <div class="width-95">
+      @if (!showTable) {
+        <pre class="raw-data"
+          >{{ dataAsCSV() }}
 </pre
-    >
-    } @else {
-    <lib-ifx-datatable
-      [data]="dataAsDataProperty()"
-      [fieldsConfig]="fields()"
-    ></lib-ifx-datatable>
-    }
+        >
+      } @else {
+        <lib-ifx-datatable
+          [data]="dataAsDataProperty()"
+          [fieldsConfig]="fields()"
+        ></lib-ifx-datatable>
+      }
+    </div>
   </div>
-</div>
-} @placeholder{}
+} @placeholder {}

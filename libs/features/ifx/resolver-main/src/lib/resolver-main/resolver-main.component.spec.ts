@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { RESOLVER_FEATURE_KEY, resolverReducer } from 'resolver-store';
@@ -13,7 +12,6 @@ describe('ResolverMainComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         ResolverMainComponent,
-        NoopAnimationsModule,
         StoreModule.forRoot({}),
         StoreModule.forFeature(RESOLVER_FEATURE_KEY, resolverReducer),
       ],

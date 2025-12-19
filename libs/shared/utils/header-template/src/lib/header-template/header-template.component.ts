@@ -9,9 +9,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { Router, RouterLink } from '@angular/router';
-import {
-  LinkTemplateProperty
-} from 'utils-models';
+import { LinkTemplateProperty } from 'utils-models';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';

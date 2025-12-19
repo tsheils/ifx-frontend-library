@@ -1,83 +1,90 @@
 <div class="ramp-main-page">
   <div class="main-ramp-rail">
     <div class="ramp-rail ramp-main" cdkScrollable>
-      @for(path of api() | keyvalue: _originalOrder; track path.key) {
-      <div
-        matRipple
-        class="rail-button"
-        [ngClass]="{ 'active-rail-button': isActive(path.key) }"
-        routerLink="/{{ path.key }}"
-      >
-        <a>
-          <div class="icon-button-image">
-            @if(isActive(path.key)){
-            <img
-              ngSrc="/assets/icons/{{ path.key }}.svg"
-              alt="{{ cleanLabel(path.key) | titlecase }} icon"
-              priority
-              fill
-            />
-            } @else {
-            <img
-              ngSrc="/assets/icons/{{ path.key }}-white.svg"
-              alt="{{ cleanLabel(path.key) | titlecase }} icon"
-              fill
-            />
-            }
+      @for (path of api() | keyvalue: _originalOrder; track path.key) {
+        <div
+          matRipple
+          class="rail-button"
+          [ngClass]="{ 'active-rail-button': isActive(path.key) }"
+          routerLink="/{{ path.key }}"
+        >
+          <a>
+            <div class="icon-button-image">
+              @if (isActive(path.key)) {
+                <img
+                  ngSrc="/assets/icons/{{ path.key }}.svg"
+                  alt="{{ cleanLabel(path.key) | titlecase }} icon"
+                  priority
+                  fill
+                />
+              } @else {
+                <img
+                  ngSrc="/assets/icons/{{ path.key }}-white.svg"
+                  alt="{{ cleanLabel(path.key) | titlecase }} icon"
+                  fill
+                />
+              }
+            </div>
+          </a>
+          <div class="rail-label">
+            {{ cleanLabel(path.key) | titlecase }}
           </div>
-        </a>
-        <div class="rail-label">
-          {{ cleanLabel(path.key) | titlecase }}
         </div>
-      </div>
       }
     </div>
   </div>
   <div class="drawer-container-content">
-    @if(fragment()!== 'analyze'){
-    <lib-ramp-page
-      [paths]="paths()"
-      [title]="title()"
-      [inputMap]="inputMap()"
-      [filterMap]="filtersMap()"
-    ></lib-ramp-page>
+    @if (fragment() !== 'analyze') {
+      <lib-ramp-page
+        [paths]="paths()"
+        [title]="title()"
+        [inputMap]="inputMap()"
+        [filterMap]="filtersMap()"
+      ></lib-ramp-page>
     } @else {
-    <div class="side-placeholder">
-      <div class="space-around-row">
-        <div class="width-40">
-          <h2 class="centered"><b>Get Started:</b></h2>
+      <div class="side-placeholder">
+        <div class="space-around-row">
+          <div class="width-40">
+            <h2 class="centered"><b>Get Started:</b></h2>
+          </div>
         </div>
-      </div>
-      <div class="column">
-        @for(path of api() | keyvalue: _originalOrder; track path.key) {
-        <mat-card class="ramp-home-card width-60" routerLink="/{{ path.key }}">
-          <div class="row space-between-row">
-            <div class="width-10">
-              <div matRipple class="home-button" routerLink="/{{ path.key }}">
-                <div class="icon-button-image">
-                  <img
-                    ngSrc="/assets/icons/{{ path.key }}.svg"
-                    alt="{{ cleanLabel(path.key) }} icon"
-                    fill
-                  />
-                </div>
+        <div class="column">
+          @for (path of api() | keyvalue: _originalOrder; track path.key) {
+            <mat-card
+              class="ramp-home-card width-60"
+              routerLink="/{{ path.key }}"
+            >
+              <div class="row space-between-row">
+                <div class="width-10">
+                  <div
+                    matRipple
+                    class="home-button"
+                    routerLink="/{{ path.key }}"
+                  >
+                    <div class="icon-button-image">
+                      <img
+                        ngSrc="/assets/icons/{{ path.key }}.svg"
+                        alt="{{ cleanLabel(path.key) }} icon"
+                        fill
+                      />
+                    </div>
 
-                <div class="rail-label rail-label-primary">
-                  {{ cleanLabel(path.key) | titlecase }}
+                    <div class="rail-label rail-label-primary">
+                      {{ cleanLabel(path.key) | titlecase }}
+                    </div>
+                  </div>
+                </div>
+                <div class="width-80">
+                  <h3 class="rail-label-primary">
+                    {{ cleanLabel(path.key) | titlecase }}
+                  </h3>
+                  <p>{{ path.value[0].pageDescription }}</p>
                 </div>
               </div>
-            </div>
-            <div class="width-80">
-              <h3 class="rail-label-primary">
-                {{ cleanLabel(path.key) | titlecase }}
-              </h3>
-              <p>{{ path.value[0].pageDescription }}</p>
-            </div>
-          </div>
-        </mat-card>
-        }
+            </mat-card>
+          }
+        </div>
       </div>
-    </div>
     }
   </div>
 </div>

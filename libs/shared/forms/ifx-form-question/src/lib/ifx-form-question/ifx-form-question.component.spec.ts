@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup } from '@angular/forms';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TextboxQuestion } from './question-base';
 import { IfxFormQuestionComponent } from './ifx-form-question.component';
 
@@ -10,7 +9,7 @@ describe('IfxFormQuestionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [IfxFormQuestionComponent, NoopAnimationsModule],
+      imports: [IfxFormQuestionComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(IfxFormQuestionComponent);

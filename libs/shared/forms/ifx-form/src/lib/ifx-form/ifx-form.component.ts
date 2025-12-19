@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 import {
   FormControl,
   FormGroup,
-  ReactiveFormsModule, ValidationErrors,
-  Validators
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators,
 } from '@angular/forms';
 import { IfxFormQuestionComponent, QuestionBase } from 'ifx-form-question';
 
@@ -21,7 +22,7 @@ export class IfxFormComponent {
   formCreated = output<FormGroup>();
   form = computed(() => {
     const retForm = this.toFormGroup(
-      this.questions() as QuestionBase<string>[]
+      this.questions() as QuestionBase<string>[],
     );
     this.formCreated.emit(retForm);
     return retForm;
@@ -33,7 +34,7 @@ export class IfxFormComponent {
       group[question.key] = question.required
         ? new FormControl(
             { value: question.value || '', disabled: question.disabled },
-            Validators.required
+            Validators.required,
           )
         : new FormControl({
             value: question.value || '',

@@ -36,7 +36,7 @@ import { Router } from '@angular/router';
 })
 export class ScrollToTopComponent implements AfterViewInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   destroyRef = inject(DestroyRef);

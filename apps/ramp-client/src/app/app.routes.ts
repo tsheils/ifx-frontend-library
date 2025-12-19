@@ -10,7 +10,7 @@ export const routes: Routes = [
   {
     path: '',
     title: 'RaMP: Home',
-    component: RampHomeComponent
+    component: RampHomeComponent,
   },
   {
     path: 'analyze',
@@ -28,7 +28,7 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('biochemical-pathways-page').then(
-            (m) => m.BiochemicalPathwaysPageComponent
+            (m) => m.BiochemicalPathwaysPageComponent,
           ),
       },
     ],
@@ -78,7 +78,7 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('chemical-descriptors-page').then(
-            (m) => m.ChemicalDescriptorsPageComponent
+            (m) => m.ChemicalDescriptorsPageComponent,
           ),
       },
     ],
@@ -102,30 +102,27 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: About',
-    loadComponent: () =>
-      import('ramp-about').then((m) => m.AboutComponent),
+    loadComponent: () => import('ramp-about').then((m) => m.AboutComponent),
   },
   {
     path: 'api',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: API',
-    loadComponent: () =>
-      import('ramp-api').then((m) => m.RampApiComponent),
+    loadComponent: () => import('ramp-api').then((m) => m.RampApiComponent),
   },
   {
     path: 'privacy',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: Privacy Policy',
-    loadComponent: () =>
-      import('privacy-page').then((m) => m.PrivacyPage),
+    loadComponent: () => import('privacy-page').then((m) => m.PrivacyPage),
     data: {
       appFullTitle: 'Relational Database of Metabolomics Pathways',
-      appAcronym:'RaMP-DB',
+      appAcronym: 'RaMP-DB',
       collectsPii: false,
       accountRegistration: false,
-      contactEmail: 'NCATSRaMP@nih.gov'
-    }
+      contactEmail: 'NCATSRaMP@nih.gov',
+    },
   },
 ];

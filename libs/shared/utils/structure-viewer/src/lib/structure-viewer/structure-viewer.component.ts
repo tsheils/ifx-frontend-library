@@ -10,7 +10,7 @@ import { DataProperty } from 'utils-models';
 import { NgClass } from '@angular/common';
 
 export const STRUCTURE_VIEWER_COMPONENT = new InjectionToken<string>(
-  'StructureViewerComponent'
+  'StructureViewerComponent',
 );
 
 @Component({

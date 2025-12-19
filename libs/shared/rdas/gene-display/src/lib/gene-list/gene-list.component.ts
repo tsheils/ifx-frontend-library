@@ -109,7 +109,7 @@ export class GeneListComponent {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       )
       .join('\n');
     return rows;

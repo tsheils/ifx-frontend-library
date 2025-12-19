@@ -28,7 +28,7 @@ export class FilterDownloadButtonComponent {
         this._toTSV(this.selectedFilter()),
         `${this.selectedFilter()
           ?.label.replaceAll(' ', '-')
-          .toLocaleLowerCase()}.tsv`
+          .toLocaleLowerCase()}.tsv`,
       );
     }
   }
@@ -47,7 +47,7 @@ export class FilterDownloadButtonComponent {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       );
       return rows.join('\n');
     } else return '';

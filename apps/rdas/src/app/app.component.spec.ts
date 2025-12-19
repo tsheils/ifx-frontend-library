@@ -1,14 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { RouterModule } from '@angular/router';
-import {
-  DISEASES_FEATURE_KEY,
-  diseasesReducer,
-} from 'disease-store';
-import {
-  USERS_FEATURE_KEY,
-  UserService,
-  usersReducer,
-} from 'user-store';
+import { DISEASES_FEATURE_KEY, diseasesReducer } from 'disease-store';
+import { USERS_FEATURE_KEY, UserService, usersReducer } from 'user-store';
 import { StoreModule } from '@ngrx/store';
 import { AppComponent } from './app.component';
 

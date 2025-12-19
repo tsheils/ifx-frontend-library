@@ -1,21 +1,27 @@
-@if (mainPageMap() && mainPageMap().size){
-<mat-tab-group mat-align-tabs="start"  [selectedIndex]="activeTabIndex()" (selectedTabChange)="tabChanged($event)">
-  @for (mainTab of mainPageMap() | keyvalue: _originalOrder; track mainTab.key)
-  {
-  <mat-tab [bodyClass]="'body-tabs'">
-    <ng-template mat-tab-label>
-      {{ cleanLabel(mainTab.key) | titlecase }}
-    </ng-template>
-    <lib-panel-accordion
-      [paths]="activePath()"
-      [inputTab]="mainTab.value.inputMap"
-      [overviewTabs]="mainTab.value.overviewMap"
-      [visualizationTabs]="mainTab.value.visualizationsMap"
-      [filterTab]="mainTab.value.filterMap"
-      [dataTabs]="mainTab.value.dataMap"
-      (dataSearch)="fetchData($event, mainTab.key)"
-    ></lib-panel-accordion>
-  </mat-tab>
-  }
-</mat-tab-group>
+@if (mainPageMap() && mainPageMap().size) {
+  <mat-tab-group
+    mat-align-tabs="start"
+    [selectedIndex]="activeTabIndex()"
+    (selectedTabChange)="tabChanged($event)"
+  >
+    @for (
+      mainTab of mainPageMap() | keyvalue: _originalOrder;
+      track mainTab.key
+    ) {
+      <mat-tab [bodyClass]="'body-tabs'">
+        <ng-template mat-tab-label>
+          {{ cleanLabel(mainTab.key) | titlecase }}
+        </ng-template>
+        <lib-panel-accordion
+          [paths]="activePath()"
+          [inputTab]="mainTab.value.inputMap"
+          [overviewTabs]="mainTab.value.overviewMap"
+          [visualizationTabs]="mainTab.value.visualizationsMap"
+          [filterTab]="mainTab.value.filterMap"
+          [dataTabs]="mainTab.value.dataMap"
+          (dataSearch)="fetchData($event, mainTab.key)"
+        ></lib-panel-accordion>
+      </mat-tab>
+    }
+  </mat-tab-group>
 }

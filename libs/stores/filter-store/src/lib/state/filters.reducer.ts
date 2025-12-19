@@ -27,7 +27,7 @@ export const initialFiltersState: FiltersState = filtersAdapter.getInitialState(
   {
     // set initial required properties
     loaded: false,
-  }
+  },
 );
 
 const reducer = createReducer(
@@ -37,17 +37,17 @@ const reducer = createReducer(
     filtersAdapter.upsertMany(filters, {
       ...state,
       loaded: true,
-    })
+    }),
   ),
   on(FetchFiltersActions.fetchFiltersFailure, (state, { error }) => ({
     ...state,
     error,
-  }))
+  })),
 );
 
 export function filtersReducer(
   state: FiltersState | undefined,
-  action: Action
+  action: Action,
 ) {
   return reducer(state, action);
 }

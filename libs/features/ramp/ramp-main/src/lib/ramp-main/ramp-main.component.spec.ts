@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { StoreModule } from '@ngrx/store';
 import { RAMP_STORE_FEATURE_KEY, rampReducer } from 'ramp-store';
@@ -14,7 +13,6 @@ describe('RampMainComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         CommonModule,
-        NoopAnimationsModule,
         RampMainComponent,
         StoreModule.forRoot({}),
         StoreModule.forFeature(RAMP_STORE_FEATURE_KEY, rampReducer),

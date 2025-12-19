@@ -19,7 +19,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'rdas-privacy-page',
+  selector: 'lib-rdas-privacy-page',
   imports: [
     CommonModule,
     MatListModule,
@@ -32,7 +32,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
   ],
   templateUrl: './rdas-privacy-page.component.html',
   styleUrl: './rdas-privacy-page.component.scss',
-  standalone: true
+  standalone: true,
 })
 export class RdasPrivacyPageComponent implements OnInit {
   scrollSections = viewChildren<ElementRef>('scrollSection');

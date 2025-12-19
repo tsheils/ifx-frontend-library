@@ -14,7 +14,7 @@
         [formControlName]="'email'"
       />
       @if (signOnForm.controls['email'].invalid) {
-      <mat-error>{{ getEmailErrorMessage() }}</mat-error>
+        <mat-error>{{ getEmailErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>
@@ -27,7 +27,7 @@
         [formControlName]="'pw'"
       />
       @if (signOnForm.controls['pw'].invalid) {
-      <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
+        <mat-error>{{ getPasswordErrorMessage() }}</mat-error>
       }
     </mat-form-field>
   </div>
@@ -44,7 +44,7 @@
 </form>
 <div class="row centered-row">
   @if (loginError) {
-  <mat-error>{{ loginError }}</mat-error>
+    <mat-error>{{ loginError }}</mat-error>
   }
 </div>
 <div class="row centered-row">

@@ -37,7 +37,7 @@ export class RampHomeComponent {
   elemRef = viewChild<ElementRef>('details');
   api = this.store.selectSignal(RampSelectors.getRampApi);
   entityCounts = computed(
-    () => this.store.selectSignal(RampSelectors.getAllRamp)().entityCounts
+    () => this.store.selectSignal(RampSelectors.getAllRamp)().entityCounts,
   );
 
   goToDetails(): void {

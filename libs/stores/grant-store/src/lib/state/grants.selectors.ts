@@ -13,41 +13,41 @@ const { selectAll, selectEntities } = projectsAdapter.getSelectors();
 
 export const selectProjectsLoaded = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => state.loaded
+  (state: ProjectsState) => state.loaded,
 );
 
 export const selectProjectsError = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => state.error
+  (state: ProjectsState) => state.error,
 );
 
 export const selectAllProjects = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => selectAll(state)
+  (state: ProjectsState) => selectAll(state),
 );
 
 export const selectProjectsEntities = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => selectEntities(state)
+  (state: ProjectsState) => selectEntities(state),
 );
 
 export const selectSelectedId = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => state.selectedId
+  (state: ProjectsState) => state.selectedId,
 );
 
 export const selectAllProjectsCount = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => state.allProjectsCount
+  (state: ProjectsState) => state.allProjectsCount,
 );
 
 export const selectProjectsCount = createSelector(
   selectProjectsState,
-  (state: ProjectsState) => state.projectsCount
+  (state: ProjectsState) => state.projectsCount,
 );
 
 export const selectEntity = createSelector(
   selectProjectsEntities,
   selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
+  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
 );

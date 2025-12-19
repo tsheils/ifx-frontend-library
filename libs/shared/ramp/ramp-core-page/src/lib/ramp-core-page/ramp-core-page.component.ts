@@ -7,7 +7,8 @@ import {
   inject,
   signal,
   input,
-  Signal, OnInit
+  Signal,
+  OnInit,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
@@ -57,7 +58,7 @@ export class RampCorePageComponent {
   inputMap = input<Map<string, FormSubsection[]>>();
   filtersMap = input<Map<string, FormSubsection[]>>();
   overviewMap = computed<{ [p: string]: QueryResultsData }>(() => {
-    return {} as { [p: string]: QueryResultsData }
+    return {} as { [p: string]: QueryResultsData };
   });
   visualizationsMap = computed<
     { [p: string]: Map<string, VisualizationMap[]> } | undefined
@@ -74,13 +75,13 @@ export class RampCorePageComponent {
   });
 
   activeTab = signal(<string>this._getActiveTab());
-  activeTabIndex = computed(() =>  {
-    if(this.route.snapshot.fragment && this.inputMap()){
-      const keys = Array.from(this.inputMap()!.keys())
-     const index = keys.indexOf(this.route.snapshot.fragment)
-      return index
-} else return 0
-});
+  activeTabIndex = computed(() => {
+    if (this.route.snapshot.fragment && this.inputMap()) {
+      const keys = Array.from(this.inputMap()!.keys());
+      const index = keys.indexOf(this.route.snapshot.fragment);
+      return index;
+    } else return 0;
+  });
 
   mainPageMap = computed(() => {
     const fullMap: Map<string, RampPage> = new Map<string, RampPage>();
@@ -120,7 +121,7 @@ export class RampCorePageComponent {
   inputList: string[] = [];
   dataColumns!: DataProperty[];
 
-   fetchData(event: { [key: string]: unknown }, origin: string) {
+  fetchData(event: { [key: string]: unknown }, origin: string) {
     console.log(origin);
   }
 
@@ -150,15 +151,15 @@ export class RampCorePageComponent {
     this.titleService.setTitle(newTitle);
     this.activeTab.set(activeTab);
     this.router.navigate([], {
-      fragment: activeTab
+      fragment: activeTab,
     });
   }
 
   protected _getActiveTab(index = 0) {
-     if (this.inputMap() && this.inputMap()!.size) {
-       const ret = Array.from(this.inputMap()!.keys())[index] as string
+    if (this.inputMap() && this.inputMap()!.size) {
+      const ret = Array.from(this.inputMap()!.keys())[index] as string;
       return ret;
-    }  else return null;
+    } else return null;
   }
 
   protected _originalOrder = () => 0;

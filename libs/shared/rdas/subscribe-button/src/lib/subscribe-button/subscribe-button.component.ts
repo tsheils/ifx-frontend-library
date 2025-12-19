@@ -22,10 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Subscription } from 'utils-models';
 import { SocialSignOnButtonComponent } from 'social-sign-on';
-import {
-  UpdateUserActions,
-  UserSelectors,
-} from 'user-store';
+import { UpdateUserActions, UserSelectors } from 'user-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
@@ -62,7 +59,7 @@ export class SubscribeButtonComponent implements OnInit {
     return (
       !!this.user() &&
       this.user()!.subscriptions.filter(
-        (sub: Subscription) => sub.gardID == this.subscriptionId()
+        (sub: Subscription) => sub.gardID == this.subscriptionId(),
       ).length > 0
     );
   });
@@ -78,7 +75,7 @@ export class SubscribeButtonComponent implements OnInit {
   subscriptionSelection = computed(() => {
     const ret = new SelectionModel<string>(true, this.all);
     const subscription = this.user()?.subscriptions?.filter(
-      (sub: Subscription) => sub.gardID == this.subscriptionId()
+      (sub: Subscription) => sub.gardID == this.subscriptionId(),
     )[0];
     if (subscription?.alerts) {
       ret.setSelection(...subscription.alerts);
@@ -98,19 +95,19 @@ export class SubscribeButtonComponent implements OnInit {
       .changed.pipe(
         takeUntilDestroyed(this.destroyRef),
         debounceTime(1000),
-        distinctUntilChanged()
+        distinctUntilChanged(),
       )
       .subscribe(() => {
         const subscriptionClone: Subscription[] = [];
         if (this.user() && this.user()!.subscriptions) {
           this.user()?.subscriptions.forEach((sub) =>
-            subscriptionClone.push(sub)
+            subscriptionClone.push(sub),
           );
           subscriptionClone.splice(
             this.user()!.subscriptions.findIndex(
-              (obj) => obj.gardID === this.subscriptionId()
+              (obj) => obj.gardID === this.subscriptionId(),
             ),
-            1
+            1,
           );
           const subscription = new Subscription({
             diseaseName: this.subscriptionName(),
@@ -121,7 +118,7 @@ export class SubscribeButtonComponent implements OnInit {
           this.userStore.dispatch(
             UpdateUserActions.updateUserSubscriptions({
               subscriptions: subscriptionClone,
-            })
+            }),
           );
         }
       });
@@ -157,7 +154,7 @@ export class SubscribeButtonComponent implements OnInit {
       this.userStore.dispatch(
         UpdateUserActions.updateUserSubscriptions({
           subscriptions: subscriptionClone,
-        })
+        }),
       );
       this._snackBar.open('Subscription updated', '', {
         duration: 3000,
@@ -187,7 +184,7 @@ export class SubscribeButtonComponent implements OnInit {
           this.userStore.dispatch(
             UpdateUserActions.updateUserSubscriptions({
               subscriptions: subscriptionClone,
-            })
+            }),
           );
           this._snackBar.open('Subscription removed', '', {
             duration: 3000,

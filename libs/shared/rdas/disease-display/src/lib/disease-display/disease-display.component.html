@@ -1,43 +1,46 @@
 <div class="scroll-container">
   <div class="disease-display-panel" id="overview" #overview #scrollSection>
     @if (!mobile) {
-    <mat-expansion-panel [expanded]="true" class="disease-display-panel">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          <span class="disease-accordion-title bottom-border-primary"
-            >Overview</span
-          >
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <div class="row space-around-row top-align">
-        @if (!mobile) { @if (staticFilterMap() &&
-        staticFilterMap().has('articles')) {
-        <div class="width-30">
-          <lib-chart-wrapper
-            [chartType]="'bar'"
-            [filters]="staticFilterMap().get('articles')!"
-          ></lib-chart-wrapper>
-          <br />
+      <mat-expansion-panel [expanded]="true" class="disease-display-panel">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <span class="disease-accordion-title bottom-border-primary"
+              >Overview</span
+            >
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <div class="row space-around-row top-align">
+          @if (!mobile) {
+            @if (staticFilterMap() && staticFilterMap().has('articles')) {
+              <div class="width-30">
+                <lib-chart-wrapper
+                  [chartType]="'bar'"
+                  [filters]="staticFilterMap().get('articles')!"
+                ></lib-chart-wrapper>
+                <br />
+              </div>
+            }
+            @if (staticFilterMap() && staticFilterMap().has('projects')) {
+              <div class="width-30">
+                <lib-chart-wrapper
+                  [chartType]="'bar'"
+                  [filters]="staticFilterMap().get('projects')!"
+                ></lib-chart-wrapper>
+                <br />
+              </div>
+            }
+            @if (staticFilterMap() && staticFilterMap().has('trials')) {
+              <div class="width-30">
+                <lib-chart-wrapper
+                  [chartType]="'pie'"
+                  [filters]="staticFilterMap().get('trials')!"
+                ></lib-chart-wrapper>
+                <br />
+              </div>
+            }
+          }
         </div>
-        } @if (staticFilterMap() && staticFilterMap().has('projects')) {
-        <div class="width-30">
-          <lib-chart-wrapper
-            [chartType]="'bar'"
-            [filters]="staticFilterMap().get('projects')!"
-          ></lib-chart-wrapper>
-          <br />
-        </div>
-        } @if (staticFilterMap() && staticFilterMap().has('trials')) {
-        <div class="width-30">
-          <lib-chart-wrapper
-            [chartType]="'pie'"
-            [filters]="staticFilterMap().get('trials')!"
-          ></lib-chart-wrapper>
-          <br />
-        </div>
-        } }
-      </div>
-    </mat-expansion-panel>
+      </mat-expansion-panel>
     }
   </div>
   <div class="disease-display-panel" id="genes" #genes #scrollSection>
@@ -52,10 +55,7 @@
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
-      <lib-gene-list
-        [genes]="disease()?.geneAssociations"
-        [showTab]="false"
-      >
+      <lib-gene-list [genes]="disease()?.geneAssociations" [showTab]="false">
       </lib-gene-list>
     </mat-expansion-panel>
   </div>
@@ -107,9 +107,7 @@
         (listChange)="fetchList($event, 'articles')"
       >
         <div class="data-list">
-          <lib-article-list
-            [articles]="articlesList()"
-          ></lib-article-list>
+          <lib-article-list [articles]="articlesList()"></lib-article-list>
         </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>
@@ -133,9 +131,7 @@
         (listChange)="fetchList($event, 'projects')"
       >
         <div class="data-list">
-          <lib-project-list
-            [projects]="projectsList()"
-          ></lib-project-list>
+          <lib-project-list [projects]="projectsList()"></lib-project-list>
         </div>
       </lib-rdas-panel-template>
     </mat-expansion-panel>

@@ -68,7 +68,7 @@ export class FisherResult extends RampDataGeneric {
             'metabCount',
             'geneCount',
             'pathCount',
-          ].includes(field)
+          ].includes(field),
       );
     } else {
       return Object.keys(this).filter(
@@ -85,7 +85,7 @@ export class FisherResult extends RampDataGeneric {
             'metabCount',
             'geneCount',
             'pathCount',
-          ].includes(field)
+          ].includes(field),
       );
     }
   }

@@ -1,26 +1,28 @@
 @if (hoveredNode()) {
-<div class="hovered-node-tooltip">
-  <div class="row right-justified-row">
-    <div class="width-10">
-      <mat-icon class="right-text">drag_indicator</mat-icon>
+  <div class="hovered-node-tooltip">
+    <div class="row right-justified-row">
+      <div class="width-10">
+        <mat-icon class="right-text">drag_indicator</mat-icon>
+      </div>
+    </div>
+    <div class="row centered-row">
+      <div class="width-95">
+        <b>{{ hoveredNode()?.rxnClass }}</b
+        ><br />
+        <b>EC Number:</b> {{ hoveredNode()?.ecNumber }}<br />
+        @if (hoveredNode()?.metCount) {
+          <b>{{ hoveredNode()?.metCount }}</b> input metabolites out of
+          <b>{{ hoveredNode()?.totalMetsInRxnClass }}</b> total<br />
+        }
+        @if (hoveredNode()?.proteinCount) {
+          <b>{{ hoveredNode()?.proteinCount }}</b> input proteins out of
+          <b>{{ hoveredNode()?.totalProteinsInRxnClass }}</b> total<br />
+        }
+        @if (hoveredNode()?.reactionCount) {
+          <b>{{ hoveredNode()?.reactionCount }}</b> reactions hit out of
+          <b>{{ hoveredNode()?.totalRxnsInClass }}</b> total<br />
+        }
+      </div>
     </div>
   </div>
-  <div class="row centered-row">
-    <div class="width-95">
-      <b>{{ hoveredNode()?.rxnClass }}</b
-      ><br />
-      <b>EC Number:</b> {{ hoveredNode()?.ecNumber }}<br />
-      @if (hoveredNode()?.metCount) {
-      <b>{{ hoveredNode()?.metCount }}</b> input metabolites out of
-      <b>{{ hoveredNode()?.totalMetsInRxnClass }}</b> total<br />
-      } @if (hoveredNode()?.proteinCount) {
-      <b>{{ hoveredNode()?.proteinCount }}</b> input proteins out of
-      <b>{{ hoveredNode()?.totalProteinsInRxnClass }}</b> total<br />
-      } @if (hoveredNode()?.reactionCount) {
-      <b>{{ hoveredNode()?.reactionCount }}</b> reactions hit out of
-      <b>{{ hoveredNode()?.totalRxnsInClass }}</b> total<br />
-      }
-    </div>
-  </div>
-</div>
 }

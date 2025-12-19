@@ -1,7 +1,7 @@
-@defer( when paths()) {
-<h4>
-  {{ paths() && paths()![0].description ? paths()![0].description : '' }}
-</h4>
+@defer (when paths()) {
+  <h4>
+    {{ paths() && paths()![0].description ? paths()![0].description : '' }}
+  </h4>
 }
 <div class="row space-around-row">
   <mat-form-field class="full-width" appearance="outline">
@@ -13,16 +13,17 @@
   </mat-form-field>
 </div>
 <div class="grid-list">
-  @for ( ontology of filteredOntologies(); track ontology.label ) { @if
-  (ontology.label) {
-  <lib-shared-utils-filter-panel
-    #filterPanel
-    [filter]="ontology"
-    [fullList]="true"
-    (filterSelectionChange)="setValues($event)"
-    (filterChange)="filterChange($event)"
-  ></lib-shared-utils-filter-panel>
-  } }
+  @for (ontology of filteredOntologies(); track ontology.label) {
+    @if (ontology.label) {
+      <lib-shared-utils-filter-panel
+        #filterPanel
+        [filter]="ontology"
+        [fullList]="true"
+        (filterSelectionChange)="setValues($event)"
+        (filterChange)="filterChange($event)"
+      ></lib-shared-utils-filter-panel>
+    }
+  }
   <div>
     <button
       mat-flat-button

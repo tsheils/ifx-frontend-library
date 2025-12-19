@@ -33,25 +33,26 @@
       </div>
     </div>
     @if (animationState() === 'in') {
-    <div class="width-75">
-      @if (disease()?.classificationLevel) {
-      <div class="primary-chip-outlined">
-        {{ disease()?.classificationLevel }}
-      </div>
-      } &nbsp;&nbsp;&nbsp; @if (disease()?.disorderType &&
-      disease()?.disorderType?.length) {
-      <div class="accent-chip-outlined">
-        {{ disease()?.disorderType?.join(', ') }}
-      </div>
-      }
-    </div>
-    <div class="row space-between-row">
-      @if (disease()?.synonyms && disease()?.synonyms?.length) {
       <div class="width-75">
-        <span>{{ disease()?.synonyms?.join(', ') }}</span>
+        @if (disease()?.classificationLevel) {
+          <div class="primary-chip-outlined">
+            {{ disease()?.classificationLevel }}
+          </div>
+        }
+        &nbsp;&nbsp;&nbsp;
+        @if (disease()?.disorderType && disease()?.disorderType?.length) {
+          <div class="accent-chip-outlined">
+            {{ disease()?.disorderType?.join(', ') }}
+          </div>
+        }
       </div>
-      }
-    </div>
+      <div class="row space-between-row">
+        @if (disease()?.synonyms && disease()?.synonyms?.length) {
+          <div class="width-75">
+            <span>{{ disease()?.synonyms?.join(', ') }}</span>
+          </div>
+        }
+      </div>
     }
   </div>
 </div>

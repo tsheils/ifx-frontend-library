@@ -54,7 +54,7 @@ export class DiseaseHeaderComponent implements OnInit {
   ngOnInit() {
     this.scrollDispatcher.scrolled().subscribe(() => {
       this.animationState.set(
-        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in'
+        this.scroller.getScrollPosition()[1] > 120 ? 'out' : 'in',
       );
     });
   }

@@ -7,22 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/rdas/project-display"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/rdas/project-display/jest.config.ts",
-        "tsConfig": "libs/shared/rdas/project-display/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/shared/rdas/project-display"
       }
     },
     "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

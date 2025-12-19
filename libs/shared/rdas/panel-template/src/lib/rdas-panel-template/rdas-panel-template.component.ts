@@ -42,7 +42,7 @@ export class RdasPanelTemplateComponent {
     const retObj: { [key: string]: string[] } = {};
     Object.entries(event).forEach(
       ([key, filters]) =>
-        (retObj[key] = [...filters.map((filter) => filter.term)])
+        (retObj[key] = [...filters.map((filter) => filter.term)]),
     );
     this.listChange.emit(retObj);
   }

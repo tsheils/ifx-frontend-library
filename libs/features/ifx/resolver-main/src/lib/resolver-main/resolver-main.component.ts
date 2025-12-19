@@ -78,30 +78,30 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
   private router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   autocompleteTrigger = viewChild<MatAutocompleteTrigger>(
-    MatAutocompleteTrigger
+    MatAutocompleteTrigger,
   );
 
   destroyRef = inject(DestroyRef);
   changeRef = inject(ChangeDetectorRef);
 
   optsList = computed(() =>
-    this.store.selectSignal(ResolverSelectors.selectResolverOptions)()
+    this.store.selectSignal(ResolverSelectors.selectResolverOptions)(),
   );
 
   optionCategories: Signal<FilterCategory[]> = computed(() =>
     this._mapFilterCategoriesFromArray(
-      this.store.selectSignal(ResolverSelectors.selectResolverOptions)()
-    )
+      this.store.selectSignal(ResolverSelectors.selectResolverOptions)(),
+    ),
   );
 
   filteredSearchOptions: WritableSignal<FilterCategory[]> = signal(
-    this.optionCategories()
+    this.optionCategories(),
   );
 
   selectedFilters: Signal<{ [key: string]: Filter[] }> = computed(() =>
     this._mapFilterArrayToObject(
-      this.store.selectSignal(ResolverSelectors.fetchSelectedOptions)()
-    )
+      this.store.selectSignal(ResolverSelectors.fetchSelectedOptions)(),
+    ),
   );
 
   selectedFiltersSignal = signal(this.selectedFilters());
@@ -120,7 +120,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
   inputCtrl = new FormControl();
   filterSearchCtrl = new FormControl();
   loading = computed(
-    () => !!(this.resolvedData().length || this.badData().length)
+    () => !!(this.resolvedData().length || this.badData().length),
   );
   clicked = signal(false);
 
@@ -132,7 +132,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
   subscriptionSelectionSignal = computed(() => {
     return new SelectionModel<string>(
       true,
-      this.store.selectSignal(ResolverSelectors.fetchPreviousFilters)()
+      this.store.selectSignal(ResolverSelectors.fetchPreviousFilters)(),
     );
   });
 
@@ -150,7 +150,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
       if (optsString) {
         const optsArr: string[] = optsString.split(';');
         this.store.dispatch(
-          LoadResolverOptionsActions.setPreviousFilters({ filters: optsArr })
+          LoadResolverOptionsActions.setPreviousFilters({ filters: optsArr }),
         );
       }
       this.resolveCtrl.setValue(params.get('standardize'));
@@ -164,7 +164,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
       .subscribe((res) => {
         const selected: string[] = this.subscriptionSelectionSignal().selected;
         const filters = this.optsList().filter((opt) =>
-          selected.includes(opt.value)
+          selected.includes(opt.value),
         );
         this.selectedFiltersSignal.set(this._mapFilterArrayToObject(filters));
       });
@@ -196,7 +196,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
       ResolveQueryActions.resolveQuery({
         urlStub: '/' + this.sortedSelection().join('/'),
         form: formData,
-      })
+      }),
     );
 
     this.router.navigate([], {
@@ -231,7 +231,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
         }
       });
       this.filteredSearchOptions.set(
-        this._mapFilterCategoriesFromArray(retArr)
+        this._mapFilterCategoriesFromArray(retArr),
       );
     } else {
       this.filteredSearchOptions.set(this.optionCategories());
@@ -254,7 +254,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
   }
 
   _mapFilterCategoriesFromArray(
-    filterArr: Filter[] | undefined
+    filterArr: Filter[] | undefined,
   ): FilterCategory[] {
     if (filterArr && filterArr.length) {
       const retMap: Map<string, FilterCategory> = new Map<
@@ -271,7 +271,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
             } else {
               retMap.set(
                 tag,
-                new FilterCategory({ parent: tag, values: [opt] })
+                new FilterCategory({ parent: tag, values: [opt] }),
               );
             }
           });
@@ -290,7 +290,7 @@ export class ResolverMainComponent implements OnInit, AfterViewInit {
           if (tempObj[field] && tempObj[field].length) {
             tempObj[field].push(filter);
             tempObj[field] = tempObj[field].sort((a, b) =>
-              a.term.localeCompare(b.term)
+              a.term.localeCompare(b.term),
             );
           } else {
             tempObj[field] = [filter];

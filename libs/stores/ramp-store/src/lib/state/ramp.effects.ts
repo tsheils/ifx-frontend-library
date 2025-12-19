@@ -1,8 +1,5 @@
 import { inject } from '@angular/core';
-import {
-  FilterCategory,
-  OpenApiPath,
-} from 'utils-models';
+import { FilterCategory, OpenApiPath } from 'utils-models';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
@@ -65,14 +62,14 @@ export const init$ = createEffect(
               return LoadRampActions.loadRampSuccess({ supportedIds: ret });
             },
             catchError((error: ErrorEvent) =>
-              of(LoadRampActions.loadRampFailure({ error: error.message }))
-            )
-          )
+              of(LoadRampActions.loadRampFailure({ error: error.message })),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const loadApi$ = createEffect(
@@ -119,7 +116,7 @@ export const loadApi$ = createEffect(
                           ...pathValue.post,
                           title: title,
                           pageDescription: tag.description,
-                        })
+                        }),
                       );
                       subsections.forEach((subsection) => {
                         let path: {
@@ -131,7 +128,7 @@ export const loadApi$ = createEffect(
                             if (splitPathName === subsection) {
                               path = pathValue;
                             }
-                          }
+                          },
                         );
                         tempArr.push(
                           new OpenApiPath({
@@ -140,7 +137,7 @@ export const loadApi$ = createEffect(
                             subtitle: subsection,
                             filter: true,
                             pageDescription: tag.description,
-                          })
+                          }),
                         );
                       });
                     }
@@ -148,19 +145,19 @@ export const loadApi$ = createEffect(
                       tempMap.set(tag.name, tempArr);
                     }
                   });
-                }
+                },
               );
               return LoadRampActions.loadRampApiSuccess({ api: tempMap });
             },
             catchError((error: ErrorEvent) =>
-              of(LoadRampActions.loadRampApiFailure({ error: error.message }))
-            )
-          )
+              of(LoadRampActions.loadRampApiFailure({ error: error.message })),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchStats = createEffect(
@@ -181,14 +178,16 @@ export const fetchStats = createEffect(
               }
             },
             catchError((error: ErrorEvent) =>
-              of(LoadRampActions.loadRampStatsFailure({ error: error.message }))
-            )
-          )
+              of(
+                LoadRampActions.loadRampStatsFailure({ error: error.message }),
+              ),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchPathwaysFromAnalytes = createEffect(
@@ -196,7 +195,7 @@ export const fetchPathwaysFromAnalytes = createEffect(
     return actions$.pipe(
       ofType(
         PathwayFromAnalyteActions.fetchPathwaysFromAnalytes,
-        PathwayEnrichmentsActions.fetchPathwaysFromAnalytes
+        PathwayEnrichmentsActions.fetchPathwaysFromAnalytes,
       ),
       exhaustMap((action) => {
         return rampService.fetchPathwaysFromAnalytes(action.analytes).pipe(
@@ -210,22 +209,22 @@ export const fetchPathwaysFromAnalytes = createEffect(
               ret.minPathwayToCluster = action.minPathwayToCluster;
               ret.percPathwayOverlap = action.percPathwayOverlap;
               return PathwayFromAnalyteActions.fetchPathwaysFromAnalytesSuccess(
-                ret
+                ret,
               );
             },
             catchError((error: ErrorEvent) => {
               return of(
                 PathwayFromAnalyteActions.fetchPathwaysFromAnalytesFailure({
                   error: error.message,
-                })
+                }),
               );
-            })
-          )
+            }),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchAnalytesFromPathways = createEffect(
@@ -237,22 +236,22 @@ export const fetchAnalytesFromPathways = createEffect(
           map(
             (ret: RampResponse<Analyte>) => {
               return AnalyteFromPathwayActions.fetchAnalytesFromPathwaysSuccess(
-                { ...ret }
+                { ...ret },
               );
             },
             catchError((error: ErrorEvent) =>
               of(
                 AnalyteFromPathwayActions.fetchAnalytesFromPathwaysFailure({
                   error: error.message,
-                })
-              )
-            )
-          )
+                }),
+              ),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchOntologiesFromMetabolites = createEffect(
@@ -266,22 +265,22 @@ export const fetchOntologiesFromMetabolites = createEffect(
             map(
               (ret: RampResponse<Ontology>) => {
                 return OntologyFromMetaboliteActions.fetchOntologiesFromMetabolitesSuccess(
-                  { ...ret }
+                  { ...ret },
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   OntologyFromMetaboliteActions.fetchOntologiesFromMetabolitesFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchOntologies = createEffect(
@@ -289,7 +288,7 @@ export const fetchOntologies = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.includes('/ontologies')
+        r.payload.routerState.url.includes('/ontologies'),
       ),
       exhaustMap(() => {
         return rampService.fetchOntologies().pipe(
@@ -301,15 +300,15 @@ export const fetchOntologies = createEffect(
               of(
                 MetaboliteFromOntologyActions.fetchOntologiesFailure({
                   error: error.message,
-                })
-              )
-            )
-          )
+                }),
+              ),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchMetabolitesFromOntologies = createEffect(
@@ -323,21 +322,21 @@ export const fetchMetabolitesFromOntologies = createEffect(
             map(
               (ret: RampResponse<Metabolite>) =>
                 MetaboliteFromOntologyActions.fetchMetabolitesFromOntologiesSuccess(
-                  ret
+                  ret,
                 ),
               catchError((error: ErrorEvent) =>
                 of(
                   MetaboliteFromOntologyActions.fetchMetaboliteFromOntologiesFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchOntologyEnrichment = createEffect(
@@ -349,7 +348,7 @@ export const fetchOntologyEnrichment = createEffect(
           .fetchEnrichmentFromOntologies(
             action.metabolites,
             action.background,
-            action.backgroundFile
+            action.backgroundFile,
           )
           .pipe(
             map(
@@ -357,22 +356,22 @@ export const fetchOntologyEnrichment = createEffect(
                 return OntologyEnrichmentsActions.fetchOntologyEnrichmentSuccess(
                   {
                     data: ret,
-                  }
+                  },
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   OntologyEnrichmentsActions.fetchOntologyEnrichmentFailure({
                     error: error.message,
-                  })
-                )
-              )
-            )
+                  }),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 /*
@@ -430,7 +429,7 @@ export const fetchOntologyEnrichmentFile = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(OntologyEnrichmentsActions.fetchOntologyEnrichmentFile),
@@ -439,10 +438,10 @@ export const fetchOntologyEnrichmentFile = createEffect(
         if (action && dataframe) {
           //     rampService.fetchOntologyEnrichmentFile(dataframe.data);
         }
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const fetchMetabolitesFromOntologiesFile = createEffect(
@@ -452,12 +451,12 @@ export const fetchMetabolitesFromOntologiesFile = createEffect(
       tap((action) =>
         rampService.fetchMetabolitesFromOntologiesFile(
           action.ontologies,
-          action.format
-        )
-      )
+          action.format,
+        ),
+      ),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const fetchClassesFromMetabolites = createEffect(
@@ -465,34 +464,34 @@ export const fetchClassesFromMetabolites = createEffect(
     return actions$.pipe(
       ofType(
         ClassesFromMetabolitesActions.fetchClassesFromMetabolites,
-        MetaboliteEnrichmentsActions.fetchClassesFromMetabolites
+        MetaboliteEnrichmentsActions.fetchClassesFromMetabolites,
       ),
       exhaustMap((action) => {
         return rampService
           .fetchChemicalClass(
             action.metabolites,
             action.background,
-            action.backgroundFile
+            action.backgroundFile,
           )
           .pipe(
             map(
               (ret: RampResponse<Classes>) =>
                 ClassesFromMetabolitesActions.fetchClassesFromMetabolitesSuccess(
-                  ret
+                  ret,
                 ),
               catchError((error: ErrorEvent) =>
                 of(
                   ClassesFromMetabolitesActions.fetchClassesFromMetabolitesFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchPropertiesFromMetabolites = createEffect(
@@ -506,21 +505,21 @@ export const fetchPropertiesFromMetabolites = createEffect(
             map(
               (ret: RampResponse<Properties>) =>
                 PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolitesSuccess(
-                  { ...ret }
+                  { ...ret },
                 ),
               catchError((error: ErrorEvent) =>
                 of(
                   PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolitesFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchCommonReactionAnalytes = createEffect(
@@ -537,16 +536,16 @@ export const fetchCommonReactionAnalytes = createEffect(
             catchError((error: ErrorEvent) =>
               of(
                 CommonReactionAnalyteActions.fetchCommonReactionAnalytesFailure(
-                  { error: error.message }
-                )
-              )
-            )
-          )
+                  { error: error.message },
+                ),
+              ),
+            ),
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchReactionsFromAnalytes = createEffect(
@@ -561,7 +560,7 @@ export const fetchReactionsFromAnalytes = createEffect(
             action.humanProtein,
             action.includeTransportRxns,
             action.rxnDirs,
-            action.includeRxnURLs
+            action.includeRxnURLs,
           )
           .pipe(
             map(
@@ -569,29 +568,29 @@ export const fetchReactionsFromAnalytes = createEffect(
                 return ReactionsFromAnalytesActions.fetchReactionsFromAnalytesSuccess(
                   {
                     ...ret,
-                  }
+                  },
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   ReactionsFromAnalytesActions.fetchReactionsFromAnalytesFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchReactionClassesFromAnalytes = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
     return actions$.pipe(
       ofType(
-        ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes
+        ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalytes,
       ),
       exhaustMap((action) => {
         return rampService
@@ -601,7 +600,7 @@ export const fetchReactionClassesFromAnalytes = createEffect(
             action.humanProtein,
             action.concatResults,
             action.includeReactionIDs,
-            action.useIdMapping
+            action.useIdMapping,
           )
           .pipe(
             map(
@@ -609,22 +608,22 @@ export const fetchReactionClassesFromAnalytes = createEffect(
                 return ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteSuccess(
                   {
                     ...ret,
-                  }
+                  },
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   ReactionClassesFromAnalytesActions.fetchReactionClassesFromAnalyteFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchReactionClassEnrichment = createEffect(
@@ -636,7 +635,7 @@ export const fetchReactionClassEnrichment = createEffect(
           .fetchEnrichmentFromReactionClasses(
             action.analytes,
             action.background,
-            action.backgroundFile
+            action.backgroundFile,
           )
           .pipe(
             map(
@@ -644,34 +643,34 @@ export const fetchReactionClassEnrichment = createEffect(
                 return ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess(
                   {
                     data: ret,
-                  }
+                  },
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const filterReactionClassEnrichment = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(
         ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentSuccess,
-        ReactionClassEnrichmentsActions.filterReactionClassEnrichment
+        ReactionClassEnrichmentsActions.filterReactionClassEnrichment,
       ),
       concatLatestFrom(() => store.select(getReactionClassEnrichment)),
       mergeMap(([action, dataframe]) => {
@@ -680,42 +679,42 @@ export const filterReactionClassEnrichment = createEffect(
             .filterReactionClassEnrichment(
               dataframe,
               action.pValType,
-              action.pValCutoff
+              action.pValCutoff,
             )
             .pipe(
               map(
                 (ret: RampReactionClassEnrichmentResponse) => {
                   return ReactionClassEnrichmentsActions.filterReactionClassEnrichmentSuccess(
-                    { data: ret }
+                    { data: ret },
                   );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
                     ReactionClassEnrichmentsActions.filterReactionClassEnrichmentFailure(
-                      { error: error.message }
-                    )
-                  )
-                )
-              )
+                      { error: error.message },
+                    ),
+                  ),
+                ),
+              ),
             );
         } else {
           return of(
             MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesFailure(
-              { error: 'No dataframe available' }
-            )
+              { error: 'No dataframe available' },
+            ),
           );
         }
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchReactionClassEnrichmentFile = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(ReactionClassEnrichmentsActions.fetchReactionClassEnrichmentFile),
@@ -724,10 +723,10 @@ export const fetchReactionClassEnrichmentFile = createEffect(
         if (action && dataframe) {
           //     rampService.fetchReactionClassEnrichmentFile(dataframe.data);
         }
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const fetchPathwayAnalysis = createEffect(
@@ -740,7 +739,7 @@ export const fetchPathwayAnalysis = createEffect(
             action.analytes,
             action.background,
             action.backgroundFile,
-            action.dataSourceExclusion
+            action.dataSourceExclusion,
           )
           .pipe(
             map(
@@ -754,34 +753,34 @@ export const fetchPathwayAnalysis = createEffect(
                 ret.minPathwayToCluster = Number(action.minPathwayToCluster);
                 ret.percPathwayOverlap = Number(action.percPathwayOverlap);
                 return PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess(
-                  ret
+                  ret,
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysFailure({
                     error: error.message,
-                  })
-                )
-              )
-            )
+                  }),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const filterEnrichedPathways = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(
         PathwayEnrichmentsActions.filterEnrichmentFromPathways,
-        PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess
+        PathwayEnrichmentsActions.fetchEnrichmentFromPathwaysSuccess,
       ),
       concatLatestFrom(() => store.select(getCombinedFishersDataframe)),
       mergeMap(([action, dataframe]) => {
@@ -790,7 +789,7 @@ export const filterEnrichedPathways = createEffect(
             .filterPathwayEnrichment(
               dataframe,
               action.pValType,
-              action.pValCutoff
+              action.pValCutoff,
             )
             .pipe(
               map(
@@ -802,41 +801,41 @@ export const filterEnrichedPathways = createEffect(
                       percPathwayOverlap: action.percPathwayOverlap,
                       filteredFishersDataframe: ret.data,
                       ...ret,
-                    } as RampPathwayEnrichmentResponse
+                    } as RampPathwayEnrichmentResponse,
                   );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
                     PathwayEnrichmentsActions.filterEnrichmentFromPathwaysFailure(
-                      { error: error.message }
-                    )
-                  )
-                )
-              )
+                      { error: error.message },
+                    ),
+                  ),
+                ),
+              ),
             );
         } else {
           return of(
             PathwayEnrichmentsActions.filterEnrichmentFromPathwaysFailure({
               error: 'no dataframe available',
-            })
+            }),
           );
         }
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchPathwayCluster = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(
         PathwayEnrichmentsActions.filterEnrichmentFromPathwaysSuccess,
-        PathwayEnrichmentsActions.fetchClusterFromEnrichment
+        PathwayEnrichmentsActions.fetchClusterFromEnrichment,
       ),
       concatLatestFrom(() => store.select(getFilteredFishersDataframe)),
       mergeMap(([action, dataframe]) => {
@@ -846,7 +845,7 @@ export const fetchPathwayCluster = createEffect(
               dataframe,
               action.percAnalyteOverlap,
               action.minPathwayToCluster,
-              action.percPathwayOverlap
+              action.percPathwayOverlap,
             )
             .pipe(
               map(
@@ -860,30 +859,29 @@ export const fetchPathwayCluster = createEffect(
                       clusterImageUrl: ret.plotUrl,
                       query: ret.data.query,
                       dataAsDataProperty: ret.data.dataAsDataProperty,
-                    }
+                    },
                   );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
                     PathwayEnrichmentsActions.fetchClusterFromEnrichmentFailure(
-                      { error: error.message }
-                    )
-                  )
-                )
-              )
+                      { error: error.message },
+                    ),
+                  ),
+                ),
+              ),
             );
         } else
           return of(
             PathwayEnrichmentsActions.fetchClusterFromEnrichmentFailure({
               error: 'no dataframe available',
-            })
+            }),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
-
 
 export const fetchChemicalAnalysis = createEffect(
   (actions$ = inject(Actions), rampService = inject(RampService)) => {
@@ -894,7 +892,7 @@ export const fetchChemicalAnalysis = createEffect(
           .fetchEnrichmentFromMetabolites(
             action.metabolites,
             action.background,
-            action.backgroundFile
+            action.backgroundFile,
           )
           .pipe(
             map(
@@ -902,34 +900,34 @@ export const fetchChemicalAnalysis = createEffect(
                 return MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolitesSuccess(
                   {
                     data: ret,
-                  }
+                  },
                 );
               },
               catchError((error: ErrorEvent) =>
                 of(
                   MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolitesFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const filterEnrichedChemicalClasses = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(
         MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolitesSuccess,
-        MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolites
+        MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolites,
       ),
       concatLatestFrom(() => store.select(getChemicalEnrichment)),
       mergeMap(([action, dataframe]) => {
@@ -938,42 +936,42 @@ export const filterEnrichedChemicalClasses = createEffect(
             .filterMetaboliteEnrichment(
               dataframe.data as RampChemicalEnrichmentResponse,
               action.pValType,
-              action.pValCutoff
+              action.pValCutoff,
             )
             .pipe(
               map(
                 (ret: RampChemicalEnrichmentResponse) => {
                   return MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesSuccess(
-                    { data: ret }
+                    { data: ret },
                   );
                 },
                 catchError((error: ErrorEvent) =>
                   of(
                     MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesFailure(
-                      { error: error.message }
-                    )
-                  )
-                )
-              )
+                      { error: error.message },
+                    ),
+                  ),
+                ),
+              ),
             );
         } else {
           return of(
             MetaboliteEnrichmentsActions.filterEnrichmentFromMetabolitesFailure(
-              { error: 'No dataframe available' }
-            )
+              { error: 'No dataframe available' },
+            ),
           );
         }
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const fetchEnrichmentFromMetabolitesFile = createEffect(
   (
     actions$ = inject(Actions),
     rampService = inject(RampService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(MetaboliteEnrichmentsActions.fetchEnrichmentFromMetabolitesFile),
@@ -981,13 +979,13 @@ export const fetchEnrichmentFromMetabolitesFile = createEffect(
       tap(([action, dataframe]) => {
         if (action && dataframe) {
           rampService.fetchEnrichmentFromMetabolitesFile(
-            dataframe.enriched_chemical_class_list
+            dataframe.enriched_chemical_class_list,
           );
         }
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const runIdentifierHarmonization = createEffect(
@@ -1005,14 +1003,14 @@ export const runIdentifierHarmonization = createEffect(
               catchError((error: ErrorEvent) =>
                 of(
                   IdentifierHarmonizationActions.runIdentifierHarmonizationFailure(
-                    { error: error.message }
-                  )
-                )
-              )
-            )
+                    { error: error.message },
+                  ),
+                ),
+              ),
+            ),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );

@@ -36,7 +36,7 @@ export class SharedUtilsListFilterRowComponent {
     this.filters()?.forEach((filter: FilterCategory) => {
       if (filter.filterable && filter.field) {
         controls[filter.field] = new FormControl(
-          filter.values.filter((val) => val.selected)
+          filter.values.filter((val) => val.selected),
         );
       }
     });

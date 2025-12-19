@@ -28,7 +28,7 @@ import { ApolloSandbox } from '@apollo/sandbox';
 })
 export class GraphqlSandboxComponent {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   destroyRef = inject(DestroyRef);

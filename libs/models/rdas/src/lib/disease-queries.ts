@@ -185,7 +185,7 @@ export const TREEROOTPARAMETERS = {
     },
     AND: [
       {
-        DisorderType_EQ: "Category"
+        DisorderType_EQ: 'Category',
       },
     ],
   },
@@ -391,7 +391,7 @@ export const DISEASEQUERYPARAMETERS: {
         associatedWithGeneGenes_SOME?: {
           GeneSymbol_IN?: string[];
         };
-      }
+      },
     ];
   };
 } = {

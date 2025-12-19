@@ -40,19 +40,19 @@ export class RdasSubscriptionsComponent implements OnInit {
             if (user && user.subscriptions) {
               const ids: string[] = user.subscriptions.map((sub) => sub.gardID);
               this.store.dispatch(
-                FetchDiseaseListActions.fetchDiseaseList({ gardIds: ids })
+                FetchDiseaseListActions.fetchDiseaseList({ gardIds: ids }),
               );
             }
             //   this.subscriptions = user?.subscriptions;
             this.loading = false;
             this.changeRef.markForCheck();
           }
-        })
+        }),
       )
       .subscribe();
 
     this.subscriptions = this.store.selectSignal(
-      DiseaseSelectors.getDiseasesSubscriptions
+      DiseaseSelectors.getDiseasesSubscriptions,
     );
   }
 }

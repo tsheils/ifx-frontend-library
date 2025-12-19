@@ -7,12 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/image-download/jest.config.ts",
-        "tsConfig": "libs/shared/utils/image-download/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/image-download"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

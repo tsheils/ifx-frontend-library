@@ -6,7 +6,6 @@ import {
   computed,
   ElementRef,
   inject,
-  Inject,
   InjectionToken,
   PLATFORM_ID,
   ViewChild,
@@ -15,7 +14,7 @@ import {
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-  selector: 'ramp-ramp-api',
+  selector: 'lib-ramp-ramp-api',
   templateUrl: './ramp-api.component.html',
   styleUrls: ['./ramp-api.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -26,7 +25,7 @@ import SwaggerUI from 'swagger-ui';
 export class RampApiComponent implements AfterViewInit {
   @ViewChild('documentation') el!: ElementRef;
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   url = '/assets/data/ramp-api.json';

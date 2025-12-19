@@ -6,7 +6,8 @@ import {
 import {
   ApplicationConfig,
   inject,
-  provideAppInitializer, provideZonelessChangeDetection
+  provideAppInitializer,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
@@ -45,11 +46,7 @@ import {
   projectsReducer,
   ProjectEffects,
 } from 'grant-store';
-import {
-  TRIALS_FEATURE_KEY,
-  trialsReducer,
-  TrialEffects,
-} from 'trial-store';
+import { TRIALS_FEATURE_KEY, trialsReducer, TrialEffects } from 'trial-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
@@ -88,7 +85,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideStore({
       router: routerReducer,
@@ -117,8 +114,8 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-   // provideAnimations(),
-  //  provideAnimationsAsync(),
+    // provideAnimations(),
+    //  provideAnimationsAsync(),
     provideRouterStore(),
     provideStoreDevtools(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),

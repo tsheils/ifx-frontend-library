@@ -6,11 +6,14 @@ import {
 import {
   ApplicationConfig,
   inject,
-  provideAppInitializer, provideBrowserGlobalErrorListeners, provideZonelessChangeDetection
+  provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import {
   BrowserModule,
-  provideClientHydration, withEventReplay
+  provideClientHydration,
+  withEventReplay,
 } from '@angular/platform-browser';
 import {
   PreloadAllModules,
@@ -48,7 +51,7 @@ export function rampInit(store = inject(Store)) {
     store.dispatch(
       LoadRampActions.loadRampApi({
         url: '/assets/data/ramp-api.json',
-      })
+      }),
     );
     store.dispatch(LoadRampActions.loadRampStats());
   };
@@ -69,12 +72,12 @@ export const appConfig: ApplicationConfig = {
       routes,
       withViewTransitions(),
       withComponentInputBinding(),
-     // s withEnabledBlockingInitialNavigation(),
+      // s withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideStore({ rampStore: rampReducer }),
     provideRouterStore(),
@@ -84,6 +87,6 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideClientHydration(withEventReplay()),
     provideBrowserGlobalErrorListeners(),
-    provideZonelessChangeDetection()
+    provideZonelessChangeDetection(),
   ],
 };

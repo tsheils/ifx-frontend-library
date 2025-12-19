@@ -7,24 +7,14 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/features/rdas/rdas-disease-page"
-      ],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-disease-page/jest.config.ts",
-        "tsConfig": "libs/features/rdas/rdas-disease-page/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/rdas-disease-page"
       }
     },
     "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.mjs",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

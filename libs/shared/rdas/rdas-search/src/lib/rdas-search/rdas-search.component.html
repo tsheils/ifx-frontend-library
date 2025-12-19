@@ -20,21 +20,21 @@
       class="custom-autocomplete-panel"
     >
       @for (option of options(); track option.name) {
-      <mat-option [value]="option" class="dynamic-height">
-        <span
-          class="main-value"
-          [innerHTML]="option.name | highlight : searchFormCtl.value"
-        ></span
-        ><br />
-        @if (option.synonyms && option.synonyms.length) {
-        <span
-          class="sub-value"
-          [innerHTML]="
-            option.synonyms.join(', ') | highlight : searchFormCtl.value
-          "
-        ></span>
-        }
-      </mat-option>
+        <mat-option [value]="option" class="dynamic-height">
+          <span
+            class="main-value"
+            [innerHTML]="option.name | highlight: searchFormCtl.value"
+          ></span
+          ><br />
+          @if (option.synonyms && option.synonyms.length) {
+            <span
+              class="sub-value"
+              [innerHTML]="
+                option.synonyms.join(', ') | highlight: searchFormCtl.value
+              "
+            ></span>
+          }
+        </mat-option>
       }
     </mat-autocomplete>
     <button matSuffix mat-icon-button aria-label="search">

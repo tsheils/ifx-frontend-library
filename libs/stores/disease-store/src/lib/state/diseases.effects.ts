@@ -23,13 +23,12 @@ import {
   TRIALSTATUSFILTERS,
   TRIALPHASEFILTERS,
   ALLARTICLES,
-  DiseaseQueryFactory, FETCHROOT, FETCHPATH, CATEGORYTREEBRANCH
+  DiseaseQueryFactory,
+  FETCHROOT,
+  FETCHPATH,
+  CATEGORYTREEBRANCH,
 } from 'rdas-models';
-import {
-  Filter,
-  FilterCategory,
-  Page,
-} from 'utils-models';
+import { Filter, FilterCategory, Page } from 'utils-models';
 import { Store } from '@ngrx/store';
 import { DiseaseService } from '../disease.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
@@ -49,49 +48,47 @@ export const fetchDiseasesList$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    diseaseService = inject(DiseaseService)
+    diseaseService = inject(DiseaseService),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseases')
+        r.payload.routerState.url.startsWith('/diseases'),
       ),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
-      switchMap(
-        (params: Params) => {
-          const queryFactory = new DiseaseQueryFactory();
-          const query = queryFactory.getQuery(params);
+      switchMap((params: Params) => {
+        const queryFactory = new DiseaseQueryFactory();
+        const query = queryFactory.getQuery(params);
 
-          return diseaseService.fetchDiseases(query.query, query.params).pipe(
-            map((res: ApolloQueryResult<unknown>) => {
-              const data: {
-                diseases: Disease[];
-                total: { count: number } | number;
-              } = res.data as {
-                diseases: Disease[];
-                total: { count: number } | number;
-              };
-              if (data) {
-                const diseaseArr: Disease[] = data.diseases.map(
-                  (obj: Partial<Disease>) => new Disease(obj)
-                );
-                return BrowseDiseaseListActions.fetchDiseaseListSuccess({
-                  diseases: diseaseArr,
-                  page: _makePage(params, data.total),
-                });
-              } else
-                return BrowseDiseaseListActions.fetchDiseaseListFailure({
-                  error: 'No Disease found',
-                });
-            })
-          );
-        }
-      )
+        return diseaseService.fetchDiseases(query.query, query.params).pipe(
+          map((res: ApolloQueryResult<unknown>) => {
+            const data: {
+              diseases: Disease[];
+              total: { count: number } | number;
+            } = res.data as {
+              diseases: Disease[];
+              total: { count: number } | number;
+            };
+            if (data) {
+              const diseaseArr: Disease[] = data.diseases.map(
+                (obj: Partial<Disease>) => new Disease(obj),
+              );
+              return BrowseDiseaseListActions.fetchDiseaseListSuccess({
+                diseases: diseaseArr,
+                page: _makePage(params, data.total),
+              });
+            } else
+              return BrowseDiseaseListActions.fetchDiseaseListFailure({
+                error: 'No Disease found',
+              });
+          }),
+        );
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 //for disease list in profile
@@ -109,7 +106,7 @@ export const fetchDiseaseListFromIds$ = createEffect(
               };
               if (data) {
                 const diseaseArr: Disease[] = data.diseases.map(
-                  (obj: Partial<Disease>) => new Disease(obj)
+                  (obj: Partial<Disease>) => new Disease(obj),
                 );
                 return FetchDiseaseListActions.fetchDiseaseListSuccess({
                   diseases: diseaseArr,
@@ -118,12 +115,12 @@ export const fetchDiseaseListFromIds$ = createEffect(
                 return FetchDiseaseListActions.fetchDiseaseListFailure({
                   error: 'No Disease found',
                 });
-            })
+            }),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // bar and pie charts
@@ -134,7 +131,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')
+          r.payload.routerState.url.startsWith('/disease'),
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
@@ -153,12 +150,12 @@ export const loadStaticDiseaseFilters$ = createEffect(
           diseaseService
             .fetchTrials(
               TRIALSTATUSFILTERS,
-              _setTrialVariables(params, 'status')
+              _setTrialVariables(params, 'status'),
             )
             .pipe(take(1)),
           diseaseService
             .fetchTrials(TRIALPHASEFILTERS, _setTrialVariables(params, 'phase'))
-            .pipe(take(1))
+            .pipe(take(1)),
         ).pipe(
           map(
             ([
@@ -172,7 +169,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>
+              ApolloQueryResult<unknown>,
             ]) => {
               if (
                 articleFilterData ||
@@ -203,7 +200,7 @@ export const loadStaticDiseaseFilters$ = createEffect(
                   articleFilterData,
                   projectFilterData,
                   trialFilterData,
-                  params
+                  params,
                 );
                 return FetchDiseaseActions.fetchStaticDiseaseFiltersSuccess({
                   filters: filters,
@@ -212,13 +209,13 @@ export const loadStaticDiseaseFilters$ = createEffect(
                 return FetchDiseaseActions.fetchStaticDiseaseFiltersFailure({
                   error: 'No Disease found',
                 });
-            }
-          )
+            },
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 //dynamic paged filters list
@@ -226,7 +223,7 @@ export const loadDiseaseFilters$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    diseaseService = inject(DiseaseService)
+    diseaseService = inject(DiseaseService),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
@@ -239,7 +236,7 @@ export const loadDiseaseFilters$ = createEffect(
       }),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       concatLatestFrom(() =>
-        store.select(DiseaseSelectors.getStaticDiseaseFilters)
+        store.select(DiseaseSelectors.getStaticDiseaseFilters),
       ),
       mergeMap(([root, staticFilters]) => {
         const params: Params = root.queryParams;
@@ -257,12 +254,12 @@ export const loadDiseaseFilters$ = createEffect(
           diseaseService
             .fetchTrials(
               TRIALSTATUSFILTERS,
-              _setTrialVariables(params, 'status')
+              _setTrialVariables(params, 'status'),
             )
             .pipe(take(1)),
           diseaseService
             .fetchTrials(TRIALPHASEFILTERS, _setTrialVariables(params, 'phase'))
-            .pipe(take(1))
+            .pipe(take(1)),
         ).pipe(
           map(
             ([
@@ -276,7 +273,7 @@ export const loadDiseaseFilters$ = createEffect(
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>
+              ApolloQueryResult<unknown>,
             ]) => {
               if (
                 articleFilterData ||
@@ -307,7 +304,7 @@ export const loadDiseaseFilters$ = createEffect(
                   articleFilterData,
                   projectFilterData,
                   trialFilterData,
-                  params
+                  params,
                 );
                 if (root.fragment) {
                   filters.forEach((filter) => {
@@ -338,13 +335,13 @@ export const loadDiseaseFilters$ = createEffect(
                 return FetchDiseaseActions.fetchDiseaseFiltersFailure({
                   error: 'No Disease found',
                 });
-            }
-          )
+            },
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 //specific disease page
@@ -355,7 +352,7 @@ export const loadDisease$ = createEffect(
       filter(
         (r: RouterNavigationAction) =>
           !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')
+          r.payload.routerState.url.startsWith('/disease'),
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
@@ -378,12 +375,12 @@ export const loadDisease$ = createEffect(
                 return FetchDiseaseActions.fetchDiseaseFailure({
                   error: 'No Disease found',
                 });
-            })
+            }),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 //disease search typeahead
@@ -404,7 +401,7 @@ export const searchDiseases$ = createEffect(
               };
               if (data) {
                 const diseaseArr = data.diseaseSearch.map(
-                  (obj: Partial<Disease>) => new Disease(obj)
+                  (obj: Partial<Disease>) => new Disease(obj),
                 );
                 return SearchDiseasesActions.searchDiseasesSuccess({
                   typeahead: diseaseArr,
@@ -413,12 +410,12 @@ export const searchDiseases$ = createEffect(
                 return SearchDiseasesActions.searchDiseasesFailure({
                   error: 'No Diseases found',
                 });
-            })
+            }),
           );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 //load values for first level of hierarchy tree
@@ -426,15 +423,15 @@ export const fetchTreeParent$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    diseaseService = inject(DiseaseService)
+    diseaseService = inject(DiseaseService),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseases')
+        r.payload.routerState.url.startsWith('/diseases'),
       ),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
       concatLatestFrom(() => store.select(DiseaseSelectors.getDiseaseTree)),
       mergeMap(([params, tree]) => {
@@ -450,13 +447,15 @@ export const fetchTreeParent$ = createEffect(
             let diseaseArr: DiseaseNode[] = [] as DiseaseNode[];
             if (data) {
               if (data.treeBranch) {
-                diseaseArr = data.treeBranch[0].nodes
-                  .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
+                diseaseArr = data.treeBranch[0].nodes.map(
+                  (obj: Partial<DiseaseNode>) => new DiseaseNode(obj),
+                );
               } else if (tree) {
                 diseaseArr = _addToTree(data.diseases[0], tree);
               } else if (data.diseases) {
-                diseaseArr = data.diseases
-                  .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
+                diseaseArr = data.diseases.map(
+                  (obj: Partial<DiseaseNode>) => new DiseaseNode(obj),
+                );
               }
               return BrowseDiseaseListActions.fetchDiseaseTreeSuccess({
                 diseases: diseaseArr,
@@ -465,12 +464,12 @@ export const fetchTreeParent$ = createEffect(
               return BrowseDiseaseListActions.fetchDiseaseTreeFailure({
                 error: 'No Disease found',
               });
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 //get tree branch data
@@ -478,15 +477,15 @@ export const fetchTreeBranch$ = createEffect(
   (
     actions$ = inject(Actions),
     store = inject(Store),
-    diseaseService = inject(DiseaseService)
+    diseaseService = inject(DiseaseService),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseasess')
+        r.payload.routerState.url.startsWith('/diseasess'),
       ),
       map(
-        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams
+        (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
       concatLatestFrom(() => store.select(DiseaseSelectors.getDiseaseTree)),
       mergeMap(([params, tree]) => {
@@ -566,19 +565,13 @@ export const fetchTreeBranch$ = createEffect(
               if (data.treeBranch) {
                 diseaseArr = data.treeBranch[0].nodes
                   .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
-                  .sort(
-                    (a: DiseaseNode, b: DiseaseNode) =>
-                      b.count - a.count
-                  );
+                  .sort((a: DiseaseNode, b: DiseaseNode) => b.count - a.count);
               } else if (tree) {
                 diseaseArr = _addToTree(data.diseases[0], tree);
               } else if (data.diseases) {
                 diseaseArr = data.diseases
                   .map((obj: Partial<DiseaseNode>) => new DiseaseNode(obj))
-                  .sort(
-                    (a: DiseaseNode, b: DiseaseNode) =>
-                      b.count - a.count
-                  );
+                  .sort((a: DiseaseNode, b: DiseaseNode) => b.count - a.count);
               }
               return BrowseDiseaseListActions.fetchDiseaseTreeSuccess({
                 diseases: diseaseArr,
@@ -587,12 +580,12 @@ export const fetchTreeBranch$ = createEffect(
               return BrowseDiseaseListActions.fetchDiseaseTreeFailure({
                 error: 'No Disease found',
               });
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 // gets all filter for disease/trials/projects to show charts on browse page
@@ -601,7 +594,7 @@ export const loadAllDiseaseFilters$ = createEffect(
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter((r: RouterNavigationAction) =>
-        r.payload.routerState.url.startsWith('/diseases')
+        r.payload.routerState.url.startsWith('/diseases'),
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
@@ -609,27 +602,26 @@ export const loadAllDiseaseFilters$ = createEffect(
         return combineLatest(
           diseaseService.fetchArticles(ALLARTICLEFILTERS).pipe(take(1)),
           diseaseService.fetchProjects(ALLPROJECTFILTERS).pipe(take(1)),
-          diseaseService.fetchTrials(ALLTRIALFILTERS).pipe(take(1))
+          diseaseService.fetchTrials(ALLTRIALFILTERS).pipe(take(1)),
         ).pipe(
           map(
             ([articleFilterData, projectFilterData, trialFilterData]: [
               ApolloQueryResult<unknown>,
               ApolloQueryResult<unknown>,
-              ApolloQueryResult<unknown>
+              ApolloQueryResult<unknown>,
             ]) => {
               const filters: FilterCategory[] = [];
               if (articleFilterData || projectFilterData || trialFilterData) {
                 if (articleFilterData) {
                   const articleFilterDataList: {
-                    allCountsByYear: Filter[],
-                    allCountsByEpi: Filter[],
-                    allCountsByNHS: Filter[]
-                  } =
-                    articleFilterData.data as {
-                      allCountsByYear: Filter[],
-                      allCountsByEpi: Filter[],
-                      allCountsByNHS: Filter[]
-                    };
+                    allCountsByYear: Filter[];
+                    allCountsByEpi: Filter[];
+                    allCountsByNHS: Filter[];
+                  } = articleFilterData.data as {
+                    allCountsByYear: Filter[];
+                    allCountsByEpi: Filter[];
+                    allCountsByNHS: Filter[];
+                  };
                   if (articleFilterDataList.allCountsByYear.length) {
                     filters.push(
                       new FilterCategory({
@@ -640,28 +632,27 @@ export const loadAllDiseaseFilters$ = createEffect(
                         values: articleFilterDataList.allCountsByYear
                           .filter((fil) => fil.term != '')
                           .map((fil: Partial<Filter>) => new Filter(fil)),
-                      })
+                      }),
                     );
                   }
                   if (articleFilterDataList.allCountsByEpi.length) {
                     filters.push(
                       new FilterCategory({
-                          parent: 'articles',
-                          label: 'Epidemiology Articles by Year',
-                          field: 'year',
-                          values: articleFilterDataList.allCountsByEpi
-                            .filter((fil) => fil.term != '')
-                            .filter(
-                              (year: Partial<Filter>) =>
-                                year.label == 'Epidemiology Articles'
-                            )
-                            .map(
-                              (fil: Partial<Filter>) =>
-                                new Filter({ ...fil, label: 'year' })
-                            ),
-                        }
-                      )
-                    )
+                        parent: 'articles',
+                        label: 'Epidemiology Articles by Year',
+                        field: 'year',
+                        values: articleFilterDataList.allCountsByEpi
+                          .filter((fil) => fil.term != '')
+                          .filter(
+                            (year: Partial<Filter>) =>
+                              year.label == 'Epidemiology Articles',
+                          )
+                          .map(
+                            (fil: Partial<Filter>) =>
+                              new Filter({ ...fil, label: 'year' }),
+                          ),
+                      }),
+                    );
                   }
                   if (articleFilterDataList.allCountsByNHS.length) {
                     filters.push(
@@ -673,13 +664,13 @@ export const loadAllDiseaseFilters$ = createEffect(
                           .filter((fil) => fil.term != '')
                           .filter(
                             (year: Partial<Filter>) =>
-                              year.label == 'Natural Health Study Articles'
+                              year.label == 'Natural Health Study Articles',
                           )
                           .map(
                             (fil: Partial<Filter>) =>
-                              new Filter({ ...fil, label: 'year' })
+                              new Filter({ ...fil, label: 'year' }),
                           ),
-                      })
+                      }),
                     );
                   }
                 }
@@ -699,9 +690,9 @@ export const loadAllDiseaseFilters$ = createEffect(
                         label: 'Projects Count by Year',
                         filterable: false,
                         values: projectFilterDataList.allCountsByYear.map(
-                          (fil: Partial<Filter>) => new Filter(fil)
+                          (fil: Partial<Filter>) => new Filter(fil),
                         ),
-                      })
+                      }),
                     );
                   }
                   if (projectFilterDataList.allFundingByYear.length) {
@@ -711,9 +702,9 @@ export const loadAllDiseaseFilters$ = createEffect(
                         label: 'Projects Funding by Year',
                         filterable: false,
                         values: projectFilterDataList.allFundingByYear.map(
-                          (fil: Partial<Filter>) => new Filter(fil)
+                          (fil: Partial<Filter>) => new Filter(fil),
                         ),
-                      })
+                      }),
                     );
                   }
                 }
@@ -743,9 +734,9 @@ export const loadAllDiseaseFilters$ = createEffect(
                               selected:
                                 params['OverallStatus'] === fil.term ||
                                 params['OverallStatus']?.includes(fil.term),
-                            })
+                            }),
                         ),
-                      })
+                      }),
                     );
                   }
                   if (
@@ -758,9 +749,9 @@ export const loadAllDiseaseFilters$ = createEffect(
                         label: 'Clinical Trials by Type',
                         field: 'StudyType',
                         values: trialFilterDataList.allTrialsByType.map(
-                          (fil: Partial<Filter>) => new Filter(fil)
+                          (fil: Partial<Filter>) => new Filter(fil),
                         ),
-                      })
+                      }),
                     );
                   }
                   if (
@@ -773,9 +764,9 @@ export const loadAllDiseaseFilters$ = createEffect(
                         label: 'Clinical Trials by Phase',
                         field: 'Phase',
                         values: trialFilterDataList.allTrialsByPhase.map(
-                          (fil: Partial<Filter>) => new Filter(fil)
+                          (fil: Partial<Filter>) => new Filter(fil),
                         ),
-                      })
+                      }),
                     );
                   }
                 }
@@ -786,20 +777,20 @@ export const loadAllDiseaseFilters$ = createEffect(
                 return FetchDiseaseListActions.fetchAllDiseaseFiltersFailure({
                   error: 'No Filters found',
                 });
-            }
-          )
+            },
+          ),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 function _makeDiseaseObj(
   diseaseData: ApolloQueryResult<unknown>,
   articleData?: ApolloQueryResult<unknown>,
   projectsData?: ApolloQueryResult<unknown>,
-  trialsData?: ApolloQueryResult<unknown>
+  trialsData?: ApolloQueryResult<unknown>,
 ): Disease {
   const disease: { disease: Disease[] } = diseaseData.data as {
     disease: Disease[];
@@ -831,7 +822,7 @@ function _makeDiseaseObj(
         count: { count: number };
       };
       diseaseObj.projects = projects.coreProjects.map(
-        (proj: Partial<CoreProject>) => new CoreProject(proj)
+        (proj: Partial<CoreProject>) => new CoreProject(proj),
       );
       diseaseObj.projectCount = projects.count.count;
       diseaseObj.allProjectCount = projects.count.count;
@@ -847,7 +838,7 @@ function _makeDiseaseObj(
         allCount: { count: number };
       };
       diseaseObj.clinicalTrials = trials.clinicalTrials.map(
-        (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial)
+        (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
       );
       diseaseObj.allClinicalTrialCount = trials.allCount.count;
       diseaseObj.clinicalTrialCount = trials.count.count;
@@ -864,14 +855,14 @@ function _makePage(params: Params, total: { count: number } | number) {
   const page: Page = {
     pageSize: pageSize,
     pageIndex: pageIndex,
-    total: typeof total !== 'number' ? total.count : total
+    total: typeof total !== 'number' ? total.count : total,
   };
   return page;
 }
 
 function _addToTree(
   data: DiseaseNode,
-  parent?: DiseaseNode[] | undefined
+  parent?: DiseaseNode[] | undefined,
 ): DiseaseNode[] {
   let ret: DiseaseNode[] = [] as DiseaseNode[];
   const dNode = new DiseaseNode(data);
@@ -889,9 +880,7 @@ function _addToTree(
       }
     });
     if (found) {
-      ret = [...diseaseMap.values()].sort(
-        (a, b) => b.count - a.count
-      );
+      ret = [...diseaseMap.values()].sort((a, b) => b.count - a.count);
     } else {
       parent.some((disease) => {
         if (disease.children) {
@@ -901,9 +890,7 @@ function _addToTree(
             children: lll,
           });
           diseaseMap.set(d2.gardId, d2);
-          ret = [...diseaseMap.values()].sort(
-            (a, b) => b.count - a.count
-          );
+          ret = [...diseaseMap.values()].sort((a, b) => b.count - a.count);
         }
       });
     }
@@ -923,7 +910,7 @@ function _setFragment(
     OverallStatus?: string[];
     StudyType?: string[];
     Phase?: string[];
-  }
+  },
 ) {
   switch (origin) {
     /*    case 'epiArticles': {
@@ -1046,7 +1033,7 @@ function _parseFilterResponse(
   articleFilterData: ApolloQueryResult<unknown>,
   projectFilterData: ApolloQueryResult<unknown>,
   trialFilterData: ApolloQueryResult<unknown>,
-  params: Params
+  params: Params,
 ): FilterCategory[] {
   const filters: FilterCategory[] = [];
   if (articleFilterData) {
@@ -1066,16 +1053,16 @@ function _parseFilterResponse(
           label: 'Articles by Year',
           field: 'year',
           values: articleFilterDataList.countsByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil)
+            (fil: Partial<Filter>) => new Filter(fil),
           ),
-        })
+        }),
       );
       const fc = new FilterCategory({
         parent: 'articles',
         label: 'Epidemiology Articles ',
         field: 'isEpi',
         values: articleFilterDataList.countsByEpi.map(
-          (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isEpi' })
+          (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isEpi' }),
         ),
       });
       filters.push(fc);
@@ -1085,9 +1072,9 @@ function _parseFilterResponse(
           label: 'Natural Health Study Articles',
           field: 'isNHS',
           values: articleFilterDataList.countsByNHS.map(
-            (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isNHS' })
+            (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isNHS' }),
           ),
-        })
+        }),
       );
     }
   }
@@ -1106,9 +1093,9 @@ function _parseFilterResponse(
           label: 'Projects Count by Year',
           filterable: false,
           values: projectFilterDataList.countsByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil)
+            (fil: Partial<Filter>) => new Filter(fil),
           ),
-        })
+        }),
       );
     }
     if (projectFilterDataList.costByYear.length) {
@@ -1118,9 +1105,9 @@ function _parseFilterResponse(
           label: 'Projects Funding by Year',
           filterable: false,
           values: projectFilterDataList.costByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil)
+            (fil: Partial<Filter>) => new Filter(fil),
           ),
-        })
+        }),
       );
     }
   }
@@ -1163,9 +1150,9 @@ function _parseFilterResponse(
                 selected:
                   params['OverallStatus'] === fil.term ||
                   params['OverallStatus']?.includes(fil.term),
-              })
+              }),
           ),
-        })
+        }),
       );
     }
     if (
@@ -1178,9 +1165,9 @@ function _parseFilterResponse(
           label: 'Clinical Trials by Type',
           field: 'StudyType',
           values: trialFilterDataList.trialsByType.map(
-            (fil: Partial<Filter>) => new Filter(fil)
+            (fil: Partial<Filter>) => new Filter(fil),
           ),
-        })
+        }),
       );
     }
     if (
@@ -1193,9 +1180,9 @@ function _parseFilterResponse(
           label: 'Clinical Trials by Phase',
           field: 'Phase',
           values: trialFilterDataList.trialsByPhase.map(
-            (fil: Partial<Filter>) => new Filter(fil)
+            (fil: Partial<Filter>) => new Filter(fil),
           ),
-        })
+        }),
       );
     }
   }

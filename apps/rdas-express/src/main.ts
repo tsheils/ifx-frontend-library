@@ -16,8 +16,8 @@ const logger = winston.createLogger({
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.printf(
-      (info) => `${info.timestamp} ${info.level}: ${info.message}`
-    )
+      (info) => `${info.timestamp} ${info.level}: ${info.message}`,
+    ),
   ),
   transports: [
     new winston.transports.Console(),
@@ -38,7 +38,7 @@ instances.forEach((instance) => startSchema(instance));
 function startSchema(instance) {
   const driver = neo4j.driver(
     environment.memgraphUrl + ':' + instance.port,
-    neo4j.auth.basic(environment.memgraphUser, environment.memgraphKey)
+    neo4j.auth.basic(environment.memgraphUser, environment.memgraphKey),
   );
 
   fs.readFile(instance.schema, 'utf8', async (err, data) => {
@@ -73,7 +73,7 @@ function startSchema(instance) {
         (req, res, next) => {
           logger.info(`Received a ${req.method} request for ${req.url}`);
           next();
-        }
+        },
       );
     } catch (e) {
       console.log(e);
@@ -84,7 +84,7 @@ function startSchema(instance) {
       const port = instance.port;
       const server = app.listen(port, () => {
         logger.info(
-          `${instance.name} API listening to port ${port} at ${environment.memgraphUrl}`
+          `${instance.name} API listening to port ${port} at ${environment.memgraphUrl}`,
         );
       });
     } catch (e) {

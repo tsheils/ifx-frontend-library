@@ -45,7 +45,7 @@ import { NgClass } from '@angular/common';
 
 const _sortingDataAccessor = (
   data: { [key: string]: DataProperty },
-  property: string
+  property: string,
 ) => {
   if (data[property] && data[property].value) {
     if (!isNaN(Number(data[property].value))) {
@@ -68,7 +68,7 @@ const _sortingDataAccessor = (
   styleUrl: './ifx-datatable.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [
-   /* trigger('detailExpand', [
+    /* trigger('detailExpand', [
       state(
         'collapsed',
         style({ height: '0px', minHeight: '0', display: 'none' })
@@ -111,7 +111,7 @@ export class IfxDatatableComponent implements OnInit {
     let ret: string[] = [];
     if (this.selectableRows()) {
       ret = ['select'].concat(
-        this.displayFields()?.map((field) => field.field) as string[]
+        this.displayFields()?.map((field) => field.field) as string[],
       );
     } else {
       ret = this.displayFields()?.map((field) => field.field) as string[];
@@ -122,7 +122,7 @@ export class IfxDatatableComponent implements OnInit {
   displayFields = computed(() => {
     let ret: DataProperty[] = [];
     ret = this.fieldsConfig()?.filter(
-      (field) => !!field.visible
+      (field) => !!field.visible,
     ) as DataProperty[];
     if (!ret || !ret.length) {
       ret = this.fieldsConfig() as DataProperty[];
@@ -146,7 +146,7 @@ export class IfxDatatableComponent implements OnInit {
 
   dataSource = computed(() => {
     const ds = new MatTableDataSource<{ [key: string]: DataProperty }>(
-      this.data()
+      this.data(),
     );
 
     if (this.internalSort() && this._sort()) {
@@ -260,7 +260,7 @@ export class IfxDatatableComponent implements OnInit {
   componentAttached(
     component: CdkPortalOutletAttachedRef,
     index: number,
-    field: DataProperty
+    field: DataProperty,
   ) {
     if (component) {
       const dataArr: { [p: string]: DataProperty }[] = this.data() as {

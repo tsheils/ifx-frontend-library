@@ -7,22 +7,14 @@
   "tags": ["privacy"],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/ifx/privacy-page/jest.config.ts",
-        "tsConfig": "libs/features/ifx/privacy-page/tsconfig.spec.json"
+        "reportsDirectory": "../../../../coverage/libs/features/ifx/privacy-page"
       }
     },
     "lint": {
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.cjs",
-        {
-          "externalDependencies": ["eslint"]
-        }
-      ]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

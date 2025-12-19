@@ -30,7 +30,7 @@ export class DiseaseListCardComponent {
       this.store.dispatch(
         BrowseDiseaseListActions.setDisease({
           disease: this.disease() as Disease,
-        })
+        }),
       );
       const navigationExtras: NavigationExtras = {
         queryParams: {

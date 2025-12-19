@@ -1,5 +1,4 @@
 /*import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from "@angular/platform-browser/animations";
 import { RdasSearchComponent } from "rdas-search";
 import { reducer, DISEASES_FEATURE_KEY } from "disease-store";
 import { StoreModule } from "@ngrx/store";
@@ -26,7 +25,6 @@ describe.skip('RdasHomeComponent', () => {
     /* await TestBed.configureTestingModule({
       declarations: [ RdasHomeComponent ],
       imports: [
-        NoopAnimationsModule,
         RdasSearchComponent,
         ApolloTestingModule,
         StoreModule.forRoot({}),

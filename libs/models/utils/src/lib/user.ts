@@ -9,7 +9,7 @@ export class User {
     Object.assign(this, obj);
     if (obj.subscriptions) {
       this.subscriptions = obj.subscriptions.map(
-        (sub) => new Subscription(sub)
+        (sub) => new Subscription(sub),
       );
     }
   }

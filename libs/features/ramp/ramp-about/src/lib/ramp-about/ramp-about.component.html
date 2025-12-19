@@ -44,14 +44,14 @@
             >Capabilities
           </a>
           @if (entityCounts()) {
-          <a
-            mat-list-item
-            class="list-button"
-            routerLink="/about"
-            fragment="dataSources"
-            [activated]="isActive('dataSources')"
-            >Data Sources
-          </a>
+            <a
+              mat-list-item
+              class="list-button"
+              routerLink="/about"
+              fragment="dataSources"
+              [activated]="isActive('dataSources')"
+              >Data Sources
+            </a>
           }
           <a
             mat-list-item
@@ -103,16 +103,16 @@
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
     @if (!navigationsidenav.opened) {
-    <div class="row">
-      <button
-        mat-stroked-button
-        class="menu-button"
-        aria-label="menu button"
-        (click)="navigationsidenav.toggle()"
-      >
-        Jump to...<mat-icon>bookmark</mat-icon>
-      </button>
-    </div>
+      <div class="row">
+        <button
+          mat-stroked-button
+          class="menu-button"
+          aria-label="menu button"
+          (click)="navigationsidenav.toggle()"
+        >
+          Jump to...<mat-icon>bookmark</mat-icon>
+        </button>
+      </div>
     }
     <div class="row centered-row">
       <div
@@ -138,9 +138,10 @@
           <div class="section-content">
             <p>
               @if (dbVersion()) {
-              <span>Version: {{ dbVersion() }}</span>
-              } @if (dbUpdated()) {
-              <span> Last updated: {{ dbUpdated() }}</span>
+                <span>Version: {{ dbVersion() }}</span>
+              }
+              @if (dbUpdated()) {
+                <span> Last updated: {{ dbUpdated() }}</span>
               }
             </p>
             <p>
@@ -155,31 +156,33 @@
               analyses. The inclusion of a mix of ID types as input is supported
               (e.g. users must prepend IDs with the source, such as
               hmdb:HMDB0000562). Further details on which IDs are supported is
-              provided for each query or analyses module. @if (sourceVersions()
-              && sourceVersions()!.length) {
-              <span
-                >Information within RaMP-DB is compiled from the following
-                multiple sources:
-              </span>
+              provided for each query or analyses module.
+              @if (sourceVersions() && sourceVersions()!.length) {
+                <span
+                  >Information within RaMP-DB is compiled from the following
+                  multiple sources:
+                </span>
               }
             </p>
             <ul class="ramp-list">
-              @for (version of sourceVersions(); track version.data_source_name)
-              {
-              <li>
-                <a
-                  href="{{ version.data_source_url }}"
-                  target="_blank"
-                  rel="noreferrer"
-                  attr.aria-label="Hyperlink to the {{
-                    version.data_source_name
-                  }} website. Link opens in a new tab."
-                >
-                  {{ version.data_source_name }}</a
-                >
-                &nbsp;
-                <span>{{ version.data_source_version }}</span>
-              </li>
+              @for (
+                version of sourceVersions();
+                track version.data_source_name
+              ) {
+                <li>
+                  <a
+                    href="{{ version.data_source_url }}"
+                    target="_blank"
+                    rel="noreferrer"
+                    attr.aria-label="Hyperlink to the {{
+                      version.data_source_name
+                    }} website. Link opens in a new tab."
+                  >
+                    {{ version.data_source_name }}</a
+                  >
+                  &nbsp;
+                  <span>{{ version.data_source_version }}</span>
+                </li>
               }
             </ul>
             <p>
@@ -189,7 +192,8 @@
             </p>
             <ul>
               <li>
-                Updated content from source databases (Reactome, HMDB, WikiPathways).
+                Updated content from source databases (Reactome, HMDB,
+                WikiPathways).
               </li>
               <li>
                 Incorporation of new metabolite annotations including structural
@@ -393,39 +397,39 @@
               plots highlight the common and unique metabolites and genes
               covered for each resource.
             </p>
-            @if(compoundsData() && compoundsData().data.length){
-            <div class="row">
-              <div class="width-90 width-sm-100">
-                <h3>Metabolite Overlap</h3>
-                <div class="upset-holder metabolite-upset">
-                  <lib-shared-utils-upset-chart
-                    [title]="'Metabolite Overlap'"
-                    [chartData]="compoundsData()"
-                    [scale]="'log'"
-                  >
-                  </lib-shared-utils-upset-chart>
+            @if (compoundsData() && compoundsData().data.length) {
+              <div class="row">
+                <div class="width-90 width-sm-100">
+                  <h3>Metabolite Overlap</h3>
+                  <div class="upset-holder metabolite-upset">
+                    <lib-shared-utils-upset-chart
+                      [title]="'Metabolite Overlap'"
+                      [chartData]="compoundsData()"
+                      [scale]="'log'"
+                    >
+                    </lib-shared-utils-upset-chart>
+                  </div>
                 </div>
               </div>
-            </div>
-            } @if(genesData() && genesData().data.length){
-            <div class="row">
-              <div class="width-75 width-md-90 width-sm-100">
-                <h3>Gene Overlap</h3>
-                <div class="upset-holder">
-                  @defer {
-                  <lib-shared-utils-upset-chart
-                    [title]="'Gene Overlap'"
-                    [chartData]="genesData()"
-                    scale="log"
-                  >
-                  </lib-shared-utils-upset-chart>
-                  } @placeholder (){
-                  <div class="upset-holder metabolite-upset"></div>
-
-                  }
+            }
+            @if (genesData() && genesData().data.length) {
+              <div class="row">
+                <div class="width-75 width-md-90 width-sm-100">
+                  <h3>Gene Overlap</h3>
+                  <div class="upset-holder">
+                    @defer {
+                      <lib-shared-utils-upset-chart
+                        [title]="'Gene Overlap'"
+                        [chartData]="genesData()"
+                        scale="log"
+                      >
+                      </lib-shared-utils-upset-chart>
+                    } @placeholder {
+                      <div class="upset-holder metabolite-upset"></div>
+                    }
+                  </div>
                 </div>
               </div>
-            </div>
             }
           </div>
         </div>
