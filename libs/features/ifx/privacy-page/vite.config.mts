@@ -14,7 +14,7 @@ export default defineConfig(() => ({
   //  plugins: [ nxViteTsPaths() ],
   // },
   test: {
-    name: 'privacy-page',
+    name: 'ifx-privacy-page',
     watch: false,
     globals: true,
     environment: 'jsdom',

@@ -10,7 +10,7 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": ["es2020", "dom"],
+    "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
@@ -32,7 +32,7 @@
         "libs/features/rdas/rdas-subscriptions/src/index.ts"
       ],
       "rdas-trial-page": ["libs/features/rdas/rdas-trial-page/src/index.ts"],
-      "rdas-models": ["libs/models/rdas/src/index.ts"],
+      "rdas-models": ["libs/models/rdas-models/src/index.ts"],
       "utils-models": ["libs/models/utils/src/index.ts"],
       "file-upload": ["libs/shared/forms/file-upload/src/index.ts"],
       "article-display": ["libs/shared/rdas/article-display/src/index.ts"],
@@ -113,7 +113,7 @@
       "panel-accordion": [
         "libs/shared/ramp/panels/panel-accordion/src/index.ts"
       ],
-      "privacy-page": ["libs/features/ifx/privacy-page/src/index.ts"],
+      "ifx-privacy-page": ["libs/features/ifx/privacy-page/src/index.ts"],
       "ramp": ["libs/models/ramp/src/index.ts"],
       "ramp-core-page": ["libs/shared/ramp/ramp-core-page/src/index.ts"],
       "ramp-graph-legend": ["libs/shared/ramp/ramp-graph-legend/src/index.ts"],
@@ -145,7 +145,8 @@
       ],
       "visualization-panel": [
         "libs/shared/ramp/panels/visualization-panel/src/index.ts"
-      ]
+      ],
+      "schemas": ["libs/schemas/src/index.ts"]
     },
     "allowSyntheticDefaultImports": true
   },

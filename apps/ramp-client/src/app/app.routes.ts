@@ -116,7 +116,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: Privacy Policy',
-    loadComponent: () => import('privacy-page').then((m) => m.PrivacyPage),
+    loadComponent: () => import('ifx-privacy-page').then((m) => m.PrivacyPage),
     data: {
       appFullTitle: 'Relational Database of Metabolomics Pathways',
       appAcronym: 'RaMP-DB',

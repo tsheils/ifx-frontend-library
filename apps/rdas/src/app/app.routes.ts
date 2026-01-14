@@ -33,7 +33,7 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RDAS: Privacy Policy',
-    loadComponent: () => import('privacy-page').then((m) => m.PrivacyPage),
+    loadComponent: () => import('rdas-privacy-page').then((m) => m.PrivacyPage),
     data: {
       appFullTitle: 'Rare Disease Alert System',
       appAcronym: 'RDAS',

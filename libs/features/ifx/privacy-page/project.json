@@ -1,5 +1,5 @@
 {
-  "name": "privacy-page",
+  "name": "ifx-privacy-page",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/features/ifx/privacy-page/src",
   "prefix": "lib",

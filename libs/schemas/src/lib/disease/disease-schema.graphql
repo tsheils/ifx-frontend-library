@@ -1,0 +1,40 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+
+type Disease @node {
+  classificationLevel: [String!]
+  disorderType: [String!]
+  gardId: String!
+  gardName: String!
+  icd10cm: [String!]
+  mesh: [String!]
+  omim: String
+  orphanet: String
+  synonyms: [String!]
+  umls: String!
+  doid: [String!]
+  ncit: [String!]
+  sctid: [String!]
+  mondo: String
+  medGen: String
+  omimps: String
+  diseaseType: String
+  associatedWithGeneGenes: [Gene!]!
+  @relationship(
+    type: "associated_with_gene"
+    direction: OUT
+    properties: "AssociatedWithGeneProperties"
+  )
+  diseaseSubClassOf: [Disease!]! @relationship(type: "subClassOf", direction: IN)
+  hasPhenotypePhenotypes: [Phenotype!]!
+  @relationship(
+    type: "has_phenotype"
+    direction: OUT
+    properties: "HasPhenotypeProperties"
+  )
+  subClassOfDisease: [Disease!]! @relationship(type: "subClassOf", direction: OUT)
+  geneCount: Int!
+  phenotypeCount: Int!
+}
+

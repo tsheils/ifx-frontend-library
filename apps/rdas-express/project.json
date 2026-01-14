@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/rdas-express/src",
   "projectType": "application",
+  "type": "module",
   "tags": [],
   "targets": {
     "build": {
@@ -80,7 +81,6 @@
           "externalDependencies": ["eslint"]
         }
       ]
-    },
-
+    }
   }
 }
