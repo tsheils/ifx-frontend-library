@@ -5,8 +5,11 @@
 /tmp
 /out-tsc
 dist.zip
-
+*.bk
 #environments
+apps/ramp-client/src/environments/*.ts
+/apps/rdas/src/environments/
+/apps/resolver/src/environments/
 apps/rdas/src/environments/environment.ts
 apps/rdas/src/environments/environment.prod.ts
 apps/rdas-graphql/src/environments/environment.ts
@@ -17,9 +20,8 @@ apps/rdas-express/src/environments/environment.prod.ts
 apps/neo4j-introspection/src/environments/environment.ts
 apps/neo4j-introspection/src/environments/environment.prod.ts
 apps/rdas/src/environments/environment.test.ts
-apps/resolver/src/environments
 apps/resolver/src/environments/environment.ts
-
+apps/rdas-express/src/logs/
 .dev.ts
 .prod.ts
 # dependencies
@@ -61,8 +63,5 @@ Thumbs.db
 .git
 *.git/
 apps/rdas-e2e
-/apps/adme-loader-backend/src/environments/environment.ts
-/apps/ramp-client/src/environments/
-/apps/rdas/src/environments/
-/apps/resolver/src/environments/
-/apps/ifx-toolbox/src/environments/
+
+vitest.config.*.timestamp*

@@ -8,7 +8,7 @@ import {
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from 'utils-models';
 
 @Component({
   selector: 'lib-filter-download-button',
@@ -28,7 +28,7 @@ export class FilterDownloadButtonComponent {
         this._toTSV(this.selectedFilter()),
         `${this.selectedFilter()
           ?.label.replaceAll(' ', '-')
-          .toLocaleLowerCase()}.tsv`
+          .toLocaleLowerCase()}.tsv`,
       );
     }
   }
@@ -47,7 +47,7 @@ export class FilterDownloadButtonComponent {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       );
       return rows.join('\n');
     } else return '';

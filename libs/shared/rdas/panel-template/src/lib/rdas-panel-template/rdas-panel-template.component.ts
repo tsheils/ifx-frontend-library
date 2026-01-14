@@ -11,9 +11,9 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
-import { SharedUtilsDataNotFoundComponent } from '@ncats-frontend-library/shared/utils/data-not-found';
-import { SharedUtilsListFilterRowComponent } from '@ncats-frontend-library/shared/utils/list-filter-row';
+import { Filter, FilterCategory } from 'utils-models';
+import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
+import { SharedUtilsListFilterRowComponent } from 'list-filter-row';
 
 @Component({
   selector: 'lib-rdas-panel-template',
@@ -42,7 +42,7 @@ export class RdasPanelTemplateComponent {
     const retObj: { [key: string]: string[] } = {};
     Object.entries(event).forEach(
       ([key, filters]) =>
-        (retObj[key] = [...filters.map((filter) => filter.term)])
+        (retObj[key] = [...filters.map((filter) => filter.term)]),
     );
     this.listChange.emit(retObj);
   }

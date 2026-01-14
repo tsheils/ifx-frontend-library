@@ -1,7 +1,4 @@
-import {
-  FilterCategory,
-  OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
+import { FilterCategory, OpenApiPath } from 'utils-models';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import {
   Analyte,

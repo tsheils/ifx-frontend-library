@@ -23,7 +23,7 @@ describe('Resolver Reducer', () => {
 
       const result: ResolverState = resolverReducer(
         initialResolverState,
-        action
+        action,
       );
 
       expect(result.loaded).toBe(true);

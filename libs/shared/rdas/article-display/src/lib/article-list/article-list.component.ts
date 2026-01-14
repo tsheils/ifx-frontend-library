@@ -7,11 +7,11 @@ import {
 } from '@angular/core';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { NavigationExtras, Router } from '@angular/router';
-import { Article } from '@ncats-frontend-library/models/rdas';
+import { Article } from 'rdas-models';
 import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';
 
 @Component({
-  selector: 'ncats-frontend-library-article-list',
+  selector: 'lib-article-list',
   templateUrl: './article-list.component.html',
   imports: [CommonModule, MatPaginatorModule, ArticleListCardComponent],
   styleUrls: ['./article-list.component.scss'],

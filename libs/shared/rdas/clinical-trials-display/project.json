@@ -3,16 +3,14 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/rdas/clinical-trials-display/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/shared/rdas/clinical-trials-display"
-      ],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/rdas/clinical-trials-display/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/rdas/clinical-trials-display"
       }
     },
     "lint": {

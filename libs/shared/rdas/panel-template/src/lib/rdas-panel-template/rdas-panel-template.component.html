@@ -1,23 +1,25 @@
 @if (filters() && filters()?.length) {
-<lib-shared-utils-list-filter-row
-  [filters]="filters()"
-  (filterChange)="fetchList($event)"
-></lib-shared-utils-list-filter-row>
-} @if (showPagination()) {
-<div class="row right-justified-row">
-  <mat-paginator
-    #paginator
-    [length]="count()"
-    [pageIndex]="0"
-    [pageSize]="10"
-    [hidePageSize]="true"
-    (page)="pageList($event)"
-  ></mat-paginator>
-</div>
-} @if (count() > 0) {
-<ng-content select=".data-list"></ng-content>
+  <lib-shared-utils-list-filter-row
+    [filters]="filters()"
+    (filterChange)="fetchList($event)"
+  ></lib-shared-utils-list-filter-row>
+}
+@if (showPagination()) {
+  <div class="row right-justified-row">
+    <mat-paginator
+      #paginator
+      [length]="count()"
+      [pageIndex]="0"
+      [pageSize]="10"
+      [hidePageSize]="true"
+      (page)="pageList($event)"
+    ></mat-paginator>
+  </div>
+}
+@if (count() > 0) {
+  <ng-content select=".data-list"></ng-content>
 } @else {
-<ncats-frontend-library-shared-utils-data-not-found
-  [message]="message()"
-></ncats-frontend-library-shared-utils-data-not-found>
+  <lib-shared-utils-data-not-found
+    [message]="message()"
+  ></lib-shared-utils-data-not-found>
 }

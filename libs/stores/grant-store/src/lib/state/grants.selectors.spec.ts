@@ -1,4 +1,4 @@
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { CoreProject } from 'rdas-models';
 import {
   initialProjectsState,
   projectsAdapter,
@@ -29,7 +29,7 @@ describe('Grants Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

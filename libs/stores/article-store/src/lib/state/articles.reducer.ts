@@ -1,4 +1,4 @@
-import { Article } from '@ncats-frontend-library/models/rdas';
+import { Article } from 'rdas-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
@@ -48,7 +48,7 @@ const reducer = createReducer(
       ...state,
       selectedId: article.pubmed_id,
       loaded: true,
-    })
+    }),
   ),
 
   on(
@@ -61,7 +61,7 @@ const reducer = createReducer(
         articlesCount,
         epiArticlesCount,
         nhsArticlesCount,
-      }
+      },
     ) =>
       articlesAdapter.setAll(articles, {
         ...state,
@@ -70,18 +70,18 @@ const reducer = createReducer(
         articlesCount: articlesCount || 0,
         epiArticlesCount: epiArticlesCount || 0,
         nhsArticlesCount: nhsArticlesCount || 0,
-      })
+      }),
   ),
 
   on(FetchArticleActions.fetchArticleFailure, (state, { error }) => ({
     ...state,
     error,
-  }))
+  })),
 );
 
 export function articlesReducer(
   state: ArticleState | undefined,
-  action: Action
+  action: Action,
 ) {
   return reducer(state, action);
 }

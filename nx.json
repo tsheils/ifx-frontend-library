@@ -4,62 +4,43 @@
     "default": ["{projectRoot}/**/*", "sharedGlobals"],
     "production": [
       "default",
-      "!{projectRoot}/eslint.config.cjs",
+      "!{projectRoot}/.eslintrc.json",
+      "!{projectRoot}/eslint.config.mjs",
       "!{projectRoot}/**/?(*.)+(spec|test).[jt]s?(x)?(.snap)",
-      "!{projectRoot}/tsconfig.spec.json",
-      "!{projectRoot}/jest.config.[jt]s",
-      "!{projectRoot}/src/test-setup.[jt]s",
-      "!{projectRoot}/test-setup.[jt]s",
-      "!{projectRoot}/cypress/**/*",
-      "!{projectRoot}/**/*.cy.[jt]s?(x)",
-      "!{projectRoot}/cypress.config.[jt]s"
+      "!{projectRoot}/tsconfig.spec.json"
     ],
     "sharedGlobals": []
   },
   "targetDefaults": {
-    "@angular-devkit/build-angular:application": {
+    "@angular/build:application": {
       "cache": true,
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
-    },
-    "build": {
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"],
-      "cache": false
     },
     "@nx/eslint:lint": {
       "cache": true,
       "inputs": [
         "default",
+        "{workspaceRoot}/.eslintrc.json",
         "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.cjs"
+        "{workspaceRoot}/eslint.config.mjs"
       ]
     },
-    "@nx/jest:jest": {
+    "@nx/vitest:test": {
       "cache": true,
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.js"],
-      "options": {
-        "passWithNoTests": true
-      },
-      "configurations": {
-        "ci": {
-          "ci": true,
-          "codeCoverage": true
-        }
-      }
+      "inputs": ["default", "^production"]
     },
-    "e2e-ci--**/*": {
-      "dependsOn": ["^build"]
+    "@nx/esbuild:esbuild": {
+      "cache": true,
+      "dependsOn": ["^build"],
+      "inputs": ["production", "^production"]
     }
   },
   "plugins": [
     {
-      "plugin": "@nx/cypress/plugin",
+      "plugin": "@nx/playwright/plugin",
       "options": {
-        "targetName": "e2e",
-        "openTargetName": "open-cypress",
-        "componentTestingTargetName": "component-test",
-        "ciTargetName": "e2e-ci"
+        "targetName": "e2e"
       }
     },
     {
@@ -67,18 +48,26 @@
       "options": {
         "targetName": "lint"
       }
+    },
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testTargetName": "vitest:test",
+        "ciTargetName": "test-ci",
+        "testMode": "watch"
+      }
     }
   ],
   "generators": {
     "@nx/angular:application": {
-      "e2eTestRunner": "cypress",
+      "e2eTestRunner": "playwright",
       "linter": "eslint",
       "style": "scss",
-      "unitTestRunner": "jest"
+      "unitTestRunner": "vitest-analog"
     },
     "@nx/angular:library": {
       "linter": "eslint",
-      "unitTestRunner": "jest",
+      "unitTestRunner": "vitest-analog",
       "style": "scss"
     },
     "@nx/angular:component": {

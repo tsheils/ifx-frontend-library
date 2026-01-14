@@ -1,4 +1,4 @@
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrial } from 'rdas-models';
 import {
   trialsAdapter,
   TrialsPartialState,
@@ -13,7 +13,7 @@ describe('Trials Selectors', () => {
     ({
       NCTId,
       briefTitle: briefTitle || `name-${NCTId}`,
-    } as ClinicalTrial);
+    }) as ClinicalTrial;
 
   let state: TrialsPartialState;
 
@@ -30,7 +30,7 @@ describe('Trials Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

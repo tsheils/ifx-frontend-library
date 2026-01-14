@@ -13,7 +13,7 @@ import {
   viewChild,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from 'utils-models';
 import { BaseType } from 'd3';
 import { select, Selection } from 'd3-selection';
 
@@ -26,7 +26,7 @@ import { select, Selection } from 'd3-selection';
 })
 export class GenericChartComponent {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
 
   readonly clickElement = output<Filter>();
@@ -57,7 +57,7 @@ export class GenericChartComponent {
     () =>
       <SVGElement>(
         select(this.chartElement()!.nativeElement).select('svg').node()
-      )
+      ),
   );
 
   dataSignal = input<FilterCategory>({} as FilterCategory);
@@ -68,7 +68,7 @@ export class GenericChartComponent {
   // Wraps tooltip text with a callout path of the correct size, as measured in the page.
   size(
     text: Selection<BaseType | SVGTextElement, undefined, null, undefined>,
-    path: Selection<BaseType | SVGPathElement, undefined, null, undefined>
+    path: Selection<BaseType | SVGPathElement, undefined, null, undefined>,
   ) {
     if (text.node()) {
       const node = text.node() as SVGGraphicsElement;
@@ -76,7 +76,7 @@ export class GenericChartComponent {
       text.attr('transform', `translate(${-w / 2},${15 - y})`);
       path.attr(
         'd',
-        `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`
+        `M${-w / 2 - 10},5H-5l5,-5l5,5H${w / 2 + 10}v${h + 20}h-${w + 20}z`,
       );
     }
   }

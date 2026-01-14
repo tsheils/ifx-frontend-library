@@ -14,7 +14,7 @@ import { CommonModule, isPlatformBrowser } from '@angular/common';
 import SwaggerUI from 'swagger-ui';
 
 @Component({
-  selector: 'ncats-frontend-library-epi-api',
+  selector: 'lib-epi-api',
   imports: [CommonModule],
   templateUrl: './epi-api.component.html',
   styleUrls: ['./epi-api.component.scss'],
@@ -25,7 +25,7 @@ import SwaggerUI from 'swagger-ui';
 export class EpiApiComponent {
   el = viewChild<ElementRef>('documentation');
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
 

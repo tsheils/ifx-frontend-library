@@ -1,4 +1,4 @@
-import { Article } from '@ncats-frontend-library/models/rdas';
+import { Article } from 'rdas-models';
 import {
   articlesAdapter,
   ArticleStorePartialState,
@@ -22,7 +22,7 @@ describe('ArticleStore Selectors', () => {
       diseases: [],
       journals: [],
       sources: [],
-    } as Article);
+    }) as Article;
 
   let state: ArticleStorePartialState;
 
@@ -39,7 +39,7 @@ describe('ArticleStore Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

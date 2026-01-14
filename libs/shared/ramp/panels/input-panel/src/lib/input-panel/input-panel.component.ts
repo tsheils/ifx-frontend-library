@@ -1,16 +1,18 @@
 import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
-  Component, computed,
+  Component,
+  computed,
   input,
-  output, signal,
-  ViewEncapsulation
+  output,
+  signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { NcatsFormComponent } from 'ncats-form';
+import { IfxFormComponent } from 'ifx-form';
 import { FormSubsection } from 'ramp';
 
 @Component({
@@ -21,7 +23,7 @@ import { FormSubsection } from 'ramp';
     MatButtonModule,
     MatInputModule,
     ReactiveFormsModule,
-    NcatsFormComponent,
+    IfxFormComponent,
   ],
   templateUrl: './input-panel.component.html',
   styleUrl: './input-panel.component.scss',
@@ -32,22 +34,22 @@ import { FormSubsection } from 'ramp';
 export class InputPanelComponent {
   inputQuestions = input<FormSubsection[]>();
   dataSearch = output<{ [key: string]: unknown }>();
-  isValid = signal(true)
+  isValid = signal(true);
   formMap: Map<string, FormGroup> = new Map<string, FormGroup>();
 
   setForm(form: FormGroup, key: string) {
-    form.statusChanges.subscribe(change => {
-      if(change === 'INVALID') {
-        this.isValid.set(false)
+    form.statusChanges.subscribe((change) => {
+      if (change === 'INVALID') {
+        this.isValid.set(false);
       } else {
-        this.isValid.set(true)
+        this.isValid.set(true);
       }
-    })
+    });
     this.formMap.set(key, form);
   }
 
   fetchData() {
-    const formValues = this.getValuesFromForm()
+    const formValues = this.getValuesFromForm();
     this.dataSearch.emit(formValues);
   }
 
@@ -55,7 +57,7 @@ export class InputPanelComponent {
     return label.replace(/-/g, ' ');
   }
 
-  getValuesFromForm(): { [key: string]: unknown }{
+  getValuesFromForm(): { [key: string]: unknown } {
     let formValues: { [key: string]: unknown } = {};
     Array.from(this.formMap.values()).forEach((form) => {
       formValues = { ...formValues, ...form.value };

@@ -1,9 +1,7 @@
 @for (disease of diseases(); track disease.gardId) {
-<div>
-  <ncats-frontend-library-disease-list-card
-    [disease]="disease"
-  ></ncats-frontend-library-disease-list-card>
-  <br />
-  <br />
-</div>
+  <div>
+    <lib-disease-list-card [disease]="disease"></lib-disease-list-card>
+    <br />
+    <br />
+  </div>
 }

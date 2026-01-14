@@ -1,30 +1,30 @@
 <mat-card class="filter-card" [appearance]="'outlined'">
   <mat-card-title>{{ filter().label | titlecase }}</mat-card-title>
-  @if(showSearch()) {
-  <mat-form-field class="table-search">
-    <input
-      matInput
-      #searchInput
-      placeholder="Search {{ filter().label | titlecase }}"
-      [formControl]="searchCtl"
-      [value]="filter().query ? filter().query : null"
-    />
-    @if (searchCtl.value) {
-    <button
-      matSuffix
-      mat-icon-button
-      aria-label="close"
-      (click)="clearSearch()"
-    >
-      <mat-icon [color]="'primary'">backspace</mat-icon>
-    </button>
-    }
-  </mat-form-field>
+  @if (showSearch()) {
+    <mat-form-field class="table-search">
+      <input
+        matInput
+        #searchInput
+        placeholder="Search {{ filter().label | titlecase }}"
+        [formControl]="searchCtl"
+        [value]="filter().query ? filter().query : null"
+      />
+      @if (searchCtl.value) {
+        <button
+          matSuffix
+          mat-icon-button
+          aria-label="close"
+          (click)="clearSearch()"
+        >
+          <mat-icon [color]="'primary'">backspace</mat-icon>
+        </button>
+      }
+    </mat-form-field>
   }
   <div>
-    <!--  <ncats-frontend-library-loading-spinner
+    <!--  <lib-loading-spinner
       [isLoaded]="!loading"
-    ></ncats-frontend-library-loading-spinner>-->
+    ></lib-loading-spinner>-->
     <cdk-virtual-scroll-viewport
       appendOnly
       itemSize="10"
@@ -54,7 +54,7 @@
             <span
               [innerHTML]="
                 field['term']
-                  | highlight : (filter().query ? filter().query : '')
+                  | highlight: (filter().query ? filter().query : '')
               "
             ></span>
           </span>
@@ -65,11 +65,12 @@
           </span>
         </div>
         @if (last) {
-        <br />
-        } @if (!fullList() && last && filter().values.length >= 200) {
-        <button mat-stroked-button (click)="loadMore()" class="full-width">
-          see more
-        </button>
+          <br />
+        }
+        @if (!fullList() && last && filter().values.length >= 200) {
+          <button mat-stroked-button (click)="loadMore()" class="full-width">
+            see more
+          </button>
         }
       </div>
     </cdk-virtual-scroll-viewport>

@@ -5,10 +5,10 @@ import {
   input,
   ViewEncapsulation,
 } from '@angular/core';
-import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
+import { SubscribeButtonComponent } from 'subscribe-button';
 
 @Component({
-  selector: 'ncats-frontend-library-shared-utils-data-not-found',
+  selector: 'lib-shared-utils-data-not-found',
   imports: [CommonModule, SubscribeButtonComponent],
   templateUrl: './shared-utils-data-not-found.component.html',
   styleUrls: ['./shared-utils-data-not-found.component.scss'],

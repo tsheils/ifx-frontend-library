@@ -7,10 +7,10 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/filter-download-button/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/filter-download-button"
       }
     },
     "lint": {

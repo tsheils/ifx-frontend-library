@@ -48,7 +48,7 @@ export class DataDownloadButtonComponent {
 
           // finally joining each row with a line break
         },
-        [headings.join('\t')]
+        [headings.join('\t')],
       );
       return rows.join('\n');
     } else return '';
@@ -77,7 +77,7 @@ export class DataDownloadButtonComponent {
 
           // finally joining each row with a line break
         },
-        [headings.join('\t')]
+        [headings.join('\t')],
       );
       return rows.join('\n');
     } else return '';

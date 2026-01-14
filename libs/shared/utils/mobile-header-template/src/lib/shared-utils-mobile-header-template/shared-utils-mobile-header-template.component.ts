@@ -12,14 +12,10 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink } from '@angular/router';
-import {
-  LinkTemplateProperty,
-  slideInOutAnimation,
-} from '@ncats-frontend-library/models/utils';
+import { LinkTemplateProperty } from 'utils-models';
 
 @Component({
-  selector: 'ncats-frontend-library-mobile-header-template',
-  animations: [slideInOutAnimation],
+  selector: 'lib-mobile-header-template',
   imports: [
     MatToolbarModule,
     MatButtonModule,

@@ -7,18 +7,18 @@ import {
   ApplicationConfig,
   inject,
   provideAppInitializer,
+  provideBrowserGlobalErrorListeners,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import {
   BrowserModule,
   provideClientHydration,
+  withEventReplay,
 } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   PreloadAllModules,
   provideRouter,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withPreloading,
   withViewTransitions,
@@ -51,7 +51,7 @@ export function rampInit(store = inject(Store)) {
     store.dispatch(
       LoadRampActions.loadRampApi({
         url: '/assets/data/ramp-api.json',
-      })
+      }),
     );
     store.dispatch(LoadRampActions.loadRampStats());
   };
@@ -72,21 +72,21 @@ export const appConfig: ApplicationConfig = {
       routes,
       withViewTransitions(),
       withComponentInputBinding(),
-     // s withEnabledBlockingInitialNavigation(),
+      // s withEnabledBlockingInitialNavigation(),
       withInMemoryScrolling({
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideStore({ rampStore: rampReducer }),
     provideRouterStore(),
     provideStoreDevtools(),
     provideEffects([RampEffects]),
     provideState(RAMP_STORE_FEATURE_KEY, rampReducer),
-    provideAnimations(),
-    provideAnimationsAsync(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
-    provideClientHydration(),
+    provideClientHydration(withEventReplay()),
+    provideBrowserGlobalErrorListeners(),
+    provideZonelessChangeDetection(),
   ],
 };

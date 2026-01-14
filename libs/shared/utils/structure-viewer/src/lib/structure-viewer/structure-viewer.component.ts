@@ -6,11 +6,11 @@ import {
   input,
   ViewEncapsulation,
 } from '@angular/core';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
+import { DataProperty } from 'utils-models';
 import { NgClass } from '@angular/common';
 
 export const STRUCTURE_VIEWER_COMPONENT = new InjectionToken<string>(
-  'StructureViewerComponent'
+  'StructureViewerComponent',
 );
 
 @Component({

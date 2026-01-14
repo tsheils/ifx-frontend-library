@@ -11,10 +11,10 @@ import {
 import { MatCardModule } from '@angular/material/card';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrial } from 'rdas-models';
 
 @Component({
-  selector: 'ncats-frontend-library-clinical-trials-details',
+  selector: 'lib-clinical-trials-details',
   imports: [CommonModule, MatCardModule, MatTabsModule, MatListModule],
   templateUrl: './clinical-trials-details.component.html',
   styleUrls: ['./clinical-trials-details.component.scss'],

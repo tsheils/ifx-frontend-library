@@ -22,7 +22,7 @@ import {
   OpenApiPath,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
+} from 'utils-models';
 import { DataDownloadButtonComponent } from 'data-download-button';
 import { DataPanelComponent } from 'data-panel';
 import { InputPanelComponent } from 'input-panel';
@@ -63,7 +63,7 @@ export class PanelAccordionComponent {
   inputTab = input<FormSubsection[]>();
   filterTab = input<FormSubsection[]>();
   visualizationTabs = input<Map<string, VisualizationMap[]> | undefined>(
-    new Map<string, VisualizationMap[]>()
+    new Map<string, VisualizationMap[]>(),
   );
   dataTabs = input<Map<string, DataMap> | undefined>(undefined);
   overviewTabs = input<QueryResultsData | undefined>(new QueryResultsData());

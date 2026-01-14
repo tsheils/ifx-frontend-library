@@ -19,7 +19,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ApolloSandbox } from '@apollo/sandbox';
 
 @Component({
-  selector: 'ncats-frontend-library-graphql-sandbox',
+  selector: 'lib-graphql-sandbox',
   imports: [],
   template: ` <div id="embedded-sandbox" #embeddedsandbox></div>`,
   styleUrls: ['./graphql-sandbox.component.scss'],
@@ -28,7 +28,7 @@ import { ApolloSandbox } from '@apollo/sandbox';
 })
 export class GraphqlSandboxComponent {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   destroyRef = inject(DestroyRef);

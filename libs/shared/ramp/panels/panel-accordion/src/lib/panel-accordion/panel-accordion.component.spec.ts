@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { PanelAccordionComponent } from './panel-accordion.component';
 
 describe('PanelAccordionComponent', () => {
@@ -8,7 +7,7 @@ describe('PanelAccordionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, PanelAccordionComponent],
+      imports: [PanelAccordionComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PanelAccordionComponent);

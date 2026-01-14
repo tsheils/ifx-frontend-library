@@ -87,16 +87,16 @@
   </mat-sidenav>
   <mat-sidenav-content class="drawer-container-content">
     @if (!navigationsidenav.opened) {
-    <div class="row">
-      <button
-        mat-stroked-button
-        class="menu-button"
-        aria-label="menu button"
-        (click)="navigationsidenav.toggle()"
-      >
-        Jump to...<mat-icon>bookmark</mat-icon>
-      </button>
-    </div>
+      <div class="row">
+        <button
+          mat-stroked-button
+          class="menu-button"
+          aria-label="menu button"
+          (click)="navigationsidenav.toggle()"
+        >
+          Jump to...<mat-icon>bookmark</mat-icon>
+        </button>
+      </div>
     }
     <div class="row centered-row">
       <div

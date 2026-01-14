@@ -3,15 +3,18 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/features/rdas/history-api/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/rdas/history-api/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/history-api"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

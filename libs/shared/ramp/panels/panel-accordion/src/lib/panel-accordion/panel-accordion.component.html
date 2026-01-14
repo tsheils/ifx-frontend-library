@@ -3,26 +3,28 @@
     <mat-expansion-panel-header>
       <mat-panel-title><h2>Input</h2></mat-panel-title>
     </mat-expansion-panel-header>
-    @defer( when paths()) {
-    <p>
-      {{ paths() && paths()![0].description ? paths()![0].description : '' }}
-    </p>
-    @if (paths()![0].allowedTypes){ Supported source ids: <br />
-    Genes/Proteins:
-    {{
-      paths()![0].allowedTypes!['genes/proteins']!.length
-        ? paths()![0].allowedTypes!['genes/proteins']!.join(', ')
-        : ' No gene/protein ids are supported'
-    }}
-    <br />
-    Metabolites:
-    {{
-      paths()
-        ? paths()![0].allowedTypes!.metabolites!.join(', ')
-        : 'No metabolite ids supported'
-    }}
-    <br />
-    } }
+    @defer (when paths()) {
+      <p>
+        {{ paths() && paths()![0].description ? paths()![0].description : '' }}
+      </p>
+      @if (paths()![0].allowedTypes) {
+        Supported source ids: <br />
+        Genes/Proteins:
+        {{
+          paths()![0].allowedTypes!['genes/proteins']!.length
+            ? paths()![0].allowedTypes!['genes/proteins']!.join(', ')
+            : ' No gene/protein ids are supported'
+        }}
+        <br />
+        Metabolites:
+        {{
+          paths()
+            ? paths()![0].allowedTypes!.metabolites!.join(', ')
+            : 'No metabolite ids supported'
+        }}
+        <br />
+      }
+    }
     <ng-content select=".custom-input"></ng-content>
     <lib-input-panel
       [inputQuestions]="inputTab()"
@@ -40,7 +42,7 @@
       <mat-panel-title><h2>Overview</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (overviewTabs()) {
-    <lib-results-panel [results]="overviewTabs()!"></lib-results-panel>
+      <lib-results-panel [results]="overviewTabs()!"></lib-results-panel>
     }
   </mat-expansion-panel>
   <mat-expansion-panel
@@ -53,19 +55,19 @@
       <mat-panel-title><h2>Visualizations</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (visualizationTabs() && visualizationTabs()?.size) {
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-      @for (tab of visualizationTabs() | keyvalue; track tab.key) {
-      <mat-tab [label]="tab.key" class="viz-tab">
-        <ng-template matTabContent>
-          <div class="viz-holder">
-            <lib-visualization-panel
-              [data]="tab.value"
-            ></lib-visualization-panel>
-          </div>
-        </ng-template>
-      </mat-tab>
-      }
-    </mat-tab-group>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        @for (tab of visualizationTabs() | keyvalue; track tab.key) {
+          <mat-tab [label]="tab.key" class="viz-tab">
+            <ng-template matTabContent>
+              <div class="viz-holder">
+                <lib-visualization-panel
+                  [data]="tab.value"
+                ></lib-visualization-panel>
+              </div>
+            </ng-template>
+          </mat-tab>
+        }
+      </mat-tab-group>
     }
   </mat-expansion-panel>
   <mat-expansion-panel
@@ -78,55 +80,60 @@
       <mat-panel-title><h2>Results</h2></mat-panel-title>
     </mat-expansion-panel-header>
     @if (dataTabs() && dataTabs()?.size) {
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-      @for (tab of dataTabs()! | keyvalue: _originalOrder; track tab.key) {
-      <mat-tab [label]="tab.key + ' (' + tab.value['data']?.length + ')'">
-        <ng-template matTabContent>
-          @if (filterTab() || tab.value['dataframe']) {
-          <div class="row right-justified-row">
-            <div class="width-15">
-              @if (filterTab()){ @if (!showFilters()) {
-              <button
-                mat-stroked-button
-                matTooltip="Show Filters"
-                (click)="showFilters.set(true)"
-              >
-                <span class="hide-small">Show Filters </span
-                ><mat-icon>filter_list</mat-icon>
-              </button>
-              } @else {
-              <button
-                mat-stroked-button
-                matTooltip="Hide Filters"
-                (click)="showFilters.set(false)"
-              >
-                <span class="hide-small">Hide Filters </span
-                ><mat-icon>close</mat-icon>
-              </button>
-              } } @if (tab.value['dataframe']) { &nbsp; &nbsp; &nbsp;
-              <lib-data-download-button
-                [data]="tab.value['dataframe']"
-                [fileName]="tab.value['fileName']!"
-              ></lib-data-download-button>
+      <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        @for (tab of dataTabs()! | keyvalue: _originalOrder; track tab.key) {
+          <mat-tab [label]="tab.key + ' (' + tab.value['data']?.length + ')'">
+            <ng-template matTabContent>
+              @if (filterTab() || tab.value['dataframe']) {
+                <div class="row right-justified-row">
+                  <div class="width-15">
+                    @if (filterTab()) {
+                      @if (!showFilters()) {
+                        <button
+                          mat-stroked-button
+                          matTooltip="Show Filters"
+                          (click)="showFilters.set(true)"
+                        >
+                          <span class="hide-small">Show Filters </span
+                          ><mat-icon>filter_list</mat-icon>
+                        </button>
+                      } @else {
+                        <button
+                          mat-stroked-button
+                          matTooltip="Hide Filters"
+                          (click)="showFilters.set(false)"
+                        >
+                          <span class="hide-small">Hide Filters </span
+                          ><mat-icon>close</mat-icon>
+                        </button>
+                      }
+                    }
+                    @if (tab.value['dataframe']) {
+                      &nbsp; &nbsp; &nbsp;
+                      <lib-data-download-button
+                        [data]="tab.value['dataframe']"
+                        [fileName]="tab.value['fileName']!"
+                      ></lib-data-download-button>
+                    }
+                  </div>
+                </div>
               }
-            </div>
-          </div>
-          } @if (filterTab() && showFilters()) {
-          <lib-input-panel
-            [inputQuestions]="filterTab()"
-            (dataSearch)="searchData($event)"
-          ></lib-input-panel>
-          }
+              @if (filterTab() && showFilters()) {
+                <lib-input-panel
+                  [inputQuestions]="filterTab()"
+                  (dataSearch)="searchData($event)"
+                ></lib-input-panel>
+              }
 
-          <lib-data-panel
-            [dataAsDataProperty]="tab.value['data']"
-            [dataColumns]="tab.value['fields']"
-            (dataSearch)="searchData($event)"
-          ></lib-data-panel>
-        </ng-template>
-      </mat-tab>
-      }
-    </mat-tab-group>
+              <lib-data-panel
+                [dataAsDataProperty]="tab.value['data']"
+                [dataColumns]="tab.value['fields']"
+                (dataSearch)="searchData($event)"
+              ></lib-data-panel>
+            </ng-template>
+          </mat-tab>
+        }
+      </mat-tab-group>
     }
   </mat-expansion-panel>
 </mat-accordion>

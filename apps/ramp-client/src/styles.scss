@@ -46,8 +46,14 @@ html,
 body {
   height: 100%;
   margin: 0 !important;
-  font-family: Roboto, Helvetica Neue Light, Helvetica Neue, Helvetica, Arial,
-    Lucida Grande, sans-serif;
+  font-family:
+    Roboto,
+    Helvetica Neue Light,
+    Helvetica Neue,
+    Helvetica,
+    Arial,
+    Lucida Grande,
+    sans-serif;
   scroll-behavior: smooth;
   @include mat.system-level-colors(theme.$light-theme);
   @include mat.all-component-themes(theme.$light-theme);
@@ -64,8 +70,10 @@ a {
 .info-card {
   @include mat.card-overrides(
     (
-      outlined-container-color:
-        mat.get-theme-color(theme.$light-theme, surface-container),
+      outlined-container-color: mat.get-theme-color(
+          theme.$light-theme,
+          surface-container
+        ),
     )
   );
 }
@@ -80,8 +88,10 @@ a {
 .navigation-menu-panel {
   @include mat.sidenav-overrides(
     (
-      container-background-color:
-        mat.get-theme-color(theme.$light-theme, surface-dim),
+      container-background-color: mat.get-theme-color(
+          theme.$light-theme,
+          surface-dim
+        ),
       container-shape: square,
     )
   );
@@ -89,7 +99,7 @@ a {
 
 .main {
   display: flex;
-  min-height: 100vh;
+  //min-height: 100vh;
   flex-direction: column;
 }
 
@@ -150,6 +160,12 @@ a {
   left: 80px;
   padding-top: 20px;
   height: 100%;
+}
+
+.navigation-menu-panel {
+  width: 25%;
+  position: fixed !important;
+  top: 60px !important;
 }
 
 .rail-button {
@@ -360,7 +376,7 @@ a {
   height: 48px;
 }
 
-ncats-frontend-library-loading-spinner {
+ifx-loading-spinner {
   .progress-bar-container {
     position: fixed;
     top: 0;

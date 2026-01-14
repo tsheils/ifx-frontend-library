@@ -3,15 +3,18 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/stores/ramp-store/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/stores/ramp-store/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/stores/ramp-store/"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

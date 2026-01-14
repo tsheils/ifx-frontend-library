@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatToolbarModule } from '@angular/material/toolbar';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { HeaderTemplateComponent } from './header-template.component';
 
@@ -15,7 +15,7 @@ describe('HeaderTemplateComponent', () => {
       declarations: [],
       imports: [
         HeaderTemplateComponent,
-        NoopAnimationsModule,
+        
         MatSidenavModule,
         MatToolbarModule,
         MatIconModule,

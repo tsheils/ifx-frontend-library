@@ -426,7 +426,10 @@
                   }
                 },
                 "example": {
-                  "pathway": ["Wnt Signaling Pathway", "sphingolipid metabolism"],
+                  "pathway": [
+                    "Wnt Signaling Pathway",
+                    "sphingolipid metabolism"
+                  ],
                   "analyteType": "both"
                 }
               }
@@ -760,12 +763,8 @@
         "tags": ["reactions"],
         "summary": "Retrieve Analytes Involved in the Same Reaction",
         "x-allowedTypes": {
-          "metabolites": [
-            "chebi"
-          ],
-          "genes/proteins": [
-            "uniprot"
-          ]
+          "metabolites": ["chebi"],
+          "genes/proteins": ["uniprot"]
         },
         "responses": {
           "200": {

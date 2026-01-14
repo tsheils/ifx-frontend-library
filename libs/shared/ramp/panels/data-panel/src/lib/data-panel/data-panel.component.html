@@ -1,18 +1,20 @@
 @if (dataAsDataProperty() && dataAsDataProperty()!.length > 0) {
-<div class="row space-around-row">
-  <div class="width-90">
-    <ncats-datatable
-      [fieldsConfig]="dataColumns()"
-      [data]="dataAsDataProperty()"
-      [internalSort]="true"
-      [useInternalPaginator]="true"
-    ></ncats-datatable>
+  <div class="row space-around-row">
+    <div class="width-90">
+      <lib-ifx-datatable
+        [fieldsConfig]="dataColumns()"
+        [data]="dataAsDataProperty()"
+        [internalSort]="true"
+        [useInternalPaginator]="true"
+      ></lib-ifx-datatable>
+    </div>
   </div>
-</div>
-} @else { @if (noDataArr()) {
-<div class="row space-around-row">
-  <div class="width-90">
-    <h1>no data found!</h1>
-  </div>
-</div>
-} }
+} @else {
+  @if (noDataArr()) {
+    <div class="row space-around-row">
+      <div class="width-90">
+        <h1>no data found!</h1>
+      </div>
+    </div>
+  }
+}

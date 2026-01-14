@@ -1,4 +1,3 @@
-import { FlatTreeControl } from '@angular/cdk/tree';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -9,11 +8,9 @@ import {
 import { CommonModule } from '@angular/common';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import {
-  MatTreeModule,
-} from '@angular/material/tree';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
-import { FlatDiseaseNode } from '@ncats-frontend-library/shared/rdas/rdas-tree';
+import { MatTreeModule } from '@angular/material/tree';
+import { HierarchyNode } from 'utils-models';
+import { FlatDiseaseNode } from 'rdas-tree';
 
 /*export class FlatHierarchyNode implements HierarchyNode<unknown> {
   level!: number;
@@ -37,16 +34,17 @@ export class TreeChartComponent {
   dataSource = computed(() => this.data() as HierarchyNode[]);
   leafExpand = output<HierarchyNode>();
 
-  childrenAccessor = (node: HierarchyNode) => node.children ?? [] as HierarchyNode[];
+  childrenAccessor = (node: HierarchyNode) =>
+    node.children ?? ([] as HierarchyNode[]);
 
   loaded = true;
 
-  hasChild = (_: number, node: HierarchyNode ) => !!node.count;
+  hasChild = (_: number, node: HierarchyNode) => !!node.count;
 
   selectNode(event: FlatDiseaseNode): void {
     this.loaded = false;
     this.leafExpand.emit(event);
-   /* this.treeControl.toggle(event);
+    /* this.treeControl.toggle(event);
     if (this.treeControl.isExpanded(event)) {
       let r = this.treeControl.expansionModel.selected;
       if (r.length) {
@@ -57,7 +55,7 @@ export class TreeChartComponent {
     } else {
       this.treeControl.expand(event);
     }*/
-  //  this.loaded = true;
- //   this.changeRef.detectChanges();
+    //  this.loaded = true;
+    //   this.changeRef.detectChanges();
   }
 }

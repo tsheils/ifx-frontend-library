@@ -1,4 +1,4 @@
-import { Subscription, User } from '@ncats-frontend-library/models/utils';
+import { Subscription, User } from 'utils-models';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const RdasUsersInitActions = createActionGroup({

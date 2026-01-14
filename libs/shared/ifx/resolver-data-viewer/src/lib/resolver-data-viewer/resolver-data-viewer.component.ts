@@ -10,10 +10,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { DataProperty } from 'utils-models';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ResolverResponse } from 'ifx';
-import { NcatsDatatableComponent } from 'ncats-datatable';
+import { IfxDatatableComponent } from 'ifx-datatable';
 
 @Component({
   selector: 'lib-resolver-data-viewer',
@@ -23,7 +23,7 @@ import { NcatsDatatableComponent } from 'ncats-datatable';
     MatIconModule,
     MatSlideToggleModule,
     MatMenuModule,
-    NcatsDatatableComponent,
+    IfxDatatableComponent,
     LoadingSpinnerComponent,
   ],
   templateUrl: './resolver-data-viewer.component.html',
@@ -76,7 +76,7 @@ export class ResolverDataViewerComponent {
           label: field,
           field: field,
           sortable: true,
-        })
+        }),
       );
     });
     return fieldsArr;
@@ -90,7 +90,7 @@ export class ResolverDataViewerComponent {
         this._downloadFile(
           JSON.stringify(this.dataAsObject()),
           'resolver.json',
-          'json'
+          'json',
         );
         break;
       }
@@ -108,7 +108,7 @@ export class ResolverDataViewerComponent {
       const inputLine: string[] = [];
       this.headers()?.forEach((field) => {
         inputLine.push(
-          input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' '
+          input[field] ? `"${input[field].replace(/"/g, '"')}"` : ' ',
         );
       });
       lines.push(inputLine.join(','));

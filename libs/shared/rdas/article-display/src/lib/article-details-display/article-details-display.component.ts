@@ -10,14 +10,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import {
-  Article,
-  PubtatorAnnotation,
-} from '@ncats-frontend-library/models/rdas';
+import { Article, PubtatorAnnotation } from 'rdas-models';
 import { ArticleListCardComponent } from '../article-list-card/article-list-card.component';
 
 @Component({
-  selector: 'ncats-frontend-library-article-details-display',
+  selector: 'lib-article-details-display',
   imports: [
     CommonModule,
     MatCardModule,

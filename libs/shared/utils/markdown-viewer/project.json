@@ -3,15 +3,18 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/utils/markdown-viewer/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/markdown-viewer/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/markdown-viewer"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

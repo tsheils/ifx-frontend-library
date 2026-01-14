@@ -6,17 +6,13 @@ import {
   output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
+import { IfxDatatableComponent } from 'ifx-datatable';
+import { DataProperty } from 'utils-models';
 import { DataDownloadButtonComponent } from 'data-download-button';
-import { NcatsDatatableComponent } from 'ncats-datatable';
 
 @Component({
   selector: 'lib-data-panel',
-  imports: [
-    CommonModule,
-    NcatsDatatableComponent,
-    DataDownloadButtonComponent,
-  ],
+  imports: [CommonModule, DataDownloadButtonComponent, IfxDatatableComponent],
   templateUrl: './data-panel.component.html',
   styleUrl: './data-panel.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -28,7 +24,7 @@ export class DataPanelComponent {
   noDataArr = computed(
     () =>
       !this.dataAsDataProperty()?.length ||
-      this.dataAsDataProperty()?.length === 0
+      this.dataAsDataProperty()?.length === 0,
   );
   dataSearch = output<{ [key: string]: unknown }>();
 

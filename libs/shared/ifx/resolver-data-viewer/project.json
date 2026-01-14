@@ -3,15 +3,18 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/ifx/resolver-data-viewer/src",
   "prefix": "lib",
-  "tags": [],
   "projectType": "library",
+  "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/ifx/resolver-data-viewer/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/ifx/resolver-data-viewer"
       }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
     }
   }
 }

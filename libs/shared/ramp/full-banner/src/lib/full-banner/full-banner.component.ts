@@ -5,7 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'ramp-full-banner',
+  selector: 'lib-ramp-full-banner',
   imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule],
   templateUrl: './full-banner.component.html',
   styleUrl: './full-banner.component.scss',

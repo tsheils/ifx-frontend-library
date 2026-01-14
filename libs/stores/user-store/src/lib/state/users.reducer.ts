@@ -1,4 +1,4 @@
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
@@ -47,7 +47,7 @@ const reducer = createReducer(
         ...state,
         loaded: true,
         selectedId: user.uid,
-      })
+      }),
   ),
   on(ResetPasswordEmailActions.resetPasswordEmailSuccess, (state) => {
     return { ...state, email: 'reset' };
@@ -67,8 +67,8 @@ const reducer = createReducer(
     RegisterEmailUserActions.registerEmailUserFailure,
     LoginEmailUserActions.loginEmailUserFailure,
     LoginLinkActions.loginLinkUserFailure,
-    (state, { error }) => ({ ...state, error })
-  )
+    (state, { error }) => ({ ...state, error }),
+  ),
 );
 
 export function usersReducer(state: UserState | undefined, action: Action) {

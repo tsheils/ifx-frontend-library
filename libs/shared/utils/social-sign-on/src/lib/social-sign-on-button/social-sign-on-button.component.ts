@@ -14,15 +14,12 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterLink } from '@angular/router';
-import {
-  UserLoginActions,
-  UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
+import { UserLoginActions, UserSelectors } from 'user-store';
 import { Store } from '@ngrx/store';
 import { SocialSignOnModalComponent } from '../social-sign-on-modal/social-sign-on-modal.component';
 
 @Component({
-  selector: 'ncats-frontend-library-social-sign-on-button',
+  selector: 'lib-social-sign-on-button',
   templateUrl: './social-sign-on-button.component.html',
   styleUrls: ['./social-sign-on-button.component.scss'],
   imports: [

@@ -13,27 +13,27 @@ const { selectAll, selectEntities } = trialsAdapter.getSelectors();
 
 export const selectTrialsLoaded = createSelector(
   selectTrialsState,
-  (state: TrialsState) => state.loaded
+  (state: TrialsState) => state.loaded,
 );
 
 export const selectTrialsError = createSelector(
   selectTrialsState,
-  (state: TrialsState) => state.error
+  (state: TrialsState) => state.error,
 );
 
 export const selectAllTrials = createSelector(
   selectTrialsState,
-  (state: TrialsState) => selectAll(state)
+  (state: TrialsState) => selectAll(state),
 );
 
 export const selectTrialsEntities = createSelector(
   selectTrialsState,
-  (state: TrialsState) => selectEntities(state)
+  (state: TrialsState) => selectEntities(state),
 );
 
 export const selectSelectedId = createSelector(
   selectTrialsState,
-  (state: TrialsState) => state.selectedId
+  (state: TrialsState) => state.selectedId,
 );
 
 export const getTrialCount = createSelector(
@@ -43,11 +43,11 @@ export const getTrialCount = createSelector(
       allTrialCount: state.allTrialCount,
       count: state.count,
     };
-  }
+  },
 );
 
 export const selectEntity = createSelector(
   selectTrialsEntities,
   selectSelectedId,
-  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined)
+  (entities, selectedId) => (selectedId ? entities[selectedId] : undefined),
 );

@@ -6,7 +6,7 @@ import {
   output,
   signal,
 } from '@angular/core';
-import { HierarchyNode } from '@ncats-frontend-library/models/utils';
+import { HierarchyNode } from 'utils-models';
 import { ReactionClass } from 'ramp';
 
 @Injectable({

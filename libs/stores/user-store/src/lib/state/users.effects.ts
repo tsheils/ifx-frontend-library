@@ -2,7 +2,7 @@ import { inject } from '@angular/core';
 import { DocumentData } from '@angular/fire/compat/firestore';
 import { UserCredential, UserInfo } from '@firebase/auth';
 import { DocumentSnapshot } from '@firebase/firestore';
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { Store } from '@ngrx/store';
@@ -24,7 +24,7 @@ import { getSelected } from './users.selectors';
 export const init = createEffect(
   (
     actions$ = inject(Actions),
-    localStorageService = inject(LocalStorageService)
+    localStorageService = inject(LocalStorageService),
   ) => {
     return actions$.pipe(
       ofType(RdasUsersInitActions.init),
@@ -38,10 +38,10 @@ export const init = createEffect(
         } else {
           return RdasUsersInitActions.initFailure({ error: '' });
         }
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const loginUser = createEffect(
@@ -64,12 +64,12 @@ export const loginUser = createEffect(
                 error: 'Login Failed',
               });
             }
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const loginEmailUser = createEffect(
@@ -105,12 +105,12 @@ export const loginEmailUser = createEffect(
                 });
               }
             }
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const registerEmailUser = createEffect(
@@ -133,12 +133,12 @@ export const registerEmailUser = createEffect(
                 error: 'Registration Failed',
               });
             }
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const loginLinkUser = createEffect(
@@ -157,12 +157,12 @@ export const loginLinkUser = createEffect(
                 error: 'Login Link Failed',
               });
             }
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const resetEmailPassword = createEffect(
@@ -180,12 +180,12 @@ export const resetEmailPassword = createEffect(
             } else {
               return ResetPasswordEmailActions.resetPasswordEmailSuccess();
             }
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const logoutUser = createEffect(
@@ -193,7 +193,7 @@ export const logoutUser = createEffect(
     actions$ = inject(Actions),
     userService = inject(UserService),
     localStorageService = inject(LocalStorageService),
-    store = inject(Store)
+    store = inject(Store),
   ) => {
     return actions$.pipe(
       ofType(UserLoginActions.logoutUser),
@@ -202,24 +202,24 @@ export const logoutUser = createEffect(
         localStorageService.removeItem('userEntity');
         store.dispatch(UserLoginActions.logoutUserSuccess());
         //  return UserLoginActions.logoutUserSuccess();
-      })
+      }),
     );
   },
-  { functional: true, dispatch: false }
+  { functional: true, dispatch: false },
 );
 
 export const fetchUserProfile = createEffect(
   (
     actions$ = inject(Actions),
     userService = inject(UserService),
-    localStorageService = inject(LocalStorageService)
+    localStorageService = inject(LocalStorageService),
   ) => {
     return actions$.pipe(
       ofType(
         RdasUsersInitActions.initSuccess,
         UserLoginActions.loginUserSuccess,
         LoginEmailUserActions.loginEmailUserSuccess,
-        RegisterEmailUserActions.registerEmailUserSuccess
+        RegisterEmailUserActions.registerEmailUserSuccess,
       ),
       mergeMap((action: { user: User }) => {
         return userService.fetchUserProfile(action.user).pipe(
@@ -233,12 +233,12 @@ export const fetchUserProfile = createEffect(
               localStorageService.setItem('userEntity', JSON.stringify(user));
             }
             return UserLoginActions.fetchUserProfileSuccess({ user: user });
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );
 
 export const updateUserProfile = createEffect(
@@ -246,7 +246,7 @@ export const updateUserProfile = createEffect(
     actions$ = inject(Actions),
     userService = inject(UserService),
     store = inject(Store),
-    localStorageService = inject(LocalStorageService)
+    localStorageService = inject(LocalStorageService),
   ) => {
     return actions$.pipe(
       ofType(UpdateUserActions.updateUserSubscriptions),
@@ -265,10 +265,10 @@ export const updateUserProfile = createEffect(
             return UpdateUserActions.updateUserSubscriptionsSuccess({
               user: user,
             });
-          })
+          }),
         );
-      })
+      }),
     );
   },
-  { functional: true }
+  { functional: true },
 );

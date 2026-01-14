@@ -5,9 +5,9 @@ import {
 } from '@angular/common/http';
 import {
   ApplicationConfig,
-  importProvidersFrom,
   inject,
   provideAppInitializer,
+  provideZonelessChangeDetection,
 } from '@angular/core';
 import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getAuth, provideAuth } from '@angular/fire/auth';
@@ -17,13 +17,10 @@ import {
   BrowserModule,
   provideClientHydration,
 } from '@angular/platform-browser';
-import { provideAnimations } from '@angular/platform-browser/animations';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import {
   PreloadAllModules,
   provideRouter,
   withComponentInputBinding,
-  withEnabledBlockingInitialNavigation,
   withInMemoryScrolling,
   withPreloading,
   withViewTransitions,
@@ -33,38 +30,34 @@ import {
   ARTICLE_STORE_FEATURE_KEY,
   ArticleEffects,
   articlesReducer,
-} from '@ncats-frontend-library/stores/article-store';
+} from 'article-store';
 import {
   DiseaseEffects,
   DISEASES_FEATURE_KEY,
   diseasesReducer,
-} from '@ncats-frontend-library/stores/disease-store';
+} from 'disease-store';
 import {
   FILTERS_FEATURE_KEY,
   filtersReducer,
   FilterEffects,
-} from '@ncats-frontend-library/stores/filter-store';
+} from 'filter-store';
 import {
   PROJECTS_FEATURE_KEY,
   projectsReducer,
   ProjectEffects,
-} from '@ncats-frontend-library/stores/grant-store';
-import {
-  TRIALS_FEATURE_KEY,
-  trialsReducer,
-  TrialEffects,
-} from '@ncats-frontend-library/stores/trial-store';
+} from 'grant-store';
+import { TRIALS_FEATURE_KEY, trialsReducer, TrialEffects } from 'trial-store';
 import {
   USERS_FEATURE_KEY,
   usersReducer,
   UserEffects,
   RdasUsersInitActions,
-} from '@ncats-frontend-library/stores/user-store';
+} from 'user-store';
 import { provideEffects } from '@ngrx/effects';
 import { provideRouterStore, routerReducer } from '@ngrx/router-store';
 import { provideState, provideStore, Store } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { provideApollo, provideNamedApollo } from 'apollo-angular';
+import { provideNamedApollo } from 'apollo-angular';
 import { HttpLink } from 'apollo-angular/http';
 import { environment } from '../environments/environment';
 
@@ -92,7 +85,7 @@ export const appConfig: ApplicationConfig = {
         anchorScrolling: 'enabled',
         scrollPositionRestoration: 'enabled',
       }),
-      withPreloading(PreloadAllModules)
+      withPreloading(PreloadAllModules),
     ),
     provideStore({
       router: routerReducer,
@@ -121,12 +114,13 @@ export const appConfig: ApplicationConfig = {
     provideAuth(() => getAuth()),
     provideFirestore(() => getFirestore()),
     provideStorage(() => getStorage()),
-    provideAnimations(),
-    provideAnimationsAsync(),
+    // provideAnimations(),
+    //  provideAnimationsAsync(),
     provideRouterStore(),
     provideStoreDevtools(),
     provideHttpClient(withInterceptorsFromDi(), withFetch()),
     provideClientHydration(),
+    provideZonelessChangeDetection(),
     provideNamedApollo(() => {
       const httpLink = inject(HttpLink);
       return {

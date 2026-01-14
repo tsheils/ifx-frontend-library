@@ -1,62 +1,79 @@
-@if (mainPageMap() && mainPageMap().size){
-<mat-tab-group
-  mat-align-tabs="start"
-  class="tabs-section"
-  [dynamicHeight]="true"
->
-  <mat-tab [bodyClass]="'body-tabs'">
-    <ng-template mat-tab-label>Identifier Harmonization </ng-template>
-    <div class="row space-around-row top-align">
-      <div class="width-40">
-        <h3>{{ paths()![0].properties[0]['label'] }}</h3>
-        <lib-dnd-file-upload
-          (selectedFiles)="setInputFiles($event)"
-          [label]="'input'"
-          [multiple]="true"
-        ></lib-dnd-file-upload>
-        <div class="help-text">{{ paths()![0].properties[0]['description'] }}</div>
-        <br>
-        <a href="/assets/metlinkr/SampleDataset.zip" target="_blank" download><mat-icon>folder_zip</mat-icon>Download Sample Dataset</a>
+@if (mainPageMap() && mainPageMap().size) {
+  <mat-tab-group
+    mat-align-tabs="start"
+    class="tabs-section"
+    [dynamicHeight]="true"
+  >
+    <mat-tab [bodyClass]="'body-tabs'">
+      <ng-template mat-tab-label>Identifier Harmonization </ng-template>
+      <div class="row space-around-row top-align">
+        <div class="width-40">
+          <h3>{{ paths()![0].properties[0]['label'] }}</h3>
+          <lib-dnd-file-upload
+            (selectedFiles)="setInputFiles($event)"
+            [label]="'input'"
+            [multiple]="true"
+          ></lib-dnd-file-upload>
+          <div class="help-text">
+            {{ paths()![0].properties[0]['description'] }}
+          </div>
+          <br />
+          <a href="/assets/metlinkr/SampleDataset.zip" target="_blank" download
+            ><mat-icon>folder_zip</mat-icon>Download Sample Dataset</a
+          >
+        </div>
+        <div class="width-40">
+          <h3>{{ paths()![0].properties[1]['label'] }}</h3>
+          <lib-dnd-file-upload
+            (selectedFiles)="setManifestFile($event)"
+            [label]="'optional manifest'"
+          ></lib-dnd-file-upload>
+          <div class="help-text">
+            {{ paths()![0].properties[1]['description'] }}
+          </div>
+          <br />
+          <a href="/assets/metlinkr/manifest.csv" target="_blank" download
+            ><mat-icon>download</mat-icon>Download Sample Manifest File</a
+          >
+        </div>
       </div>
-      <div class="width-40">
-        <h3>{{ paths()![0].properties[1]['label'] }}</h3>
-        <lib-dnd-file-upload
-          (selectedFiles)="setManifestFile($event)"
-          [label]="'optional manifest'"
-        ></lib-dnd-file-upload>
-        <div class="help-text">{{ paths()![0].properties[1]['description'] }}</div>
-        <br>
-        <a href="/assets/metlinkr/manifest.csv" target="_blank" download><mat-icon>download</mat-icon>Download Sample Manifest File</a>
-      </div>
-    </div>
 
-    <div class="row file-upload-row">
-      <div class="width-5">
-        <button mat-flat-button (click)="submit()" [disabled]="!files().length || !manifestFile()">Submit</button>
+      <div class="row file-upload-row">
+        <div class="width-5">
+          <button
+            mat-flat-button
+            (click)="submit()"
+            [disabled]="!files().length || !manifestFile()"
+          >
+            Submit
+          </button>
+        </div>
       </div>
-    </div>
-    @if(ManifestFormMap().size){
-    <div class="row space-between-row">
-      <div class="width-20">
-        <h2>Edit Manifest</h2>
-      </div>
-      <div class="width-20">
-        <button mat-flat-button (click)="_downloadFile()">
-          <mat-icon>download</mat-icon>Download Manifest File
-        </button>
-      </div>
-    </div>
-    <div class="row space-around-row">
-      @for (element of ManifestFormMap() | keyvalue; track element.key; let idx
-      = $index){
-      <lib-ncats-form
-        [questions]="element.value.questions"
-        [direction]="'row'"
-        (formCreated)="setForm($event, element.key)"
-      ></lib-ncats-form>
+      @if (ManifestFormMap().size) {
+        <div class="row space-between-row">
+          <div class="width-20">
+            <h2>Edit Manifest</h2>
+          </div>
+          <div class="width-20">
+            <button mat-flat-button (click)="_downloadFile()">
+              <mat-icon>download</mat-icon>Download Manifest File
+            </button>
+          </div>
+        </div>
+        <div class="row space-around-row">
+          @for (
+            element of ManifestFormMap() | keyvalue;
+            track element.key;
+            let idx = $index
+          ) {
+            <lib-ifx-form
+              [questions]="element.value.questions"
+              [direction]="'row'"
+              (formCreated)="setForm($event, element.key)"
+            ></lib-ifx-form>
+          }
+        </div>
       }
-    </div>
-    }
-  </mat-tab>
-</mat-tab-group>
+    </mat-tab>
+  </mat-tab-group>
 }

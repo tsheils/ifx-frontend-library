@@ -1,4 +1,4 @@
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter } from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import { ResolverResponse } from 'ifx';
@@ -51,7 +51,7 @@ const reducer = createReducer(
         loaded: true,
         error: null,
       };
-    }
+    },
   ),
 
   on(LoadResolverOptionsActions.setPreviousFilters, (state, { filters }) => {
@@ -72,13 +72,13 @@ const reducer = createReducer(
     (state, { error }) => ({
       ...state,
       error,
-    })
-  )
+    }),
+  ),
 );
 
 export function resolverReducer(
   state: ResolverState | undefined,
-  action: Action
+  action: Action,
 ) {
   return reducer(state, action);
 }

@@ -1,4 +1,4 @@
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import { CoreProject } from 'rdas-models';
 import { Action } from '@ngrx/store';
 import { FetchProjectsListActions } from './grants.actions';
 
@@ -28,7 +28,7 @@ describe('Grants Reducer', () => {
 
       const result: ProjectsState = projectsReducer(
         initialProjectsState,
-        action
+        action,
       );
 
       expect(result.loaded).toBe(true);

@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NgClass } from '@angular/common';
 
 @Component({
-  selector: 'ncats-frontend-library-loading-spinner',
+  selector: 'lib-loading-spinner',
   templateUrl: './loading-spinner.component.html',
   styleUrls: ['./loading-spinner.component.scss'],
   imports: [NgClass, MatProgressSpinnerModule],
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class LoadingSpinnerComponent {
   @Input() isLoaded: boolean | undefined = false;

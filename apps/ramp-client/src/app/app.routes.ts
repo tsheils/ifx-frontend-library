@@ -1,4 +1,6 @@
 import { Routes } from '@angular/router';
+import { RampHomeComponent } from 'ramp-home';
+
 import {
   STRUCTURE_VIEWER_COMPONENT,
   StructureViewerComponent,
@@ -7,16 +9,11 @@ import {
 export const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: Home',
-    loadComponent: () =>
-      import('@ramp/features/ramp/ramp-home').then((m) => m.RampHomeComponent),
+    component: RampHomeComponent,
   },
   {
     path: 'analyze',
-    pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: Biochemical Pathways',
     loadComponent: () => import('ramp-main').then((m) => m.RampMainComponent),
   },
@@ -31,7 +28,7 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('biochemical-pathways-page').then(
-            (m) => m.BiochemicalPathwaysPageComponent
+            (m) => m.BiochemicalPathwaysPageComponent,
           ),
       },
     ],
@@ -81,7 +78,7 @@ export const routes: Routes = [
         path: '',
         loadComponent: () =>
           import('chemical-descriptors-page').then(
-            (m) => m.ChemicalDescriptorsPageComponent
+            (m) => m.ChemicalDescriptorsPageComponent,
           ),
       },
     ],
@@ -105,15 +102,27 @@ export const routes: Routes = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: About',
-    loadComponent: () =>
-      import('@ramp/features/ramp/ramp-about').then((m) => m.AboutComponent),
+    loadComponent: () => import('ramp-about').then((m) => m.AboutComponent),
   },
   {
     path: 'api',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     title: 'RaMP: API',
-    loadComponent: () =>
-      import('@ramp/features/ramp/ramp-api').then((m) => m.RampApiComponent),
+    loadComponent: () => import('ramp-api').then((m) => m.RampApiComponent),
+  },
+  {
+    path: 'privacy',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    title: 'RaMP: Privacy Policy',
+    loadComponent: () => import('ifx-privacy-page').then((m) => m.PrivacyPage),
+    data: {
+      appFullTitle: 'Relational Database of Metabolomics Pathways',
+      appAcronym: 'RaMP-DB',
+      collectsPii: false,
+      accountRegistration: false,
+      contactEmail: 'NCATSRaMP@nih.gov',
+    },
   },
 ];

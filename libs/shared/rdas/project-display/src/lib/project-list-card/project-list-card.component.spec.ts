@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { CoreProject, Project } from '@ncats-frontend-library/models/rdas';
+
+import { CoreProject, Project } from 'rdas-models';
 
 import { ProjectListCardComponent } from './project-list-card.component';
 
@@ -11,7 +11,7 @@ describe('ProjectListCardComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [NoopAnimationsModule, ProjectListCardComponent],
+      imports: [ ProjectListCardComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ProjectListCardComponent);

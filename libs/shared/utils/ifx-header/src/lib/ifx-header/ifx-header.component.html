@@ -1,0 +1,61 @@
+<mat-toolbar>
+  <mat-toolbar-row id="ncats-banner" class="row">
+    <img
+      ngSrc="./assets/ifx-header/nihribbon-hhs.svg"
+      width="26"
+      height="26"
+      alt="HHS Logo"
+    />
+    <a href="http://www.hhs.gov/" title="Go to the hhs.gov" target="_blank"
+      >U.S. Department of Health &amp; Human Services</a
+    >
+    <img
+      ngSrc="./assets/ifx-header/nihribbon-divider.svg"
+      width="15"
+      height="40"
+      alt="Divider Arrow"
+    />
+    <img
+      ngSrc="./assets/ifx-header/nih-ribbon.svg"
+      width="26"
+      height="26"
+      alt="NIH logo"
+    />
+    <a
+      href="http://www.nih.gov/"
+      title="National Institutes of Health | Homepage"
+      target="_blank"
+      >National Institutes of Health</a
+    >
+    <img
+      ngSrc="./assets/ifx-header/nihribbon-divider.svg"
+      width="15"
+      height="40"
+      alt="Divider Arrow"
+    />
+    <img
+      ngSrc="./assets/ifx-header/nih-ribbon.svg"
+      width="26"
+      height="26"
+      alt="NCATS"
+    />
+    <a href="http://www.ncats.nih.gov" target="new">NCATS</a>
+  </mat-toolbar-row>
+  <mat-toolbar-row id="ncats-logo" class="row">
+    <div>
+      <img
+        ngSrc="./assets/ifx-header/ncats.svg"
+        width="430"
+        height="100"
+        alt="NCATS"
+        class="ncats-logo"
+        priority
+      />
+    </div>
+    <div>
+      <a routerLink="/">
+        <span class="logo-header subsection">&nbsp;{{ title() }}</span></a
+      >
+    </div>
+  </mat-toolbar-row>
+</mat-toolbar>

@@ -3,16 +3,14 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/features/rdas/rdas-subscriptions/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": [
-        "{workspaceRoot}/coverage/libs/features/rdas/rdas-subscriptions"
-      ],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-subscriptions/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/rdas-subscriptions"
       }
     },
     "lint": {

@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/neo4j-introspection/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -52,7 +53,14 @@
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     },
     "test": {
       "executor": "@nx/jest:jest",
@@ -61,6 +69,5 @@
         "jestConfig": "apps/neo4j-introspection/jest.config.ts"
       }
     }
-  },
-  "tags": []
+  }
 }

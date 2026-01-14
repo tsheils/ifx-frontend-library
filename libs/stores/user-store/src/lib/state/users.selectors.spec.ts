@@ -1,4 +1,4 @@
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { usersAdapter, UsersPartialState, initialState } from './users.reducer';
 import * as UsersSelectors from './users.selectors';
 
@@ -26,7 +26,7 @@ describe('Users Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

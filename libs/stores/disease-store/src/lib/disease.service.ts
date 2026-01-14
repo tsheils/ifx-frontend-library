@@ -11,7 +11,7 @@ export class DiseaseService {
 
   fetchDiseases(
     query: DocumentNode,
-    variables: { [key: string]: unknown } | undefined
+    variables: { [key: string]: unknown } | undefined,
   ): Observable<ApolloQueryResult<unknown>> {
     return this.apollo
       .use('diseases')

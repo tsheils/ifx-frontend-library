@@ -2,20 +2,19 @@
   "name": "features-rdas-rdas-article-page",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/features/rdas/rdas-article-page/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "projectType": "library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/features/rdas/rdas-article-page/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/rdas-article-page"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

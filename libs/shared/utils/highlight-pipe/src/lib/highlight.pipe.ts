@@ -23,8 +23,8 @@ export class HighlightPipe implements PipeTransform {
         text.replace(
           regex,
           (match) =>
-            `<span style="font-weight:900;" class="search-highlight">${match}</span>`
-        )
+            `<span style="font-weight:900;" class="search-highlight">${match}</span>`,
+        ),
       );
     } else {
       return text;

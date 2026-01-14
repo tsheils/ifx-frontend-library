@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute } from '@angular/router';
 import { provideEffects } from '@ngrx/effects';
 import { provideStore } from '@ngrx/store';
@@ -14,7 +13,7 @@ describe('AboutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [],
-      imports: [NoopAnimationsModule, AboutComponent],
+      imports: [AboutComponent],
       providers: [
         { provide: ActivatedRoute, useValue: {} as ActivatedRoute },
         provideStore({

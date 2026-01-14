@@ -10,7 +10,7 @@ import {
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from 'utils-models';
 import { GenericChartComponent } from 'generic-chart';
 
 @Component({
@@ -25,37 +25,40 @@ export class ImageDownloadComponent {
   chartComponent = input<GenericChartComponent>();
   svg = input<SVGElement>({} as SVGElement);
   showTSV = input(true);
-  dataUrl = input<string>()
+  dataUrl = input<string>();
   dom = inject(DOCUMENT);
 
-  link = computed(()=> {
-    if(this.dom){
-      return this.dom.createElement('a')
-    } else return null
-  })
+  link = computed(() => {
+    if (this.dom) {
+      return this.dom.createElement('a');
+    } else return null;
+  });
 
   downloadSVG() {
-    const url = this.dataUrl()
-    if(url) {
-      this._downloadFileFromUrl(url, 'data.svg')
+    const url = this.dataUrl();
+    if (url) {
+      this._downloadFileFromUrl(url, 'data.svg');
     } else {
       const blob = this._makeBlob(this._getSVGElement(), 'image/svg+xml');
-      const url = this._urlFromData(blob)
-      this._downloadFileFromUrl(url, 'data.svg')
+      const url = this._urlFromData(blob);
+      this._downloadFileFromUrl(url, 'data.svg');
     }
   }
 
   downloadPNG() {
-      this.svgString2Image(this._getSVGElement()); // passes Blob and filesize String to the callback
-     }
+    this.svgString2Image(this._getSVGElement()); // passes Blob and filesize String to the callback
+  }
 
   downloadTSV() {
     const data = this.chartComponent()?.dataSignal() as FilterCategory;
     if (data) {
       const tsv = this._toTSV(data);
       const blob = this._makeBlob(tsv);
-      const url = this._urlFromData(blob)
-      this._downloadFileFromUrl(url, `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`)
+      const url = this._urlFromData(blob);
+      this._downloadFileFromUrl(
+        url,
+        `${data.label.replaceAll(' ', '-').toLocaleLowerCase()}.tsv`,
+      );
     }
   }
 
@@ -135,8 +138,8 @@ export class ImageDownloadComponent {
         context.clearRect(0, 0, width, height);
         context.drawImage(image, 0, 0, width, height);
         canvas.toBlob((blob) => {
-          const url = this._urlFromData(blob as Blob)
-          this._downloadFileFromUrl(url, 'image.png')
+          const url = this._urlFromData(blob as Blob);
+          this._downloadFileFromUrl(url, 'image.png');
         });
       };
       image.src = imgsrc;
@@ -149,7 +152,7 @@ export class ImageDownloadComponent {
       svgString = this.getSVGString(this.svg());
     } else {
       svgString = this.getSVGString(
-        <SVGElement>this.chartComponent()?.svgExport()
+        <SVGElement>this.chartComponent()?.svgExport(),
       );
     }
     return svgString;
@@ -173,19 +176,19 @@ export class ImageDownloadComponent {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       );
       return rows.join('\n');
     } else return '';
   }
 
-  _urlFromData(data: Blob){
-    return URL.createObjectURL(data)
+  _urlFromData(data: Blob) {
+    return URL.createObjectURL(data);
   }
 
-  _downloadFileFromUrl(url:string, name: string) {
-    const link = this.link()
-    if(link && link.download !== undefined) {
+  _downloadFileFromUrl(url: string, name: string) {
+    const link = this.link();
+    if (link && link.download !== undefined) {
       link.setAttribute('href', url);
       link.setAttribute('download', `${name}`);
       link.style.visibility = 'hidden';

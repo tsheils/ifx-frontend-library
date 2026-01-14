@@ -3,8 +3,8 @@ import {
   DataProperty,
   QueryResultsData,
   VisualizationMap,
-} from '@ncats-frontend-library/models/utils';
-import { QuestionBase } from 'ncats-form-question';
+} from 'utils-models';
+import { QuestionBase } from 'ifx-form-question';
 import { ChemicalEnrichment } from './chemical-enrichment';
 import { FisherResult, FishersDataframe } from './fisher-result';
 import { OntologyEnrichment } from './ontology';
@@ -67,8 +67,7 @@ export interface RampPathwayEnrichmentAPIResponse {
   function_call?: string[];
 }
 
-export interface RampPathwayEnrichmentResponse
-  extends RampResponse<FisherResult> {
+export interface RampPathwayEnrichmentResponse extends RampResponse<FisherResult> {
   clusterImageUrl?: string | undefined;
   filteredFishersDataframe?: FishersDataframe;
   combinedFishersDataframe?: FishersDataframe;

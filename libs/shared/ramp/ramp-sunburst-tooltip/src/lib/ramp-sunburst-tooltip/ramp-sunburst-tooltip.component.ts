@@ -10,7 +10,7 @@ import { MatIcon } from '@angular/material/icon';
 import { SunburstChartService } from 'sunburst-chart';
 
 export const SUNBURST_TOOLTIP = new InjectionToken<string>(
-  'SunburstTooltipComponent'
+  'SunburstTooltipComponent',
 );
 @Component({
   selector: 'lib-ramp-sunburst-tooltip',

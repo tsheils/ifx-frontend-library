@@ -17,8 +17,8 @@ import {
   MatTreeModule,
 } from '@angular/material/tree';
 import { Router } from '@angular/router';
-import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { DiseaseNode } from 'rdas-models';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 
 export class FlatDiseaseNode extends DiseaseNode {
   level!: number;
@@ -26,7 +26,7 @@ export class FlatDiseaseNode extends DiseaseNode {
 }
 
 @Component({
-  selector: 'ncats-frontend-library-rdas-tree',
+  selector: 'lib-rdas-tree',
   imports: [
     CommonModule,
     MatTreeModule,
@@ -61,20 +61,20 @@ export class RdasTreeComponent {
 
   treeControl = new FlatTreeControl<FlatDiseaseNode>(
     (node) => node.level,
-    (node) => node.expandable
+    (node) => node.expandable,
   );
 
   treeFlattener = new MatTreeFlattener(
     this._transformer,
     (node) => node.level,
     (node) => node.expandable,
-    (node) => node.children
+    (node) => node.children,
   );
 
   dataSource = computed(() => {
     const dataSource = new MatTreeFlatDataSource(
       this.treeControl,
-      this.treeFlattener
+      this.treeFlattener,
     );
 
     dataSource.data = this.data()!.map((disease) => {
@@ -90,7 +90,7 @@ export class RdasTreeComponent {
 
     this.treeControl.expansionModel.selected.forEach((node) => {
       const n = this.treeControl.dataNodes.find(
-        (d) => d.gardId === node.gardId
+        (d) => d.gardId === node.gardId,
       );
       if (n) {
         this.treeControl.expand(n);

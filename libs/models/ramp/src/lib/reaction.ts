@@ -112,7 +112,7 @@ export class CommonAnalyte extends RampDataGeneric {
     if (obj['rxn_partner_ids']) {
       this.rxnPartnerIdsString = (<string>obj['rxn_partner_ids']).replace(
         /,/g,
-        ', '
+        ', ',
       );
       this.rxnPartnerIds = this.rxnPartnerIdsString.split(',');
     }

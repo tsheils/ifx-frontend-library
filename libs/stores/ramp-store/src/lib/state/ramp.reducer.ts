@@ -1,7 +1,4 @@
-import {
-  FilterCategory,
-  OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
+import { FilterCategory, OpenApiPath } from 'utils-models';
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, on, Action } from '@ngrx/store';
 import {
@@ -27,7 +24,8 @@ import {
 import {
   AnalyteFromPathwayActions,
   ClassesFromMetabolitesActions,
-  CommonReactionAnalyteActions, IdentifierHarmonizationActions,
+  CommonReactionAnalyteActions,
+  IdentifierHarmonizationActions,
   LoadRampActions,
   MetaboliteEnrichmentsActions,
   MetaboliteFromOntologyActions,
@@ -38,7 +36,7 @@ import {
   PropertiesFromMetaboliteActions,
   ReactionClassEnrichmentsActions,
   ReactionClassesFromAnalytesActions,
-  ReactionsFromAnalytesActions
+  ReactionsFromAnalytesActions,
 } from './ramp.actions';
 
 export const RAMP_STORE_FEATURE_KEY = 'rampStore';
@@ -96,7 +94,7 @@ export const initialState: State = rampAdapter.getInitialState({
   ontologiesList: [],
   geneIntersects: [] as { id: string; sets: string[]; size: number }[],
   metaboliteIntersects: [] as { id: string; sets: string[]; size: number }[],
-  metlinkrFinished: false
+  metlinkrFinished: false,
 });
 
 export const rampReducer = createReducer(
@@ -134,7 +132,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: true,
       error: null,
-    })
+    }),
   ),
 
   on(LoadRampActions.loadRampStatsSuccess, (state, { data }) => ({
@@ -180,7 +178,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       ontologies: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -189,7 +187,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       analytes: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -201,7 +199,7 @@ export const rampReducer = createReducer(
         loading: false,
         pathways: { data, query, dataAsDataProperty },
       };
-    }
+    },
   ),
 
   on(
@@ -210,7 +208,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       commonReactions: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -219,7 +217,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       reactions: { data, query, dataAsDataProperty, plot },
-    })
+    }),
   ),
 
   on(
@@ -228,7 +226,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       reactionClasses: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -240,7 +238,7 @@ export const rampReducer = createReducer(
         loading: false,
         reactionClassEnrichments: data,
       };
-    }
+    },
   ),
 
   on(
@@ -252,7 +250,7 @@ export const rampReducer = createReducer(
         loading: false,
         ontologyEnrichments: data,
       };
-    }
+    },
   ),
 
   on(
@@ -261,7 +259,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       metabolitesFromOntologies: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -270,7 +268,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       ontologiesList: data,
-    })
+    }),
   ),
 
   on(
@@ -280,7 +278,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       metClasses: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -289,7 +287,7 @@ export const rampReducer = createReducer(
       ...state,
       loading: false,
       properties: { data, query, dataAsDataProperty },
-    })
+    }),
   ),
 
   on(
@@ -301,7 +299,7 @@ export const rampReducer = createReducer(
         loading: false,
         chemicalEnrichments: data,
       };
-    }
+    },
   ),
 
   on(
@@ -316,7 +314,7 @@ export const rampReducer = createReducer(
         clusterPlotUrl: undefined,
         dataAsDataProperty: dataAsDataProperty,
       };
-    }
+    },
   ),
 
   on(
@@ -334,7 +332,7 @@ export const rampReducer = createReducer(
         clusterPlotUrl: undefined,
         dataAsDataProperty: dataAsDataProperty,
       };
-    }
+    },
   ),
 
   on(
@@ -346,27 +344,24 @@ export const rampReducer = createReducer(
         pathwayEnrichments: { data, query, dataAsDataProperty },
         clusterPlotUrl: clusterImageUrl,
       };
-    }
+    },
   ),
 
-  on(
-    IdentifierHarmonizationActions.runIdentifierHarmonization,
-    (state) => {
-      return {
-        ...state,
-        metlinkrFinished: false
-      };
-    }
-  ),
+  on(IdentifierHarmonizationActions.runIdentifierHarmonization, (state) => {
+    return {
+      ...state,
+      metlinkrFinished: false,
+    };
+  }),
 
   on(
     IdentifierHarmonizationActions.runIdentifierHarmonizationSuccess,
     (state) => {
       return {
         ...state,
-        metlinkrFinished: true
+        metlinkrFinished: true,
       };
-    }
+    },
   ),
 
   on(
@@ -398,8 +393,8 @@ export const rampReducer = createReducer(
         loading: false,
         error,
       };
-    }
-  )
+    },
+  ),
 );
 
 export function reducer(state: State | undefined, action: Action) {

@@ -1,4 +1,4 @@
-import { User } from '@ncats-frontend-library/models/utils';
+import { User } from 'utils-models';
 import { UserLoginActions } from './users.actions';
 import { initialState, usersReducer, UserState } from './users.reducer';
 import { Action } from '@ngrx/store';

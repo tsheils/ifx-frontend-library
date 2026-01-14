@@ -1,0 +1,30 @@
+scalar JSON
+extend schema @mutation(operations: [])
+
+type AssociatedWithGeneProperties @relationshipProperties {
+  associationStatus: String
+  associationType: String
+  reference: [String!]
+}
+
+type Gene @node {
+  geneIdentifier: String
+  geneSymbol: String
+  geneSynonyms: [String!]
+  geneTitle: String
+  locus: String
+  locusGroup: String
+  omim: String
+  mondo: String
+  medGen: String
+  orphanet: String
+  umls: String
+  geneUrl: String
+  reference: [String!]
+  diseaseAssociatedWithGene: [Disease!]!
+  @relationship(
+    type: "associated_with_gene"
+    direction: IN
+    properties: "AssociatedWithGeneProperties"
+  )
+  }

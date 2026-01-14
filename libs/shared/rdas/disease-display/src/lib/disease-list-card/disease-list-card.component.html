@@ -13,28 +13,29 @@
         </h3>
       </div>
       <div>
-        <ncats-frontend-library-subscribe-button
+        <lib-subscribe-button
           [subscriptionName]="disease()?.name"
           [subscriptionId]="disease()?.gardId"
-        ></ncats-frontend-library-subscribe-button>
+        ></lib-subscribe-button>
       </div>
     </div>
     <div class="width-75">
       @if (disease()?.classificationLevel) {
-      <div class="primary-chip-outlined">
-        {{ disease()?.classificationLevel }}
-      </div>
-      } &nbsp;&nbsp;&nbsp; @if (disease()?.disorderType &&
-      disease()?.disorderType?.length) {
-      <div class="accent-chip-outlined">
-        {{ disease()?.disorderType?.join(', ') }}
-      </div>
+        <div class="primary-chip-outlined">
+          {{ disease()?.classificationLevel }}
+        </div>
+      }
+      &nbsp;&nbsp;&nbsp;
+      @if (disease()?.disorderType && disease()?.disorderType?.length) {
+        <div class="accent-chip-outlined">
+          {{ disease()?.disorderType?.join(', ') }}
+        </div>
       }
     </div>
     @if (disease()?.synonyms && disease()?.synonyms?.length) {
-    <div class="width-75">
-      <i>{{ disease()?.synonyms?.join(', ') }}</i>
-    </div>
+      <div class="width-75">
+        <i>{{ disease()?.synonyms?.join(', ') }}</i>
+      </div>
     }
     <div class="count-grid">
       <div class="count-card">

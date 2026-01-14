@@ -6,11 +6,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTab, MatTabGroup, MatTabLabel } from '@angular/material/tabs';
-import {
-  DataMap,
-  DataProperty,
-  QueryResultsData,
-} from '@ncats-frontend-library/models/utils';
+import { DataMap, DataProperty, QueryResultsData } from 'utils-models';
 import { PanelAccordionComponent } from 'panel-accordion';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { STRUCTURE_VIEWER_COMPONENT } from 'structure-viewer';
@@ -185,7 +181,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
   chemicalProperties = this.store.selectSignal(RampSelectors.getProperties);
   chemicalClasses = this.store.selectSignal(RampSelectors.getClasses);
   chemicalEnrichment = this.store.selectSignal(
-    RampSelectors.getChemicalEnrichment
+    RampSelectors.getChemicalEnrichment,
   );
 
   override dataMap = computed(() => {
@@ -298,18 +294,18 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
 
   override fetchData(
     formData: { [key: string]: unknown },
-    origin: string
+    origin: string,
   ): void {
     this.activeTab.set(origin);
     this.inputList = this._parseInput(
-      formData['metabolites'] as string | string[]
+      formData['metabolites'] as string | string[],
     );
     switch (origin) {
       case 'chemical-properties': {
         this.store.dispatch(
           PropertiesFromMetaboliteActions.fetchPropertiesFromMetabolites({
             metabolites: this.inputList,
-          })
+          }),
         );
         break;
       }
@@ -320,7 +316,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
             metabolites: this.inputList,
             background: <string>formData['background'],
             backgroundFile: formData['backgroundFile'] as File,
-          })
+          }),
         );
         break;
       }
@@ -330,7 +326,7 @@ export class ChemicalDescriptorsPageComponent extends RampCorePageComponent {
             metabolites: this.inputList,
             background: <string>formData['background'],
             backgroundFile: formData['backgroundFile'] as File,
-          })
+          }),
         );
         break;
       }

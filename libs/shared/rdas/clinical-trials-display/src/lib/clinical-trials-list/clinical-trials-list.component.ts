@@ -5,11 +5,11 @@ import {
   input,
 } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
-import { ClinicalTrial } from '@ncats-frontend-library/models/rdas';
+import { ClinicalTrial } from 'rdas-models';
 import { ClinicalTrialsListCardComponent } from '../clinical-trials-list-card/clinical-trials-list-card.component';
 
 @Component({
-  selector: 'ncats-frontend-library-clinical-trials-list',
+  selector: 'lib-clinical-trials-list',
   templateUrl: './clinical-trials-list.component.html',
   styleUrls: ['./clinical-trials-list.component.scss'],
   imports: [ClinicalTrialsListCardComponent],

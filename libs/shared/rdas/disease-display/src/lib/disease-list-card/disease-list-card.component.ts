@@ -3,13 +3,13 @@ import { Component, inject, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { NavigationExtras, Router } from '@angular/router';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { SubscribeButtonComponent } from '@ncats-frontend-library/shared/rdas/subscribe-button';
-import { BrowseDiseaseListActions } from '@ncats-frontend-library/stores/disease-store';
+import { Disease } from 'rdas-models';
+import { SubscribeButtonComponent } from 'subscribe-button';
+import { BrowseDiseaseListActions } from 'disease-store';
 import { Store } from '@ngrx/store';
 
 @Component({
-  selector: 'ncats-frontend-library-disease-list-card',
+  selector: 'lib-disease-list-card',
   templateUrl: './disease-list-card.component.html',
   styleUrls: ['./disease-list-card.component.scss'],
   standalone: true,
@@ -30,7 +30,7 @@ export class DiseaseListCardComponent {
       this.store.dispatch(
         BrowseDiseaseListActions.setDisease({
           disease: this.disease() as Disease,
-        })
+        }),
       );
       const navigationExtras: NavigationExtras = {
         queryParams: {

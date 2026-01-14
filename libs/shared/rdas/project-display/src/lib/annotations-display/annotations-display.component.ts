@@ -1,9 +1,9 @@
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Annotation } from '@ncats-frontend-library/models/rdas';
+import { Annotation } from 'rdas-models';
 
 @Component({
-  selector: 'ncats-frontend-library-annotations-display',
+  selector: 'lib-annotations-display',
   imports: [CommonModule],
   templateUrl: './annotations-display.component.html',
   styleUrls: ['./annotations-display.component.scss'],

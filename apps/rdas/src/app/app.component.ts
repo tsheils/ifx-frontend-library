@@ -17,16 +17,16 @@ import {
   RouterLink,
   RouterOutlet,
 } from '@angular/router';
-import { Disease } from '@ncats-frontend-library/models/rdas';
-import { LinkTemplateProperty } from '@ncats-frontend-library/models/utils';
-import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/header-template';
-import { MobileHeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/mobile-header-template';
-import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
-import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
-import { RdasSearchComponent } from '@ncats-frontend-library/shared/rdas/rdas-search';
+import { Disease } from 'rdas-models';
+import { LinkTemplateProperty } from 'utils-models';
+import { HeaderTemplateComponent } from 'header-template';
+import { MobileHeaderTemplateComponent } from 'mobile-header-template';
+import { SocialSignOnButtonComponent } from 'social-sign-on';
+import { FooterTemplateComponent } from 'footer-template';
+import { RdasSearchComponent } from 'rdas-search';
 
 @Component({
-  selector: 'ncats-frontend-library-root',
+  selector: 'app-rdas-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,
@@ -52,7 +52,7 @@ export class AppComponent {
   private breakpointObserver = inject(BreakpointObserver);
 
   header = viewChild<MobileHeaderTemplateComponent>(
-    MobileHeaderTemplateComponent
+    MobileHeaderTemplateComponent,
   );
 
   title = 'rdas';
@@ -69,8 +69,8 @@ export class AppComponent {
 
   displayLinks = computed(() =>
     this.links.filter(
-      (link) => !(link.hideMobile && link.hideMobile === this.mobile())
-    )
+      (link) => !(link.hideMobile && link.hideMobile === this.mobile()),
+    ),
   );
   links: LinkTemplateProperty[] = [
     {

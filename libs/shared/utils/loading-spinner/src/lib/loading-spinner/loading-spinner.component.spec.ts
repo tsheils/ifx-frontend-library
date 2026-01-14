@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
+
 
 import { LoadingSpinnerComponent } from './loading-spinner.component';
 
@@ -11,7 +11,7 @@ describe('LoadingSpinnerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [
-        NoopAnimationsModule,
+        
         MatProgressSpinnerModule,
         LoadingSpinnerComponent,
       ],

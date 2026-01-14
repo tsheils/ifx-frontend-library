@@ -2,20 +2,19 @@
   "name": "shared-utils-selected-filter-list",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/shared/utils/selected-filter-list/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "projectType": "library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/selected-filter-list/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/selected-filter-list"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

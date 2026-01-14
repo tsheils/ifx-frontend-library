@@ -20,11 +20,8 @@ import { MatFormField } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { MatTooltip } from '@angular/material/tooltip';
-import {
-  FilterCategory,
-  OpenApiPath,
-} from '@ncats-frontend-library/models/utils';
-import { SharedUtilsFilterPanelComponent } from '@ncats-frontend-library/shared/utils/filter-panel';
+import { FilterCategory, OpenApiPath } from 'utils-models';
+import { SharedUtilsFilterPanelComponent } from 'filter-panel';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
@@ -71,18 +68,18 @@ export class OntologyPanelComponent implements OnInit {
             const values = ontologyCategory.values.filter((ontology) =>
               ontology.term
                 .toLocaleLowerCase()
-                .includes(<string>term.toLocaleLowerCase())
+                .includes(<string>term.toLocaleLowerCase()),
             );
             retOntologies.push(
               new FilterCategory({
                 ...ontologyCategory,
                 values: values,
                 query: term,
-              })
+              }),
             );
           });
           this.filteredOntologies.set(retOntologies);
-        })
+        }),
       )
       .subscribe();
   }
@@ -104,10 +101,10 @@ export class OntologyPanelComponent implements OnInit {
           const values = onto.values.filter((val) =>
             val.term
               .toLocaleLowerCase()
-              .includes(<string>term.toLocaleLowerCase())
+              .includes(<string>term.toLocaleLowerCase()),
           );
           returnedOntologies.push(
-            new FilterCategory({ ...onto, values: values, query: term })
+            new FilterCategory({ ...onto, values: values, query: term }),
           );
         } else {
           returnedOntologies.push(onto);

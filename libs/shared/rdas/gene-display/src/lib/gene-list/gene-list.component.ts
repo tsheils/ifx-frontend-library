@@ -15,11 +15,11 @@ import { MatSort, MatSortModule, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
-import { GeneAssociation } from '@ncats-frontend-library/models/rdas';
-import { ExternalLinkComponent } from '@ncats-frontend-library/shared/utils/external-link';
+import { GeneAssociation } from 'rdas-models';
+import { ExternalLinkComponent } from 'external-link';
 
 @Component({
-  selector: 'ncats-frontend-library-gene-list',
+  selector: 'lib-gene-list',
   imports: [
     MatPaginatorModule,
     MatCardModule,
@@ -109,7 +109,7 @@ export class GeneListComponent {
 
           // finally joining each row with a line break
         },
-        [headings]
+        [headings],
       )
       .join('\n');
     return rows;

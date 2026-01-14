@@ -3,14 +3,14 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/stores/disease-store/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/stores/disease-store"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/stores/disease-store/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/stores/disease-store/"
       }
     },
     "lint": {

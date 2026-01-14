@@ -7,3 +7,5 @@
 .idea
 .nx
 /.nx/workspace-data
+
+/.nx/cache

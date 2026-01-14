@@ -8,17 +8,17 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { GraphNode } from '@ncats-frontend-library/models/utils';
-import { NcatsDatatableComponent } from 'ncats-datatable';
+import { IfxDatatableComponent } from 'ifx-datatable';
+import { GraphNode } from 'utils-models';
 import { ForceDirectedGraphService } from 'utils-force-directed-graph';
 
 export const GRAPH_LEGEND = new InjectionToken<string>(
-  'RampGraphLegendComponent'
+  'RampGraphLegendComponent',
 );
 
 @Component({
   selector: 'lib-ramp-graph-legend',
-  imports: [CommonModule, NcatsDatatableComponent, MatExpansionModule],
+  imports: [CommonModule, MatExpansionModule, IfxDatatableComponent],
   templateUrl: './ramp-graph-legend.component.html',
   styleUrl: './ramp-graph-legend.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -35,7 +35,7 @@ export class RampGraphLegendComponent implements OnInit {
       this.hoveredNode.set(res);
     });
     this.forceDirectedGraphService.nodeClicked.subscribe((res) =>
-      this.clickedNode.set(res)
+      this.clickedNode.set(res),
     );
   }
 }

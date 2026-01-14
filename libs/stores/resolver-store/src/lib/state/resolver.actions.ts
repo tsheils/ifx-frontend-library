@@ -1,4 +1,4 @@
-import { Filter } from '@ncats-frontend-library/models/utils';
+import { Filter } from 'utils-models';
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { ResolverForm, ResolverResponse } from 'ifx';
 

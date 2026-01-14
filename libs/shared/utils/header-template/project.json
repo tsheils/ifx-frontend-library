@@ -3,14 +3,14 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/utils/header-template/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/utils/header-template"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/header-template/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/header-template"
       }
     },
     "lint": {

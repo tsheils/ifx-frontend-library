@@ -14,7 +14,7 @@ info:
     x-id: 'https://github.com/ncats'
   termsOfService: https://rampdb.nih.gov
 tags:
-  - name: NCATS-API
+  - name: RaMP-API
 paths:
   /api/source-versions:
     get:

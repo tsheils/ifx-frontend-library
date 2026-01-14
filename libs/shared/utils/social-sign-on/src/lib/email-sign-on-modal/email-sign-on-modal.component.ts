@@ -14,10 +14,7 @@ import {
   ReactiveFormsModule,
 } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import {
-  LoginEmailUserActions,
-  UserSelectors,
-} from '@ncats-frontend-library/stores/user-store';
+import { LoginEmailUserActions, UserSelectors } from 'user-store';
 import { select, Store } from '@ngrx/store';
 import { map } from 'rxjs';
 import { ForgotPasswordModalComponent } from '../forgot-password-modal/forgot-password-modal.component';
@@ -29,7 +26,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-email-sign-on-modal',
+  selector: 'lib-email-sign-on-modal',
   templateUrl: './email-sign-on-modal.component.html',
   styleUrls: ['./email-sign-on-modal.component.scss'],
   imports: [
@@ -64,7 +61,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
           if (res) {
             this.loginError = res;
           }
-        })
+        }),
       )
       .subscribe();
 
@@ -76,12 +73,12 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
           if (res) {
             this.closeModal();
           }
-        })
+        }),
       )
       .subscribe();
 
     this.signOnForm.controls['pw'].valueChanges.subscribe(
-      () => (this.loginError = '')
+      () => (this.loginError = ''),
     );
   }
 
@@ -105,7 +102,7 @@ export class EmailSignOnModalComponent implements OnInit, OnDestroy {
     this.loginError = '';
     if (this.signOnForm.valid) {
       this.store.dispatch(
-        LoginEmailUserActions.loginEmailUser(this.signOnForm.value)
+        LoginEmailUserActions.loginEmailUser(this.signOnForm.value),
       );
     }
   }

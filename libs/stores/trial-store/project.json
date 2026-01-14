@@ -2,20 +2,19 @@
   "name": "stores-trial-store",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/stores/trial-store/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "projectType": "library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/stores/trial-store/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/stores/trial-store/"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "executor": "@nx/eslint:lint"
     }
   }
 }

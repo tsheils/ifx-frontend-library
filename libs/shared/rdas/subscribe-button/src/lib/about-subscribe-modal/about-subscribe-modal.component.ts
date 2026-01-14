@@ -4,10 +4,10 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
-import { SocialSignOnButtonComponent } from '@ncats-frontend-library/shared/utils/social-sign-on';
+import { SocialSignOnButtonComponent } from 'social-sign-on';
 
 @Component({
-  selector: 'ncats-frontend-library-about-subscribe-modal',
+  selector: 'lib-about-subscribe-modal',
   templateUrl: './about-subscribe-modal.component.html',
   styleUrls: ['./about-subscribe-modal.component.scss'],
   imports: [

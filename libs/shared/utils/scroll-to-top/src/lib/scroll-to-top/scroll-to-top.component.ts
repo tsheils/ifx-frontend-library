@@ -20,7 +20,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'ncats-frontend-library-scroll-to-top',
+  selector: 'lib-scroll-to-top',
   imports: [
     CommonModule,
     MatIconModule,
@@ -36,7 +36,7 @@ import { Router } from '@angular/router';
 })
 export class ScrollToTopComponent implements AfterViewInit {
   platformId: InjectionToken<NonNullable<unknown>> = inject(
-    PLATFORM_ID
+    PLATFORM_ID,
   ) as InjectionToken<NonNullable<unknown>>;
   isBrowser = computed(() => isPlatformBrowser(this.platformId));
   destroyRef = inject(DestroyRef);

@@ -7,11 +7,8 @@ import {
 } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  USERS_FEATURE_KEY,
-  usersReducer,
-} from '@ncats-frontend-library/stores/user-store';
+
+import { USERS_FEATURE_KEY, usersReducer } from 'user-store';
 import { StoreModule } from '@ngrx/store';
 
 import { SocialSignOnModalComponent } from './social-sign-on-modal.component';
@@ -29,7 +26,7 @@ describe('SocialSignOnModalComponent', () => {
         MatListModule,
         MatIconModule,
         MatButtonModule,
-        NoopAnimationsModule,
+        
         StoreModule.forRoot({}),
         StoreModule.forFeature(USERS_FEATURE_KEY, usersReducer),
       ],

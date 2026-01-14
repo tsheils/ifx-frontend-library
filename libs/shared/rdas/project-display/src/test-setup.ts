@@ -1,10 +1,18 @@
-import { setupZoneTestEnv } from 'jest-preset-angular/setup-env/zone';
+import '@angular/compiler';
+import '@analogjs/vitest-angular/setup-zone';
 
-setupZoneTestEnv({
-  errorOnUnknownElements: true,
-  errorOnUnknownProperties: true,
-});
-import { CoreProject } from '@ncats-frontend-library/models/rdas';
+import {
+  BrowserTestingModule,
+  platformBrowserTesting,
+} from '@angular/platform-browser/testing';
+import { CoreProject } from 'rdas-models';
+
+import { getTestBed } from '@angular/core/testing';
+
+getTestBed().initTestEnvironment(
+    BrowserTestingModule,
+    platformBrowserTesting(),
+);
 
 export const PROJECTMOCK: CoreProject = new CoreProject({
   core_project_num: 'K01OH000018',

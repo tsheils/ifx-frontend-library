@@ -1,4 +1,4 @@
-import { FilterCategory } from '@ncats-frontend-library/models/utils';
+import { FilterCategory } from 'utils-models';
 import {
   filtersAdapter,
   FiltersPartialState,
@@ -25,7 +25,7 @@ describe('Filters Selectors', () => {
           selectedId: 'PRODUCT-BBB',
           error: ERROR_MSG,
           loaded: true,
-        }
+        },
       ),
     };
   });

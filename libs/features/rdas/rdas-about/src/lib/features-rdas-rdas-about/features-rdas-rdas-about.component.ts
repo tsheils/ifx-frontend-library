@@ -22,7 +22,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 
 @Component({
-  selector: 'ncats-frontend-library-features-rdas-about',
+  selector: 'lib-features-rdas-about',
   imports: [
     CommonModule,
     MatListModule,

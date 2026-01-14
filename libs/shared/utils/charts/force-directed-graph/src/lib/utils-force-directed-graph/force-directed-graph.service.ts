@@ -5,8 +5,8 @@ import {
   Output,
   signal,
 } from '@angular/core';
-import { GraphNode } from '@ncats-frontend-library/models/utils';
-import { DataProperty } from '@ncats-frontend-library/models/utils';
+import { GraphNode } from 'utils-models';
+import { DataProperty } from 'utils-models';
 
 @Injectable({
   providedIn: 'root',

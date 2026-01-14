@@ -3,14 +3,14 @@
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "libs/shared/utils/loading-spinner/src",
-  "prefix": "ncats-frontend-library",
+  "prefix": "ifx-frontend-library",
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/libs/shared/utils/loading-spinner"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/loading-spinner/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/loading-spinner"
       }
     },
     "lint": {

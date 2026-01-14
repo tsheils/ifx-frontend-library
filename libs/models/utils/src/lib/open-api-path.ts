@@ -1,4 +1,3 @@
-
 export class OpenApiPath {
   description?: string;
   required?: string;
@@ -45,7 +44,7 @@ export class OpenApiPath {
       this.hideSection = <boolean>obj['x-hideSection'];
     }
 
-   if (obj['x-HTMLDescription']) {
+    if (obj['x-HTMLDescription']) {
       this.HTMLDescription = <string>obj['x-HTMLDescription'];
     }
 
@@ -95,7 +94,7 @@ export class OpenApiPath {
                   if (!val['hidden']) {
                     exampleObj[key] = value[key as keyof typeof value];
                   }
-                }
+                },
               );
             }
           }

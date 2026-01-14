@@ -3,7 +3,7 @@ import {
   ProjectEffects,
   PROJECTS_FEATURE_KEY,
   projectsReducer,
-} from '@ncats-frontend-library/stores/grant-store';
+} from 'grant-store';
 import { StoreModule } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 

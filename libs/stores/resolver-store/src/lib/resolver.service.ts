@@ -39,7 +39,7 @@ export class ResolverService {
     return this.http.post<ResolverResponse[]>(
       this.resolverUrl + urlStub,
       this.toUrlEncodedParams(newForm),
-      httpOptions
+      httpOptions,
     );
   }
 
@@ -48,8 +48,8 @@ export class ResolverService {
       .map(
         (key: string) =>
           `${encodeURIComponent(key)}=${encodeURIComponent(
-            body[key as keyof typeof body]
-          )}`
+            body[key as keyof typeof body],
+          )}`,
       )
       .join('&');
   }

@@ -3,7 +3,7 @@ import { MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
 @Component({
-  selector: 'ncats-frontend-library-unsubscribe-modal',
+  selector: 'lib-unsubscribe-modal',
   templateUrl: './unsubscribe-modal.component.html',
   styleUrls: ['./unsubscribe-modal.component.scss'],
   imports: [MatDialogModule, MatButtonModule],

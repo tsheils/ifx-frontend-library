@@ -6,54 +6,54 @@
           <span class="mat-card-title"> {{ latestGrant()!.title }}</span>
         </div>
         @if (grant()?.core_project_num) {
-        <div class="mat-h3">
-          <a
-            aria-label="Link to project at NIH Reporter"
-            href="https://reporter.nih.gov/project-details/{{
-              grant()?.core_project_num
-            }}"
-            rel="noreferrer"
-            target="_blank"
-            >{{ grant()?.core_project_num }}</a
-          >
-        </div>
+          <div class="mat-h3">
+            <a
+              aria-label="Link to project at NIH Reporter"
+              href="https://reporter.nih.gov/project-details/{{
+                grant()?.core_project_num
+              }}"
+              rel="noreferrer"
+              target="_blank"
+              >{{ grant()?.core_project_num }}</a
+            >
+          </div>
         }
       </div>
       <mat-card-content>
         @if (latestGrant() && latestGrant()!.abstract?.length) {
-        <div class="primary-chip-outlined">Abstract</div>
+          <div class="primary-chip-outlined">Abstract</div>
         }
         <br />
         @if (fullAbstract) {
-        <div>
-          <span class="mat-subtitle-2">{{ latestGrant().abstract }}</span>
-          @if (fullAbstract && truncatedAbstract()) {
-          <a
-            role="button"
-            tabindex="0"
-            (click)="fullAbstract = false"
-            (keydown.enter)="fullAbstract = false"
-            class="expand-link"
-          >
-            ...less</a
-          >
-          }
-        </div>
+          <div>
+            <span class="mat-subtitle-2">{{ latestGrant().abstract }}</span>
+            @if (fullAbstract && truncatedAbstract()) {
+              <a
+                role="button"
+                tabindex="0"
+                (click)="fullAbstract = false"
+                (keydown.enter)="fullAbstract = false"
+                class="expand-link"
+              >
+                ...less</a
+              >
+            }
+          </div>
         } @else {
-        <div #truncated>
-          <span class="mat-subtitle-2">{{ truncatedAbstract() }}</span>
-          @if (!fullAbstract) {
-          <a
-            role="button"
-            tabindex="0"
-            (click)="fullAbstract = true"
-            (keydown.enter)="fullAbstract = true"
-            class="expand-link"
-          >
-            ...more</a
-          >
-          }
-        </div>
+          <div #truncated>
+            <span class="mat-subtitle-2">{{ truncatedAbstract() }}</span>
+            @if (!fullAbstract) {
+              <a
+                role="button"
+                tabindex="0"
+                (click)="fullAbstract = true"
+                (keydown.enter)="fullAbstract = true"
+                class="expand-link"
+              >
+                ...more</a
+              >
+            }
+          </div>
         }
 
         <br />
@@ -67,12 +67,12 @@
               {{ funding() || 'None Listed' }}
             </div>
             @if (grant()?.rd_total_cost) {
-            <div>
-              <div class="primary-chip-outlined">Total Cost</div>
-              <div class="list-item-content">
-                {{ grant()?.rd_total_cost | currency }}
+              <div>
+                <div class="primary-chip-outlined">Total Cost</div>
+                <div class="list-item-content">
+                  {{ grant()?.rd_total_cost | currency }}
+                </div>
               </div>
-            </div>
             }
           </mat-card>
           <mat-card [appearance]="'outlined'">
@@ -80,14 +80,14 @@
               Patents: {{ grant()?.patents ? grant()?.patents?.length : 0 }}
             </div>
             @if (grant()?.patents && grant()?.patents?.length) {
-            <div>
-              @for (patent of grant()!.patents; track patent.title) {
               <div>
-                <div class="list-item-title">{{ patent.title }}</div>
-                <div class="list-item-content">{{ patent.org_name }}</div>
+                @for (patent of grant()!.patents; track patent.title) {
+                  <div>
+                    <div class="list-item-title">{{ patent.title }}</div>
+                    <div class="list-item-content">{{ patent.org_name }}</div>
+                  </div>
+                }
               </div>
-              }
-            </div>
             }
           </mat-card>
           <mat-card [appearance]="'outlined'">
@@ -98,14 +98,14 @@
               }}
             </div>
             @if (grant()?.clinicalStudies && grant()?.clinicalStudies?.length) {
-            <div>
-              @for (study of grant()!.clinicalStudies; track study.title) {
               <div>
-                <div class="list-item-title">{{ study.title }}</div>
-                <div class="list-item-content">{{ study.status }}</div>
+                @for (study of grant()!.clinicalStudies; track study.title) {
+                  <div>
+                    <div class="list-item-title">{{ study.title }}</div>
+                    <div class="list-item-content">{{ study.status }}</div>
+                  </div>
+                }
               </div>
-              }
-            </div>
             }
           </mat-card>
         </div>
@@ -121,77 +121,85 @@
               </div>
             </ng-template>
             <mat-accordion [displayMode]="'flat'" multi>
-              @for ( grantPr of grant()?.projects; track grantPr.application_id;
-              let i = $index ) {
-              <mat-expansion-panel [expanded]="i === 0">
-                <mat-expansion-panel-header>
-                  <mat-panel-title>
-                    <div class="mat-mdc-card-title">
-                      {{ grantPr.funding_year }} &nbsp;&nbsp;&nbsp;
-                      {{ grantPr.title }}&nbsp;&nbsp;&nbsp;
-                      {{ grantPr.total_cost | currency }}
-                    </div>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <div class="grant-content-wrapper">
-                  <mat-card [appearance]="'outlined'">
-                    <div class="grant-sub-header bottom-border-primary">
-                      Diseases Studied:
-                      {{
-                        grantPr?.researchedDiseases
-                          ? grantPr?.researchedDiseases?.length
-                          : 0
-                      }}
-                    </div>
-                    @for ( disease of grantPr?.researchedDiseases; track
-                    disease.gardId ) {
-                    <div>
-                      @if (disease.gardId) {
-                      <div #link>
-                        <a
-                          aria-label="Link to disease details page"
-                          href="/disease?id={{ disease.gardId }}"
-                          rel="noreferrer"
-                          target="_blank"
-                          >{{ disease.name }}</a
-                        >
+              @for (
+                grantPr of grant()?.projects;
+                track grantPr.application_id;
+                let i = $index
+              ) {
+                <mat-expansion-panel [expanded]="i === 0">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                      <div class="mat-mdc-card-title">
+                        {{ grantPr.funding_year }} &nbsp;&nbsp;&nbsp;
+                        {{ grantPr.title }}&nbsp;&nbsp;&nbsp;
+                        {{ grantPr.total_cost | currency }}
                       </div>
-                      } @else {
-                      <div #nolink>
-                        {{ disease.name }}
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <div class="grant-content-wrapper">
+                    <mat-card [appearance]="'outlined'">
+                      <div class="grant-sub-header bottom-border-primary">
+                        Diseases Studied:
+                        {{
+                          grantPr?.researchedDiseases
+                            ? grantPr?.researchedDiseases?.length
+                            : 0
+                        }}
                       </div>
+                      @for (
+                        disease of grantPr?.researchedDiseases;
+                        track disease.gardId
+                      ) {
+                        <div>
+                          @if (disease.gardId) {
+                            <div #link>
+                              <a
+                                aria-label="Link to disease details page"
+                                href="/disease?id={{ disease.gardId }}"
+                                rel="noreferrer"
+                                target="_blank"
+                                >{{ disease.name }}</a
+                              >
+                            </div>
+                          } @else {
+                            <div #nolink>
+                              {{ disease.name }}
+                            </div>
+                          }
+                        </div>
                       }
-                    </div>
-                    }
-                  </mat-card>
-                  <mat-card [appearance]="'outlined'">
-                    <div class="grant-sub-header bottom-border-primary">
-                      Annotations:
-                      {{
-                        grantPr?.annotations ? grantPr?.annotations?.length : 0
-                      }}
-                    </div>
-                    @if ( grantPr?.annotations && grantPr?.annotations?.length )
-                    {
-                    <ncats-frontend-library-annotations-display
-                      [annotations]="grantPr.annotations"
-                    ></ncats-frontend-library-annotations-display>
-                    }
-                  </mat-card>
-                  <mat-card [appearance]="'outlined'">
-                    <div class="grant-sub-header bottom-border-primary">
-                      Key Terms:
-                      {{ grantPr?.terms ? grantPr?.terms?.length : 0 }}
-                    </div>
-                    <br />
-                    @for (term of grantPr?.terms; track term) {
-                    <div>
-                      {{ term }}
-                    </div>
-                    }
-                  </mat-card>
-                </div>
-              </mat-expansion-panel>
+                    </mat-card>
+                    <mat-card [appearance]="'outlined'">
+                      <div class="grant-sub-header bottom-border-primary">
+                        Annotations:
+                        {{
+                          grantPr?.annotations
+                            ? grantPr?.annotations?.length
+                            : 0
+                        }}
+                      </div>
+                      @if (
+                        grantPr?.annotations && grantPr?.annotations?.length
+                      ) {
+                        <lib-annotations-display
+                          [annotations]="grantPr.annotations"
+                        ></lib-annotations-display>
+                      }
+                    </mat-card>
+                    <mat-card [appearance]="'outlined'">
+                      <div class="grant-sub-header bottom-border-primary">
+                        Key Terms:
+                        {{ grantPr?.terms ? grantPr?.terms?.length : 0 }}
+                      </div>
+                      <br />
+                      @for (term of grantPr?.terms; track term) {
+                        <div>
+                          {{ term }}
+                        </div>
+                      }
+                    </mat-card>
+                  </div>
+                </mat-expansion-panel>
               }
             </mat-accordion>
           </mat-tab>

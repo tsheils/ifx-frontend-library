@@ -23,12 +23,12 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
-import { HighlightPipe } from '@ncats-frontend-library/shared/utils/highlight-pipe';
+import { Filter, FilterCategory } from 'utils-models';
+import { HighlightPipe } from 'highlight-pipe';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 @Component({
-  selector: 'ncats-frontend-library-shared-utils-filter-panel',
+  selector: 'lib-shared-utils-filter-panel',
   imports: [
     CommonModule,
     MatCheckboxModule,
@@ -84,7 +84,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
             label: this.filter().label,
             term: term,
           });
-        })
+        }),
       )
       .subscribe();
 
@@ -99,7 +99,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
         takeUntilDestroyed(this.destroyRef),
         map((range: ListRange) => {
           this.range = range;
-        })
+        }),
       )
       .subscribe();
   }
@@ -108,7 +108,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
     this.filterSelection.select(
       ...this.filter()
         .values.filter((val) => val.selected)
-        .map((val) => val.term)
+        .map((val) => val.term),
     );
   }
 

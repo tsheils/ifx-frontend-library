@@ -9,7 +9,7 @@ import {
   OnInit,
   ViewEncapsulation,
 } from '@angular/core';
-import { Filter, FilterCategory } from '@ncats-frontend-library/models/utils';
+import { Filter, FilterCategory } from 'utils-models';
 import { interpolate, quantize, ScaleOrdinal } from 'd3';
 import { scaleOrdinal } from 'd3-scale';
 import { select } from 'd3-selection';
@@ -37,7 +37,7 @@ export class SharedUtilsPieChartComponent
       .innerRadius(this.radius() * 0.67)
       .outerRadius(this.radius() - 1)
       .cornerRadius(3)
-      .padAngle(0.015)
+      .padAngle(0.015),
   );
 
   // readonly clickElement = output<Filter>();
@@ -73,8 +73,8 @@ export class SharedUtilsPieChartComponent
         .range(
           quantize(
             interpolate('#93278f', '#6e4c8f'),
-            this.dataSignal()!.values.length
-          ).reverse()
+            this.dataSignal()!.values.length,
+          ).reverse(),
         );
 
       select(element).select('svg').remove();
@@ -137,7 +137,7 @@ export class SharedUtilsPieChartComponent
         this.clickElement.emit(d.data);
         select((<unknown>event.currentTarget) as string).attr(
           'class',
-          'clickedSlice'
+          'clickedSlice',
         );
       });
     const firstSlice = this.svg
@@ -179,7 +179,7 @@ export class SharedUtilsPieChartComponent
       .attr('class', 'toolCircle')
       .attr(
         'style',
-        'text-anchor: middle; font-family: Roboto, serif; font-color: white'
+        'text-anchor: middle; font-family: Roboto, serif; font-color: white',
       )
       .attr('dy', -15) // hard-coded. can adjust this to adjust text vertical alignment in tooltip*/
       .html(d.term); // add text to the circle.
@@ -188,7 +188,7 @@ export class SharedUtilsPieChartComponent
       .attr('class', 'toolCircle value')
       .attr(
         'style',
-        'text-anchor: middle; font-family: Roboto, serif; font-size: 2.4em'
+        'text-anchor: middle; font-family: Roboto, serif; font-size: 2.4em',
       )
       .attr('dy', 30) // hard-coded. can adjust this to adjust text vertical alignment in tooltip*/
       .html(d.count);

@@ -1,302 +1,300 @@
-<ncats-frontend-library-disease-header
-  [disease]="disease()"
-></ncats-frontend-library-disease-header>
+<lib-disease-header [disease]="disease()"></lib-disease-header>
 <div class="disease-page row right-justified-row">
   @defer (when !mobile) {
-  <div #navigationsidenav class="width-25 navigation-sidenav">
-    <div class="toc-wrapper" [@followOnScroll]="animationState()">
-      <div class="toc">
-        <mat-nav-list>
-          <a
-            mat-list-item
-            class="list-button"
-            role="button"
-            tabindex="0"
-            (click)="scroll('overview')"
-            (keydown.enter)="scroll('overview')"
-            [activated]="isActive('overview')"
-          >
-            Overview
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            role="button"
-            tabindex="0"
-            (click)="scroll('genes')"
-            (keydown.enter)="scroll('genes')"
-            [activated]="isActive('genes')"
-          >
-            <div class="row space-between-row">
-              <div>Genes</div>
-              <div>{{ disease()?.geneCount }}</div>
-            </div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            role="button"
-            tabindex="0"
-            (click)="scroll('phenotypes')"
-            (keydown.enter)="scroll('phenotypes')"
-            [activated]="isActive('phenotypes')"
-          >
-            <div class="row space-between-row">
-              <div>Phenotypes</div>
-              <div>{{ disease()?.phenotypeCount }}</div>
-            </div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            role="button"
-            tabindex="0"
-            (click)="
-              setUrl({
-                fragment: 'articles',
-                params: { isNHS: null, isEpi: null }
-              })
-            "
-            (keydown.enter)="
-              setUrl({
-                fragment: 'articles',
-                params: { isNHS: null, isEpi: null }
-              })
-            "
-            [activated]="isActive('articles')"
-          >
-            <div class="row space-between-row">
-              <div>Articles</div>
-              <div>{{ articlesCount().allArticlesCount }}</div>
-            </div>
-          </a>
-          <a
-            mat-list-item
-            class="sub-list-button"
-            role="button"
-            tabindex="0"
-            (click)="
-              setUrl({
-                fragment: 'articles',
-                params: { isEpi: true, isNHS: null }
-              })
-            "
-            (keydown.enter)="
-              setUrl({
-                fragment: 'articles',
-                params: { isEpi: true, isNHS: null }
-              })
-            "
-            [activated]="isActive('epiArticles')"
-          >
-            <div class="row space-between-row">
-              <div>Epidemiology Articles</div>
-              <div>{{ articlesCount().epiArticlesCount }}</div>
-            </div>
-          </a>
-          <a
-            mat-list-item
-            class="sub-list-button"
-            role="button"
-            tabindex="0"
-            (click)="
-              setUrl({
-                fragment: 'articles',
-                params: { isNHS: true, isEpi: null }
-              })
-            "
-            (keydown.enter)="
-              setUrl({
-                fragment: 'articles',
-                params: { isNHS: true, isEpi: null }
-              })
-            "
-            [activated]="isActive('nhsArticles')"
-          >
-            <div class="row space-between-row">
-              <div>Natural Health Study Articles</div>
-              <div>{{ articlesCount().nhsArticlesCount }}</div>
-            </div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            role="button"
-            tabindex="0"
-            (click)="scroll('projects')"
-            (keydown.enter)="scroll('projects')"
-            [activated]="isActive('projects')"
-          >
-            <div class="row space-between-row">
-              <div>NIH funded Projects</div>
-              <div>{{ projectsCount() }}</div>
-            </div>
-          </a>
-          <a
-            mat-list-item
-            class="list-button"
-            role="button"
-            tabindex="0"
-            (click)="scroll('trials')"
-            (keydown.enter)="scroll('trials')"
-            [activated]="isActive('trials')"
-          >
-            <div class="row space-between-row">
-              <div>Clinical Trials</div>
-              <div>{{ trialsCount().allTrialCount }}</div>
-            </div>
-          </a>
-        </mat-nav-list>
+    <div #navigationsidenav class="width-25 navigation-sidenav">
+      <div class="toc-wrapper" [@followOnScroll]="animationState()">
+        <div class="toc">
+          <mat-nav-list>
+            <a
+              mat-list-item
+              class="list-button"
+              role="button"
+              tabindex="0"
+              (click)="scroll('overview')"
+              (keydown.enter)="scroll('overview')"
+              [activated]="isActive('overview')"
+            >
+              Overview
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              role="button"
+              tabindex="0"
+              (click)="scroll('genes')"
+              (keydown.enter)="scroll('genes')"
+              [activated]="isActive('genes')"
+            >
+              <div class="row space-between-row">
+                <div>Genes</div>
+                <div>{{ disease()?.geneCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              role="button"
+              tabindex="0"
+              (click)="scroll('phenotypes')"
+              (keydown.enter)="scroll('phenotypes')"
+              [activated]="isActive('phenotypes')"
+            >
+              <div class="row space-between-row">
+                <div>Phenotypes</div>
+                <div>{{ disease()?.phenotypeCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              role="button"
+              tabindex="0"
+              (click)="
+                setUrl({
+                  fragment: 'articles',
+                  params: { isNHS: null, isEpi: null },
+                })
+              "
+              (keydown.enter)="
+                setUrl({
+                  fragment: 'articles',
+                  params: { isNHS: null, isEpi: null },
+                })
+              "
+              [activated]="isActive('articles')"
+            >
+              <div class="row space-between-row">
+                <div>Articles</div>
+                <div>{{ articlesCount().allArticlesCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="sub-list-button"
+              role="button"
+              tabindex="0"
+              (click)="
+                setUrl({
+                  fragment: 'articles',
+                  params: { isEpi: true, isNHS: null },
+                })
+              "
+              (keydown.enter)="
+                setUrl({
+                  fragment: 'articles',
+                  params: { isEpi: true, isNHS: null },
+                })
+              "
+              [activated]="isActive('epiArticles')"
+            >
+              <div class="row space-between-row">
+                <div>Epidemiology Articles</div>
+                <div>{{ articlesCount().epiArticlesCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="sub-list-button"
+              role="button"
+              tabindex="0"
+              (click)="
+                setUrl({
+                  fragment: 'articles',
+                  params: { isNHS: true, isEpi: null },
+                })
+              "
+              (keydown.enter)="
+                setUrl({
+                  fragment: 'articles',
+                  params: { isNHS: true, isEpi: null },
+                })
+              "
+              [activated]="isActive('nhsArticles')"
+            >
+              <div class="row space-between-row">
+                <div>Natural Health Study Articles</div>
+                <div>{{ articlesCount().nhsArticlesCount }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              role="button"
+              tabindex="0"
+              (click)="scroll('projects')"
+              (keydown.enter)="scroll('projects')"
+              [activated]="isActive('projects')"
+            >
+              <div class="row space-between-row">
+                <div>NIH funded Projects</div>
+                <div>{{ projectsCount() }}</div>
+              </div>
+            </a>
+            <a
+              mat-list-item
+              class="list-button"
+              role="button"
+              tabindex="0"
+              (click)="scroll('trials')"
+              (keydown.enter)="scroll('trials')"
+              [activated]="isActive('trials')"
+            >
+              <div class="row space-between-row">
+                <div>Clinical Trials</div>
+                <div>{{ trialsCount().allTrialCount }}</div>
+              </div>
+            </a>
+          </mat-nav-list>
+        </div>
       </div>
     </div>
-  </div>
   } @placeholder {
-  <div class="drawer-container-content width-75 width-sm-95">
-    <div class="row centered-row">
-      <div class="full-width">
-        <mat-expansion-panel [expanded]="true">
-          <mat-expansion-panel-header>
-            <mat-panel-title>
-              <span class="disease-accordion-title bottom-border-primary"
-                >Shortcuts</span
-              >
-            </mat-panel-title>
-          </mat-expansion-panel-header>
-          <div class="toc">
-            <mat-nav-list>
-              <a
-                mat-list-item
-                class="list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('overview')"
-                (keydown.enter)="scroll('overview')"
-                [activated]="isActive('overview')"
-              >
-                Overview
-              </a>
-              <a
-                mat-list-item
-                class="list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('genes')"
-                (keydown.enter)="scroll('genes')"
-                [activated]="isActive('genes')"
-              >
-                <div class="row space-between-row">
-                  <div>Genes</div>
-                  <div>{{ disease()?.geneCount }}</div>
-                </div>
-              </a>
-              <a
-                mat-list-item
-                class="list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('phenotypes')"
-                (keydown.enter)="scroll('phenotypes')"
-                [activated]="isActive('phenotypes')"
-              >
-                <div class="row space-between-row">
-                  <div>Phenotypes</div>
-                  <div>{{ disease()?.phenotypeCount }}</div>
-                </div>
-              </a>
-              <a
-                mat-list-item
-                class="list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('articles')"
-                (keydown.enter)="scroll('articles')"
-                [activated]="isActive('articles')"
-              >
-                <div class="row space-between-row">
-                  <div>Articles</div>
-                  <div>{{ articlesCount().allArticlesCount }}</div>
-                </div>
-              </a>
-              <a
-                mat-list-item
-                class="sub-list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('epiArticles')"
-                (keydown.enter)="scroll('epiArticles')"
-                [activated]="isActive('epiArticles')"
-              >
-                <div class="row space-between-row">
-                  <div>Epidemiology Articles</div>
-                  <div>{{ articlesCount().epiArticlesCount }}</div>
-                </div>
-              </a>
-              <a
-                mat-list-item
-                class="sub-list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('nhsArticles')"
-                (keydown.enter)="scroll('nhsArticles')"
-                [activated]="isActive('nhsArticles')"
-              >
-                <div class="row space-between-row">
-                  <div>Natural Health Study Articles</div>
-                  <div>{{ articlesCount().nhsArticlesCount }}</div>
-                </div>
-              </a>
-              <a
-                mat-list-item
-                class="list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('projects')"
-                (keydown.enter)="scroll('projects')"
-                [activated]="isActive('projects')"
-              >
-                <div class="row space-between-row">
-                  <div>NIH funded Projects</div>
-                  <div>{{ projectsCount() }}</div>
-                </div>
-              </a>
-              <a
-                mat-list-item
-                class="list-button"
-                role="button"
-                tabindex="0"
-                (click)="scroll('trials')"
-                (keydown.enter)="scroll('trials')"
-                [activated]="isActive('trials')"
-              >
-                <div class="row space-between-row">
-                  <div>Clinical Trials</div>
-                  <div>{{ trialsCount() }}</div>
-                </div>
-              </a>
-            </mat-nav-list>
-          </div>
-        </mat-expansion-panel>
+    <div class="drawer-container-content width-75 width-sm-95">
+      <div class="row centered-row">
+        <div class="full-width">
+          <mat-expansion-panel [expanded]="true">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <span class="disease-accordion-title bottom-border-primary"
+                  >Shortcuts</span
+                >
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="toc">
+              <mat-nav-list>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('overview')"
+                  (keydown.enter)="scroll('overview')"
+                  [activated]="isActive('overview')"
+                >
+                  Overview
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('genes')"
+                  (keydown.enter)="scroll('genes')"
+                  [activated]="isActive('genes')"
+                >
+                  <div class="row space-between-row">
+                    <div>Genes</div>
+                    <div>{{ disease()?.geneCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('phenotypes')"
+                  (keydown.enter)="scroll('phenotypes')"
+                  [activated]="isActive('phenotypes')"
+                >
+                  <div class="row space-between-row">
+                    <div>Phenotypes</div>
+                    <div>{{ disease()?.phenotypeCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('articles')"
+                  (keydown.enter)="scroll('articles')"
+                  [activated]="isActive('articles')"
+                >
+                  <div class="row space-between-row">
+                    <div>Articles</div>
+                    <div>{{ articlesCount().allArticlesCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="sub-list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('epiArticles')"
+                  (keydown.enter)="scroll('epiArticles')"
+                  [activated]="isActive('epiArticles')"
+                >
+                  <div class="row space-between-row">
+                    <div>Epidemiology Articles</div>
+                    <div>{{ articlesCount().epiArticlesCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="sub-list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('nhsArticles')"
+                  (keydown.enter)="scroll('nhsArticles')"
+                  [activated]="isActive('nhsArticles')"
+                >
+                  <div class="row space-between-row">
+                    <div>Natural Health Study Articles</div>
+                    <div>{{ articlesCount().nhsArticlesCount }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('projects')"
+                  (keydown.enter)="scroll('projects')"
+                  [activated]="isActive('projects')"
+                >
+                  <div class="row space-between-row">
+                    <div>NIH funded Projects</div>
+                    <div>{{ projectsCount() }}</div>
+                  </div>
+                </a>
+                <a
+                  mat-list-item
+                  class="list-button"
+                  role="button"
+                  tabindex="0"
+                  (click)="scroll('trials')"
+                  (keydown.enter)="scroll('trials')"
+                  [activated]="isActive('trials')"
+                >
+                  <div class="row space-between-row">
+                    <div>Clinical Trials</div>
+                    <div>{{ trialsCount() }}</div>
+                  </div>
+                </a>
+              </mat-nav-list>
+            </div>
+          </mat-expansion-panel>
+        </div>
       </div>
     </div>
-  </div>
   }
   <div class="drawer-container-content width-75 width-sm-95">
     <div class="row centered-row">
       <div class="full-width">
         @if (!disease.name) {
-        <div>
-          <h1>No disease info found</h1>
-        </div>
+          <div>
+            <h1>No disease info found</h1>
+          </div>
         }
-        <ncats-frontend-library-disease-display
+        <lib-disease-display
           [disease]="disease()"
           [filters]="diseaseFilters()"
           [staticFilters]="staticDiseaseFilters()"
           [loaded]="loaded()"
           (optionsChange)="setUrl($event)"
           (activeElement)="setActiveElement($event)"
-        ></ncats-frontend-library-disease-display>
-        <ncats-frontend-library-scroll-to-top></ncats-frontend-library-scroll-to-top>
+        ></lib-disease-display>
+        <lib-scroll-to-top></lib-scroll-to-top>
       </div>
     </div>
   </div>

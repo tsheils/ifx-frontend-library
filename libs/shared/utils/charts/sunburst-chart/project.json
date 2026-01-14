@@ -7,10 +7,10 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/utils/charts/sunburst-chart/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/utils/charts/sunburst-chart"
       }
     },
     "lint": {

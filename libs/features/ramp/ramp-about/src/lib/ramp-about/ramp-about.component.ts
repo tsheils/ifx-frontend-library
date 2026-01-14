@@ -22,19 +22,15 @@ import { MatListModule } from '@angular/material/list';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { RouterLink } from '@angular/router';
-import {
-  DataProperty,
-  UpsetData,
-  UpsetPlot,
-} from '@ncats-frontend-library/models/utils';
+import { DataProperty, UpsetData, UpsetPlot } from 'utils-models';
 import { Store } from '@ngrx/store';
-import { NcatsDatatableComponent } from 'ncats-datatable';
+import { IfxDatatableComponent } from 'ifx-datatable';
 import { EntityCount } from 'ramp';
 import { RampSelectors } from 'ramp-store';
 import { UpsetComponent } from 'upset-chart';
 
 @Component({
-  selector: 'ramp-about',
+  selector: 'lib-ramp-about',
   templateUrl: './ramp-about.component.html',
   styleUrls: ['./ramp-about.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -44,7 +40,6 @@ import { UpsetComponent } from 'upset-chart';
     MatListModule,
     NgClass,
     CdkScrollable,
-    NcatsDatatableComponent,
     UpsetComponent,
     ScrollingModule,
     OverlayModule,
@@ -53,6 +48,7 @@ import { UpsetComponent } from 'upset-chart';
     MatSidenavModule,
     MatButtonModule,
     RouterLink,
+    IfxDatatableComponent,
   ],
 })
 export class AboutComponent implements OnInit {
@@ -72,14 +68,14 @@ export class AboutComponent implements OnInit {
   genesData = computed(() => {
     if (this.allRamp() && this.allRamp().geneIntersects) {
       return new UpsetPlot(
-        this.allRamp().geneIntersects.map((g) => new UpsetData(g))
+        this.allRamp().geneIntersects.map((g) => new UpsetData(g)),
       );
     } else return {} as UpsetPlot;
   });
   compoundsData = computed(() => {
     if (this.allRamp() && this.allRamp().metaboliteIntersects) {
       return new UpsetPlot(
-        this.allRamp().metaboliteIntersects.map((g) => new UpsetData(g))
+        this.allRamp().metaboliteIntersects.map((g) => new UpsetData(g)),
       );
     } else return {} as UpsetPlot;
   });
@@ -95,7 +91,7 @@ export class AboutComponent implements OnInit {
         });
       });
       return newObj;
-    })
+    }),
   );
 
   entityCountsColumns: DataProperty[] = [

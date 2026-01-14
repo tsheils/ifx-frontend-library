@@ -1,4 +1,4 @@
-ncats-frontend-library-article-details-display {
+lib-article-details-display {
   width: 98%;
   -ms-overflow-style: none; //windows
   scrollbar-width: none; //firefox
@@ -38,7 +38,7 @@ ncats-frontend-library-article-details-display {
   .annotation-term {
     padding-left: 1vw;
   }
-  ncats-frontend-library-article-list-card .mat-card-title {
+  lib-article-list-card .mat-card-title {
     font-size: 1.5rem;
   }
 }

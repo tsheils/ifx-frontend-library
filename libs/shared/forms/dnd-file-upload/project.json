@@ -7,10 +7,10 @@
   "tags": ["forms"],
   "targets": {
     "test": {
-      "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "jestConfig": "libs/shared/forms/dnd-file-upload/jest.config.ts"
+        "reportsDirectory": "../../../../coverage/libs/shared/forms/dnd-file-upload"
       }
     },
     "lint": {

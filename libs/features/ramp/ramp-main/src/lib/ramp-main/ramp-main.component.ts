@@ -9,7 +9,7 @@ import { CommonModule, NgOptimizedImage } from '@angular/common';
 import { MatCard } from '@angular/material/card';
 import { MatRipple } from '@angular/material/core';
 import { RouterLink, Router } from '@angular/router';
-import { OpenApiPath } from '@ncats-frontend-library/models/utils';
+import { OpenApiPath } from 'utils-models';
 import { Store } from '@ngrx/store';
 import {
   DropdownQuestion,
@@ -20,7 +20,7 @@ import {
   RadioQuestion,
   TextareaQuestion,
   TextboxQuestion,
-} from 'ncats-form-question';
+} from 'ifx-form-question';
 import { FormSubsection } from 'ramp';
 import { RampPageComponent } from 'ramp-page';
 import { RampSelectors } from 'ramp-store';
@@ -108,7 +108,7 @@ export class RampMainComponent {
 
   _mapPathToQuestion(
     key: string,
-    prop: { [key: string]: unknown }
+    prop: { [key: string]: unknown },
   ): QuestionBase<string> {
     let q = {} as QuestionBase<string>;
     switch (prop['type']) {

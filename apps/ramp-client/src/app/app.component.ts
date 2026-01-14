@@ -5,10 +5,10 @@ import {
   inject,
   ViewEncapsulation,
 } from '@angular/core';
-import { LinkTemplateProperty } from '@ncats-frontend-library/models/utils';
-import { FooterTemplateComponent } from '@ncats-frontend-library/shared/utils/footer-template';
-import { HeaderTemplateComponent } from '@ncats-frontend-library/shared/utils/header-template';
-import { LoadingSpinnerComponent } from '@ncats-frontend-library/shared/utils/loading-spinner';
+import { LinkTemplateProperty } from 'utils-models';
+import { FooterTemplateComponent } from 'footer-template';
+import { HeaderTemplateComponent } from 'header-template';
+import { LoadingSpinnerComponent } from 'loading-spinner';
 import { Store } from '@ngrx/store';
 import { RampFullBannerComponent } from 'full-banner';
 
@@ -18,7 +18,7 @@ import { RouterOutlet } from '@angular/router';
 import { RampSelectors } from 'ramp-store';
 
 @Component({
-  selector: 'ramp-root',
+  selector: 'app-ramp-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   encapsulation: ViewEncapsulation.None,

@@ -11,7 +11,7 @@ import { MatCard, MatCardContent } from '@angular/material/card';
 import { MatRipple } from '@angular/material/core';
 import { MatIcon } from '@angular/material/icon';
 import { RouterOutlet } from '@angular/router';
-import { OpenApiPath } from '@ncats-frontend-library/models/utils';
+import { OpenApiPath } from 'utils-models';
 import { FormSubsection } from 'ramp';
 import { RampCorePageComponent } from 'ramp-core-page';
 import { SafeHtmlPipe } from 'safe-html-pipe';
@@ -26,7 +26,7 @@ import { SafeHtmlPipe } from 'safe-html-pipe';
     MatRipple,
     MatCard,
     MatCardContent,
-    SafeHtmlPipe
+    SafeHtmlPipe,
   ],
   templateUrl: './ramp-page.component.html',
   styleUrl: './ramp-page.component.scss',
@@ -59,9 +59,9 @@ export class RampPageComponent<T extends RampCorePageComponent> {
   isActive(check: string): boolean {
     return this.activeMenuElement === check;
   }
-getHTMLDescription() {
- return this.paths()![0].HTMLDescription || ''
-}
+  getHTMLDescription() {
+    return this.paths()![0].HTMLDescription || '';
+  }
 
   scrollTo(anchor: string) {
     this.activeMenuElement = anchor;

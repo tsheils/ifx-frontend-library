@@ -6,13 +6,13 @@ import {
   input,
   signal,
   viewChild,
-  WritableSignal,
+  WritableSignal, OnInit,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatRadioButton, MatRadioGroup } from '@angular/material/radio';
-import { VisualizationMap } from '@ncats-frontend-library/models/utils';
+import { VisualizationMap } from 'utils-models';
 import { select } from 'd3-selection';
 import { ImageDownloadComponent } from 'image-download';
 import { ImageFromFile } from 'image-from-file';
@@ -34,14 +34,14 @@ import { UtilsForceDirectedGraphComponent } from 'utils-force-directed-graph';
     UtilsForceDirectedGraphComponent,
     UpsetComponent,
     ImageDownloadComponent,
-    ImageFromFile
+    ImageFromFile,
   ],
   templateUrl: './visualization-panel.component.html',
   styleUrl: './visualization-panel.component.scss',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VisualizationPanelComponent {
+export class VisualizationPanelComponent implements OnInit {
   data = input<VisualizationMap[]>([]);
   chartElement =
     viewChild.required<ElementRef<HTMLInputElement>>('chartElement');
@@ -56,6 +56,6 @@ export class VisualizationPanelComponent {
   });
 
   ngOnInit() {
-    console.log(this.data())
+    console.log(this.data());
   }
 }

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'ncats-frontend-library-external-link',
+  selector: 'lib-external-link',
   imports: [MatIconModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `

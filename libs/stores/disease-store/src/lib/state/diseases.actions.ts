@@ -1,5 +1,5 @@
-import { Disease, DiseaseNode } from '@ncats-frontend-library/models/rdas';
-import { FilterCategory, Page } from '@ncats-frontend-library/models/utils';
+import { Disease, DiseaseNode } from 'rdas-models';
+import { FilterCategory, Page } from 'utils-models';
 import {
   createAction,
   createActionGroup,

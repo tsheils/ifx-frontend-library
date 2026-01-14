@@ -1,6 +1,6 @@
 <div class="content-wrapper">
   <header>
-    <ncats-frontend-library-header-template class="header" [links]="links">
+    <lib-header-template class="header" [links]="links">
       <div class="left-options">
         <a href="/" title="RaMP home page">
           <img
@@ -12,25 +12,25 @@
         </a>
       </div>
       <div class="right-options"></div>
-    </ncats-frontend-library-header-template>
+    </lib-header-template>
   </header>
   <main role="main" class="ncats-main">
     <div class="main-content">
-      @if(isProd()){
-      <div class="row space-around-row">
-        <div class="width-95">
-          <ramp-full-banner [showBanner]="isProd()"></ramp-full-banner>
+      @if (isProd()) {
+        <div class="row space-around-row">
+          <div class="width-95">
+            <lib-ramp-full-banner
+              [showBanner]="isProd()"
+            ></lib-ramp-full-banner>
+          </div>
         </div>
-      </div>
       }
-      <ncats-frontend-library-loading-spinner
-        [isLoaded]="!loading()"
-      ></ncats-frontend-library-loading-spinner>
+      <lib-loading-spinner [isLoaded]="!loading()"></lib-loading-spinner>
       <router-outlet></router-outlet>
     </div>
   </main>
   <footer>
-    <ncats-frontend-library-footer-template>
+    <lib-footer-template>
       <div class="app-description">
         <a href="/" title="RaMP home page">
           <picture>
@@ -51,6 +51,6 @@
           </picture>
         </a>
       </div>
-    </ncats-frontend-library-footer-template>
+    </lib-footer-template>
   </footer>
 </div>
