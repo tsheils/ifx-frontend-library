@@ -26,7 +26,7 @@
       "rdas-disease-page": [
         "libs/features/rdas/rdas-disease-page/src/index.ts"
       ],
-      "rdas-grant-page": ["libs/features/rdas/rdas-grant-page/src/index.ts"],
+      "rdas-project-page": ["libs/features/rdas/rdas-project-page/src/index.ts"],
       "rdas-home": ["libs/features/rdas/rdas-home/src/index.ts"],
       "rdas-subscriptions": [
         "libs/features/rdas/rdas-subscriptions/src/index.ts"
@@ -73,7 +73,7 @@
       "article-store": ["libs/stores/article-store/src/index.ts"],
       "disease-store": ["libs/stores/disease-store/src/index.ts"],
       "filter-store": ["libs/stores/filter-store/src/index.ts"],
-      "grant-store": ["libs/stores/grant-store/src/index.ts"],
+      "project-store": ["libs/stores/project-store/src/index.ts"],
       "trial-store": ["libs/stores/trial-store/src/index.ts"],
       "user-store": ["libs/stores/user-store/src/index.ts"],
       "ramp-about": ["libs/features/ramp/ramp-about/src/index.ts"],

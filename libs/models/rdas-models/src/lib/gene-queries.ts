@@ -100,7 +100,6 @@ export class GeneQueryFactory implements RdasQueryFactory {
   }
 
   _buildParams(params: Params) {
-    console.log(params);
     if (Object.keys(params).length > 0) {
       if (params['genes']) {
         const terms: string[] = params['genes'].split('&');

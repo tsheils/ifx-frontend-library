@@ -2,7 +2,7 @@
 <div class="disease-page row right-justified-row">
   @defer (when !mobile) {
     <div #navigationsidenav class="width-25 navigation-sidenav">
-      <div class="toc-wrapper" [@followOnScroll]="animationState()">
+      <div class="toc-wrapper"> <!--[@followOnScroll]="animationState()"-->
         <div class="toc">
           <mat-nav-list>
             <a
@@ -27,7 +27,7 @@
             >
               <div class="row space-between-row">
                 <div>Genes</div>
-                <div>{{ disease()?.geneCount }}</div>
+                <div>{{ disease()?.countGenes }}</div>
               </div>
             </a>
             <a
@@ -41,10 +41,10 @@
             >
               <div class="row space-between-row">
                 <div>Phenotypes</div>
-                <div>{{ disease()?.phenotypeCount }}</div>
+                <div>{{ disease()?.countPhenotypes }}</div>
               </div>
             </a>
-            <a
+         <a
               mat-list-item
               class="list-button"
               role="button"
@@ -116,34 +116,34 @@
                 <div>{{ articlesCount().nhsArticlesCount }}</div>
               </div>
             </a>
-            <a
-              mat-list-item
-              class="list-button"
-              role="button"
-              tabindex="0"
-              (click)="scroll('projects')"
-              (keydown.enter)="scroll('projects')"
-              [activated]="isActive('projects')"
-            >
-              <div class="row space-between-row">
-                <div>NIH funded Projects</div>
-                <div>{{ projectsCount() }}</div>
-              </div>
-            </a>
-            <a
-              mat-list-item
-              class="list-button"
-              role="button"
-              tabindex="0"
-              (click)="scroll('trials')"
-              (keydown.enter)="scroll('trials')"
-              [activated]="isActive('trials')"
-            >
-              <div class="row space-between-row">
-                <div>Clinical Trials</div>
-                <div>{{ trialsCount().allTrialCount }}</div>
-              </div>
-            </a>
+           <a
+             mat-list-item
+             class="list-button"
+             role="button"
+             tabindex="0"
+             (click)="scroll('projects')"
+             (keydown.enter)="scroll('projects')"
+             [activated]="isActive('projects')"
+           >
+             <div class="row space-between-row">
+               <div>NIH funded Projects</div>
+               <div>{{ projectsCount() }}</div>
+             </div>
+           </a>
+           <a
+             mat-list-item
+             class="list-button"
+             role="button"
+             tabindex="0"
+             (click)="scroll('trials')"
+             (keydown.enter)="scroll('trials')"
+             [activated]="isActive('trials')"
+           >
+             <div class="row space-between-row">
+               <div>Clinical Trials</div>
+               <div>{{ trialsCount().allTrialCount }}</div>
+             </div>
+           </a>
           </mat-nav-list>
         </div>
       </div>
@@ -184,7 +184,7 @@
                 >
                   <div class="row space-between-row">
                     <div>Genes</div>
-                    <div>{{ disease()?.geneCount }}</div>
+                    <div>{{ disease()?.countGenes }}</div>
                   </div>
                 </a>
                 <a
@@ -198,10 +198,10 @@
                 >
                   <div class="row space-between-row">
                     <div>Phenotypes</div>
-                    <div>{{ disease()?.phenotypeCount }}</div>
+                    <div>{{ disease()?.countPhenotypes }}</div>
                   </div>
                 </a>
-                <a
+               <a
                   mat-list-item
                   class="list-button"
                   role="button"
@@ -242,19 +242,21 @@
                     <div>Natural Health Study Articles</div>
                     <div>{{ articlesCount().nhsArticlesCount }}</div>
                   </div>
-                </a>
-                <a
-                  mat-list-item
-                  class="list-button"
-                  role="button"
-                  tabindex="0"
-                  (click)="scroll('projects')"
-                  (keydown.enter)="scroll('projects')"
-                  [activated]="isActive('projects')"
-                >
-                  <div class="row space-between-row">
-                    <div>NIH funded Projects</div>
-                    <div>{{ projectsCount() }}</div>
+                </a>-->
+                              <a
+                                  mat-list-item
+                                  class="list-button"
+                                  role="button"
+                                  tabindex="0"
+                                  (click)="scroll('projects')"
+                                  (keydown.enter)="scroll('projects')"
+                                  [activated]="isActive('projects')"
+                                >
+                                  <div class="row space-between-row">
+                                    <div>NIH funded Projects</div>
+
+                                    <div>{{ projectsCount() }}</div>
+
                   </div>
                 </a>
                 <a

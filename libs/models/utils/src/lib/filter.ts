@@ -27,7 +27,12 @@ export class FilterCategory {
 
     if (obj.values && obj.values.length) {
       this.values = obj.values
-        .map((val) => new Filter(val))
+        .map((val) => {
+          if(!val.label) {
+            val.label = this.label
+          }
+          return new Filter(val)
+        })
         .sort((a, b) => b.count - a.count);
     }
 

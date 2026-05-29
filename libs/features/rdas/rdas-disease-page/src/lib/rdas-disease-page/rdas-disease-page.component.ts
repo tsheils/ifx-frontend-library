@@ -36,7 +36,7 @@ import {
 import { ScrollToTopComponent } from 'scroll-to-top';
 import { DiseaseSelectors, FetchDiseaseActions } from 'disease-store';
 import { ArticleSelectors } from 'article-store';
-import { ProjectSelectors } from 'grant-store';
+import { ProjectSelectors } from 'project-store';
 import { TrialSelectors } from 'trial-store';
 import { Store } from '@ngrx/store';
 
@@ -94,11 +94,12 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   loaded: Signal<boolean | undefined> = this.store.selectSignal(
     DiseaseSelectors.getDiseasesLoaded,
   );
+  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
   diseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
   staticDiseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getStaticDiseaseFilters);
-  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
+
   projectsCount = this.store.selectSignal(
     ProjectSelectors.selectAllProjectsCount,
   );
@@ -149,7 +150,7 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
       //scroll to section
       this.router.navigate(['disease'], {
         fragment: event.fragment,
-        queryParams: { id: this.disease()?.gardId, ...event.params },
+        queryParams: { gardId: this.disease()?.gardId, ...event.params },
       });
     }
   }

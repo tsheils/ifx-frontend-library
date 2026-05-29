@@ -7,7 +7,7 @@ import {
   ApplicationConfig,
   inject,
   provideAppInitializer,
-  provideBrowserGlobalErrorListeners,
+  provideBrowserGlobalErrorListeners, provideStabilityDebugging,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import {
@@ -48,10 +48,25 @@ import {
   DiseaseEffects,
 } from 'disease-store';
 import {
+  TRIALS_FEATURE_KEY,
+  trialsReducer,
+  TrialEffects,
+} from 'trial-store';
+import {
+  ARTICLE_STORE_FEATURE_KEY,
+  articlesReducer,
+  ArticleEffects
+} from 'article-store';
+import {
   FILTERS_FEATURE_KEY,
   filtersReducer,
   FilterEffects,
 } from 'filter-store';
+import {
+  PROJECTS_FEATURE_KEY,
+  projectsReducer,
+  ProjectEffects
+} from 'project-store';
 
 export function rdasInit(store = inject(Store)) {
   return () => {
@@ -83,19 +98,23 @@ export const appConfig: ApplicationConfig = {
       users: usersReducer,
       diseases: diseasesReducer,
       filters: filtersReducer,
+      articles: articlesReducer,
+      clinicalTrials: trialsReducer,
+      projects: projectsReducer
     }),
     provideState(USERS_FEATURE_KEY, usersReducer),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),
     provideState(FILTERS_FEATURE_KEY, filtersReducer),
+    provideState(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
+    provideState(TRIALS_FEATURE_KEY, trialsReducer),
+      provideState(PROJECTS_FEATURE_KEY, projectsReducer),
     provideEffects([
       UserEffects,
       DiseaseEffects,
       FilterEffects,
-      //    ArticleEffects,
-      //
-      /*
+      ArticleEffects,
       TrialEffects,
-      ProjectEffects, */
+      ProjectEffects,
     ]),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAuth(() => getAuth()),
@@ -106,6 +125,7 @@ export const appConfig: ApplicationConfig = {
     provideApollo(() => {
       const httpLink = inject(HttpLink);
       return {
+        ssrMode: true,
         cache: new InMemoryCache(),
         link: httpLink.create({
           uri: environment.baseUrl,

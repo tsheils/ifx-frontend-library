@@ -73,8 +73,6 @@ export class PhenotypeListComponent {
             return compare(a.phenotype.hpoTerm, b.phenotype.hpoTerm, isAsc);
           case 'Frequency':
             return compare(a.frequencyRank, b.frequencyRank, isAsc);
-          case 'Validated':
-            return compare(+a.validationStatus, +b.validationStatus, isAsc);
           case 'Evidence':
             return compare(a.evidence.code, b.evidence.code, isAsc);
           default:
@@ -99,7 +97,6 @@ export class PhenotypeListComponent {
     const headings: string = [
       'term',
       'frequency',
-      'validationStatus',
       'evidence',
       'references',
     ].join('\t');

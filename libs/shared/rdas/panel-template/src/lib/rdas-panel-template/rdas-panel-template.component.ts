@@ -14,6 +14,7 @@ import {
 import { Filter, FilterCategory } from 'utils-models';
 import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
 import { SharedUtilsListFilterRowComponent } from 'list-filter-row';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 
 @Component({
   selector: 'lib-rdas-panel-template',
@@ -22,6 +23,7 @@ import { SharedUtilsListFilterRowComponent } from 'list-filter-row';
     MatPaginatorModule,
     SharedUtilsListFilterRowComponent,
     SharedUtilsDataNotFoundComponent,
+    MatProgressSpinner,
   ],
   templateUrl: './rdas-panel-template.component.html',
   styleUrl: './rdas-panel-template.component.scss',

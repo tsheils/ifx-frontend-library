@@ -8,11 +8,11 @@ import * as ArticleStoreSelectors from './articles.selectors';
 
 describe('ArticleStore Selectors', () => {
   const ERROR_MSG = 'No Error Available';
-  const getArticleStoreId = (it: Article) => it.pubmed_id;
-  const createArticleStoreEntity = (pubmed_id: string, name = '') =>
+  const getArticleStoreId = (it: Article) => it.pubmedId;
+  const createArticleStoreEntity = (pubmedId: string, name = '') =>
     ({
-      pubmed_id,
-      title: name || `name-${pubmed_id}`,
+      pubmedId,
+      title: name || `name-${pubmedId}`,
       DateCreatedRDAS: 'string',
       abstractText: 'string',
       affiliation: 'string',

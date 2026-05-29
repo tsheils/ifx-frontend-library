@@ -1,4 +1,4 @@
-<div class="disease-header-section" [@shrinkOnScroll]="animationState()">
+<div class="disease-header-section" > <!--[@shrinkOnScroll]="animationState()">-->
   <div class="header-background">
     <img
       ngSrc="/assets/disease-display/graph-background-crop.webp"
@@ -8,8 +8,8 @@
     />
   </div>
   <div class="disease-header">
-    <div class="row space-around-row link-row">
-      <div class="width-sm-95 width-75">
+    <div class="row link-row">
+      <div class="width-sm-95 width-85">
         <a
           class="mat-h1 disease-link"
           href="https://rarediseases.info.nih.gov/diseases/{{ parsedId() }}/{{
@@ -33,6 +33,7 @@
       </div>
     </div>
     @if (animationState() === 'in') {
+      <div class=" row">
       <div class="width-75">
         @if (disease()?.classificationLevel) {
           <div class="primary-chip-outlined">
@@ -45,6 +46,7 @@
             {{ disease()?.disorderType?.join(', ') }}
           </div>
         }
+      </div>
       </div>
       <div class="row space-between-row">
         @if (disease()?.synonyms && disease()?.synonyms?.length) {

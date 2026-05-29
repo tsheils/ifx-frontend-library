@@ -1,149 +1,122 @@
-/*
+
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { Params } from '@angular/router';
 import { ObservableQuery } from '@apollo/client';
-import {
-  ClinicalTrial,
-  FETCHTRIALDETAILS,
-  FETCHTRIALSQUERY,
-  FETCHTRIALSVARIABLES,
-  TRIALDETAILSVARIABLES,
-} from 'rdas-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
-import { filter, map, mergeMap } from 'rxjs';
-import { TrialService } from '../trial.service';
+import { filter, map, switchMap } from 'rxjs';
 import { FetchTrialActions, FetchTrialsListActions } from './trials.actions';
-*/
+import { DiseaseSelectors } from 'disease-store';
+import { concatLatestFrom } from '@ngrx/operators';
+import { Store } from '@ngrx/store';
+import {
+  ClinicalTrial,
+  ClinicalTrialListQueryGQL,
+  ClinicalTrialQueryFactory,
+  ClinicalTrialQueryGQL,
+} from 'rdas-models';
 
-/*
-export const fetchTrial$ = createEffect(
-  (actions$ = inject(Actions), trialService = inject(TrialService)) => {
+const queryFactory = new ClinicalTrialQueryFactory();
+
+interface ClinicalTrialQueryResponse {
+  diseases: {
+    allCount: number;
+    clinicalTrials: ClinicalTrial[];
+    filteredCount: {
+      totalCount: {count: {nodes: number} }
+    };
+  }[];
+}
+
+export const loadClinicalTrialsList$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject(Store),
+    clinicalTrialsListQuery = inject(ClinicalTrialListQueryGQL),
+) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
-      filter((r: RouterNavigationAction) => {
+      concatLatestFrom(() => store.select(DiseaseSelectors.getSelected)),
+      filter(([r, data]) => {
         return (
-          !r.payload.routerState.url.includes('/trials') &&
-          r.payload.routerState.url.startsWith('/trial')
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.includes('/disease') &&
+          (!data || r.payload.routerState.root.fragment === 'trials')
         );
       }),
+      map(([r]) => {
+        return r.payload.routerState.root.queryParams;
+      }),
+      switchMap((params: Params) => {
+        const query = queryFactory.getQuery(params);
+        return clinicalTrialsListQuery.watch({variables: query.params}).valueChanges
+          .pipe(
+          map((res: ObservableQuery.Result<unknown>) => {
+            console.log(res);
+            if (res && res.data) {
+              const data = (res.data as ClinicalTrialQueryResponse).diseases[0];
+              const clinicalTrialsList = data.clinicalTrials.map(
+                (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
+              );
+              return FetchTrialsListActions.fetchTrialsListSuccess({
+                clinicalTrials: clinicalTrialsList,
+                allClinicalTrialsCount: data.allCount,
+                clinicalTrialsCount: data.filteredCount.totalCount.count.nodes,
+              });
+            } else
+              return FetchTrialsListActions.fetchTrialsListFailure({
+                error: 'No clinical trials found',
+              });
+          }),
+        );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+
+export const fetchClinicalTrial$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    clinicalTrialQuery = inject(ClinicalTrialQueryGQL)
+) => {
+    return actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/trials') &&
+          r.payload.routerState.url.startsWith('/trial'),
+      ),
       map(
         (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
-      mergeMap((params: { nctid?: string }) => {
-        TRIALDETAILSVARIABLES.ctfilters.NCTId_EQ = params.nctid;
-        return trialService
-          .fetchTrials(FETCHTRIALDETAILS, TRIALDETAILSVARIABLES)
-          .pipe(
-            map((trialData: ObservableQuery.Result<unknown>) => {
-              const data: { clinicalTrials: ClinicalTrial[] } =
-                trialData.data as { clinicalTrials: ClinicalTrial[] };
-              if (data) {
-                const trial: ClinicalTrial = new ClinicalTrial(
-                  data.clinicalTrials[0],
-                );
-                return FetchTrialActions.fetchTrialSuccess({ trial: trial });
-              } else
-                return FetchTrialActions.fetchTrialFailure({
-                  error: 'No Disease found',
-                });
-            }),
-          );
-      }),
-    );
-  },
-  { functional: true },
-);
-
-export const fetchTrialList$ = createEffect(
-  (actions$ = inject(Actions), trialService = inject(TrialService)) => {
-    return actions$.pipe(
-      ofType(ROUTER_NAVIGATION),
-      filter((r: RouterNavigationAction) => {
-        return (
-          !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease')
-        );
-      }),
-      map((r: RouterNavigationAction) => r.payload.routerState.root),
-      mergeMap((root: ActivatedRouteSnapshot) => {
-        FETCHTRIALSVARIABLES.gardWhere.GardId = root.queryParams['id'];
-        if (root.fragment === 'trials') {
-          _setTrialsOptions(root.queryParams);
-        }
-        return trialService
-          .fetchTrials(FETCHTRIALSQUERY, FETCHTRIALSVARIABLES)
-          .pipe(
-            map((trialsData: ObservableQuery.Result<unknown>) => {
-              const trialsObj = trialsData.data as {
-                trialsData: [
-                  {
+      switchMap((params) => {
+        const query = queryFactory.getQuery(params);
+       // return trialService.fetchClinicalTrials(query.query, query.params)
+          return clinicalTrialQuery
+            .watch({ variables: query.params })
+            .valueChanges.pipe(
+              map((trialsData: ObservableQuery.Result<unknown>) => {
+                console.log(trialsData);
+                const data: { clinicalTrials: ClinicalTrial[] } =
+                  trialsData.data as {
                     clinicalTrials: ClinicalTrial[];
-                    count: { count: number };
-                    allCount: { count: number };
-                  },
-                ];
-              };
-              const trials: {
-                clinicalTrials: ClinicalTrial[];
-                count: { count: number };
-                allCount: { count: number };
-              } = trialsObj.trialsData[0];
-              const trialsList = trials?.clinicalTrials?.map(
-                (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
-              );
-              if (trialsList) {
-                return FetchTrialsListActions.fetchTrialsListSuccess({
-                  trials: trialsList,
-                  allTrialCount: trials.allCount.count,
-                  count: trials.count.count,
-                });
-              } else
-                return FetchTrialsListActions.fetchTrialsListFailure({
-                  error: 'No Disease found',
-                });
-            }),
-          );
+                  };
+                if (data) {
+                  const trial: ClinicalTrial = new ClinicalTrial(
+                    data.clinicalTrials[0],
+                  );
+                  return FetchTrialActions.fetchTrialSuccess({ trial: trial });
+                } else
+                  return FetchTrialActions.fetchTrialFailure({
+                    error: 'No Trial found',
+                  });
+              }),
+            );
       }),
     );
   },
   { functional: true },
 );
 
-function _setTrialsOptions(options: {
-  limit?: number;
-  offset?: number;
-  GardId?: string;
-  id?: string;
-  OverallStatus?: string[];
-  StudyType?: string[];
-  Phase?: string[];
-}) {
-  FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit']
-    ? <number>options['limit']
-    : 10;
-  if (<number>options['offset']) {
-    FETCHTRIALSVARIABLES.ctoptions.offset = <number>options['offset'] * 1;
-  } else {
-    FETCHTRIALSVARIABLES.ctoptions.offset = 0;
-  }
-  if (options['GardId']) {
-    FETCHTRIALSVARIABLES.gardWhere.GardId = <string>options['GardId'];
-  }
-  if (options['OverallStatus'] && options['OverallStatus']?.length > 0) {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = options['OverallStatus'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = undefined;
-  }
-  if (options['StudyType'] && options['StudyType']?.length > 0) {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = options['StudyType'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
-  }
-  if (options['Phase'] && options['Phase']?.length > 0) {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = options['Phase'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = undefined;
-  }
-}
- */

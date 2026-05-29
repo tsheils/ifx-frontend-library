@@ -5,7 +5,7 @@ const config: CodegenConfig = {
   schema: 'http://localhost:4000/graphql',
   // schema: 'libs/schemas/src/lib/apollo-schema.graphql',
   //  documents: 'libs/models/rdas-models/src/lib/**/*.ts',
-  documents: 'libs/models/rdas-models/src/lib/**/!(*.generated).ts',
+  documents: 'libs/models/rdas-models/src/lib/**/*.ts',
   //  schema: 'libs/schemas/src/lib/**/*.graphql',
   generates: {
     //creates types and exported services
@@ -31,7 +31,7 @@ const config: CodegenConfig = {
       ],
     }, */
     'libs/models/rdas-models/src/lib/generated-types.ts': {
-      plugins: ['typescript'],
+      plugins: ['typescript-operations'],
     },
     'libs/models/rdas-models/src/lib/**/': {
       preset: 'near-operation-file',
@@ -39,7 +39,7 @@ const config: CodegenConfig = {
         extension: '.generated.ts',
         baseTypesPath: 'libs/models/rdas-models/src/lib/**/generated-types.ts',
       },
-      plugins: ['typescript-operations', 'typescript-apollo-angular'],
+      plugins: ['typescript-apollo-angular'],
       config: { withHooks: true },
     },
   },

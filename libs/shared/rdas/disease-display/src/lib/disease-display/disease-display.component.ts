@@ -37,7 +37,7 @@ import { ProjectListComponent } from 'project-display';
 import { ChartWrapperComponent } from 'chart-wrapper';
 import { RdasPanelTemplateComponent } from 'rdas-panel-template';
 import { ArticleSelectors } from 'article-store';
-import { ProjectSelectors } from 'grant-store';
+import { ProjectSelectors } from 'project-store';
 import { TrialSelectors } from 'trial-store';
 import { Store } from '@ngrx/store';
 
@@ -79,12 +79,12 @@ export class DiseaseDisplayComponent
 
   disease = input<Disease>();
   trialsList = this.store.selectSignal(TrialSelectors.selectAllTrials);
-  projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
-  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
+  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
+   projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
   projectsCount = this.store.selectSignal(
     ProjectSelectors.selectAllProjectsCount,
   );
-  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
+  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
   articlesList = this.store.selectSignal(ArticleSelectors.selectAllArticles);
   loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();

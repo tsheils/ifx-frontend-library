@@ -14,6 +14,13 @@ export const appRoutes: Route[] = [
       import('rdas-browse').then((m) => m.RdasBrowseComponent),
   },
   {
+    path: 'disease',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'pathParamsChange',
+    loadComponent: () =>
+      import('rdas-disease-page').then((m) => m.RdasDiseasePageComponent),
+  },
+  {
     path: 'about',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
@@ -60,6 +67,29 @@ export const appRoutes: Route[] = [
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('history-api').then((m) => m.HistoryApiComponent),
+  },
+  {
+    path: 'article',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('rdas-article-page').then(
+        (m) => m.FeaturesRdasRdasArticlePageComponent,
+      ),
+  },
+  {
+    path: 'project',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('rdas-project-page').then((m) => m.RdasProjectPageComponent),
+  },
+  {
+    path: 'trial',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('rdas-trial-page').then((m) => m.RdasTrialPageComponent),
   },
   { path: '**', redirectTo: '' },
 ];

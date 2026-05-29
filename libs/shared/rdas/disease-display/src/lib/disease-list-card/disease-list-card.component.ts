@@ -25,8 +25,8 @@ export class DiseaseListCardComponent {
   router = inject(Router);
   disease = input<Disease>();
 
-  navigate(id: string | undefined): void {
-    if (id) {
+  navigate(gardId: string | undefined): void {
+    if (gardId) {
       this.store.dispatch(
         BrowseDiseaseListActions.setDisease({
           disease: this.disease() as Disease,
@@ -34,7 +34,7 @@ export class DiseaseListCardComponent {
       );
       const navigationExtras: NavigationExtras = {
         queryParams: {
-          id: id,
+          gardId: gardId,
         },
       };
       this.router.navigate(['/disease'], navigationExtras);

@@ -120,7 +120,7 @@
         "buildTarget": "rdas-frontend:build",
         "port": 4200,
         "staticFilePath": "dist/apps/rdas-frontend/browser",
-        "spa": true
+       "spa": true
       }
     }
   }

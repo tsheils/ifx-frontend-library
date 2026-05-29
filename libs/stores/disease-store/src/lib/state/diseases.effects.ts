@@ -2,29 +2,20 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Params } from '@angular/router';
 import { ObservableQuery } from '@apollo/client';
 import {
-  Article,
-  ClinicalTrial,
-  CoreProject,
-  Disease,
+  Disease, DiseaseDynamicFiltersQueryGQL,
+  DiseaseListQueryGQL,
   DiseaseNode,
-  DiseaseQueryFactory,
+  DiseaseQueryFactory, DiseaseQueryGQL, DiseaseStaticFiltersQueryGQL, DiseasesTypeaheadGQL,
   DISEASETYPEAHEAD,
-  DiseaseWhereParams,
 } from 'rdas-models';
 import { Filter, FilterCategory, Page } from 'utils-models';
-import { Store } from '@ngrx/store';
-import { DiseaseService } from '../disease.service';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
-import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
 import {
-  combineLatest,
   filter,
   map,
   mergeMap,
-  of,
   switchMap,
-  take,
 } from 'rxjs';
 import {
   BrowseDiseaseListActions,
@@ -32,14 +23,18 @@ import {
   FetchDiseaseListActions,
   SearchDiseasesActions,
 } from './diseases.actions';
-import * as DiseaseSelectors from './diseases.selectors';
+
+const queryFactory = new DiseaseQueryFactory();
+
+class DiseaseFilterResponse {
+ [key: string]: Filter[];
+}
 
 //for disease list browsing
 export const fetchDiseasesList$ = createEffect(
   (
     actions$ = inject(Actions),
-    store = inject(Store),
-    diseaseService = inject(DiseaseService),
+    diseaseListQuery = inject(DiseaseListQueryGQL),
   ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
@@ -50,9 +45,9 @@ export const fetchDiseasesList$ = createEffect(
         (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
       switchMap((params: Params) => {
-        const queryFactory = new DiseaseQueryFactory();
         const query = queryFactory.getQuery(params);
-        return diseaseService.fetchDiseases(query.query, query.params).pipe(
+        return diseaseListQuery.watch({variables: query.params}).valueChanges
+          .pipe(
           map((res: ObservableQuery.Result<unknown>) => {
             const data: {
               diseases: Disease[];
@@ -84,13 +79,13 @@ export const fetchDiseasesList$ = createEffect(
 
 //for disease list in profile
 export const fetchDiseaseListFromIds$ = createEffect(
-  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
+  (actions$ = inject(Actions), diseaseListQuery = inject(DiseaseListQueryGQL)) => {
     return actions$.pipe(
       ofType(FetchDiseaseListActions.fetchDiseaseList),
       mergeMap((action: { gardIds: string[] }) => {
-        const queryFactory = new DiseaseQueryFactory();
         const query = queryFactory.getQuery(action);
-        return diseaseService.fetchDiseases(query.query, query.params).pipe(
+        return diseaseListQuery.watch({ variables: query.params }).valueChanges
+          .pipe(
           map((res: ObservableQuery.Result<unknown>) => {
             const data: { diseases: DiseaseNode[] } = res.data as {
               diseases: DiseaseNode[];
@@ -116,16 +111,21 @@ export const fetchDiseaseListFromIds$ = createEffect(
 
 //disease search typeahead
 export const searchDiseases$ = createEffect(
-  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
+  (
+    actions$ = inject(Actions),
+    diseaseTypeaheadQuery = inject(DiseasesTypeaheadGQL),
+  ) => {
     return actions$.pipe(
       ofType(SearchDiseasesActions.searchDiseases),
       mergeMap((action: { term: string }) => {
-        return diseaseService
-          .fetchDiseases(DISEASETYPEAHEAD, {
-            searchString: action.term, //.split(' ').join('~ AND ') + '*',
-            limit: 10,
-          } as DiseaseWhereParams)
-          .pipe(
+        return diseaseTypeaheadQuery
+          .watch({
+            variables: {
+              searchString: action.term, //.split(' ').join('~ AND ') + '*',
+              limit: 10,
+            },
+          })
+          .valueChanges.pipe(
             map((res: ObservableQuery.Result<unknown>) => {
               console.log(res);
               const data: { diseaseSearch: Disease[] } = res.data as {
@@ -150,10 +150,11 @@ export const searchDiseases$ = createEffect(
   },
   { functional: true },
 );
-/*
-// bar and pie charts
-export const loadStaticDiseaseFilters$ = createEffect(
-  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
+
+
+//specific disease page
+export const loadDisease$ = createEffect(
+  (actions$ = inject(Actions), diseaseQuery = inject(DiseaseQueryGQL)) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
@@ -163,72 +164,72 @@ export const loadStaticDiseaseFilters$ = createEffect(
       ),
       map((r: RouterNavigationAction) => r.payload.routerState.root),
       mergeMap((root: ActivatedRouteSnapshot) => {
-        const params: Params = root.queryParams;
-        const gardid: string = params['id'];
-        return combineLatest(
-          diseaseService
-            .fetchArticles(ARTICLEFILTERS, { gardId: gardid })
-            .pipe(take(1)),
-          diseaseService
-            .fetchProjects(PROJECTFILTERS, { gardId: gardid })
-            .pipe(take(1)),
-          diseaseService
-            .fetchTrials(TRIALTYPEFILTERS, _setTrialVariables(params, 'type'))
-            .pipe(take(1)),
-          diseaseService
-            .fetchTrials(
-              TRIALSTATUSFILTERS,
-              _setTrialVariables(params, 'status'),
-            )
-            .pipe(take(1)),
-          diseaseService
-            .fetchTrials(TRIALPHASEFILTERS, _setTrialVariables(params, 'phase'))
-            .pipe(take(1)),
-        ).pipe(
-          map(
-            ([
-              articleFilterData,
-              projectFilterData,
-              trialTypeFilterData,
-              trialStatusFilterData,
-              trialPhaseFilterData,
-            ]: [
-              ObservableQuery.Result<unknown>,
-              ObservableQuery.Result<unknown>,
-              ObservableQuery.Result<unknown>,
-              ObservableQuery.Result<unknown>,
-              ObservableQuery.Result<unknown>,
-            ]) => {
-              if (
-                articleFilterData ||
-                projectFilterData ||
-                trialTypeFilterData ||
-                trialStatusFilterData ||
-                trialPhaseFilterData
-              ) {
-                const typeData = trialTypeFilterData as {
-                  data: { trialsByType: Filter[] };
-                };
-                const statusData = trialStatusFilterData as {
-                  data: { trialsByStatus: Filter[] };
-                };
-                const phaseData = trialPhaseFilterData as {
-                  data: { trialsByPhase: Filter[] };
-                };
-                const trialFilterData = {
-                  data: {
-                    allClinicalTrialsFilters: {
-                      trialsByStatus: statusData.data.trialsByStatus,
-                      trialsByType: typeData.data.trialsByType,
-                      trialsByPhase: phaseData.data.trialsByPhase,
-                    },
-                  },
-                } as ObservableQuery.Result<unknown>;
-                const filters = _parseFilterResponse(
-                  articleFilterData,
-                  projectFilterData,
-                  trialFilterData,
-                  params,
+        const params = root.queryParams;
+        const query = queryFactory.getQuery(params);
+        return diseaseQuery
+          .watch({ variables: query.params }).valueChanges
+          .pipe(
+            map((res: ObservableQuery.Result<unknown>) => {
+              const data: {
+                diseases: Disease[];
+              } = res.data as {
+                diseases: Disease[];
+              };
+              if (data) {
+                const diseaseArr: Disease[] = data.diseases.map(
+                  (obj: Partial<Disease>) => new Disease(obj),
+                );
+                return FetchDiseaseActions.fetchDiseaseSuccess({
+                  disease: diseaseArr[0],
+                });
+              } else
+                return FetchDiseaseActions.fetchDiseaseFailure({
+                  error: 'No Disease found',
+                });
+            }),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+
+// bar and pie charts
+export const loadStaticDiseaseFilters$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    staticFiltersQuery = inject(DiseaseStaticFiltersQueryGQL),
+  ) => {
+    return actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease'),
+      ),
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      mergeMap((root: ActivatedRouteSnapshot) => {
+        const params = root.queryParams;
+        const query = queryFactory.getStaticFilterQuery(params);
+        return staticFiltersQuery.watch({variables: query.params}).valueChanges
+          .pipe(
+            map((res: ObservableQuery.Result<unknown>) => {
+              console.log(res);
+              const data: {
+                diseases: Disease[];
+              } = res.data as {
+                diseases: Disease[];
+              };
+              if (data) {
+                const diseaseArr: Disease[] = data.diseases.map(
+                  (obj: Partial<Disease>) => new Disease(obj),
+                );
+
+                //  const data = res.data as DiseaseFilterResponse;
+                // if(data) {
+                const filters = _parseFilters(
+                  diseaseArr[0].filterCounts as DiseaseFilterResponse,
                 );
                 return FetchDiseaseActions.fetchStaticDiseaseFiltersSuccess({
                   filters: filters,
@@ -237,15 +238,207 @@ export const loadStaticDiseaseFilters$ = createEffect(
                 return FetchDiseaseActions.fetchStaticDiseaseFiltersFailure({
                   error: 'No Disease found',
                 });
-            },
-          ),
-        );
+            }),
+          );
       }),
     );
   },
   { functional: true },
 );
 
+export const loadDynamicDiseaseFilters$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    dynamicFiltersQuery = inject(DiseaseDynamicFiltersQueryGQL),
+  ) => {
+    return actions$.pipe(
+      ofType(ROUTER_NAVIGATION),
+      filter(
+        (r: RouterNavigationAction) =>
+          !r.payload.routerState.url.includes('/diseases') &&
+          r.payload.routerState.url.startsWith('/disease'),
+      ),
+      map((r: RouterNavigationAction) => r.payload.routerState.root),
+      mergeMap((root: ActivatedRouteSnapshot) => {
+        const params = root.queryParams;
+        const query = queryFactory.getDynamicFilterQuery(params);
+        return dynamicFiltersQuery.watch({variables: query.params}).valueChanges
+          .pipe(
+            map((res: ObservableQuery.Result<unknown>) => {
+              const data = res.data as DiseaseFilterResponse;
+              if (data) {
+                const filters = _parseFilters(data, params);
+                return FetchDiseaseActions.fetchDiseaseFiltersSuccess({
+                  filters: filters,
+                });
+              } else
+                return FetchDiseaseActions.fetchDiseaseFiltersFailure({
+                  error: 'No Disease found',
+                });
+            }),
+          );
+      }),
+    );
+  },
+  { functional: true },
+);
+
+
+function _parseFilters(data: DiseaseFilterResponse, params?: Params) {
+  const filters: FilterCategory[] = []
+  Object.entries(data).map((key) => {
+    switch (key[0]) {
+      case 'diseaseArticleByYear': {
+        filters.push(
+          new FilterCategory({
+            parent: 'articles',
+            label: 'Articles by Year',
+            field: 'year',
+            values: key[1].map(
+              (fil: Partial<Filter>) =>
+                new Filter({
+                  ...fil,
+                 /* selected:
+                    params['OverallStatus'] === fil.term ||
+                    params['OverallStatus']?.includes(fil.term),*/
+                }),
+            ),
+          }),
+        );
+        break;
+      }
+      case 'diseaseArticleByEpi': {
+        filters.push(
+          new FilterCategory({
+            parent: 'articles',
+            label: 'Epidemiology Articles ',
+            field: 'isEpi',
+            values: key[1].map(
+              (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isEpi' }),
+            ),
+          }),
+        );
+        break;
+      }
+      case 'diseaseArticleByNHS': {
+        filters.push(
+          new FilterCategory({
+            parent: 'articles',
+            label: 'Natural Health Study Articles',
+            field: 'isNHS',
+            values: key[1].map(
+              (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isNHS' }),
+            ),
+          }),
+        );
+        break;
+      }
+      case 'diseaseProjectsByYear': {
+        filters.push(
+          new FilterCategory({
+            parent: 'projects',
+            label: 'Projects Count by Year',
+            filterable: false,
+            values: key[1].map((fil: Partial<Filter>) => new Filter(fil)),
+          }),
+        );
+        break;
+      }
+      case 'diseaseProjectsByCost': {
+        filters.push(
+          new FilterCategory({
+            parent: 'projects',
+            label: 'Projects Funding by Year',
+            filterable: false,
+            values: key[1].map((fil: Partial<Filter>) => new Filter(fil)),
+          }),
+        );
+        break;
+      }
+      case 'trialCountsByPhase':
+      case 'diseaseTrialsByPhase': {
+        filters.push(
+          new FilterCategory({
+            parent: 'trials',
+            label: 'Clinical Trials by Phase',
+            field: 'phase',
+            values: key[1].map(
+              (fil: Partial<Filter>) => {
+                let filter: Filter;
+                if(params){
+                filter = new Filter({
+                  ...fil,
+                  selected:
+                    params['phase'] === fil.term ||
+                    params['phase']?.includes(fil.term),
+                })
+                  } else {
+                filter = new Filter(fil)
+              }
+                return filter
+          })
+        })
+        )
+        break;
+      }
+      case 'trialCountsByStatus':
+      case 'diseaseTrialsByStatus': {
+        filters.push(
+          new FilterCategory({
+            parent: 'trials',
+            label: 'Clinical Trials by Status',
+            field: 'overallStatus',
+            values: key[1].map((fil: Partial<Filter>) => {
+              let filter: Filter;
+              if (params) {
+                filter = new Filter({
+                  ...fil,
+                  selected:
+                    params['overallStatus'] === fil.term ||
+                    params['overallStatus']?.includes(fil.term),
+                });
+              } else {
+                filter = new Filter(fil);
+              }
+              return filter;
+            }),
+          }),
+        );
+        break;
+      }
+      case 'trialCountsByType':
+      case 'diseaseTrialsByType':
+        {
+          filters.push(
+            new FilterCategory({
+              parent: 'trials',
+              label: 'Clinical Trials by Type',
+              field: 'studyType',
+              values: key[1].map(
+                (fil: Partial<Filter>) => {
+                  let filter: Filter;
+                  if(params){
+                    filter = new Filter({
+                      ...fil,
+                      selected:
+                        params['studyType'] === fil.term ||
+                        params['studyType']?.includes(fil.term),
+                    })
+                  } else {
+                    filter = new Filter(fil)
+                  }
+                  return filter
+                })
+            })
+          )
+        break;
+    }
+    }
+    })
+    return filters
+}
+
+/*
 //dynamic paged filters list
 export const loadDiseaseFilters$ = createEffect(
   (
@@ -372,44 +565,7 @@ export const loadDiseaseFilters$ = createEffect(
   { functional: true },
 );
 
-//specific disease page
-export const loadDisease$ = createEffect(
-  (actions$ = inject(Actions), diseaseService = inject(DiseaseService)) => {
-    return actions$.pipe(
-      ofType(ROUTER_NAVIGATION),
-      filter(
-        (r: RouterNavigationAction) =>
-          !r.payload.routerState.url.includes('/diseases') &&
-          r.payload.routerState.url.startsWith('/disease'),
-      ),
-      map((r: RouterNavigationAction) => r.payload.routerState.root),
-      mergeMap((root: ActivatedRouteSnapshot) => {
-        const params = root.queryParams;
-        const gardid: string = params['id'];
-        _setGardId(gardid);
-        if (root.fragment) {
-          _setFragment(root.fragment, params);
-        }
-        return diseaseService
-          .fetchDiseases(FETCHDISEASEQUERY, DISEASEQUERYPARAMETERS)
-          .pipe(
-            map((diseaseData: ObservableQuery.Result<unknown>) => {
-              if (diseaseData && diseaseData.data) {
-                const diseaseObj: Disease = _makeDiseaseObj(diseaseData);
-                return FetchDiseaseActions.fetchDiseaseSuccess({
-                  disease: diseaseObj,
-                });
-              } else
-                return FetchDiseaseActions.fetchDiseaseFailure({
-                  error: 'No Disease found',
-                });
-            }),
-          );
-      }),
-    );
-  },
-  { functional: true },
-);
+
 
 */
 
@@ -782,67 +938,6 @@ export const loadAllDiseaseFilters$ = createEffect(
   { functional: true },
 );
 
-function _makeDiseaseObj(
-  diseaseData: ObservableQuery.Result<unknown>,
-  articleData?: ObservableQuery.Result<unknown>,
-  projectsData?: ObservableQuery.Result<unknown>,
-  trialsData?: ObservableQuery.Result<unknown>,
-): Disease {
-  const disease: { disease: Disease[] } = diseaseData.data as {
-    disease: Disease[];
-  };
-  if (disease) {
-    const diseaseObj: Disease = new Disease(disease.disease[0]);
-    if (articleData) {
-      const articles: {
-        articles: {
-          articles: Article[];
-          _count: { count: number };
-          allCount: { count: number };
-        }[];
-      } = articleData.data as {
-        articles: {
-          articles: Article[];
-          _count: { count: number };
-          allCount: { count: number };
-        }[];
-      };
-    }
-
-    if (projectsData) {
-      const projects: {
-        coreProjects: CoreProject[];
-        count: { count: number };
-      } = projectsData.data as {
-        coreProjects: CoreProject[];
-        count: { count: number };
-      };
-      diseaseObj.projects = projects.coreProjects.map(
-        (proj: Partial<CoreProject>) => new CoreProject(proj),
-      );
-      diseaseObj.projectCount = projects.count.count;
-      diseaseObj.allProjectCount = projects.count.count;
-    }
-    if (trialsData) {
-      const trials: {
-        clinicalTrials: ClinicalTrial[];
-        count: { count: number };
-        allCount: { count: number };
-      } = trialsData.data as {
-        clinicalTrials: ClinicalTrial[];
-        count: { count: number };
-        allCount: { count: number };
-      };
-      diseaseObj.clinicalTrials = trials.clinicalTrials.map(
-        (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
-      );
-      diseaseObj.allClinicalTrialCount = trials.allCount.count;
-      diseaseObj.clinicalTrialCount = trials.count.count;
-    }
-    return diseaseObj;
-  } else return new Disease({});
-}
-
 
 function _addToTree(
   data: DiseaseNode,
@@ -881,304 +976,12 @@ function _addToTree(
     return ret;
   }
 }
+*/
 
-function _setFragment(
-  origin: string | null,
-  options: {
-    limit?: number;
-    offset?: number;
-    year?: string | string[];
-    GardId?: string;
-    isEpi?: string | string[];
-    isNHS?: string | string[];
-    OverallStatus?: string[];
-    StudyType?: string[];
-    Phase?: string[];
-  },
-) {
-  switch (origin) {
-     */ /*
 
- */
-/*    case 'epiArticles': {
-      EPIARTICLES.articleOptions.limit = <number>options['limit']
-        ? <number>options['limit']
-        : 10;
-      if (<number>options['offset']) {
-        EPIARTICLES.articleOptions.offset = <number>options['offset'] * 1;
-      }
-      if (options['year'] && options['year'].length > 0) {
-        EPIARTICLES.articleFilter.publicationYear_IN = options['year'];
-      } else {
-        EPIARTICLES.articleFilter.publicationYear_IN = undefined;
-      }
-      break;
-    }
-    case 'articles': {
-      console.log(options)
-      ALLARTICLES.articleOptions.limit = <number>options['limit']
-        ? <number>options['limit']
-        : 10;
-      if (<number>options['offset']) {
-        ALLARTICLES.articleOptions.offset = <number>options['offset'] * 1;
-      }
-      if (options['year'] && options['year'].length > 0) {
-        ALLARTICLES.articleFilter.publicationYear_IN = options['year'];
-      }
-      if (options['isEpi']) {
-        ALLARTICLES.articleFilter.publicationYear_IN = options['isEpi'];
-      }
-      if (options['isNHS'] ) {
-        ALLARTICLES.articleFilter.publicationYear_IN = options['isNHS'];
-      }
-      break;
-    }*/ /*
- */
-/*
 
-    case 'projects': {
-      PROJECTVARIABLES.limit = <number>options['limit']
-        ? <number>options['limit']
-        : 10;
-      if (<number>options['offset']) {
-        PROJECTVARIABLES.offset = <number>options['offset'] * 1;
-      }
-      break;
-    }
-    case 'trials': {
-      FETCHTRIALSVARIABLES.ctoptions.limit = <number>options['limit']
-        ? <number>options['limit']
-        : 10;
-      if (<number>options['offset']) {
-        FETCHTRIALSVARIABLES.ctoptions.offset = <number>options['offset'] * 1;
-      } else {
-        FETCHTRIALSVARIABLES.ctoptions.offset = 0;
-      }
-      if (options['GardId']) {
-        FETCHTRIALSVARIABLES.gardWhere.GardId = <string>options['GardId'];
-      }
-      if (options['OverallStatus'] && options['OverallStatus'].length > 0) {
-        FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN =
-          options['OverallStatus'];
-      } else {
-        FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = undefined;
-      }
-      if (options['StudyType'] && options['StudyType'].length > 0) {
-        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = options['StudyType'];
-      } else {
-        FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
-      }
-      if (options['Phase'] && options['Phase'].length > 0) {
-        FETCHTRIALSVARIABLES.ctfilters.Phase_IN = options['Phase'];
-      } else {
-        FETCHTRIALSVARIABLES.ctfilters.Phase_IN = undefined;
-      }
-      break;
-    }
-  }
-}
 
-function _setGardId(gardid: string) {
-  DISEASEQUERYPARAMETERS.where = { GardId: gardid };
-  EPIARTICLES.gardWhere.GardId = gardid;
-  ALLARTICLES.gardWhere.GardId = gardid;
-  PROJECTVARIABLES.gardId = gardid;
-  FETCHTRIALSVARIABLES.gardWhere.GardId = gardid;
-}
 
-function _setTrialVariables(params: Params, origin: string) {
-  if (origin !== 'type' && params['StudyType'] && params['StudyType'].length) {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = params['StudyType'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
-  }
-  if (origin !== 'phase' && params['Phase'] && params['Phase'].length) {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = params['Phase'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.Phase_IN = undefined;
-  }
-  if (
-    origin !== 'status' &&
-    params['OverallStatus'] &&
-    params['OverallStatus'].length
-  ) {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = params['OverallStatus'];
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.OverallStatus_IN = undefined;
-  }
-  return FETCHTRIALSVARIABLES;
-}
-
-function _setArticleVariables(params: Params) {
-  if (params['year'] && params['year'].length) {
-    // FETCHART.ctfilters.StudyType_IN = params['StudyType']
-  } else {
-    FETCHTRIALSVARIABLES.ctfilters.StudyType_IN = undefined;
-  }
-
-  return FETCHTRIALSVARIABLES;
-}
-
-function _parseFilterResponse(
-  articleFilterData: ObservableQuery.Result<unknown>,
-  projectFilterData: ObservableQuery.Result<unknown>,
-  trialFilterData: ObservableQuery.Result<unknown>,
-  params: Params,
-): FilterCategory[] {
-  const filters: FilterCategory[] = [];
-  if (articleFilterData) {
-    const articleFilterDataList: {
-      countsByYear: Filter[];
-      countsByEpi: Filter[];
-      countsByNHS: Filter[];
-    } = articleFilterData.data as {
-      countsByYear: Filter[];
-      countsByEpi: Filter[];
-      countsByNHS: Filter[];
-    };
-    if (articleFilterDataList.countsByYear.length) {
-      filters.push(
-        new FilterCategory({
-          parent: 'articles',
-          label: 'Articles by Year',
-          field: 'year',
-          values: articleFilterDataList.countsByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-      const fc = new FilterCategory({
-        parent: 'articles',
-        label: 'Epidemiology Articles ',
-        field: 'isEpi',
-        values: articleFilterDataList.countsByEpi.map(
-          (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isEpi' }),
-        ),
-      });
-      filters.push(fc);
-      filters.push(
-        new FilterCategory({
-          parent: 'articles',
-          label: 'Natural Health Study Articles',
-          field: 'isNHS',
-          values: articleFilterDataList.countsByNHS.map(
-            (fil: Partial<Filter>) => new Filter({ ...fil, label: 'isNHS' }),
-          ),
-        }),
-      );
-    }
-  }
-  if (projectFilterData) {
-    const projectFilterDataList: {
-      countsByYear: Filter[];
-      costByYear: Filter[];
-    } = projectFilterData.data as {
-      countsByYear: Filter[];
-      costByYear: Filter[];
-    };
-    if (projectFilterDataList.countsByYear.length) {
-      filters.push(
-        new FilterCategory({
-          parent: 'projects',
-          label: 'Projects Count by Year',
-          filterable: false,
-          values: projectFilterDataList.countsByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-    if (projectFilterDataList.costByYear.length) {
-      filters.push(
-        new FilterCategory({
-          parent: 'projects',
-          label: 'Projects Funding by Year',
-          filterable: false,
-          values: projectFilterDataList.costByYear.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-  }
-  if (trialFilterData) {
-    const dataObj: {
-      allClinicalTrialsFilters: {
-        trialsByStatus: Filter[];
-        trialsByType: Filter[];
-        trialsByPhase: Filter[];
-      };
-    } = trialFilterData.data as {
-      allClinicalTrialsFilters: {
-        trialsByStatus: Filter[];
-        trialsByType: Filter[];
-        trialsByPhase: Filter[];
-      };
-    };
-    const trialFilterDataList: {
-      trialsByStatus: Filter[];
-      trialsByType: Filter[];
-      trialsByPhase: Filter[];
-    } = dataObj.allClinicalTrialsFilters as {
-      trialsByStatus: Filter[];
-      trialsByType: Filter[];
-      trialsByPhase: Filter[];
-    };
-    if (
-      trialFilterDataList.trialsByStatus &&
-      trialFilterDataList.trialsByStatus.length
-    ) {
-      filters.push(
-        new FilterCategory({
-          parent: 'trials',
-          label: 'Clinical Trials by Status',
-          field: 'OverallStatus',
-          values: trialFilterDataList.trialsByStatus.map(
-            (fil: Partial<Filter>) =>
-              new Filter({
-                ...fil,
-                selected:
-                  params['OverallStatus'] === fil.term ||
-                  params['OverallStatus']?.includes(fil.term),
-              }),
-          ),
-        }),
-      );
-    }
-    if (
-      trialFilterDataList.trialsByType &&
-      trialFilterDataList.trialsByType.length
-    ) {
-      filters.push(
-        new FilterCategory({
-          parent: 'trials',
-          label: 'Clinical Trials by Type',
-          field: 'StudyType',
-          values: trialFilterDataList.trialsByType.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-    if (
-      trialFilterDataList.trialsByPhase &&
-      trialFilterDataList.trialsByPhase.length
-    ) {
-      filters.push(
-        new FilterCategory({
-          parent: 'trials',
-          label: 'Clinical Trials by Phase',
-          field: 'Phase',
-          values: trialFilterDataList.trialsByPhase.map(
-            (fil: Partial<Filter>) => new Filter(fil),
-          ),
-        }),
-      );
-    }
-  }
-  return filters;
-}
- */
 
 function _makePage(params: Params, total: { count: number } | number) {
   const pageSize: number = params['pageSize']

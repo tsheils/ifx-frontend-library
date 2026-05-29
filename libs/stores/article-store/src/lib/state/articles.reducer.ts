@@ -28,7 +28,7 @@ export interface ArticleStorePartialState {
 
 export const articlesAdapter: EntityAdapter<Article> =
   createEntityAdapter<Article>({
-    selectId: (article) => article.pubmed_id,
+    selectId: (article) => article.pubmedId,
   });
 
 export const initialState: ArticleState = articlesAdapter.getInitialState({
@@ -46,7 +46,7 @@ const reducer = createReducer(
   on(FetchArticleActions.fetchArticleSuccess, (state, { article }) =>
     articlesAdapter.setOne(article, {
       ...state,
-      selectedId: article.pubmed_id,
+      selectedId: article.pubmedId,
       loaded: true,
     }),
   ),

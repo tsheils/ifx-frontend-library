@@ -75,7 +75,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -100,7 +100,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -125,7 +125,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -150,7 +150,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -175,7 +175,7 @@ export const DISEASEENTITIESMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -270,7 +270,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -295,7 +295,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -320,7 +320,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -345,7 +345,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',
@@ -370,7 +370,7 @@ export const DISEASELISTMOCK = {
             code: 'IEA',
             value: 'Inferred from Electronic Annotation',
           },
-          hpoFrequency: null,
+          hpoTermFrequency: null,
           reference: [
             {
               code: 'OMIM:300062',

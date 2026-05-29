@@ -6,7 +6,7 @@ export const FetchArticleActions = createActionGroup({
   source: 'Fetch Article',
   events: {
     fetchArticle: props<{
-      pmid: string;
+      pubmedId: string;
       options?: { [key: string]: string };
     }>(),
     fetchArticleSuccess: props<{ article: Article }>(),

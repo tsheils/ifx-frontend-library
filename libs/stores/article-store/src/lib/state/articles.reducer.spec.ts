@@ -14,7 +14,7 @@ import {
 describe('ArticleStore Reducer', () => {
   const createArticleStoreEntity = (id: string, name = ''): Article =>
     new Article({
-      pubmed_id: id,
+      pubmedId: id,
       title: name || `name-${id}`,
     });
 

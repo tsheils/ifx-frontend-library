@@ -3,10 +3,6 @@ import { Reference } from './reference';
 export class Phenotype {
   hpoId!: string;
   hpoTerm!: string;
-  modifier?: string;
-  online?: boolean;
-  onset?: string;
-  sex?: string;
 
   constructor(obj: Partial<Phenotype> = {}) {
     Object.assign(this, obj);
@@ -15,10 +11,9 @@ export class Phenotype {
 
 export class PhenotypeAssociation {
   evidence!: { code: string; value: string };
-  hpoFrequency!: string;
+  hpoTermFrequency!: string;
   reference?: Reference[];
   _reference?: string[];
-  validationStatus!: boolean;
   phenotype!: Phenotype;
   frequencyRank = 0;
   _evidence?: string;
@@ -32,8 +27,8 @@ export class PhenotypeAssociation {
     if (obj.phenotype) {
       this.phenotype = new Phenotype(obj.phenotype);
     }
-    if (obj.properties && obj.properties.hpoFrequency) {
-      this.frequencyRank = FREQUENCYRANK.indexOf(obj.properties.hpoFrequency);
+    if (obj.properties && obj.properties.hpoTermFrequency) {
+      this.frequencyRank = FREQUENCYRANK.indexOf(obj.properties.hpoTermFrequency);
     }
 
     if (obj.properties && obj.properties._reference) {
@@ -54,9 +49,7 @@ export class PhenotypeAssociation {
   }
 
   _toString() {
-    return `${this.phenotype.hpoTerm}\t ${this.hpoFrequency}\t${
-      this.validationStatus ? this.validationStatus : ''
-    }\t${[Object.values(this.evidence)].join(':')}\t${this.reference
+    return `${this.phenotype.hpoTerm}\t ${this.hpoTermFrequency}\t${[Object.values(this.evidence)].join(':')}\t${this.reference
       ?.map((ref) => ref._toString())
       .join('|')}`;
   }

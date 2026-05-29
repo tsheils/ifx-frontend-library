@@ -1,5 +1,5 @@
 import { ClinicalTrial } from 'rdas-models';
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 
 export const FetchTrialActions = createActionGroup({
   source: 'Fetch Trial',
@@ -13,6 +13,17 @@ export const FetchTrialActions = createActionGroup({
   },
 });
 
+export const FetchTrialCountsActions = createActionGroup({
+  source: 'Fetch Trial Counts',
+  events: {
+    fetchTrialCounts: props<{
+      options?: { [key: string]: string };
+    }>(),
+    fetchTrialCountsSuccess: emptyProps(),
+    fetchTrialCountsFailure: props<{ error: string }>(),
+  },
+});
+
 export const FetchTrialsListActions = createActionGroup({
   source: 'Fetch Trials List',
   events: {
@@ -21,9 +32,9 @@ export const FetchTrialsListActions = createActionGroup({
       skip: number;
     }>(),
     FetchTrialsListSuccess: props<{
-      trials: ClinicalTrial[];
-      allTrialCount?: number;
-      count?: number;
+      clinicalTrials: ClinicalTrial[];
+      allClinicalTrialsCount?: number;
+      clinicalTrialsCount?: number;
     }>(),
     FetchTrialsListFailure: props<{ error: string }>(),
   },
