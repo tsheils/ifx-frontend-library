@@ -1,4 +1,31 @@
-import { Route } from '@angular/router';
+import {
+  ActivatedRouteSnapshot,
+  ResolveFn,
+  Route,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { Gene } from 'rdas-models';
+import { inject } from '@angular/core';
+import { GeneStore } from 'gene-store';
+import { PhenotypeStore } from 'phenotype-store';
+import { FilterCategory } from 'utils-models';
+
+export const geneFilterResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot,
+  router: RouterStateSnapshot,
+) => {
+  const geneStore = inject(GeneStore);
+  const params = route.queryParams;
+  return geneStore.loadGeneFilters(params);
+};
+export const phenotypeFilterResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot,
+  router: RouterStateSnapshot,
+) => {
+  const phenotypeStore = inject(PhenotypeStore);
+  const params = route.queryParams;
+  return phenotypeStore.loadPhenotypeFilters(params);
+};
 
 export const appRoutes: Route[] = [
   {
@@ -10,6 +37,10 @@ export const appRoutes: Route[] = [
     path: 'diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    /*   resolve: {
+     // geneFilters: geneFilterResolver,
+     // //phenotypeFilters: phenotypeFilterResolver,
+    },*/
     loadComponent: () =>
       import('rdas-browse').then((m) => m.RdasBrowseComponent),
   },
@@ -68,6 +99,13 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('history-api').then((m) => m.HistoryApiComponent),
   },
+/*  {
+    path: 'apis/abstract-abstraction',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    loadComponent: () =>
+      import('abstract-extraction-api').then((m) => m.AbstractExtractionApi),
+  },*/
   {
     path: 'article',
     pathMatch: 'full',

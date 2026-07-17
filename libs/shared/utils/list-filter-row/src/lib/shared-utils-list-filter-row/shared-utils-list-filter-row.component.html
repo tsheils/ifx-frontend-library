@@ -6,7 +6,7 @@
           <div>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ filter?.label }}</mat-label>
-              <mat-select [formControlName]="filter.field" multiple (closed)="filterChange.emit(filterFormControls().value)">
+              <mat-select [formControlName]="filter.field" multiple>
                 <mat-select-trigger>
                   {{
                     filterFormControls().controls[filter.field].value[0]?.term

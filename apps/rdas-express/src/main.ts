@@ -2,7 +2,6 @@ import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
 import { Neo4jGraphQL } from '@neo4j/graphql';
 import * as neo4j from 'neo4j-driver';
-import { print } from 'graphql';
 import cors from 'cors';
 import http from 'http';
 import * as winston from 'winston';
@@ -10,6 +9,8 @@ import fs from 'fs';
 import { expressMiddleware } from '@as-integrations/express5';
 import express from 'express';
 import * as path from 'path';
+const dotenv = require('dotenv');
+dotenv.config();
 
 const logger = winston.createLogger({
   level: 'info',
@@ -32,12 +33,10 @@ const app = express();
 // Below, we tell Apollo Server to "drain" this httpServer,
 // enabling our servers to shut down gracefully.
 const httpServer = http.createServer(app);
-
 const driver = neo4j.driver(
   process.env.MEMGRAPH_HOST + ':' + process.env.MEMGRAPH_PORT,
-  neo4j.auth.basic(process.env.MEMGRAPH_USERNAME, process.env.MEMGRAPH_KEY),
+  neo4j.auth.basic(<string>process.env.MEMGRAPH_USERNAME, <string>process.env.MEMGRAPH_KEY),
 );
-
 
 const assetPath = path.join(__dirname, 'assets', 'rdas-schema.graphql');
 fs.readFile(assetPath, 'utf8', async (err, data) => {
@@ -47,11 +46,11 @@ fs.readFile(assetPath, 'utf8', async (err, data) => {
   }
   const typeDefs = data;
 
-const neoSchema: Neo4jGraphQL = new Neo4jGraphQL({
-  typeDefs,
-  driver,
-  debug: true,
-});
+  const neoSchema: Neo4jGraphQL = new Neo4jGraphQL({
+    typeDefs,
+    driver,
+    debug: true,
+  });
 
   try {
     const apolloServer: ApolloServer = new ApolloServer({

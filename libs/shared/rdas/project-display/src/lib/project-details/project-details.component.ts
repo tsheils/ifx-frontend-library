@@ -59,7 +59,7 @@ export class ProjectDetailsComponent {
 
   funding = computed(() => {
     const gr = this.latestProject();
-/*    if (gr && gr?.fundedByAgents) {
+    /*    if (gr && gr?.fundedByAgents) {
       return gr?.fundedByAgents.map((obj) => obj.name).join(', ');
     } else return null;*/
   });

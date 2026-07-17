@@ -1,4 +1,3 @@
-
 import { inject } from '@angular/core';
 import { Params } from '@angular/router';
 import { ObservableQuery } from '@apollo/client';
@@ -23,7 +22,7 @@ interface ClinicalTrialQueryResponse {
     allCount: number;
     clinicalTrials: ClinicalTrial[];
     filteredCount: {
-      totalCount: {count: {nodes: number} }
+      totalCount: { count: { nodes: number } };
     };
   }[];
 }
@@ -33,7 +32,7 @@ export const loadClinicalTrialsList$ = createEffect(
     actions$ = inject(Actions),
     store = inject(Store),
     clinicalTrialsListQuery = inject(ClinicalTrialListQueryGQL),
-) => {
+  ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       concatLatestFrom(() => store.select(DiseaseSelectors.getSelected)),
@@ -49,38 +48,39 @@ export const loadClinicalTrialsList$ = createEffect(
       }),
       switchMap((params: Params) => {
         const query = queryFactory.getQuery(params);
-        return clinicalTrialsListQuery.watch({variables: query.params}).valueChanges
-          .pipe(
-          map((res: ObservableQuery.Result<unknown>) => {
-            console.log(res);
-            if (res && res.data) {
-              const data = (res.data as ClinicalTrialQueryResponse).diseases[0];
-              const clinicalTrialsList = data.clinicalTrials.map(
-                (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
-              );
-              return FetchTrialsListActions.fetchTrialsListSuccess({
-                clinicalTrials: clinicalTrialsList,
-                allClinicalTrialsCount: data.allCount,
-                clinicalTrialsCount: data.filteredCount.totalCount.count.nodes,
-              });
-            } else
-              return FetchTrialsListActions.fetchTrialsListFailure({
-                error: 'No clinical trials found',
-              });
-          }),
-        );
+        return clinicalTrialsListQuery
+          .watch({ variables: query.params })
+          .valueChanges.pipe(
+            map((res: ObservableQuery.Result<unknown>) => {
+              if (res && res.data) {
+                const data = (res.data as ClinicalTrialQueryResponse)
+                  .diseases[0];
+                const clinicalTrialsList = data.clinicalTrials.map(
+                  (trial: Partial<ClinicalTrial>) => new ClinicalTrial(trial),
+                );
+                return FetchTrialsListActions.fetchTrialsListSuccess({
+                  clinicalTrials: clinicalTrialsList,
+                  allClinicalTrialsCount: data.allCount,
+                  clinicalTrialsCount:
+                    data.filteredCount.totalCount.count.nodes,
+                });
+              } else
+                return FetchTrialsListActions.fetchTrialsListFailure({
+                  error: 'No clinical trials found',
+                });
+            }),
+          );
       }),
     );
   },
   { functional: true },
 );
 
-
 export const fetchClinicalTrial$ = createEffect(
   (
     actions$ = inject(Actions),
-    clinicalTrialQuery = inject(ClinicalTrialQueryGQL)
-) => {
+    clinicalTrialQuery = inject(ClinicalTrialQueryGQL),
+  ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
@@ -93,30 +93,27 @@ export const fetchClinicalTrial$ = createEffect(
       ),
       switchMap((params) => {
         const query = queryFactory.getQuery(params);
-       // return trialService.fetchClinicalTrials(query.query, query.params)
-          return clinicalTrialQuery
-            .watch({ variables: query.params })
-            .valueChanges.pipe(
-              map((trialsData: ObservableQuery.Result<unknown>) => {
-                console.log(trialsData);
-                const data: { clinicalTrials: ClinicalTrial[] } =
-                  trialsData.data as {
-                    clinicalTrials: ClinicalTrial[];
-                  };
-                if (data) {
-                  const trial: ClinicalTrial = new ClinicalTrial(
-                    data.clinicalTrials[0],
-                  );
-                  return FetchTrialActions.fetchTrialSuccess({ trial: trial });
-                } else
-                  return FetchTrialActions.fetchTrialFailure({
-                    error: 'No Trial found',
-                  });
-              }),
-            );
+        return clinicalTrialQuery
+          .watch({ variables: query.params })
+          .valueChanges.pipe(
+            map((trialsData: ObservableQuery.Result<unknown>) => {
+              const data: { clinicalTrials: ClinicalTrial[] } =
+                trialsData.data as {
+                  clinicalTrials: ClinicalTrial[];
+                };
+              if (data) {
+                const trial: ClinicalTrial = new ClinicalTrial(
+                  data.clinicalTrials[0],
+                );
+                return FetchTrialActions.fetchTrialSuccess({ trial: trial });
+              } else
+                return FetchTrialActions.fetchTrialFailure({
+                  error: 'No Trial found',
+                });
+            }),
+          );
       }),
     );
   },
   { functional: true },
 );
-

@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
@@ -26,7 +27,9 @@
       "rdas-disease-page": [
         "libs/features/rdas/rdas-disease-page/src/index.ts"
       ],
-      "rdas-project-page": ["libs/features/rdas/rdas-project-page/src/index.ts"],
+      "rdas-project-page": [
+        "libs/features/rdas/rdas-project-page/src/index.ts"
+      ],
       "rdas-home": ["libs/features/rdas/rdas-home/src/index.ts"],
       "rdas-subscriptions": [
         "libs/features/rdas/rdas-subscriptions/src/index.ts"
@@ -146,7 +149,12 @@
       "visualization-panel": [
         "libs/shared/ramp/panels/visualization-panel/src/index.ts"
       ],
-      "schemas": ["libs/schemas/src/index.ts"]
+      "schemas": ["libs/schemas/src/index.ts"],
+      "gene-store": ["libs/stores/gene-store/src/index.ts"],
+      "phenotype-store": ["libs/stores/phenotype-store/src/index.ts"],
+      "abstract-extraction-api": [
+        "./libs/features/rdas/abstract-extraction-api/src/index.ts"
+      ]
     },
     "allowSyntheticDefaultImports": true
   },

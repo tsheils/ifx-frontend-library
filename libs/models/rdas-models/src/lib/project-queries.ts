@@ -1,8 +1,13 @@
 import { gql } from 'apollo-angular';
 import { TypedDocumentNode } from '@apollo/client';
 import { Params } from '@angular/router';
-import { ClinicalTrialSort, CoreProjectWhere, DiseaseWhere, ProjectSort, SortDirection } from './generated-types';
-
+import {
+  ClinicalTrialSort,
+  CoreProjectWhere,
+  DiseaseWhere,
+  ProjectSort,
+  SortDirection,
+} from './generated-types';
 
 export const COREPROJECTQUERY = gql`
   query CoreProjectQuery(
@@ -79,7 +84,6 @@ export const COREPROJECTLISTQUERY = gql`
     }
   }
 `;
-
 
 export class ProjectQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;

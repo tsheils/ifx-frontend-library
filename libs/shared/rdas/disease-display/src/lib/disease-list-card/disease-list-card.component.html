@@ -36,7 +36,7 @@
     </div>
     @if (disease()?.synonyms && disease()?.synonyms?.length) {
       <div class="width-75">
-        <i>{{ disease()?.synonyms?.join(', ') }}</i>
+        <i>{{ disease()?.synonyms?.join(' | ') }}</i>
       </div>
     }
     <div class="count-grid">

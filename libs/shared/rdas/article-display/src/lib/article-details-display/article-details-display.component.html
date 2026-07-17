@@ -50,7 +50,10 @@
                     }
                   </div>
                 }
-                @if (epidemiology.studyLocation && epidemiology.studyLocation.length) {
+                @if (
+                  epidemiology.studyLocation &&
+                  epidemiology.studyLocation.length
+                ) {
                   <div>
                     <b>Location: </b><br />{{
                       epidemiology.studyLocation.join(', ')
@@ -82,7 +85,7 @@
             </div>
           }
         </div>
-             @if (article()?.substances && article()?.substances?.length) {
+        @if (article()?.substances && article()?.substances?.length) {
           <div>
             <div class="primary-chip-outlined">Substances</div>
             <br />

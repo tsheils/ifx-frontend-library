@@ -51,8 +51,8 @@ export class RdasSubscriptionsComponent implements OnInit {
       )
       .subscribe();
 
-    this.subscriptions = this.store.selectSignal(
+    /*    this.subscriptions = this.store.selectSignal(
       DiseaseSelectors.getDiseasesSubscriptions,
-    );
+    );*/
   }
 }

@@ -102,7 +102,7 @@ export const reducer = createReducer(
   ),
 
   on(
-    FetchDiseaseListActions.fetchAllDiseaseFiltersSuccess,
+    BrowseDiseaseListActions.fetchAllDiseaseFiltersSuccess,
     (state, { filters }) => ({
       ...state,
       allDiseaseFilters: filters,
@@ -135,7 +135,7 @@ export const reducer = createReducer(
     SearchDiseasesActions.searchDiseasesFailure,
     FetchDiseaseActions.fetchDiseaseFailure,
     FetchDiseaseListActions.fetchDiseaseListFailure,
-    FetchDiseaseListActions.fetchAllDiseaseFiltersFailure,
+    BrowseDiseaseListActions.fetchAllDiseaseFiltersFailure,
     FetchDiseaseActions.fetchDiseaseFiltersFailure,
     FetchDiseaseActions.fetchStaticDiseaseFiltersFailure,
     BrowseDiseaseListActions.fetchDiseaseTreeFailure,

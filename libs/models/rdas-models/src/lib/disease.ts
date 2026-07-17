@@ -34,13 +34,20 @@ export class Disease {
   countProjects = 0;
   countGenes = 0;
   countPhenotypes = 0;
-  filterCounts?: {[key:string]: Filter[]}
+  filterCounts?: { [key: string]: Filter[] };
   projects?: CoreProject[];
   clinicalTrials?: ClinicalTrial[];
   geneAssociations?: GeneAssociation[];
-  _geneAssociations?: { edges: {gene:Partial<Gene>, properties:Partial<GeneAssociation>}[]};
+  _geneAssociations?: {
+    edges: { gene: Partial<Gene>; properties: Partial<GeneAssociation> }[];
+  };
   phenotypeAssociations?: PhenotypeAssociation[];
-  _phenotypeAssociations?: { edges: {phenotype: Partial<Phenotype>,  properties: Partial<PhenotypeAssociation>}[]};
+  _phenotypeAssociations?: {
+    edges: {
+      phenotype: Partial<Phenotype>;
+      properties: Partial<PhenotypeAssociation>;
+    }[];
+  };
   parentId?: string;
   _childrenCount?: { count?: number; low: 0 };
 
@@ -68,19 +75,17 @@ export class Disease {
       );
     }
 
-
     if (obj._geneAssociations && obj._geneAssociations.edges) {
-      this.geneAssociations = obj._geneAssociations.edges
-        .map(
-          (data: unknown) =>
-            new GeneAssociation(
-              data as {
-                gene: Partial<Gene>;
-                properties: Partial<GeneAssociation>;
-              },
-            ),
-        )
-     //   .sort((a, b) => b.associationType.localeCompare(a.associationType));
+      this.geneAssociations = obj._geneAssociations.edges.map(
+        (data: unknown) =>
+          new GeneAssociation(
+            data as {
+              gene: Partial<Gene>;
+              properties: Partial<GeneAssociation>;
+            },
+          ),
+      );
+      //   .sort((a, b) => b.associationType.localeCompare(a.associationType));
       delete this._geneAssociations;
     }
 

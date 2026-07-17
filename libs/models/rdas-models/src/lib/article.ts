@@ -28,8 +28,8 @@ export class Article {
   meshTerms?: MeshTerm[];
   annotations?: PubtatorAnnotation[];
   epidemiologies?: Epidemiology[];
- // sources!: Source[];
-   substances?: { name: string }[];
+  // sources!: Source[];
+  substances?: { name: string }[];
 
   constructor(obj: Partial<Article> = {}) {
     Object.assign(this, obj);
@@ -59,11 +59,10 @@ export class Article {
     }
 
     if (obj.annotations) {
-      this.annotations = obj.annotations
-        .map(
-          (annotation: Partial<PubtatorAnnotation> = {}) =>
-            new PubtatorAnnotation(annotation),
-        );
+      this.annotations = obj.annotations.map(
+        (annotation: Partial<PubtatorAnnotation> = {}) =>
+          new PubtatorAnnotation(annotation),
+      );
     }
 
     if (obj.diseases) {
@@ -72,7 +71,7 @@ export class Article {
         .sort((a: Disease, b: Disease) => a.gardName.localeCompare(b.gardName));
     }
 
-/*    if (obj.sources) {
+    /*    if (obj.sources) {
       this.sources = obj.sources.map(
         (source: Partial<Source> = {}) => new Source(source),
       );
@@ -87,15 +86,15 @@ export class Article {
 }
 
 export class JournalVolume {
- // dateOfPublication!: string;
- // printPublicationDate!: string;
-///  volume!: string;
- // _title!: { title: string }[];
+  // dateOfPublication!: string;
+  // printPublicationDate!: string;
+  ///  volume!: string;
+  // _title!: { title: string }[];
   title!: string;
 
   constructor(obj: Partial<JournalVolume>) {
     Object.assign(this, obj);
-/*
+    /*
     if (obj._title) {
       this.title = obj._title[0].title;
     }*/
@@ -133,7 +132,7 @@ export class PubtatorAnnotation {
 
   constructor(obj: Partial<PubtatorAnnotation>) {
     Object.assign(this, obj);
-   /* if (obj.text) {
+    /* if (obj.text) {
       if (!Array.isArray(obj.text)) {
         this.text = [obj.text];
       } else {

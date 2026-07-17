@@ -41,9 +41,8 @@ export class SharedUtilsListFilterRowComponent {
       }
     });
     const fg = new FormGroup(controls);
-    fg.valueChanges
-      .subscribe(() => {
-      //this.filterChange.emit(fg.value);
+    fg.valueChanges.subscribe(() => {
+      this.filterChange.emit(fg.value);
     });
     return fg;
   });

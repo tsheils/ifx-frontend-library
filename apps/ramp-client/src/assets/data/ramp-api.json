@@ -1112,9 +1112,7 @@
     "/api/chemical-class-enrichment": {
       "post": {
         "tags": ["chemical-descriptors"],
-        "x-subsections": [
-          "filter-enrichment-results"
-        ],
+        "x-subsections": ["filter-enrichment-results"],
         "summary": "Run Chemical Class Enrichment",
         "x-allowedTypes": {
           "metabolites": [

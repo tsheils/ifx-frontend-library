@@ -1,7 +1,7 @@
 import { gql } from 'apollo-angular';
 
-import {TypedDocumentNode} from "@apollo/client";
-import {Params} from "@angular/router";
+import { TypedDocumentNode } from '@apollo/client';
+import { Params } from '@angular/router';
 import {
   ClinicalTrialSort,
   ClinicalTrialWhere,
@@ -9,7 +9,6 @@ import {
   DiseaseWhere,
   SortDirection,
 } from './generated-types';
-
 
 const CLINICALTRIALQUERY = gql`
   query ClinicalTrialQuery($clinicalTrialWhere: ClinicalTrialWhere) {
@@ -130,7 +129,7 @@ export class ClinicalTrialQueryFactory {
     hasClinicalTrialOffset?: number;
     hasClinicalTrialSort?: ClinicalTrialSort[];
     hasClinicalTrialConnectionWhere?: DiseaseHasClinicalTrialConnectionWhere;
-  } ;
+  };
 
   getQuery(params: Params) {
     this.query = this._buildQuery(params);
@@ -139,20 +138,20 @@ export class ClinicalTrialQueryFactory {
   }
 
   _buildQuery(params: Params) {
-    console.log(params);
-    this.params = {};
     if (params['nctId']) {
       return CLINICALTRIALQUERY;
     } else {
-      this.params.hasClinicalTrialLimit = 10;
-      this.params.hasClinicalTrialOffset = 0;
       return CLINICALTRIALLISTQUERY;
     }
   }
 
   _buildParams(params: Params) {
-    console.log(params);
-    console.log(this.params);
+    this.params = {};
+    if (!params['nctId']) {
+      this.params.hasClinicalTrialLimit = 10;
+      this.params.hasClinicalTrialOffset = 0;
+    }
+
     Object.entries(params).forEach((key) => {
       switch (key[0]) {
         case 'pageSize': {
@@ -176,8 +175,8 @@ export class ClinicalTrialQueryFactory {
           break;
         }
         case 'nctId': {
-          if(!this.params.clinicalTrialWhere) {
-            this.params.clinicalTrialWhere = {}
+          if (!this.params.clinicalTrialWhere) {
+            this.params.clinicalTrialWhere = {};
           }
           this.params.clinicalTrialWhere.nctId = { eq: params['nctId'] };
           break;
@@ -193,25 +192,28 @@ export class ClinicalTrialQueryFactory {
           if (!this.params.hasClinicalTrialConnectionWhere) {
             this.params.hasClinicalTrialConnectionWhere = {};
           }
-          if(!this.params.hasClinicalTrialConnectionWhere.node){
+          if (!this.params.hasClinicalTrialConnectionWhere.node) {
             this.params.hasClinicalTrialConnectionWhere.node = {};
           }
           if (params['phase'].length) {
             if (
-              this.params.clinicalTrialWhere['overallStatus'] ||
-              this.params.clinicalTrialWhere['studyType']
+              this.params.clinicalTrialWhere.overallStatus ||
+              this.params.clinicalTrialWhere.studyType
             ) {
               if (!this.params.hasClinicalTrialConnectionWhere.node.AND) {
                 this.params.hasClinicalTrialConnectionWhere.node.AND = [];
               }
-              this.params.clinicalTrialWhere['AND'] = [
-                { phase: { in: params['phase'] } },
-              ];
+              if (!this.params.clinicalTrialWhere.AND) {
+                this.params.clinicalTrialWhere.AND = [];
+              }
+              this.params.clinicalTrialWhere.AND.push({
+                phase: { in: params['phase'] },
+              });
+
               this.params.hasClinicalTrialConnectionWhere.node.AND.push({
                 phase: { in: params['phase'] },
               });
-              }
-             else {
+            } else {
               this.params.clinicalTrialWhere.phase = {
                 in: params['phase'],
               };
@@ -231,20 +233,20 @@ export class ClinicalTrialQueryFactory {
           if (!this.params.hasClinicalTrialConnectionWhere) {
             this.params.hasClinicalTrialConnectionWhere = {};
           }
-          if(!this.params.hasClinicalTrialConnectionWhere.node){
+          if (!this.params.hasClinicalTrialConnectionWhere.node) {
             this.params.hasClinicalTrialConnectionWhere.node = {};
           }
           if (params['overallStatus'].length) {
             if (
-              this.params.clinicalTrialWhere['phase'] ||
-              this.params.clinicalTrialWhere['studyType']
+              this.params.clinicalTrialWhere.phase ||
+              this.params.clinicalTrialWhere.studyType
             ) {
               if (!this.params.hasClinicalTrialConnectionWhere.node.AND) {
                 this.params.hasClinicalTrialConnectionWhere.node.AND = [];
               }
-              this.params.clinicalTrialWhere['AND'] = [
-                { overallStatus: { in: params['overallStatus'] } },
-              ];
+              this.params.clinicalTrialWhere.AND?.push({
+                overallStatus: { in: params['overallStatus'] },
+              });
               this.params.hasClinicalTrialConnectionWhere.node.AND.push({
                 overallStatus: { in: params['overallStatus'] },
               });
@@ -268,20 +270,20 @@ export class ClinicalTrialQueryFactory {
           if (!this.params.hasClinicalTrialConnectionWhere) {
             this.params.hasClinicalTrialConnectionWhere = {};
           }
-          if(!this.params.hasClinicalTrialConnectionWhere.node){
+          if (!this.params.hasClinicalTrialConnectionWhere.node) {
             this.params.hasClinicalTrialConnectionWhere.node = {};
           }
           if (params['studyType'].length) {
             if (
-              this.params.clinicalTrialWhere['overallStatus'] ||
-              this.params.clinicalTrialWhere['phase']
+              this.params.clinicalTrialWhere.overallStatus ||
+              this.params.clinicalTrialWhere.phase
             ) {
               if (!this.params.hasClinicalTrialConnectionWhere.node.AND) {
                 this.params.hasClinicalTrialConnectionWhere.node.AND = [];
               }
-              this.params.clinicalTrialWhere['AND'] = [
-                { studyType: { in: params['studyType'] } },
-              ];
+              this.params.clinicalTrialWhere['AND']?.push({
+                studyType: { in: params['studyType'] },
+              });
               this.params.hasClinicalTrialConnectionWhere.node.AND.push({
                 studyType: { in: params['studyType'] },
               });

@@ -2,13 +2,49 @@ import { Params } from '@angular/router';
 import { TypedDocumentNode } from '@apollo/client';
 import { gql } from 'apollo-angular';
 import {
+  ArticleWhere,
   ClinicalTrialWhere,
   DiseaseSort,
   DiseaseWhere,
   SortDirection,
 } from './generated-types';
-import { DiseasesTypeaheadGQL } from './disease-queries.generated';
 
+export const ALLDISEASEFILTERCOUNTSQUERY = gql`
+  query FieldCounts {
+    fieldCounts(limit: 1) {
+      fieldCounts {
+        allArticlesByYear {
+          count
+          term
+        }
+        allEpiArticlesByYear {
+          count
+          term
+        }
+        allNHSArticlesByYear {
+          term
+          count
+        }
+        allProjectsByYear {
+          count
+          term
+        }
+        allTrialsByPhase {
+          count
+          term
+        }
+        allTrialsByStatus {
+          count
+          term
+        }
+        allTrialsByType {
+          count
+          term
+        }
+      }
+    }
+  }
+`;
 
 export const DISEASEQUERY = gql`
   query DiseaseQuery($where: DiseaseWhere) {
@@ -110,6 +146,7 @@ export const DISEASEDYNAMICFILTERSQUERY = gql`
   query DiseaseDynamicFiltersQuery(
     $where: DiseaseWhere
     $clinicalTrialWhere: ClinicalTrialWhere
+    $articleWhere: ArticleWhere
   ) {
     trialCountsByStatus(
       where: $where
@@ -127,8 +164,20 @@ export const DISEASEDYNAMICFILTERSQUERY = gql`
       count
       term
     }
-  }
 
+    diseaseArticleByYear(where: $where, articleWhere: $articleWhere) {
+      count
+      term
+    }
+    diseaseArticleByEpi(where: $where, articleWhere: $articleWhere) {
+      count
+      term
+    }
+    diseaseArticleByNHS(where: $where, articleWhere: $articleWhere) {
+      count
+      term
+    }
+  }
 `;
 
 export const DISEASELISTQUERY = gql`
@@ -138,12 +187,7 @@ export const DISEASELISTQUERY = gql`
     $sort: [DiseaseSort!]
     $diseaseWhere: DiseaseWhere
   ) {
-    diseases(
-      limit: $limit
-      offset: $offset
-      sort: $sort
-      where: $diseaseWhere
-    ) {
+    diseases(limit: $limit, offset: $offset, sort: $sort, where: $where) {
       gardName
       gardId
       classificationLevel
@@ -156,7 +200,7 @@ export const DISEASELISTQUERY = gql`
       countGenes
       countPhenotypes
     }
-    total: diseasesConnection(where: $diseaseWhere) {
+    total: diseasesConnection(where: $where) {
       count: totalCount
     }
   }
@@ -200,7 +244,6 @@ export class GeneParameter {
     | undefined;
 }
 
-
 export class DiseaseQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;
   params!: {
@@ -209,6 +252,7 @@ export class DiseaseQueryFactory {
     sort?: DiseaseSort[];
     where?: DiseaseWhere;
     clinicalTrialWhere?: ClinicalTrialWhere;
+    articleWhere?: ArticleWhere;
   };
 
   getQuery(params: Params) {
@@ -233,29 +277,42 @@ export class DiseaseQueryFactory {
     if (params['gardId']) {
       return DISEASEQUERY;
     } else {
-      this.params.limit = 10;
-      this.params.offset = 0;
-      this.params.sort = [{ countArticles: 'DESC' as SortDirection }];
       return DISEASELISTQUERY;
     }
   }
 
   //todo: should there be text search for q instead of contains? =-- change query
   _buildParams(params: Params) {
-    this.params = {}
+    this.params = {};
+    if (!params['gardId']) {
+      this.params = {};
+      this.params.limit = 10;
+      this.params.offset = 0;
+      this.params.sort = [{ countArticles: 'DESC' as SortDirection }];
+    }
     Object.entries(params).forEach((key) => {
       switch (key[0]) {
+        case 'pageSize':
         case 'limit': {
           this.params.limit = params['pageSize']
             ? +(params['pageSize'] as number)
             : 10;
           break;
         }
+        case 'pageIndex': {
+          this.params.offset = params['pageIndex']
+            ? +(
+                (params['pageIndex'] - 1) *
+                (params['pageSize'] ? (+params['pageSize'] as number) : 10)
+              )
+            : 0;
+          break;
+        }
         case 'offset': {
           this.params.offset = params['pageIndex']
             ? +(
                 (params['pageIndex'] - 1) *
-                (this.params['limit'] ? +this.params['limit'] : 10)
+                (this.params.limit ? +this.params.limit : 10)
               )
             : 0;
           break;
@@ -271,11 +328,17 @@ export class DiseaseQueryFactory {
           break;
         }
         case 'gardIds': {
-          this.params.where = { gardId: { in: params['gardIds'] } };
+          if (!this.params.where) {
+            this.params.where = {};
+          }
+          this.params.where.gardId = { in: params['gardIds'] };
           break;
         }
         case 'gardId': {
-          this.params.where = { gardId: { eq: params['gardId'] } };
+          if (!this.params.where) {
+            this.params.where = {};
+          }
+          this.params.where.gardId = { eq: params['gardId'] };
           break;
         }
         case 'genes': {
@@ -297,7 +360,10 @@ export class DiseaseQueryFactory {
           break;
         }
         case 'q': {
-          this.params.where = { gardName: { contains: params['q'] } };
+          if (!this.params.where) {
+            this.params.where = {};
+          }
+          this.params.where.gardName = { contains: params['q'] };
           break;
         }
         case 'phase': {
@@ -305,10 +371,10 @@ export class DiseaseQueryFactory {
             this.params.clinicalTrialWhere = {};
           }
           if (params['phase'].length) {
-              this.params.clinicalTrialWhere.phase = {
-                in: params['phase'],
-              };
-            }
+            this.params.clinicalTrialWhere.phase = {
+              in: params['phase'],
+            };
+          }
           break;
         }
         case 'overallStatus': {
@@ -316,9 +382,9 @@ export class DiseaseQueryFactory {
             this.params.clinicalTrialWhere = {};
           }
           if (params['overallStatus'].length) {
-              this.params.clinicalTrialWhere.overallStatus = {
-                in: params['overallStatus'],
-              };
+            this.params.clinicalTrialWhere.overallStatus = {
+              in: params['overallStatus'],
+            };
           }
           break;
         }
@@ -327,9 +393,50 @@ export class DiseaseQueryFactory {
             this.params.clinicalTrialWhere = {};
           }
           if (params['studyType'].length) {
-              this.params.clinicalTrialWhere.studyType = {
-                in: params['studyType'],
-              };
+            this.params.clinicalTrialWhere.studyType = {
+              in: params['studyType'],
+            };
+          }
+          break;
+        }
+        case 'isEpi': {
+          if (!this.params.articleWhere) {
+            this.params.articleWhere = {};
+          }
+          if (params['isEpi'].length) {
+            this.params.articleWhere.isEpidemiologicalStudy = {
+              eq: JSON.parse(params['isEpi']),
+            };
+          }
+          break;
+        }
+        case 'isNHS': {
+          if (!this.params.articleWhere) {
+            this.params.articleWhere = {};
+          }
+          if (params['isNHS'].length) {
+            this.params.articleWhere.isNaturalHistoryStudy = {
+              eq: JSON.parse(params['isNHS']),
+            };
+          }
+          break;
+        }
+        case 'year': {
+          if (!this.params.articleWhere) {
+            this.params.articleWhere = {};
+          }
+          if (params['year'].length) {
+            let val = params['year'];
+            if (typeof val === 'string') {
+              val = Number.parseInt(params['year']);
+            } else if (typeof params['year'] === 'object') {
+              val = params['year'].map(
+                (year: string | number) => Number.parseInt(<string>year),
+              );
+            }
+            this.params.articleWhere.publicationYear = {
+              in: val,
+            };
           }
           break;
         }

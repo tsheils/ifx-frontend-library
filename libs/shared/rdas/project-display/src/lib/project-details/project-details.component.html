@@ -65,11 +65,13 @@
             <div class="primary-chip-outlined">Funding Agency</div>
             <div class="list-item-content">
               @if (project()?.organizations) {
-                @for(organizaion of project()?.organizations; track organizaion.name){
-                  {{organizaion.name}}
+                @for (
+                  organizaion of project()?.organizations;
+                  track organizaion.name
+                ) {
+                  {{ organizaion.name }}
                 }
-              }
-              @else {
+              } @else {
                 'None Listed'
               }
             </div>
@@ -77,12 +79,12 @@
               <div>
                 <div class="primary-chip-outlined">Total Cost</div>
                 <div class="list-item-content">
-                  {{ project()?.totalCost  }}
+                  {{ project()?.totalCost | currency }}
                 </div>
               </div>
             }
           </mat-card>
-         <mat-card [appearance]="'outlined'">
+          <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Patents: {{ project()?.patents ? project()?.patents?.length : 0 }}
             </div>
@@ -97,7 +99,7 @@
               </div>
             }
           </mat-card>
-         <!-- <mat-card [appearance]="'outlined'">
+          <!-- <mat-card [appearance]="'outlined'">
             <div class="project-sub-header bottom-border-accent">
               Clinical Studies:
               {{
@@ -124,7 +126,7 @@
           <mat-tab>
             <ng-template mat-tab-label>
               <div class="rdas-tab-label">
-                Sub Projects: {{ project()?.subProjectsCount}}
+                Sub Projects: {{ project()?.subProjectsCount }}
               </div>
             </ng-template>
             <mat-accordion [displayMode]="'flat'" multi>
@@ -139,7 +141,7 @@
                       <div class="mat-mdc-card-title">
                         {{ grantPr.fundingYear }} &nbsp;&nbsp;&nbsp;
                         {{ grantPr.title }}&nbsp;&nbsp;&nbsp;
-                        {{ grantPr.totalCost  }}
+                        {{ grantPr.totalCost | currency }}
                       </div>
                     </mat-panel-title>
                   </mat-expansion-panel-header>

@@ -4,7 +4,7 @@
     @if (article()?.journals && article()?.journals!.length) {
       @for (journal of article()!.journals; track journal.title) {
         <div>
-          <i>{{ journal.title }}  </i>
+          <i>{{ journal.title }} </i>
           {{ article()?.firstPublicationDate | date }}
         </div>
       }

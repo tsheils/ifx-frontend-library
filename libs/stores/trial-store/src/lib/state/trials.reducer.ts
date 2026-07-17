@@ -45,14 +45,13 @@ const reducer = createReducer(
       }),
   ),
 
-  on(FetchTrialActions.fetchTrialSuccess,
-    (state: TrialsState, { trial }) =>
-     trialsAdapter.setOne(trial, {
-        ...state,
-        selectedId: trial.nctId,
-        loaded: true,
-      error: ''
-      })
+  on(FetchTrialActions.fetchTrialSuccess, (state: TrialsState, { trial }) =>
+    trialsAdapter.setOne(trial, {
+      ...state,
+      selectedId: trial.nctId,
+      loaded: true,
+      error: '',
+    }),
   ),
 
   on(
@@ -62,8 +61,8 @@ const reducer = createReducer(
       ...state,
       error,
     }),
-),
-)
+  ),
+);
 
 export function trialsReducer(state: TrialsState | undefined, action: Action) {
   return reducer(state, action);

@@ -33,12 +33,12 @@ export const initialFiltersState: FiltersState = filtersAdapter.getInitialState(
 const reducer = createReducer(
   initialFiltersState,
 
-  on(FetchFiltersActions.fetchFiltersSuccess, (state, { filters }) =>
-    filtersAdapter.upsertMany(filters, {
+  on(FetchFiltersActions.fetchFiltersSuccess, (state, { filters }) => {
+    return filtersAdapter.setMany(filters, {
       ...state,
       loaded: true,
-    }),
-  ),
+    });
+  }),
   on(FetchFiltersActions.fetchFiltersFailure, (state, { error }) => ({
     ...state,
     error,

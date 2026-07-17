@@ -5,25 +5,17 @@ import {
   computed,
   DestroyRef,
   inject,
-  signal,
   input,
-  Signal,
-  OnInit,
+  signal,
+  Signal
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import {
-  DataMap,
-  OpenApiPath,
-  QueryResultsData,
-  VisualizationMap,
-} from 'utils-models';
+import { DataMap, DataProperty, OpenApiPath, QueryResultsData, VisualizationMap } from 'utils-models';
 import { Store } from '@ngrx/store';
-import { DataProperty } from 'utils-models';
-import { QuestionBase } from 'ifx-form-question';
 import { FormSubsection, RampPage } from 'ramp';
 
 @Component({
@@ -78,8 +70,7 @@ export class RampCorePageComponent {
   activeTabIndex = computed(() => {
     if (this.route.snapshot.fragment && this.inputMap()) {
       const keys = Array.from(this.inputMap()!.keys());
-      const index = keys.indexOf(this.route.snapshot.fragment);
-      return index;
+      return keys.indexOf(this.route.snapshot.fragment);
     } else return 0;
   });
 
@@ -133,7 +124,7 @@ export class RampCorePageComponent {
     let retArr: string[] = [];
     if (input && input.length > 0) {
       if (Array.isArray(input)) {
-        retArr = input.map((val: string) => (val = val.trim()));
+        retArr = input.map((val: string) => val.trim());
       } else {
         retArr = input
           .trim()

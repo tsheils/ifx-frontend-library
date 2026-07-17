@@ -41,7 +41,7 @@ export class RdasPanelTemplateComponent {
   paginator = viewChild<MatPaginator>(MatPaginator);
 
   fetchList(event: { [key: string]: Filter[] }) {
-    const retObj: { [key: string]: string[] } = {};
+    const retObj: { [key: string]: (string | number | boolean)[] } = {};
     Object.entries(event).forEach(
       ([key, filters]) =>
         (retObj[key] = [...filters.map((filter) => filter.term)]),

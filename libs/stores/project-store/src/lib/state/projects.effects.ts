@@ -1,4 +1,3 @@
-
 import { inject } from '@angular/core';
 import { Params } from '@angular/router';
 import { ObservableQuery } from '@apollo/client';
@@ -83,10 +82,11 @@ export const loadCoreProjectsList$ = createEffect(
   { functional: true },
 );
 
-
 export const fetchProject$ = createEffect(
-  (actions$ = inject(Actions),
-    coreProjectQuery = inject(CoreProjectQueryGQL))=> {
+  (
+    actions$ = inject(Actions),
+    coreProjectQuery = inject(CoreProjectQueryGQL),
+  ) => {
     return actions$.pipe(
       ofType(ROUTER_NAVIGATION),
       filter(
@@ -99,24 +99,27 @@ export const fetchProject$ = createEffect(
       ),
       mergeMap((params) => {
         const query = queryFactory.getQuery(params);
-        return coreProjectQuery.watch({variables: query.params}).valueChanges.pipe(
-          map((projectData: ObservableQuery.Result<unknown>) => {
-            const data: { coreProjects: CoreProject[] } = projectData.data as {
-              coreProjects: CoreProject[];
-            };
-            if (data) {
-              const project: CoreProject = new CoreProject(
-                data.coreProjects[0],
-              );
-              return FetchProjectActions.fetchProjectSuccess({
-                project: project,
-              });
-            } else
-              return FetchProjectActions.fetchProjectFailure({
-                error: 'No Project found',
-              });
-          }),
-        );
+        return coreProjectQuery
+          .watch({ variables: query.params })
+          .valueChanges.pipe(
+            map((projectData: ObservableQuery.Result<unknown>) => {
+              const data: { coreProjects: CoreProject[] } =
+                projectData.data as {
+                  coreProjects: CoreProject[];
+                };
+              if (data) {
+                const project: CoreProject = new CoreProject(
+                  data.coreProjects[0],
+                );
+                return FetchProjectActions.fetchProjectSuccess({
+                  project: project,
+                });
+              } else
+                return FetchProjectActions.fetchProjectFailure({
+                  error: 'No Project found',
+                });
+            }),
+          );
       }),
     );
   },

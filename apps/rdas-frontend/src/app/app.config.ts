@@ -7,7 +7,8 @@ import {
   ApplicationConfig,
   inject,
   provideAppInitializer,
-  provideBrowserGlobalErrorListeners, provideStabilityDebugging,
+  provideBrowserGlobalErrorListeners,
+  provideStabilityDebugging,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import {
@@ -47,15 +48,11 @@ import {
   diseasesReducer,
   DiseaseEffects,
 } from 'disease-store';
-import {
-  TRIALS_FEATURE_KEY,
-  trialsReducer,
-  TrialEffects,
-} from 'trial-store';
+import { TRIALS_FEATURE_KEY, trialsReducer, TrialEffects } from 'trial-store';
 import {
   ARTICLE_STORE_FEATURE_KEY,
   articlesReducer,
-  ArticleEffects
+  ArticleEffects,
 } from 'article-store';
 import {
   FILTERS_FEATURE_KEY,
@@ -65,7 +62,7 @@ import {
 import {
   PROJECTS_FEATURE_KEY,
   projectsReducer,
-  ProjectEffects
+  ProjectEffects,
 } from 'project-store';
 
 export function rdasInit(store = inject(Store)) {
@@ -100,14 +97,14 @@ export const appConfig: ApplicationConfig = {
       filters: filtersReducer,
       articles: articlesReducer,
       clinicalTrials: trialsReducer,
-      projects: projectsReducer
+      projects: projectsReducer,
     }),
     provideState(USERS_FEATURE_KEY, usersReducer),
     provideState(DISEASES_FEATURE_KEY, diseasesReducer),
     provideState(FILTERS_FEATURE_KEY, filtersReducer),
     provideState(ARTICLE_STORE_FEATURE_KEY, articlesReducer),
     provideState(TRIALS_FEATURE_KEY, trialsReducer),
-      provideState(PROJECTS_FEATURE_KEY, projectsReducer),
+    provideState(PROJECTS_FEATURE_KEY, projectsReducer),
     provideEffects([
       UserEffects,
       DiseaseEffects,
@@ -128,7 +125,7 @@ export const appConfig: ApplicationConfig = {
         ssrMode: true,
         cache: new InMemoryCache(),
         link: httpLink.create({
-          uri: environment.baseUrl,
+          uri: environment.baseUrl+'/api/diseases',
         }),
       };
     }),

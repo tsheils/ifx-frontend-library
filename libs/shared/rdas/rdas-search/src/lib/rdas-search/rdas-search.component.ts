@@ -62,7 +62,7 @@ export class RdasSearchComponent implements OnInit {
     this.searchFormCtl.valueChanges
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        debounceTime(200),
+        debounceTime(100),
         distinctUntilChanged(),
       )
       .subscribe((term) => {

@@ -292,7 +292,10 @@
                   <mat-list-item>
                     {{ condition.condition }}
                     mapped to:
-                    @for(disease of condition.mappedDiseases; track disease.gardId) {
+                    @for (
+                      disease of condition.mappedDiseases;
+                      track disease.gardId
+                    ) {
                       @if (disease.gardId) {
                         <div #link>
                           <a
@@ -300,7 +303,7 @@
                             target="_blank"
                             rel="noreferrer"
                             aria-label="Link to disease details page"
-                          >{{ disease.gardName }}</a
+                            >{{ disease.gardName }}</a
                           >
                         </div>
                       } @else {
@@ -392,7 +395,7 @@
                 </div>
               }
             </mat-tab>
-           <!-- <mat-tab
+            <!-- <mat-tab
               [label]="getLabel('references')"
               [disabled]="
                 !trial()?.references || trial()?.references?.length === 0

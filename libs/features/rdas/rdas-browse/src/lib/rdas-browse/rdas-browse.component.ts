@@ -1,5 +1,5 @@
 import { MediaMatcher } from '@angular/cdk/layout';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -11,7 +11,9 @@ import {
   OnInit,
   Signal,
   viewChild,
+  DOCUMENT,
   ViewEncapsulation,
+  signal,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,6 +33,7 @@ import {
   NavigationEnd,
   NavigationExtras,
   NavigationStart,
+  Params,
   Router,
 } from '@angular/router';
 import { DiseaseNode, GeneAssociation } from 'rdas-models';
@@ -46,6 +49,8 @@ import { FetchFiltersActions, FilterSelectors } from 'filter-store';
 import { BrowseDiseaseListActions, DiseaseSelectors } from 'disease-store';
 import { Store } from '@ngrx/store';
 import { TreeChartComponent } from 'tree-chart';
+import { GeneStore } from 'gene-store';
+import { PhenotypeStore } from 'phenotype-store';
 
 const navigationExtras: NavigationExtras = {
   queryParamsHandling: 'merge',
@@ -79,6 +84,8 @@ const navigationExtras: NavigationExtras = {
   encapsulation: ViewEncapsulation.None,
 })
 export class RdasBrowseComponent implements OnInit, OnDestroy {
+  readonly geneStore = inject(GeneStore);
+  readonly phenotypeStore = inject(PhenotypeStore);
   private readonly store = inject(Store);
   paginator = viewChild<MatPaginator>(MatPaginator);
   destroyRef = inject(DestroyRef);
@@ -111,10 +118,18 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
   diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
   //  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
-  filters = this.store.selectSignal(FilterSelectors.selectAllFilters);
+  filters = computed(() => {
+    const filtersMap = new Map<string, FilterCategory | undefined>([
+      ['genes', { label: 'genes' } as FilterCategory],
+      ['phenotypes', { label: 'phenotypes' } as FilterCategory],
+    ]);
+    filtersMap.set('genes', this.geneStore.geneFilters());
+    filtersMap.set('phenotypes', this.phenotypeStore.phenotypeFilters());
+    return filtersMap;
+  });
 
   sort = 'countArticles';
-  selectedValues: Map<string, string[]> = new Map<string, string[]>();
+  selectedValues = signal<Map<string, string[]> | undefined>(undefined);
   showDownload = false;
 
   mobileQuery!: MediaQueryList;
@@ -134,7 +149,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.selectedValues.clear();
+    this.selectedValues.set(undefined);
     this.fetchParameters();
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -143,7 +158,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
           this.store.dispatch(BrowseDiseaseListActions.setLoading());
         }
         if (e instanceof NavigationEnd) {
-          this.selectedValues.clear();
+          this.selectedValues.set(undefined);
           this.fetchParameters();
         }
       });
@@ -177,31 +192,48 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     this._navigate(navigationExtras);
   }
 
-  filterChange(event: { label: string; term?: string; page?: number }): void {
-    const skip = event.page ? event.page * 200 : 0;
+  filterChange(event: {
+    label: string;
+    term?: string | number | boolean;
+    page?: number;
+  }): void {
+    const skip = event.page ? event.page * 50 : 0;
+    const params: Params = { limit: 50, skip: event.term ? 0 : skip };
     if (event.term) {
-      this.store.dispatch(
-        FetchFiltersActions.fetchFilters({
-          label: event.label,
-          term: event.term,
-          limit: 200,
-          skip: 0,
-        }),
-      );
-    } else {
-      this.store.dispatch(
-        FetchFiltersActions.fetchFilters({
-          label: event.label,
-          limit: 200,
-          skip: skip,
-        }),
-      );
+      params['term'] = event.term;
+    }
+    switch (event.label) {
+      case 'genes': {
+        this.geneStore.loadGeneFilters(params);
+        break;
+      }
+      case 'phenotypes':
+        {
+          this.phenotypeStore.loadPhenotypeFilters(params);
+        }
+        break;
     }
   }
 
-  filterSelectionChange(filters: { label: string; values: string[] }[]): void {
+  filterSelectionChange(
+    filters: { label: string; values: (string | number | boolean)[] }[],
+  ): void {
     let navigationExtras: NavigationExtras = { queryParamsHandling: 'merge' };
     const newObj: { [key: string]: string | null } = {};
+    if (filters.length == 0) {
+      navigationExtras.queryParams = null;
+      navigationExtras.queryParamsHandling = 'replace';
+    } else {
+      filters.forEach((filter) => {
+        if (filter.values.length) {
+          newObj[filter.label] = filter.values.join('&');
+        } else {
+          newObj[filter.label] = null;
+        }
+      });
+      navigationExtras.queryParams = { ...newObj };
+    }
+
     if (this.router.routerState.snapshot.root.queryParamMap.has('sort')) {
       navigationExtras = {
         queryParams: {
@@ -210,14 +242,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         },
       };
     }
-    filters.forEach((filter) => {
-      if (filter.values.length) {
-        newObj[filter.label] = filter.values.join('&');
-      } else {
-        newObj[filter.label] = null;
-      }
-    });
-    navigationExtras.queryParams = { ...newObj };
+    this.fetchParameters();
     this.router.navigate(['/diseases'], navigationExtras);
   }
 
@@ -237,13 +262,15 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
         (key) => !['sort', 'pageIndex', 'pageSize', 'direction'].includes(key),
       );
     if (params && params.length) {
+      const valuesMap = new Map();
       params.forEach((param) => {
-        const selectedValues: string | null =
+        const selectedValuesString: string | null =
           this.router.routerState.root.snapshot.queryParamMap.get(param);
-        if (selectedValues) {
-          this.selectedValues.set(param, selectedValues.split('&'));
+        if (selectedValuesString) {
+          valuesMap.set(param, selectedValuesString.split('&'));
         }
       });
+      this.selectedValues.set(valuesMap);
     }
   }
 

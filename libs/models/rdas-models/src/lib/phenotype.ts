@@ -28,7 +28,9 @@ export class PhenotypeAssociation {
       this.phenotype = new Phenotype(obj.phenotype);
     }
     if (obj.properties && obj.properties.hpoTermFrequency) {
-      this.frequencyRank = FREQUENCYRANK.indexOf(obj.properties.hpoTermFrequency);
+      this.frequencyRank = FREQUENCYRANK.indexOf(
+        obj.properties.hpoTermFrequency,
+      );
     }
 
     if (obj.properties && obj.properties._reference) {

@@ -1,7 +1,7 @@
+/*
 import { inject, Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { DocumentNode } from 'graphql';
-import {ArticleWhereParams} from "rdas-models";
 import {Observable} from "rxjs";
 import {ObservableQuery} from "@apollo/client";
 
@@ -24,3 +24,4 @@ export class ArticleService {
       .valueChanges.pipe();
   }
 }
+*/

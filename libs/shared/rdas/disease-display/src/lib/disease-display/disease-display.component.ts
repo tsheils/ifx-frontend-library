@@ -80,7 +80,7 @@ export class DiseaseDisplayComponent
   disease = input<Disease>();
   trialsList = this.store.selectSignal(TrialSelectors.selectAllTrials);
   trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
-   projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
+  projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
   projectsCount = this.store.selectSignal(
     ProjectSelectors.selectAllProjectsCount,
   );

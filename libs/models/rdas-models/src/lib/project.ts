@@ -25,7 +25,9 @@ export class CoreProject {
     }
 
     if (obj.organizations) {
-      this.organizations = obj.organizations.map((data) => new Organization(data));
+      this.organizations = obj.organizations.map(
+        (data) => new Organization(data),
+      );
     }
   }
 }
@@ -101,11 +103,13 @@ export class Project {
     }
 
     if (obj.researchedDiseases) {
-      this.researchedDiseases = obj.researchedDiseases.map((data) => new Disease(data));
+      this.researchedDiseases = obj.researchedDiseases.map(
+        (data) => new Disease(data),
+      );
     }
 
-    if(obj._terms) {
-      this.terms = obj._terms.split(';')
+    if (obj._terms) {
+      this.terms = obj._terms.split(';');
     }
     /*    if (obj.clinicalStudies) {
       this.clinicalStudies = obj.clinicalStudies.map(

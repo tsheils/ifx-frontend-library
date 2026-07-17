@@ -3,7 +3,7 @@ export class Agent {
   pi_id?: string;
   orc_id?: string;
   fullName?: string;
-  contactEmail?: string;
+  contactEmail?: string[];
   firstName?: string;
   lastName?: string;
   affiliations?: Organization[];
@@ -12,7 +12,9 @@ export class Agent {
     Object.assign(this, obj);
 
     if (obj.affiliations) {
-      this.affiliations = obj.affiliations.map((data) => new Organization(data));
+      this.affiliations = obj.affiliations.map(
+        (data) => new Organization(data),
+      );
     }
   }
 }

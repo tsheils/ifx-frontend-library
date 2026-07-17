@@ -105,6 +105,10 @@ export class AppComponent {
           link: 'apis/history',
           label: 'Natural History',
         },
+/*        {
+          link: 'apis/abstract-abstraction',
+          label: 'Abstract Extraction',
+        },*/
       ],
     },
   ];

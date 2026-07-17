@@ -1,5 +1,5 @@
 import { Disease } from './disease';
-import {Location} from './shared-models';
+import { Location } from './shared-models';
 
 export class ClinicalTrial {
   acronym?: string;
@@ -113,8 +113,10 @@ export class Condition {
   constructor(obj: Partial<Condition> = {}) {
     Object.assign(this, obj);
 
-    if(obj.mappedDiseases) {
-      this.mappedDiseases = obj.mappedDiseases.map(disease => new Disease(disease))
+    if (obj.mappedDiseases) {
+      this.mappedDiseases = obj.mappedDiseases.map(
+        (disease) => new Disease(disease),
+      );
     }
   }
 }

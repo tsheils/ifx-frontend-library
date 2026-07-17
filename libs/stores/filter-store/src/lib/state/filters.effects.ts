@@ -1,16 +1,12 @@
 import { inject } from '@angular/core';
 import { Params } from '@angular/router';
-import { ObservableQuery, DocumentNode } from '@apollo/client';
+import { ObservableQuery } from '@apollo/client';
 import {
-  GENEFILTERSQUERY,
   GeneQueryFactory,
-  PHENOTYPEFILTERPARAMETERS,
-  PHENOTYPEFILTERS,
-  QueryParameters,
+  PhenotypeQueryFactory,
   RdasQueryFactory,
-  RdasQueryParams,
 } from 'rdas-models';
-import { Filter, FilterCategory } from 'utils-models';
+import { Filter, FilterCategory, FilterResponse } from 'utils-models';
 import { createEffect, Actions, ofType } from '@ngrx/effects';
 import { concatLatestFrom } from '@ngrx/operators';
 import { ROUTER_NAVIGATION, RouterNavigationAction } from '@ngrx/router-store';
@@ -27,26 +23,19 @@ import { FilterService } from '../filter.service';
 import { FetchFiltersActions } from './filters.actions';
 import * as FiltersSelectors from './filters.selectors';
 
-interface FilterResponse {
-  [key: string]: {
-    data: {
-      allFilters: Filter[];
-      searchFilters: [];
-      selectedFilters: [];
-    };
-  };
-}
-
-const filterMap: Map<string, RdasQueryFactory> = new Map<
+const filterMap: Map<string, PhenotypeQueryFactory> = new Map<
   string,
-  RdasQueryFactory
->([['genes', new GeneQueryFactory()]]);
+  GeneQueryFactory | PhenotypeQueryFactory
+>([
+  // ['genes', new GeneQueryFactory()],
+  ['phenotypes', new PhenotypeQueryFactory()],
+]);
 
+/*
 function parseFilterResponse(
   res: FilterResponse,
   currentFilter?: FilterCategory,
 ): FilterCategory[] {
-  console.log(res);
   const filters: FilterCategory[] = [];
   if (Object.keys(res).length) {
     Object.keys(res).forEach((key: string) => {
@@ -84,8 +73,8 @@ function parseFilterResponse(
         });
         //current values (just for pagination)
         currentFilter?.values.forEach((filter) => {
-          if (!retMap.has(filter.term)) {
-            retMap.set(filter.term, filter);
+          if (!retMap.has(<string>filter.term)) {
+            retMap.set(<string>filter.term, filter);
           }
         });
       }
@@ -119,11 +108,13 @@ function parseFilterResponse(
   }
   return filters;
 }
+*/
 
 /**
  * initial load and paging of filter list
  */
 
+/*
 export const loadFilters$ = createEffect(
   (actions$ = inject(Actions), filterService = inject(FilterService)) => {
     return actions$.pipe(
@@ -135,10 +126,12 @@ export const loadFilters$ = createEffect(
         (r: RouterNavigationAction) => r.payload.routerState.root.queryParams,
       ),
       mergeMap((params: Params) => {
-        console.log('loading filters');
-        console.log(params);
+        console.log("load filters")
         const queries: { [key: string]: ObservableInput<unknown> } = {};
+        console.log(queries);
         [...filterMap.keys()].forEach((selectedFilter: string | undefined) => {
+          console.log(selectedFilter)
+          console.log(filterMap)
           if (selectedFilter != null) {
             const factory = filterMap.get(selectedFilter);
             if (factory) {
@@ -152,12 +145,18 @@ export const loadFilters$ = createEffect(
         });
         return combineLatest(queries).pipe(
           map((res: unknown) => {
+            console.log(res)
             const data = res as FilterResponse;
             if (data) {
               const filters = parseFilterResponse(data);
-              return FetchFiltersActions.fetchFiltersSuccess({
-                filters: filters,
-              });
+              console.log(filters)
+              if(filters[0].values.length) {
+                return FetchFiltersActions.fetchFiltersSuccess({
+                  filters: filters,
+                });
+              } else return FetchFiltersActions.fetchFiltersFailure({
+                  error: 'No new filters found',
+                });
             } else {
               return FetchFiltersActions.fetchFiltersFailure({
                 error: 'No Disease found',
@@ -181,7 +180,7 @@ export const searchFilters$ = createEffect(
       ofType(FetchFiltersActions.fetchFilters),
       concatLatestFrom(() => store.select(FiltersSelectors.selectAllFilters)),
       mergeMap(([action, currentFilters]) => {
-        console.log('search filters');
+        console.log("search filters")
         const queries: {
           [key: string]: Observable<ObservableQuery.Result<unknown>>;
         } = {};
@@ -205,9 +204,6 @@ export const searchFilters$ = createEffect(
             label: action.label,
           });
         }
-        console.log(currentFilters);
-        console.log(filterMatch);
-        console.log(action);
         //get queries and parameters
         const factory = filterMap.get(action.label);
         if (factory) {
@@ -238,12 +234,10 @@ export const searchFilters$ = createEffect(
                 page: nextPage,
                 query: action.term,
               });
-              console.log(tempFilter);
               const filter = parseFilterResponse(
                 res as FilterResponse,
                 tempFilter,
               );
-              console.log(filter);
               return FetchFiltersActions.fetchFiltersSuccess({
                 filters: filter,
               });
@@ -258,3 +252,4 @@ export const searchFilters$ = createEffect(
   },
   { functional: true },
 );
+*/

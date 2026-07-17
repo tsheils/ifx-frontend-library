@@ -1,6 +1,5 @@
-import { Article } from 'rdas-models';
-import { Filter, FilterCategory, Page } from 'utils-models';
-import { createAction, createActionGroup, props } from '@ngrx/store';
+import { Filter, FilterCategory } from 'utils-models';
+import { createActionGroup, props } from '@ngrx/store';
 
 export const SearchFiltersActions = createActionGroup({
   source: 'Search Filters',
@@ -22,7 +21,7 @@ export const FetchFiltersActions = createActionGroup({
       label: string;
       skip?: number;
       limit?: number;
-      term?: string;
+      term?: string | number | boolean;
       terms?: string[];
     }>(),
     fetchFiltersSuccess: props<{ filters: FilterCategory[] }>(),

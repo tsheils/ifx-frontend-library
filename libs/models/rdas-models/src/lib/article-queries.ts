@@ -1,12 +1,13 @@
 import { gql } from 'apollo-angular';
+import { TypedDocumentNode } from '@apollo/client';
+import { Params } from '@angular/router';
 import {
-  DIRECTION,
-  RdasQueryFactory,
-  RdasQueryParams
-} from "rdas-models";
-import {TypedDocumentNode} from "@apollo/client";
-import {Params} from "@angular/router";
-
+  ArticleSort,
+  ArticleWhere,
+  DiseaseHasMentionInConnectionWhere,
+  DiseaseWhere,
+  SortDirection,
+} from './generated-types';
 
 export const ARTICLEQUERY = gql`
   query ArticleQuery($articleWhere: ArticleWhere) {
@@ -86,7 +87,7 @@ export const ARTICLELISTQUERY = gql`
     $hasMentionInConnectionWhere: DiseaseHasMentionInConnectionWhere
   ) {
     diseases(where: $diseaseWhere) {
-      countArticles
+      allCount: countArticles
       countEpiArticles
       countNhsArticles
       articles: hasMentionIn(
@@ -110,108 +111,141 @@ export const ARTICLELISTQUERY = gql`
           title
         }
       }
-      allCount: hasMentionInConnection(where: $hasMentionInConnectionWhere) {
-        totalCount
+      filteredCount: hasMentionInConnection(
+        where: $hasMentionInConnectionWhere
+      ) {
+        totalCount: aggregate {
+          count {
+            nodes
+          }
+        }
       }
     }
   }
 `;
 
-
-export class ArticleWhereParams extends RdasQueryParams {
-  diseaseWhere?: {
-    gardId: {
-      eq: string
-  }
-  }
-  articleWhere?: {
-    pubmedId: {
-      eq: number
-  }
-  }
-
-  /*hasMentionInConnectionWhere?: {
-    node: {
-      [key:string]: {eq: boolean}
-    },
-    AND?:  {[key:string]: {eq: boolean}}[]
-
-  }
-  hasMentionInWhere?: {
-    AND?: {[key:string]: {eq: boolean}}[]
-  //  [key:string]: {eq: boolean};
-  }*/
-  hasMentionInLimit?: number
-  hasMentionInOffset?: number
-  hasMentionInSort?: [{ [key: string]: DIRECTION }]
-}
-
-export class ArticleQueryFactory implements RdasQueryFactory {
+export class ArticleQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;
-  params: ArticleWhereParams = {};
+  params: {
+    hasMentionInLimit?: number;
+    hasMentionInOffset?: number;
+    hasMentionInSort?: ArticleSort[];
+    diseaseWhere?: DiseaseWhere;
+    articleWhere?: ArticleWhere;
+    hasMentionInConnectionWhere?: DiseaseHasMentionInConnectionWhere;
+  } = {};
 
   getQuery(params: Params) {
     this.query = this._buildQuery(params);
     this._buildParams(params);
-    return {query: this.query, params: this.params};
+    return { query: this.query, params: this.params };
   }
 
   _buildQuery(params: Params) {
     if (params['pubmedId']) {
-      return ARTICLEQUERY
+      return ARTICLEQUERY;
     } else {
       this.params = {
         hasMentionInLimit: 10,
         hasMentionInOffset: 0,
-        sort: [{ publicationYear: DIRECTION.DESC }],
+        hasMentionInSort: [{ publicationYear: 'DESC' }],
       };
-      return ARTICLELISTQUERY
+      return ARTICLELISTQUERY;
     }
   }
 
   _buildParams(params: Params) {
-    if(params['offset']) {
-    this.params.hasMentionInOffset = +params['offset']
-      }
+    Object.entries(params).forEach((key) => {
+      switch (key[0]) {
+        case 'pageSize': {
+          this.params.hasMentionInOffset = params['pageSize']
+            ? +(params['pageSize'] as number)
+            : 10;
+          break;
+        }
+        case 'offset': {
+          this.params.hasMentionInOffset = +params['offset'];
+          break;
+        }
+        case 'sort': {
+          this.params.hasMentionInSort = [
+            {
+              [params['sort']]: params['direction']
+                ? (params['direction'] as SortDirection)
+                : ('DESC' as SortDirection),
+            },
+          ];
+          break;
+        }
+        case 'pubmedId': {
+          this.params.articleWhere = { pubmedId: { eq: +params['pubmedId'] } };
+          break;
+        }
+        case 'gardId': {
+          this.params.diseaseWhere = { gardId: { eq: params['gardId'] } };
+          break;
+        }
+        case 'isEpi': {
+          if (params['isEpi'].length) {
+            if (!this.params.articleWhere) {
+              this.params.articleWhere = {};
+            }
+            if (!this.params.hasMentionInConnectionWhere) {
+              this.params.hasMentionInConnectionWhere = {};
+            }
+            if (!this.params.hasMentionInConnectionWhere.node) {
+              this.params.hasMentionInConnectionWhere.node = {};
+            }
+            this.params.articleWhere.isEpidemiologicalStudy = {
+              eq: params['isEpi'] === 'true',
+            };
+            this.params.hasMentionInConnectionWhere.node.isEpidemiologicalStudy =
+              { eq: params['isEpi'] === 'true' };
+          }
+          break;
+        }
+        case 'isNHS': {
+          if (params['isNHS'].length) {
+            if (!this.params.articleWhere) {
+              this.params.articleWhere = {};
+            }
+            if (!this.params.hasMentionInConnectionWhere) {
+              this.params.hasMentionInConnectionWhere = {};
+            }
+            if (!this.params.hasMentionInConnectionWhere.node) {
+              this.params.hasMentionInConnectionWhere.node = {};
+            }
 
-    if (params['sort']) {
-      this.params['hasMentionInSort'] = [
-        {
-          [params['sort']]: params['direction']
-            ? (params['direction'] as DIRECTION)
-            : DIRECTION.DESC,
-        },
-      ];
-    }
-      if (params['pubmedId']) {
-        this.params.articleWhere = {pubmedId: {eq: +params['pubmedId']}};
-      }
-
-    if (params['gardId']) {
-      this.params.diseaseWhere = {gardId: {eq: params['gardId']}};
-    }
-/*
-    if (params['isNHS'] || params['isEpi']) {
-      console.log("yoyoyoy")
-      this.params.hasMentionInConnectionWhere = {node: {}}
-      if (params['isNHS']) {
-        this.params.hasMentionInConnectionWhere!.node!['isNaturalHistoryStudy'].eq = params['isNHS']
-        this.params.hasMentionInWhere!['isNaturalHistoryStudy']!.eq = params['isNHS']
-
-        if (params['isEpi']) {
-          this.params.hasMentionInConnectionWhere!['AND'] = [{isEpidemiologicalStudy: {eq: params['isEpi']}}]
+            this.params.articleWhere.isNaturalHistoryStudy = {
+              eq: JSON.parse(params['isNHS']),
+            };
+            this.params.hasMentionInConnectionWhere.node.isNaturalHistoryStudy =
+              { eq: JSON.parse(params['isNHS']) };
+          }
+          break;
+        }
+        case 'year': {
+          let val = params['year'];
+          if (typeof val === 'string') {
+            val = Number.parseInt(params['year']);
+          } else if (typeof params['year'] === 'object') {
+            val = params['year'].map(
+              (year: string | number) => Number.parseInt(<string>year),
+            );
+          }
+          if (!this.params.articleWhere) {
+            this.params.articleWhere = {};
+          }
+          if (!this.params.hasMentionInConnectionWhere) {
+            this.params.hasMentionInConnectionWhere = { node: {} };
+          }
+          this.params.articleWhere.publicationYear = { in: val };
+          this.params.hasMentionInConnectionWhere.node = {
+            publicationYear: { in: val },
+          };
+          break;
         }
       }
-
-      if (params['isEpi']) {
-        this.params.hasMentionInConnectionWhere!.node['isEpidemiologicalStudy'].eq = params['isEpi']
-      }
-
-      if (params['isNHS']) {
-        this.params.hasMentionInConnectionWhere!['AND'] = []
-        this.params.hasMentionInConnectionWhere!['AND']!.push({isNaturalHistoryStudy: {eq: params['isNHS']}})
-      }
-    }*/
+    });
   }
-
 }

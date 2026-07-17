@@ -1,7 +1,11 @@
 /** Internal type. DO NOT USE DIRECTLY. */
 type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** Internal type. DO NOT USE DIRECTLY. */
-export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
+export type Incremental<T> =
+  | T
+  | {
+      [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never;
+    };
 export type AgentHasAffiliationConnectionAggregateInput = {
   AND?: Array<AgentHasAffiliationConnectionAggregateInput> | null | undefined;
   NOT?: AgentHasAffiliationConnectionAggregateInput | null | undefined;
@@ -58,7 +62,8 @@ export type AgentWhere = {
   firstName?: StringScalarFilters | null | undefined;
   fullName?: StringScalarFilters | null | undefined;
   hasAffiliation?: OrganizationRelationshipFilters | null | undefined;
-  hasAffiliationConnection?: AgentHasAffiliationConnectionFilters | null | undefined;
+  hasAffiliationConnection?:
+    AgentHasAffiliationConnectionFilters | null | undefined;
   lastName?: StringScalarFilters | null | undefined;
   orc_id?: StringScalarFilters | null | undefined;
   pi_id?: StringScalarFilters | null | undefined;
@@ -128,37 +133,68 @@ export type ArticleHasAuthorNodeAggregationWhereInput = {
 };
 
 export type ArticleHasEpidemiologicalAnnotationConnectionAggregateInput = {
-  AND?: Array<ArticleHasEpidemiologicalAnnotationConnectionAggregateInput> | null | undefined;
-  NOT?: ArticleHasEpidemiologicalAnnotationConnectionAggregateInput | null | undefined;
-  OR?: Array<ArticleHasEpidemiologicalAnnotationConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ArticleHasEpidemiologicalAnnotationConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    | ArticleHasEpidemiologicalAnnotationConnectionAggregateInput
+    | null
+    | undefined;
+  OR?:
+    | Array<ArticleHasEpidemiologicalAnnotationConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput | null | undefined;
+  node?:
+    | ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput
+    | null
+    | undefined;
 };
 
 export type ArticleHasEpidemiologicalAnnotationConnectionFilters = {
   /** Filter Articles by aggregating results on related ArticleHasEpidemiologicalAnnotationConnections */
-  aggregate?: ArticleHasEpidemiologicalAnnotationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    | ArticleHasEpidemiologicalAnnotationConnectionAggregateInput
+    | null
+    | undefined;
   /** Return Articles where all of the related ArticleHasEpidemiologicalAnnotationConnections match this filter */
   all?: ArticleHasEpidemiologicalAnnotationConnectionWhere | null | undefined;
   /** Return Articles where none of the related ArticleHasEpidemiologicalAnnotationConnections match this filter */
   none?: ArticleHasEpidemiologicalAnnotationConnectionWhere | null | undefined;
   /** Return Articles where one of the related ArticleHasEpidemiologicalAnnotationConnections match this filter */
-  single?: ArticleHasEpidemiologicalAnnotationConnectionWhere | null | undefined;
+  single?:
+    ArticleHasEpidemiologicalAnnotationConnectionWhere | null | undefined;
   /** Return Articles where some of the related ArticleHasEpidemiologicalAnnotationConnections match this filter */
   some?: ArticleHasEpidemiologicalAnnotationConnectionWhere | null | undefined;
 };
 
 export type ArticleHasEpidemiologicalAnnotationConnectionWhere = {
-  AND?: Array<ArticleHasEpidemiologicalAnnotationConnectionWhere> | null | undefined;
+  AND?:
+    | Array<ArticleHasEpidemiologicalAnnotationConnectionWhere>
+    | null
+    | undefined;
   NOT?: ArticleHasEpidemiologicalAnnotationConnectionWhere | null | undefined;
-  OR?: Array<ArticleHasEpidemiologicalAnnotationConnectionWhere> | null | undefined;
+  OR?:
+    | Array<ArticleHasEpidemiologicalAnnotationConnectionWhere>
+    | null
+    | undefined;
   node?: EpidemiologyAnnotationWhere | null | undefined;
 };
 
 export type ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput = {
-  AND?: Array<ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput> | null | undefined;
-  NOT?: ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    | ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput
+    | null
+    | undefined;
+  OR?:
+    | Array<ArticleHasEpidemiologicalAnnotationNodeAggregationWhereInput>
+    | null
+    | undefined;
   _composite_key?: StringScalarAggregationFilters | null | undefined;
   dateCreatedByRDAS?: StringScalarAggregationFilters | null | undefined;
   lastUpdatedByRDAS?: StringScalarAggregationFilters | null | undefined;
@@ -324,16 +360,19 @@ export type ArticleHasMeshTermNodeAggregationWhereInput = {
 };
 
 export type ArticleHasOmimReferenceConnectionAggregateInput = {
-  AND?: Array<ArticleHasOmimReferenceConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<ArticleHasOmimReferenceConnectionAggregateInput> | null | undefined;
   NOT?: ArticleHasOmimReferenceConnectionAggregateInput | null | undefined;
-  OR?: Array<ArticleHasOmimReferenceConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<ArticleHasOmimReferenceConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: ArticleHasOmimReferenceNodeAggregationWhereInput | null | undefined;
 };
 
 export type ArticleHasOmimReferenceConnectionFilters = {
   /** Filter Articles by aggregating results on related ArticleHasOMIMReferenceConnections */
-  aggregate?: ArticleHasOmimReferenceConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ArticleHasOmimReferenceConnectionAggregateInput | null | undefined;
   /** Return Articles where all of the related ArticleHasOMIMReferenceConnections match this filter */
   all?: ArticleHasOmimReferenceConnectionWhere | null | undefined;
   /** Return Articles where none of the related ArticleHasOMIMReferenceConnections match this filter */
@@ -352,9 +391,11 @@ export type ArticleHasOmimReferenceConnectionWhere = {
 };
 
 export type ArticleHasOmimReferenceNodeAggregationWhereInput = {
-  AND?: Array<ArticleHasOmimReferenceNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<ArticleHasOmimReferenceNodeAggregationWhereInput> | null | undefined;
   NOT?: ArticleHasOmimReferenceNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ArticleHasOmimReferenceNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<ArticleHasOmimReferenceNodeAggregationWhereInput> | null | undefined;
   _composite_key?: StringScalarAggregationFilters | null | undefined;
   dateCreatedByRDAS?: StringScalarAggregationFilters | null | undefined;
   lastUpdatedByRDAS?: StringScalarAggregationFilters | null | undefined;
@@ -364,16 +405,24 @@ export type ArticleHasOmimReferenceNodeAggregationWhereInput = {
 };
 
 export type ArticleHasPubtatorAnnotationConnectionAggregateInput = {
-  AND?: Array<ArticleHasPubtatorAnnotationConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ArticleHasPubtatorAnnotationConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ArticleHasPubtatorAnnotationConnectionAggregateInput | null | undefined;
-  OR?: Array<ArticleHasPubtatorAnnotationConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ArticleHasPubtatorAnnotationConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ArticleHasPubtatorAnnotationNodeAggregationWhereInput | null | undefined;
+  node?:
+    ArticleHasPubtatorAnnotationNodeAggregationWhereInput | null | undefined;
 };
 
 export type ArticleHasPubtatorAnnotationConnectionFilters = {
   /** Filter Articles by aggregating results on related ArticleHasPubtatorAnnotationConnections */
-  aggregate?: ArticleHasPubtatorAnnotationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ArticleHasPubtatorAnnotationConnectionAggregateInput | null | undefined;
   /** Return Articles where all of the related ArticleHasPubtatorAnnotationConnections match this filter */
   all?: ArticleHasPubtatorAnnotationConnectionWhere | null | undefined;
   /** Return Articles where none of the related ArticleHasPubtatorAnnotationConnections match this filter */
@@ -392,9 +441,16 @@ export type ArticleHasPubtatorAnnotationConnectionWhere = {
 };
 
 export type ArticleHasPubtatorAnnotationNodeAggregationWhereInput = {
-  AND?: Array<ArticleHasPubtatorAnnotationNodeAggregationWhereInput> | null | undefined;
-  NOT?: ArticleHasPubtatorAnnotationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ArticleHasPubtatorAnnotationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ArticleHasPubtatorAnnotationNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ArticleHasPubtatorAnnotationNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ArticleHasPubtatorAnnotationNodeAggregationWhereInput>
+    | null
+    | undefined;
   _composite_key?: StringScalarAggregationFilters | null | undefined;
   annotationIdentifier?: StringScalarAggregationFilters | null | undefined;
   annotationType?: StringScalarAggregationFilters | null | undefined;
@@ -484,23 +540,31 @@ export type ArticleWhere = {
   fullTextUrls?: StringScalarFilters | null | undefined;
   hasAuthor?: AgentRelationshipFilters | null | undefined;
   hasAuthorConnection?: ArticleHasAuthorConnectionFilters | null | undefined;
-  hasEpidemiologicalAnnotation?: EpidemiologyAnnotationRelationshipFilters | null | undefined;
-  hasEpidemiologicalAnnotationConnection?: ArticleHasEpidemiologicalAnnotationConnectionFilters | null | undefined;
+  hasEpidemiologicalAnnotation?:
+    EpidemiologyAnnotationRelationshipFilters | null | undefined;
+  hasEpidemiologicalAnnotationConnection?:
+    ArticleHasEpidemiologicalAnnotationConnectionFilters | null | undefined;
   hasJournal?: JournalRelationshipFilters | null | undefined;
   hasJournalConnection?: ArticleHasJournalConnectionFilters | null | undefined;
   hasKeyword?: KeywordRelationshipFilters | null | undefined;
   hasKeywordConnection?: ArticleHasKeywordConnectionFilters | null | undefined;
   hasMentionIn?: DiseaseRelationshipFilters | null | undefined;
-  hasMentionInConnection?: ArticleHasMentionInConnectionFilters | null | undefined;
+  hasMentionInConnection?:
+    ArticleHasMentionInConnectionFilters | null | undefined;
   hasMeshTerm?: MeshTermRelationshipFilters | null | undefined;
-  hasMeshTermConnection?: ArticleHasMeshTermConnectionFilters | null | undefined;
+  hasMeshTermConnection?:
+    ArticleHasMeshTermConnectionFilters | null | undefined;
   hasOMIMReference?: OmimRefRelationshipFilters | null | undefined;
-  hasOMIMReferenceConnection?: ArticleHasOmimReferenceConnectionFilters | null | undefined;
+  hasOMIMReferenceConnection?:
+    ArticleHasOmimReferenceConnectionFilters | null | undefined;
   hasPDF?: StringScalarFilters | null | undefined;
-  hasPubtatorAnnotation?: PubtatorAnnotationRelationshipFilters | null | undefined;
-  hasPubtatorAnnotationConnection?: ArticleHasPubtatorAnnotationConnectionFilters | null | undefined;
+  hasPubtatorAnnotation?:
+    PubtatorAnnotationRelationshipFilters | null | undefined;
+  hasPubtatorAnnotationConnection?:
+    ArticleHasPubtatorAnnotationConnectionFilters | null | undefined;
   hasSubstance?: SubstanceRelationshipFilters | null | undefined;
-  hasSubstanceConnection?: ArticleHasSubstanceConnectionFilters | null | undefined;
+  hasSubstanceConnection?:
+    ArticleHasSubstanceConnectionFilters | null | undefined;
   inEPMC?: StringScalarFilters | null | undefined;
   inPMC?: StringScalarFilters | null | undefined;
   isEpidemiologicalStudy?: BooleanScalarFilters | null | undefined;
@@ -516,9 +580,11 @@ export type ArticleWhere = {
 };
 
 export type AssociatedWithGenePropertiesAggregationWhereInput = {
-  AND?: Array<AssociatedWithGenePropertiesAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<AssociatedWithGenePropertiesAggregationWhereInput> | null | undefined;
   NOT?: AssociatedWithGenePropertiesAggregationWhereInput | null | undefined;
-  OR?: Array<AssociatedWithGenePropertiesAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<AssociatedWithGenePropertiesAggregationWhereInput> | null | undefined;
   associationStatus?: StringScalarAggregationFilters | null | undefined;
   associationType?: StringScalarAggregationFilters | null | undefined;
 };
@@ -538,16 +604,23 @@ export type BooleanScalarFilters = {
 };
 
 export type ClinicalTrialHasAnnotationConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasAnnotationConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasAnnotationConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasAnnotationConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasAnnotationConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasAnnotationConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: ClinicalTrialHasAnnotationNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasAnnotationConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasAnnotationConnections */
-  aggregate?: ClinicalTrialHasAnnotationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasAnnotationConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasAnnotationConnections match this filter */
   all?: ClinicalTrialHasAnnotationConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasAnnotationConnections match this filter */
@@ -566,24 +639,39 @@ export type ClinicalTrialHasAnnotationConnectionWhere = {
 };
 
 export type ClinicalTrialHasAnnotationNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasAnnotationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasAnnotationNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasAnnotationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasAnnotationNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasAnnotationNodeAggregationWhereInput>
+    | null
+    | undefined;
   umlsConcept?: StringScalarAggregationFilters | null | undefined;
   umlsCui?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type ClinicalTrialHasClinicalTrialConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasClinicalTrialConnectionAggregateInput> | null | undefined;
-  NOT?: ClinicalTrialHasClinicalTrialConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasClinicalTrialConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasClinicalTrialConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasClinicalTrialConnectionAggregateInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasClinicalTrialConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasClinicalTrialNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasClinicalTrialNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasClinicalTrialConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasClinicalTrialConnections */
-  aggregate?: ClinicalTrialHasClinicalTrialConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasClinicalTrialConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasClinicalTrialConnections match this filter */
   all?: ClinicalTrialHasClinicalTrialConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasClinicalTrialConnections match this filter */
@@ -602,9 +690,16 @@ export type ClinicalTrialHasClinicalTrialConnectionWhere = {
 };
 
 export type ClinicalTrialHasClinicalTrialNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasClinicalTrialNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasClinicalTrialNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasClinicalTrialNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasClinicalTrialNodeAggregationWhereInput>
+    | null
+    | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -625,16 +720,19 @@ export type ClinicalTrialHasClinicalTrialNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasContactConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasContactConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<ClinicalTrialHasContactConnectionAggregateInput> | null | undefined;
   NOT?: ClinicalTrialHasContactConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasContactConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<ClinicalTrialHasContactConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: ClinicalTrialHasContactNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasContactConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasContactConnections */
-  aggregate?: ClinicalTrialHasContactConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasContactConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasContactConnections match this filter */
   all?: ClinicalTrialHasContactConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasContactConnections match this filter */
@@ -653,9 +751,11 @@ export type ClinicalTrialHasContactConnectionWhere = {
 };
 
 export type ClinicalTrialHasContactNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasContactNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<ClinicalTrialHasContactNodeAggregationWhereInput> | null | undefined;
   NOT?: ClinicalTrialHasContactNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasContactNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<ClinicalTrialHasContactNodeAggregationWhereInput> | null | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   contactEmail?: StringScalarAggregationFilters | null | undefined;
   firstName?: StringScalarAggregationFilters | null | undefined;
@@ -666,37 +766,70 @@ export type ClinicalTrialHasContactNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasIndividualPatientDataConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasIndividualPatientDataConnectionAggregateInput> | null | undefined;
-  NOT?: ClinicalTrialHasIndividualPatientDataConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasIndividualPatientDataConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasIndividualPatientDataConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    | ClinicalTrialHasIndividualPatientDataConnectionAggregateInput
+    | null
+    | undefined;
+  OR?:
+    | Array<ClinicalTrialHasIndividualPatientDataConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput | null | undefined;
+  node?:
+    | ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput
+    | null
+    | undefined;
 };
 
 export type ClinicalTrialHasIndividualPatientDataConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasIndividualPatientDataConnections */
-  aggregate?: ClinicalTrialHasIndividualPatientDataConnectionAggregateInput | null | undefined;
+  aggregate?:
+    | ClinicalTrialHasIndividualPatientDataConnectionAggregateInput
+    | null
+    | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasIndividualPatientDataConnections match this filter */
   all?: ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasIndividualPatientDataConnections match this filter */
-  none?: ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
+  none?:
+    ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
   /** Return ClinicalTrials where one of the related ClinicalTrialHasIndividualPatientDataConnections match this filter */
-  single?: ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
+  single?:
+    ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
   /** Return ClinicalTrials where some of the related ClinicalTrialHasIndividualPatientDataConnections match this filter */
-  some?: ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
+  some?:
+    ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
 };
 
 export type ClinicalTrialHasIndividualPatientDataConnectionWhere = {
-  AND?: Array<ClinicalTrialHasIndividualPatientDataConnectionWhere> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasIndividualPatientDataConnectionWhere>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasIndividualPatientDataConnectionWhere | null | undefined;
-  OR?: Array<ClinicalTrialHasIndividualPatientDataConnectionWhere> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasIndividualPatientDataConnectionWhere>
+    | null
+    | undefined;
   node?: IndividualPatientDataWhere | null | undefined;
 };
 
 export type ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    | ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput
+    | null
+    | undefined;
+  OR?:
+    | Array<ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput>
+    | null
+    | undefined;
   ipdSharing?: StringScalarAggregationFilters | null | undefined;
   ipdSharingAccessCriteria?: StringScalarAggregationFilters | null | undefined;
   ipdSharingDescription?: StringScalarAggregationFilters | null | undefined;
@@ -705,16 +838,24 @@ export type ClinicalTrialHasIndividualPatientDataNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasInterventionConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasInterventionConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInterventionConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasInterventionConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasInterventionConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInterventionConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasInterventionNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasInterventionNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasInterventionConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasInterventionConnections */
-  aggregate?: ClinicalTrialHasInterventionConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasInterventionConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasInterventionConnections match this filter */
   all?: ClinicalTrialHasInterventionConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasInterventionConnections match this filter */
@@ -733,9 +874,16 @@ export type ClinicalTrialHasInterventionConnectionWhere = {
 };
 
 export type ClinicalTrialHasInterventionNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasInterventionNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasInterventionNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasInterventionNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInterventionNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasInterventionNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInterventionNodeAggregationWhereInput>
+    | null
+    | undefined;
   _composite_key?: StringScalarAggregationFilters | null | undefined;
   _intervention_name_key?: StringScalarAggregationFilters | null | undefined;
   interventionDescription?: StringScalarAggregationFilters | null | undefined;
@@ -744,51 +892,92 @@ export type ClinicalTrialHasInterventionNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasInvestigatedConditionConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasInvestigatedConditionConnectionAggregateInput> | null | undefined;
-  NOT?: ClinicalTrialHasInvestigatedConditionConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasInvestigatedConditionConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInvestigatedConditionConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    | ClinicalTrialHasInvestigatedConditionConnectionAggregateInput
+    | null
+    | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInvestigatedConditionConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput | null | undefined;
+  node?:
+    | ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput
+    | null
+    | undefined;
 };
 
 export type ClinicalTrialHasInvestigatedConditionConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasInvestigatedConditionConnections */
-  aggregate?: ClinicalTrialHasInvestigatedConditionConnectionAggregateInput | null | undefined;
+  aggregate?:
+    | ClinicalTrialHasInvestigatedConditionConnectionAggregateInput
+    | null
+    | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasInvestigatedConditionConnections match this filter */
   all?: ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasInvestigatedConditionConnections match this filter */
-  none?: ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
+  none?:
+    ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
   /** Return ClinicalTrials where one of the related ClinicalTrialHasInvestigatedConditionConnections match this filter */
-  single?: ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
+  single?:
+    ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
   /** Return ClinicalTrials where some of the related ClinicalTrialHasInvestigatedConditionConnections match this filter */
-  some?: ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
+  some?:
+    ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
 };
 
 export type ClinicalTrialHasInvestigatedConditionConnectionWhere = {
-  AND?: Array<ClinicalTrialHasInvestigatedConditionConnectionWhere> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInvestigatedConditionConnectionWhere>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasInvestigatedConditionConnectionWhere | null | undefined;
-  OR?: Array<ClinicalTrialHasInvestigatedConditionConnectionWhere> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInvestigatedConditionConnectionWhere>
+    | null
+    | undefined;
   node?: ConditionWhere | null | undefined;
 };
 
 export type ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    | ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput
+    | null
+    | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInvestigatedConditionNodeAggregationWhereInput>
+    | null
+    | undefined;
   condition?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type ClinicalTrialHasInvestigatorConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasInvestigatorConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInvestigatorConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasInvestigatorConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasInvestigatorConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInvestigatorConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasInvestigatorNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasInvestigatorNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasInvestigatorConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasInvestigatorConnections */
-  aggregate?: ClinicalTrialHasInvestigatorConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasInvestigatorConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasInvestigatorConnections match this filter */
   all?: ClinicalTrialHasInvestigatorConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasInvestigatorConnections match this filter */
@@ -807,9 +996,16 @@ export type ClinicalTrialHasInvestigatorConnectionWhere = {
 };
 
 export type ClinicalTrialHasInvestigatorNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasInvestigatorNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasInvestigatorNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasInvestigatorNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasInvestigatorNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasInvestigatorNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasInvestigatorNodeAggregationWhereInput>
+    | null
+    | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   contactEmail?: StringScalarAggregationFilters | null | undefined;
   firstName?: StringScalarAggregationFilters | null | undefined;
@@ -820,16 +1016,24 @@ export type ClinicalTrialHasInvestigatorNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasOrganizationConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasOrganizationConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasOrganizationConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasOrganizationConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasOrganizationConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasOrganizationConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasOrganizationNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasOrganizationNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasOrganizationConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasOrganizationConnections */
-  aggregate?: ClinicalTrialHasOrganizationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasOrganizationConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasOrganizationConnections match this filter */
   all?: ClinicalTrialHasOrganizationConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasOrganizationConnections match this filter */
@@ -848,24 +1052,40 @@ export type ClinicalTrialHasOrganizationConnectionWhere = {
 };
 
 export type ClinicalTrialHasOrganizationNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasOrganizationNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasOrganizationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasOrganizationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasOrganizationNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasOrganizationNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasOrganizationNodeAggregationWhereInput>
+    | null
+    | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   name?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type ClinicalTrialHasParticipantInfoConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasParticipantInfoConnectionAggregateInput> | null | undefined;
-  NOT?: ClinicalTrialHasParticipantInfoConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasParticipantInfoConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasParticipantInfoConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasParticipantInfoConnectionAggregateInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasParticipantInfoConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasParticipantInfoNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasParticipantInfoNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasParticipantInfoConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasParticipantInfoConnections */
-  aggregate?: ClinicalTrialHasParticipantInfoConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasParticipantInfoConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasParticipantInfoConnections match this filter */
   all?: ClinicalTrialHasParticipantInfoConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasParticipantInfoConnections match this filter */
@@ -877,16 +1097,24 @@ export type ClinicalTrialHasParticipantInfoConnectionFilters = {
 };
 
 export type ClinicalTrialHasParticipantInfoConnectionWhere = {
-  AND?: Array<ClinicalTrialHasParticipantInfoConnectionWhere> | null | undefined;
+  AND?:
+    Array<ClinicalTrialHasParticipantInfoConnectionWhere> | null | undefined;
   NOT?: ClinicalTrialHasParticipantInfoConnectionWhere | null | undefined;
   OR?: Array<ClinicalTrialHasParticipantInfoConnectionWhere> | null | undefined;
   node?: ParticipantWhere | null | undefined;
 };
 
 export type ClinicalTrialHasParticipantInfoNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasParticipantInfoNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasParticipantInfoNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasParticipantInfoNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasParticipantInfoNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasParticipantInfoNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasParticipantInfoNodeAggregationWhereInput>
+    | null
+    | undefined;
   eligibilityCriteria?: StringScalarAggregationFilters | null | undefined;
   enrollmentCount?: StringScalarAggregationFilters | null | undefined;
   enrollmentType?: StringScalarAggregationFilters | null | undefined;
@@ -896,16 +1124,25 @@ export type ClinicalTrialHasParticipantInfoNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput> | null | undefined;
-  NOT?: ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasPrimaryOutcomeConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasPrimaryOutcomeConnections */
-  aggregate?: ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasPrimaryOutcomeConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasPrimaryOutcomeConnections match this filter */
   all?: ClinicalTrialHasPrimaryOutcomeConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasPrimaryOutcomeConnections match this filter */
@@ -924,25 +1161,40 @@ export type ClinicalTrialHasPrimaryOutcomeConnectionWhere = {
 };
 
 export type ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasPrimaryOutcomeNodeAggregationWhereInput>
+    | null
+    | undefined;
   primaryOutcomeDescription?: StringScalarAggregationFilters | null | undefined;
   primaryOutcomeMeasure?: StringScalarAggregationFilters | null | undefined;
   primaryOutcomeTimeFrame?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type ClinicalTrialHasStudyDesignConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasStudyDesignConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasStudyDesignConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasStudyDesignConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasStudyDesignConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasStudyDesignConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasStudyDesignNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasStudyDesignNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasStudyDesignConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasStudyDesignConnections */
-  aggregate?: ClinicalTrialHasStudyDesignConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasStudyDesignConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasStudyDesignConnections match this filter */
   all?: ClinicalTrialHasStudyDesignConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasStudyDesignConnections match this filter */
@@ -961,12 +1213,19 @@ export type ClinicalTrialHasStudyDesignConnectionWhere = {
 };
 
 export type ClinicalTrialHasStudyDesignNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasStudyDesignNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasStudyDesignNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: ClinicalTrialHasStudyDesignNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasStudyDesignNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasStudyDesignNodeAggregationWhereInput>
+    | null
+    | undefined;
   designAllocation?: StringScalarAggregationFilters | null | undefined;
   designInterventionModel?: StringScalarAggregationFilters | null | undefined;
-  designInterventionModelDescription?: StringScalarAggregationFilters | null | undefined;
+  designInterventionModelDescription?:
+    StringScalarAggregationFilters | null | undefined;
   designMasking?: StringScalarAggregationFilters | null | undefined;
   designObservationalModel?: StringScalarAggregationFilters | null | undefined;
   designPrimaryPurpose?: StringScalarAggregationFilters | null | undefined;
@@ -977,16 +1236,25 @@ export type ClinicalTrialHasStudyDesignNodeAggregationWhereInput = {
 };
 
 export type ClinicalTrialHasTrialLocationConnectionAggregateInput = {
-  AND?: Array<ClinicalTrialHasTrialLocationConnectionAggregateInput> | null | undefined;
-  NOT?: ClinicalTrialHasTrialLocationConnectionAggregateInput | null | undefined;
-  OR?: Array<ClinicalTrialHasTrialLocationConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasTrialLocationConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasTrialLocationConnectionAggregateInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasTrialLocationConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ClinicalTrialHasTrialLocationNodeAggregationWhereInput | null | undefined;
+  node?:
+    ClinicalTrialHasTrialLocationNodeAggregationWhereInput | null | undefined;
 };
 
 export type ClinicalTrialHasTrialLocationConnectionFilters = {
   /** Filter ClinicalTrials by aggregating results on related ClinicalTrialHasTrialLocationConnections */
-  aggregate?: ClinicalTrialHasTrialLocationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ClinicalTrialHasTrialLocationConnectionAggregateInput | null | undefined;
   /** Return ClinicalTrials where all of the related ClinicalTrialHasTrialLocationConnections match this filter */
   all?: ClinicalTrialHasTrialLocationConnectionWhere | null | undefined;
   /** Return ClinicalTrials where none of the related ClinicalTrialHasTrialLocationConnections match this filter */
@@ -1005,9 +1273,16 @@ export type ClinicalTrialHasTrialLocationConnectionWhere = {
 };
 
 export type ClinicalTrialHasTrialLocationNodeAggregationWhereInput = {
-  AND?: Array<ClinicalTrialHasTrialLocationNodeAggregationWhereInput> | null | undefined;
-  NOT?: ClinicalTrialHasTrialLocationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ClinicalTrialHasTrialLocationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ClinicalTrialHasTrialLocationNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    ClinicalTrialHasTrialLocationNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<ClinicalTrialHasTrialLocationNodeAggregationWhereInput>
+    | null
+    | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   address?: StringScalarAggregationFilters | null | undefined;
   city?: StringScalarAggregationFilters | null | undefined;
@@ -1065,29 +1340,42 @@ export type ClinicalTrialWhere = {
   completionDateType?: StringScalarFilters | null | undefined;
   dateCreatedRDAS?: StringScalarFilters | null | undefined;
   hasAnnotation?: AnnotationRelationshipFilters | null | undefined;
-  hasAnnotationConnection?: ClinicalTrialHasAnnotationConnectionFilters | null | undefined;
+  hasAnnotationConnection?:
+    ClinicalTrialHasAnnotationConnectionFilters | null | undefined;
   hasClinicalTrial?: DiseaseRelationshipFilters | null | undefined;
-  hasClinicalTrialConnection?: ClinicalTrialHasClinicalTrialConnectionFilters | null | undefined;
+  hasClinicalTrialConnection?:
+    ClinicalTrialHasClinicalTrialConnectionFilters | null | undefined;
   hasContact?: AgentRelationshipFilters | null | undefined;
-  hasContactConnection?: ClinicalTrialHasContactConnectionFilters | null | undefined;
-  hasIndividualPatientData?: IndividualPatientDataRelationshipFilters | null | undefined;
-  hasIndividualPatientDataConnection?: ClinicalTrialHasIndividualPatientDataConnectionFilters | null | undefined;
+  hasContactConnection?:
+    ClinicalTrialHasContactConnectionFilters | null | undefined;
+  hasIndividualPatientData?:
+    IndividualPatientDataRelationshipFilters | null | undefined;
+  hasIndividualPatientDataConnection?:
+    ClinicalTrialHasIndividualPatientDataConnectionFilters | null | undefined;
   hasIntervention?: InterventionRelationshipFilters | null | undefined;
-  hasInterventionConnection?: ClinicalTrialHasInterventionConnectionFilters | null | undefined;
+  hasInterventionConnection?:
+    ClinicalTrialHasInterventionConnectionFilters | null | undefined;
   hasInvestigatedCondition?: ConditionRelationshipFilters | null | undefined;
-  hasInvestigatedConditionConnection?: ClinicalTrialHasInvestigatedConditionConnectionFilters | null | undefined;
+  hasInvestigatedConditionConnection?:
+    ClinicalTrialHasInvestigatedConditionConnectionFilters | null | undefined;
   hasInvestigator?: AgentRelationshipFilters | null | undefined;
-  hasInvestigatorConnection?: ClinicalTrialHasInvestigatorConnectionFilters | null | undefined;
+  hasInvestigatorConnection?:
+    ClinicalTrialHasInvestigatorConnectionFilters | null | undefined;
   hasOrganization?: OrganizationRelationshipFilters | null | undefined;
-  hasOrganizationConnection?: ClinicalTrialHasOrganizationConnectionFilters | null | undefined;
+  hasOrganizationConnection?:
+    ClinicalTrialHasOrganizationConnectionFilters | null | undefined;
   hasParticipantInfo?: ParticipantRelationshipFilters | null | undefined;
-  hasParticipantInfoConnection?: ClinicalTrialHasParticipantInfoConnectionFilters | null | undefined;
+  hasParticipantInfoConnection?:
+    ClinicalTrialHasParticipantInfoConnectionFilters | null | undefined;
   hasPrimaryOutcome?: PrimaryOutcomeRelationshipFilters | null | undefined;
-  hasPrimaryOutcomeConnection?: ClinicalTrialHasPrimaryOutcomeConnectionFilters | null | undefined;
+  hasPrimaryOutcomeConnection?:
+    ClinicalTrialHasPrimaryOutcomeConnectionFilters | null | undefined;
   hasStudyDesign?: StudyDesignRelationshipFilters | null | undefined;
-  hasStudyDesignConnection?: ClinicalTrialHasStudyDesignConnectionFilters | null | undefined;
+  hasStudyDesignConnection?:
+    ClinicalTrialHasStudyDesignConnectionFilters | null | undefined;
   hasTrialLocation?: LocationRelationshipFilters | null | undefined;
-  hasTrialLocationConnection?: ClinicalTrialHasTrialLocationConnectionFilters | null | undefined;
+  hasTrialLocationConnection?:
+    ClinicalTrialHasTrialLocationConnectionFilters | null | undefined;
   lastKnownStatus?: StringScalarFilters | null | undefined;
   lastUpdatePostDate?: StringScalarFilters | null | undefined;
   lastUpdatePostDateType?: StringScalarFilters | null | undefined;
@@ -1109,16 +1397,19 @@ export type ClinicalTrialWhere = {
 };
 
 export type ConditionHasClinicalTrialConnectionAggregateInput = {
-  AND?: Array<ConditionHasClinicalTrialConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<ConditionHasClinicalTrialConnectionAggregateInput> | null | undefined;
   NOT?: ConditionHasClinicalTrialConnectionAggregateInput | null | undefined;
-  OR?: Array<ConditionHasClinicalTrialConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<ConditionHasClinicalTrialConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: ConditionHasClinicalTrialNodeAggregationWhereInput | null | undefined;
 };
 
 export type ConditionHasClinicalTrialConnectionFilters = {
   /** Filter Conditions by aggregating results on related ConditionHasClinicalTrialConnections */
-  aggregate?: ConditionHasClinicalTrialConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ConditionHasClinicalTrialConnectionAggregateInput | null | undefined;
   /** Return Conditions where all of the related ConditionHasClinicalTrialConnections match this filter */
   all?: ConditionHasClinicalTrialConnectionWhere | null | undefined;
   /** Return Conditions where none of the related ConditionHasClinicalTrialConnections match this filter */
@@ -1137,9 +1428,15 @@ export type ConditionHasClinicalTrialConnectionWhere = {
 };
 
 export type ConditionHasClinicalTrialNodeAggregationWhereInput = {
-  AND?: Array<ConditionHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ConditionHasClinicalTrialNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: ConditionHasClinicalTrialNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ConditionHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<ConditionHasClinicalTrialNodeAggregationWhereInput>
+    | null
+    | undefined;
   briefSummary?: StringScalarAggregationFilters | null | undefined;
   briefTitle?: StringScalarAggregationFilters | null | undefined;
   completionDate?: StringScalarAggregationFilters | null | undefined;
@@ -1159,23 +1456,32 @@ export type ConditionHasClinicalTrialNodeAggregationWhereInput = {
   primaryCompletionDateType?: StringScalarAggregationFilters | null | undefined;
   resultsFirstPostDate?: StringScalarAggregationFilters | null | undefined;
   resultsFirstPostDateType?: StringScalarAggregationFilters | null | undefined;
-  resultsFirstPostedQCCommentsDate?: StringScalarAggregationFilters | null | undefined;
+  resultsFirstPostedQCCommentsDate?:
+    StringScalarAggregationFilters | null | undefined;
   startDate?: StringScalarAggregationFilters | null | undefined;
   startDateType?: StringScalarAggregationFilters | null | undefined;
   studyType?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type ConditionHasMappedConditionConnectionAggregateInput = {
-  AND?: Array<ConditionHasMappedConditionConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ConditionHasMappedConditionConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ConditionHasMappedConditionConnectionAggregateInput | null | undefined;
-  OR?: Array<ConditionHasMappedConditionConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ConditionHasMappedConditionConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ConditionHasMappedConditionNodeAggregationWhereInput | null | undefined;
+  node?:
+    ConditionHasMappedConditionNodeAggregationWhereInput | null | undefined;
 };
 
 export type ConditionHasMappedConditionConnectionFilters = {
   /** Filter Conditions by aggregating results on related ConditionHasMappedConditionConnections */
-  aggregate?: ConditionHasMappedConditionConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ConditionHasMappedConditionConnectionAggregateInput | null | undefined;
   /** Return Conditions where all of the related ConditionHasMappedConditionConnections match this filter */
   all?: ConditionHasMappedConditionConnectionWhere | null | undefined;
   /** Return Conditions where none of the related ConditionHasMappedConditionConnections match this filter */
@@ -1194,9 +1500,15 @@ export type ConditionHasMappedConditionConnectionWhere = {
 };
 
 export type ConditionHasMappedConditionNodeAggregationWhereInput = {
-  AND?: Array<ConditionHasMappedConditionNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ConditionHasMappedConditionNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: ConditionHasMappedConditionNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ConditionHasMappedConditionNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<ConditionHasMappedConditionNodeAggregationWhereInput>
+    | null
+    | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -1233,9 +1545,11 @@ export type ConditionWhere = {
   OR?: Array<ConditionWhere> | null | undefined;
   condition?: StringScalarFilters | null | undefined;
   hasClinicalTrial?: ClinicalTrialRelationshipFilters | null | undefined;
-  hasClinicalTrialConnection?: ConditionHasClinicalTrialConnectionFilters | null | undefined;
+  hasClinicalTrialConnection?:
+    ConditionHasClinicalTrialConnectionFilters | null | undefined;
   hasMappedCondition?: DiseaseRelationshipFilters | null | undefined;
-  hasMappedConditionConnection?: ConditionHasMappedConditionConnectionFilters | null | undefined;
+  hasMappedConditionConnection?:
+    ConditionHasMappedConditionConnectionFilters | null | undefined;
 };
 
 export type ConnectionAggregationCountFilterInput = {
@@ -1244,16 +1558,31 @@ export type ConnectionAggregationCountFilterInput = {
 };
 
 export type CoreProjectHasFundingOrganizationConnectionAggregateInput = {
-  AND?: Array<CoreProjectHasFundingOrganizationConnectionAggregateInput> | null | undefined;
-  NOT?: CoreProjectHasFundingOrganizationConnectionAggregateInput | null | undefined;
-  OR?: Array<CoreProjectHasFundingOrganizationConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<CoreProjectHasFundingOrganizationConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?:
+    | CoreProjectHasFundingOrganizationConnectionAggregateInput
+    | null
+    | undefined;
+  OR?:
+    | Array<CoreProjectHasFundingOrganizationConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: CoreProjectHasFundingOrganizationNodeAggregationWhereInput | null | undefined;
+  node?:
+    | CoreProjectHasFundingOrganizationNodeAggregationWhereInput
+    | null
+    | undefined;
 };
 
 export type CoreProjectHasFundingOrganizationConnectionFilters = {
   /** Filter CoreProjects by aggregating results on related CoreProjectHasFundingOrganizationConnections */
-  aggregate?: CoreProjectHasFundingOrganizationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    | CoreProjectHasFundingOrganizationConnectionAggregateInput
+    | null
+    | undefined;
   /** Return CoreProjects where all of the related CoreProjectHasFundingOrganizationConnections match this filter */
   all?: CoreProjectHasFundingOrganizationConnectionWhere | null | undefined;
   /** Return CoreProjects where none of the related CoreProjectHasFundingOrganizationConnections match this filter */
@@ -1265,31 +1594,49 @@ export type CoreProjectHasFundingOrganizationConnectionFilters = {
 };
 
 export type CoreProjectHasFundingOrganizationConnectionWhere = {
-  AND?: Array<CoreProjectHasFundingOrganizationConnectionWhere> | null | undefined;
+  AND?:
+    Array<CoreProjectHasFundingOrganizationConnectionWhere> | null | undefined;
   NOT?: CoreProjectHasFundingOrganizationConnectionWhere | null | undefined;
-  OR?: Array<CoreProjectHasFundingOrganizationConnectionWhere> | null | undefined;
+  OR?:
+    Array<CoreProjectHasFundingOrganizationConnectionWhere> | null | undefined;
   node?: OrganizationWhere | null | undefined;
 };
 
 export type CoreProjectHasFundingOrganizationNodeAggregationWhereInput = {
-  AND?: Array<CoreProjectHasFundingOrganizationNodeAggregationWhereInput> | null | undefined;
-  NOT?: CoreProjectHasFundingOrganizationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<CoreProjectHasFundingOrganizationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<CoreProjectHasFundingOrganizationNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    | CoreProjectHasFundingOrganizationNodeAggregationWhereInput
+    | null
+    | undefined;
+  OR?:
+    | Array<CoreProjectHasFundingOrganizationNodeAggregationWhereInput>
+    | null
+    | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   name?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type CoreProjectHasMentionUnderConnectionAggregateInput = {
-  AND?: Array<CoreProjectHasMentionUnderConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<CoreProjectHasMentionUnderConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: CoreProjectHasMentionUnderConnectionAggregateInput | null | undefined;
-  OR?: Array<CoreProjectHasMentionUnderConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<CoreProjectHasMentionUnderConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: CoreProjectHasMentionUnderNodeAggregationWhereInput | null | undefined;
 };
 
 export type CoreProjectHasMentionUnderConnectionFilters = {
   /** Filter CoreProjects by aggregating results on related CoreProjectHasMentionUnderConnections */
-  aggregate?: CoreProjectHasMentionUnderConnectionAggregateInput | null | undefined;
+  aggregate?:
+    CoreProjectHasMentionUnderConnectionAggregateInput | null | undefined;
   /** Return CoreProjects where all of the related CoreProjectHasMentionUnderConnections match this filter */
   all?: CoreProjectHasMentionUnderConnectionWhere | null | undefined;
   /** Return CoreProjects where none of the related CoreProjectHasMentionUnderConnections match this filter */
@@ -1308,9 +1655,15 @@ export type CoreProjectHasMentionUnderConnectionWhere = {
 };
 
 export type CoreProjectHasMentionUnderNodeAggregationWhereInput = {
-  AND?: Array<CoreProjectHasMentionUnderNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<CoreProjectHasMentionUnderNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: CoreProjectHasMentionUnderNodeAggregationWhereInput | null | undefined;
-  OR?: Array<CoreProjectHasMentionUnderNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<CoreProjectHasMentionUnderNodeAggregationWhereInput>
+    | null
+    | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -1366,16 +1719,19 @@ export type CoreProjectHasPatentNodeAggregationWhereInput = {
 };
 
 export type CoreProjectHasPublicationConnectionAggregateInput = {
-  AND?: Array<CoreProjectHasPublicationConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<CoreProjectHasPublicationConnectionAggregateInput> | null | undefined;
   NOT?: CoreProjectHasPublicationConnectionAggregateInput | null | undefined;
-  OR?: Array<CoreProjectHasPublicationConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<CoreProjectHasPublicationConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: CoreProjectHasPublicationNodeAggregationWhereInput | null | undefined;
 };
 
 export type CoreProjectHasPublicationConnectionFilters = {
   /** Filter CoreProjects by aggregating results on related CoreProjectHasPublicationConnections */
-  aggregate?: CoreProjectHasPublicationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    CoreProjectHasPublicationConnectionAggregateInput | null | undefined;
   /** Return CoreProjects where all of the related CoreProjectHasPublicationConnections match this filter */
   all?: CoreProjectHasPublicationConnectionWhere | null | undefined;
   /** Return CoreProjects where none of the related CoreProjectHasPublicationConnections match this filter */
@@ -1394,9 +1750,15 @@ export type CoreProjectHasPublicationConnectionWhere = {
 };
 
 export type CoreProjectHasPublicationNodeAggregationWhereInput = {
-  AND?: Array<CoreProjectHasPublicationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<CoreProjectHasPublicationNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: CoreProjectHasPublicationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<CoreProjectHasPublicationNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<CoreProjectHasPublicationNodeAggregationWhereInput>
+    | null
+    | undefined;
   abstractText?: StringScalarAggregationFilters | null | undefined;
   citationCount?: IntScalarAggregationFilters | null | undefined;
   dateCreatedByRDAS?: StringScalarAggregationFilters | null | undefined;
@@ -1417,16 +1779,19 @@ export type CoreProjectHasPublicationNodeAggregationWhereInput = {
 };
 
 export type CoreProjectHasSubprojectConnectionAggregateInput = {
-  AND?: Array<CoreProjectHasSubprojectConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<CoreProjectHasSubprojectConnectionAggregateInput> | null | undefined;
   NOT?: CoreProjectHasSubprojectConnectionAggregateInput | null | undefined;
-  OR?: Array<CoreProjectHasSubprojectConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<CoreProjectHasSubprojectConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: CoreProjectHasSubprojectNodeAggregationWhereInput | null | undefined;
 };
 
 export type CoreProjectHasSubprojectConnectionFilters = {
   /** Filter CoreProjects by aggregating results on related CoreProjectHasSubprojectConnections */
-  aggregate?: CoreProjectHasSubprojectConnectionAggregateInput | null | undefined;
+  aggregate?:
+    CoreProjectHasSubprojectConnectionAggregateInput | null | undefined;
   /** Return CoreProjects where all of the related CoreProjectHasSubprojectConnections match this filter */
   all?: CoreProjectHasSubprojectConnectionWhere | null | undefined;
   /** Return CoreProjects where none of the related CoreProjectHasSubprojectConnections match this filter */
@@ -1445,9 +1810,11 @@ export type CoreProjectHasSubprojectConnectionWhere = {
 };
 
 export type CoreProjectHasSubprojectNodeAggregationWhereInput = {
-  AND?: Array<CoreProjectHasSubprojectNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<CoreProjectHasSubprojectNodeAggregationWhereInput> | null | undefined;
   NOT?: CoreProjectHasSubprojectNodeAggregationWhereInput | null | undefined;
-  OR?: Array<CoreProjectHasSubprojectNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<CoreProjectHasSubprojectNodeAggregationWhereInput> | null | undefined;
   abstract?: StringScalarAggregationFilters | null | undefined;
   activity?: StringScalarAggregationFilters | null | undefined;
   applicationId?: IntScalarAggregationFilters | null | undefined;
@@ -1486,29 +1853,37 @@ export type CoreProjectWhere = {
   OR?: Array<CoreProjectWhere> | null | undefined;
   coreProjectNumber?: StringScalarFilters | null | undefined;
   hasFundingOrganization?: OrganizationRelationshipFilters | null | undefined;
-  hasFundingOrganizationConnection?: CoreProjectHasFundingOrganizationConnectionFilters | null | undefined;
+  hasFundingOrganizationConnection?:
+    CoreProjectHasFundingOrganizationConnectionFilters | null | undefined;
   hasMentionUnder?: DiseaseRelationshipFilters | null | undefined;
-  hasMentionUnderConnection?: CoreProjectHasMentionUnderConnectionFilters | null | undefined;
+  hasMentionUnderConnection?:
+    CoreProjectHasMentionUnderConnectionFilters | null | undefined;
   hasPatent?: PatentRelationshipFilters | null | undefined;
-  hasPatentConnection?: CoreProjectHasPatentConnectionFilters | null | undefined;
+  hasPatentConnection?:
+    CoreProjectHasPatentConnectionFilters | null | undefined;
   hasPublication?: ArticleRelationshipFilters | null | undefined;
-  hasPublicationConnection?: CoreProjectHasPublicationConnectionFilters | null | undefined;
+  hasPublicationConnection?:
+    CoreProjectHasPublicationConnectionFilters | null | undefined;
   hasSubproject?: ProjectRelationshipFilters | null | undefined;
-  hasSubprojectConnection?: CoreProjectHasSubprojectConnectionFilters | null | undefined;
+  hasSubprojectConnection?:
+    CoreProjectHasSubprojectConnectionFilters | null | undefined;
   totalCost?: IntScalarFilters | null | undefined;
 };
 
 export type DiseaseDiseaseSubClassOfConnectionAggregateInput = {
-  AND?: Array<DiseaseDiseaseSubClassOfConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<DiseaseDiseaseSubClassOfConnectionAggregateInput> | null | undefined;
   NOT?: DiseaseDiseaseSubClassOfConnectionAggregateInput | null | undefined;
-  OR?: Array<DiseaseDiseaseSubClassOfConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<DiseaseDiseaseSubClassOfConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: DiseaseDiseaseSubClassOfNodeAggregationWhereInput | null | undefined;
 };
 
 export type DiseaseDiseaseSubClassOfConnectionFilters = {
   /** Filter Diseases by aggregating results on related DiseaseDiseaseSubClassOfConnections */
-  aggregate?: DiseaseDiseaseSubClassOfConnectionAggregateInput | null | undefined;
+  aggregate?:
+    DiseaseDiseaseSubClassOfConnectionAggregateInput | null | undefined;
   /** Return Diseases where all of the related DiseaseDiseaseSubClassOfConnections match this filter */
   all?: DiseaseDiseaseSubClassOfConnectionWhere | null | undefined;
   /** Return Diseases where none of the related DiseaseDiseaseSubClassOfConnections match this filter */
@@ -1527,9 +1902,11 @@ export type DiseaseDiseaseSubClassOfConnectionWhere = {
 };
 
 export type DiseaseDiseaseSubClassOfNodeAggregationWhereInput = {
-  AND?: Array<DiseaseDiseaseSubClassOfNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<DiseaseDiseaseSubClassOfNodeAggregationWhereInput> | null | undefined;
   NOT?: DiseaseDiseaseSubClassOfNodeAggregationWhereInput | null | undefined;
-  OR?: Array<DiseaseDiseaseSubClassOfNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<DiseaseDiseaseSubClassOfNodeAggregationWhereInput> | null | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -1550,9 +1927,11 @@ export type DiseaseDiseaseSubClassOfNodeAggregationWhereInput = {
 };
 
 export type DiseaseHasAssociatedGeneConnectionAggregateInput = {
-  AND?: Array<DiseaseHasAssociatedGeneConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasAssociatedGeneConnectionAggregateInput> | null | undefined;
   NOT?: DiseaseHasAssociatedGeneConnectionAggregateInput | null | undefined;
-  OR?: Array<DiseaseHasAssociatedGeneConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<DiseaseHasAssociatedGeneConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   edge?: AssociatedWithGenePropertiesAggregationWhereInput | null | undefined;
   node?: DiseaseHasAssociatedGeneNodeAggregationWhereInput | null | undefined;
@@ -1560,7 +1939,8 @@ export type DiseaseHasAssociatedGeneConnectionAggregateInput = {
 
 export type DiseaseHasAssociatedGeneConnectionFilters = {
   /** Filter Diseases by aggregating results on related DiseaseHasAssociatedGeneConnections */
-  aggregate?: DiseaseHasAssociatedGeneConnectionAggregateInput | null | undefined;
+  aggregate?:
+    DiseaseHasAssociatedGeneConnectionAggregateInput | null | undefined;
   /** Return Diseases where all of the related DiseaseHasAssociatedGeneConnections match this filter */
   all?: DiseaseHasAssociatedGeneConnectionWhere | null | undefined;
   /** Return Diseases where none of the related DiseaseHasAssociatedGeneConnections match this filter */
@@ -1580,9 +1960,11 @@ export type DiseaseHasAssociatedGeneConnectionWhere = {
 };
 
 export type DiseaseHasAssociatedGeneNodeAggregationWhereInput = {
-  AND?: Array<DiseaseHasAssociatedGeneNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasAssociatedGeneNodeAggregationWhereInput> | null | undefined;
   NOT?: DiseaseHasAssociatedGeneNodeAggregationWhereInput | null | undefined;
-  OR?: Array<DiseaseHasAssociatedGeneNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<DiseaseHasAssociatedGeneNodeAggregationWhereInput> | null | undefined;
   countDiseases?: IntScalarAggregationFilters | null | undefined;
   geneIdentifier?: StringScalarAggregationFilters | null | undefined;
   geneSymbol?: StringScalarAggregationFilters | null | undefined;
@@ -1598,16 +1980,19 @@ export type DiseaseHasAssociatedGeneNodeAggregationWhereInput = {
 };
 
 export type DiseaseHasClinicalTrialConnectionAggregateInput = {
-  AND?: Array<DiseaseHasClinicalTrialConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasClinicalTrialConnectionAggregateInput> | null | undefined;
   NOT?: DiseaseHasClinicalTrialConnectionAggregateInput | null | undefined;
-  OR?: Array<DiseaseHasClinicalTrialConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<DiseaseHasClinicalTrialConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: DiseaseHasClinicalTrialNodeAggregationWhereInput | null | undefined;
 };
 
 export type DiseaseHasClinicalTrialConnectionFilters = {
   /** Filter Diseases by aggregating results on related DiseaseHasClinicalTrialConnections */
-  aggregate?: DiseaseHasClinicalTrialConnectionAggregateInput | null | undefined;
+  aggregate?:
+    DiseaseHasClinicalTrialConnectionAggregateInput | null | undefined;
   /** Return Diseases where all of the related DiseaseHasClinicalTrialConnections match this filter */
   all?: DiseaseHasClinicalTrialConnectionWhere | null | undefined;
   /** Return Diseases where none of the related DiseaseHasClinicalTrialConnections match this filter */
@@ -1626,9 +2011,11 @@ export type DiseaseHasClinicalTrialConnectionWhere = {
 };
 
 export type DiseaseHasClinicalTrialNodeAggregationWhereInput = {
-  AND?: Array<DiseaseHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
   NOT?: DiseaseHasClinicalTrialNodeAggregationWhereInput | null | undefined;
-  OR?: Array<DiseaseHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<DiseaseHasClinicalTrialNodeAggregationWhereInput> | null | undefined;
   briefSummary?: StringScalarAggregationFilters | null | undefined;
   briefTitle?: StringScalarAggregationFilters | null | undefined;
   completionDate?: StringScalarAggregationFilters | null | undefined;
@@ -1648,23 +2035,27 @@ export type DiseaseHasClinicalTrialNodeAggregationWhereInput = {
   primaryCompletionDateType?: StringScalarAggregationFilters | null | undefined;
   resultsFirstPostDate?: StringScalarAggregationFilters | null | undefined;
   resultsFirstPostDateType?: StringScalarAggregationFilters | null | undefined;
-  resultsFirstPostedQCCommentsDate?: StringScalarAggregationFilters | null | undefined;
+  resultsFirstPostedQCCommentsDate?:
+    StringScalarAggregationFilters | null | undefined;
   startDate?: StringScalarAggregationFilters | null | undefined;
   startDateType?: StringScalarAggregationFilters | null | undefined;
   studyType?: StringScalarAggregationFilters | null | undefined;
 };
 
 export type DiseaseHasMappedConditionConnectionAggregateInput = {
-  AND?: Array<DiseaseHasMappedConditionConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasMappedConditionConnectionAggregateInput> | null | undefined;
   NOT?: DiseaseHasMappedConditionConnectionAggregateInput | null | undefined;
-  OR?: Array<DiseaseHasMappedConditionConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<DiseaseHasMappedConditionConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: DiseaseHasMappedConditionNodeAggregationWhereInput | null | undefined;
 };
 
 export type DiseaseHasMappedConditionConnectionFilters = {
   /** Filter Diseases by aggregating results on related DiseaseHasMappedConditionConnections */
-  aggregate?: DiseaseHasMappedConditionConnectionAggregateInput | null | undefined;
+  aggregate?:
+    DiseaseHasMappedConditionConnectionAggregateInput | null | undefined;
   /** Return Diseases where all of the related DiseaseHasMappedConditionConnections match this filter */
   all?: DiseaseHasMappedConditionConnectionWhere | null | undefined;
   /** Return Diseases where none of the related DiseaseHasMappedConditionConnections match this filter */
@@ -1683,9 +2074,15 @@ export type DiseaseHasMappedConditionConnectionWhere = {
 };
 
 export type DiseaseHasMappedConditionNodeAggregationWhereInput = {
-  AND?: Array<DiseaseHasMappedConditionNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<DiseaseHasMappedConditionNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: DiseaseHasMappedConditionNodeAggregationWhereInput | null | undefined;
-  OR?: Array<DiseaseHasMappedConditionNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<DiseaseHasMappedConditionNodeAggregationWhereInput>
+    | null
+    | undefined;
   condition?: StringScalarAggregationFilters | null | undefined;
 };
 
@@ -1741,7 +2138,8 @@ export type DiseaseHasMentionInNodeAggregationWhereInput = {
 };
 
 export type DiseaseHasMentionUnderConnectionAggregateInput = {
-  AND?: Array<DiseaseHasMentionUnderConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasMentionUnderConnectionAggregateInput> | null | undefined;
   NOT?: DiseaseHasMentionUnderConnectionAggregateInput | null | undefined;
   OR?: Array<DiseaseHasMentionUnderConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
@@ -1769,9 +2167,11 @@ export type DiseaseHasMentionUnderConnectionWhere = {
 };
 
 export type DiseaseHasMentionUnderNodeAggregationWhereInput = {
-  AND?: Array<DiseaseHasMentionUnderNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<DiseaseHasMentionUnderNodeAggregationWhereInput> | null | undefined;
   NOT?: DiseaseHasMentionUnderNodeAggregationWhereInput | null | undefined;
-  OR?: Array<DiseaseHasMentionUnderNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<DiseaseHasMentionUnderNodeAggregationWhereInput> | null | undefined;
   coreProjectNumber?: StringScalarAggregationFilters | null | undefined;
   totalCost?: IntScalarAggregationFilters | null | undefined;
 };
@@ -1848,16 +2248,19 @@ export type DiseaseSort = {
 };
 
 export type DiseaseSubClassOfDiseaseConnectionAggregateInput = {
-  AND?: Array<DiseaseSubClassOfDiseaseConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<DiseaseSubClassOfDiseaseConnectionAggregateInput> | null | undefined;
   NOT?: DiseaseSubClassOfDiseaseConnectionAggregateInput | null | undefined;
-  OR?: Array<DiseaseSubClassOfDiseaseConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<DiseaseSubClassOfDiseaseConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: DiseaseSubClassOfDiseaseNodeAggregationWhereInput | null | undefined;
 };
 
 export type DiseaseSubClassOfDiseaseConnectionFilters = {
   /** Filter Diseases by aggregating results on related DiseaseSubClassOfDiseaseConnections */
-  aggregate?: DiseaseSubClassOfDiseaseConnectionAggregateInput | null | undefined;
+  aggregate?:
+    DiseaseSubClassOfDiseaseConnectionAggregateInput | null | undefined;
   /** Return Diseases where all of the related DiseaseSubClassOfDiseaseConnections match this filter */
   all?: DiseaseSubClassOfDiseaseConnectionWhere | null | undefined;
   /** Return Diseases where none of the related DiseaseSubClassOfDiseaseConnections match this filter */
@@ -1876,9 +2279,11 @@ export type DiseaseSubClassOfDiseaseConnectionWhere = {
 };
 
 export type DiseaseSubClassOfDiseaseNodeAggregationWhereInput = {
-  AND?: Array<DiseaseSubClassOfDiseaseNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<DiseaseSubClassOfDiseaseNodeAggregationWhereInput> | null | undefined;
   NOT?: DiseaseSubClassOfDiseaseNodeAggregationWhereInput | null | undefined;
-  OR?: Array<DiseaseSubClassOfDiseaseNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<DiseaseSubClassOfDiseaseNodeAggregationWhereInput> | null | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -1912,24 +2317,31 @@ export type DiseaseWhere = {
   countProjects?: IntScalarFilters | null | undefined;
   countTrials?: IntScalarFilters | null | undefined;
   diseaseSubClassOf?: DiseaseRelationshipFilters | null | undefined;
-  diseaseSubClassOfConnection?: DiseaseDiseaseSubClassOfConnectionFilters | null | undefined;
+  diseaseSubClassOfConnection?:
+    DiseaseDiseaseSubClassOfConnectionFilters | null | undefined;
   diseaseType?: StringScalarFilters | null | undefined;
   disorderType?: StringListFilters | null | undefined;
   doid?: StringListFilters | null | undefined;
   gardId?: StringScalarFilters | null | undefined;
   gardName?: StringScalarFilters | null | undefined;
   hasAssociatedGene?: GeneRelationshipFilters | null | undefined;
-  hasAssociatedGeneConnection?: DiseaseHasAssociatedGeneConnectionFilters | null | undefined;
+  hasAssociatedGeneConnection?:
+    DiseaseHasAssociatedGeneConnectionFilters | null | undefined;
   hasClinicalTrial?: ClinicalTrialRelationshipFilters | null | undefined;
-  hasClinicalTrialConnection?: DiseaseHasClinicalTrialConnectionFilters | null | undefined;
+  hasClinicalTrialConnection?:
+    DiseaseHasClinicalTrialConnectionFilters | null | undefined;
   hasMappedCondition?: ConditionRelationshipFilters | null | undefined;
-  hasMappedConditionConnection?: DiseaseHasMappedConditionConnectionFilters | null | undefined;
+  hasMappedConditionConnection?:
+    DiseaseHasMappedConditionConnectionFilters | null | undefined;
   hasMentionIn?: ArticleRelationshipFilters | null | undefined;
-  hasMentionInConnection?: DiseaseHasMentionInConnectionFilters | null | undefined;
+  hasMentionInConnection?:
+    DiseaseHasMentionInConnectionFilters | null | undefined;
   hasMentionUnder?: CoreProjectRelationshipFilters | null | undefined;
-  hasMentionUnderConnection?: DiseaseHasMentionUnderConnectionFilters | null | undefined;
+  hasMentionUnderConnection?:
+    DiseaseHasMentionUnderConnectionFilters | null | undefined;
   hasPhenotype?: PhenotypeRelationshipFilters | null | undefined;
-  hasPhenotypeConnection?: DiseaseHasPhenotypeConnectionFilters | null | undefined;
+  hasPhenotypeConnection?:
+    DiseaseHasPhenotypeConnectionFilters | null | undefined;
   icd10cm?: StringListFilters | null | undefined;
   medGen?: StringScalarFilters | null | undefined;
   mesh?: StringListFilters | null | undefined;
@@ -1940,7 +2352,8 @@ export type DiseaseWhere = {
   orphanet?: StringScalarFilters | null | undefined;
   sctid?: StringListFilters | null | undefined;
   subClassOfDisease?: DiseaseRelationshipFilters | null | undefined;
-  subClassOfDiseaseConnection?: DiseaseSubClassOfDiseaseConnectionFilters | null | undefined;
+  subClassOfDiseaseConnection?:
+    DiseaseSubClassOfDiseaseConnectionFilters | null | undefined;
   synonyms?: StringListFilters | null | undefined;
   umls?: StringScalarFilters | null | undefined;
 };
@@ -2017,40 +2430,55 @@ export type FloatScalarFilters = {
   lte?: number | null | undefined;
 };
 
-export type GeneDiseaseAssociatedWithGeneConnectionAggregateInput = {
-  AND?: Array<GeneDiseaseAssociatedWithGeneConnectionAggregateInput> | null | undefined;
-  NOT?: GeneDiseaseAssociatedWithGeneConnectionAggregateInput | null | undefined;
-  OR?: Array<GeneDiseaseAssociatedWithGeneConnectionAggregateInput> | null | undefined;
+export type GeneDiseaseHasAssociatedGeneConnectionAggregateInput = {
+  AND?:
+    | Array<GeneDiseaseHasAssociatedGeneConnectionAggregateInput>
+    | null
+    | undefined;
+  NOT?: GeneDiseaseHasAssociatedGeneConnectionAggregateInput | null | undefined;
+  OR?:
+    | Array<GeneDiseaseHasAssociatedGeneConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   edge?: AssociatedWithGenePropertiesAggregationWhereInput | null | undefined;
-  node?: GeneDiseaseAssociatedWithGeneNodeAggregationWhereInput | null | undefined;
+  node?:
+    GeneDiseaseHasAssociatedGeneNodeAggregationWhereInput | null | undefined;
 };
 
-export type GeneDiseaseAssociatedWithGeneConnectionFilters = {
-  /** Filter Genes by aggregating results on related GeneDiseaseAssociatedWithGeneConnections */
-  aggregate?: GeneDiseaseAssociatedWithGeneConnectionAggregateInput | null | undefined;
-  /** Return Genes where all of the related GeneDiseaseAssociatedWithGeneConnections match this filter */
-  all?: GeneDiseaseAssociatedWithGeneConnectionWhere | null | undefined;
-  /** Return Genes where none of the related GeneDiseaseAssociatedWithGeneConnections match this filter */
-  none?: GeneDiseaseAssociatedWithGeneConnectionWhere | null | undefined;
-  /** Return Genes where one of the related GeneDiseaseAssociatedWithGeneConnections match this filter */
-  single?: GeneDiseaseAssociatedWithGeneConnectionWhere | null | undefined;
-  /** Return Genes where some of the related GeneDiseaseAssociatedWithGeneConnections match this filter */
-  some?: GeneDiseaseAssociatedWithGeneConnectionWhere | null | undefined;
+export type GeneDiseaseHasAssociatedGeneConnectionFilters = {
+  /** Filter Genes by aggregating results on related GeneDiseaseHasAssociatedGeneConnections */
+  aggregate?:
+    GeneDiseaseHasAssociatedGeneConnectionAggregateInput | null | undefined;
+  /** Return Genes where all of the related GeneDiseaseHasAssociatedGeneConnections match this filter */
+  all?: GeneDiseaseHasAssociatedGeneConnectionWhere | null | undefined;
+  /** Return Genes where none of the related GeneDiseaseHasAssociatedGeneConnections match this filter */
+  none?: GeneDiseaseHasAssociatedGeneConnectionWhere | null | undefined;
+  /** Return Genes where one of the related GeneDiseaseHasAssociatedGeneConnections match this filter */
+  single?: GeneDiseaseHasAssociatedGeneConnectionWhere | null | undefined;
+  /** Return Genes where some of the related GeneDiseaseHasAssociatedGeneConnections match this filter */
+  some?: GeneDiseaseHasAssociatedGeneConnectionWhere | null | undefined;
 };
 
-export type GeneDiseaseAssociatedWithGeneConnectionWhere = {
-  AND?: Array<GeneDiseaseAssociatedWithGeneConnectionWhere> | null | undefined;
-  NOT?: GeneDiseaseAssociatedWithGeneConnectionWhere | null | undefined;
-  OR?: Array<GeneDiseaseAssociatedWithGeneConnectionWhere> | null | undefined;
+export type GeneDiseaseHasAssociatedGeneConnectionWhere = {
+  AND?: Array<GeneDiseaseHasAssociatedGeneConnectionWhere> | null | undefined;
+  NOT?: GeneDiseaseHasAssociatedGeneConnectionWhere | null | undefined;
+  OR?: Array<GeneDiseaseHasAssociatedGeneConnectionWhere> | null | undefined;
   edge?: AssociatedWithGenePropertiesWhere | null | undefined;
   node?: DiseaseWhere | null | undefined;
 };
 
-export type GeneDiseaseAssociatedWithGeneNodeAggregationWhereInput = {
-  AND?: Array<GeneDiseaseAssociatedWithGeneNodeAggregationWhereInput> | null | undefined;
-  NOT?: GeneDiseaseAssociatedWithGeneNodeAggregationWhereInput | null | undefined;
-  OR?: Array<GeneDiseaseAssociatedWithGeneNodeAggregationWhereInput> | null | undefined;
+export type GeneDiseaseHasAssociatedGeneNodeAggregationWhereInput = {
+  AND?:
+    | Array<GeneDiseaseHasAssociatedGeneNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    GeneDiseaseHasAssociatedGeneNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<GeneDiseaseHasAssociatedGeneNodeAggregationWhereInput>
+    | null
+    | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -2102,8 +2530,9 @@ export type GeneWhere = {
   NOT?: GeneWhere | null | undefined;
   OR?: Array<GeneWhere> | null | undefined;
   countDiseases?: IntScalarFilters | null | undefined;
-  diseaseAssociatedWithGene?: DiseaseRelationshipFilters | null | undefined;
-  diseaseAssociatedWithGeneConnection?: GeneDiseaseAssociatedWithGeneConnectionFilters | null | undefined;
+  diseaseHasAssociatedGene?: DiseaseRelationshipFilters | null | undefined;
+  diseaseHasAssociatedGeneConnection?:
+    GeneDiseaseHasAssociatedGeneConnectionFilters | null | undefined;
   geneIdentifier?: StringScalarFilters | null | undefined;
   geneSymbol?: StringScalarFilters | null | undefined;
   geneSynonyms?: StringListFilters | null | undefined;
@@ -2383,7 +2812,8 @@ export type MeshTermWhere = {
   NOT?: MeshTermWhere | null | undefined;
   OR?: Array<MeshTermWhere> | null | undefined;
   hasMeshTerm?: ArticleRelationshipFilters | null | undefined;
-  hasMeshTermConnection?: MeshTermHasMeshTermConnectionFilters | null | undefined;
+  hasMeshTermConnection?:
+    MeshTermHasMeshTermConnectionFilters | null | undefined;
   meshTerm?: StringScalarFilters | null | undefined;
 };
 
@@ -2411,16 +2841,19 @@ export type OmimRefWhere = {
 };
 
 export type OrganizationHasLocationConnectionAggregateInput = {
-  AND?: Array<OrganizationHasLocationConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<OrganizationHasLocationConnectionAggregateInput> | null | undefined;
   NOT?: OrganizationHasLocationConnectionAggregateInput | null | undefined;
-  OR?: Array<OrganizationHasLocationConnectionAggregateInput> | null | undefined;
+  OR?:
+    Array<OrganizationHasLocationConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   node?: OrganizationHasLocationNodeAggregationWhereInput | null | undefined;
 };
 
 export type OrganizationHasLocationConnectionFilters = {
   /** Filter Organizations by aggregating results on related OrganizationHasLocationConnections */
-  aggregate?: OrganizationHasLocationConnectionAggregateInput | null | undefined;
+  aggregate?:
+    OrganizationHasLocationConnectionAggregateInput | null | undefined;
   /** Return Organizations where all of the related OrganizationHasLocationConnections match this filter */
   all?: OrganizationHasLocationConnectionWhere | null | undefined;
   /** Return Organizations where none of the related OrganizationHasLocationConnections match this filter */
@@ -2439,9 +2872,11 @@ export type OrganizationHasLocationConnectionWhere = {
 };
 
 export type OrganizationHasLocationNodeAggregationWhereInput = {
-  AND?: Array<OrganizationHasLocationNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<OrganizationHasLocationNodeAggregationWhereInput> | null | undefined;
   NOT?: OrganizationHasLocationNodeAggregationWhereInput | null | undefined;
-  OR?: Array<OrganizationHasLocationNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<OrganizationHasLocationNodeAggregationWhereInput> | null | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   address?: StringScalarAggregationFilters | null | undefined;
   city?: StringScalarAggregationFilters | null | undefined;
@@ -2468,7 +2903,8 @@ export type OrganizationWhere = {
   OR?: Array<OrganizationWhere> | null | undefined;
   _idx_key?: StringScalarFilters | null | undefined;
   hasLocation?: LocationRelationshipFilters | null | undefined;
-  hasLocationConnection?: OrganizationHasLocationConnectionFilters | null | undefined;
+  hasLocationConnection?:
+    OrganizationHasLocationConnectionFilters | null | undefined;
   name?: StringScalarFilters | null | undefined;
 };
 
@@ -2515,17 +2951,25 @@ export type PatentWhere = {
 };
 
 export type PhenotypeDiseaseHasPhenotypeConnectionAggregateInput = {
-  AND?: Array<PhenotypeDiseaseHasPhenotypeConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<PhenotypeDiseaseHasPhenotypeConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: PhenotypeDiseaseHasPhenotypeConnectionAggregateInput | null | undefined;
-  OR?: Array<PhenotypeDiseaseHasPhenotypeConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<PhenotypeDiseaseHasPhenotypeConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
   edge?: HasPhenotypePropertiesAggregationWhereInput | null | undefined;
-  node?: PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput | null | undefined;
+  node?:
+    PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput | null | undefined;
 };
 
 export type PhenotypeDiseaseHasPhenotypeConnectionFilters = {
   /** Filter Phenotypes by aggregating results on related PhenotypeDiseaseHasPhenotypeConnections */
-  aggregate?: PhenotypeDiseaseHasPhenotypeConnectionAggregateInput | null | undefined;
+  aggregate?:
+    PhenotypeDiseaseHasPhenotypeConnectionAggregateInput | null | undefined;
   /** Return Phenotypes where all of the related PhenotypeDiseaseHasPhenotypeConnections match this filter */
   all?: PhenotypeDiseaseHasPhenotypeConnectionWhere | null | undefined;
   /** Return Phenotypes where none of the related PhenotypeDiseaseHasPhenotypeConnections match this filter */
@@ -2545,9 +2989,16 @@ export type PhenotypeDiseaseHasPhenotypeConnectionWhere = {
 };
 
 export type PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput = {
-  AND?: Array<PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput> | null | undefined;
-  NOT?: PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput | null | undefined;
-  OR?: Array<PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput>
+    | null
+    | undefined;
+  NOT?:
+    PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput | null | undefined;
+  OR?:
+    | Array<PhenotypeDiseaseHasPhenotypeNodeAggregationWhereInput>
+    | null
+    | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -2591,7 +3042,8 @@ export type PhenotypeWhere = {
   OR?: Array<PhenotypeWhere> | null | undefined;
   countDiseases?: IntScalarFilters | null | undefined;
   diseaseHasPhenotype?: DiseaseRelationshipFilters | null | undefined;
-  diseaseHasPhenotypeConnection?: PhenotypeDiseaseHasPhenotypeConnectionFilters | null | undefined;
+  diseaseHasPhenotypeConnection?:
+    PhenotypeDiseaseHasPhenotypeConnectionFilters | null | undefined;
   hpoId?: StringScalarFilters | null | undefined;
   hpoTerm?: StringScalarFilters | null | undefined;
 };
@@ -2722,7 +3174,8 @@ export type ProjectHasCoreProjectConnectionWhere = {
 };
 
 export type ProjectHasCoreProjectNodeAggregationWhereInput = {
-  AND?: Array<ProjectHasCoreProjectNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<ProjectHasCoreProjectNodeAggregationWhereInput> | null | undefined;
   NOT?: ProjectHasCoreProjectNodeAggregationWhereInput | null | undefined;
   OR?: Array<ProjectHasCoreProjectNodeAggregationWhereInput> | null | undefined;
   coreProjectNumber?: StringScalarAggregationFilters | null | undefined;
@@ -2730,7 +3183,8 @@ export type ProjectHasCoreProjectNodeAggregationWhereInput = {
 };
 
 export type ProjectHasInvestigatorConnectionAggregateInput = {
-  AND?: Array<ProjectHasInvestigatorConnectionAggregateInput> | null | undefined;
+  AND?:
+    Array<ProjectHasInvestigatorConnectionAggregateInput> | null | undefined;
   NOT?: ProjectHasInvestigatorConnectionAggregateInput | null | undefined;
   OR?: Array<ProjectHasInvestigatorConnectionAggregateInput> | null | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
@@ -2758,9 +3212,11 @@ export type ProjectHasInvestigatorConnectionWhere = {
 };
 
 export type ProjectHasInvestigatorNodeAggregationWhereInput = {
-  AND?: Array<ProjectHasInvestigatorNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<ProjectHasInvestigatorNodeAggregationWhereInput> | null | undefined;
   NOT?: ProjectHasInvestigatorNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ProjectHasInvestigatorNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    Array<ProjectHasInvestigatorNodeAggregationWhereInput> | null | undefined;
   _idx_key?: StringScalarAggregationFilters | null | undefined;
   contactEmail?: StringScalarAggregationFilters | null | undefined;
   firstName?: StringScalarAggregationFilters | null | undefined;
@@ -2771,16 +3227,24 @@ export type ProjectHasInvestigatorNodeAggregationWhereInput = {
 };
 
 export type ProjectHasResearchedDiseaseConnectionAggregateInput = {
-  AND?: Array<ProjectHasResearchedDiseaseConnectionAggregateInput> | null | undefined;
+  AND?:
+    | Array<ProjectHasResearchedDiseaseConnectionAggregateInput>
+    | null
+    | undefined;
   NOT?: ProjectHasResearchedDiseaseConnectionAggregateInput | null | undefined;
-  OR?: Array<ProjectHasResearchedDiseaseConnectionAggregateInput> | null | undefined;
+  OR?:
+    | Array<ProjectHasResearchedDiseaseConnectionAggregateInput>
+    | null
+    | undefined;
   count?: ConnectionAggregationCountFilterInput | null | undefined;
-  node?: ProjectHasResearchedDiseaseNodeAggregationWhereInput | null | undefined;
+  node?:
+    ProjectHasResearchedDiseaseNodeAggregationWhereInput | null | undefined;
 };
 
 export type ProjectHasResearchedDiseaseConnectionFilters = {
   /** Filter Projects by aggregating results on related ProjectHasResearchedDiseaseConnections */
-  aggregate?: ProjectHasResearchedDiseaseConnectionAggregateInput | null | undefined;
+  aggregate?:
+    ProjectHasResearchedDiseaseConnectionAggregateInput | null | undefined;
   /** Return Projects where all of the related ProjectHasResearchedDiseaseConnections match this filter */
   all?: ProjectHasResearchedDiseaseConnectionWhere | null | undefined;
   /** Return Projects where none of the related ProjectHasResearchedDiseaseConnections match this filter */
@@ -2799,9 +3263,15 @@ export type ProjectHasResearchedDiseaseConnectionWhere = {
 };
 
 export type ProjectHasResearchedDiseaseNodeAggregationWhereInput = {
-  AND?: Array<ProjectHasResearchedDiseaseNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    | Array<ProjectHasResearchedDiseaseNodeAggregationWhereInput>
+    | null
+    | undefined;
   NOT?: ProjectHasResearchedDiseaseNodeAggregationWhereInput | null | undefined;
-  OR?: Array<ProjectHasResearchedDiseaseNodeAggregationWhereInput> | null | undefined;
+  OR?:
+    | Array<ProjectHasResearchedDiseaseNodeAggregationWhereInput>
+    | null
+    | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
   countCoreProjects?: IntScalarAggregationFilters | null | undefined;
   countEpiArticles?: IntScalarAggregationFilters | null | undefined;
@@ -2871,15 +3341,19 @@ export type ProjectWhere = {
   fundingMechanism?: StringScalarFilters | null | undefined;
   fundingYear?: IntScalarFilters | null | undefined;
   hasAnnotation?: AnnotationRelationshipFilters | null | undefined;
-  hasAnnotationConnection?: ProjectHasAnnotationConnectionFilters | null | undefined;
+  hasAnnotationConnection?:
+    ProjectHasAnnotationConnectionFilters | null | undefined;
   hasContact?: AgentRelationshipFilters | null | undefined;
   hasContactConnection?: ProjectHasContactConnectionFilters | null | undefined;
   hasCoreProject?: CoreProjectRelationshipFilters | null | undefined;
-  hasCoreProjectConnection?: ProjectHasCoreProjectConnectionFilters | null | undefined;
+  hasCoreProjectConnection?:
+    ProjectHasCoreProjectConnectionFilters | null | undefined;
   hasInvestigator?: AgentRelationshipFilters | null | undefined;
-  hasInvestigatorConnection?: ProjectHasInvestigatorConnectionFilters | null | undefined;
+  hasInvestigatorConnection?:
+    ProjectHasInvestigatorConnectionFilters | null | undefined;
   hasResearchedDisease?: DiseaseRelationshipFilters | null | undefined;
-  hasResearchedDiseaseConnection?: ProjectHasResearchedDiseaseConnectionFilters | null | undefined;
+  hasResearchedDiseaseConnection?:
+    ProjectHasResearchedDiseaseConnectionFilters | null | undefined;
   phr?: StringScalarFilters | null | undefined;
   serialNumber?: StringScalarFilters | null | undefined;
   studySection?: StringScalarFilters | null | undefined;
@@ -2998,7 +3472,8 @@ export type SubstanceHasSubstanceConnectionWhere = {
 };
 
 export type SubstanceHasSubstanceNodeAggregationWhereInput = {
-  AND?: Array<SubstanceHasSubstanceNodeAggregationWhereInput> | null | undefined;
+  AND?:
+    Array<SubstanceHasSubstanceNodeAggregationWhereInput> | null | undefined;
   NOT?: SubstanceHasSubstanceNodeAggregationWhereInput | null | undefined;
   OR?: Array<SubstanceHasSubstanceNodeAggregationWhereInput> | null | undefined;
   countArticles?: IntScalarAggregationFilters | null | undefined;
@@ -3036,7 +3511,8 @@ export type SubstanceWhere = {
   NOT?: SubstanceWhere | null | undefined;
   OR?: Array<SubstanceWhere> | null | undefined;
   hasSubstance?: DiseaseRelationshipFilters | null | undefined;
-  hasSubstanceConnection?: SubstanceHasSubstanceConnectionFilters | null | undefined;
+  hasSubstanceConnection?:
+    SubstanceHasSubstanceConnectionFilters | null | undefined;
   name?: StringScalarFilters | null | undefined;
   registryNumber?: StringScalarFilters | null | undefined;
 };
@@ -3045,8 +3521,59 @@ export type ArticleQueryQueryVariables = Exact<{
   articleWhere?: ArticleWhere | null | undefined;
 }>;
 
-
-export type ArticleQueryQuery = { articles: Array<{ abstractText: string | null, citationCount: number | null, dateCreatedByRDAS: string | null, doi: string | null, firstPublicationDate: string | null, inEPMC: string | null, inPMC: string | null, isEpidemiologicalStudy: boolean | null, isNaturalHistoryStudy: boolean | null, isOpenAccess: string | null, issue: string | null, lastUpdatedDateByRDAS: string | null, publicationYear: number | null, pubmedId: number | null, pubType: string | null, title: string | null, volume: string | null, journals: Array<{ essn: string | null, issn: string | null, nlmid: string | null, title: string | null }>, diseases: Array<{ gardId: string, gardName: string }>, meshTerms: Array<{ meshTerm: string | null }>, substances: Array<{ name: string | null, registryNumber: string | null }>, authors: Array<{ fullName: string | null, firstName: string | null, contactEmail: string | null, lastName: string | null, orc_id: string | null, pi_id: string | null, hasAffiliation: Array<{ name: string | null }> }>, epidemiologies: Array<{ epidemiologyRate: Array<string> | null, studyDate: Array<string> | null, studyLocation: Array<string> | null, sex: Array<string> | null, lastUpdatedByRDAS: string | null, ethnicity: Array<string> | null, epidemiologyType: Array<string> | null }>, annotations: Array<{ annotationIdentifier: string | null, annotationType: string | null, annotation: Array<string> | null }> }> };
+export type ArticleQueryQuery = {
+  articles: Array<{
+    abstractText: string | null;
+    citationCount: number | null;
+    dateCreatedByRDAS: string | null;
+    doi: string | null;
+    firstPublicationDate: string | null;
+    inEPMC: string | null;
+    inPMC: string | null;
+    isEpidemiologicalStudy: boolean | null;
+    isNaturalHistoryStudy: boolean | null;
+    isOpenAccess: string | null;
+    issue: string | null;
+    lastUpdatedDateByRDAS: string | null;
+    publicationYear: number | null;
+    pubmedId: number | null;
+    pubType: string | null;
+    title: string | null;
+    volume: string | null;
+    journals: Array<{
+      essn: string | null;
+      issn: string | null;
+      nlmid: string | null;
+      title: string | null;
+    }>;
+    diseases: Array<{ gardId: string; gardName: string }>;
+    meshTerms: Array<{ meshTerm: string | null }>;
+    substances: Array<{ name: string | null; registryNumber: string | null }>;
+    authors: Array<{
+      fullName: string | null;
+      firstName: string | null;
+      contactEmail: string | null;
+      lastName: string | null;
+      orc_id: string | null;
+      pi_id: string | null;
+      hasAffiliation: Array<{ name: string | null }>;
+    }>;
+    epidemiologies: Array<{
+      epidemiologyRate: Array<string> | null;
+      studyDate: Array<string> | null;
+      studyLocation: Array<string> | null;
+      sex: Array<string> | null;
+      lastUpdatedByRDAS: string | null;
+      ethnicity: Array<string> | null;
+      epidemiologyType: Array<string> | null;
+    }>;
+    annotations: Array<{
+      annotationIdentifier: string | null;
+      annotationType: string | null;
+      annotation: Array<string> | null;
+    }>;
+  }>;
+};
 
 export type ArticleListQueryQueryVariables = Exact<{
   diseaseWhere?: DiseaseWhere | null | undefined;
@@ -3054,52 +3581,246 @@ export type ArticleListQueryQueryVariables = Exact<{
   hasMentionInOffset?: number | null | undefined;
   hasMentionInSort?: Array<ArticleSort> | ArticleSort | null | undefined;
   articleWhere?: ArticleWhere | null | undefined;
-  hasMentionInConnectionWhere?: DiseaseHasMentionInConnectionWhere | null | undefined;
+  hasMentionInConnectionWhere?:
+    DiseaseHasMentionInConnectionWhere | null | undefined;
 }>;
 
-
-export type ArticleListQueryQuery = { diseases: Array<{ countArticles: number, countEpiArticles: number | null, countNhsArticles: number | null, articles: Array<{ pubmedId: number | null, title: string | null, publicationYear: number | null, doi: string | null, firstPublicationDate: string | null, pubType: string | null, isNaturalHistoryStudy: boolean | null, isEpidemiologicalStudy: boolean | null, journals: Array<{ essn: string | null, issn: string | null, nlmid: string | null, title: string | null }> }>, allCount: { totalCount: number } }> };
+export type ArticleListQueryQuery = {
+  diseases: Array<{
+    countArticles: number;
+    countEpiArticles: number | null;
+    countNhsArticles: number | null;
+    articles: Array<{
+      pubmedId: number | null;
+      title: string | null;
+      publicationYear: number | null;
+      doi: string | null;
+      firstPublicationDate: string | null;
+      pubType: string | null;
+      isNaturalHistoryStudy: boolean | null;
+      isEpidemiologicalStudy: boolean | null;
+      journals: Array<{
+        essn: string | null;
+        issn: string | null;
+        nlmid: string | null;
+        title: string | null;
+      }>;
+    }>;
+    allCount: { totalCount: number };
+  }>;
+};
 
 export type ClinicalTrialQueryQueryVariables = Exact<{
   clinicalTrialWhere?: ClinicalTrialWhere | null | undefined;
 }>;
 
-
-export type ClinicalTrialQueryQuery = { clinicalTrials: Array<{ briefTitle: string | null, briefSummary: string | null, nctId: string | null, phase: string | null, studyType: string | null, overallStatus: string | null, officialTitle: string | null, startDate: string | null, completionDate: string | null, completionDateType: string | null, startDateType: string | null, lastUpdatePostDate: string | null, studyDesigns: Array<{ designAllocation: string | null, designInterventionModelDescription: string | null, designInterventionModel: string | null, designMasking: string | null, designObservationalModel: string | null, designPrimaryPurpose: string | null, designTimePerspective: string | null, detailedDescription: string | null, hasExpandedAccess: string | null, studyType: string | null }>, participantInfo: Array<{ eligibilityCriteria: string | null, enrollmentCount: string | null, enrollmentType: string | null, healthyVolunteers: string | null, maximumAge: string | null, minimumAge: string | null, stdAges: Array<string> | null }>, studyDiseases: Array<{ gardId: string, gardName: string }>, conditions: Array<{ condition: string | null, mappedDiseases: Array<{ gardId: string, gardName: string }> }>, locations: Array<{ address: string | null, city: string | null, country: string | null, facility: string | null, state: string | null, zip: string | null }>, interventions: Array<{ interventionType: string | null, interventionName: string | null, interventionDescription: string | null, hasDrug: Array<{ unii: string | null, rxnormName: string | null, rxnormID: string | null }> }> }> };
+export type ClinicalTrialQueryQuery = {
+  clinicalTrials: Array<{
+    briefTitle: string | null;
+    briefSummary: string | null;
+    nctId: string | null;
+    phase: string | null;
+    studyType: string | null;
+    overallStatus: string | null;
+    officialTitle: string | null;
+    startDate: string | null;
+    completionDate: string | null;
+    completionDateType: string | null;
+    startDateType: string | null;
+    lastUpdatePostDate: string | null;
+    studyDesigns: Array<{
+      designAllocation: string | null;
+      designInterventionModelDescription: string | null;
+      designInterventionModel: string | null;
+      designMasking: string | null;
+      designObservationalModel: string | null;
+      designPrimaryPurpose: string | null;
+      designTimePerspective: string | null;
+      detailedDescription: string | null;
+      hasExpandedAccess: string | null;
+      studyType: string | null;
+    }>;
+    participantInfo: Array<{
+      eligibilityCriteria: string | null;
+      enrollmentCount: string | null;
+      enrollmentType: string | null;
+      healthyVolunteers: string | null;
+      maximumAge: string | null;
+      minimumAge: string | null;
+      stdAges: Array<string> | null;
+    }>;
+    studyDiseases: Array<{ gardId: string; gardName: string }>;
+    conditions: Array<{
+      condition: string | null;
+      mappedDiseases: Array<{ gardId: string; gardName: string }>;
+    }>;
+    locations: Array<{
+      address: string | null;
+      city: string | null;
+      country: string | null;
+      facility: string | null;
+      state: string | null;
+      zip: string | null;
+    }>;
+    interventions: Array<{
+      interventionType: string | null;
+      interventionName: string | null;
+      interventionDescription: string | null;
+      hasDrug: Array<{
+        unii: string | null;
+        rxnormName: string | null;
+        rxnormID: string | null;
+      }>;
+    }>;
+  }>;
+};
 
 export type ClinicalTrialListQueryQueryVariables = Exact<{
   diseaseWhere?: DiseaseWhere | null | undefined;
   hasClinicalTrialLimit?: number | null | undefined;
   hasClinicalTrialOffset?: number | null | undefined;
-  hasClinicalTrialSort?: Array<ClinicalTrialSort> | ClinicalTrialSort | null | undefined;
+  hasClinicalTrialSort?:
+    Array<ClinicalTrialSort> | ClinicalTrialSort | null | undefined;
   clinicalTrialWhere?: ClinicalTrialWhere | null | undefined;
-  hasClinicalTrialConnectionWhere?: DiseaseHasClinicalTrialConnectionWhere | null | undefined;
+  hasClinicalTrialConnectionWhere?:
+    DiseaseHasClinicalTrialConnectionWhere | null | undefined;
 }>;
 
-
-export type ClinicalTrialListQueryQuery = { diseases: Array<{ allCount: number, clinicalTrials: Array<{ briefTitle: string | null, nctId: string | null, phase: string | null, studyType: string | null, overallStatus: string | null, officialTitle: string | null, startDate: string | null, completionDate: string | null, completionDateType: string | null, startDateType: string | null }>, filteredCount: { totalCount: { count: { nodes: number } } } }> };
+export type ClinicalTrialListQueryQuery = {
+  diseases: Array<{
+    allCount: number;
+    clinicalTrials: Array<{
+      briefTitle: string | null;
+      nctId: string | null;
+      phase: string | null;
+      studyType: string | null;
+      overallStatus: string | null;
+      officialTitle: string | null;
+      startDate: string | null;
+      completionDate: string | null;
+      completionDateType: string | null;
+      startDateType: string | null;
+    }>;
+    filteredCount: { totalCount: { count: { nodes: number } } };
+  }>;
+};
 
 export type DiseaseQueryQueryVariables = Exact<{
   where?: DiseaseWhere | null | undefined;
 }>;
 
-
-export type DiseaseQueryQuery = { diseases: Array<{ classificationLevel: Array<string> | null, countArticles: number, countGenes: number, countPhenotypes: number, countProjects: number | null, countTrials: number, disorderType: Array<string> | null, gardId: string, gardName: string, icd10cm: Array<string> | null, mesh: Array<string> | null, omim: string | null, orphanet: string | null, synonyms: Array<string> | null, umls: string, doid: Array<string> | null, ncit: Array<string> | null, sctid: Array<string> | null, mondo: string | null, medGen: string | null, omimps: string | null, diseaseType: string | null, _geneAssociations: { edges: Array<{ gene: { geneIdentifier: string | null, geneSymbol: string | null, geneSynonyms: Array<string> | null, geneUrl: string | null, omim: string | null, reference: Array<string> | null }, properties: { associationStatus: string | null, associationType: string | null, reference: Array<string> | null } }> }, _phenotypeAssociations: { edges: Array<{ phenotype: { hpoId: string | null, hpoTerm: string | null }, properties: { hpoTermFrequency: string | null, reference: Array<string> | null, _evidence: string | null } }> } }> };
+export type DiseaseQueryQuery = {
+  diseases: Array<{
+    classificationLevel: Array<string> | null;
+    countArticles: number;
+    countGenes: number;
+    countPhenotypes: number;
+    countProjects: number | null;
+    countTrials: number;
+    disorderType: Array<string> | null;
+    gardId: string;
+    gardName: string;
+    icd10cm: Array<string> | null;
+    mesh: Array<string> | null;
+    omim: string | null;
+    orphanet: string | null;
+    synonyms: Array<string> | null;
+    umls: string;
+    doid: Array<string> | null;
+    ncit: Array<string> | null;
+    sctid: Array<string> | null;
+    mondo: string | null;
+    medGen: string | null;
+    omimps: string | null;
+    diseaseType: string | null;
+    _geneAssociations: {
+      edges: Array<{
+        gene: {
+          geneIdentifier: string | null;
+          geneSymbol: string | null;
+          geneSynonyms: Array<string> | null;
+          geneUrl: string | null;
+          omim: string | null;
+          reference: Array<string> | null;
+        };
+        properties: {
+          associationStatus: string | null;
+          associationType: string | null;
+          reference: Array<string> | null;
+        };
+      }>;
+    };
+    _phenotypeAssociations: {
+      edges: Array<{
+        phenotype: { hpoId: string | null; hpoTerm: string | null };
+        properties: {
+          hpoTermFrequency: string | null;
+          reference: Array<string> | null;
+          _evidence: string | null;
+        };
+      }>;
+    };
+  }>;
+};
 
 export type DiseaseStaticFiltersQueryQueryVariables = Exact<{
   where?: DiseaseWhere | null | undefined;
 }>;
 
-
-export type DiseaseStaticFiltersQueryQuery = { diseases: Array<{ filterCounts: { diseaseArticleByEpi: Array<{ count: number | null, term: string | null }> | null, diseaseArticleByNHS: Array<{ count: number | null, term: string | null }> | null, diseaseArticleByYear: Array<{ count: number | null, term: string | null }> | null, diseaseProjectsByYear: Array<{ count: number | null, term: string | null }> | null, diseaseTrialsByPhase: Array<{ count: number | null, term: string | null }> | null, diseaseTrialsByStatus: Array<{ count: number | null, term: string | null }> | null, diseaseTrialsByType: Array<{ count: number | null, term: string | null }> | null } | null }> };
+export type DiseaseStaticFiltersQueryQuery = {
+  diseases: Array<{
+    filterCounts: {
+      diseaseArticleByEpi: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+      diseaseArticleByNHS: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+      diseaseArticleByYear: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+      diseaseProjectsByYear: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+      diseaseTrialsByPhase: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+      diseaseTrialsByStatus: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+      diseaseTrialsByType: Array<{
+        count: number | null;
+        term: string | null;
+      }> | null;
+    } | null;
+  }>;
+};
 
 export type DiseaseDynamicFiltersQueryQueryVariables = Exact<{
   where?: DiseaseWhere | null | undefined;
   clinicalTrialWhere?: ClinicalTrialWhere | null | undefined;
 }>;
 
-
-export type DiseaseDynamicFiltersQueryQuery = { trialCountsByStatus: Array<{ count: number | null, term: string | null } | null> | null, trialCountsByPhase: Array<{ count: number | null, term: string | null } | null> | null, trialCountsByType: Array<{ count: number | null, term: string | null } | null> | null };
+export type DiseaseDynamicFiltersQueryQuery = {
+  trialCountsByStatus: Array<{
+    count: number | null;
+    term: string | null;
+  } | null> | null;
+  trialCountsByPhase: Array<{
+    count: number | null;
+    term: string | null;
+  } | null> | null;
+  trialCountsByType: Array<{
+    count: number | null;
+    term: string | null;
+  } | null> | null;
+};
 
 export type DiseaseListQueryQueryVariables = Exact<{
   limit?: number | null | undefined;
@@ -3108,16 +3829,43 @@ export type DiseaseListQueryQueryVariables = Exact<{
   diseaseWhere?: DiseaseWhere | null | undefined;
 }>;
 
-
-export type DiseaseListQueryQuery = { diseases: Array<{ gardName: string, gardId: string, classificationLevel: Array<string> | null, disorderType: Array<string> | null, synonyms: Array<string> | null, countArticles: number, countTrials: number, countProjects: number | null, countCoreProjects: number | null, countGenes: number, countPhenotypes: number }>, total: { count: number } };
+export type DiseaseListQueryQuery = {
+  diseases: Array<{
+    gardName: string;
+    gardId: string;
+    classificationLevel: Array<string> | null;
+    disorderType: Array<string> | null;
+    synonyms: Array<string> | null;
+    countArticles: number;
+    countTrials: number;
+    countProjects: number | null;
+    countCoreProjects: number | null;
+    countGenes: number;
+    countPhenotypes: number;
+  }>;
+  total: { count: number };
+};
 
 export type DiseasesQueryVariables = Exact<{
   searchString?: string | null | undefined;
   limit?: number | null | undefined;
 }>;
 
-
-export type DiseasesQuery = { diseaseSearch: Array<{ gardName: string, gardId: string, classificationLevel: Array<string> | null, disorderType: Array<string> | null, synonyms: Array<string> | null, countArticles: number, countTrials: number, countProjects: number | null, countCoreProjects: number | null, countGenes: number, countPhenotypes: number } | null> | null };
+export type DiseasesQuery = {
+  diseaseSearch: Array<{
+    gardName: string;
+    gardId: string;
+    classificationLevel: Array<string> | null;
+    disorderType: Array<string> | null;
+    synonyms: Array<string> | null;
+    countArticles: number;
+    countTrials: number;
+    countProjects: number | null;
+    countCoreProjects: number | null;
+    countGenes: number;
+    countPhenotypes: number;
+  } | null> | null;
+};
 
 export type GeneFiltersQueryVariables = Exact<{
   offset?: number | null | undefined;
@@ -3128,8 +3876,11 @@ export type GeneFiltersQueryVariables = Exact<{
   searchedGenesWhere?: GeneWhere | null | undefined;
 }>;
 
-
-export type GeneFiltersQuery = { allFilters: Array<{ term: string | null, count: number }>, selectedFilters: Array<{ term: string | null, count: number }>, searchFilters: Array<{ term: string | null, count: number }> };
+export type GeneFiltersQuery = {
+  allFilters: Array<{ term: string | null; count: number }>;
+  selectedFilters: Array<{ term: string | null; count: number }>;
+  searchFilters: Array<{ term: string | null; count: number }>;
+};
 
 export type PhenotypeFiltersQueryVariables = Exact<{
   offset?: number | null | undefined;
@@ -3138,16 +3889,47 @@ export type PhenotypeFiltersQueryVariables = Exact<{
   where?: PhenotypeWhere | null | undefined;
 }>;
 
-
-export type PhenotypeFiltersQuery = { phenotypes: Array<{ hpoId: string | null, term: string | null, count: number }> };
+export type PhenotypeFiltersQuery = {
+  phenotypes: Array<{
+    hpoId: string | null;
+    term: string | null;
+    count: number;
+  }>;
+};
 
 export type CoreProjectQueryQueryVariables = Exact<{
   coreProjectWhere?: CoreProjectWhere | null | undefined;
   hasSubprojectSort?: Array<ProjectSort> | ProjectSort | null | undefined;
 }>;
 
-
-export type CoreProjectQueryQuery = { coreProjects: Array<{ coreProjectNumber: string | null, totalCost: number | null, totalCount: { totalCount: number }, organizations: Array<{ name: string | null }>, subProjects: Array<{ abstract: string | null, title: string | null, activity: string | null, applicationId: number | null, cfdaCode: string | null, foaNumber: string | null, fullProjectNumber: string | null, fundingMechanism: string | null, fundingYear: number | null, _terms: string | null, annotations: Array<{ semanticTypeNames: Array<string> | null, semanticTypesNames: Array<string> | null, semanticTypes: Array<string> | null, umlsConcept: string | null, umlsCui: string | null }>, researchedDiseases: Array<{ gardId: string, gardName: string }> }> }> };
+export type CoreProjectQueryQuery = {
+  coreProjects: Array<{
+    coreProjectNumber: string | null;
+    totalCost: number | null;
+    totalCount: { totalCount: number };
+    organizations: Array<{ name: string | null }>;
+    subProjects: Array<{
+      abstract: string | null;
+      title: string | null;
+      activity: string | null;
+      applicationId: number | null;
+      cfdaCode: string | null;
+      foaNumber: string | null;
+      fullProjectNumber: string | null;
+      fundingMechanism: string | null;
+      fundingYear: number | null;
+      _terms: string | null;
+      annotations: Array<{
+        semanticTypeNames: Array<string> | null;
+        semanticTypesNames: Array<string> | null;
+        semanticTypes: Array<string> | null;
+        umlsConcept: string | null;
+        umlsCui: string | null;
+      }>;
+      researchedDiseases: Array<{ gardId: string; gardName: string }>;
+    }>;
+  }>;
+};
 
 export type CoreProjectListQueryQueryVariables = Exact<{
   diseaseWhere?: DiseaseWhere | null | undefined;
@@ -3157,5 +3939,17 @@ export type CoreProjectListQueryQueryVariables = Exact<{
   hasSubprojectLimit?: number | null | undefined;
 }>;
 
-
-export type CoreProjectListQueryQuery = { diseases: Array<{ countCoreProjects: number | null, countProjects: number | null, gardId: string, gardName: string, coreProjects: Array<{ coreProjectNumber: string | null, totalCost: number | null, _subProjectsCount: { totalCount: number }, subProjects: Array<{ title: string | null, fundingYear: number | null }> }> }> };
+export type CoreProjectListQueryQuery = {
+  diseases: Array<{
+    countCoreProjects: number | null;
+    countProjects: number | null;
+    gardId: string;
+    gardName: string;
+    coreProjects: Array<{
+      coreProjectNumber: string | null;
+      totalCost: number | null;
+      _subProjectsCount: { totalCount: number };
+      subProjects: Array<{ title: string | null; fundingYear: number | null }>;
+    }>;
+  }>;
+};
