@@ -3,7 +3,6 @@
   @defer (when !mobile) {
     <div #navigationsidenav class="width-25 navigation-sidenav">
       <div class="toc-wrapper">
-        <!--[@followOnScroll]="animationState()"-->
         <div class="toc">
           <mat-nav-list>
             <a
@@ -128,7 +127,7 @@
             >
               <div class="row space-between-row">
                 <div>NIH funded Projects</div>
-                <div>{{ projectsCount() }}</div>
+                <div>{{ projectsCount().allProjectsCount }}</div>
               </div>
             </a>
             <a
@@ -142,7 +141,7 @@
             >
               <div class="row space-between-row">
                 <div>Clinical Trials</div>
-                <div>{{ trialsCount().allTrialCount }}</div>
+                <div>{{ clinicalTrialsCount().allClinicalTrialsCount }}</div>
               </div>
             </a>
           </mat-nav-list>
@@ -256,7 +255,7 @@
                   <div class="row space-between-row">
                     <div>NIH funded Projects</div>
 
-                    <div>{{ projectsCount() }}</div>
+                    <div>{{ projectsCount().allProjectsCount }}</div>
                   </div>
                 </a>
                 <a
@@ -270,7 +269,7 @@
                 >
                   <div class="row space-between-row">
                     <div>Clinical Trials</div>
-                    <div>{{ trialsCount() }}</div>
+                    <div>{{ clinicalTrialsCount().allClinicalTrialsCount }}</div>
                   </div>
                 </a>
               </mat-nav-list>

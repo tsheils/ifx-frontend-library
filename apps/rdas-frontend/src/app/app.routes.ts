@@ -9,6 +9,10 @@ import { inject } from '@angular/core';
 import { GeneStore } from 'gene-store';
 import { PhenotypeStore } from 'phenotype-store';
 import { FilterCategory } from 'utils-models';
+import { ArticleStore } from 'article-store';
+import { ProjectStore } from 'project-store';
+import { ClinicalTrialStore } from 'trial-store';
+import { DiseaseStore } from 'disease-store';
 
 export const geneFilterResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
@@ -27,6 +31,47 @@ export const phenotypeFilterResolver: ResolveFn<any> = (
   return phenotypeStore.loadPhenotypeFilters(params);
 };
 
+export const articleResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const articleStore = inject(ArticleStore);
+  return articleStore.loadArticle(route.queryParams);
+};
+
+export const projectResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const projectStore = inject(ProjectStore);
+  return projectStore.loadProject(route.queryParams);
+};
+
+export const clinicalTrialResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const clinicalTrialStore = inject(ClinicalTrialStore);
+  return clinicalTrialStore.loadClinicalTrial(route.queryParams);
+};
+
+export const allStaticDiseaseFiltersResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const allStaticDiseaseFiltersStore = inject(DiseaseStore);
+  return allStaticDiseaseFiltersStore.loadAllDiseaseFilters({});
+};
+
+export const staticDiseaseFiltersResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const staticDiseaseFiltersStore = inject(DiseaseStore);
+  return staticDiseaseFiltersStore.loadStaticDiseaseFilters(route.queryParams);
+};
+export const diseaseResolver: ResolveFn<any> = (
+  route: ActivatedRouteSnapshot
+) => {
+  const diseaseStore = inject(DiseaseStore);
+  return diseaseStore.loadDisease(route.queryParams);
+};
+
 export const appRoutes: Route[] = [
   {
     path: '',
@@ -37,10 +82,10 @@ export const appRoutes: Route[] = [
     path: 'diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    /*   resolve: {
-     // geneFilters: geneFilterResolver,
-     // //phenotypeFilters: phenotypeFilterResolver,
-    },*/
+    resolve: {
+      allStaticFilters: allStaticDiseaseFiltersResolver,
+      // //phenotypeFilters: phenotypeFilterResolver,
+    },
     loadComponent: () =>
       import('rdas-browse').then((m) => m.RdasBrowseComponent),
   },
@@ -48,6 +93,10 @@ export const appRoutes: Route[] = [
     path: 'disease',
     pathMatch: 'full',
     runGuardsAndResolvers: 'pathParamsChange',
+    resolve: {
+      staticFilters: staticDiseaseFiltersResolver,
+      disease: diseaseResolver
+    },
     loadComponent: () =>
       import('rdas-disease-page').then((m) => m.RdasDiseasePageComponent),
   },
@@ -80,6 +129,36 @@ export const appRoutes: Route[] = [
       import('rdas-subscriptions').then((m) => m.RdasSubscriptionsComponent),
   },
   {
+    path: 'article',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      article: articleResolver,
+    },
+    loadComponent: () =>
+      import('article-page').then((m) => m.ArticlePageComponent),
+  },
+  {
+    path: 'project',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      project: projectResolver,
+    },
+    loadComponent: () =>
+      import('project-page').then((m) => m.ProjectPageComponent),
+  },
+  {
+    path: 'trial',
+    pathMatch: 'full',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      clinicalTrial: clinicalTrialResolver,
+    },
+    loadComponent: () =>
+      import('rdas-trial-page').then((m) => m.RdasTrialPageComponent),
+  },
+  {
     path: 'apis/diseases',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
@@ -99,35 +178,12 @@ export const appRoutes: Route[] = [
     loadComponent: () =>
       import('history-api').then((m) => m.HistoryApiComponent),
   },
-/*  {
+  /*  {
     path: 'apis/abstract-abstraction',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     loadComponent: () =>
       import('abstract-extraction-api').then((m) => m.AbstractExtractionApi),
   },*/
-  {
-    path: 'article',
-    pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    loadComponent: () =>
-      import('rdas-article-page').then(
-        (m) => m.FeaturesRdasRdasArticlePageComponent,
-      ),
-  },
-  {
-    path: 'project',
-    pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    loadComponent: () =>
-      import('rdas-project-page').then((m) => m.RdasProjectPageComponent),
-  },
-  {
-    path: 'trial',
-    pathMatch: 'full',
-    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
-    loadComponent: () =>
-      import('rdas-trial-page').then((m) => m.RdasTrialPageComponent),
-  },
   { path: '**', redirectTo: '' },
 ];

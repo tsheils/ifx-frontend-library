@@ -14,7 +14,7 @@
         <a
           class="mat-h1 disease-link"
           href="https://rarediseases.info.nih.gov/diseases/{{ parsedId() }}/{{
-            this.disease()?.gardName | lowercase
+            this.disease()!.gardName | lowercase
           }}"
           target="_blank"
           rel="noreferrer"
@@ -36,7 +36,7 @@
     @if (animationState() === 'in') {
       <div class="row">
         <div class="width-75">
-          @if (disease()?.classificationLevel) {
+          @if (disease()?.classificationLevel && disease()?.classificationLevel?.length) {
             <div class="primary-chip-outlined">
               {{ disease()?.classificationLevel }}
             </div>

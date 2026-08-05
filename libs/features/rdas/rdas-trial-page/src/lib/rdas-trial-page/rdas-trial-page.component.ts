@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClinicalTrialsDetailsComponent } from 'clinical-trials-display';
-import { Store } from '@ngrx/store';
-import { TrialSelectors } from 'trial-store';
+import { ClinicalTrialStore } from 'trial-store';
 
 @Component({
   selector: 'lib-trial-page',
@@ -12,6 +11,6 @@ import { TrialSelectors } from 'trial-store';
   standalone: true,
 })
 export class RdasTrialPageComponent {
-  private readonly trialStore = inject(Store);
-  trial = this.trialStore.selectSignal(TrialSelectors.selectEntity);
+  private readonly clinicalTrialStore = inject(ClinicalTrialStore);
+  trial = this.clinicalTrialStore.clinicalTrial;
 }

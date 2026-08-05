@@ -24,8 +24,7 @@ import { Subscription } from 'utils-models';
 import { UpdateUserActions, UserSelectors } from 'user-store';
 import { Store } from '@ngrx/store';
 import { debounceTime, distinctUntilChanged } from 'rxjs';
-import { AboutSubscribeModalComponent } from '../about-subscribe-modal/about-subscribe-modal.component';
-import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-modal.component';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
   selector: 'lib-subscribe-button',
@@ -41,6 +40,7 @@ import { UnsubscribeModalComponent } from '../unsubscribe-modal/unsubscribe-moda
     MatCheckboxModule,
     MatDialogModule,
     MatSnackBarModule,
+    MatTooltip,
   ],
 })
 export class SubscribeButtonComponent implements OnInit {
@@ -164,16 +164,6 @@ export class SubscribeButtonComponent implements OnInit {
   }
 
   unSubscribe() {
-    this.dialog
-      .open(UnsubscribeModalComponent, {
-        data: {
-          entity: this.subscriptionId(),
-          label: this.subscriptionName(),
-        },
-      })
-      .afterClosed()
-      .subscribe((res: { [key: string]: string }) => {
-        if (res) {
           const subscriptionClone: Subscription[] = [];
           this.user()?.subscriptions.forEach((sub) => {
             if (sub.gardID !== this.subscriptionId()) {
@@ -188,24 +178,5 @@ export class SubscribeButtonComponent implements OnInit {
           this._snackBar.open('Subscription removed', '', {
             duration: 3000,
           });
-        }
-      });
-  }
-
-  aboutSubscribe() {
-    this.dialog.open(AboutSubscribeModalComponent, {
-      width: this.mobile() ? '90vw' : '35vw',
-      data: {
-        user: !!this.user(),
-      },
-    });
-  }
-
-  toggleAll() {
-    if (this.subscriptionSelection()?.selected.length === 3) {
-      this.subscriptionSelection()?.clear();
-    } else {
-      this.subscriptionSelection()?.select(...this.all);
-    }
   }
 }

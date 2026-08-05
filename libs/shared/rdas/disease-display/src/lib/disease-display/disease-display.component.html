@@ -45,8 +45,8 @@
   </div>
   <div class="disease-display-panel" id="genes" #genes #scrollSection>
     <mat-expansion-panel
-      [disabled]="!disease()?.countGenes"
-      [expanded]="disease()?.countGenes"
+      [disabled]="!disease()!.countGenes"
+      [expanded]="disease()!.countGenes > 0"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -61,8 +61,8 @@
   </div>
   <div class="disease-display-panel" id="phenotypes" #phenotypes #scrollSection>
     <mat-expansion-panel
-      [disabled]="!disease()?.countPhenotypes"
-      [expanded]="disease()?.countPhenotypes"
+      [disabled]="!disease()!.countPhenotypes"
+      [expanded]="disease()!.countPhenotypes > 0"
     >
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -121,13 +121,13 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >NIH-funded Projects {{ projectsCount() }}</span
+            >NIH-funded Projects {{ projectsCount().currentProjectsCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
       <lib-rdas-panel-template
         [_id]="'projects'"
-        [count]="projectsCount()"
+        [count]="projectsCount().currentProjectsCount"
         [message]="'No NIH Funded Projects Available'"
         (listChange)="fetchList($event, 'projects')"
       >
@@ -138,18 +138,18 @@
     </mat-expansion-panel>
   </div>
   <div class="disease-display-panel" id="trials" #trials #scrollSection>
-    <mat-expansion-panel [disabled]="!trialsCount()" [expanded]="trialsCount()">
+    <mat-expansion-panel [disabled]="!clinicalTrialsCount()" [expanded]="clinicalTrialsCount()">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Clinical Trials {{ trialsCount().allTrialCount }}</span
+            >Clinical Trials {{ clinicalTrialsCount().currentClinicalTrialsCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <lib-rdas-panel-template
         [_id]="'trials'"
-        [count]="trialsCount().clinicalTrialsCount"
+        [count]="clinicalTrialsCount().currentClinicalTrialsCount"
         [filters]="filterMap().get('trials')!"
         [loaded]="loaded()"
         [message]="'No Clinical Trial Data Available'"
@@ -157,7 +157,7 @@
       >
         <div class="data-list">
           <lib-clinical-trials-list
-            [trials]="trialsList()"
+            [trials]="clinicalTrialsList()"
           ></lib-clinical-trials-list>
         </div>
       </lib-rdas-panel-template>

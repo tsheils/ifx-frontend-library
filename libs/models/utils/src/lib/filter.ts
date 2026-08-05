@@ -1,3 +1,5 @@
+import { Params } from '@angular/router';
+
 export interface FilterResponse {
   data: {
     filters: Filter[];
@@ -61,85 +63,237 @@ export class FilterCategory {
   }
 }
 
-/*
-export function parseFilterResponse(
-  res: FilterResponse,
-  currentFilter?: FilterCategory,
-): FilterCategory {
-  let filterCategory: FilterCategory = {} as FilterCategory;
- // if (Object.keys(res).length) {
-   // const retMap: Map<string, Filter> = new Map<string, Filter>();
-  //  Object.keys(res).forEach((key: string) => {
-      /!*const selectedFiltersData: { selectedFilters: Filter[] } = res[
-        key as keyof FilterResponse
-      ].data as { selectedFilters: Filter[] };
-      if (selectedFiltersData) {
-        //selected/checked filters always go on top
-        selectedFiltersData.selectedFilters?.forEach((obj: Partial<Filter>) => {
-          retMap.set(
-            <string>obj.term,
-            new Filter({
-              ...obj,
-              selected: true,
-            }),
-          );
+export function _parseFilters(
+  data: {
+    [key: string]: Filter[];
+  },
+  params?: Params,
+) {
+  const filters: FilterCategory[] = [];
+  Object.entries(data).map((key) => {
+    switch (key[0]) {
+      case 'allEpiArticlesByYear': {
+        const fc = new FilterCategory({
+          parent: 'articles',
+          label: 'Epidemiology Articles by Year',
+          field: 'isEpi',
+          values: key[1].map((fil: Partial<Filter>) => {
+            let filter: Filter;
+            if (params) {
+              filter = new Filter({
+                ...fil,
+                selected:
+                  params['year'] === fil.term ||
+                  params['year']?.includes(fil.term),
+              });
+            } else {
+              filter = new Filter(fil);
+            }
+            return filter;
+          }),
         });
-      }*!/
-      //search term
-      // }
- /!*     const searchFiltersData: { searchFilters: Filter[] } = res[key].data as {
-        searchFilters: Filter[];
-      };
-      if (searchFiltersData) {
-        searchFiltersData.searchFilters.forEach((obj: Partial<Filter>) => {
-          if (!retMap.has(<string>obj.term)) {
-            retMap.set(
-              <string>obj.term,
-              new Filter({
-                ...obj,
-              }),
-            );
-          }
-        });
-        //current values (just for pagination)
-        currentFilter?.values.forEach((filter) => {
-          if (!retMap.has(<string>filter.term)) {
-            retMap.set(<string>filter.term, filter);
-          }
-        });
-      }*!/
-      //everything else
-/!*      const allFiltersData: { allFilters: Filter[] } = res[key].data as {
-        allFilters: Filter[];
-      };
-      if (allFiltersData) {*!/
-       /!* allFiltersData.allFilters.forEach((obj: Partial<Filter>) => {
-          if (!retMap.has(<string>obj.term)) {
-            retMap.set(
-              <string>obj.term,
-              new Filter({
-                ...obj,
-              }),
-            );
-          }
-        });*!/
-         filterCategory = new FilterCategory({
-          label: res.data.label,
-          values: res.data.filters.sort(
-            (a, b) => Number(b.selected) - Number(a.selected),
-          ),
-          page: currentFilter?.page || 0,
-          query: currentFilter?.query,
-        });
-
+        fc.values = fc.values.sort((a, b) =>
+          b.term.toString().localeCompare(a.term.toString()),
+        );
+        filters.push(fc);
+        break;
       }
-     /!* filterCategory.values = [...retMap.values()].sort(
-        (a, b) => Number(b.selected) - Number(a.selected),
-      );*!/
-     // filters.push(filterCategory as FilterCategory);
-    });
-  }
-  console.log(filterCategory);
-  return filterCategory;
+      case 'allNHSArticlesByYear': {
+        const fc = new FilterCategory({
+          parent: 'articles',
+          label: 'Natural History Articles by Year',
+          field: 'isNHS',
+          values: key[1].map((fil: Partial<Filter>) => {
+            let filter: Filter;
+            if (params) {
+              filter = new Filter({
+                ...fil,
+                selected:
+                  params['year'] === fil.term ||
+                  params['year']?.includes(fil.term),
+              });
+            } else {
+              filter = new Filter(fil);
+            }
+            return filter;
+          }),
+        });
+        fc.values = fc.values.sort((a, b) =>
+          b.term.toString().localeCompare(a.term.toString()),
+        );
+        filters.push(fc);
+        break;
+      }
+      case 'diseaseArticleByEpi': {
+        filters.push(
+          new FilterCategory({
+            parent: 'articles',
+            label: 'Epidemiology Articles',
+            field: 'isEpi',
+            values: key[1].map((fil: Partial<Filter>) => {
+              const filter: Filter = new Filter(fil);
+              filter.term = JSON.parse(<string>filter.term);
+              if (params) {
+                filter.label = 'isEpi';
+                filter.selected = params['isEpi']?.includes(filter.term);
+              }
+              return filter;
+            }),
+          }),
+        );
+        break;
+      }
+      case 'diseaseArticleByNHS': {
+        filters.push(
+          new FilterCategory({
+            parent: 'articles',
+            label: 'Natural Health Study Articles',
+            field: 'isNHS',
+            values: key[1].map((fil: Partial<Filter>) => {
+              const filter: Filter = new Filter(fil);
+              filter.term = JSON.parse(<string>filter.term);
+              if (params) {
+                filter.label = 'isNHS';
+                filter.selected = params['isNHS']?.includes(filter.term);
+              }
+              return filter;
+            }),
+          }),
+        );
+        break;
+      }
+
+      case 'allProjectsByYear':
+      case 'diseaseProjectsByYear': {
+        filters.push(
+          new FilterCategory({
+            parent: 'projects',
+            label: 'Projects Count by Year',
+            filterable: false,
+            values: key[1].map((fil: Partial<Filter>) => new Filter(fil)),
+          }),
+        );
+        break;
+      }
+
+      case 'diseaseProjectsByCost': {
+        filters.push(
+          new FilterCategory({
+            parent: 'projects',
+            label: 'Projects Funding by Year',
+            filterable: false,
+            values: key[1].map((fil: Partial<Filter>) => new Filter(fil)),
+          }),
+        );
+        break;
+      }
+
+      case 'allTrialsByPhase':
+      case 'trialCountsByPhase':
+      case 'diseaseTrialsByPhase': {
+        filters.push(
+          new FilterCategory({
+            parent: 'trials',
+            label: 'Clinical Trials by Phase',
+            field: 'phase',
+            values: key[1].map((fil: Partial<Filter>) => {
+              let filter: Filter;
+              if (params) {
+                filter = new Filter({
+                  ...fil,
+                  selected:
+                    params['phase'] === fil.term ||
+                    params['phase']?.includes(fil.term),
+                });
+              } else {
+                filter = new Filter(fil);
+              }
+              return filter;
+            }),
+          }),
+        );
+        break;
+      }
+      case 'allTrialsByStatus':
+      case 'trialCountsByStatus':
+      case 'diseaseTrialsByStatus': {
+        filters.push(
+          new FilterCategory({
+            parent: 'trials',
+            label: 'Clinical Trials by Status',
+            field: 'overallStatus',
+            values: key[1].map((fil: Partial<Filter>) => {
+              let filter: Filter;
+              if (params) {
+                filter = new Filter({
+                  ...fil,
+                  selected:
+                    params['overallStatus'] === fil.term ||
+                    params['overallStatus']?.includes(fil.term),
+                });
+              } else {
+                filter = new Filter(fil);
+              }
+              return filter;
+            }),
+          }),
+        );
+        break;
+      }
+      case 'allTrialsByType':
+      case 'trialCountsByType':
+      case 'diseaseTrialsByType': {
+        filters.push(
+          new FilterCategory({
+            parent: 'trials',
+            label: 'Clinical Trials by Type',
+            field: 'studyType',
+            values: key[1].map((fil: Partial<Filter>) => {
+              let filter: Filter;
+              if (params) {
+                filter = new Filter({
+                  ...fil,
+                  selected:
+                    params['studyType'] === fil.term ||
+                    params['studyType']?.includes(fil.term),
+                });
+              } else {
+                filter = new Filter(fil);
+              }
+              return filter;
+            }),
+          }),
+        );
+        break;
+      }
+      case 'allArticlesByYear':
+      case 'diseaseArticleByYear': {
+        const fc = new FilterCategory({
+          parent: 'articles',
+          label: 'Articles by Year',
+          field: 'year',
+          values: key[1].map((fil: Partial<Filter>) => {
+            let filter: Filter;
+            if (params) {
+              filter = new Filter({
+                ...fil,
+                selected:
+                  params['year'] === fil.term ||
+                  params['year']?.includes(fil.term),
+              });
+            } else {
+              filter = new Filter(fil);
+            }
+            return filter;
+          }),
+        });
+        fc.values = fc.values.sort((a, b) =>
+          b.term.toString().localeCompare(a.term.toString()),
+        );
+        filters.push(fc);
+        break;
+      }
+    }
+  });
+  return filters;
 }
-*/

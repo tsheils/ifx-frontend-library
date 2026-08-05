@@ -86,15 +86,15 @@ export const DiseaseStaticFiltersQueryDocument = gql`
   query DiseaseStaticFiltersQuery($where: DiseaseWhere) {
     diseases(where: $where) {
       filterCounts {
+        diseaseArticleByYear {
+          count
+          term
+        }
         diseaseArticleByEpi {
           count
           term
         }
         diseaseArticleByNHS {
-          count
-          term
-        }
-        diseaseArticleByYear {
           count
           term
         }
@@ -152,14 +152,6 @@ export const DiseaseDynamicFiltersQueryDocument = gql`
     }
 
     diseaseArticleByYear(where: $where, articleWhere: $articleWhere) {
-      count
-      term
-    }
-    diseaseArticleByEpi(where: $where, articleWhere: $articleWhere) {
-      count
-      term
-    }
-    diseaseArticleByNHS(where: $where, articleWhere: $articleWhere) {
       count
       term
     }

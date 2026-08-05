@@ -116,7 +116,7 @@ export class AppComponent {
   selectDisease(event: Disease): void {
     const navigationExtras: NavigationExtras = {
       queryParams: {
-        id: event.gardId,
+        gardId: event.gardId,
       },
     };
     this.router.navigate(['/disease'], navigationExtras);

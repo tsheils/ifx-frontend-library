@@ -1,4 +1,5 @@
-export * from './lib/state/trials.actions';
+export * from './lib/trial.store';
+/*export * from './lib/state/trials.actions';
 export * from './lib/state/trials.reducer';
 export * as TrialEffects from './lib/state/trials.effects';
-export * as TrialSelectors from './lib/state/trials.selectors';
+export * as TrialSelectors from './lib/state/trials.selectors';*/

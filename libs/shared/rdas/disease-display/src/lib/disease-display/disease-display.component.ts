@@ -1,7 +1,7 @@
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ScrollDispatcher } from '@angular/cdk/overlay';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-import { ViewportScroller } from '@angular/common';
+import { JsonPipe, ViewportScroller } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -36,9 +36,9 @@ import { PhenotypeListComponent } from 'phenotype-display';
 import { ProjectListComponent } from 'project-display';
 import { ChartWrapperComponent } from 'chart-wrapper';
 import { RdasPanelTemplateComponent } from 'rdas-panel-template';
-import { ArticleSelectors } from 'article-store';
-import { ProjectSelectors } from 'project-store';
-import { TrialSelectors } from 'trial-store';
+import { ArticleStore } from 'article-store';
+import { ProjectStore } from 'project-store';
+import { ClinicalTrialStore } from 'trial-store';
 import { Store } from '@ngrx/store';
 
 @Component({
@@ -59,7 +59,7 @@ import { Store } from '@ngrx/store';
     MatTabsModule,
     ScrollingModule,
     RdasPanelTemplateComponent,
-    ChartWrapperComponent,
+    ChartWrapperComponent
   ],
 })
 export class DiseaseDisplayComponent
@@ -76,16 +76,19 @@ export class DiseaseDisplayComponent
   public scroller = inject(ViewportScroller);
   private scrollDispatcher = inject(ScrollDispatcher);
   private breakpointObserver = inject(BreakpointObserver);
+  readonly articleStore = inject(ArticleStore);
+  readonly projectStore = inject(ProjectStore);
+  readonly clinicalTrialStore = inject(ClinicalTrialStore);
 
   disease = input<Disease>();
-  trialsList = this.store.selectSignal(TrialSelectors.selectAllTrials);
-  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
-  projectsList = this.store.selectSignal(ProjectSelectors.selectAllProjects);
-  projectsCount = this.store.selectSignal(
-    ProjectSelectors.selectAllProjectsCount,
-  );
-  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
-  articlesList = this.store.selectSignal(ArticleSelectors.selectAllArticles);
+
+  articlesCount = this.articleStore.articleCounts;
+  articlesList = this.articleStore.articles;
+  projectsCount = this.projectStore.projectCounts;
+  projectsList = this.projectStore.projects;
+  clinicalTrialsCount = this.clinicalTrialStore.clinicalTrialCounts;
+  clinicalTrialsList = this.clinicalTrialStore.clinicalTrials;
+
   loaded = input<boolean | undefined>();
   filters = input<FilterCategory[]>();
   staticFilters = input<FilterCategory[]>();

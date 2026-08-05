@@ -7,7 +7,6 @@ import {
   Component,
   DestroyRef,
   inject,
-  OnDestroy,
   OnInit,
   signal,
   Signal,
@@ -34,11 +33,14 @@ import {
   DiseaseHeaderComponent,
 } from 'disease-display';
 import { ScrollToTopComponent } from 'scroll-to-top';
-import { DiseaseSelectors, FetchDiseaseActions } from 'disease-store';
-import { ArticleSelectors } from 'article-store';
-import { ProjectSelectors } from 'project-store';
-import { TrialSelectors } from 'trial-store';
+import {
+  DiseaseSelectors,
+  DiseaseStore,
+} from 'disease-store';
+import { ArticleStore } from 'article-store';
 import { Store } from '@ngrx/store';
+import { ProjectStore } from 'project-store';
+import { ClinicalTrialStore } from 'trial-store';
 
 @Component({
   selector: 'lib-rdas-disease-page',
@@ -78,8 +80,12 @@ import { Store } from '@ngrx/store';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RdasDiseasePageComponent implements OnInit, OnDestroy {
+export class RdasDiseasePageComponent implements OnInit {
   private readonly store = inject(Store);
+  private readonly articleStore = inject(ArticleStore);
+  private readonly diseaseStore = inject(DiseaseStore);
+  private readonly projectStore = inject(ProjectStore);
+  private readonly clinicalTrialStore = inject(ClinicalTrialStore);
   private readonly route = inject(ActivatedRoute);
   scroller = inject(ViewportScroller);
   scrollDispatcher = inject(ScrollDispatcher);
@@ -88,22 +94,17 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
   private router = inject(Router);
   destroyRef = inject(DestroyRef);
 
-  disease: Signal<Disease | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getSelected,
-  );
-  loaded: Signal<boolean | undefined> = this.store.selectSignal(
-    DiseaseSelectors.getDiseasesLoaded,
-  );
-  articlesCount = this.store.selectSignal(ArticleSelectors.getArticleCount);
+  loaded = this.diseaseStore.isLoading;
+
   diseaseFilters: Signal<FilterCategory[] | undefined> =
     this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
-  staticDiseaseFilters: Signal<FilterCategory[] | undefined> =
-    this.store.selectSignal(DiseaseSelectors.getStaticDiseaseFilters);
 
-  projectsCount = this.store.selectSignal(
-    ProjectSelectors.selectAllProjectsCount,
-  );
-  trialsCount = this.store.selectSignal(TrialSelectors.getTrialCount);
+  disease = this.diseaseStore.disease;
+  staticDiseaseFilters = this.diseaseStore.staticDiseaseFilters;
+  articlesCount = this.articleStore.articleCounts;
+  projectsCount = this.projectStore.projectCounts;
+  clinicalTrialsCount = this.clinicalTrialStore.clinicalTrialCounts;
+
   animationState = signal('in');
 
   activeElement = 'overview';
@@ -165,10 +166,5 @@ export class RdasDiseasePageComponent implements OnInit, OnDestroy {
 
   isActive(check: string): boolean {
     return this.activeElement === check;
-  }
-
-  ngOnDestroy() {
-    this.store.dispatch(FetchDiseaseActions.clearStaticDiseaseFilters());
-    // this.store.dispatch(FetchDiseaseActions.clearDisease());
   }
 }

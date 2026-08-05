@@ -1,1 +1,1 @@
-export * from './lib/gene-store/gene.store';
+export * from './lib/gene.store';

@@ -45,8 +45,11 @@ import { SharedUtilsFilterPanelComponent } from 'filter-panel';
 import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ScrollToTopComponent } from 'scroll-to-top';
 import { SharedUtilsSelectedFilterListComponent } from 'selected-filter-list';
-import { FetchFiltersActions, FilterSelectors } from 'filter-store';
-import { BrowseDiseaseListActions, DiseaseSelectors } from 'disease-store';
+import {
+  BrowseDiseaseListActions,
+  DiseaseSelectors,
+  DiseaseStore,
+} from 'disease-store';
 import { Store } from '@ngrx/store';
 import { TreeChartComponent } from 'tree-chart';
 import { GeneStore } from 'gene-store';
@@ -86,6 +89,7 @@ const navigationExtras: NavigationExtras = {
 export class RdasBrowseComponent implements OnInit, OnDestroy {
   readonly geneStore = inject(GeneStore);
   readonly phenotypeStore = inject(PhenotypeStore);
+  readonly DiseaseStore = inject(DiseaseStore);
   private readonly store = inject(Store);
   paginator = viewChild<MatPaginator>(MatPaginator);
   destroyRef = inject(DestroyRef);
@@ -94,9 +98,7 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
 
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
     const map = new Map<string, FilterCategory[]>();
-    const filtersL = this.store.selectSignal(
-      DiseaseSelectors.getAllDiseaseFilters,
-    );
+    const filtersL = this.DiseaseStore.allStaticFilters
     if (filtersL() && filtersL()?.length) {
       filtersL()?.forEach((filterCat) => {
         if (filterCat.parent) {

@@ -1,1 +1,1 @@
-export * from './lib/phenotype-store/phenotype.store';
+export * from './lib/phenotype.store';
