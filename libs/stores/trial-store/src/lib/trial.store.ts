@@ -19,13 +19,7 @@ import {
 import { Filter, FilterCategory, FilterResponse } from 'utils-models';
 import { computed, inject } from '@angular/core';
 import { Params } from '@angular/router';
-import {
-  switchMap,
-  pipe,
-  tap,
-  filter,
-  map,
-} from 'rxjs';
+import { switchMap, pipe, tap, filter, map } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Actions, ofType } from '@ngrx/effects';
@@ -61,7 +55,6 @@ const initialState: ClinicalTrialState = {
   isLoading: false,
   allClinicalTrialsCount: 0,
   clinicalTrialsCount: 0,
-
 };
 
 export const ClinicalTrialStore = signalStore(
@@ -75,105 +68,108 @@ export const ClinicalTrialStore = signalStore(
       };
     }),
   })),
-  withMethods((store,
-               clinicalTrialListQuery = inject(ClinicalTrialListQueryGQL),
-               clinicalTrialQuery = inject(ClinicalTrialQueryGQL)
-  ) => ({
-    loadClinicalTrials: rxMethod<Params>(
-      pipe(
-        tap(() => {
-          patchState(store, { isLoading: true });
-        }),
-        switchMap((params) => {
-          const query = queryFactory.getQuery(params);
-          return clinicalTrialListQuery
-            .watch({ variables: query.params })
-            .valueChanges.pipe(
-              tapResponse({
-                next: (clinicalTrials) => {
-                  if (clinicalTrials.dataState === 'complete') {
-                    const data = (<unknown>(
-                      clinicalTrials.data
-                    )) as ClinicalTrialQueryResponse;
-                    const disease = data.diseases![0];
-                    const clinicalTrialsList = disease.clinicalTrials.map(
-                      (clinicalTrial: Partial<ClinicalTrial>) => new ClinicalTrial(clinicalTrial),
-                    );
-                    patchState(store, (state) => {
-                      return {
-                        clinicalTrials: clinicalTrialsList,
-                        isLoading: false,
-                        allClinicalTrialsCount: disease.allCount,
-                        clinicalTrialsCount:
-                          disease.filteredCount.totalCount.count.nodes,
-                      };
-                    });
-                  }
-                },
-                error: (err) => {
-                  patchState(store, { isLoading: false });
-                  console.error(err);
-                },
-              }),
-            );
-        }),
-      ),
-    ),
-    loadClinicalTrial: rxMethod<Params>(
-      pipe(
-        tap(() => {
-          patchState(store, { isLoading: true });
-        }),
-        switchMap((params) => {
-          const query = queryFactory.getQuery(params);
-          return clinicalTrialQuery
-            .watch({ variables: query.params })
-            .valueChanges.pipe(
-              tapResponse({
-                next: (clinicalTrials) => {
-                  if (clinicalTrials.dataState === 'complete') {
-                    const data = (<unknown>(
-                      clinicalTrials.data
-                    )) as {clinicalTrials: ClinicalTrial[]};
-                    console.log(data)
-                    const clinicalTrial: ClinicalTrial = new ClinicalTrial(data.clinicalTrials[0]);
-                    console.log(clinicalTrial)
-                    patchState(store, (state) => {
-                      return {
-                        ...state,
-                        clinicalTrial: clinicalTrial,
-                        isLoading: false,
-                      };
-                    });
-                  }
-                },
-                error: (err) => {
-                  patchState(store, { isLoading: false });
-                  console.error(err);
-                },
-              }),
-            );
-        }),
-      ),
-    ),
-  })),
-  withHooks({
-    onInit(
+  withMethods(
+    (
       store,
-      actions$ = inject(Actions),
-    ) {
-      actions$.pipe(
-        ofType(ROUTER_NAVIGATED),
-        filter((r) => {
-          return (
-            !r.payload.routerState.url.includes('/diseases') &&
-            r.payload.routerState.url.includes('/disease')
-          );
-      }),
-        map((r)=> {
-          store.loadClinicalTrials(r.payload.routerState.root.queryParams);
-        })
-      ).subscribe();
+      clinicalTrialListQuery = inject(ClinicalTrialListQueryGQL),
+      clinicalTrialQuery = inject(ClinicalTrialQueryGQL),
+    ) => ({
+      loadClinicalTrials: rxMethod<Params>(
+        pipe(
+          tap(() => {
+            patchState(store, { isLoading: true });
+          }),
+          switchMap((params) => {
+            const query = queryFactory.getQuery(params);
+            return clinicalTrialListQuery
+              .watch({ variables: query.params })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (clinicalTrials) => {
+                    if (clinicalTrials.dataState === 'complete') {
+                      const data = (<unknown>(
+                        clinicalTrials.data
+                      )) as ClinicalTrialQueryResponse;
+                      const disease = data.diseases![0];
+                      const clinicalTrialsList = disease.clinicalTrials.map(
+                        (clinicalTrial: Partial<ClinicalTrial>) =>
+                          new ClinicalTrial(clinicalTrial),
+                      );
+                      patchState(store, (state) => {
+                        return {
+                          clinicalTrials: clinicalTrialsList,
+                          isLoading: false,
+                          allClinicalTrialsCount: disease.allCount,
+                          clinicalTrialsCount:
+                            disease.filteredCount.totalCount.count.nodes,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
+      ),
+      loadClinicalTrial: rxMethod<Params>(
+        pipe(
+          tap(() => {
+            patchState(store, { isLoading: true });
+          }),
+          switchMap((params) => {
+            const query = queryFactory.getQuery(params);
+            return clinicalTrialQuery
+              .watch({ variables: query.params })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (clinicalTrials) => {
+                    if (clinicalTrials.dataState === 'complete') {
+                      const data = (<unknown>clinicalTrials.data) as {
+                        clinicalTrials: ClinicalTrial[];
+                      };
+                      const clinicalTrial: ClinicalTrial = new ClinicalTrial(
+                        data.clinicalTrials[0],
+                      );
+                      patchState(store, (state) => {
+                        return {
+                          ...state,
+                          clinicalTrial: clinicalTrial,
+                          isLoading: false,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
+      ),
+    }),
+  ),
+  withHooks({
+    onInit(store, actions$ = inject(Actions)) {
+      actions$
+        .pipe(
+          ofType(ROUTER_NAVIGATED),
+          filter((r) => {
+            return (
+              !r.payload.routerState.url.includes('/diseases') &&
+              r.payload.routerState.url.includes('/disease')
+            );
+          }),
+          map((r) => {
+            store.loadClinicalTrials(r.payload.routerState.root.queryParams);
+          }),
+        )
+        .subscribe();
     },
   }),
 );

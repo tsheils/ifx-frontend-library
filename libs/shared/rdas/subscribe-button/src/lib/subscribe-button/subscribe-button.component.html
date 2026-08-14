@@ -1,17 +1,18 @@
 @if (subscribed()) {
   <button
-    mat-flat-button (click) = unSubscribe()
+    matButton="outlined"
+    (click)="unSubscribe()"
     class="subscription-button"
   >
     Unsubscribe
-      <mat-icon>notifications_off</mat-icon>
+    <mat-icon>notifications_off</mat-icon>
   </button>
 } @else {
   <button
     mat-flat-button
     (click)="subscribe()"
     class="subscribe-button"
-    [disabled]="!user()"
+    [disabled]="!subscriptions()"
   >
     <mat-icon>notifications_active</mat-icon>
     Subscribe
@@ -21,6 +22,7 @@
   matIconButton
   class="about-subscribe-button"
   matTooltip="Register for emailed alerts when data about this rare disease changes."
-  aria-label="Button that displays a tooltip when focused or hovered over">
+  aria-label="Button that displays a tooltip when focused or hovered over"
+>
   <mat-icon>question_mark</mat-icon>
 </button>

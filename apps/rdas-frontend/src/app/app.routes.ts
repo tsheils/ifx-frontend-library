@@ -1,76 +1,6 @@
-import {
-  ActivatedRouteSnapshot,
-  ResolveFn,
-  Route,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { Gene } from 'rdas-models';
-import { inject } from '@angular/core';
-import { GeneStore } from 'gene-store';
-import { PhenotypeStore } from 'phenotype-store';
-import { FilterCategory } from 'utils-models';
-import { ArticleStore } from 'article-store';
-import { ProjectStore } from 'project-store';
-import { ClinicalTrialStore } from 'trial-store';
-import { DiseaseStore } from 'disease-store';
-
-export const geneFilterResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot,
-  router: RouterStateSnapshot,
-) => {
-  const geneStore = inject(GeneStore);
-  const params = route.queryParams;
-  return geneStore.loadGeneFilters(params);
-};
-export const phenotypeFilterResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot,
-  router: RouterStateSnapshot,
-) => {
-  const phenotypeStore = inject(PhenotypeStore);
-  const params = route.queryParams;
-  return phenotypeStore.loadPhenotypeFilters(params);
-};
-
-export const articleResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot
-) => {
-  const articleStore = inject(ArticleStore);
-  return articleStore.loadArticle(route.queryParams);
-};
-
-export const projectResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot
-) => {
-  const projectStore = inject(ProjectStore);
-  return projectStore.loadProject(route.queryParams);
-};
-
-export const clinicalTrialResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot
-) => {
-  const clinicalTrialStore = inject(ClinicalTrialStore);
-  return clinicalTrialStore.loadClinicalTrial(route.queryParams);
-};
-
-export const allStaticDiseaseFiltersResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot
-) => {
-  const allStaticDiseaseFiltersStore = inject(DiseaseStore);
-  return allStaticDiseaseFiltersStore.loadAllDiseaseFilters({});
-};
-
-export const staticDiseaseFiltersResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot
-) => {
-  const staticDiseaseFiltersStore = inject(DiseaseStore);
-  return staticDiseaseFiltersStore.loadStaticDiseaseFilters(route.queryParams);
-};
-export const diseaseResolver: ResolveFn<any> = (
-  route: ActivatedRouteSnapshot
-) => {
-  const diseaseStore = inject(DiseaseStore);
-  return diseaseStore.loadDisease(route.queryParams);
-};
+import { Route } from '@angular/router';
+import * as Resolvers from './app.resolvers';
+import { diseaseSubscriptionResolver } from './app.resolvers';
 
 export const appRoutes: Route[] = [
   {
@@ -83,7 +13,8 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
-      allStaticFilters: allStaticDiseaseFiltersResolver,
+      allStaticFilters: Resolvers.allStaticDiseaseFiltersResolver,
+      diseases: Resolvers.diseaseListResolver,
       // //phenotypeFilters: phenotypeFilterResolver,
     },
     loadComponent: () =>
@@ -92,10 +23,11 @@ export const appRoutes: Route[] = [
   {
     path: 'disease',
     pathMatch: 'full',
-    runGuardsAndResolvers: 'pathParamsChange',
+    runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
-      staticFilters: staticDiseaseFiltersResolver,
-      disease: diseaseResolver
+      staticFilters: Resolvers.staticDiseaseFiltersResolver,
+      dynamicFilters: Resolvers.dynamicDiseaseFiltersResolver,
+      disease: Resolvers.diseaseResolver,
     },
     loadComponent: () =>
       import('rdas-disease-page').then((m) => m.RdasDiseasePageComponent),
@@ -125,6 +57,9 @@ export const appRoutes: Route[] = [
     path: 'subscriptions',
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
+    resolve: {
+      diseases: Resolvers.diseaseSubscriptionResolver,
+    },
     loadComponent: () =>
       import('rdas-subscriptions').then((m) => m.RdasSubscriptionsComponent),
   },
@@ -133,7 +68,7 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
-      article: articleResolver,
+      article: Resolvers.articleResolver,
     },
     loadComponent: () =>
       import('article-page').then((m) => m.ArticlePageComponent),
@@ -143,7 +78,7 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
-      project: projectResolver,
+      project: Resolvers.projectResolver,
     },
     loadComponent: () =>
       import('project-page').then((m) => m.ProjectPageComponent),
@@ -153,10 +88,9 @@ export const appRoutes: Route[] = [
     pathMatch: 'full',
     runGuardsAndResolvers: 'paramsOrQueryParamsChange',
     resolve: {
-      clinicalTrial: clinicalTrialResolver,
+      clinicalTrial: Resolvers.clinicalTrialResolver,
     },
-    loadComponent: () =>
-      import('rdas-trial-page').then((m) => m.RdasTrialPageComponent),
+    loadComponent: () => import('trial-page').then((m) => m.TrialPageComponent),
   },
   {
     path: 'apis/diseases',

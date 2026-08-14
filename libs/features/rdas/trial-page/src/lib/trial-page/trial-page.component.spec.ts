@@ -4,15 +4,15 @@ import { provideEffects } from '@ngrx/effects';
 import { provideStore, StoreModule } from '@ngrx/store';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 
-import { RdasTrialPageComponent } from './rdas-trial-page.component';
+import { TrialPageComponent } from './trial-page.component';
 
-describe('RdasTrialPageComponent', () => {
-  let component: RdasTrialPageComponent;
-  let fixture: ComponentFixture<RdasTrialPageComponent>;
+describe('TrialPageComponent', () => {
+  let component: TrialPageComponent;
+  let fixture: ComponentFixture<TrialPageComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [RdasTrialPageComponent, StoreModule],
+      imports: [TrialPageComponent, StoreModule],
       providers: [
         provideStore({
           trials: trialsReducer,
@@ -21,7 +21,7 @@ describe('RdasTrialPageComponent', () => {
         provideStoreDevtools({ maxAge: 25, logOnly: false }),
       ],
     });
-    fixture = TestBed.createComponent(RdasTrialPageComponent);
+    fixture = TestBed.createComponent(TrialPageComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

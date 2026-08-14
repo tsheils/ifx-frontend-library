@@ -143,3 +143,14 @@ export class DiseaseNode implements HierarchyNode {
 
   term: string;
 }
+
+export class Subscription {
+  diseaseName!: string;
+  gardId = '';
+  disease?: Disease;
+  alerts?: string[];
+
+  constructor(obj: Partial<Subscription>) {
+    Object.assign(this, obj);
+  }
+}

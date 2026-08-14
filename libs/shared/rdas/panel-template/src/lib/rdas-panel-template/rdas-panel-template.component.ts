@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   input,
   output,
   viewChild,
@@ -12,6 +13,7 @@ import {
   PageEvent,
 } from '@angular/material/paginator';
 import { Filter, FilterCategory } from 'utils-models';
+import { Disease } from 'rdas-models';
 import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
 import { SharedUtilsListFilterRowComponent } from 'list-filter-row';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
@@ -35,6 +37,13 @@ export class RdasPanelTemplateComponent {
   _id = input<string>();
   loaded = input<boolean | undefined>();
   message = input<string>();
+  disease = input<Disease>();
+  diseaseSubscription = computed(() => {
+    return {
+      gardName: this.disease()?.gardName,
+      gardId: this.disease()?.gardId,
+    };
+  });
   count = input<number>(0);
   showPagination = input<boolean>(true);
   listChange = output<{ [key: string]: unknown }>();

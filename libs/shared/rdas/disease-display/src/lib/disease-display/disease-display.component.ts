@@ -39,7 +39,6 @@ import { RdasPanelTemplateComponent } from 'rdas-panel-template';
 import { ArticleStore } from 'article-store';
 import { ProjectStore } from 'project-store';
 import { ClinicalTrialStore } from 'trial-store';
-import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'lib-disease-display',
@@ -59,7 +58,7 @@ import { Store } from '@ngrx/store';
     MatTabsModule,
     ScrollingModule,
     RdasPanelTemplateComponent,
-    ChartWrapperComponent
+    ChartWrapperComponent,
   ],
 })
 export class DiseaseDisplayComponent
@@ -71,8 +70,6 @@ export class DiseaseDisplayComponent
   private route = inject(ActivatedRoute);
   destroyRef = inject(DestroyRef);
   private changeRef = inject(ChangeDetectorRef);
-  private router = inject(Router);
-  private store = inject(Store);
   public scroller = inject(ViewportScroller);
   private scrollDispatcher = inject(ScrollDispatcher);
   private breakpointObserver = inject(BreakpointObserver);

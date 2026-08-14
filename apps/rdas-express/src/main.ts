@@ -35,7 +35,10 @@ const app = express();
 const httpServer = http.createServer(app);
 const driver = neo4j.driver(
   process.env.MEMGRAPH_HOST + ':' + process.env.MEMGRAPH_PORT,
-  neo4j.auth.basic(<string>process.env.MEMGRAPH_USERNAME, <string>process.env.MEMGRAPH_KEY),
+  neo4j.auth.basic(
+    <string>process.env.MEMGRAPH_USERNAME,
+    <string>process.env.MEMGRAPH_KEY,
+  ),
 );
 
 const assetPath = path.join(__dirname, 'assets', 'rdas-schema.graphql');

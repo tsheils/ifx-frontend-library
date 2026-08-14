@@ -1,11 +1,7 @@
 import { gql } from 'apollo-angular';
 import { TypedDocumentNode } from '@apollo/client';
 import { Params } from '@angular/router';
-import {
-  GeneSort,
-  GeneWhere,
-  SortDirection,
-} from './generated-types';
+import { GeneSort, GeneWhere, SortDirection } from './generated-types';
 
 export const GENEFILTERSQUERY = gql`
   query GeneFilters(

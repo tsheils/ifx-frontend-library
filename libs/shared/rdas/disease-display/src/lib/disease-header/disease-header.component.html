@@ -28,15 +28,17 @@
       <div class="width-sm-5 width-15">
         <lib-subscribe-button
           class="subscribed-button"
-          [subscriptionName]="disease()?.gardName"
-          [subscriptionId]="disease()?.gardId"
+          [subscriptionObject]="diseaseSubscription()"
         ></lib-subscribe-button>
       </div>
     </div>
     @if (animationState() === 'in') {
       <div class="row">
         <div class="width-75">
-          @if (disease()?.classificationLevel && disease()?.classificationLevel?.length) {
+          @if (
+            disease()?.classificationLevel &&
+            disease()?.classificationLevel?.length
+          ) {
             <div class="primary-chip-outlined">
               {{ disease()?.classificationLevel }}
             </div>

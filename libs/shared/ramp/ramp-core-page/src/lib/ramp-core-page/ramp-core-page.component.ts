@@ -7,14 +7,20 @@ import {
   inject,
   input,
   signal,
-  Signal
+  Signal,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { DomSanitizer, Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DataMap, DataProperty, OpenApiPath, QueryResultsData, VisualizationMap } from 'utils-models';
+import {
+  DataMap,
+  DataProperty,
+  OpenApiPath,
+  QueryResultsData,
+  VisualizationMap,
+} from 'utils-models';
 import { Store } from '@ngrx/store';
 import { FormSubsection, RampPage } from 'ramp';
 

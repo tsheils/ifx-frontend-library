@@ -29,6 +29,7 @@ class DiseaseFilterResponse {
   [key: string]: Filter[];
 }
 
+/*
 //for disease list browsing
 export const fetchDiseasesList$ = createEffect(
   (
@@ -75,7 +76,9 @@ export const fetchDiseasesList$ = createEffect(
   },
   { functional: true },
 );
+*/
 
+/*
 //for disease list in profile
 export const fetchDiseaseListFromIds$ = createEffect(
   (
@@ -112,7 +115,9 @@ export const fetchDiseaseListFromIds$ = createEffect(
   { functional: true },
 );
 
-//disease search typeahead
+*/
+
+/*//disease search typeahead
 export const searchDiseases$ = createEffect(
   (
     actions$ = inject(Actions),
@@ -150,7 +155,7 @@ export const searchDiseases$ = createEffect(
     );
   },
   { functional: true },
-);
+);*/
 
 /*//specific disease page
 export const loadDisease$ = createEffect(
@@ -319,7 +324,7 @@ export const loadAllDiseaseFilters$ = createEffect(
     );
   },
   { functional: true },
-);*//*
+);*/ /*
 export function _parseFilters(data: DiseaseFilterResponse, params?: Params) {
   const filters: FilterCategory[] = [];
   Object.entries(data).map((key) => {
@@ -550,7 +555,6 @@ export function _parseFilters(data: DiseaseFilterResponse, params?: Params) {
   return filters;
 }
 */
-
 
 /*
 export function _parseFilters(data: DiseaseFilterResponse, params?: Params) {
@@ -996,7 +1000,7 @@ function _addToTree(
 }
 */
 
-function _makePage(params: Params, total: { count: number } | number) {
+/*function _makePage(params: Params, total: { count: number } | number) {
   const pageSize: number = params['pageSize']
     ? (params['pageSize'] as number)
     : 10;
@@ -1007,4 +1011,4 @@ function _makePage(params: Params, total: { count: number } | number) {
     total: typeof total !== 'number' ? total.count : total,
   };
   return page;
-}
+}*/

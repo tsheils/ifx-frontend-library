@@ -8,29 +8,28 @@ import {
 } from '@ngrx/signals';
 import {
   AllDiseasesFieldCountsGQL,
- Disease,
-  DiseaseQueryFactory, DiseaseQueryGQL, DiseaseStaticFiltersQueryGQL,
+  Disease,
+  DiseaseDynamicFiltersQueryGQL,
+  DiseaseListQueryGQL,
+  DiseaseQueryFactory,
+  DiseaseQueryGQL,
+  DiseaseStaticFiltersQueryGQL,
+  DiseasesTypeaheadGQL,
 } from 'rdas-models';
 import {
   _parseFilters,
   Filter,
   FilterCategory,
   FilterResponse,
+  Page,
 } from 'utils-models';
 import { computed, inject } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
-import {
-  switchMap,
-  pipe,
-  tap,
-  filter,
-  map,
-} from 'rxjs';
+import { switchMap, pipe, tap, filter, map } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Actions, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED } from '@ngrx/router-store';
-
 
 const queryFactory = new DiseaseQueryFactory();
 
@@ -38,11 +37,14 @@ class DiseaseFilterResponse {
   [key: string]: Filter[];
 }
 
-
 type DiseaseState = {
   allStaticFilters: FilterCategory[];
   staticDiseaseFilters: FilterCategory[];
+  dynamicDiseaseFilters: FilterCategory[];
   disease: Disease;
+  diseases: Disease[];
+  typeahead: Disease[];
+  page: Page;
   isLoading: boolean; // has the DiseaseStore list been loaded
   error?: string | null; // last known error (if any)
 };
@@ -50,7 +52,11 @@ type DiseaseState = {
 const initialState: DiseaseState = {
   allStaticFilters: [{ label: 'diseases' } as FilterCategory],
   staticDiseaseFilters: [{ label: 'diseases' } as FilterCategory],
+  dynamicDiseaseFilters: [{ label: 'diseases' } as FilterCategory],
   disease: {} as Disease,
+  diseases: [] as Disease[],
+  typeahead: [] as Disease[],
+  page: {} as Page,
   isLoading: false,
 };
 
@@ -61,14 +67,20 @@ export const DiseaseStore = signalStore(
   withMethods(
     (
       store,
-      diseaseQuery= inject(DiseaseQueryGQL),
+      diseaseQuery = inject(DiseaseQueryGQL),
+      diseaseListQuery = inject(DiseaseListQueryGQL),
       staticFiltersQuery = inject(DiseaseStaticFiltersQueryGQL),
+      dynamicFiltersQuery = inject(DiseaseDynamicFiltersQueryGQL),
       allStaticFiltersQuery = inject(AllDiseasesFieldCountsGQL),
+      diseaseTypeaheadQuery = inject(DiseasesTypeaheadGQL),
     ) => ({
       loadDisease: rxMethod<Params>(
         pipe(
           tap(() => {
-            patchState(store, { isLoading: true });
+            patchState(store, {
+              disease: {} as Disease,
+              isLoading: true,
+            });
           }),
           switchMap((params) => {
             const query = queryFactory.getQuery(params);
@@ -79,7 +91,6 @@ export const DiseaseStore = signalStore(
               .valueChanges.pipe(
                 tapResponse({
                   next: (res) => {
-                    console.log(res);
                     if (res.dataState === 'complete') {
                       const data: {
                         diseases: Disease[];
@@ -108,6 +119,88 @@ export const DiseaseStore = signalStore(
         ),
       ),
 
+      loadDiseaseList: rxMethod<Params>(
+        pipe(
+          tap(() => {
+            patchState(store, { isLoading: true });
+          }),
+          switchMap((params) => {
+            const query = queryFactory.getQuery(params);
+            return diseaseListQuery
+              .watch({
+                variables: query.params,
+              })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (res) => {
+                    if (res.dataState === 'complete') {
+                      const data: {
+                        diseases: Disease[];
+                        total: { count: number } | number;
+                      } = (<unknown>res.data) as {
+                        diseases: Disease[];
+                        total: { count: number } | number;
+                      };
+                      const diseaseArr: Disease[] = data.diseases.map(
+                        (obj: Partial<Disease>) => new Disease(obj),
+                      );
+                      patchState(store, () => {
+                        return {
+                          diseases: diseaseArr,
+                          page: _makePage(params, data.total),
+                          isLoading: false,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
+      ),
+
+      diseaseTypeaheadList: rxMethod<{ term: string }>(
+        pipe(
+          switchMap((action: { term: string }) => {
+            return diseaseTypeaheadQuery
+              .watch({
+                variables: {
+                  searchString: action.term, //.split(' ').join('~ AND ') + '*',
+                  limit: 10,
+                },
+              })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (res) => {
+                    if (res.dataState === 'complete') {
+                      const data: {
+                        diseaseSearch: Disease[];
+                      } = (<unknown>res.data) as {
+                        diseaseSearch: Disease[];
+                      };
+                      const diseaseArr: Disease[] =
+                        data.diseaseSearch as Disease[];
+                      patchState(store, () => {
+                        return {
+                          typeahead: diseaseArr,
+                          isLoading: false,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
+      ),
       loadStaticDiseaseFilters: rxMethod<Params>(
         pipe(
           tap(() => {
@@ -122,7 +215,6 @@ export const DiseaseStore = signalStore(
               .valueChanges.pipe(
                 tapResponse({
                   next: (res) => {
-                    console.log(res);
                     if (res.dataState === 'complete') {
                       const data: {
                         diseases: Disease[];
@@ -152,7 +244,41 @@ export const DiseaseStore = signalStore(
           }),
         ),
       ),
-      loadAllDiseaseFilters: rxMethod(
+      loadDynamicDiseaseFilters: rxMethod<Params>(
+        pipe(
+          tap(() => {
+            patchState(store, { isLoading: true });
+          }),
+          switchMap((params) => {
+            const query = queryFactory.getDynamicFilterQuery(params);
+            return dynamicFiltersQuery
+              .watch({
+                variables: query.params,
+              })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (res) => {
+                    if (res.dataState === 'complete') {
+                      const data = (<unknown>res.data) as DiseaseFilterResponse;
+                      const filters = _parseFilters(data);
+                      patchState(store, () => {
+                        return {
+                          dynamicDiseaseFilters: filters,
+                          isLoading: false,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
+      ),
+      loadAllDiseaseFilters: rxMethod<void>(
         pipe(
           tap(() => {
             patchState(store, { isLoading: true });
@@ -196,3 +322,16 @@ export const DiseaseStore = signalStore(
    // onInit(store, actions$ = inject(Actions)) {},}),
 */
 );
+
+function _makePage(params: Params, total: { count: number } | number) {
+  const pageSize: number = params['pageSize']
+    ? (params['pageSize'] as number)
+    : 10;
+  const pageIndex: number = params['pageIndex'] ? params['pageIndex'] - 1 : 0;
+  const page: Page = {
+    pageSize: pageSize,
+    pageIndex: pageIndex,
+    total: typeof total !== 'number' ? total.count : total,
+  };
+  return page;
+}

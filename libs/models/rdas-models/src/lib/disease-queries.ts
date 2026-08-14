@@ -63,7 +63,6 @@ export const DISEASEQUERY = gql`
       omim
       orphanet
       synonyms
-      umls
       doid
       ncit
       sctid
@@ -166,14 +165,6 @@ export const DISEASEDYNAMICFILTERSQUERY = gql`
     }
 
     diseaseArticleByYear(where: $where, articleWhere: $articleWhere) {
-      count
-      term
-    }
-    diseaseArticleByEpi(where: $where, articleWhere: $articleWhere) {
-      count
-      term
-    }
-    diseaseArticleByNHS(where: $where, articleWhere: $articleWhere) {
       count
       term
     }
@@ -430,8 +421,8 @@ export class DiseaseQueryFactory {
             if (typeof val === 'string') {
               val = Number.parseInt(params['year']);
             } else if (typeof params['year'] === 'object') {
-              val = params['year'].map(
-                (year: string | number) => Number.parseInt(<string>year),
+              val = params['year'].map((year: string | number) =>
+                Number.parseInt(<string>year),
               );
             }
             this.params.articleWhere.publicationYear = {

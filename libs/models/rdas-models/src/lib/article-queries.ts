@@ -229,8 +229,8 @@ export class ArticleQueryFactory {
           if (typeof val === 'string') {
             val = Number.parseInt(params['year']);
           } else if (typeof params['year'] === 'object') {
-            val = params['year'].map(
-              (year: string | number) => Number.parseInt(<string>year),
+            val = params['year'].map((year: string | number) =>
+              Number.parseInt(<string>year),
             );
           }
           if (!this.params.articleWhere) {

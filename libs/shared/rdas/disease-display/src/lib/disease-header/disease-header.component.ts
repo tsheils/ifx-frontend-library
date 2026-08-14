@@ -43,6 +43,12 @@ export class DiseaseHeaderComponent implements OnInit {
   animationState = signal('in');
 
   disease = input<Disease>();
+  diseaseSubscription = computed(() => {
+    return {
+      gardName: this.disease()?.gardName,
+      gardId: this.disease()?.gardId,
+    };
+  });
   parsedId = computed(() => {
     let ret = 0;
     const gardId: string | undefined = this.disease()?.gardId;

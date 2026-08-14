@@ -1,7 +1,7 @@
 {
-  "name": "features-rdas-rdas-trial-page",
+  "name": "features-trial-page",
   "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/features/rdas/rdas-trial-page/src",
+  "sourceRoot": "libs/features/rdas/trial-page/src",
   "prefix": "ifx-frontend-library",
   "projectType": "library",
   "tags": [],
@@ -10,7 +10,7 @@
       "executor": "@nx/vitest:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../../../coverage/libs/features/rdas/rdas-trial-page"
+        "reportsDirectory": "../../../../coverage/libs/features/rdas/trial-page"
       }
     },
     "lint": {

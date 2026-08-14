@@ -29,6 +29,7 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatTooltip } from '@angular/material/tooltip';
 import {
+  ActivatedRoute,
   Event,
   NavigationEnd,
   NavigationExtras,
@@ -45,12 +46,7 @@ import { SharedUtilsFilterPanelComponent } from 'filter-panel';
 import { LoadingSpinnerComponent } from 'loading-spinner';
 import { ScrollToTopComponent } from 'scroll-to-top';
 import { SharedUtilsSelectedFilterListComponent } from 'selected-filter-list';
-import {
-  BrowseDiseaseListActions,
-  DiseaseSelectors,
-  DiseaseStore,
-} from 'disease-store';
-import { Store } from '@ngrx/store';
+import { DiseaseStore } from 'disease-store';
 import { TreeChartComponent } from 'tree-chart';
 import { GeneStore } from 'gene-store';
 import { PhenotypeStore } from 'phenotype-store';
@@ -89,16 +85,16 @@ const navigationExtras: NavigationExtras = {
 export class RdasBrowseComponent implements OnInit, OnDestroy {
   readonly geneStore = inject(GeneStore);
   readonly phenotypeStore = inject(PhenotypeStore);
-  readonly DiseaseStore = inject(DiseaseStore);
-  private readonly store = inject(Store);
+  readonly diseaseStore = inject(DiseaseStore);
   paginator = viewChild<MatPaginator>(MatPaginator);
   destroyRef = inject(DestroyRef);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   protected dom = inject(DOCUMENT);
 
   filterMap: Signal<Map<string, FilterCategory[]>> = computed(() => {
     const map = new Map<string, FilterCategory[]>();
-    const filtersL = this.DiseaseStore.allStaticFilters
+    const filtersL = this.diseaseStore.allStaticFilters;
     if (filtersL() && filtersL()?.length) {
       filtersL()?.forEach((filterCat) => {
         if (filterCat.parent) {
@@ -116,9 +112,9 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     }
     return map;
   });
-  page = this.store.selectSignal(DiseaseSelectors.getDiseasesPage);
-  loaded = this.store.selectSignal(DiseaseSelectors.getDiseasesLoaded);
-  diseases = this.store.selectSignal(DiseaseSelectors.getAllDiseases);
+  page = this.diseaseStore.page;
+  loaded = this.diseaseStore.isLoading;
+  diseases = this.diseaseStore.diseases;
   //  diseaseTree = this.store.selectSignal(DiseaseSelectors.getDiseaseTree);
   filters = computed(() => {
     const filtersMap = new Map<string, FilterCategory | undefined>([
@@ -156,9 +152,6 @@ export class RdasBrowseComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((e: Event) => {
-        if (e instanceof NavigationStart) {
-          this.store.dispatch(BrowseDiseaseListActions.setLoading());
-        }
         if (e instanceof NavigationEnd) {
           this.selectedValues.set(undefined);
           this.fetchParameters();

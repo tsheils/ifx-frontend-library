@@ -104,6 +104,7 @@
         [count]="articlesCount().currentArticlesCount"
         [filters]="filterMap().get('articles')!"
         [message]="'No Articles Found'"
+        [disease]="disease()"
         [loaded]="loaded()"
         (listChange)="fetchList($event, 'articles')"
       >
@@ -121,7 +122,8 @@
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >NIH-funded Projects {{ projectsCount().currentProjectsCount }}</span
+            >NIH-funded Projects
+            {{ projectsCount().currentProjectsCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -129,6 +131,7 @@
         [_id]="'projects'"
         [count]="projectsCount().currentProjectsCount"
         [message]="'No NIH Funded Projects Available'"
+        [disease]="disease()"
         (listChange)="fetchList($event, 'projects')"
       >
         <div class="data-list">
@@ -138,11 +141,15 @@
     </mat-expansion-panel>
   </div>
   <div class="disease-display-panel" id="trials" #trials #scrollSection>
-    <mat-expansion-panel [disabled]="!clinicalTrialsCount()" [expanded]="clinicalTrialsCount()">
+    <mat-expansion-panel
+      [disabled]="!clinicalTrialsCount()"
+      [expanded]="clinicalTrialsCount()"
+    >
       <mat-expansion-panel-header>
         <mat-panel-title>
           <span class="disease-accordion-title bottom-border-primary"
-            >Clinical Trials {{ clinicalTrialsCount().currentClinicalTrialsCount }}</span
+            >Clinical Trials
+            {{ clinicalTrialsCount().currentClinicalTrialsCount }}</span
           >
         </mat-panel-title>
       </mat-expansion-panel-header>
@@ -152,6 +159,7 @@
         [count]="clinicalTrialsCount().currentClinicalTrialsCount"
         [filters]="filterMap().get('trials')!"
         [loaded]="loaded()"
+        [disease]="disease()"
         [message]="'No Clinical Trial Data Available'"
         (listChange)="fetchList($event, 'trials')"
       >

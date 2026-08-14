@@ -6,11 +6,11 @@ import { ClinicalTrialStore } from 'trial-store';
 @Component({
   selector: 'lib-trial-page',
   imports: [CommonModule, ClinicalTrialsDetailsComponent],
-  templateUrl: './rdas-trial-page.component.html',
-  styleUrls: ['./rdas-trial-page.component.scss'],
+  templateUrl: './trial-page.component.html',
+  styleUrls: ['./trial-page.component.scss'],
   standalone: true,
 })
-export class RdasTrialPageComponent {
+export class TrialPageComponent {
   private readonly clinicalTrialStore = inject(ClinicalTrialStore);
   trial = this.clinicalTrialStore.clinicalTrial;
 }

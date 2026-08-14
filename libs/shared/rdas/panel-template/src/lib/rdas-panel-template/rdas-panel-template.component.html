@@ -19,7 +19,9 @@
 @if (count() > 0) {
   <ng-content select=".data-list"></ng-content>
 } @else {
+  {{ diseaseSubscription() | json }}
   <lib-shared-utils-data-not-found
+    [subscription]="diseaseSubscription()"
     [message]="message()"
   ></lib-shared-utils-data-not-found>
 }

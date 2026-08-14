@@ -105,7 +105,7 @@ export class AppComponent {
           link: 'apis/history',
           label: 'Natural History',
         },
-/*        {
+        /*        {
           link: 'apis/abstract-abstraction',
           label: 'Abstract Extraction',
         },*/
@@ -123,12 +123,14 @@ export class AppComponent {
   }
 
   searchDiseaseString(event: string): void {
-    const navigationExtras: NavigationExtras = {
-      queryParams: {
-        q: event,
-      },
-    };
-    this.router.navigate(['/diseases'], navigationExtras);
+    if (event) {
+      const navigationExtras: NavigationExtras = {
+        queryParams: {
+          q: event,
+        },
+      };
+      this.router.navigate(['/diseases'], navigationExtras);
+    }
   }
 
   closeSidenav() {

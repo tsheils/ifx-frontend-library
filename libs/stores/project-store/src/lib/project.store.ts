@@ -10,18 +10,13 @@ import {
   Project,
   CoreProjectListQueryGQL,
   ProjectQueryFactory,
-  CoreProjectQueryGQL, CoreProject,
+  CoreProjectQueryGQL,
+  CoreProject,
 } from 'rdas-models';
 import { Filter, FilterCategory, FilterResponse } from 'utils-models';
 import { computed, inject } from '@angular/core';
 import { Params } from '@angular/router';
-import {
-  switchMap,
-  pipe,
-  tap,
-  filter,
-  map,
-} from 'rxjs';
+import { switchMap, pipe, tap, filter, map } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { Actions, ofType } from '@ngrx/effects';
@@ -71,107 +66,112 @@ export const ProjectStore = signalStore(
       };
     }),
   })),
-  withMethods((store,
-               projectListQuery = inject(CoreProjectListQueryGQL),
-               projectQuery = inject(CoreProjectQueryGQL)
-  ) => ({
-    loadProjects: rxMethod<Params>(
-      pipe(
-        tap(() => {
-          patchState(store, { isLoading: true });
-        }),
-        switchMap((params) => {
-          const query = queryFactory.getQuery(params);
-          return projectListQuery
-            .watch({ variables: query.params })
-            .valueChanges.pipe(
-              tapResponse({
-                next: (projects) => {
-                  if (projects.dataState === 'complete') {
-                    const data = (<unknown>projects.data as ProjectQueryResponse).diseases[0];
-                    const coreProjectsList = data.coreProjects.map(
-                      (project: Partial<CoreProject>) =>
-                        new CoreProject({
-                          ...project,
-                          subProjectsCount:
-                            project._subProjectsCount!.totalCount,
-                        }),
-                    );
-                    patchState(store, (state) => {
-                      return {
-                        projects: coreProjectsList,
-                        isLoading: false,
-                        projectsCount: data.countCoreProjects,
-                        allProjectsCount: data.countCoreProjects,
-                      };
-                    });
-                  }
-                },
-                error: (err) => {
-                  patchState(store, { isLoading: false });
-                  console.error(err);
-                },
-              }),
-            );
-        }),
+  withMethods(
+    (
+      store,
+      projectListQuery = inject(CoreProjectListQueryGQL),
+      projectQuery = inject(CoreProjectQueryGQL),
+    ) => ({
+      loadProjects: rxMethod<Params>(
+        pipe(
+          tap(() => {
+            patchState(store, { isLoading: true });
+          }),
+          switchMap((params) => {
+            const query = queryFactory.getQuery(params);
+            return projectListQuery
+              .watch({ variables: query.params })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (projects) => {
+                    if (projects.dataState === 'complete') {
+                      const data = (
+                        (<unknown>projects.data) as ProjectQueryResponse
+                      ).diseases[0];
+                      const coreProjectsList = data.coreProjects.map(
+                        (project: Partial<CoreProject>) =>
+                          new CoreProject({
+                            ...project,
+                            subProjectsCount:
+                              project._subProjectsCount!.totalCount,
+                          }),
+                      );
+                      patchState(store, (state) => {
+                        return {
+                          projects: coreProjectsList,
+                          isLoading: false,
+                          projectsCount: data.countCoreProjects,
+                          allProjectsCount: data.countCoreProjects,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
       ),
-    ),
-    loadProject: rxMethod<Params>(
-      pipe(
-        tap(() => {
-          patchState(store, { isLoading: true });
-        }),
-        switchMap((params) => {
-          const query = queryFactory.getQuery(params);
-          return projectQuery
-            .watch({ variables: query.params })
-            .valueChanges.pipe(
-              tapResponse({
-                next: (projects) => {
-                  if (projects.dataState === 'complete') {
-                    const data: { coreProjects: CoreProject[] } =
-                      <unknown>projects.data as {
+      loadProject: rxMethod<Params>(
+        pipe(
+          tap(() => {
+            patchState(store, { isLoading: true });
+          }),
+          switchMap((params) => {
+            const query = queryFactory.getQuery(params);
+            return projectQuery
+              .watch({ variables: query.params })
+              .valueChanges.pipe(
+                tapResponse({
+                  next: (projects) => {
+                    if (projects.dataState === 'complete') {
+                      const data: { coreProjects: CoreProject[] } = (<unknown>(
+                        projects.data
+                      )) as {
                         coreProjects: CoreProject[];
                       };
                       const project: CoreProject = new CoreProject(
                         data.coreProjects[0],
                       );
-                    patchState(store, (state) => {
-                      return {
-                        ...state,
-                        project: project,
-                        isLoading: false,
-                      };
-                    });
-                  }
-                },
-                error: (err) => {
-                  patchState(store, { isLoading: false });
-                  console.error(err);
-                },
-              }),
-            );
-        }),
+                      patchState(store, (state) => {
+                        return {
+                          ...state,
+                          project: project,
+                          isLoading: false,
+                        };
+                      });
+                    }
+                  },
+                  error: (err) => {
+                    patchState(store, { isLoading: false });
+                    console.error(err);
+                  },
+                }),
+              );
+          }),
+        ),
       ),
-    ),
-  })),
+    }),
+  ),
   withHooks({
-    onInit(
-      store,
-      actions$ = inject(Actions),
-    ) {
-      actions$.pipe(
-        ofType(ROUTER_NAVIGATED),
-        filter((r) => {
-          return (
-            !r.payload.routerState.url.includes('/diseases') &&
-            r.payload.routerState.url.includes('/disease')
-          );
-      }),
-        map((r)=> {
-          store.loadProjects(r.payload.routerState.root.queryParams);
-        })
-      ).subscribe();
+    onInit(store, actions$ = inject(Actions)) {
+      actions$
+        .pipe(
+          ofType(ROUTER_NAVIGATED),
+          filter((r) => {
+            return (
+              !r.payload.routerState.url.includes('/diseases') &&
+              r.payload.routerState.url.includes('/disease')
+            );
+          }),
+          map((r) => {
+            store.loadProjects(r.payload.routerState.root.queryParams);
+          }),
+        )
+        .subscribe();
     },
   }),
 );

@@ -18,6 +18,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { PhenotypeAssociation } from 'rdas-models';
 import { SharedUtilsDataNotFoundComponent } from 'data-not-found';
 import { ExternalLinkComponent } from 'external-link';
+import { RdasPanelTemplateComponent } from 'rdas-panel-template';
 
 @Component({
   selector: 'lib-phenotype-list',
@@ -31,6 +32,7 @@ import { ExternalLinkComponent } from 'external-link';
     SharedUtilsDataNotFoundComponent,
     ExternalLinkComponent,
     MatTooltip,
+    RdasPanelTemplateComponent,
   ],
   templateUrl: './phenotype-list.component.html',
   styleUrls: ['./phenotype-list.component.scss'],

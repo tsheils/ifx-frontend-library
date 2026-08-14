@@ -33,12 +33,8 @@ import {
   DiseaseHeaderComponent,
 } from 'disease-display';
 import { ScrollToTopComponent } from 'scroll-to-top';
-import {
-  DiseaseSelectors,
-  DiseaseStore,
-} from 'disease-store';
+import { DiseaseSelectors, DiseaseStore } from 'disease-store';
 import { ArticleStore } from 'article-store';
-import { Store } from '@ngrx/store';
 import { ProjectStore } from 'project-store';
 import { ClinicalTrialStore } from 'trial-store';
 
@@ -81,7 +77,6 @@ import { ClinicalTrialStore } from 'trial-store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdasDiseasePageComponent implements OnInit {
-  private readonly store = inject(Store);
   private readonly articleStore = inject(ArticleStore);
   private readonly diseaseStore = inject(DiseaseStore);
   private readonly projectStore = inject(ProjectStore);
@@ -97,7 +92,7 @@ export class RdasDiseasePageComponent implements OnInit {
   loaded = this.diseaseStore.isLoading;
 
   diseaseFilters: Signal<FilterCategory[] | undefined> =
-    this.store.selectSignal(DiseaseSelectors.getDiseaseFilters);
+    this.diseaseStore.dynamicDiseaseFilters;
 
   disease = this.diseaseStore.disease;
   staticDiseaseFilters = this.diseaseStore.staticDiseaseFilters;
