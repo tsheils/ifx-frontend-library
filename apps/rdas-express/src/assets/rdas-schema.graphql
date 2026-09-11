@@ -142,7 +142,7 @@ type ClinicalTrial @node {
   hasInvestigatedCondition: [Condition!]!
     @relationship(type: "has_investigated_condition", direction: OUT)
   hasClinicalTrial: [Disease!]!
-    @relationship(type: "has_clinical_trial", direction: OUT)
+    @relationship(type: "has_clinical_trial", direction: IN)
 }
 
 type Condition @node {
@@ -163,8 +163,8 @@ type CoreProject @node {
   hasPatent: [Patent!]! @relationship(type: "has_patent", direction: OUT)
   hasSubproject: [Project!]!
     @relationship(type: "has_subproject", direction: OUT)
-  hasMentionUnder: [Disease!]!
-    @relationship(type: "has_mention_under", direction: IN)
+  hasCoreProject: [Disease!]!
+    @relationship(type: "has_core_project", direction: IN)
 }
 
 type Disease @node {
@@ -204,7 +204,6 @@ type Disease @node {
       direction: OUT
       properties: "AssociatedWithGeneProperties"
     )
-
   hasPhenotype: [Phenotype!]!
     @relationship(
       type: "has_phenotype"
@@ -212,13 +211,15 @@ type Disease @node {
       properties: "HasPhenotypeProperties"
     )
   hasClinicalTrial: [ClinicalTrial!]!
-    @relationship(type: "has_clinical_trial", direction: IN)
+    @relationship(type: "has_clinical_trial", direction: OUT)
   hasMappedCondition: [Condition!]!
     @relationship(type: "has_mapped_condition", direction: IN)
   hasMentionIn: [Article!]!
     @relationship(type: "has_mention_in", direction: OUT)
-  hasMentionUnder: [CoreProject!]!
-    @relationship(type: "has_mention_under", direction: OUT)
+  hasCoreProject: [CoreProject!]!
+    @relationship(type: "has_core_project", direction: OUT)
+  hasResearchedProject: [Project!]!
+    @relationship(type: "has_researched_disease", direction: IN)
 }
 
 type Drug @node {
@@ -395,9 +396,9 @@ type Project @node {
     @relationship(type: "has_investigator", direction: OUT)
   hasContact: [Agent!]! @relationship(type: "has_contact", direction: OUT)
   hasCoreProject: [CoreProject!]!
-    @relationship(type: "has_subproject", direction: IN)
+    @relationship(type: "has_subproject", direction: OUT)
   hasResearchedDisease: [Disease!]!
-    @relationship(type: "has_researched_disease", direction: IN)
+    @relationship(type: "has_researched_disease", direction: OUT)
 }
 
 type PubtatorAnnotation @node {
@@ -535,7 +536,7 @@ type Query {
   ): [FilterCount]
     @cypher(
       statement: """
-      MATCH (n:Disease)<-[m:has_clinical_trial]-(cl:ClinicalTrial)
+      MATCH (n:Disease)-[m:has_clinical_trial]->(cl:ClinicalTrial)
       WHERE n.gardId = $where.gardId.eq
       AND (cl.studyType IN $clinicalTrialWhere.studyType.in OR $clinicalTrialWhere.studyType.in IS NULL)
       AND (cl.phase IN $clinicalTrialWhere.phase.in OR $clinicalTrialWhere.phase.in IS NULL)
@@ -553,7 +554,7 @@ type Query {
   ): [FilterCount]
     @cypher(
       statement: """
-      MATCH (n:Disease)<-[m:has_clinical_trial]-(cl:ClinicalTrial)
+      MATCH (n:Disease)-[m:has_clinical_trial]->(cl:ClinicalTrial)
       WHERE n.gardId = $where.gardId.eq
       AND (cl.studyType IN $clinicalTrialWhere.studyType.in OR $clinicalTrialWhere.studyType.in IS NULL)
       AND (cl.overallStatus IN $clinicalTrialWhere.overallStatus.in OR $clinicalTrialWhere.overallStatus.in IS NULL)
@@ -571,7 +572,7 @@ type Query {
   ): [FilterCount]
     @cypher(
       statement: """
-      MATCH (n:Disease)<-[m:has_clinical_trial]-(cl:ClinicalTrial)
+      MATCH (n:Disease)-[m:has_clinical_trial]->(cl:ClinicalTrial)
       WHERE n.gardId = $where.gardId.eq
       AND (cl.overallStatus IN $clinicalTrialWhere.overallStatus.in OR $clinicalTrialWhere.overallStatus.in IS NULL)
       AND (cl.phase IN $clinicalTrialWhere.phase.in OR $clinicalTrialWhere.phase.in IS NULL)

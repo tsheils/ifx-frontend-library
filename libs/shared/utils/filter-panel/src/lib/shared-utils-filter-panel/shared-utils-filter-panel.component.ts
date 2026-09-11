@@ -10,6 +10,7 @@ import {
   OnInit,
   output,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
@@ -22,7 +23,6 @@ import { MatInput, MatInputModule } from '@angular/material/input';
 import { Filter, FilterCategory } from 'utils-models';
 import { HighlightPipe } from 'highlight-pipe';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
-import { LoadingSpinnerComponent } from 'loading-spinner';
 
 @Component({
   selector: 'lib-shared-utils-filter-panel',
@@ -37,19 +37,24 @@ import { LoadingSpinnerComponent } from 'loading-spinner';
     HighlightPipe,
     MatButtonModule,
     MatIconModule,
-    LoadingSpinnerComponent,
   ],
   templateUrl: './shared-utils-filter-panel.component.html',
   styleUrls: ['./shared-utils-filter-panel.component.scss'],
   standalone: true,
+  encapsulation: ViewEncapsulation.None,
 })
 export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
   destroyRef = inject(DestroyRef);
   showSearch = input(true);
   searchInput = viewChild<MatInput>(MatInput);
   filter = input<FilterCategory>();
-  filterSelectionChange =
-    output<{ label: string; values: (string | number | boolean)[] }[]>();
+  filterSelectionChange = output<
+    {
+      label: string;
+      term?: string | number | boolean;
+      values: (string | number | boolean)[];
+    }[]
+  >();
   filterChange = output<{
     label: string;
     term?: string | number | boolean;
@@ -69,6 +74,7 @@ export class SharedUtilsFilterPanelComponent implements OnInit, OnChanges {
       this.filterSelectionChange.emit([
         {
           label: <string>this.filter()?.label,
+          term: <string>this.filter()?.field,
           values: this.filterSelection.selected,
         },
       ]);

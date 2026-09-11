@@ -1,13 +1,10 @@
 import {
   patchState,
   signalStore,
-  withComputed,
-  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
 import {
-  AllDiseasesFieldCountsGQL,
   Disease,
   DiseaseDynamicFiltersQueryGQL,
   DiseaseListQueryGQL,
@@ -15,21 +12,19 @@ import {
   DiseaseQueryGQL,
   DiseaseStaticFiltersQueryGQL,
   DiseasesTypeaheadGQL,
+  FieldCountsGQL,
 } from 'rdas-models';
 import {
   _parseFilters,
   Filter,
   FilterCategory,
-  FilterResponse,
   Page,
 } from 'utils-models';
-import { computed, inject } from '@angular/core';
-import { ActivatedRoute, Params, Router } from '@angular/router';
-import { switchMap, pipe, tap, filter, map } from 'rxjs';
+import { inject } from '@angular/core';
+import { Params } from '@angular/router';
+import { switchMap, pipe, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { Actions, ofType } from '@ngrx/effects';
-import { ROUTER_NAVIGATED } from '@ngrx/router-store';
 
 const queryFactory = new DiseaseQueryFactory();
 
@@ -71,7 +66,7 @@ export const DiseaseStore = signalStore(
       diseaseListQuery = inject(DiseaseListQueryGQL),
       staticFiltersQuery = inject(DiseaseStaticFiltersQueryGQL),
       dynamicFiltersQuery = inject(DiseaseDynamicFiltersQueryGQL),
-      allStaticFiltersQuery = inject(AllDiseasesFieldCountsGQL),
+      allStaticFiltersQuery = inject(FieldCountsGQL),
       diseaseTypeaheadQuery = inject(DiseasesTypeaheadGQL),
     ) => ({
       loadDisease: rxMethod<Params>(

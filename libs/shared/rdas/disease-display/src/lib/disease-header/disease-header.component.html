@@ -1,6 +1,5 @@
 <div class="disease-header-section">
-  <!--[@shrinkOnScroll]="animationState()">-->
-  <div class="header-background">
+  <div class="header-background" [ngClass]="animationState()">
     <img
       ngSrc="/assets/disease-display/graph-background-crop.webp"
       alt="disease header image"
@@ -32,7 +31,7 @@
         ></lib-subscribe-button>
       </div>
     </div>
-    @if (animationState() === 'in') {
+    @if (animationState() === 'full-height-animate') {
       <div class="row">
         <div class="width-75">
           @if (

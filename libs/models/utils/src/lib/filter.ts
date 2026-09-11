@@ -130,6 +130,7 @@ export function _parseFilters(
             parent: 'articles',
             label: 'Epidemiology Articles',
             field: 'isEpi',
+            formType: 'boolean',
             values: key[1].map((fil: Partial<Filter>) => {
               const filter: Filter = new Filter(fil);
               filter.term = JSON.parse(<string>filter.term);
@@ -149,6 +150,7 @@ export function _parseFilters(
             parent: 'articles',
             label: 'Natural Health Study Articles',
             field: 'isNHS',
+            formType: 'boolean',
             values: key[1].map((fil: Partial<Filter>) => {
               const filter: Filter = new Filter(fil);
               filter.term = JSON.parse(<string>filter.term);

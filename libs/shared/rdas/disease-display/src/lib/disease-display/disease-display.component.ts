@@ -174,6 +174,7 @@ export class DiseaseDisplayComponent
   }
 
   setFilterMap(filtersL: FilterCategory[] | undefined) {
+    console.log(filtersL)
     const map = new Map<string, FilterCategory[]>();
     if (filtersL && filtersL.length) {
       filtersL.forEach((filterCat) => {
@@ -190,6 +191,7 @@ export class DiseaseDisplayComponent
         }
       });
     }
+    console.log(map)
     return map;
   }
 }

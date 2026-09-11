@@ -55,8 +55,8 @@ export const COREPROJECTLISTQUERY = gql`
   query CoreProjectListQuery(
     $diseaseWhere: DiseaseWhere
     $hasSubprojectSort: [ProjectSort!]
-    $hasMentionUnderLimit: Int
-    $hasMentionUnderOffset: Int
+    $hasMentionInLimit: Int
+    $hasMentionInOffset: Int
     $hasSubprojectLimit: Int
   ) {
     diseases(where: $diseaseWhere) {
@@ -64,9 +64,9 @@ export const COREPROJECTLISTQUERY = gql`
       countProjects
       gardId
       gardName
-      coreProjects: hasMentionUnder(
-        limit: $hasMentionUnderLimit
-        offset: $hasMentionUnderOffset
+      coreProjects: hasCoreProject(
+        limit: $hasMentionInLimit
+        offset: $hasMentionInOffset
       ) {
         coreProjectNumber
         _subProjectsCount: hasSubprojectConnection {
@@ -89,8 +89,8 @@ export class ProjectQueryFactory {
   query!: TypedDocumentNode<unknown, unknown>;
   params!: {
     hasSubprojectSort?: ProjectSort[];
-    hasMentionUnderLimit?: number;
-    hasMentionUnderOffset?: number;
+    hasMentionInLimit?: number;
+    hasMentionInOffset?: number;
     hasSubprojectLimit?: number;
     diseaseWhere?: DiseaseWhere;
     coreProjectWhere?: CoreProjectWhere;
@@ -108,8 +108,8 @@ export class ProjectQueryFactory {
       return COREPROJECTQUERY;
     } else {
       this.params = {};
-      this.params.hasMentionUnderLimit = 10;
-      this.params.hasMentionUnderOffset = 0;
+      this.params.hasMentionInLimit = 10;
+      this.params.hasMentionInOffset = 0;
       this.params.hasSubprojectLimit = 1;
       this.params.hasSubprojectSort = [
         { fundingYear: 'DESC' as SortDirection },
@@ -122,13 +122,13 @@ export class ProjectQueryFactory {
     Object.entries(params).forEach((key) => {
       switch (key[0]) {
         case 'pageSize': {
-          this.params.hasMentionUnderLimit = params['pageSize']
+          this.params.hasMentionInLimit = params['pageSize']
             ? +(params['pageSize'] as number)
             : 10;
           break;
         }
         case 'offset': {
-          this.params.hasMentionUnderOffset = +params['offset'];
+          this.params.hasMentionInOffset = +params['offset'];
           break;
         }
         case 'sort': {

@@ -108,15 +108,15 @@ export const DISEASESTATICFILTERSQUERY = gql`
   query DiseaseStaticFiltersQuery($where: DiseaseWhere) {
     diseases(where: $where) {
       filterCounts {
+        diseaseArticleByYear {
+          count
+          term
+        }
         diseaseArticleByEpi {
           count
           term
         }
         diseaseArticleByNHS {
-          count
-          term
-        }
-        diseaseArticleByYear {
           count
           term
         }
@@ -178,7 +178,12 @@ export const DISEASELISTQUERY = gql`
     $sort: [DiseaseSort!]
     $diseaseWhere: DiseaseWhere
   ) {
-    diseases(limit: $limit, offset: $offset, sort: $sort, where: $where) {
+    diseases(
+      limit: $limit
+      offset: $offset
+      sort: $sort
+      where: $diseaseWhere
+    ) {
       gardName
       gardId
       classificationLevel
@@ -191,7 +196,7 @@ export const DISEASELISTQUERY = gql`
       countGenes
       countPhenotypes
     }
-    total: diseasesConnection(where: $where) {
+    total: diseasesConnection(where: $diseaseWhere) {
       count: totalCount
     }
   }

@@ -42,19 +42,6 @@ import { ClinicalTrialStore } from 'trial-store';
   selector: 'lib-rdas-disease-page',
   templateUrl: './rdas-disease-page.component.html',
   styleUrls: ['./rdas-disease-page.component.scss'],
-  /*   animations: [
-    trigger('followOnScroll', [
-      state('in', style({ top: '30vh' })),
-      state(
-        'out',
-        style({
-          top: '15vh',
-        }),
-      ),
-      transition('in => out', [group([animate('200ms ease-out')])]),
-      transition('out => in', [group([animate('200ms ease-in')])]),
-    ]),
-  ], */
   encapsulation: ViewEncapsulation.None,
   imports: [
     CommonModule,

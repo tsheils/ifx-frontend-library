@@ -2,7 +2,6 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Params } from '@angular/router';
 import { ObservableQuery } from '@apollo/client';
 import {
-  AllDiseasesFieldCountsGQL,
   Disease,
   DiseaseDynamicFiltersQueryGQL,
   DiseaseListQueryGQL,

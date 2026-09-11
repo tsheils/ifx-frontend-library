@@ -58,12 +58,12 @@ export class PhenotypeAssociation {
 }
 
 const FREQUENCYRANK = [
-  'Excluded (0%)',
-  'Very rare (<4-1%)',
-  'Occasional (29-5%)',
-  'Frequent (79-30%)',
-  'Very frequent (99-80%)',
-  'Obligate (100%)',
+  'Excluded',
+  'Very rare',
+  'Occasional',
+  'Frequent',
+  'Very frequent',
+  'Obligate',
 ];
 
 const EVIDENCE = [

@@ -77,6 +77,7 @@
     "@nx/vite": "^23.1.0",
     "@nx/vitest": "^23.1.0",
     "@nx/web": "^23.1.0",
+    "@nx/webpack": "^23.2.1",
     "@nx/workspace": "^23.1.0",
     "@oxc-project/runtime": "^0.115.0",
     "@playwright/test": "^1.36.0",
@@ -143,24 +144,23 @@
     }
   },
   "allowScripts": {
-    "esbuild@0.27.7": true,
-    "esbuild@0.28.1": true,
     "@apollo/protobufjs@1.2.8": true,
-    "@firebase/util@1.12.1": true,
     "less@4.5.1": true,
-    "@parcel/watcher@2.5.6": true,
     "@scarf/scarf@1.4.0": true,
     "@tree-sitter-grammars/tree-sitter-yaml@0.7.1": true,
     "tree-sitter@0.22.4": true,
     "tree-sitter@0.21.1": true,
-    "@swc/core@1.15.43": true,
-    "core-js-pure@3.49.0": true,
-    "lmdb@3.5.4": true,
     "msgpackr-extract@3.0.4": true,
-    "nx@23.0.1": true,
-    "protobufjs@7.6.5": true,
     "tree-sitter-json@0.24.8": true,
     "fsevents@2.3.3": true,
-    "fsevents@2.3.2": true
+    "fsevents@2.3.2": true,
+    "nx@23.2.1": true,
+    "@firebase/util@1.15.3": true,
+    "@parcel/watcher@2.6.0": true,
+    "esbuild@0.28.2": true,
+    "@swc/core@1.16.2": true,
+    "core-js-pure@3.50.0": true,
+    "lmdb@3.5.6": true,
+    "protobufjs@7.6.6": true
   }
 }

@@ -1,6 +1,5 @@
 import { Route } from '@angular/router';
 import * as Resolvers from './app.resolvers';
-import { diseaseSubscriptionResolver } from './app.resolvers';
 
 export const appRoutes: Route[] = [
   {
@@ -15,7 +14,6 @@ export const appRoutes: Route[] = [
     resolve: {
       allStaticFilters: Resolvers.allStaticDiseaseFiltersResolver,
       diseases: Resolvers.diseaseListResolver,
-      // //phenotypeFilters: phenotypeFilterResolver,
     },
     loadComponent: () =>
       import('rdas-browse').then((m) => m.RdasBrowseComponent),
