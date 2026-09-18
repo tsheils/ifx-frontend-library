@@ -85,13 +85,11 @@ export class RdasPanelTemplateComponent {
   filterSelection = new SelectionModel<string | number | boolean>(true, []);
 
   fetchList(event: unknown) {
-    console.log(event);
     const retObj: { [key: string]: (string | number | boolean)[] } = {};
     Object.entries(event as { [key: string]: Filter[] }).forEach(
       ([key, filters]) =>
         (retObj[key] = [...filters.map((filter) => filter.term)]),
     );
-    console.log(retObj);
     this.listChange.emit(retObj);
   }
 
@@ -102,12 +100,10 @@ export class RdasPanelTemplateComponent {
       values: (string | number | boolean)[];
     }[]
   ) {
-    console.log(event);
     const retObj: { [key: string]: (string | number | boolean)[] } = {};
     event.forEach(filter => {
       retObj[<string>filter.term] = filter.values
     })
-    console.log(retObj);
     this.listChange.emit(retObj);
   }
 
